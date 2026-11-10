@@ -29,7 +29,7 @@ class Check(HTMLParser):
             if not self.header:assert self.row,f'Uncited table row in {self.path}';self.rows+=1
             self.row=None
 count=0
-files=list(R.glob('*.html'))
+files=[R/f for f in ('index.html','taxes.html','decision.html','costs.html','projections.html','inheritance.html','review.html','sources.html')]
 assert len(files)==8
 before={f:f.read_bytes() for f in files}
 subprocess.run(['python','scripts/build.py'],cwd=R,check=True)
