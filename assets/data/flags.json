@@ -1,0 +1,367 @@
+[
+ {
+  "id": "F-01",
+  "group": "Values left blank",
+  "item": "Home insurance premium for Property A",
+  "why": "The Department of Insurance publishes premiums only through an interactive tool. This session could not operate it, so no official figure was confirmed.",
+  "action": "Run the tool for the home's location, age and coverage amount, then get three written quotes.",
+  "sources": [
+   "CDI-TOOL"
+  ]
+ },
+ {
+  "id": "F-02",
+  "group": "Values left blank",
+  "item": "Rental-building insurance premium for Property B",
+  "why": "No official premium survey covers a landlord policy on a three-unit building. The state tool covers homeowner, condominium, renter and earthquake policies only, and the national regulators' report defines its dwelling fire category as owner-occupied.",
+  "action": "Ask a licensed broker for landlord quotes on a three-unit building with liability and loss-of-rent cover.",
+  "sources": [
+   "CDI-TOOL",
+   "NAIC-HO"
+  ]
+ },
+ {
+  "id": "F-03",
+  "group": "Values left blank",
+  "item": "Statewide average homeowner premium",
+  "why": "The averages quoted by comparison sites (about $1,660 from the regulators' report and about $2,340 from a state data call) were not found on a page this session could read.",
+  "action": "Read the state average tables in the regulators' report before relying on either figure.",
+  "sources": [
+   "NAIC-HO",
+   "CDI-DATA"
+  ]
+ },
+ {
+  "id": "F-04",
+  "group": "Values left blank",
+  "item": "Market rent for Property A",
+  "why": "The owner gave no rent estimate and the federal Fair Market Rent page could not be read. The model uses a $6,000 a month placeholder and reports the rent at which renting would catch up with selling.",
+  "action": "Get a written rental estimate from two local property managers.",
+  "sources": [
+   "HUD-FMR"
+  ]
+ },
+ {
+  "id": "F-05",
+  "group": "Unverified assumptions",
+  "item": "Rent for the third unit of Property B",
+  "why": "Assumed equal to the average of the two rented units ($3,580 a month). Nobody has priced the unit.",
+  "action": "Get a rental estimate; check whether the unit can lawfully be let.",
+  "sources": [
+   "SF-RENT"
+  ]
+ },
+ {
+  "id": "F-06",
+  "group": "Unverified assumptions",
+  "item": "Repair and maintenance budgets",
+  "why": "The owner gave no amounts and no official benchmark exists. The model uses 0.5% of value a year for Property A and 1.0% for Property B.",
+  "action": "Replace with the last five years of actual repair spending.",
+  "sources": [
+   "IRS-T414"
+  ]
+ },
+ {
+  "id": "F-07",
+  "group": "Unverified assumptions",
+  "item": "Property A tax rate and fixed charges",
+  "why": "The parcel's tax rate area was deliberately not looked up, because a parcel lookup would identify the home. A 1.20% rate plus about $800 of fixed charges reproduces the owner's latest bill within 1%.",
+  "action": "Read the rate and the direct charges from the bill.",
+  "sources": [
+   "LAO-250017",
+   "BOE-LTA2602"
+  ]
+ },
+ {
+  "id": "F-08",
+  "group": "Unverified assumptions",
+  "item": "Property B fixed charges of about $1,100",
+  "why": "The owner's bill is about $1,100 more than the official rate applied to the assessed value. The individual charges were not itemised.",
+  "action": "Read the direct charges and special assessments section of the bill.",
+  "sources": [
+   "SF-TAX"
+  ]
+ },
+ {
+  "id": "F-09",
+  "group": "Unverified assumptions",
+  "item": "Solar credit on Property A",
+  "why": "Net metering lasts 20 years from the date the system was connected. That date is unknown, so the credit is counted only until 2039 and left blank afterwards.",
+  "action": "Find the permission-to-operate date on the utility account.",
+  "sources": [
+   "CPUC-NEM"
+  ]
+ },
+ {
+  "id": "F-10",
+  "group": "Facts to confirm",
+  "item": "Type of trust",
+  "why": "The step-up in tax basis is assumed. It does not apply to assets of an irrevocable trust that are outside the taxable estate, and a second step-up may be lost on assets held in a bypass trust after the first parent's death.",
+  "action": "Ask the trust's attorney which kind of trust holds each property and whether it should be updated.",
+  "sources": [
+   "IRS-RR232",
+   "IRS-P551"
+  ]
+ },
+ {
+  "id": "F-11",
+  "group": "Facts to confirm",
+  "item": "Which home is the parents' principal residence",
+  "why": "The partial property-tax exclusion applies only to the home that is the parent's principal residence and becomes the heir's within one year. The plan assumes that home is Property A and that no unit of Property B qualifies.",
+  "action": "Confirm which property carries the Homeowners' Exemption today.",
+  "sources": [
+   "BOE-LTA2626",
+   "BOE-P19"
+  ]
+ },
+ {
+  "id": "F-12",
+  "group": "Facts to confirm",
+  "item": "Rent rules that apply to Property B",
+  "why": "Whether the building is covered by the rent increase limit depends on its construction date, which this session does not know. Owner move-in rules were seen only on unofficial sites.",
+  "action": "Confirm coverage and the rules for occupying the third unit with the Rent Board.",
+  "sources": [
+   "SF-RENT"
+  ]
+ },
+ {
+  "id": "F-13",
+  "group": "Unverified assumptions",
+  "item": "The heir's tax rates",
+  "why": "The heir's income is unknown. The model uses 37.1% on rent and interest, 27.8% on Treasury interest, 28.1% on dividends and 34.1% on large one-time gains.",
+  "action": "Have a tax adviser rerun the model with the heir's real brackets.",
+  "sources": [
+   "IRS-RP2635",
+   "FTB-RATES",
+   "IRS-T559"
+  ]
+ },
+ {
+  "id": "F-14",
+  "group": "Unverified assumptions",
+  "item": "Stock market return of 7.0% a year",
+  "why": "No official body publishes an expected stock return. Official anchors are the 10-year Treasury yield and one year of Thrift Savings Plan results.",
+  "action": "Read the result at 5.0% and 9.0% as well; the break-even return is reported.",
+  "sources": [
+   "UST-YIELD",
+   "TSP-RET"
+  ]
+ },
+ {
+  "id": "F-15",
+  "group": "Unverified assumptions",
+  "item": "Selling costs of 6.0%",
+  "why": "Only the county transfer tax, $1.10 per $1,000, is official. Commission, escrow and preparation costs are assumed.",
+  "action": "Ask two listing agents for a written net sheet.",
+  "sources": [
+   "SCC-DTT"
+  ]
+ },
+ {
+  "id": "F-16",
+  "group": "Values left blank",
+  "item": "Federal limit on deducting state and local taxes",
+  "why": "The current limit and its scheduled drop in 2030 were seen only on unofficial sites, so no figure is published here.",
+  "action": "Confirm on the IRS page before counting any deduction for property tax.",
+  "sources": [
+   "IRS-OBBB"
+  ]
+ },
+ {
+  "id": "F-17",
+  "group": "Facts to confirm",
+  "item": "California trust return thresholds",
+  "why": "The thresholds come from the 2019 edition of the state booklet.",
+  "action": "Confirm in the booklet for the year of death.",
+  "sources": [
+   "FTB-541"
+  ]
+ },
+ {
+  "id": "F-18",
+  "group": "Facts to confirm",
+  "item": "November 2026 ballot results",
+  "why": "Results are unofficial until the Secretary of State certifies them, due by 11 December 2026.",
+  "action": "Recheck Propositions 3 and 42 after certification.",
+  "sources": [
+   "SOS-RESULTS"
+  ]
+ },
+ {
+  "id": "F-19",
+  "group": "Facts to confirm",
+  "item": "February 2027 adjustment of the $1 million amount",
+  "why": "The next figure is not published yet. The California index fell 0.20% over the year to mid-2026, and the sources read do not say whether the amount can fall.",
+  "action": "Check the Board of Equalization letter in February or March 2027.",
+  "sources": [
+   "BOE-LTA2509",
+   "FHFA-HPI"
+  ]
+ },
+ {
+  "id": "F-20",
+  "group": "Facts to confirm",
+  "item": "Size of the cash and investments to be inherited",
+  "why": "The owner described it only as considerable. The plan therefore reports how much room is left under the federal exclusion, not a tax bill.",
+  "action": "Add up every asset the parents own, including retirement accounts and life insurance.",
+  "sources": [
+   "IRS-706"
+  ]
+ },
+ {
+  "id": "F-21",
+  "group": "Unverified assumptions",
+  "item": "Federal exclusion after 2027",
+  "why": "The law indexes the exclusion for inflation. Later years are projected at 2.4% a year; the indexing formula was not read.",
+  "action": "Use each year's IRS revenue procedure when it is published.",
+  "sources": [
+   "IRS-RP2635",
+   "SSA-TR"
+  ]
+ },
+ {
+  "id": "F-22",
+  "group": "Unverified assumptions",
+  "item": "Share of each property's value that is building",
+  "why": "Depreciation needs the building share of value. 30% for Property A and 40% for Property B are assumed.",
+  "action": "Use the land and improvement split from the date-of-death appraisal.",
+  "sources": [
+   "IRS-P551"
+  ]
+ },
+ {
+  "id": "I-01",
+  "group": "Irregularities in the owner's records",
+  "item": "Property B bill is about 2.1% of assessed value",
+  "why": "The official rate is 1.18%. The gap is consistent with about $1,100 of flat charges, which matter a great deal on a low assessed value.",
+  "action": "No action beyond F-08.",
+  "sources": [
+   "SF-TAX"
+  ]
+ },
+ {
+  "id": "I-02",
+  "group": "Irregularities in the owner's records",
+  "item": "One year of Property B's assessed values rose slightly less than the official factor",
+  "why": "The difference is under $50. Every other year matches the official factor.",
+  "action": "Compare that year with the bill; likely a transcription slip.",
+  "sources": [
+   "BOE-LTA2602"
+  ]
+ },
+ {
+  "id": "I-03",
+  "group": "Irregularities in the owner's records",
+  "item": "Property A shows the same bill amount in consecutive years, twice",
+  "why": "Assessed value rose in each of those years, so the bill should have changed.",
+  "action": "Compare with the original bills.",
+  "sources": [
+   "BOE-LTA2602"
+  ]
+ },
+ {
+  "id": "I-04",
+  "group": "Irregularities in the owner's records",
+  "item": "Property B's bill jumped by about $320 in one year and fell in another",
+  "why": "A step of that size on a small bill usually means a flat charge was added or removed.",
+  "action": "Read the direct charges on the bills for those years.",
+  "sources": [
+   "SF-TAX"
+  ]
+ },
+ {
+  "id": "I-05",
+  "group": "Irregularities in the owner's records",
+  "item": "2026 figures are incomplete",
+  "why": "No 2026 bill was supplied for either property and no 2026 assessed value for Property B. Both are projected.",
+  "action": "Add the 2026 bills when they arrive.",
+  "sources": [
+   "SF-TAX"
+  ]
+ },
+ {
+  "id": "R-01",
+  "group": "Irregularities in this repository",
+  "item": "Assessed values rounded to $10 still identify a parcel",
+  "why": "Until this integration the live site listed both assessed-value histories rounded to $10. Assessment rolls are public records, and a value that precise can be matched to one parcel and from there to an address and an owner. This edition publishes rounded levels instead and computes every projection from them.",
+  "action": "Owner decision: keep the privacy rounding, or restore exact figures knowing the risk.",
+  "sources": [
+   "GH-REPO",
+   "BOE-LTA2602"
+  ]
+ },
+ {
+  "id": "R-02",
+  "group": "Irregularities in this repository",
+  "item": "Earlier commits still hold exact figures and postal codes",
+  "why": "This repository is public. A normal update cannot remove what earlier commits and pull requests contain.",
+  "action": "Only the owner can make the repository private or delete and recreate it.",
+  "sources": [
+   "GH-REPO"
+  ]
+ },
+ {
+  "id": "R-03",
+  "group": "Irregularities in this repository",
+  "item": "Two publishers deploy the same site",
+  "why": "GitHub's branch build and the Actions workflow both publish. The setting could not be changed with the credentials available. The repository root is now kept identical to the packaged site, so both publish the same pages.",
+  "action": "Owner: set the Pages source to GitHub Actions only.",
+  "sources": [
+   "GH-REPO"
+  ]
+ },
+ {
+  "id": "R-04",
+  "group": "Irregularities in this repository",
+  "item": "The previous edition described initiative 25-0017 as a live proposal",
+  "why": "The Secretary of State recorded on 18 May 2026 that it failed to qualify.",
+  "action": "Corrected on Law changes.",
+  "sources": [
+   "SOS-FAIL",
+   "LAO-250017"
+  ]
+ },
+ {
+  "id": "R-05",
+  "group": "Irregularities in this repository",
+  "item": "The previous edition used a property tax rate of 1.18268325% for Property B",
+  "why": "The rate published for fiscal year 2026-27 is 1.18162182%.",
+  "action": "Corrected in the model.",
+  "sources": [
+   "SF-TAX"
+  ]
+ },
+ {
+  "id": "R-06",
+  "group": "Irregularities in this repository",
+  "item": "The previous edition predated or omitted several developments",
+  "why": "Missing: the 2027 federal exclusion, the November 2026 ballot results, the September 2026 appeal ruling on the Empty Homes Tax and the August 2026 guidance on multi-unit buildings.",
+  "action": "Added on Law changes and Tax thresholds.",
+  "sources": [
+   "IRS-IR133",
+   "SOS-RESULTS",
+   "SF-EHT",
+   "BOE-LTA2626"
+  ]
+ },
+ {
+  "id": "R-07",
+  "group": "Irregularities in this repository",
+  "item": "Insurance averages in earlier editions came from comparison sites",
+  "why": "Those are not official sources.",
+  "action": "Removed; see F-01 to F-03.",
+  "sources": [
+   "CDI-TOOL"
+  ]
+ },
+ {
+  "id": "R-08",
+  "group": "Irregularities in this repository",
+  "item": "Several sessions claimed the same shared files at once",
+  "why": "At least three sessions claimed the packaging and verification scripts within one minute, and other pull requests were still open when this edition merged.",
+  "action": "Recorded on the coordination board.",
+  "sources": [
+   "GH-REPO"
+  ]
+ }
+]

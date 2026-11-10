@@ -1,0 +1,22 @@
+inheritance_year,case,option,first_year_cash,cash_over_20_years,value_after_20_years,value_in_2026_dollars
+2040,heir uses the spare unit of Property B,live,-25240,-773380,6940680,3098870
+2040,heir uses the spare unit of Property B,rent,6820,157270,8006350,3574670
+2040,heir uses the spare unit of Property B,sell_stocks,0,0,13326610,5950060
+2040,heir uses the spare unit of Property B,sell_treasuries,0,0,9323390,4162700
+2045,heir uses the spare unit of Property B,live,-33160,-992690,8124680,3221870
+2045,heir uses the spare unit of Property B,rent,2410,42840,9360650,3712000
+2045,heir uses the spare unit of Property B,sell_stocks,0,0,15827830,6276580
+2045,heir uses the spare unit of Property B,sell_treasuries,0,0,11073270,4391140
+2050,heir uses the spare unit of Property B,live,-43610,-1278050,9496550,3344780
+2050,heir uses the spare unit of Property B,rent,-3540,-111200,10950450,3856860
+2050,heir uses the spare unit of Property B,sell_stocks,0,0,18798490,6621020
+2050,heir uses the spare unit of Property B,sell_treasuries,0,0,13151570,4632120
+2040,heir needs a similar house,live,-74570,,5356450,2391540
+2040,heir needs a similar house,sell_stocks,-100350,,9170790,4094570
+2040,heir needs a similar house,sell_treasuries,-100350,,5842050,2608360
+2045,heir needs a similar house,live,-89510,,6314530,2504050
+2045,heir needs a similar house,sell_stocks,-112990,,11148800,4421090
+2045,heir needs a similar house,sell_treasuries,-112990,,7153620,2836790
+2050,heir needs a similar house,live,-108020,,7427080,2615890
+2050,heir needs a similar house,sell_stocks,-127210,,13530370,4765540
+2050,heir needs a similar house,sell_treasuries,-127210,,8738440,3077770
