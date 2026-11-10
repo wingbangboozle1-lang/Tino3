@@ -65,3 +65,5 @@ Main advanced concurrently to 67fc2b2 with multiple earlier integrations. Merge 
 
 - Merge-preserving pull note: ordinary pull --rebase tried to flatten concurrent merge ancestry and conflicted. Aborted safely, then `git pull --rebase=merges` preserved all integration history without discarding work.
 - Arena integration token cannot update Pages settings (403); workflow uses the narrowly scoped GitHub Actions pages-write token to select workflow-only publication before deploying the allowlisted artifact. Must verify that step and final deployment before claiming privacy-safe Pages live.
+
+- PR #8 merged successfully: https://github.com/wingbangboozle1-lang/Tino3/pull/8 (baf9790b). Deployment 42767197076 failed at the optional Pages-settings update; both Arena and Actions credentials cannot change that setting. Removing that settings call and deploying the allowlisted artifact through the already working deploy-pages route. No build/test failure; deployment permission limitation is explicit. Do not claim workflow-only repository settings have been changed.
