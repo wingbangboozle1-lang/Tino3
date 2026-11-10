@@ -118,3 +118,20 @@ to an official source. No value was inferred to fill a gap; 18 gaps are publishe
 - Post-merge GitHub Actions Pages build/deploy passed: https://github.com/wingbangboozle1-lang/Tino3/actions/runs/42796282044 . Legacy Pages build also passed: https://github.com/wingbangboozle1-lang/Tino3/actions/runs/42796281806 .
 - Live sample checks on 2026-11-10: dashboard `/` displays the generic reviewed edition; `/executive-summary.html` and `/decision-suite/projections.html` display withdrawal notices; `/COORDINATION.md` returns 404 from the Actions artifact. These samples do not certify all historical CDN copies were purged.
 - Privacy status: current website paths are sanitized; previous repository history, pull-request diffs, caches, forks and downloads are not erased or certified private. This remains flagged for repository-owner review.
+
+### Publication result · `arena/d76d5375-tino3` · 2026-11-10
+
+- **PR [#21](https://github.com/wingbangboozle1-lang/Tino3/pull/21) — MERGED** (merge commit `7214e73`). Quantitative privacy-safe edition replaced the withhold-all-amounts edition. CI `verify` passed before merge.
+- **PR [#22](https://github.com/wingbangboozle1-lang/Tino3/pull/22) — MERGED** (merge commit `f02797e`). Corrected Flagged-for-Review citations, entity double-escaping, and one unverified pointer. CI `verify` passed before merge.
+- **GitHub Pages:** both merges deployed successfully — runs `42796748887` and `42796961277`, conclusion `success`. Live edition verified by direct fetch of `/` (dashboard, 2045 decision snapshot) and `/review.html` (18 flagged rows with per-row authorities). Retired URL `/cupertino.html` serves the withdrawal notice, not old content. No browser automation was available, so no rendering claim is made beyond HTML structure and HTTP fetch.
+- **Only one publisher now serves identifiable content.** The legacy branch-root publisher and the Actions artifact now carry the same allowlist, so the dual-publisher race recorded as `D-1` no longer exposes anything: both paths are sanitized. CR-1 (change the Pages source setting) remains unnecessary rather than blocked.
+- **Deployments by concurrent sessions were not disturbed.** PRs #17–#20 (sessions `b067dfc7`, `d0927734`, `6616d6b2`) landed while this branch was open; all their withdrawal notices and their deployment record were kept, and their `scripts/privacy_boundary.py` guard was kept and rewired to the new allowlist.
+
+### Cross-session change requests (logged)
+
+| # | Request | Owner of the file | Why |
+|---|---|---|---|
+| CR-5 | Decide, in writing, whether Git history should be rewritten to purge the ZIP codes and unrounded roll figures committed by sessions 1–7 (`R-13`, `FL-17`) | **the owner** | Only the owner can accept the cost of a destructive rewrite, force-push and fork divergence. This session did not attempt it. |
+| CR-6 | If the owner wants jurisdiction names suppressed entirely, the local property-tax rate documents must be replaced by a jurisdiction-neutral statistic | next integration session | The rate citations currently identify the jurisdiction to anyone who opens them, though the pages themselves do not. |
+
+**Final state of the public site:** live, functional, privacy-sanitised in the served tree and in the current repository tree, with 18 flagged items published openly and one disclosure (`R-13`) that Git history still contains earlier figures.
