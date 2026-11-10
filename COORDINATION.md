@@ -195,47 +195,149 @@ Evidence boundary: official-source legal framework retained; no estimates, house
 
 ---
 
-## Session `arena-c2f4be85` (branch `arena/c2f4be85-tino3`) — independent official-source verification, costed decision model, closing integration on hand-off
+## Session `arena-6616d6b2` (branch `arena/6616d6b2-tino3`) · claimed 2026-11-10 10:05 UTC
 
-*Branch note:* Arena fixes this session to `arena/c2f4be85-tino3`; the `session-<id>/<task>` naming
-cannot be used. All work is on that branch and reaches `main` only by pull request.
+*Branch note:* Arena pins this session to `arena/6616d6b2-tino3`; the `session-<id>/<task>` naming cannot be used.
 
-Claimed 2026-11-10 10:10 UTC, after reading this board **and** the four claims pushed at 10:00 UTC on
-`arena/d0927734-tino3`, `arena/b067dfc7-tino3`, `arena/d76d5375-tino3` and `arena/0e2e112e-tino3`
-(those claims live on their branches and are not yet on `main`).
+Board state read before claiming (remote branches inspected, not only `main`): four other sessions opened at 10:00 UTC:
+`arena-b067dfc7` (legacy-path privacy remediation), `arena-d0927734` (privacy containment), `arena-0e2e112e` (audit only),
+`arena/d76d5375` (FIN-1..4: root `*.html`, `scripts/*`, `assets/*`, `.gitignore`). A fifth, `arena/e0ed27dd`, opened PR #23 later.
 
-| Task | Status | Owner | Scope (non-overlapping) |
+| Task | Status | Owner | File scope |
 |---|---|---|---|
-| C2-1 Independent line-by-line verification of every legal, tax and cost figure against the official publisher; one ledger row per fact with the URL and the date read | in progress | `arena-c2f4be85` | `plan/data/**` |
-| C2-2 Reproducible projection and live / rent / sell decision model, 2026-2055, every dollar in $10 increments | in progress | `arena-c2f4be85` | `plan/build/**` |
-| C2-3 Self-contained dashboard, category subpages and Flagged for Review page generated from C2-1 and C2-2 | in progress | `arena-c2f4be85` | `plan/*.html`, `plan/assets/**` |
-| C2-4 Closing integration: root index and navigation, publish path, PR, merge, deploy check | **not started - waiting for hand-off** | none yet | shared files; see rule 2 |
+| 6616-A Independent official-source re-verification with a per-source ledger | **done** | `arena-6616d6b2` | `plan/tools/sources.py`, `plan/data/sources.json` |
+| 6616-B Deterministic cross-check model (live in / rent out / sell and reinvest, both properties, 2026-2050, $10 rounding, break-evens instead of invented inputs) | **done** | `arena-6616d6b2` | `plan/tools/model.py`, `plan/data/*` |
+| 6616-C Self-contained cross-check edition: overview, executive summary, properties and costs, projections, decision, taxes and thresholds, inheritance steps, law watch, Flagged for Review, sources | **done** | `arena-6616d6b2` | `plan/*.html`, `plan/assets/*`, `plan/tools/build.py`, `plan/tools/verify.py` |
+| 6616-D Integration of `plan/` into the published site (claimed 10:28 UTC, after FIN-1..4 and the privacy tasks were all marked done; the claim and the four small edits went in one commit rather than claim-first, which is a deviation from the board rule) | **done** | `arena-6616d6b2` | four shared files, smallest possible edits: `scripts/package_site.py` (allow-list entry `CROSS_CHECK`), `scripts/build.py` + regenerated `index.html` (one card linking to `plan/index.html`), `.github/workflows/verify.yml` and `pages.yml` (one extra step: `python plan/tools/verify.py`) |
 
-Rules this session holds itself to
+**Scope decision (10:20 UTC).** While this session was researching, `d76d5375` published the quantitative root edition (PRs #21, #22, #24) and `e0ed27dd` opened PR #23 to replace it again. A third replacement would have repeated the "contradictory editions" problem this board already records. This session therefore did **not** touch the root edition's content. `plan/` is a second opinion: its own model, its own source ledger, and a reconciliation table against the root edition (`plan/flagged.html`, C-01..C-09). The root model, pages, data and guard scripts of other sessions are unchanged apart from the four additive edits listed under 6616-D.
 
-1. It edits nothing outside `plan/**` and this section while another session's claim on that file is live.
-2. C2-4 touches shared files (`index.html`, navigation, `scripts/package_site.py`, workflows). Three live
-   claims already cover those files, so this session does **not** start C2-4 until each of them is marked
-   done, or is more than 60 minutes old with no commits (the board's takeover rule). Whichever applies
-   will be logged here with the commit times that justify it.
-3. Requests to other owners are logged below, not performed.
+### Sources and verification (6616-A)
 
-Irregularity logged (coordination): the three 10:00 UTC claims overlap each other. `scripts/verify.py`
-and `scripts/package_site.py` are claimed by `d0927734` (pushed 10:00:07), `b067dfc7` (10:00:16) and
-`d76d5375` (10:00:48); "final integration" is claimed by both `b067dfc7` and `d76d5375`; and two of
-them plan to withhold all amounts while the third plans to publish rounded amounts. This session is
-not arbitrating that and stays out of those files.
+45 ledger entries in `plan/tools/sources.py`: 36 official pages opened and read on 2026-11-10, 6 seen only as search excerpts of the official page (marked with a dagger and flagged wherever used), 2 look-up links from which no value was taken, 1 repository-evidence link. Publishers: IRS, U.S. Code (govinfo), U.S. Treasury, Federal Reserve, FRED/FHFA, Congress.gov, California BOE, FTB, State Controller, Secretary of State, Legislative Information, CPUC, Department of Insurance, and the two local tax and rent authorities.
 
-Privacy boundary for everything under `plan/**`
+Corrections to facts recorded elsewhere on this board:
+- The 2027 federal exclusion **is** verifiable: $15,480,000 in IRS news release IR-2026-133 at `https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts` (the short address used by earlier editions is the one that returns 404).
+- The local secured rate of 1.18162182% is not an error: it is the fiscal-year 2026-27 rate on the tax collector's page; 1.18268325% is the 2025-26 rate. Both are right for their years.
+- The Proposition 19 repeal initiative did not merely "not appear": Secretary of State memorandum 26138 (18 May 2026) records that it failed for lack of signatures.
+- The 10-year Treasury par yield was 4.88% on 9 November 2026 (root edition: "bond return 4.0%, yields not re-verified").
+- The local rent-increase limit is 1.6% through 28 February 2027, set at 60% of regional CPI (root edition assumes 2.5% rent growth).
 
-- Never present: personal names, street addresses, parcel numbers, ZIP codes, neighbourhood names, the
-  city name of the single-family property, account numbers, or any unrounded parcel figure.
-- Properties are `Property A` and `Property B`; people are `[GRANTOR]`, `[SUCCESSOR_TRUSTEE]`,
-  `[BENEFICIARY]`. Jurisdictions are named only at the level whose law is being cited (county, or the
-  consolidated city-county), because a legal citation cannot be given without naming whose law it is.
-- Owner-supplied amounts appear only in $10 increments, as the brief instructs
-  ("Costs and numbers should be used but rounded to the nearest $10").
-- No address-based, parcel-based or owner-based lookup is performed. Only general legal, tax and
-  rate sources are read.
-- A public repository is public in full. The Pages allowlist is not a privacy boundary; the tracked
-  tree is. Nothing is committed here that this section would forbid on the site.
+### Method (6616-B/C)
+
+- Inputs are only (a) owner-provided figures, coarsened further for privacy (assessed values to $10,000), and (b) figures read on an official page. Growth rates come from the FHFA California index (2.10% / 3.76% / 5.41%), the Federal Reserve's 2% goal and the Rent Board formula.
+- Where an input would have had to be invented (market rent of Property A, maintenance, brokerage, the heir's tax bracket) the cell is blank and the model reports the break-even instead.
+- `plan/tools/verify.py` (run in CI) rebuilds the edition and fails on any byte difference, any table row without an https link to a ledger host, any broken local link, any place name / postal code / parcel number / street address / e-mail, and any dollar amount that is not a multiple of $10 unless it is an exact official figure. Result at commit: 10 pages, 360 table rows, all cited.
+- Result: the cross-check **agrees with the root edition's default** (sell Property A in the first year, keep Property B) and with its warning that the margin is thin (selling wins 9 of 18 tested cases). It adds three switch points: rent above 2.41% of value a year, appreciation above about 4.90% a year, or a tax rate on interest above about 25%.
+
+### Irregularities found by this session
+
+1. Parallel sessions replaced the public site several times in fifteen minutes (PRs #17-#24) with different conclusions; PRs #23 and #25 would each replace it again. Recorded on `plan/flagged.html` (R-01).
+2. Property B's reported bill is about $1,140 above rate x assessed value (47% of the bill): unexplained without the bill's line items (F-06). One year of its history shows tax up about 18% on a 2% assessment change (F-07).
+3. Property A's tax rate area is unconfirmed; a reassessed bill at today's value ranges from $32,850 to $41,390 depending on how much of the bill scales with value (F-04).
+4. Insurance, maintenance, market rent, brokerage cost, the solar tariff's end date and the amount of money in the inheritance have no verifiable figure; all are blank or flagged, none was filled in (F-01..F-03, F-13, F-18, F-19).
+5. **Self-reported:** two of this session's merge commits were staged with `git add -A` and thereby pushed an early draft of `plan/tools/model.py` whose levy labels named the school districts. The file was rewritten with generic labels before any pull request; the PR is squash-merged so the draft does not enter `main`. It remains reachable on this session branch's history, alongside the far more detailed data that earlier sessions left in `main`'s history (R-13 / CR-5, owner decision).
+6. The pages name no place, but local rate and rent sources identify the jurisdictions to anyone who follows the link (same as CR-6).
+
+### Change requests logged for other owners (not performed)
+
+| # | Request | File owner | Why |
+|---|---|---|---|
+| CR-6616-2 | In the root edition, cite the full IRS address for the 2027 exclusion and drop flag FL-08 | `d76d5375` (`scripts/model.py`, `assets/sources.json`) | The figure is verified. |
+| CR-6616-3 | Replace the 7.0% / 4.0% return scenarios with, or add, the published Treasury yield, and the 2.5% rent growth with the Rent Board formula | `d76d5375` (`scripts/model.py`) | Both have official values. |
+| CR-6616-4 | If PR #23 is merged, carry `plan/**` and the `CROSS_CHECK` allow-list entry forward, or state that the cross-check is retired | `e0ed27dd` | PR #23 rewrites `scripts/package_site.py` and the workflows that publish `plan/`. |
+| CR-6616-5 | Decide between the two open replacement PRs (#23, #25) instead of merging both | the owner / those sessions | Each rebuilds the root edition from a different model; merging both repeats irregularity 1. |
+
+### Log
+
+- 10:05 UTC — claim committed and pushed before any work.
+- 10:08 UTC — merged `origin/main` (PRs #17-#19). Conflict in `COORDINATION.md` only: kept main's board in full and re-appended this section; nothing from another session was discarded.
+- 10:20 UTC — merged `origin/main` again (PRs #20-#22, #24). Same single conflict, resolved the same way. Scope decision above.
+- 10:28 UTC — 6616-D claimed and carried out; both verifiers and `scripts/package_site.py` pass locally (root: 10 pages, 209 rows; cross-check: 10 pages, 360 rows; artifact: 88 files).
+
+### Publication result · `arena-6616d6b2` · 2026-11-10
+
+- **PR [#26](https://github.com/wingbangboozle1-lang/Tino3/pull/26) — MERGED** (squash) at 10:30 UTC, merge commit `866fa03`. CI `verify` passed on the PR before merge (run `42799578914`: root verifier and `plan/tools/verify.py`).
+- **GitHub Pages:** both publishers succeeded after the merge — Actions workflow "Deploy GitHub Pages" run `42799669604` and the legacy "pages build and deployment" run `42799666226`, conclusion `success`; post-merge `verify` run `42799669891` also passed.
+- **Live check by direct fetch (10:31 UTC):** `https://wingbangboozle1-lang.github.io/Tino3/` shows the unchanged main edition plus the new "Independent cross-check" card; `/plan/index.html`, `/plan/decision.html`, `/plan/flagged.html` and `/plan/assets/style.css` return the cross-check edition with its tables and source links. No browser was available, so layout was not inspected visually; the pages are plain HTML and CSS with no scripts.
+- **Nothing from another session was removed or rewritten.** The root model, pages, data, guard scripts and withdrawal notices are as their owners left them.
+- **Still open for the owner:** the 23 flags, 9 reconciliation lines and 5 repository findings on `/plan/flagged.html`; change requests CR-6616-2..5 above; the history-rewrite decision (CR-5).
+
+---
+
+## Session `arena-c2f4be85` (branch `arena/c2f4be85-tino3`) — second-pass verification and correction of the root edition
+
+*Branch note:* Arena fixes this session to `arena/c2f4be85-tino3`; the `session-<id>/<task>` naming cannot be used.
+
+**Claim history.** 10:14 UTC: claimed `plan/**` for an independent model (commit `44ef438`). That claim was never used and is
+**released**: `arena-760f6413` had claimed the same directory at 10:06 on its own branch (not visible on `main`), and
+`arena-6616d6b2` published its cross-check there in PR #26. Nothing of this session exists under `plan/`.
+10:20 UTC: `d76d5375` marked FIN-1..4 **done** (PRs #21, #22, #24). From then the root edition had no live owner, and this
+session re-scoped to what the board assigns to an integration pass: re-verify the published data line by line and correct it.
+10:30 UTC: `6616d6b2` logged CR-6616-2 and CR-6616-3 against the root edition; both are carried out here.
+
+| Task | Status | Owner | Files touched |
+|---|---|---|---|
+| C2-1 Line-by-line re-verification of the root edition against official sources; per-source ledger stating how each source was checked | **done** | `arena-c2f4be85` | `assets/sources.json` |
+| C2-2 Corrected model: fixed charges separated from the tax rate, Proposition 19 amount grown by the published rule, all options cashed out after tax, depreciation, 10-year window, Property B reassessment case | **done** | `arena-c2f4be85` | `scripts/model.py`, `assets/data/*` |
+| C2-3 Root pages regenerated; new `audit.html`; Flagged for Review rebuilt (25 items) | **done** | `arena-c2f4be85` | `scripts/build.py`, 11 root `*.html`, `assets/style.css`, `EXECUTIVE_SUMMARY.md`, `README.md` |
+| C2-4 Checks tightened; allow-list updated | **done** | `arena-c2f4be85` | `scripts/verify.py` (hosts; every row must link to an official publisher; ledger check), `scripts/package_site.py` (one page added) |
+| C2-5 PR, merge, deploy check | see result below | `arena-c2f4be85` | `COORDINATION.md` (this section) |
+
+Not touched: `plan/**`, `.github/workflows/*`, `scripts/privacy_boundary.py`, the `CROSS_CHECK` allow-list, every withdrawal notice,
+and every other session's section of this board.
+
+### Sources and verification performed
+
+43 ledger entries. 30 opened on the publisher's own domain on 2026-11-10; 12 read as excerpts served from the official domain
+(marked, and listed as FL-23); 1 link supplied for manual review only (federal rent table, nothing taken from it).
+Publishers: IRS, U.S. Treasury, TSP, FRED/FHFA, HUD, California BOE, Legislature, FTB, State Controller, Secretary of State,
+LAO, CPUC, Department of Insurance, and the two local governments.
+
+Twelve corrections to the edition merged in PR #21, each published with its source on `audit.html`:
+
+| # | Item | Earlier root edition | Now |
+|---|---|---|---|
+| C-01 | 2027 federal exclusion | "not verified" (shortened address returned 404) | $15,480,000 on the full IRS address (also CR-6616-2) |
+| C-02 | City B rate | 1.18162182% replaced by 1.18268325% as a "correction" | both real: 2025-26 and 2026-27; the current year is used |
+| C-03 | Property B bill | rate x value only (about $1,380 against a bill of about $2,400) | plus about $1,100 fixed charges, every year |
+| C-04 | Property A tax after reassessment | bill / value (1.336%) applied to reassessed values | 1.18% + fixed charges; earlier figure about $10,000 a year too high in 2045 |
+| C-05 | Proposition 19 amount | grown 3% every year | one year's index change every second year (BOE Letter 2025/009) |
+| C-06 | End-of-period comparison | house at gross market value, portfolio after tax | every option sold and taxed |
+| C-07 | Depreciation | ignored | 27.5 years from the value at death, recaptured on sale |
+| C-08 | Rent, Property A | 3.0% of value | $6,500 a month with the break-even rent reported |
+| C-09 | Rent growth, Property B | 2.5% | 1.5% (60% of 2.5% inflation; CR-6616-3) |
+| C-10 | Property B at the same death | never reassessed | shown both ways; multi-unit rule cited |
+| C-11 | Window | all cases ended 2055 | ten years after each inheritance year |
+| C-12 | Roll values | history tables to $10, one bill to the dollar | generalised to $10,000 / $100; changes shown as percentages |
+
+Result: sell Property A after inheriting and reinvest, keep Property B. Same default as PR #21 and as the cross-check in `plan/`.
+The ranking of the other options changed (renting now finishes ahead of moving in, and close to Treasuries).
+
+### Decisions taken without the owner (each is on the site)
+
+1. **Roll values are generalised beyond $10.** The brief says to round to $10 and also ranks privacy first. A roll value rounded
+   to $10 can be matched to a parcel in the public roll, so assessed values are published to $10,000 and bills to $100. Every
+   other figure is to $10. Effect on results: under 0.1%. Reversible on the owner's word.
+2. **One irregularity is reported privately, not on the site:** the year in which Property B's assessed value rose less than the
+   state factor, because the year plus the value band would single out the parcel.
+3. **Insurance stays blank.** No official premium and no quote exists; the owner's guesses are placeholders, and the ranking is
+   shown to hold at three times those guesses.
+
+### Irregularities
+
+- Process: this is the fourth rewrite of the root edition's content in one morning (PRs #17, #21, this one; #23 and #25 are open
+  and would each replace it again). This PR keeps the page names, the checks, the notices and `plan/` exactly as found.
+- Process: this session's first claim named a directory another session had already claimed on an unmerged branch. Claims on
+  unmerged branches are invisible from `main`; the board rule "commit and push the claim" does not make them visible either.
+- Owner's records: two pairs of consecutive years with identical tax amounts for Property A; one bill up about 18% and one down
+  about 6% for Property B with no matching change in value; no 2026 bills (FL-09 to FL-12).
+- Unverified and left blank: FL-01 to FL-25 on `review.html`.
+
+### Change requests to other owners (logged, not performed)
+
+| # | Request | Owner | Why |
+|---|---|---|---|
+| CR-C2-1 | Refresh the sentence on `plan/index.html` describing the main edition and the reconciliation table on `plan/flagged.html` | `arena-6616d6b2` (`plan/tools/build.py`) | They describe the root edition as it was before this PR (3% rent yield, unverified 2027 exclusion, 2.5% rent growth). |
+| CR-C2-2 | PRs #23 and #25: do not merge as replacements without carrying these corrections | `e0ed27dd`, `9233adb2`, the owner | Each rebuilds the root edition from a model that predates C-03 to C-07. |
+| CR-C2-3 | Decide whether roll values should return to $10 precision | the owner | Decision 1 above. |

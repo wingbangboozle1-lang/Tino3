@@ -328,6 +328,7 @@ def build():
     d["breakeven"] = {
         "stock_return": round(bisect(lambda r: run("sell_stock", y0, g, rs=r)["wealth"] - run("rent", y0, g, rs=r)["wealth"], 0.0, 0.2) * 100, 1),
         "house_growth": round(bisect(lambda x: run("rent", y0, x)["wealth"] - run("sell_stock", y0, x)["wealth"], 0.0, 0.2) * 100, 1),
+        "house_growth_vs_treasury": round(bisect(lambda x: run("rent", y0, x)["wealth"] - run("sell_treasury", y0, x)["wealth"], 0.0, 0.2) * 100, 1),
         "rent_month": r10(bisect(lambda m: run("rent", y0, g, rent_mo=m)["wealth"] - base["sell_stock"], 1_000, 60_000)),
         "rent_month_vs_treasury": r10(bisect(lambda m: run("rent", y0, g, rent_mo=m)["wealth"] - base["sell_treasury"], 1_000, 60_000)),
     }

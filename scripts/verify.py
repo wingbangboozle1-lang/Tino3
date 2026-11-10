@@ -31,6 +31,7 @@ ALLOWED_HOSTS = {
     # state
     "www.boe.ca.gov", "boe.ca.gov", "leginfo.legislature.ca.gov", "www.ftb.ca.gov", "ftb.ca.gov",
     "www.cpuc.ca.gov", "cpuc.ca.gov", "www.insurance.ca.gov", "www.lao.ca.gov", "www.sos.ca.gov", "www.sco.ca.gov",
+    "elections.cdn.sos.ca.gov",
     # local government (jurisdiction A and jurisdiction B)
     "REDACTED.archive.REDACTED", "REDACTED.org", "www.REDACTED",
     "clerkrecorder.REDACTEDcounty.gov", "files.REDACTEDcounty.gov",

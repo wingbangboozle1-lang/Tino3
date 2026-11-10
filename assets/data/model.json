@@ -2309,6 +2309,7 @@
  "breakeven": {
   "stock_return": 4.7,
   "house_growth": 7.0,
+  "house_growth_vs_treasury": 4.5,
   "rent_month": 14250,
   "rent_month_vs_treasury": 7440
  },
