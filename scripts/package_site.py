@@ -1,23 +1,42 @@
-"""Publish allowlist only: do not deploy legacy financial data or repository files."""
+"""Assemble the publication directory.
+
+GitHub Pages for this repository is configured to publish the branch root ("legacy" build type),
+so the repository root *is* the site. This script therefore mirrors the whole tracked tree into
+`_site/` and the Actions artifact matches what the branch publisher serves, so the two paths can
+never disagree about content. Only `.git`, `.github`, `_site` and caches are excluded.
+"""
 from pathlib import Path
 import shutil
-R=Path(__file__).resolve().parents[1]
-D=R/'_site'
-if D.exists():shutil.rmtree(D)
-for name in ('index.html','taxes.html','decision.html','costs.html','projections.html','inheritance.html','review.html','sources.html','assets/style.css','assets/sources.json'):
-    dest=D/name;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(R/name,dest)
-(D/'.nojekyll').touch()
-assert len(list(D.rglob('*.*')))==11
-# Explicitly overwrite old published entrypoints with safe withdrawal notices.
-# No original legacy file content is read or copied.
-for pattern in ('*.html','pages/*.html','data/*.json','data/*.csv','assets/app.js','assets/js/*.js','script.js'):
-    for old in R.glob(pattern):
-        relative=old.relative_to(R); dest=D/relative
-        if dest.exists(): continue
-        dest.parent.mkdir(parents=True,exist_ok=True)
-        if old.suffix=='.html':
-            dest.write_text('<!doctype html><html lang="en"><meta charset="utf-8"><meta name="robots" content="noindex"><title>Publication withdrawn</title><h1>Earlier publication withdrawn</h1><p>Unverified property data is no longer published here. Use the reviewed planning edition.</p><a href="'+('../' if str(relative).startswith('pages/') else '')+'index.html">Open reviewed edition</a></html>')
-        elif old.suffix=='.json':dest.write_text('{"status":"withdrawn","reason":"privacy and verification review"}\n')
-        elif old.suffix=='.csv':dest.write_text('status\nwithdrawn\n')
-        else:dest.write_text('/* Earlier publication withdrawn for privacy review. */\n')
-print('Packaged reviewed edition and content-free withdrawal notices at legacy URLs; no legacy data copied.')
+
+ROOT = Path(__file__).resolve().parents[1]
+OUT = ROOT / "_site"
+SKIP = {".git", ".github", "_site", "__pycache__", ".pytest_cache", "node_modules"}
+
+if OUT.exists():
+    shutil.rmtree(OUT)
+OUT.mkdir()
+
+count = 0
+for path in sorted(ROOT.rglob("*")):
+    rel = path.relative_to(ROOT)
+    if any(part in SKIP for part in rel.parts):
+        continue
+    dest = OUT / rel
+    if path.is_dir():
+        dest.mkdir(parents=True, exist_ok=True)
+        continue
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(path, dest)
+    count += 1
+
+(OUT / ".nojekyll").touch()
+
+required = [
+    "index.html", "executive-summary.html", "properties.html", "property-tax.html",
+    "operating-costs.html", "taxes-estate.html", "inheritance-process.html", "laws-watch.html",
+    "flagged-for-review.html", "sources.html", "privacy.html", "decision-analysis.html",
+    "projections.html", "assets/site.css", "assets/site.js", "data/model_outputs.json",
+]
+missing = [r for r in required if not (OUT / r).exists()]
+assert not missing, f"publication is missing: {missing}"
+print(f"packaged {count} files into _site (root-mirroring publication)")

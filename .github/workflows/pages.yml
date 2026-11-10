@@ -18,8 +18,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: python scripts/verify.py
-      - run: python scripts/package_site.py
+      - name: Rebuild model and site
+        run: |
+          python scripts/model.py
+          cd scripts && python webbuild.py
+      - name: Verify (citations, hosts, links, privacy, rounding, reproducibility)
+        run: python scripts/verify.py
+      - name: Package
+        run: python scripts/package_site.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
