@@ -74,3 +74,71 @@ Main advanced concurrently to 67fc2b2 with multiple earlier integrations. Merge 
 - Pages build and deploy succeeded: https://github.com/wingbangboozle1-lang/Tino3/actions/runs/42767304425 . Live landing page verified via cache-busted fetch: https://wingbangboozle1-lang.github.io/Tino3/?publication=b0b0ff8 . Uncached landing contains the privacy-safe edition.
 - Earlier legacy data URL still returned old content through the retrieval/cache path after deployment. Do NOT claim prior disclosures erased. Additional mitigation: generate content-free withdrawal notices at all legacy HTML/data/JS paths rather than relying solely on 404/cache expiration. No legacy content is copied to the artifact. Historical repository exposure remains R12.
 - Status: research/dashboard done within explicit evidence limits; property facts, forecasts, quotes, pending outcome and historical privacy remediation remain needs review. No browser automation was available. 119 reviewed data rows have contextual official source links.
+
+---
+
+## Conflict resolution · session `arena-f0c2842a` · 2026-11-10
+
+### What happened
+
+This session claimed all twelve tasks on an empty board and built a complete
+property-specific edition: 26 official sources, a 55-fact status-labelled fact base, 13 flags, a
+projection engine and a three-option after-tax decision model, published as an 11-page dashboard.
+
+**The claim was wrong.** The board I read was stale. By the time this session finished, `main` had
+advanced through PRs #1, #3, #4–#8, #9 and #10. Four earlier sessions (`arena-d11336c5`,
+`arena/653eba50`, `arena/50c6b81e`, `session-1820664f`, `arena-0765efc4`) had already built and
+published a site, and — critically — had made and enforced **the opposite privacy decision**:
+
+> "Privacy rule: no user-supplied property values, rents, assessments, locations, or household details
+> are published. Public site contains generic Property A / B planning guidance and official legal
+> references only. Private figures are not committed."
+
+That decision is now enforced in code. `scripts/package_site.py` publishes a hard allowlist of exactly
+eight HTML pages and two assets and asserts `len(list(D.rglob("*.*"))) == 11`; `scripts/verify.py` runs
+before it; and `.github/workflows/pages.yml` deploys only that artifact. My branch could not have
+merged without either (a) rewriting another session's publication guard, or (b) publishing the owner's
+figures on a public site.
+
+### The resolution
+
+1. **Nothing belonging to another session was overwritten or discarded.** This branch is
+   `origin/main` plus this log entry. All eight published entrypoints, the workflows, the scripts,
+   the data and the `pages/` set are untouched.
+2. **My edition is not published.** It has been moved to a git-ignored, local-only directory
+   (`.git/info/exclude` carries `/internal/`, so the shared `.gitignore` — another session's file —
+   is not modified). It contains the owner's property-specific figures and therefore must not be in
+   a public repository or a public site.
+3. **My branch history was rewritten** (`git reset --hard origin/main` then force-push) so the
+   owner's figures are not reachable through this branch on the remote. The earlier commits on this
+   branch did contain them. This is the same class of exposure the other sessions logged as **R12**,
+   and it is disclosed here rather than hidden. I cannot certify that GitHub has garbage-collected the
+   unreachable objects, and I did not attempt a destructive history rewrite of `main`.
+4. **Consequence for the site:** this PR changes no published page. That is the correct outcome. The
+   live site must remain the privacy-reviewed edition until the owner explicitly chooses otherwise.
+
+### What the owner should decide
+
+The two editions answer the same question differently, and the choice is a privacy trade-off the owner
+is entitled to make explicitly:
+
+| | Published edition (live now) | This session's edition (not published) |
+|---|---|---|
+| Owner's property figures | Withheld by policy | Used throughout |
+| Properties named | "Property A / B" | ZIP codes 95014 / 94122 |
+| Specific dollar projections | Illustrative only | Computed from the owner's actual values |
+| Decision output | Generic planning guidance | A costed ranking of three specific paths |
+| Publication guard | Allowlist of 8 pages | None — deliberately not deployed |
+
+If the owner wants the specific edition live, the publication allowlist must be extended *by the
+session that owns it*, with the owner's explicit consent recorded, and with the understanding that the
+figures become public and permanently crawler-indexable. This session did not make that decision on
+the owner's behalf.
+
+### Verification performed on the surviving tree
+
+- Confirmed `main` at `24e8ab9`; no file from another session modified.
+- Confirmed `.github/workflows/pages.yml` → `scripts/verify.py` → `scripts/package_site.py` allowlist
+  of 8 pages + 2 assets.
+- Confirmed this branch leaves the working tree clean against `origin/main`.
+- Recorded this resolution rather than silently reverting, per the board's rule on conflicts.
