@@ -11,16 +11,42 @@ concurrency:
   group: pages
   cancel-in-progress: true
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - name: Validate site links
+        run: |
+          python3 - <<'PYCODE'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          class Check(HTMLParser):
+              def __init__(self): super().__init__(); self.ids=set(); self.hrefs=[]
+              def handle_starttag(self, tag, attrs):
+                  d=dict(attrs)
+                  if 'id' in d: self.ids.add(d['id'])
+                  if tag=='a':
+                      href=d.get('href','')
+                      if href.startswith('#'): self.hrefs.append(href[1:])
+                      elif href and not href.startswith(('https://','http://','mailto:','javascript:')):
+                          assert (Path(current).parent / href.split('#')[0]).exists(), f'Broken link in {current}: {href}'
+          pages=sorted(Path('.').glob('*.html'))
+          for page in pages:
+              current=str(page); c=Check(); c.feed(page.read_text())
+              missing=sorted(set(c.hrefs)-c.ids)
+              assert not missing, f'Broken anchor in {page}: {missing}'
+          print(f'Validated {len(pages)} HTML pages.')
+          PYCODE
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
   deploy:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: "."
       - id: deployment
         uses: actions/deploy-pages@v4
