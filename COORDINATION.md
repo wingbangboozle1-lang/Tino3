@@ -252,3 +252,16 @@ Evidence boundary: official-source legal framework retained; no estimates, house
 - Corrected false claims in reviewed R01/R12 that information had never entered Git history. Rebuilt reviewed pages. Added fail-closed tracked-file allowlist and disabled legacy generators so CI prevents unnoticed republication outside the reviewed edition.
 - Official rechecks: IRS https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax (2026 $15,000,000; estate assets/gifts; portability); IRS https://www.irs.gov/faqs/interest-dividends-other-types-of-income/gifts-inheritances/gifts-inheritances (basis and sale gain; initial transient 502 resolved on retry); BOE https://www.boe.ca.gov/prop19/ (eligibility and filing windows); BOE https://www.boe.ca.gov/proptaxes/pdf/lta26026.pdf (definitions and continual use; retrieved opening chunk, not exhaustive document); Controller https://www.sco.ca.gov/ardtax_estate_tax.html; SF https://sftreasurer.org/property/secured-property-taxes (2026–27 rate); CDI https://www.insurance.ca.gov/0400-news/0100-press-releases/2018/release138-18.cfm (comparison tool is not a quote); LAO https://www.lao.ca.gov/ballot/2025/250422.pdf (proposal only). IRS Form 706 opening contents retrieved; no claim of full instruction-set review.
 - Limits: retained legal ledger is not an exhaustive fresh legal audit. Official-source-only/no-inference and confidentiality requirements preclude publicly publishing household-based forecasts or an unsupported profit winner. Unverified premium, law-outcome, asset/basis and projection fields remain blank on Flagged for Review.
+
+### Publication result · arena-b067dfc7 · 2026-11-10
+
+| Task | Status | Owner | Evidence |
+|---|---|---|---|
+| Current-tree privacy remediation and final integration | done | arena-b067dfc7 | PR https://github.com/wingbangboozle1-lang/Tino3/pull/17 merged; merge commit 6846fe67619eb06a123e1b8bb1fc723486be9262 |
+| Historical disclosure / unknown financial and legal inputs | needs review | arena-b067dfc7 | Published R01–R12 at https://wingbangboozle1-lang.github.io/Tino3/review.html ; does not block deployment |
+
+- CI verify passed: https://github.com/wingbangboozle1-lang/Tino3/actions/runs/42795741639 . Post-merge verification also passed.
+- Actions build AND deploy succeeded: https://github.com/wingbangboozle1-lang/Tino3/actions/runs/42795790616 . Legacy publisher checked separately: https://github.com/wingbangboozle1-lang/Tino3/actions/runs/42795787851 .
+- Live fetch verified dashboard at https://wingbangboozle1-lang.github.io/Tino3/ and corrected R01/R12 on review.html. Former executive-summary.html and decision-suite/projections.html return withdrawal notices (sample endpoint checks, not a claim of every CDN cache purged).
+- Tests passed: eight reproducible pages, 119 cited rows, official source-host allowlist, local navigation, all 78 root/package HTML local-link checks, $10 display increments, negative privacy regression and whitespace. No browser automation/rendering or comprehensive fresh legal audit claimed.
+- All session work remains on the fixed Arena branch. No other session's branch or pending PR modified. Both current publishing paths contain sanitized content; API source-configuration permission and historical exposure remain flagged.
