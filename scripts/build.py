@@ -129,7 +129,7 @@ est45 = [x for x in M["estate"] if x["year"] == 2045][0]
 P["index.html"] = (head("Overview", "index.html") + hero(
     "INHERITANCE DECISION BRIEF",
     "Decide with numbers.<br>Not with guesses.",
-    "A 2040&ndash;2050 inherited-residence decision, modelled against the official property-tax, income-tax and estate rules that apply.") +
+    "A 2040–2050 inherited-residence decision, modelled against the official property-tax, income-tax and estate rules that apply.") +
     f'<div class="notice"><span>&#9672;</span><div>{PRIVACY}</div></div>' +
     f"""<div class="metrics">
 <article><span>BEST 2045 OPTION · AFTER TAX</span><strong>Sell A</strong><p>{money(sell45)} of terminal net worth in 2055 versus {money(rent45)} if rented. Gap {money(sell45-rent45)}.</p></article>
@@ -151,13 +151,13 @@ P["index.html"] = (head("Overview", "index.html") + hero(
          "links": ulinks("irs_basis", "irs_tc409") if r["code"].startswith("S3") else ulinks("boe_prop19", "rtc51"),
          "basis": "scenario"} for r in d45["rows"]],
        caption="All figures are model output from the assumptions register; terminal values are nominal 2055 dollars.")}
-<p class="note">Sources for the mechanics: {ulinks('irs_basis')} (basis step-up), {ulinks('boe_prop19')} (family-home exclusion), {ulinks('boe_cap')} (cap amount). Rental treatment: <a href="https://www.irs.gov/publications/p527" target="_blank" rel="noopener noreferrer">IRS &middot; Publication 527 &#8599;</a>.</p>
+<p class="note">Sources for the mechanics: {ulinks('irs_basis')} (basis step-up), {ulinks('boe_prop19')} (family-home exclusion), {ulinks('boe_cap')} (cap amount). Rental income is taxed as ordinary income in California: {ulinks("ftb_cg")}.</p>
 </section>
 <section><h2>Read by category</h2>
 <div class="cards">
 <article class="card"><h3><a href="executive-summary.html">Executive summary</a></h3><p>The decision, the numbers behind it, and what would change it.</p></article>
-<article class="card"><h3><a href="property-a.html">[PROPERTY_A]</a></h3><p>Assessed value, derived tax rate, carrying costs, 2026&ndash;2055 projection, solar exposure.</p></article>
-<article class="card"><h3><a href="property-b.html">[PROPERTY_B]</a></h3><p>Rent roll, operating statement, the reported-bill anomaly, 2026&ndash;2055 projection.</p></article>
+<article class="card"><h3><a href="property-a.html">[PROPERTY_A]</a></h3><p>Assessed value, derived tax rate, carrying costs, 2026–2055 projection, solar exposure.</p></article>
+<article class="card"><h3><a href="property-b.html">[PROPERTY_B]</a></h3><p>Rent roll, operating statement, the reported-bill anomaly, 2026–2055 projection.</p></article>
 <article class="card"><h3><a href="taxes.html">Tax &amp; law</a></h3><p>Federal estate, California death taxes, Proposition 13 and 19, capital gains, pending changes.</p></article>
 <article class="card"><h3><a href="inheritance.html">Inheritance steps</a></h3><p>Day-by-day obligations, statutory deadlines and the filings that protect the assessment.</p></article>
 <article class="card"><h3><a href="review.html">Flagged for review</a></h3><p>Every unverified value, every assumption, and one disclosure about earlier repository history.</p></article>
@@ -219,7 +219,7 @@ P["property-a.html"] = (head("Property A", "property-a.html") + hero(
   {"cells": ["2025 property tax paid", money(7210), "Owner-provided."], "links": ulinks("rtc51")},
   {"cells": ["Implied effective tax rate", f"{M['sources_rates']['rate_a_derived']}%", "Derived: 2025 tax &divide; 2025 assessed value. Includes voter-approved debt and parcel charges, not just the 1% base levy."], "links": ulinks("rtc51")},
   {"cells": ["Derived 2026 tax (bill not provided)", money([r for r in M['projections_a'] if r['year']==2026][0]['tax']), "Derived, not a bill &mdash; flagged FL-01."], "links": ulinks("rtc51")},
-  {"cells": ["Solar", "Net credit reported: $10&ndash;$20 per month", "Owner-reported. Export compensation rules changed for new interconnections after 15 April 2023 and legacy tariffs are closed to new enrolments."], "links": ulinks("cpuc_nem")}])}
+  {"cells": ["Solar", "Net credit reported: $10–$20 per month", "Owner-reported. Export compensation rules changed for new interconnections after 15 April 2023 and legacy tariffs are closed to new enrolments."], "links": ulinks("cpuc_nem")}])}
 </section>
 <section><h2>Assessment history (owner-provided, rounded to $10, unverified)</h2>
 <p>These are the owner's records, not county records. They were checked only for internal arithmetic and for consistency with the statutory 2% cap on assessed-value growth. {ulinks('rtc51')}</p>
@@ -234,7 +234,7 @@ P["property-a.html"] = (head("Property A", "property-a.html") + hero(
  [{"cells": ["Total", money(sum(c["a"] for c in M["carrying"])), "Before any rent is received."], "links": ulinks("rtc51"), "basis": "scenario"}],
  caption="Insurance is the owner's estimate; no verified quote exists (FL-03). Maintenance is a 0.50% of value scenario.")}
 </section>
-<section><h2>Projection 2026&ndash;2055 (base case: 4.0% appreciation, 2.5% cost inflation, 2.0% Proposition 13 growth)</h2>
+<section><h2>Projection 2026–2055 (base case: 4.0% appreciation, 2.5% cost inflation, 2.0% Proposition 13 growth)</h2>
 {table(["Year", "Value &middot; low 3%", "Value &middot; base 4%", "Value &middot; high 5%", "Assessed value", "Property tax", "Insurance", "Water", "Electricity", "Maintenance", "Total carrying cost"],
  [{"cells": [str(r["year"]), money(r["fmv_low"]), money(r["fmv_base"]), money(r["fmv_high"]), money(r["assessed"]),
              money(r["tax"]), money(r["insurance"]), money(r["water"]), money(r["electric"]), money(r["maintenance"]), money(r["total_carrying"])],
@@ -278,13 +278,13 @@ P["property-b.html"] = (head("Property B", "property-b.html") + hero(
   {"cells": ["Vacancy and collection allowance", money(-round(b26["rent"]*0.03, -1)), "3.0% scenario."], "links": internal("executive-summary.html#assumptions", "Assumption register"), "basis": "scenario"},
   {"cells": ["Property tax", money(-b26["tax"]), "Reported bill (see anomaly above)."], "links": ulinks("sf_rate")},
   {"cells": ["Insurance (landlord, three units)", money(-b26["insurance"]), "Scenario band; the owner estimate is $1,500 (FL-03)."], "links": ulinks("cdi_tool"), "basis": "scenario"},
-  {"cells": ["Water and sewer", money(-b26["water"]), "Midpoint of the owner's $330&ndash;$400 monthly range."], "links": internal("sources.html", "Owner-provided input") , "basis": "scenario"},
-  {"cells": ["Electricity", money(-b26["electric"]), "Midpoint of the owner's $30&ndash;$70 monthly range."], "links": internal("sources.html", "Owner-provided input"), "basis": "scenario"},
+  {"cells": ["Water and sewer", money(-b26["water"]), "Midpoint of the owner's $330–$400 monthly range."], "links": internal("sources.html", "Owner-provided input") , "basis": "scenario"},
+  {"cells": ["Electricity", money(-b26["electric"]), "Midpoint of the owner's $30–$70 monthly range."], "links": internal("sources.html", "Owner-provided input"), "basis": "scenario"},
   {"cells": ["Maintenance and repairs", money(-b26["maintenance"]), "1.00% of value scenario."], "links": ulinks("irs_basis", "ftb_cg"), "basis": "scenario"},
   {"cells": ["Net operating income", money(b26["noi"]), "Before income tax."], "links": internal("executive-summary.html#assumptions", "Method"), "basis": "scenario"},
   {"cells": ["After-tax cash flow", money(b26["after_tax"]), "Income tax applied at the 33.3% scenario rate; depreciation ignored."], "links": ulinks("ftb_rates")}])}
 </section>
-<section><h2>Projection 2026&ndash;2055</h2>
+<section><h2>Projection 2026–2055</h2>
 {table(["Year", "Value &middot; low 3%", "Value &middot; base 4%", "Value &middot; high 5%", "Assessed value", "Property tax", "Gross rent", "Insurance", "Maintenance", "Net operating income"],
  [{"cells": [str(r["year"]), money(r["fmv_low"]), money(r["fmv_base"]), money(r["fmv_high"]), money(r["assessed"]),
              money(r["tax"]), money(r["rent"]), money(r["insurance"]), money(r["maintenance"]), money(r["noi"])],
@@ -343,7 +343,7 @@ P["projections.html"] = (head("Projections", "projections.html") + hero(
              money(selb[r["year"]]["noi"]), money(selb[r["year"]]["after_tax"] - r["total_carrying"])],
    "links": ulinks("rtc51", "sf_rate", "cpuc_nem"), "basis": "scenario"} for r in sel],
  caption="Combined column charges A's full carrying cost against B's after-tax cash flow, i.e. the household occupies A and rents B's third unit.")}
-<p class="note">Download the full series: <a href="assets/data/property_a.csv">[PROPERTY_A] 2026&ndash;2055 (CSV)</a> &middot; <a href="assets/data/property_b.csv">[PROPERTY_B] 2026&ndash;2055 (CSV)</a> &middot; <a href="assets/data/decision.csv">decision comparison (CSV)</a>. Every row is reproducible by running <code>python scripts/model.py</code>.</p>
+<p class="note">Download the full series: <a href="assets/data/property_a.csv">[PROPERTY_A] 2026–2055 (CSV)</a> &middot; <a href="assets/data/property_b.csv">[PROPERTY_B] 2026–2055 (CSV)</a> &middot; <a href="assets/data/decision.csv">decision comparison (CSV)</a>. Every row is reproducible by running <code>python scripts/model.py</code>.</p>
 </section>
 <section><h2>Assumption register</h2>
 <p>These are the only inputs that are not verified law or owner-provided data. Change one and the model recomputes.</p>
@@ -407,7 +407,7 @@ P["decision.html"] = (head("Decision analysis", "decision.html") + hero(
 <li><strong>Liquidity.</strong> A sale converts an illiquid asset into a portfolio that can fund the household's housing, care and expenses without a forced sale at a bad moment.</li>
 <li><strong>Optionality.</strong> The household keeps a place to live in B. Nothing about selling A removes the option to buy elsewhere later.</li>
 </ol>
-<p class="note"><strong>The counter-case, stated fairly:</strong> if appreciation runs at 5% and portfolio returns at 4&ndash;5%, renting A is worth {money([s for s in matrix if s['appreciation']==0.05 and s['reinvest']==0.05][0]['rent'] - [s for s in matrix if s['appreciation']==0.05 and s['reinvest']==0.05][0]['sell'])} more by 2055. Landlording a single-family home also produces no capital-gains tax while held, and the pending proposal would widen that gap. Anyone who believes Bay Area land compounds above 5% should rent, not sell.</p>
+<p class="note"><strong>The counter-case, stated fairly:</strong> if appreciation runs at 5% and portfolio returns at 4–5%, renting A is worth {money([s for s in matrix if s['appreciation']==0.05 and s['reinvest']==0.05][0]['rent'] - [s for s in matrix if s['appreciation']==0.05 and s['reinvest']==0.05][0]['sell'])} more by 2055. Landlording a single-family home also produces no capital-gains tax while held, and the pending proposal would widen that gap. Anyone who believes Bay Area land compounds above 5% should rent, not sell.</p>
 </section>""" + FOOT)
 
 # ---------------------------------------------------------------- inheritance steps
@@ -424,7 +424,7 @@ P["inheritance.html"] = (head("Inheritance steps", "inheritance.html") + hero(
   {"cells": ["Within 1 year", "File for the homeowners' exemption on the inherited residence, if it will be occupied.", "[BENEFICIARY]", "Proposition 19 requirements"], "links": ulinks("boe_prop19")},
   {"cells": ["Within 3 years", "Claim the Proposition 19 exclusion, or before any transfer to a third party.", "[BENEFICIARY]", "Proposition 19 requirements"], "links": ulinks("boe_prop19")},
   {"cells": ["Within 9 months", "File Form 706 if the gross estate plus adjusted taxable gifts exceeds $15,000,000 (2026 threshold); automatic six-month extension by Form 4768.", "Executor / trustee", "IRS filing threshold"], "links": ulinks("irs_estate", "irs_estate_faq")},
-  {"cells": ["Month 1&ndash;12", "Decide live, rent or sell; if selling, do it inside the first year so post-death appreciation stays out of the gain.", "[BENEFICIARY]", "Basis and gain rules"], "links": ulinks("irs_basis", "irs_tc409")},
+  {"cells": ["Month 1–12", "Decide live, rent or sell; if selling, do it inside the first year so post-death appreciation stays out of the gain.", "[BENEFICIARY]", "Basis and gain rules"], "links": ulinks("irs_basis", "irs_tc409")},
   {"cells": ["At sale", "Escrow pays transfer taxes and costs; the sale is reported on Form 1099-S and Schedule D even when the gain is excluded.", "Escrow / [BENEFICIARY]", "IRS home-sale reporting"], "links": ulinks("irs_tc701")}])}
 </section>
 <section><h2>What the assessor will do</h2>
@@ -448,11 +448,11 @@ P["inheritance.html"] = (head("Inheritance steps", "inheritance.html") + hero(
 
 # ---------------------------------------------------------------- flagged
 FL = [
-    ("FL-01", "[PROPERTY_A] 2026 property-tax bill", "The owner's schedule stops at 2025. The 2026 tax of " + money([r for r in M['projections_a'] if r['year'] == 2026][0]['tax']) + " is derived, not billed.", "Obtain the 2026&ndash;27 secured bill.", "rtc51"),
+    ("FL-01", "[PROPERTY_A] 2026 property-tax bill", "The owner's schedule stops at 2025. The 2026 tax of " + money([r for r in M['projections_a'] if r['year'] == 2026][0]['tax']) + " is derived, not billed.", "Obtain the 2026–27 secured bill.", "rtc51"),
     ("FL-02", "[PROPERTY_B] reported tax does not reconcile", "Ad valorem at the verified local rate gives about " + money(1350) + " against a reported bill of " + money(2440) + "; the gap of about " + money(2440-1350) + " is unexplained.", "Obtain the actual bill and separate ad valorem from parcel charges.", "sf_rate"),
     ("FL-03", "Insurance premiums on both properties", "No verified premium exists. The owner estimates $1,500; the model uses $3,000 for A and $3,600 for B as scenario bands. CDI's tool gives company averages, not quotes.", "Get three written quotes per property, with the correct occupancy and unit count.", "cdi_tool"),
     ("FL-04", "Maintenance percentages", "0.50% of value for A and 1.00% for B are scenario assumptions, not measured history.", "Use five years of actual repair invoices to replace the assumption.", "irs_basis" ),
-    ("FL-05", "[PROPERTY_A] future market rent", "Rent is derived from a 3.0% gross yield on projected value. No market rent for a 2040&ndash;2050 letting exists to verify.", "Track comparable rents annually; update the yield.", "irs_basis"),
+    ("FL-05", "[PROPERTY_A] future market rent", "Rent is derived from a 3.0% gross yield on projected value. No market rent for a 2040–2050 letting exists to verify.", "Track comparable rents annually; update the yield.", "irs_basis"),
     ("FL-06", "Appreciation, inflation and return scenarios", "3%/4%/5% appreciation, 2.5% inflation and 7.0% equity returns are assumptions. They are not forecasts and were not modelled from a published projection.", "Re-run scripts/model.py with your own numbers.", "irs_tc409"),
     ("FL-07", "Proposition 19 cap growth", "The biennial recalculation method is verified; the 3.0% growth used to project future caps is not.", "Confirm each published adjustment from BOE when released.", "boe_cap"),
     ("FL-08", "Federal exclusion after 2026", "Only the 2026 amount could be retrieved. The IRS newsroom page for 2027 adjustments returned a 404 during this review, so the 2.5% indexing is a scenario.", "Re-check the IRS inflation-adjustment release when it is published.", "irs_estate_faq"),
@@ -471,9 +471,8 @@ FL = [
 FIX = {"irs_basis": "irs_basis", "sos_measures": "sos_measures"}
 fl_rows = []
 for fid, item, detail, next_step, sid in FL:
-    sid = FIX.get(sid, sid) if FIX.get(sid, "irs_basis") not in SRC else ("irs_basis" if FIX.get(sid) not in SRC else FIX[sid])
     if sid not in SRC:
-        sid = "irs_basis"
+        raise SystemExit(f"flagged row {fid} cites unknown source {sid}")
     fl_rows.append({"cells": [fid, e(item), e(detail), e(next_step), "Open"], "links": ulinks(sid)})
 
 P["review.html"] = (head("Flagged for review", "review.html") + hero(
