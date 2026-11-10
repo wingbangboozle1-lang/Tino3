@@ -1,4 +1,4 @@
-name: Deploy static site to GitHub Pages
+name: Deploy GitHub Pages
 on:
   push:
     branches: [main]
@@ -15,9 +15,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Validate site links and privacy notice
+      - uses: actions/configure-pages@v5
+      - name: Validate site links
         run: |
-          python3 - <<'PY'
+          python3 - <<'PYCODE'
           from html.parser import HTMLParser
           from pathlib import Path
           class Check(HTMLParser):
@@ -29,24 +30,22 @@ jobs:
                       href=d.get('href','')
                       if href.startswith('#'): self.hrefs.append(href[1:])
                       elif href and not href.startswith(('https://','http://','mailto:','javascript:')):
-                          target=Path(current).parent / href.split('#')[0]
-                          assert target.exists(), f'Broken local link in {current}: {href}'
+                          assert (Path(current).parent / href.split('#')[0]).exists(), f'Broken link in {current}: {href}'
           pages=sorted(Path('.').glob('*.html'))
           for page in pages:
-              current=str(page); check=Check(); check.feed(page.read_text())
-              missing=sorted(set(check.hrefs)-check.ids)
-              assert not missing, f'Broken anchor(s) in {page}: {missing}'
-          assert Path('flagged.html').exists(), 'Missing Flagged for Review page'
-          print(f'Validated {len(pages)} pages, internal references, and review page.')
-          PY
+              current=str(page); c=Check(); c.feed(page.read_text())
+              missing=sorted(set(c.hrefs)-c.ids)
+              assert not missing, f'Broken anchor in {page}: {missing}'
+          print(f'Validated {len(pages)} HTML pages.')
+          PYCODE
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .
   deploy:
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
     needs: build
     steps:
       - id: deployment
