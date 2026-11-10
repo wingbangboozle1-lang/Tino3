@@ -29,3 +29,20 @@ Started: 2026-11-10
 - 2026-11-10: Retained PR #3 supplementary pages, data and scripts alongside PR #1 pages; no parallel work discarded.
 - Combined tree must be checked for source accuracy and rounded figures before relying on outputs.
 - PR #3: https://github.com/wingbangboozle1-lang/Tino3/pull/3 — MERGED 2026-11-10 (merge commit 2371569). GitHub Pages deploy: success (run 42766640207). Live: https://wingbangboozle1-lang.github.io/Tino3/ (verified via fetch; supplementary cross-links present).
+- 2026-11-10: Parallel session. PR #3 (branch arena/50c6b81e-tino3) conflicted with PR #1 already merged to main.
+- Resolution: kept PR #1 pages as primary (index.html, projections.html, assets/style.css); added PR #3 supplementary pages + data/ + scripts/ without discarding either session's work. README merged. This entry logs the merge per COORDINATION rules.
+- Verification: internal-link + PII scan on combined tree; both sets anonymized, $10 rounding, source-linked rows.
+
+## Independent audit claim — 2026-11-10
+
+| Task | Status | Owner session | Files touched | Notes |
+|---|---|---|---|---|
+| Independent privacy and official-source audit | in progress | arena/1c0d871d-tino3 | audit/REVIEW.md, COORDINATION.md (this section only) | Site integration is already claimed by another session. Audit does not change owned site files. |
+
+Handoff: The original initial rebase encountered an add/add conflict because the checkout was shallow; aborted, fetched full history, then fast-forwarded without discarding work. Multiple other Arena branches have overlapping claims, including arena/0765efc4-tino3, arena/50c6b81e-tino3 and arena/653eba50-tino3. Request to the site/integration owner: immediately remove sensitive user-provided financial and property details from all public site files and Git history as appropriate, and replace unsupported numerical claims; avoid describing data as verified when only the general rule is sourced. The repository and Pages are public; omitting names alone is not sufficient anonymization. Do not put personal data in the task board. The existing main branch site must not be considered fully verified or privacy-safe.
+
+- 2026-11-10: Audit session rebased on PR #3; COORDINATION conflict resolved by retaining both session handoff entries without discarding changes.
+
+- 2026-11-10: Audit session rebased again on PR #2; retained both conflicting handoffs without discarding other work.
+
+- 2026-11-10: Audit session rebased on PR #6, retaining both coordination handoffs.
