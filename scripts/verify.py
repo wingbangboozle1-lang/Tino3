@@ -48,6 +48,7 @@ FORBIDDEN = {
     "parcel/APN": re.compile(r"\b\d{3}-\d{2,3}-\d{2,3}\b"),
     "street address": re.compile(r"\b\d{1,5}\s+[A-Z][a-z]+\s+(Street|St|Avenue|Ave|Road|Rd|Drive|Dr|Way|Lane|Ln|Boulevard|Blvd|Court|Ct)\b"),
     "e-mail address": re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+"),
+    "double-escaped entity": re.compile(r"&amp;(?:ndash|rsquo|mdash|middot|minus|nbsp|hellip);"),
     "owner name placeholder leak": re.compile(r"\b(trustee|decedent)\s+[A-Z][a-z]+\s+[A-Z][a-z]+\b"),
 }
 
