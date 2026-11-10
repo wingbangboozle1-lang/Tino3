@@ -1,6 +1,6 @@
 {
   "reviewed_on": "2026-11-10",
-  "reviewer_session": "arena/d76d5375-tino3",
+  "reviewer_session": "arena/d76d5375-tino3; integration additions by arena-9233adb2-tino3 (2026-11-10)",
   "method": "Each entry below was retrieved directly from the publisher's own domain on 2026-11-10 during this session. The 'verifies' field lists only what the retrieved text actually supports. Nothing is inferred.",
   "sources": {
     "irs_estate": {
@@ -213,6 +213,66 @@
         "No inherited-property measure appears among the qualified November 3, 2026 measures listed"
       ],
       "quote": "## November 3, 2026, Statewide Ballot Measures ... Proposition 45 ... Modifies Environmental Review for Certain Projects.",
+      "status": "verified"
+    },
+    "irs_2027": {
+      "title": "IR-2026-133 (Nov 5, 2026): IRS releases tax inflation adjustments for tax year 2027 (Revenue Procedure 2026-35)",
+      "publisher": "Internal Revenue Service",
+      "url": "https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts",
+      "verifies": [
+        "Basic exclusion amount for estates of decedents dying in 2027 is $15,480,000, up from $15,000,000 for 2026",
+        "Annual gift-tax exclusion rises to $20,000 per recipient for 2027, up from $19,000 for 2026",
+        "Annual exclusion for gifts to a non-citizen spouse rises to $201,000 for 2027, up from $194,000 for 2026"
+      ],
+      "quote": "Estates of decedents who die during 2027 have a basic exclusion amount of $15,480,000, up from a total of $15,000,000 for estates of decedents who died in 2026.",
+      "status": "verified"
+    },
+    "sf_treasurer": {
+      "title": "Secured Property Taxes - current secured rate for jurisdiction B (treasurer-tax collector)",
+      "publisher": "Treasurer-Tax Collector (jurisdiction B)",
+      "url": "https://sftreasurer.org/property/secured-property-taxes",
+      "verifies": [
+        "The secured property tax rate for Fiscal Year 2026-27 is 1.18162182%",
+        "Secured bills are mailed in October; first installment delinquent after December 10, second after April 10",
+        "A change in ownership or new construction triggers a supplemental assessment on the value difference"
+      ],
+      "quote": "The secured property tax rate for Fiscal Year 2026-27 is 1.18162182%.",
+      "status": "verified"
+    },
+    "sf_rentboard": {
+      "title": "Current rates, including rent increase, relocation, security deposit (jurisdiction B rent board)",
+      "publisher": "Rent Board (jurisdiction B)",
+      "url": "https://www.sf.gov/reports--current-rates-including-rent-increase-relocation-sec-deposit",
+      "verifies": [
+        "Allowable annual rent increase is 1.6% for March 1, 2026 through February 28, 2027",
+        "Prior allowable increases: 1.4% (Mar 2025-Feb 2026) and 1.7% (Mar 2024-Feb 2025)",
+        "Notice posted November 9, 2026: the Board of Supervisors is considering File No. 261020, which would temporarily limit combined banked and capital-improvement rent increases to 10% per year for rent-controlled units; not enacted and subject to change"
+      ],
+      "quote": "Allowable Rent Increase: 1.6% for March 1, 2026 - February 28, 2027",
+      "status": "verified"
+    },
+    "sos_memo": {
+      "title": "CC/ROV Memorandum #26138 (May 18, 2026): Initiative - Failure of 1994, Related to Property Taxes on Transfers Between Family Members",
+      "publisher": "California Secretary of State",
+      "url": "https://elections.cdn.sos.ca.gov/ccrov/2026/may/26138jh.pdf",
+      "verifies": [
+        "Initiative 1994 (A.G. File 25-0017), the constitutional amendment repealing Proposition 19's transfer rules, failed: signatures filed were less than 100 percent of the required number (Elections Code section 9030(b))",
+        "Title of measure: REPEALS VOTER-ENACTED CHANGES TO PROPERTY TAX RULES FOR TRANSFERS BETWEEN FAMILY MEMBERS. INITIATIVE CONSTITUTIONAL AMENDMENT. Summary date November 6, 2025",
+        "The measure therefore was not on the November 3, 2026 statewide ballot; Proposition 19 rules remain in effect"
+      ],
+      "quote": "...the total number of signatures for the hereinafter named initiative filed with all county elections officials is less than 100 percent of the number of qualified voters required to find the petition sufficient; therefore, the petition has failed.",
+      "status": "verified"
+    },
+    "sb974": {
+      "title": "SB 974, Stats. 2026 ch. 665 - Property taxation: change in ownership: generational transfers: special needs trusts",
+      "publisher": "California Legislative Information",
+      "url": "https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202520260SB974",
+      "verifies": [
+        "Amends Revenue and Taxation Code section 63.2 so a court-established special needs trust must be considered an eligible medium of transfer for the family-home / family-farm exclusion",
+        "Approved by the Governor and filed with the Secretary of State on September 27, 2026 (Chapter 665)",
+        "No urgency clause, so the general January 1, 2027 effective-date rule applies; all other section 63.2 requirements are unchanged"
+      ],
+      "quote": "This bill would revise the definition of 'transfer' for purposes of the above-described property tax law provisions to require that a special needs trust, established as described above, be considered an eligible medium of transfer.",
       "status": "verified"
     }
   }

@@ -31,10 +31,16 @@
       "basis": "Statutory amount for deaths in 2026."
     },
     {
+      "id": "fed_exclusion_2027",
+      "item": "Federal estate exclusion, 2027",
+      "value": "$15,480,000",
+      "basis": "Published amount for deaths in 2027 (IRS IR-2026-133, 5 Nov 2026; Rev. Proc. 2026-35); verified on integration re-check."
+    },
+    {
       "id": "fed_exclusion_indexing",
-      "item": "Federal exclusion indexing after 2026",
+      "item": "Federal exclusion indexing after 2027",
       "value": "2.5%",
-      "basis": "Scenario assumption; the 2027 published amount was not retrievable from an official page in this review."
+      "basis": "Scenario assumption for 2028 onward; the 2026 and 2027 published amounts are verified and used directly."
     },
     {
       "id": "equity_return",
@@ -46,7 +52,7 @@
       "id": "bond_return",
       "item": "Bond / Treasury return (nominal)",
       "value": "4.0%",
-      "basis": "Scenario assumption; current market yields were not re-verified in this review."
+      "basis": "Scenario assumption. Reference: the official 10-year U.S. Treasury par yield was 4.88% on 9 Nov 2026 (cited in the Decision Brief annex ledger); forward yields are unknown."
     },
     {
       "id": "cash_return",
@@ -58,7 +64,7 @@
       "id": "rent_growth",
       "item": "Rent growth (nominal)",
       "value": "2.5%",
-      "basis": "Scenario assumption. The local rent-stabilisation cap on annual increases was not re-verified."
+      "basis": "Scenario assumption. The jurisdiction's published allowable annual increase for covered units is 1.6% for Mar 2026-Feb 2027; regulated increases may be lower than this scenario."
     },
     {
       "id": "rent_yield_a",
@@ -671,7 +677,7 @@
       "fmv_base": 1872000,
       "fmv_high": 1890000,
       "assessed": 118870,
-      "tax": 1410,
+      "tax": 1400,
       "rent": 87940,
       "water": 4490,
       "electric": 620,
@@ -737,7 +743,7 @@
       "electric": 680,
       "insurance": 4070,
       "maintenance": 21900,
-      "noi": 61030,
+      "noi": 61040,
       "after_tax": 40710
     },
     {
@@ -783,7 +789,7 @@
       "insurance": 4390,
       "maintenance": 24630,
       "noi": 64700,
-      "after_tax": 43150
+      "after_tax": 43160
     },
     {
       "year": 2035,
@@ -842,7 +848,7 @@
       "electric": 810,
       "insurance": 4840,
       "maintenance": 28820,
-      "noi": 69820,
+      "noi": 69830,
       "after_tax": 46570
     },
     {
@@ -858,7 +864,7 @@
       "insurance": 4960,
       "maintenance": 29970,
       "noi": 71150,
-      "after_tax": 47450
+      "after_tax": 47460
     },
     {
       "year": 2040,
@@ -872,7 +878,7 @@
       "electric": 850,
       "insurance": 5090,
       "maintenance": 31170,
-      "noi": 72480,
+      "noi": 72490,
       "after_tax": 48350
     },
     {
@@ -1016,7 +1022,7 @@
       "fmv_base": 4613950,
       "fmv_high": 5805180,
       "assessed": 187440,
-      "tax": 2220,
+      "tax": 2210,
       "rent": 155190,
       "water": 7920,
       "electric": 1090,
@@ -1037,7 +1043,7 @@
       "electric": 1110,
       "insurance": 6670,
       "maintenance": 47990,
-      "noi": 88140,
+      "noi": 88150,
       "after_tax": 58790
     },
     {
@@ -1046,7 +1052,7 @@
       "fmv_base": 4990450,
       "fmv_high": 6400210,
       "assessed": 195010,
-      "tax": 2310,
+      "tax": 2300,
       "rent": 163050,
       "water": 8320,
       "electric": 1140,
@@ -1082,7 +1088,7 @@
       "electric": 1200,
       "insurance": 7190,
       "maintenance": 53980,
-      "noi": 92650,
+      "noi": 92660,
       "after_tax": 61800
     },
     {
@@ -1097,7 +1103,7 @@
       "electric": 1230,
       "insurance": 7370,
       "maintenance": 56140,
-      "noi": 94170,
+      "noi": 94180,
       "after_tax": 62810
     }
   ],
@@ -1221,10 +1227,10 @@
           "name": "Live in Property A",
           "note": "Owner occupies A; the third unit of Property B is rented.",
           "yr1_cash": 6690,
-          "cum_cash": 51070,
-          "terminal_net_worth": 15352770,
+          "cum_cash": 51100,
+          "terminal_net_worth": 15352800,
           "tax_first_year": 49970,
-          "gap_vs_best": -3192190
+          "gap_vs_best": -3192160
         },
         {
           "code": "S2",
@@ -1268,10 +1274,10 @@
           "name": "Live in Property A",
           "note": "Owner occupies A; the third unit of Property B is rented.",
           "yr1_cash": -1970,
-          "cum_cash": -62770,
-          "terminal_net_worth": 15211400,
+          "cum_cash": -62740,
+          "terminal_net_worth": 15211440,
           "tax_first_year": 62040,
-          "gap_vs_best": -1972290
+          "gap_vs_best": -1972250
         },
         {
           "code": "S2",
@@ -1315,10 +1321,10 @@
           "name": "Live in Property A",
           "note": "Owner occupies A; the third unit of Property B is rented.",
           "yr1_cash": -13860,
-          "cum_cash": -99630,
-          "terminal_net_worth": 15174620,
+          "cum_cash": -99610,
+          "terminal_net_worth": 15174640,
           "tax_first_year": 76930,
-          "gap_vs_best": -924690
+          "gap_vs_best": -924670
         },
         {
           "code": "S2",
@@ -1367,38 +1373,38 @@
     },
     {
       "year": 2032,
-      "exclusion_single": 17395400,
-      "exclusion_married": 34790800,
+      "exclusion_single": 17514200,
+      "exclusion_married": 35028400,
       "estate_two_properties": 6200060,
-      "cash_headroom_single": 11195340,
-      "cash_headroom_married": 28590740,
+      "cash_headroom_single": 11314140,
+      "cash_headroom_married": 28828340,
       "ca_inheritance_tax": 0
     },
     {
       "year": 2040,
-      "exclusion_single": 21194610,
-      "exclusion_married": 42389210,
+      "exclusion_single": 21339350,
+      "exclusion_married": 42678700,
       "estate_two_properties": 8485210,
-      "cash_headroom_single": 12709390,
-      "cash_headroom_married": 33904000,
+      "cash_headroom_single": 12854140,
+      "cash_headroom_married": 34193490,
       "ca_inheritance_tax": 0
     },
     {
       "year": 2045,
-      "exclusion_single": 23979750,
-      "exclusion_married": 47959510,
+      "exclusion_single": 24143520,
+      "exclusion_married": 48287030,
       "estate_two_properties": 10323560,
-      "cash_headroom_single": 13656190,
-      "cash_headroom_married": 37635940,
+      "cash_headroom_single": 13819960,
+      "cash_headroom_married": 37963470,
       "ca_inheritance_tax": 0
     },
     {
       "year": 2050,
-      "exclusion_single": 27130890,
-      "exclusion_married": 54261780,
+      "exclusion_single": 27316170,
+      "exclusion_married": 54632350,
       "estate_two_properties": 12560190,
-      "cash_headroom_single": 14570700,
-      "cash_headroom_married": 41701590,
+      "cash_headroom_single": 14755980,
+      "cash_headroom_married": 42072160,
       "ca_inheritance_tax": 0
     }
   ],
@@ -1432,9 +1438,9 @@
       "year": 2045,
       "appreciation": 0.03,
       "reinvest": 0.04,
-      "sell": 12102110,
-      "rent": 12907710,
-      "live": 11869810,
+      "sell": 12102130,
+      "rent": 12907740,
+      "live": 11869840,
       "winner": "Rent"
     },
     {
@@ -1442,9 +1448,9 @@
       "year": 2045,
       "appreciation": 0.03,
       "reinvest": 0.05,
-      "sell": 12698850,
-      "rent": 12907710,
-      "live": 11869810,
+      "sell": 12698870,
+      "rent": 12907740,
+      "live": 11869840,
       "winner": "Rent"
     },
     {
@@ -1452,9 +1458,9 @@
       "year": 2045,
       "appreciation": 0.03,
       "reinvest": 0.06,
-      "sell": 13355210,
-      "rent": 12907710,
-      "live": 11869810,
+      "sell": 13355230,
+      "rent": 12907740,
+      "live": 11869840,
       "winner": "Sell"
     },
     {
@@ -1462,9 +1468,9 @@
       "year": 2045,
       "appreciation": 0.03,
       "reinvest": 0.07,
-      "sell": 14076500,
-      "rent": 12907710,
-      "live": 11869810,
+      "sell": 14076520,
+      "rent": 12907740,
+      "live": 11869840,
       "winner": "Sell"
     },
     {
@@ -1474,7 +1480,7 @@
       "reinvest": 0.04,
       "sell": 14811450,
       "rent": 16760930,
-      "live": 15211400,
+      "live": 15211440,
       "winner": "Rent"
     },
     {
@@ -1484,7 +1490,7 @@
       "reinvest": 0.05,
       "sell": 15528430,
       "rent": 16760930,
-      "live": 15211400,
+      "live": 15211440,
       "winner": "Rent"
     },
     {
@@ -1494,7 +1500,7 @@
       "reinvest": 0.06,
       "sell": 16317050,
       "rent": 16760930,
-      "live": 15211400,
+      "live": 15211440,
       "winner": "Rent"
     },
     {
@@ -1504,7 +1510,7 @@
       "reinvest": 0.07,
       "sell": 17183690,
       "rent": 16760930,
-      "live": 15211400,
+      "live": 15211440,
       "winner": "Sell"
     },
     {
@@ -1514,7 +1520,7 @@
       "reinvest": 0.04,
       "sell": 18191980,
       "rent": 21806690,
-      "live": 19620240,
+      "live": 19620250,
       "winner": "Rent"
     },
     {
@@ -1524,7 +1530,7 @@
       "reinvest": 0.05,
       "sell": 19051930,
       "rent": 21806690,
-      "live": 19620240,
+      "live": 19620250,
       "winner": "Rent"
     },
     {
@@ -1534,7 +1540,7 @@
       "reinvest": 0.06,
       "sell": 19997800,
       "rent": 21806690,
-      "live": 19620240,
+      "live": 19620250,
       "winner": "Rent"
     },
     {
@@ -1544,15 +1550,15 @@
       "reinvest": 0.07,
       "sell": 21037240,
       "rent": 21806690,
-      "live": 19620240,
+      "live": 19620250,
       "winner": "Rent"
     }
   ],
   "sources_rates": {
     "rate_a_derived": 1.336,
     "rate_a_source": "derived: owner-provided 2025 bill divided by owner-provided 2025 assessed value",
-    "rate_b": 1.18268,
-    "rate_b_source": "sf_rate",
+    "rate_b": 1.18162,
+    "rate_b_source": "sf_treasurer",
     "prop19_cap_2025": 1044590
   }
 }

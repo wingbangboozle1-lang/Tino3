@@ -32,6 +32,7 @@ A = {
     "prop13_growth": 0.02,
     "prop19_cap_growth": 0.030,
     "fed_exclusion_2026": 15_000_000,
+    "fed_exclusion_2027": 15_480_000,
     "fed_exclusion_indexing": 0.025,
     "equity_return": 0.070,
     "bond_return": 0.040,
@@ -70,7 +71,7 @@ INPUTS = {
 }
 
 # Verified rates
-RATE_B = 0.0118268325          # SF FY2025-26 combined rate per $100 (src sf_rate)
+RATE_B = 0.0118162182          # jurisdiction B FY2026-27 secured rate (src sf_treasurer); FY2025-26 was $1.18268325 per $100 (src sf_rate)
 PROP19_CAP_2025 = 1_044_586    # src boe_cap
 
 RATE_A = INPUTS["a_tax_2025"] / INPUTS["a_assessed_2025"]   # derived effective rate
@@ -250,7 +251,7 @@ def build():
         "rate_a_derived": round(RATE_A * 100, 3),
         "rate_a_source": "derived: owner-provided 2025 bill divided by owner-provided 2025 assessed value",
         "rate_b": round(RATE_B * 100, 5),
-        "rate_b_source": "sf_rate",
+        "rate_b_source": "sf_treasurer",
         "prop19_cap_2025": r10(PROP19_CAP_2025),
     }
     data["sources_rates"] = RATE_INFO
@@ -262,11 +263,12 @@ def build():
         ("prop13_growth", "Assessed-value growth while owned (RTC 51)", "2.0%", "Statutory 2% cap applies while California CPI exceeds 2%."),
         ("prop19_cap_growth", "Proposition 19 exclusion cap growth", "3.0%", "The real cap is recalculated every two years from the FHFA House Price Index for California; the growth rate is a scenario assumption."),
         ("fed_exclusion_2026", "Federal estate exclusion, 2026", "$15,000,000", "Statutory amount for deaths in 2026."),
-        ("fed_exclusion_indexing", "Federal exclusion indexing after 2026", "2.5%", "Scenario assumption; the 2027 published amount was not retrievable from an official page in this review."),
+        ("fed_exclusion_2027", "Federal estate exclusion, 2027", "$15,480,000", "Published amount for deaths in 2027 (IRS IR-2026-133, 5 Nov 2026; Rev. Proc. 2026-35); verified on integration re-check."),
+        ("fed_exclusion_indexing", "Federal exclusion indexing after 2027", "2.5%", "Scenario assumption for 2028 onward; the 2026 and 2027 published amounts are verified and used directly."),
         ("equity_return", "Diversified equity return (nominal)", "7.0%", "Scenario assumption for the sell-and-reinvest comparison."),
-        ("bond_return", "Bond / Treasury return (nominal)", "4.0%", "Scenario assumption; current market yields were not re-verified in this review."),
+        ("bond_return", "Bond / Treasury return (nominal)", "4.0%", "Scenario assumption. Reference: the official 10-year U.S. Treasury par yield was 4.88% on 9 Nov 2026 (cited in the Decision Brief annex ledger); forward yields are unknown."),
         ("cash_return", "Return on accumulated cash", "3.0%", "Scenario assumption for reinvested cash flow."),
-        ("rent_growth", "Rent growth (nominal)", "2.5%", "Scenario assumption. The local rent-stabilisation cap on annual increases was not re-verified."),
+        ("rent_growth", "Rent growth (nominal)", "2.5%", "Scenario assumption. The jurisdiction's published allowable annual increase for covered units is 1.6% for Mar 2026-Feb 2027; regulated increases may be lower than this scenario."),
         ("rent_yield_a", "Gross rent yield on Property A", "3.0% of market value per year", "Scenario assumption used because no verified market rent exists for a future year."),
         ("vacancy", "Vacancy and collection allowance", "3.0% of gross rent", "Scenario assumption."),
         ("income_tax", "Marginal tax rate on rental income", "33.3%", "Scenario: 24% federal plus 9.3% California. Depreciation is ignored, which overstates tax."),
@@ -377,7 +379,10 @@ def build():
 
     # Estate / inheritance tax headroom
     for Y in (2026, 2032, 2040, 2045, 2050):
-        excl = A["fed_exclusion_2026"] * (1 + A["fed_exclusion_indexing"]) ** (Y - 2026)
+        if Y >= 2027:
+            excl = A["fed_exclusion_2027"] * (1 + A["fed_exclusion_indexing"]) ** (Y - 2027)
+        else:
+            excl = A["fed_exclusion_2026"]
         estate = a_value(Y, g) + b_value(Y, g)
         data["estate"].append({
             "year": Y,

@@ -27,6 +27,21 @@ NAV = [
     ("sources.html", "Source library"),
 ]
 
+ANNEX_NAV = [
+    ("decision-suite/index.html", "Brief dashboard"),
+    ("decision-suite/executive-summary.html", "Brief summary"),
+    ("decision-suite/property-a.html", "Brief &middot; Property A"),
+    ("decision-suite/property-b.html", "Brief &middot; Property B"),
+    ("decision-suite/taxes-and-laws.html", "Brief &middot; Taxes &amp; statutes"),
+    ("decision-suite/projections.html", "Brief &middot; Projections"),
+    ("decision-suite/decision-analysis.html", "Brief &middot; Decision matrix"),
+    ("decision-suite/inheritance-process.html", "Brief &middot; Inheritance steps"),
+    ("decision-suite/flagged-for-review.html", "Brief &middot; Flags"),
+    ("decision-suite/sources-ledger.html", "Brief &middot; Source ledger"),
+    ("verified-dashboard/index.html", "Research supplement"),
+    ("audit/REVIEW.md", "Independent audit (Markdown)"),
+]
+
 PRIVACY = ("<strong>Privacy boundary.</strong> No names, street addresses, ZIP codes, parcel numbers or "
            "unrounded assessment figures are published. Properties appear as <code>[PROPERTY_A]</code> and "
            "<code>[PROPERTY_B]</code>. All amounts are rounded to the nearest $10.")
@@ -36,7 +51,9 @@ SHORT = {"Internal Revenue Service": "IRS", "California State Board of Equalizat
          "California Legislative Information": "CA statute", "California Franchise Tax Board": "FTB",
          "California Public Utilities Commission": "CPUC", "California Department of Insurance": "CDI",
          "California Legislative Analyst's Office": "LAO", "California Secretary of State": "CA SOS",
-         "Board of Supervisors (jurisdiction B rate-setting authority)": "Local rate resolution"}
+         "Board of Supervisors (jurisdiction B rate-setting authority)": "Local rate resolution",
+         "Treasurer-Tax Collector (jurisdiction B)": "Local treasurer",
+         "Rent Board (jurisdiction B)": "Local rent board"}
 
 
 def link(src_id, label=None):
@@ -89,6 +106,7 @@ def head(title, current):
     nav = "".join(
         f'<a {"aria-current=page" if href == current else ""} href="{href}"><span>{i:02d}</span>{label}</a>'
         for i, (href, label) in enumerate(NAV, start=1))
+    annexnav = "".join(f'<a href="{href}">{label}</a>' for href, label in ANNEX_NAV)
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Privacy-safe, official-source inherited-property decision dashboard.">
 <meta name="referrer" content="no-referrer">
@@ -98,6 +116,8 @@ def head(title, current):
 <aside><a class="brand" href="index.html"><b>IA<span>&#8599;</span></b>Inheritance<br>Atlas</a>
 <div class="nav-label">PLANNING WORKSPACE</div>
 <nav aria-label="Main navigation">{nav}</nav>
+<div class="nav-label">DECISION BRIEF ANNEX</div>
+<nav aria-label="Annex navigation">{annexnav}</nav>
 <div class="aside-bottom"><span class="dot"></span> Privacy-first publication<br><small>Official sources &middot; No personal data</small></div></aside>
 <main id="main"><header><span>PROPERTY &amp; WEALTH / {current.replace('.html', '').replace('-', ' ').upper()}</span><span class="review-date">Reviewed Nov 10, 2026</span></header>"""
 
@@ -143,7 +163,7 @@ P["index.html"] = (head("Overview", "index.html") + hero(
 <article class="card"><h3>2. Sell [PROPERTY_A] at inheritance</h3><p>Inherited basis steps up to date-of-death value, so a prompt sale inside the first year realises almost no gain. That is the only moment the embedded gain disappears.</p></article>
 <article class="card"><h3>3. Keep [PROPERTY_B] rented</h3><p>It already produces the housing the household needs through its third unit, so occupying A buys no housing benefit and costs {money([x for x in d45['rows'] if x['code']=='S1'][0]['terminal_net_worth']*-1+best45)} in terminal wealth at 2045.</p></article>
 </div>
-<p class="note">The ranking is close: renting A beats selling if long-run returns fall below about {d45['breakeven_reinvest']}%, or if the pending full-exclusion proposal becomes law (rent then gains about {money([s for s in M['sensitivity'] if s['kind']=='law' and s['year']==2045][0]['delta'])}). Both branches are shown in full on the decision page.</p>
+<p class="note">The ranking is close: renting A beats selling if long-run returns fall below about {d45['breakeven_reinvest']}%, or if a future full-exclusion proposal becomes law &mdash; the 2025&ndash;26 petition failed to qualify for the November 2026 ballot (rent then gains about {money([s for s in M['sensitivity'] if s['kind']=='law' and s['year']==2045][0]['delta'])}). Both branches are shown in full on the decision page.</p>
 </section>
 <section><h2>Decision snapshot &middot; inheritance in 2045</h2>
 {table(["Option", "First-year cash flow", "Terminal after-tax net worth (2055)", "Gap versus best", "Why"],
@@ -161,7 +181,15 @@ P["index.html"] = (head("Overview", "index.html") + hero(
 <article class="card"><h3><a href="taxes.html">Tax &amp; law</a></h3><p>Federal estate, California death taxes, Proposition 13 and 19, capital gains, pending changes.</p></article>
 <article class="card"><h3><a href="inheritance.html">Inheritance steps</a></h3><p>Day-by-day obligations, statutory deadlines and the filings that protect the assessment.</p></article>
 <article class="card"><h3><a href="review.html">Flagged for review</a></h3><p>Every unverified value, every assumption, and one disclosure about earlier repository history.</p></article>
-</div></section>""" + FOOT)
+<article class="card"><h3><a href="decision-suite/index.html">Decision Brief annex</a></h3><p>The earlier full brief, restored: 2026&ndash;2055 projections, estate headroom, trust-inheritance walkthrough and its own .gov source ledger &mdash; placeholders and $10 rounding throughout.</p></article>
+</div></section>
+<section><h2>Two layers, one dashboard</h2>
+<p>This site publishes one integrated edition and one restored annex. They are both anonymized and $10-rounded; they measure different things, and neither is a duplicate of the other.</p>
+{table(["Layer", "What it reports", "How it is verified", "Use it for"],
+ [{"cells": ["Integrated edition (these pages)", "Household terminal net worth at 2055 for an inheritance in 2040, 2045 or 2050, including [PROPERTY_B]'s value and accumulated cash, with a full assumption register.", "Model regenerated and every page re-verified on each CI run; the source ledger was re-checked against official pages on 10 November 2026 (23 sources, quoted).", "The decision, the numbers behind it, and everything that is still unverified."], "links": ulinks("irs_basis", "boe_prop19")},
+  {"cells": ["Decision Brief annex", "Strategy-level ten-year after-tax wealth contributions, 2026&ndash;2055 property-level series, estate-tax headroom table and a step-by-step trust-inheritance walkthrough.", "Its own verifier checks .gov citations per row, $10 rounding, RFC-4180 data files and identifier leaks; unconfirmed official cells are left blank and flagged.", "Longer property-level history and projections, the headroom table, and the filing-by-filing inheritance checklist."], "links": ulinks("boe_cap", "irs_estate_faq")}])}
+<p class="note">Because the two layers measure different scopes and horizons, their figures are not interchangeable and a difference between them is not a disagreement about law. Where they differ, use the integrated edition&rsquo;s figures and assumption register. Both layers carry the same privacy boundary: no names, addresses, ZIP codes, parcel numbers or unrounded records, and every displayed amount is a multiple of $10.</p>
+</section>""" + FOOT)
 
 # ---------------------------------------------------------------- executive summary
 P["executive-summary.html"] = (head("Executive summary", "executive-summary.html") + hero(
@@ -193,7 +221,7 @@ P["executive-summary.html"] = (head("Executive summary", "executive-summary.html
  [{"cells": ["Total annual carrying cost before any rent", money(sum(c["a"] for c in M["carrying"])), money(sum(c["b"] for c in M["carrying"])), "Sum of the rows above."], "links": ulinks("rtc51"), "basis": "scenario"}])}
 <h2>6. What would change the recommendation</h2>
 <ul>
-<li><strong>The pending full-exclusion proposal.</strong> LAO's analysis of initiative 25-0017 describes restoring pre-Proposition 19 rules from 1 January 2027, applying to all inherited primary homes regardless of value and retroactively to transfers since February 2021. If enacted, renting A would keep the base year value and gain about {money([s for s in M['sensitivity'] if s['kind']=='law' and s['year']==2045][0]['delta'])} by 2055, enough to overtake selling. {ulinks('lao_250017')} It did <strong>not</strong> appear on the 3 November 2026 statewide ballot. {ulinks('sos_measures')}</li>
+<li><strong>The pending full-exclusion proposal.</strong> LAO's analysis of initiative 25-0017 describes restoring pre-Proposition 19 rules from 1 January 2027, applying to all inherited primary homes regardless of value and retroactively to transfers since February 2021. If enacted, renting A would keep the base year value and gain about {money([s for s in M['sensitivity'] if s['kind']=='law' and s['year']==2045][0]['delta'])} by 2055, enough to overtake selling. {ulinks('lao_250017')} It did <strong>not</strong> appear on the 3 November 2026 statewide ballot: the Secretary of State's official memorandum of 18 May 2026 records the petition's failure for insufficient signatures, so Proposition 19 rules remain in effect. {ulinks('sos_measures','sos_memo')}</li>
 <li><strong>Sustained returns below about {d45['breakeven_reinvest']}%.</strong> At a 4.0% reinvestment return, selling is the worst of the three hold-or-sell options. See the sensitivity matrix.</li>
 <li><strong>A decision to live in A long term.</strong> Then the exclusion plus avoided transaction costs make occupancy defensible.</li>
 </ul>
@@ -262,6 +290,7 @@ P["property-b.html"] = (head("Property B", "property-b.html") + hero(
   {"cells": ["2025 assessed value", money(114250), "Owner-provided roll figure, rounded to $10."], "links": ulinks("rtc51")},
   {"cells": ["2025 property tax paid", money(2440), "Owner-provided, rounded to $10."], "links": ulinks("sf_rate")},
   {"cells": ["Verified local ad valorem rate, FY2025-26", "$1.18268325 per $100", f"Applied to the reported assessed value this yields {money(1350)} &mdash; about {money(2440-1350)} less than the reported bill (flagged FL-02)."], "links": ulinks("sf_rate")},
+  {"cells": ["Current secured rate, FY2026-27", "1.18162182%", "Published by the jurisdiction's treasurer-tax collector; forward projections in this edition use the current rate."], "links": ulinks("sf_treasurer")},
   {"cells": ["Rent received, two units", money(7150) + " per month", "Owner-provided."], "links": ulinks("irs_basis", "ftb_cg")},
   {"cells": ["Units", "3 livable &middot; 2 rented &middot; 1 available", "Owner-provided."], "links": ulinks("sf_rate")}])}
 <p class="note"><strong>The reported bill does not reconcile with the published rate.</strong> Ad valorem tax on the reported assessed value should be about {money(round(114250*0.0118268325,-1))}; the reported bill is {money(2440)}. The difference of roughly {money(2440-1350)} is consistent with non-ad-valorem parcel charges or a different roll value, but neither is verified. Obtain the actual bill before relying on either figure. {ulinks('sf_rate')}</p>
@@ -309,13 +338,13 @@ P["taxes.html"] = (head("Tax &amp; law", "taxes.html") + hero(
   {"cells": ["Local", "Exclusion cap amount", "$1,044,590 (official figure $1,044,586, shown rounded) for transfers from 16 February 2025 through 15 February 2027, recalculated every two years from the FHFA House Price Index for California.", "Rounded to $1,044,590 in this edition; future amounts are scenario-indexed."], "links": ulinks("boe_cap")},
   {"cells": ["Local", "Claim deadlines", "File for the homeowners' exemption within one year of transfer; claim the exclusion within three years or before a transfer to a third party.", "Both are calendar items, not paperwork details."], "links": ulinks("boe_prop19")},
   {"cells": ["Local", "Change of ownership reporting", "For transfers by reason of death, including through a trust, the trustee or transferee files a statement within 150 days; late filing can carry a $100 or 10% penalty.", "Miss this and the reassessment runs on the assessor's timetable."], "links": ulinks("rtc480")},
-  {"cells": ["Local", "Jurisdiction B ad valorem rate", "FY2025-26 combined rate: $1.18268325 per $100 of taxable value.", "Applied to [PROPERTY_B]'s reported assessed value this does not reproduce the reported bill (FL-02)."], "links": ulinks("sf_rate")},
+  {"cells": ["Local", "Jurisdiction B property tax rates", "FY2025-26 combined rate: $1.18268325 per $100 of taxable value; FY2026-27 secured rate: 1.18162182% (current).", "The FY2025-26 rate applied to [PROPERTY_B]'s reported assessed value does not reproduce the reported bill (FL-02); forward projections use the current FY2026-27 rate."], "links": ulinks("sf_rate", "sf_treasurer")},
   {"cells": ["State income", "Rental income and capital gains", "California has no preferential capital-gains rate; gains are taxed as ordinary income, in brackets running from 1.00% to 12.30%.", f"A sale gain and rental profit are taxed at ordinary California rates; the model uses a 32.3% combined rate (20% federal capital-gain rate plus the 12.3% California top bracket)."], "links": ulinks("ftb_cg", "ftb_rates")},
   {"cells": ["Federal income", "Long-term capital gains", "0%, 15% or 20% depending on taxable income; a net investment income tax may also apply.", "A 20% rate plus California 12.3% is the 32.3% gain rate used here."], "links": ulinks("irs_tc409")},
   {"cells": ["Federal income", "Home-sale gain exclusion", "Up to $250,000 of gain, or $500,000 on a joint return, may be excluded if ownership and use tests are met (generally 24 of the last 60 months).", "Relevant only if the household occupies A long enough to qualify after the transfer."], "links": ulinks("irs_tc701")}])}
 </section>
 <section><h2>Death-tax threshold over time</h2>
-<p>The federal exclusion is a per-decedent amount and California adds nothing. The projection below indexes the exclusion at the 2.5% scenario rate because the published 2027 amount could not be retrieved from an official page during this review (FL-08).</p>
+<p>The federal exclusion is a per-decedent amount and California adds nothing. The projection below uses the published 2026 ($15,000,000) and 2027 ($15,480,000) amounts and indexes at the 2.5% scenario rate after 2027 (FL-08, resolved on integration re-check). {ulinks('irs_2027')}</p>
 {table(["Year", "Federal exclusion &middot; single", "Federal exclusion &middot; with portability", "Modelled value of both properties", "Cash headroom before federal tax", "California death tax"],
  [{"cells": [str(r["year"]), money(r["exclusion_single"]), money(r["exclusion_married"]), money(r["estate_two_properties"]), money(r["cash_headroom_single"]), "$0"],
    "links": ulinks("irs_estate", "rtc13301"), "basis": "scenario"} for r in M["estate"]],
@@ -323,9 +352,11 @@ P["taxes.html"] = (head("Tax &amp; law", "taxes.html") + hero(
 </section>
 <section><h2>Pending and possible changes</h2>
 {table(["Change", "Status on 10 November 2026", "Effect if enacted"],
- [{"cells": ["Initiative A.G. File 25-0017 &mdash; restores pre-Proposition 19 exclusion rules from 1 January 2027, for all inherited primary homes regardless of value, retroactive to transfers since 16 February 2021.", "Analysed by the Legislative Analyst's Office on 22 October 2025. It does not appear among the measures qualified for the 3 November 2026 statewide ballot.", f"Renting [PROPERTY_A] would keep the base year value, adding about {money([s for s in M['sensitivity'] if s['kind']=='law' and s['year']==2045][0]['delta'])} of terminal wealth at 2045 and overtaking the sell option."],
-   "links": ulinks("lao_250017", "sos_measures")},
-  {"cells": ["Federal exclusion after 2026", "The 2026 amount is statutory at $15,000,000; indexing thereafter is modelled at 2.5% (FL-08).", "If the exclusion were cut, the 2045 estate here would still sit below half of the 2026 threshold."], "links": ulinks("irs_estate_faq"), "basis": "scenario"},
+ [{"cells": ["Initiative A.G. File 25-0017 &mdash; restores pre-Proposition 19 exclusion rules from 1 January 2027, for all inherited primary homes regardless of value, retroactive to transfers since 16 February 2021.", "FAILED to qualify: the Secretary of State's memorandum of 18 May 2026 records insufficient signatures; it was not on the 3 November 2026 ballot. Proposition 19 rules remain in effect.", f"Renting [PROPERTY_A] would keep the base year value, adding about {money([s for s in M['sensitivity'] if s['kind']=='law' and s['year']==2045][0]['delta'])} of terminal wealth at 2045 and overtaking the sell option."],
+   "links": ulinks("lao_250017", "sos_memo")},
+  {"cells": ["Federal exclusion after 2027", "The 2026 ($15,000,000) and 2027 ($15,480,000) amounts are published and verified; indexing after 2027 is modelled at 2.5% (FL-08 resolved).", "A statutory cut remains a risk scenario: compare the modelled estate value in the table above against each year's exclusion."], "links": ulinks("irs_estate_faq", "irs_2027"), "basis": "scenario"},
+  {"cells": ["SB 974 (Stats. 2026, ch. 665) &mdash; special needs trusts and the family-home exclusion", "ENACTED: approved by the Governor 27 September 2026; effective 1 January 2027.", "A court-established special needs trust becomes an eligible medium of transfer under the section 63.2 exclusion; occupancy, exemption-filing, deadline and cap requirements are unchanged. Relevant only if such a trust joins the estate plan."], "links": ulinks("sb974", "boe_prop19")},
+  {"cells": ["File No. 261020 &mdash; cap on banked and capital-improvement rent increases", "PROPOSED: noticed on the rent board's rates page on 9 November 2026; not enacted and subject to change.", "Would temporarily limit combined banked and capital-improvement increases to 10% per year for rent-controlled units, applying to banked increases noticed on or after 15 September 2026. Affects [PROPERTY_B] banking strategy if enacted."], "links": ulinks("sf_rentboard")},
   {"cells": ["Solar export compensation", "Net billing applies to applications after 15 April 2023; the NBT legacy period is nine years and export credits are usually below retail.", "The owner-reported net credit may end when the existing tariff's legacy period expires (FL-10)."], "links": ulinks("cpuc_nem")}])}
 </section>""" + FOOT)
 
@@ -397,8 +428,8 @@ P["decision.html"] = (head("Decision analysis", "decision.html") + hero(
 </section>
 <section><h2>If the law changes: proposal 25-0017</h2>
 {table(["Scenario", "Rent under current law", "Rent under full exclusion", "Difference", "Note"], law_rows,
- caption="The proposal would restore pre-Proposition 19 rules from 1 January 2027. It is not law and was not on the November 2026 ballot.")}
-<p class="note">{ulinks('lao_250017', 'sos_measures')}</p>
+ caption="The proposal would restore pre-Proposition 19 rules from 1 January 2027. It is not law: the petition failed to qualify for the November 2026 ballot per the Secretary of State's memorandum of 18 May 2026.")}
+<p class="note">{ulinks('lao_250017', 'sos_memo')}</p>
 </section>
 <section><h2>Why selling still gets the recommendation</h2>
 <ol>
@@ -407,7 +438,7 @@ P["decision.html"] = (head("Decision analysis", "decision.html") + hero(
 <li><strong>Liquidity.</strong> A sale converts an illiquid asset into a portfolio that can fund the household's housing, care and expenses without a forced sale at a bad moment.</li>
 <li><strong>Optionality.</strong> The household keeps a place to live in B. Nothing about selling A removes the option to buy elsewhere later.</li>
 </ol>
-<p class="note"><strong>The counter-case, stated fairly:</strong> if appreciation runs at 5% and portfolio returns at 4–5%, renting A is worth {money([s for s in matrix if s['appreciation']==0.05 and s['reinvest']==0.05][0]['rent'] - [s for s in matrix if s['appreciation']==0.05 and s['reinvest']==0.05][0]['sell'])} more by 2055. Landlording a single-family home also produces no capital-gains tax while held, and the pending proposal would widen that gap. Anyone who believes Bay Area land compounds above 5% should rent, not sell.</p>
+<p class="note"><strong>The counter-case, stated fairly:</strong> if appreciation runs at 5% and portfolio returns at 4–5%, renting A is worth {money([s for s in matrix if s['appreciation']==0.05 and s['reinvest']==0.05][0]['rent'] - [s for s in matrix if s['appreciation']==0.05 and s['reinvest']==0.05][0]['sell'])} more by 2055. Landlording a single-family home also produces no capital-gains tax while held, and a future full-exclusion proposal (the 2025&ndash;26 petition failed to qualify) would widen that gap. Anyone who believes Bay Area land compounds above 5% should rent, not sell.</p>
 </section>""" + FOOT)
 
 # ---------------------------------------------------------------- inheritance steps
@@ -455,10 +486,10 @@ FL = [
     ("FL-05", "[PROPERTY_A] future market rent", "Rent is derived from a 3.0% gross yield on projected value. No market rent for a 2040–2050 letting exists to verify.", "Track comparable rents annually; update the yield.", "irs_basis"),
     ("FL-06", "Appreciation, inflation and return scenarios", "3%/4%/5% appreciation, 2.5% inflation and 7.0% equity returns are assumptions. They are not forecasts and were not modelled from a published projection.", "Re-run scripts/model.py with your own numbers.", "irs_tc409"),
     ("FL-07", "Proposition 19 cap growth", "The biennial recalculation method is verified; the 3.0% growth used to project future caps is not.", "Confirm each published adjustment from BOE when released.", "boe_cap"),
-    ("FL-08", "Federal exclusion after 2026", "Only the 2026 amount could be retrieved. The IRS newsroom page for 2027 adjustments returned a 404 during this review, so the 2.5% indexing is a scenario.", "Re-check the IRS inflation-adjustment release when it is published.", "irs_estate_faq"),
+    ("FL-08", "Federal exclusion after 2026 - RESOLVED", "Integration re-check retrieved the official release at its full URL (IR-2026-133, 5 November 2026; Rev. Proc. 2026-35): the 2027 basic exclusion is $15,480,000 and the 2027 annual gift exclusion is $20,000. The earlier 404 came from a truncated URL. The model now anchors 2026-2027 to the published amounts; indexing after 2027 remains a 2.5% scenario.", "Re-check each annual revenue procedure as published.", "irs_2027", "Resolved"),
     ("FL-09", "Net investment income tax", "IRS Topic 409 confirms a NIIT may apply; the 3.8% rate and thresholds were not re-verified in this review, so they are excluded from the base case.", "Confirm with IRS Topic 559.", "irs_tc409"),
     ("FL-10", "Solar export value", "The owner reports a small net credit. Net billing applies to interconnections after 15 April 2023; legacy tariffs are closed and their remaining term is unverified.", "Obtain the utility's tariff schedule and legacy-period end date.", "cpuc_nem"),
-    ("FL-11", "Rent increase cap", "Rent is grown at 2.5%, which may exceed the ordinance's allowable annual increase in some years.", "Verify the annual allowable increase from the local rent board each year.", "sf_rate"),
+    ("FL-11", "Rent increase cap", "Rent is grown at a 2.5% scenario rate; the jurisdiction's verified allowable annual increase for covered units is 1.6% for March 2026 through February 2027, so regulated increases may run lower than the scenario. Pending File No. 261020 would cap combined banked and capital-improvement increases at 10% per year if enacted (not law).", "Re-check the published allowable increase each March; track File No. 261020.", "sf_rentboard"),
     ("FL-12", "[PROPERTY_B] ownership and step-up", "This edition assumes B is already owned and is not inherited. If B is also in the trust, its assessment resets at death.", "Confirm title and the trust schedule of assets.", "rtc480"),
     ("FL-13", "Marital property and number of step-ups", "Whether both properties are community property changes whether there is a full or partial basis step-up; not verified.", "Confirm with counsel.", "irs_basis"),
     ("FL-14", "Utilities", "Water and electricity figures are owner-provided midpoints of stated ranges; no tariff was verified.", "Use twelve months of bills.", "cpuc_nem"),
@@ -466,19 +497,22 @@ FL = [
     ("FL-16", "40% top federal estate-tax rate", "The threshold and filing rules are verified; the 40% marginal rate above the exclusion is statutory and was not re-verified from an IRS page in this review.", "Confirm against the Form 706 rate schedule.", "irs_estate_faq"),
     ("FL-17", "Earlier repository history (R-13)", "Earlier commits on this public repository contain the owner's ZIP codes and unrounded assessment figures from prior sessions. They are not published by this edition but remain in Git history.", "Decide whether to rewrite history; this session did not do so.", "sos_measures"),
     ("FL-18", "Insurance for a three-unit rental", "A landlord policy with loss-of-rents and the correct unit count may cost materially more than a homeowner policy.", "Quote both a DP-3 and a commercial policy.", "cdi_tool"),
+    ("FL-19", "Jurisdiction disclosure through official source links (CR-6)", "These pages describe the jurisdictions generically, but the primary sources they cite (the local rate resolution, the treasurer's rate page and the rent board's rate page) are published by those jurisdictions, so opening a citation reveals which county and city are involved. The Decision Brief annex cites the same class of local documents. Suppressing jurisdiction names entirely would mean dropping the primary official citations, which the owner's source-verification requirement does not allow.", "Owner decision: accept the disclosure (default here), or replace local primary citations with jurisdiction-neutral statistics and lose row-level official sourcing.", "sf_rate"),
 ]
 # some rows reference ids that do not exist; remap to real sources
 FIX = {"irs_basis": "irs_basis", "sos_measures": "sos_measures"}
 fl_rows = []
-for fid, item, detail, next_step, sid in FL:
+for row in FL:
+    fid, item, detail, next_step, sid = row[:5]
+    status = row[5] if len(row) > 5 else "Open"
     if sid not in SRC:
         raise SystemExit(f"flagged row {fid} cites unknown source {sid}")
-    fl_rows.append({"cells": [fid, e(item), e(detail), e(next_step), "Open"], "links": ulinks(sid)})
+    fl_rows.append({"cells": [fid, e(item), e(detail), e(next_step), status], "links": ulinks(sid)})
 
 P["review.html"] = (head("Flagged for review", "review.html") + hero(
     "FLAGGED FOR REVIEW",
     "What is not verified,<br>stated plainly.",
-    "Eighteen open items plus one disclosure. None of them blocks publication; all of them block certainty.") + notice() +
+    "Nineteen tracked items (one resolved on integration re-verification) plus one disclosure. None of them blocks publication; all of them block certainty.") + notice() +
     f"""<section><h2>Open items</h2>
 {table(["ID", "Item", "Why it matters", "What closes it", "Status"], fl_rows,
  caption="Rows flagged here are not used as if verified anywhere else on the site.")}

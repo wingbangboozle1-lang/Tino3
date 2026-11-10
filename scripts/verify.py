@@ -35,6 +35,9 @@ ALLOWED_HOSTS = {
     "www.lao.ca.gov",
     "www.sos.ca.gov",
     "sfbos.archive.sf.gov",
+    "sftreasurer.org",
+    "www.sf.gov",
+    "elections.cdn.sos.ca.gov",
 }
 
 # Identifier patterns that must never appear in the published edition.

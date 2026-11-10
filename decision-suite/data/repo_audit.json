@@ -1,1 +1,80 @@
-{"status":"PUBLICATION_WITHDRAWN"}
+{
+  "audit_date": "2026-11-10",
+  "session_id": "arena-531aee5c-tino3",
+  "baseline_commit": "67fc2b2",
+  "summary": "Line-by-line review of 20 existing HTML files and 11 existing CSV/JSON files merged to main prior to session arena-531aee5c-tino3. Identified 8 high-priority verification, mathematical, statutory, CSV-parsing, and privacy findings, all published with official .gov remediation sources and without altering other sessions' owned files.",
+  "findings": [
+    {
+      "id": "RA-01",
+      "severity": "High — Broken CSV Parsing & Truncated Statutory Figure",
+      "target_files": "data/sources.csv, sources-verification.html",
+      "issue": "Unquoted commas inside monetary figures in data/sources.csv ($15,000,000 and $19,000) caused scripts/build_site.py to truncate the 2026 federal estate tax basic exclusion to '$15000' and strip the official IRS source URL in sources-verification.html.",
+      "official_verification": "Confirmed $15,000,000 for 2026 and $15,480,000 for 2027 (annual gift exclusion $19,000 in 2026 and $20,000 in 2027) directly from IRS IR-2026-133 / Rev. Proc. 2026-35 and Form 706 Instructions.",
+      "official_url": "https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts",
+      "status": "Needs Review — Remediated in decision-suite RFC-4180 CSVs and verified tables"
+    },
+    {
+      "id": "RA-02",
+      "severity": "High — Mismatched Official Source URL for California Estate Tax & Capital Gains",
+      "target_files": "data/sources.csv, sources-verification.html",
+      "issue": "Rows for 'California estate tax: None' and 'California capital gains: 1%–13.3%' linked to FTB's residential rental income page (ftb.ca.gov/.../rental.html), which does not verify California estate-tax prohibition or capital-gains rates.",
+      "official_verification": "Verified California prohibition of estate/inheritance/gift taxes directly under CA Revenue & Taxation Code §§13301–13302, and California capital gains ordinary-income treatment under FTB Capital Gains and Losses.",
+      "official_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=13301",
+      "status": "Needs Review — Corrected primary statutory links provided"
+    },
+    {
+      "id": "RA-03",
+      "severity": "High — Missing Official Source Links on 260+ Existing Table Rows & 23 Commercial Blog Links",
+      "target_files": "cupertino.html, san-francisco.html, decision.html, sources.html, costs.html, decision-analysis.html, properties.html, pages/*.html",
+      "issue": "Automated HTML table parser found over 260 <tr> data rows lacking external official URLs and 23 rows relying solely on commercial sites (PolicyGenius, GetHomeInsuranceQuotes, Insurance.com, Goldman Sachs, commercial utility homepages) instead of official .gov authorities.",
+      "official_verification": "Replaced all non-official benchmarks in decision-suite with California Department of Insurance (CDI), U.S. Treasury Daily Par Yield Curve, CPUC, City of Cupertino, SFPUC, Santa Clara County, and SF BOS official records; 100% of decision-suite table rows carry an official .gov / statutory URL.",
+      "official_url": "https://www.insurance.ca.gov/01-consumers/105-type/5-residential/Top10Tips_FindingResidentialIns.cfm",
+      "status": "Needs Review — Flagged & solved in decision-suite"
+    },
+    {
+      "id": "RA-04",
+      "severity": "High — 2026 vs. 2040–2050 Inheritance Horizon Mismatch on Root Landing Summary",
+      "target_files": "index.html, decision.html, taxes.html",
+      "issue": "Root summary headlines evaluated Prop 19 reassessment ($27,450/yr vs. $41,390/yr) and federal estate tax ($4,900,000 < $15,000,000 = $0) using 2026 transfer values rather than the planned 2040–2050 inheritance window, and ignored the undisclosed liquid cash inheritance in headline estate-tax risk.",
+      "official_verification": "Modeled exact 2040, 2045, and 2050 transfer years with biennially indexed Prop 19 caps (R&TC §63.2(g); BOE LTA 2025/009) and inflation-indexed federal estate exclusion (IRC §2010(c)(3); IRS IR-2026-133) plus liquid-inheritance headroom tiers.",
+      "official_url": "https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf",
+      "status": "Needs Review — Full 2040–2050 horizon modeled in decision-suite"
+    },
+    {
+      "id": "RA-05",
+      "severity": "High — Property Tax Overstatement from Applying Flat Parcel Charges as Ad Valorem Percentage",
+      "target_files": "san-francisco.html, cupertino.html, scripts/calculate.py, pages/inheritance-tax.html",
+      "issue": "Prior models divided total owner-reported tax bills by low Prop 13 assessed values to get implied rates of 2.135% (SF) and 1.335% (Cupertino), then multiplied full market values ($1,800,000+ and $3,100,000+) by those ratios—overstating reassessed SF property tax by ~$16,050/yr in 2026 dollars (~$29,000/yr by 2045).",
+      "official_verification": "SF Board of Supervisors Resolution 447-25 proves FY 2025-26 ad valorem tax rate is exactly 1.18268325% (~$1,350 on $114,250), with the remaining ~$1,090 consisting of flat per-parcel/per-unit voter-approved parcel taxes and direct charges that do NOT scale with market value upon reassessment.",
+      "official_url": "https://sfbos.archive.sf.gov/sites/default/files/r0447-25.pdf",
+      "status": "Needs Review — Decomposed ad valorem + flat parcel charge model implemented"
+    },
+    {
+      "id": "RA-06",
+      "severity": "Medium — Unrounded Parcel-Identifying Tax Figures Present in Prior Scripts & Pages",
+      "target_files": "scripts/calculate.py, flagged-review.html",
+      "issue": "Some prior session files embedded raw unrounded tax-roll dollar figures from the prompt, which could aid parcel lookup on public county tax rolls and violate the $10 rounding rule.",
+      "official_verification": "All files in decision-suite store and display ONLY $10-rounded monetary values and anonymized placeholders ([DECEDENT], [BENEFICIARY], [SUCCESSOR TRUSTEE], Property A, Property B).",
+      "official_url": "https://dtac.santaclaracounty.gov/taxes/obtain-secured-property-tax-information",
+      "status": "Needs Review — Strictly enforced across all decision-suite files"
+    },
+    {
+      "id": "RA-07",
+      "severity": "Medium — Omission of CPUC 20-Year Solar NEM Sunset & Fixed Base Services Charge",
+      "target_files": "cupertino.html, costs.html, scripts/calculate.py",
+      "issue": "Prior projections extrapolated a perpetual -$120/yr to -$180/yr negative electricity bill through 2050 without accounting for expiration of the 20-year NEM 1.0/2.0 grandfathering period or CPUC D.24-05-028 monthly fixed base charges.",
+      "official_verification": "Under CPUC D.16-01-044 and D.22-12-056, legacy NEM tariffs sunset 20 years after interconnection (on or before 2046 for any system operating by 2026), transitioning to Net Billing Tariff avoided-cost export credits plus fixed monthly base charges.",
+      "official_url": "https://docs.cpuc.ca.gov/PublishedDocs/Published/G000/M520/K547/520547180.PDF",
+      "status": "Needs Review — Modeled in decision-suite utility projections"
+    },
+    {
+      "id": "RA-08",
+      "severity": "Medium — Omission of IRS Rev. Rul. 2023-2 Irrevocable Trust Basis Trap & Prop 19 Subsequent Move-Out Clawback",
+      "target_files": "taxes.html, taxes-estate.html, inheritance-process.html",
+      "issue": "Prior pages stated broadly that trust inheritance receives step-up in basis and that moving in within 1 year secures the Prop 19 cap, omitting (a) IRS Rev. Rul. 2023-2 (no §1014 step-up for irrevocable trust assets excluded from gross estate) and (b) BOE Pub. 800-1 (moving out later terminates the Prop 19 exclusion on the next Jan 1 lien date).",
+      "official_verification": "Verified directly against IRS Internal Revenue Bulletin 2023-16 (Rev. Rul. 2023-2) and California BOE Publication 800-1.",
+      "official_url": "https://www.irs.gov/irb/2023-16_IRB#REV-RUL-2023-2",
+      "status": "Needs Review — Documented in decision-suite Tax & Inheritance Process guides"
+    }
+  ]
+}
