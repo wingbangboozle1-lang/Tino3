@@ -477,6 +477,16 @@
    ],
    "quote": "",
    "checked": "NOT verified: link supplied for manual review only"
+  },
+  "sos_memo": {
+   "publisher": "California Secretary of State",
+   "title": "County Clerk/Registrar of Voters Memorandum 26138 (18 May 2026)",
+   "url": "https://elections.cdn.sos.ca.gov/ccrov/2026/may/26138jh.pdf",
+   "verifies": [
+    "The initiative titled 'Repeals voter-enacted changes to property tax rules for transfers between family members' failed: the signatures filed were below the number required"
+   ],
+   "quote": "the total number of signatures for the hereinafter named initiative filed with all county elections officials is less than 100 percent of the number of qualified voters required to find the petition sufficient; therefore, the petition has failed.",
+   "checked": "opened on the publisher's site in this session"
   }
  }
 }
