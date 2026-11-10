@@ -135,3 +135,68 @@ to an official source. No value was inferred to fill a gap; 18 gaps are publishe
 | CR-6 | If the owner wants jurisdiction names suppressed entirely, the local property-tax rate documents must be replaced by a jurisdiction-neutral statistic | next integration session | The rate citations currently identify the jurisdiction to anyone who opens them, though the pages themselves do not. |
 
 **Final state of the public site:** live, functional, privacy-sanitised in the served tree and in the current repository tree, with 18 flagged items published openly and one disclosure (`R-13`) that Git history still contains earlier figures.
+
+
+---
+
+## Session `arena-6616d6b2` (branch `arena/6616d6b2-tino3`) · claimed 2026-11-10 10:05 UTC
+
+*Branch note:* Arena pins this session to `arena/6616d6b2-tino3`; the `session-<id>/<task>` naming cannot be used.
+
+Board state read before claiming (remote branches inspected, not only `main`): four other sessions opened at 10:00 UTC:
+`arena-b067dfc7` (legacy-path privacy remediation), `arena-d0927734` (privacy containment), `arena-0e2e112e` (audit only),
+`arena/d76d5375` (FIN-1..4: root `*.html`, `scripts/*`, `assets/*`, `.gitignore`). A fifth, `arena/e0ed27dd`, opened PR #23 later.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| 6616-A Independent official-source re-verification with a per-source ledger | **done** | `arena-6616d6b2` | `plan/tools/sources.py`, `plan/data/sources.json` |
+| 6616-B Deterministic cross-check model (live in / rent out / sell and reinvest, both properties, 2026-2050, $10 rounding, break-evens instead of invented inputs) | **done** | `arena-6616d6b2` | `plan/tools/model.py`, `plan/data/*` |
+| 6616-C Self-contained cross-check edition: overview, executive summary, properties and costs, projections, decision, taxes and thresholds, inheritance steps, law watch, Flagged for Review, sources | **done** | `arena-6616d6b2` | `plan/*.html`, `plan/assets/*`, `plan/tools/build.py`, `plan/tools/verify.py` |
+| 6616-D Integration of `plan/` into the published site (claimed 10:40 UTC, after FIN-1..4 and the privacy tasks were all marked done) | **done** | `arena-6616d6b2` | four shared files, smallest possible edits: `scripts/package_site.py` (allow-list entry `CROSS_CHECK`), `scripts/build.py` + regenerated `index.html` (one card linking to `plan/index.html`), `.github/workflows/verify.yml` and `pages.yml` (one extra step: `python plan/tools/verify.py`) |
+
+**Scope decision (10:20 UTC).** While this session was researching, `d76d5375` published the quantitative root edition (PRs #21, #22, #24) and `e0ed27dd` opened PR #23 to replace it again. A third replacement would have repeated the "contradictory editions" problem this board already records. This session therefore did **not** touch the root edition's content. `plan/` is a second opinion: its own model, its own source ledger, and a reconciliation table against the root edition (`plan/flagged.html`, C-01..C-09). The root model, pages, data and guard scripts of other sessions are unchanged apart from the four additive edits listed under 6616-D.
+
+### Sources and verification (6616-A)
+
+45 ledger entries in `plan/tools/sources.py`: 36 official pages opened and read on 2026-11-10, 6 seen only as search excerpts of the official page (marked with a dagger and flagged wherever used), 2 look-up links from which no value was taken, 1 repository-evidence link. Publishers: IRS, U.S. Code (govinfo), U.S. Treasury, Federal Reserve, FRED/FHFA, Congress.gov, California BOE, FTB, State Controller, Secretary of State, Legislative Information, CPUC, Department of Insurance, and the two local tax and rent authorities.
+
+Corrections to facts recorded elsewhere on this board:
+- The 2027 federal exclusion **is** verifiable: $15,480,000 in IRS news release IR-2026-133 at `https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts` (the short address used by earlier editions is the one that returns 404).
+- The local secured rate of 1.18162182% is not an error: it is the fiscal-year 2026-27 rate on the tax collector's page; 1.18268325% is the 2025-26 rate. Both are right for their years.
+- The Proposition 19 repeal initiative did not merely "not appear": Secretary of State memorandum 26138 (18 May 2026) records that it failed for lack of signatures.
+- The 10-year Treasury par yield was 4.88% on 9 November 2026 (root edition: "bond return 4.0%, yields not re-verified").
+- The local rent-increase limit is 1.6% through 28 February 2027, set at 60% of regional CPI (root edition assumes 2.5% rent growth).
+
+### Method (6616-B/C)
+
+- Inputs are only (a) owner-provided figures, coarsened further for privacy (assessed values to $10,000), and (b) figures read on an official page. Growth rates come from the FHFA California index (2.10% / 3.76% / 5.41%), the Federal Reserve's 2% goal and the Rent Board formula.
+- Where an input would have had to be invented (market rent of Property A, maintenance, brokerage, the heir's tax bracket) the cell is blank and the model reports the break-even instead.
+- `plan/tools/verify.py` (run in CI) rebuilds the edition and fails on any byte difference, any table row without an https link to a ledger host, any broken local link, any place name / postal code / parcel number / street address / e-mail, and any dollar amount that is not a multiple of $10 unless it is an exact official figure. Result at commit: 10 pages, 360 table rows, all cited.
+- Result: the cross-check **agrees with the root edition's default** (sell Property A in the first year, keep Property B) and with its warning that the margin is thin (selling wins 9 of 18 tested cases). It adds three switch points: rent above 2.41% of value a year, appreciation above about 4.90% a year, or a tax rate on interest above about 25%.
+
+### Irregularities found by this session
+
+1. Parallel sessions replaced the public site four times in fifteen minutes (PRs #17-#24) with different conclusions; PR #23 would replace it again. Recorded on `plan/flagged.html` (R-01).
+2. Property B's reported bill is about $1,140 above rate x assessed value (47% of the bill): unexplained without the bill's line items (F-06). One year of its history shows tax up about 18% on a 2% assessment change (F-07).
+3. Property A's tax rate area is unconfirmed; a reassessed bill at today's value ranges from $32,850 to $41,390 depending on how much of the bill scales with value (F-04).
+4. Insurance, maintenance, market rent, brokerage cost, the solar tariff's end date and the amount of money in the inheritance have no verifiable figure; all are blank or flagged, none was filled in (F-01..F-03, F-13, F-18, F-19).
+5. **Self-reported:** two of this session's merge commits were staged with `git add -A` and thereby pushed an early draft of `plan/tools/model.py` whose levy labels named the school districts. The file was rewritten with generic labels before any pull request; the PR is squash-merged so the draft does not enter `main`. It remains reachable on this session branch's history, alongside the far more detailed data that earlier sessions left in `main`'s history (R-13 / CR-5, owner decision).
+6. The pages name no place, but local rate and rent sources identify the jurisdictions to anyone who follows the link (same as CR-6).
+
+### Change requests logged for other owners (not performed)
+
+| # | Request | File owner | Why |
+|---|---|---|---|
+| CR-6616-2 | In the root edition, cite the full IRS address for the 2027 exclusion and drop flag FL-08 | `d76d5375` (`scripts/model.py`, `assets/sources.json`) | The figure is verified. |
+| CR-6616-3 | Replace the 7.0% / 4.0% return scenarios with, or add, the published Treasury yield, and the 2.5% rent growth with the Rent Board formula | `d76d5375` (`scripts/model.py`) | Both have official values. |
+| CR-6616-4 | If PR #23 is merged, carry `plan/**` and the `CROSS_CHECK` allow-list entry forward, or state that the cross-check is retired | `e0ed27dd` | PR #23 rewrites `scripts/package_site.py` and the workflows that publish `plan/`. |
+| CR-6616-5 | Close or merge the stale pull requests #7, #14, #16 | the owner | They predate the privacy remediation. |
+
+### Log
+
+- 10:05 UTC — claim committed and pushed before any work.
+- 10:08 UTC — merged `origin/main` (PRs #17-#19). Conflict in `COORDINATION.md` only: kept main's board in full and re-appended this section; nothing from another session was discarded.
+- 10:20 UTC — merged `origin/main` again (PRs #20-#22, #24). Same single conflict, resolved the same way. Scope decision above.
+- 10:40 UTC — 6616-D claimed and carried out; both verifiers and `scripts/package_site.py` pass locally (root: 10 pages, 209 rows; cross-check: 10 pages, 360 rows; artifact: 88 files).
+
+**Publication result:** recorded below after merge and deployment.

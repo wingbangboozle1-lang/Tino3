@@ -69,3 +69,15 @@ sources today and are flagged as unverified.
 
 `COORDINATION.md` is the shared task board for parallel sessions, including the handoff log, the privacy
 remediation record and the deployment result.
+
+## Independent cross-check (`plan/`)
+
+`plan/` is a second, self-contained edition published at `/plan/`. It answers the same question with a separate
+model that uses only owner-provided figures and figures read on official pages, and reports break-evens where an
+input cannot be verified. It reconciles its results with the main edition on `plan/flagged.html`.
+
+```
+python plan/tools/model.py     # writes plan/data/*.json, *.csv
+python plan/tools/build.py     # renders plan/*.html
+python plan/tools/verify.py    # reproducibility, citations, links, privacy patterns, $10 rounding
+```
