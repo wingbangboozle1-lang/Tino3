@@ -1,0 +1,31 @@
+year_of_death,exclusion_basis,hypothetical_taxable_estate,exclusion_single,headroom_single,federal_estate_tax_single,federal_estate_tax_married_with_portability,california_estate_or_inheritance_tax,rate_source,ca_source
+2026,official,10000000,15000000,5000000,0,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2026,official,15000000,15000000,0,0,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2026,official,20000000,15000000,-5000000,2000000,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2026,official,25000000,15000000,-10000000,4000000,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2026,official,30000000,15000000,-15000000,6000000,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2026,official,40000000,15000000,-25000000,10000000,4000000,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2027,official,10000000,15480000,5480000,0,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2027,official,15000000,15480000,480000,0,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2027,official,20000000,15480000,-4520000,1808000,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2027,official,25000000,15480000,-9520000,3808000,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2027,official,30000000,15480000,-14520000,5808000,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2027,official,40000000,15480000,-24520000,9808000,3616000,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2040,scenario 2.5%/yr from 2027,10000000,21339350,11339350,0,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2040,scenario 2.5%/yr from 2027,15000000,21339350,6339350,0,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2040,scenario 2.5%/yr from 2027,20000000,21339350,1339350,0,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2040,scenario 2.5%/yr from 2027,25000000,21339350,-3660650,1464260,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2040,scenario 2.5%/yr from 2027,30000000,21339350,-8660650,3464260,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2040,scenario 2.5%/yr from 2027,40000000,21339350,-18660650,7464260,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2045,scenario 2.5%/yr from 2027,10000000,24143520,14143520,0,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2045,scenario 2.5%/yr from 2027,15000000,24143520,9143520,0,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2045,scenario 2.5%/yr from 2027,20000000,24143520,4143520,0,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2045,scenario 2.5%/yr from 2027,25000000,24143520,-856480,342590,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2045,scenario 2.5%/yr from 2027,30000000,24143520,-5856480,2342590,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2045,scenario 2.5%/yr from 2027,40000000,24143520,-15856480,6342590,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2050,scenario 2.5%/yr from 2027,10000000,27316170,17316170,0,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2050,scenario 2.5%/yr from 2027,15000000,27316170,12316170,0,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2050,scenario 2.5%/yr from 2027,20000000,27316170,7316170,0,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2050,scenario 2.5%/yr from 2027,25000000,27316170,2316170,0,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2050,scenario 2.5%/yr from 2027,30000000,27316170,-2683830,1073530,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html
+2050,scenario 2.5%/yr from 2027,40000000,27316170,-12683830,5073530,0,0,https://www.irs.gov/instructions/i706,https://www.sco.ca.gov/ardtax_estate_tax.html

@@ -1,0 +1,292 @@
+{
+ "checked": "2026-11-10",
+ "session": "arena-b8f9abd6",
+ "rows": [
+  {
+   "id": "L01",
+   "level": "Federal",
+   "topic": "Estate tax basic exclusion (2026 deaths)",
+   "rule": "$15,000,000 filing threshold / basic exclusion for decedents dying in 2026.",
+   "status": "verified",
+   "status_as_of": "In force",
+   "impact": "An estate (all assets incl. both houses, cash, securities) at or below this amount owes no federal estate tax.",
+   "source": "IRS \u2014 Estate tax (filing threshold table)",
+   "url": "https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax"
+  },
+  {
+   "id": "L02",
+   "level": "Federal",
+   "topic": "Working Families Tax Cuts (P.L. 119-21) set the 2026 amount",
+   "rule": "P.L. 119-21, signed July 4, 2025, amended IRC \u00a72010(c)(3) to a $15,000,000 basic exclusion for 2026.",
+   "status": "verified",
+   "status_as_of": "Enacted law; no scheduled sunset stated on the IRS page",
+   "impact": "Replaces the pre-2026 expectation that the exclusion would roughly halve. Future Congresses can still amend it.",
+   "source": "IRS \u2014 What's new, Estate and gift tax",
+   "url": "https://www.irs.gov/businesses/small-businesses-self-employed/whats-new-estate-and-gift-tax"
+  },
+  {
+   "id": "L03",
+   "level": "Federal",
+   "topic": "Estate tax exclusion (2027 deaths) and annual gift exclusion",
+   "rule": "$15,480,000 basic exclusion for 2027 deaths; annual gift exclusion $20,000 for 2027 (up from $19,000 in 2026). IR-2026-133, Nov. 5, 2026; Rev. Proc. 2026-35.",
+   "status": "verified",
+   "status_as_of": "Published Nov. 5, 2026",
+   "impact": "Confirms the exclusion is inflation-indexed after 2026 (+3.2% for 2027). Basis for the 2028\u20132050 scenario projection.",
+   "source": "IRS \u2014 IR-2026-133 (2027 inflation adjustments)",
+   "url": "https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts"
+  },
+  {
+   "id": "L04",
+   "level": "Federal",
+   "topic": "Estate tax rate above the exclusion",
+   "rule": "Unified rate schedule tops out at 40% on taxable amounts over $1,000,000 (Form 706 Table A). With an exclusion above $1M, each dollar over the exclusion is taxed at 40%.",
+   "status": "verified",
+   "status_as_of": "In force",
+   "impact": "Tax = 40% x (taxable estate - available exclusion) when the estate exceeds the exclusion.",
+   "source": "IRS \u2014 Instructions for Form 706 (07/2026), Table A",
+   "url": "https://www.irs.gov/instructions/i706"
+  },
+  {
+   "id": "L05",
+   "level": "Federal",
+   "topic": "Portability (DSUE) for married couples",
+   "rule": "A surviving spouse can receive the deceased spouse's unused exclusion only if elected on a timely filed Form 706 (simplified late-election relief: Rev. Proc. 2022-32).",
+   "status": "verified",
+   "status_as_of": "In force",
+   "impact": "Can roughly double the shelter for the second death (2 x $15,000,000 in 2026 terms) \u2014 but only if Form 706 is filed at the first death.",
+   "source": "IRS \u2014 Estate tax page; Instructions for Form 706 (portability)",
+   "url": "https://www.irs.gov/instructions/i706"
+  },
+  {
+   "id": "L06",
+   "level": "Federal",
+   "topic": "Step-up in basis for inherited property",
+   "rule": "Basis of inherited property is generally fair market value on the date of death (or alternate valuation date if elected on Form 706), whether or not Form 706 is filed.",
+   "status": "verified",
+   "status_as_of": "In force",
+   "impact": "Selling an inherited house soon after death produces little or no capital gain; most of the decades of appreciation is never taxed as income.",
+   "source": "IRS \u2014 Gifts & inheritances FAQ",
+   "url": "https://www.irs.gov/faqs/interest-dividends-other-types-of-income/gifts-inheritances/gifts-inheritances"
+  },
+  {
+   "id": "L07",
+   "level": "Federal",
+   "topic": "Irrevocable grantor trust caution (Rev. Rul. 2023-2)",
+   "rule": "The \u00a71014 basis adjustment generally does not apply to assets of an irrevocable grantor trust that are not included in the deceased grantor's gross estate.",
+   "status": "verified",
+   "status_as_of": "Published IRB 2023-16",
+   "impact": "Have counsel confirm the trust type. A revocable living trust (included in the estate) is the usual vehicle that keeps the step-up.",
+   "source": "IRS \u2014 Internal Revenue Bulletin 2023-16, Rev. Rul. 2023-2",
+   "url": "https://www.irs.gov/irb/2023-16_IRB"
+  },
+  {
+   "id": "L08",
+   "level": "Federal",
+   "topic": "Home-sale gain exclusion (IRC \u00a7121)",
+   "rule": "Up to $250,000 ($500,000 joint) of gain on a main home excluded if owned and used as a residence 24 of the last 60 months.",
+   "status": "verified",
+   "status_as_of": "In force",
+   "impact": "Relevant if an heir lives in an inherited house for 2+ years, then sells after it appreciates beyond the stepped-up basis.",
+   "source": "IRS \u2014 Topic no. 701, Sale of your home",
+   "url": "https://www.irs.gov/taxtopics/tc701"
+  },
+  {
+   "id": "L09",
+   "level": "Federal",
+   "topic": "Long-term capital gain rates",
+   "rule": "0% / 15% / 20% by taxable income (2025 thresholds listed on page); unrecaptured \u00a71250 gain up to 25%; NIIT may also apply.",
+   "status": "verified",
+   "status_as_of": "In force",
+   "impact": "Applies to gain above the stepped-up basis when a house or reinvested portfolio is sold.",
+   "source": "IRS \u2014 Topic no. 409, Capital gains and losses",
+   "url": "https://www.irs.gov/taxtopics/tc409"
+  },
+  {
+   "id": "L10",
+   "level": "Federal",
+   "topic": "Pending: full repeal of estate tax (S.587 / H.R.1301, 119th Congress)",
+   "rule": "Death Tax Repeal Act bills would repeal the estate and GST taxes.",
+   "status": "verified",
+   "status_as_of": "Introduced 02/13/2025; referred to committee; no further action shown",
+   "impact": "Not law. If ever enacted, federal estate tax exposure would disappear; plan on current law.",
+   "source": "Congress.gov \u2014 S.587 all actions",
+   "url": "https://www.congress.gov/bill/119th-congress/senate-bill/587/all-info"
+  },
+  {
+   "id": "L11",
+   "level": "Federal",
+   "topic": "Pending: House companion H.R.1301",
+   "rule": "Death Tax Repeal Act (House).",
+   "status": "verified",
+   "status_as_of": "Introduced 02/13/2025; referred to Ways and Means; no further action shown",
+   "impact": "Not law. Monitor only.",
+   "source": "Congress.gov \u2014 H.R.1301 all actions",
+   "url": "https://www.congress.gov/bill/119th-congress/house-bill/1301/all-info"
+  },
+  {
+   "id": "L12",
+   "level": "State (CA)",
+   "topic": "California estate / inheritance tax",
+   "rule": "No California estate tax return is required for decedents dying on or after January 1, 2005; inheritance tax applies only to deaths before June 8, 1982.",
+   "status": "verified",
+   "status_as_of": "In force",
+   "impact": "No state-level death tax on the inheritance.",
+   "source": "California State Controller \u2014 California Estate Tax",
+   "url": "https://www.sco.ca.gov/ardtax_estate_tax.html"
+  },
+  {
+   "id": "L13",
+   "level": "State (CA)",
+   "topic": "Proposition 19 parent-child exclusion (R&TC \u00a763.2)",
+   "rule": "Only the transferor's principal residence qualifies; it must become the child's principal residence within 1 year; homeowners' exemption must be filed within 1 year; claim within 3 years or before transfer to a third party. New taxable value = taxable value + (market value - (taxable value + $1M as adjusted)) when market value exceeds that sum.",
+   "status": "verified",
+   "status_as_of": "In force since Feb 16, 2021",
+   "impact": "The decisive property-tax rule for the inherited home: moving in preserves part of the low base; renting or holding vacant triggers full reassessment to market value.",
+   "source": "California Legislative Information \u2014 R&TC \u00a763.2",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=63.2"
+  },
+  {
+   "id": "L14",
+   "level": "State (CA)",
+   "topic": "Prop 19 exclusion amount (current period)",
+   "rule": "$1,044,586 for transfers Feb 16, 2025 \u2013 Feb 15, 2027 (adjusted every other year by FHFA California HPI; up 2.15% from $1,022,600).",
+   "status": "verified",
+   "status_as_of": "Next adjustment due for transfers from Feb 16, 2027 (not yet published at check)",
+   "impact": "Grows with California house prices, so it will be larger by 2040\u20132050, but the formula still taxes everything above taxable value + exclusion.",
+   "source": "BOE \u2014 News Release NR 25-02 (LTA 2025/009)",
+   "url": "https://www.boe.ca.gov/news/2025/nr-25-02.htm"
+  },
+  {
+   "id": "L15",
+   "level": "State (CA)",
+   "topic": "Prop 13 annual inflation factor",
+   "rule": "Base year values rise by CCPI change capped at 2%; 2026 roll factor 1.02 (CCPI +3.307%, capped).",
+   "status": "verified",
+   "status_as_of": "2026 lien date",
+   "impact": "Assessed value of a home not reassessed grows at most 2%/yr; full 2% applied in 2017\u20132020 and 2022\u20132026 rolls.",
+   "source": "BOE \u2014 Letter To Assessors No. 2026/002",
+   "url": "https://www.boe.ca.gov/proptaxes/pdf/lta26002.pdf"
+  },
+  {
+   "id": "L16",
+   "level": "State (CA)",
+   "topic": "Homeowners' exemption",
+   "rule": "$7,000 reduction in taxable value for an owner-occupied principal residence; one-time claim on BOE-266; file by February 15 for full-year exemption.",
+   "status": "verified",
+   "status_as_of": "In force",
+   "impact": "Required within 1 year to keep the Prop 19 exclusion (see L13). Worth about $7,000 x local rate per year.",
+   "source": "BOE \u2014 Homeowners' Exemption",
+   "url": "https://www.boe.ca.gov/proptaxes/homeowners_exemption.htm"
+  },
+  {
+   "id": "L17",
+   "level": "State (CA)",
+   "topic": "Failed 2026 initiative to repeal Prop 19 inheritance rules (No. 25-0017)",
+   "rule": "Would have restored pre-Prop 19 parent-child exclusions from Jan 1, 2027. Petition failed: signatures filed were below the number required (SOS memo #26138, May 18, 2026).",
+   "status": "verified",
+   "status_as_of": "Failed \u2014 not on Nov 3, 2026 ballot",
+   "impact": "Prop 19 rules remain in force. Treat any future repeal attempt as upside only, not a planning assumption.",
+   "source": "CA Secretary of State \u2014 CC/ROV Memorandum #26138",
+   "url": "https://elections.cdn.sos.ca.gov/ccrov/2026/may/26138jh.pdf"
+  },
+  {
+   "id": "L18",
+   "level": "State (CA)",
+   "topic": "LAO fiscal analysis of No. 25-0017",
+   "rule": "LAO: measure would reverse most Prop 19 changes; revenue loss ~ $1B/yr initially rising to ~ $2B/yr.",
+   "status": "verified",
+   "status_as_of": "Oct 22, 2025 analysis",
+   "impact": "Shows the scale of revenue at stake, a reason repeal is politically difficult.",
+   "source": "Legislative Analyst's Office \u2014 A.G. File No. 25-0017",
+   "url": "https://lao.ca.gov/BallotAnalysis/Initiative/2025-017"
+  },
+  {
+   "id": "L19",
+   "level": "State (CA)",
+   "topic": "Initiatives now circulating",
+   "rule": "SOS list of initiatives cleared for circulation (checked 2026-11-10) shows five measures (26-0001 to 26-0005); none concerns Prop 19 or inherited-property reassessment.",
+   "status": "verified",
+   "status_as_of": "As of check date",
+   "impact": "No active Prop 19 change in the pipeline. Re-check before the 2028 cycle.",
+   "source": "CA Secretary of State \u2014 Initiatives cleared for circulation",
+   "url": "https://www.sos.ca.gov/elections/ballot-measures/initiative-and-referendum-status/initiatives-referenda-cleared-circulation"
+  },
+  {
+   "id": "L20",
+   "level": "State (CA)",
+   "topic": "Nov 3, 2026 \u2014 Prop 3 (permanent high-income tax rates)",
+   "rule": "Makes Prop 30 higher income-tax rates on high incomes permanent instead of expiring in 2031. Unofficial result: Yes 60.6% (as of Nov 9, 2026; certification by Dec 11, 2026).",
+   "status": "verified",
+   "status_as_of": "Passing (unofficial)",
+   "impact": "CA income tax applies to profits from selling property and investments; higher top brackets continue for large sale gains and portfolio income after 2030.",
+   "source": "CA SOS \u2014 Statewide ballot measure results; LAO analysis (Voter Guide)",
+   "url": "https://electionresults.sos.ca.gov/returns/ballot-measures"
+  },
+  {
+   "id": "L21",
+   "level": "State (CA)",
+   "topic": "Nov 3, 2026 \u2014 Prop 40 (one-time billionaire tax)",
+   "rule": "One-time tax on certain taxpayers. Unofficial result: No 52.8%.",
+   "status": "verified",
+   "status_as_of": "Failing (unofficial)",
+   "impact": "No direct effect on this household's decision.",
+   "source": "CA SOS \u2014 Statewide ballot measure results",
+   "url": "https://electionresults.sos.ca.gov/returns/ballot-measures"
+  },
+  {
+   "id": "L22",
+   "level": "State (CA)",
+   "topic": "Nov 3, 2026 \u2014 Prop 42 (bars new state personal-property taxes)",
+   "rule": "Prohibits new state taxes on ownership of financial assets or other personal property and limits retroactive taxes. Unofficial result: Yes 51.6%.",
+   "status": "verified",
+   "status_as_of": "Passing (unofficial)",
+   "impact": "If certified, a future state wealth tax on stock/savings holdings would be barred \u2014 modestly favours the sell-and-reinvest path.",
+   "source": "CA Voter Guide \u2014 LAO analysis of Prop 42",
+   "url": "https://voterguide.sos.ca.gov/propositions/42/analysis.htm"
+  },
+  {
+   "id": "L23",
+   "level": "State (CA)",
+   "topic": "Nov 3, 2026 \u2014 Prop 43 (2/3 vote for voter-initiated local special taxes)",
+   "rule": "Legislative constitutional amendment. Unofficial result: No 57.3%.",
+   "status": "verified",
+   "status_as_of": "Failing (unofficial)",
+   "impact": "Local parcel taxes can still be passed by citizen initiative at current thresholds \u2014 fixed charges on property tax bills may keep rising.",
+   "source": "CA SOS \u2014 Statewide ballot measure results",
+   "url": "https://electionresults.sos.ca.gov/returns/ballot-measures"
+  },
+  {
+   "id": "L24",
+   "level": "Local (county/city)",
+   "topic": "Documentary transfer tax on inheritance",
+   "rule": "Documentary transfer tax does not apply to a deed transferring realty by reason of death, outright or in trust (R&TC \u00a711930).",
+   "status": "verified",
+   "status_as_of": "In force",
+   "impact": "Distributing the house from the trust to the heir triggers no county/city transfer tax; a later sale does.",
+   "source": "California Legislative Information \u2014 R&TC \u00a711930",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=11930"
+  },
+  {
+   "id": "L25",
+   "level": "Local (county/city)",
+   "topic": "County documentary transfer tax rate on a sale",
+   "rule": "County rate $0.55 per $500 of consideration (= $1.10 per $1,000); a city in that county may levy half that amount, credited against the county tax. Charter-city rates (e.g., San Francisco) are set locally and are not covered by this row.",
+   "status": "verified",
+   "status_as_of": "In force",
+   "impact": "On a sale, budget the county rate at minimum; SF's own rate schedule must be checked separately (not verified here).",
+   "source": "California Legislative Information \u2014 R&TC \u00a711911",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=11911"
+  },
+  {
+   "id": "L26",
+   "level": "State (CA, utility)",
+   "topic": "Rooftop solar NEM legacy period",
+   "rule": "NEM 2.0 customers may stay on NEM 2.0 for 20 years from interconnection (D.14-03-041); new interconnections since Apr 15, 2023 take the Net Billing Tariff, whose export credits are usually lower than retail rates.",
+   "status": "verified",
+   "status_as_of": "In force",
+   "impact": "A system interconnected before 2023 loses NEM terms ~20 years after interconnection \u2014 likely before a 2040\u20132050 inheritance. Do not assume today's ~$0 electric bill / monthly credit continues.",
+   "source": "CPUC \u2014 Net Energy Metering and Net Billing",
+   "url": "https://www.cpuc.ca.gov/nem/"
+  }
+ ]
+}
