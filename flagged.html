@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flagged for Review — Tino3</title><link rel="stylesheet" href="assets/style.css"></head>
+<body>
+<header class="topbar"><div class="topbar-inner"><div class="brand">Tino3<small>Cupertino &amp; San Francisco — Inheritance Decision Dashboard</small></div>
+<nav class="nav"><a href="index.html">Dashboard</a><a href="cupertino.html">Cupertino</a><a href="san-francisco.html">San Francisco</a><a href="taxes.html">Taxes &amp; Law</a><a href="inheritance-process.html">Inheritance Steps</a><a href="projections.html">Projections</a><a href="decision.html">Decision</a><a href="sources.html">Sources</a><a class="active" href="flagged.html">Flagged for Review</a></nav></div></header>
+<div class="wrap">
+<h1>Flagged for Review — unverified items</h1>
+<p>Per requirements: any value that cannot be confirmed from an official source is left flagged here. <strong>Flagged items do not block publication.</strong> Review after the site is live and request changes.</p>
+
+<h2>High priority — verify before deciding</h2>
+<table><tr><th>#</th><th>Item</th><th>Why it matters</th><th>How to verify</th></tr>
+<tr><td>1</td><td>SF effective tax rate 2.13% (vs. Cupertino 1.34%)</td><td>Drives $38,430 reassessment estimate; if wrong, SF net is off by ~$15,000/yr</td><td>SF Assessor-Recorder tax bill / parcel record</td></tr>
+<tr><td>2</td><td>Cupertino &amp; SF market values ($3,100,000 / $1,800,000)</td><td>All Prop 19, estate-tax, and sell-and-invest math scales with these</td><td>Licensed appraisal as of date of death</td></tr>
+<tr><td>3</td><td>Cash inheritance amount</td><td>Determines whether federal estate tax applies at all</td><td>Trust / estate inventory</td></tr>
+<tr><td>4</td><td>Cupertino achievable market rent</td><td>Determines whether renting beats selling (break-even ~$5,650/mo)</td><td>2–3 local rent comps / property manager</td></tr>
+<tr><td>5</td><td>SF building construction date + tenancy dates</td><td>Determines rent-control coverage and increase caps</td><td>SF Rent Board / building records</td></tr>
+<tr><td>6</td><td>Mortgage balances (both houses)</td><td>Net equity and cash needed at transfer</td><td>Lender statements</td></tr>
+</table>
+
+<h2>Medium priority</h2>
+<table><tr><th>#</th><th>Item</th><th>Why it matters</th><th>How to verify</th></tr>
+<tr><td>7</td><td>All insurance premiums (secondary averages)</td><td>Modeled $1,190 / $1,500 are averages, not quotes</td><td>Parcel-specific quotes (HO-3 + dwelling-fire)</td></tr>
+<tr><td>8</td><td>Assessor histories (2014–2026)</td><td>Pattern looks correct (~2%/yr) but exact figures unconfirmed</td><td>County assessor parcel records</td></tr>
+<tr><td>9</td><td>Future Prop 19 cap (2040s)</td><td>Move-in assessed value depends on cap at transfer date</td><td>BOE biennial adjustment (future)</td></tr>
+<tr><td>10</td><td>Vacancy / management rates (5% / 8%)</td><td>Break-even rent sensitivity</td><td>Property manager quotes</td></tr>
+<tr><td>11</td><td>Solar agreement terms (Cupertino)</td><td>Credit may not transfer; NEM rules change</td><td>Solar lease/PPA + utility account</td></tr>
+<tr><td>12</td><td>Trust funding status</td><td>Unfunded assets go to probate (~$124,000)</td><td>Title search + trustee</td></tr>
+</table>
+
+<h2>Assumptions (not facts — scenario inputs)</h2>
+<table><tr><th>#</th><th>Assumption</th><th>Value used</th><th>Source / basis</th></tr>
+<tr><td>A1</td><td>Home appreciation</td><td class="num">3%/yr</td><td>Scenario (Bay Area long-run range)</td></tr>
+<tr><td>A2</td><td>Insurance inflation</td><td class="num">5%/yr</td><td>Scenario (CA insurance inflation)</td></tr>
+<tr><td>A3</td><td>Utilities / maintenance inflation</td><td class="num">3%/yr</td><td>Scenario</td></tr>
+<tr><td>A4</td><td>Exemption indexing</td><td class="num">2.5%/yr from 2027</td><td>Scenario (IRS indexes annually)</td></tr>
+<tr><td>A5</td><td>Market return (sell-and-invest)</td><td class="num">7%/yr nominal</td><td>Goldman Sachs 6.5% forecast; 7% scenario</td></tr>
+<tr><td>A6</td><td>Selling costs</td><td class="num">6%</td><td>Scenario (agent + closing)</td></tr>
+<tr><td>A7</td><td>Rent growth (SF)</td><td class="num">3%/yr</td><td>Scenario (Rent Ordinance caps apply)</td></tr>
+</table>
+
+<div class="note"><strong>Irregularities found during research:</strong>
+<ul>
+<li>BOE old Prop 19 URL returns 404 — corrected to <code>boe.ca.gov/prop19/</code>.</li>
+<li>SF implied tax rate (2.13%) is anomalously high vs. Prop 13 base — flagged as #1 above.</li>
+<li>Insurance averages vary widely by source ($810–$1,620 CA averages) — shown as ranges, not single facts.</li>
+<li>No hallucinations: missing values (cash amount, mortgage, rent comps, construction date) are left blank/flagged, never filled in.</li>
+</ul></div>
+
+<p><a href="index.html">← Back to Dashboard</a> | <a href="sources.html">Sources →</a></p>
+</div>
+<footer>Tino3 — anonymized planning dashboard. Planning information only, not legal/tax advice.</footer>
+<script src="assets/app.js"></script>
+</body></html>
