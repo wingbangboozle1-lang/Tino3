@@ -1,0 +1,272 @@
+{
+  "cup_rate_pct": 1.335,
+  "sf_rate_pct": 2.135,
+  "inheritance": [
+    {
+      "inherit_year": 2040,
+      "property": "Cupertino",
+      "market_at_inheritance": 4689030,
+      "factored_base_no_transfer": 726420,
+      "assessed_if_move_in_prop19": 3689030,
+      "tax_if_move_in": 49260,
+      "assessed_if_rent_or_sell_full_reassess": 4689030,
+      "tax_if_rent_full_reassess": 62610,
+      "tax_if_no_transfer_hypothetical": 9700,
+      "effective_rate_used": 1.335
+    },
+    {
+      "inherit_year": 2040,
+      "property": "San Francisco",
+      "market_at_inheritance": 2722660,
+      "factored_base_no_transfer": 153760,
+      "assessed_if_move_in_prop19": 1722660,
+      "tax_if_move_in": 36780,
+      "assessed_if_rent_or_sell_full_reassess": 2722660,
+      "tax_if_rent_full_reassess": 58120,
+      "tax_if_no_transfer_hypothetical": 3280,
+      "effective_rate_used": 2.135
+    },
+    {
+      "inherit_year": 2045,
+      "property": "Cupertino",
+      "market_at_inheritance": 5435870,
+      "factored_base_no_transfer": 802030,
+      "assessed_if_move_in_prop19": 4435870,
+      "tax_if_move_in": 59230,
+      "assessed_if_rent_or_sell_full_reassess": 5435870,
+      "tax_if_rent_full_reassess": 72580,
+      "tax_if_no_transfer_hypothetical": 10710,
+      "effective_rate_used": 1.335
+    },
+    {
+      "inherit_year": 2045,
+      "property": "San Francisco",
+      "market_at_inheritance": 3156310,
+      "factored_base_no_transfer": 169770,
+      "assessed_if_move_in_prop19": 2156310,
+      "tax_if_move_in": 46030,
+      "assessed_if_rent_or_sell_full_reassess": 3156310,
+      "tax_if_rent_full_reassess": 67380,
+      "tax_if_no_transfer_hypothetical": 3620,
+      "effective_rate_used": 2.135
+    },
+    {
+      "inherit_year": 2050,
+      "property": "Cupertino",
+      "market_at_inheritance": 6301660,
+      "factored_base_no_transfer": 885500,
+      "assessed_if_move_in_prop19": 5301660,
+      "tax_if_move_in": 70790,
+      "assessed_if_rent_or_sell_full_reassess": 6301660,
+      "tax_if_rent_full_reassess": 84140,
+      "tax_if_no_transfer_hypothetical": 11820,
+      "effective_rate_used": 1.335
+    },
+    {
+      "inherit_year": 2050,
+      "property": "San Francisco",
+      "market_at_inheritance": 3659030,
+      "factored_base_no_transfer": 187440,
+      "assessed_if_move_in_prop19": 2659030,
+      "tax_if_move_in": 56770,
+      "assessed_if_rent_or_sell_full_reassess": 3659030,
+      "tax_if_rent_full_reassess": 78110,
+      "tax_if_no_transfer_hypothetical": 4000,
+      "effective_rate_used": 2.135
+    }
+  ],
+  "carry": [
+    {
+      "year": 2040,
+      "scenario": "Live in (Prop 19 move-in)",
+      "property_tax": 49260,
+      "insurance": 2340,
+      "water": 1440,
+      "electricity_solar_credit": -120,
+      "maintenance_assumption": 23450,
+      "total_annual_cost": 76360,
+      "break_even_monthly_rent": 6360
+    },
+    {
+      "year": 2040,
+      "scenario": "Rent (full reassessment)",
+      "property_tax": 62610,
+      "insurance": 2340,
+      "water": 1440,
+      "electricity_solar_credit": -120,
+      "maintenance_assumption": 23450,
+      "total_annual_cost": 89720,
+      "break_even_monthly_rent": 7480
+    },
+    {
+      "year": 2045,
+      "scenario": "Live in (Prop 19 move-in)",
+      "property_tax": 59230,
+      "insurance": 2340,
+      "water": 1440,
+      "electricity_solar_credit": -120,
+      "maintenance_assumption": 27180,
+      "total_annual_cost": 90070,
+      "break_even_monthly_rent": 7510
+    },
+    {
+      "year": 2045,
+      "scenario": "Rent (full reassessment)",
+      "property_tax": 72580,
+      "insurance": 2340,
+      "water": 1440,
+      "electricity_solar_credit": -120,
+      "maintenance_assumption": 27180,
+      "total_annual_cost": 103420,
+      "break_even_monthly_rent": 8620
+    },
+    {
+      "year": 2050,
+      "scenario": "Live in (Prop 19 move-in)",
+      "property_tax": 70790,
+      "insurance": 2340,
+      "water": 1440,
+      "electricity_solar_credit": -120,
+      "maintenance_assumption": 31510,
+      "total_annual_cost": 105960,
+      "break_even_monthly_rent": 8830
+    },
+    {
+      "year": 2050,
+      "scenario": "Rent (full reassessment)",
+      "property_tax": 84140,
+      "insurance": 2340,
+      "water": 1440,
+      "electricity_solar_credit": -120,
+      "maintenance_assumption": 31510,
+      "total_annual_cost": 119310,
+      "break_even_monthly_rent": 9940
+    }
+  ],
+  "sf_pl": [
+    {
+      "year": 2040,
+      "gross_rent": 129780,
+      "property_tax_full_reassess": 58120,
+      "insurance": 2340,
+      "water": 4380,
+      "electricity": 600,
+      "maintenance_assumption": 27230,
+      "total_costs": 92670,
+      "net_before_income_tax": 37110
+    },
+    {
+      "year": 2045,
+      "gross_rent": 150450,
+      "property_tax_full_reassess": 67380,
+      "insurance": 2340,
+      "water": 4380,
+      "electricity": 600,
+      "maintenance_assumption": 31560,
+      "total_costs": 106260,
+      "net_before_income_tax": 44190
+    },
+    {
+      "year": 2050,
+      "gross_rent": 174410,
+      "property_tax_full_reassess": 78110,
+      "insurance": 2340,
+      "water": 4380,
+      "electricity": 600,
+      "maintenance_assumption": 36590,
+      "total_costs": 122020,
+      "net_before_income_tax": 52390
+    }
+  ],
+  "reinvest": [
+    {
+      "sell_year": 2040,
+      "net_proceeds_after_selling_costs": 4407690,
+      "return_assumption": "Savings 4%",
+      "value_10y_later": 6524450,
+      "value_20y_later": 9657780
+    },
+    {
+      "sell_year": 2040,
+      "net_proceeds_after_selling_costs": 4407690,
+      "return_assumption": "Stocks 7%",
+      "value_10y_later": 8670590,
+      "value_20y_later": 17056360
+    },
+    {
+      "sell_year": 2040,
+      "net_proceeds_after_selling_costs": 4407690,
+      "return_assumption": "Stocks 10%",
+      "value_10y_later": 11432400,
+      "value_20y_later": 29652710
+    },
+    {
+      "sell_year": 2045,
+      "net_proceeds_after_selling_costs": 5109720,
+      "return_assumption": "Savings 4%",
+      "value_10y_later": 7563630,
+      "value_20y_later": 11196020
+    },
+    {
+      "sell_year": 2045,
+      "net_proceeds_after_selling_costs": 5109720,
+      "return_assumption": "Stocks 7%",
+      "value_10y_later": 10051590,
+      "value_20y_later": 19772990
+    },
+    {
+      "sell_year": 2045,
+      "net_proceeds_after_selling_costs": 5109720,
+      "return_assumption": "Stocks 10%",
+      "value_10y_later": 13253290,
+      "value_20y_later": 34375620
+    },
+    {
+      "sell_year": 2050,
+      "net_proceeds_after_selling_costs": 5923560,
+      "return_assumption": "Savings 4%",
+      "value_10y_later": 8768320,
+      "value_20y_later": 12979250
+    },
+    {
+      "sell_year": 2050,
+      "net_proceeds_after_selling_costs": 5923560,
+      "return_assumption": "Stocks 7%",
+      "value_10y_later": 11652540,
+      "value_20y_later": 22922320
+    },
+    {
+      "sell_year": 2050,
+      "net_proceeds_after_selling_costs": 5923560,
+      "return_assumption": "Stocks 10%",
+      "value_10y_later": 15364190,
+      "value_20y_later": 39850760
+    }
+  ],
+  "estate": [
+    {
+      "year": 2026,
+      "combined_house_market_base3": 4900000,
+      "federal_exemption_2026_per_person": 15000000,
+      "headroom_houses_only": 10100000
+    },
+    {
+      "year": 2040,
+      "combined_house_market_base3": 7411690,
+      "federal_exemption_2026_per_person": 15000000,
+      "headroom_houses_only": 7588310
+    },
+    {
+      "year": 2045,
+      "combined_house_market_base3": 8592180,
+      "federal_exemption_2026_per_person": 15000000,
+      "headroom_houses_only": 6407820
+    },
+    {
+      "year": 2050,
+      "combined_house_market_base3": 9960690,
+      "federal_exemption_2026_per_person": 15000000,
+      "headroom_houses_only": 5039310
+    }
+  ]
+}
