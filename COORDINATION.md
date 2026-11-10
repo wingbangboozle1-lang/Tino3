@@ -214,3 +214,14 @@ constrain the other publisher.
 The correct status of the public site is: **live, functional, and privacy-inconsistent.** Do not
 represent it as privacy-reviewed. I have not attempted a destructive history rewrite and I cannot erase
 copies already crawled.
+
+## Parallel session claim — `arena/416807ea-tino3` (2026-11-10)
+
+| # | Task | Status | Owner session | Files touched (non-overlapping scope) | Sources / verification | Irregularities |
+|---|------|--------|---------------|---------------------------------------|------------------------|----------------|
+| 416807ea-1 | Official-source verification (IRS, CA BOE, CA FTB, CA Probate Code, CA Dept. of Insurance, Santa Clara County / SF official tax & utility authorities, CA Legislature bills) + privacy-preserving rounded-$10 modeling | in progress | `arena/416807ea-tino3` | `verified-dashboard/**`, `tools/verify_416807ea.py`, `COORDINATION.md` | Verifying line by line from official `.gov` / `.ca.gov` primary sources only | Pending verification pass |
+| 416807ea-2 | Line-by-line repo review of existing pages/data + self-contained Official-Verified & Privacy-Anonymized Dashboard Suite (`verified-dashboard/`) + Flagged for Review log | in progress | `arena/416807ea-tino3` | `verified-dashboard/**`, `tools/verify_416807ea.py` | Automated row-by-row link, rounding, and PII scanner | Pending audit |
+| 416807ea-3 | Final non-destructive integration check, link validation across all HTML files, PR to `main`, merge, and GitHub Pages deploy verification | pending | `arena/416807ea-tino3` | `COORDINATION.md` (and non-destructive cross-link integration once tasks complete) | — | — |
+
+- Note on branch naming: Arena tracks this session strictly on fixed branch `arena/416807ea-tino3`. File scope (`verified-dashboard/**` and `tools/verify_416807ea.py`) is strictly non-overlapping with all other sessions (`root *.html`, `pages/`, `audit/`, `data/`, `scripts/`).
+
