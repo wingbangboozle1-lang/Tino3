@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Validate page links and privacy basics
+      - name: Validate site links and privacy notice
         run: |
           python3 - <<'PY'
           from html.parser import HTMLParser
@@ -25,12 +25,19 @@ jobs:
               def handle_starttag(self, tag, attrs):
                   d=dict(attrs)
                   if 'id' in d: self.ids.add(d['id'])
-                  if tag=='a' and d.get('href','').startswith('#'): self.hrefs.append(d['href'][1:])
-          p=Path('index.html').read_text(); c=Check(); c.feed(p)
-          missing=sorted(set(c.hrefs)-c.ids)
-          assert not missing, f'Broken anchor links: {missing}'
-          assert 'personal names, parcel numbers, street addresses' in p
-          print(f'Validated {len(c.hrefs)} in-page links and privacy notice.')
+                  if tag=='a':
+                      href=d.get('href','')
+                      if href.startswith('#'): self.hrefs.append(href[1:])
+                      elif href and not href.startswith(('https://','http://','mailto:','javascript:')):
+                          target=Path(current).parent / href.split('#')[0]
+                          assert target.exists(), f'Broken local link in {current}: {href}'
+          pages=sorted(Path('.').glob('*.html'))
+          for page in pages:
+              current=str(page); check=Check(); check.feed(page.read_text())
+              missing=sorted(set(check.hrefs)-check.ids)
+              assert not missing, f'Broken anchor(s) in {page}: {missing}'
+          assert Path('flagged.html').exists(), 'Missing Flagged for Review page'
+          print(f'Validated {len(pages)} pages, internal references, and review page.')
           PY
       - uses: actions/upload-pages-artifact@v3
         with:

@@ -1,17 +1,27 @@
-# Home Inheritance Decision Desk
+# Tino3 — REDACTED & REDACTED Inheritance Decision Dashboard
 
-A privacy-first, source-linked dashboard to organize a future REDACTED inheritance decision alongside a REDACTED rental property. The site separates current official rules from user-supplied, unverified estimates and identifies what needs to be verified before a live/rent/sell decision.
+Anonymized planning dashboard for a trust inheritance expected around 2040–2050.
+All personal information is anonymized (city + ZIP only). All dollars rounded to nearest $10.
+Every table row carries a source link; unverifiable values are flagged on the Flagged for Review page.
 
-## Preview locally
+## Site pages (GitHub Pages, static — no build step)
 
-Open `index.html` directly or serve the repository root with any static HTTP server.
+- `index.html` — Dashboard + executive summary
+- `REDACTED.html` — REDACTED REDACTED detail
+- `REDACTED.html` — REDACTED REDACTED rental detail
+- `taxes.html` — Federal / state / Prop 13 / Prop 19 / step-up / capital gains + calculator
+- `inheritance-process.html` — Step-by-step inheritance process (trust vs. probate)
+- `projections.html` — Year-by-year projections to 2050
+- `decision.html` — Live vs. rent vs. sell-and-invest recommendation
+- `sources.html` — Sources & verification log
+- `flagged.html` — Flagged for Review (unverified items)
+- `assets/style.css`, `assets/app.js` — styles + charts/calculator (no external deps)
 
-## GitHub Pages
+## Coordination
 
-The workflow in `.github/workflows/pages.yml` validates in-page anchors and deploys on pushes to `main` once GitHub Pages is configured to use GitHub Actions. GitHub Pages needs repository-level activation and a successful GitHub Actions deployment; this branch cannot itself prove deployment to a live URL.
+See `COORDINATION.md` for the shared task board, session claims, and handoff log.
 
-## Privacy and limitations
+## Disclaimer
 
-No personal names, street addresses, parcel numbers, or account details are published. User-provided property and utility estimates are labeled unverified. Blank values are intentionally left blank. Legal, tax, insurance and investment information is general planning research, not professional advice. Recheck laws and all values near the actual transfer.
-
-See [COORDINATION.md](COORDINATION.md) for task status, sources and verification notes.
+Planning information only, not legal or tax advice. Verify all figures with official sources
+(IRS, CA BOE, CA FTB, REDACTED, county assessors) and licensed professionals before acting.
