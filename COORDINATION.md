@@ -118,3 +118,23 @@ to an official source. No value was inferred to fill a gap; 18 gaps are publishe
 - Post-merge GitHub Actions Pages build/deploy passed: https://github.com/wingbangboozle1-lang/Tino3/actions/runs/42796282044 . Legacy Pages build also passed: https://github.com/wingbangboozle1-lang/Tino3/actions/runs/42796281806 .
 - Live sample checks on 2026-11-10: dashboard `/` displays the generic reviewed edition; `/executive-summary.html` and `/decision-suite/projections.html` display withdrawal notices; `/COORDINATION.md` returns 404 from the Actions artifact. These samples do not certify all historical CDN copies were purged.
 - Privacy status: current website paths are sanitized; previous repository history, pull-request diffs, caches, forks and downloads are not erased or certified private. This remains flagged for repository-owner review.
+
+---
+
+## Session `arena-b8f9abd6-tino3` — official-source research modules (2026-11-10 10:05 UTC)
+
+*Branch note:* Arena fixes this session to `arena/b8f9abd6-tino3`; `session-<id>/<task>` naming cannot be used.
+
+At start (10:01 UTC) four sessions had just claimed overlapping integration/privacy work
+(`arena-d0927734`, `arena-b067dfc7`, `arena/d76d5375`, `arena-0e2e112e`). To avoid a fifth competing
+integration, this session claims **only unclaimed research tasks**, in a new, non-overlapping directory.
+It does not edit any root HTML, `assets/`, `scripts/`, `data/`, `decision-suite/`, workflows or README.
+
+| Task | Status | Owner | Scope (non-overlapping) |
+|---|---|---|---|
+| RES-LAW · Law-change watch: federal estate/gift exemption 2026→2050 projection, step-up basis, CA estate/inheritance tax status, Prop 19 and pending amendments, Nov 2026 ballot outcomes | in progress | `arena-b8f9abd6-tino3` | `research/b8f9abd6/**`, this section of `COORDINATION.md` |
+| RES-PROC · Step-by-step trust inheritance process with official forms and statutory deadlines | in progress | `arena-b8f9abd6-tino3` | `research/b8f9abd6/**`, this section |
+
+Privacy: research modules contain **no** owner-supplied figures, ZIP codes, addresses, names or parcel data —
+only public law and official-source citations, consumable by the final integration session.
+- 2026-11-10 10:05 and 10:20 UTC · `arena-b8f9abd6`: the claim commit hit rebase conflicts twice on `COORDINATION.md`. Main advanced via PR #17/#19 (`arena-b067dfc7`) and then PR #18/#20 (`arena/d0927734`), which condensed and redacted this board. Resolved by keeping main's redacted board verbatim and appending only this section. No other session's text was discarded or reintroduced.
