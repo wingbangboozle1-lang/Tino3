@@ -214,3 +214,23 @@ constrain the other publisher.
 The correct status of the public site is: **live, functional, and privacy-inconsistent.** Do not
 represent it as privacy-reviewed. I have not attempted a destructive history rewrite and I cannot erase
 copies already crawled.
+
+---
+
+## Session `arena-531aee5c-tino3` (branch `arena/531aee5c-tino3`) — Non-overlapping Anonymized Decision Suite & Line-by-Line Official Audit
+
+*Branch & scope note:* Bound by Arena environment to fixed session branch `arena/531aee5c-tino3`. Scoped strictly to `decision-suite/**` and `EXECUTIVE_SUMMARY_531AEE5C.md` so zero files owned by `arena-0765efc4` (`index.html`, `README.md`, `assets/`, `scripts/`, `.github/workflows/`) or prior sessions (`d11336c5`, `50c6b81e`, `653eba50`, `1820664f`, `1c0d871d`, `f0c2842a`) are modified. All personal/location identifiers (names, addresses, APNs, ZIP codes, unrounded roll figures) are excluded; placeholders (`[PROPERTY_A]`, `[PROPERTY_B]`, `[DECEDENT]`, `[BENEFICIARY]`, `[SUCCESSOR_TRUSTEE]`) and `$10`-rounded scenario figures are used throughout, with unconfirmed official values left blank and flagged `UNVERIFIED`.
+
+| Task ID | Task | Status | Owner session | Files touched | Sources / verification | Irregularities |
+|---|---|---|---|---|---|---|
+| 531A | Line-by-line repo review & official `.gov` primary-source verification register | in progress | `arena-531aee5c-tino3` | `decision-suite/data/official_sources.json`, `decision-suite/data/repo_audit.json` | Pending completion | Pending |
+| 531B | Local, state & federal property, capital gains, trust & estate tax verification + 2040–2050 law/threshold analysis | unclaimed | — | `decision-suite/data/tax_law_verified.json` | — | — |
+| 531C | Anonymized `[PROPERTY_A]` & `[PROPERTY_B]` Prop 13 CCPI factor audit, CDI insurance, utilities, solar NEM & rent ordinance verification | unclaimed | — | `decision-suite/data/properties_verified.json` | — | — |
+| 531D | Deterministic `$10`-rounded 2026–2055 projection & Live/Rent/Sell+Reinvest decision model (coordinated 2-property optimization) | unclaimed | — | `decision-suite/scripts/generate_suite.py`, `decision-suite/data/*.csv`, `decision-suite/data/model_outputs.json` | — | — |
+| 531E | Static dashboard suite, category subpages, step-by-step trust inheritance guide, repo audit & Flagged for Review page | unclaimed | — | `decision-suite/*.html`, `decision-suite/assets/*`, `EXECUTIVE_SUMMARY_531AEE5C.md` | — | — |
+| 531F | Final verification: 100% official `.gov` row citations, blank unconfirmed official cells, `$10` rounding & zero-PII check, PR to `main`, merge & Pages deploy verification | unclaimed | — | `COORDINATION.md` (this section only) | — | — |
+
+### Log (`arena-531aee5c-tino3`)
+- 2026-11-10: Rebase conflict on `COORDINATION.md` when `origin/main` advanced from `67fc2b2` to `72bf445` (PRs #8–#11, #13). Stopped, preserved 100% of `arena-0765efc4` and `arena-f0c2842a` logs without discarding any work, and updated Task `531F` scope so `arena-0765efc4`'s owned files (`index.html`, `README.md`, `scripts/*`, `.github/workflows/*`) are not edited. Logged cross-session request below per board rules.
+- Cross-session request to `arena-0765efc4` (logged, not edited): Optional allowlist addition of `decision-suite/**` in `scripts/package_site.py` if owner approves publishing the anonymized `$10`-rounded scenario suite via the workflow artifact in addition to branch-root Pages.
+
