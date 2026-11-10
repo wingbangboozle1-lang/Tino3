@@ -1,26 +1,71 @@
 # Inheritance Atlas
 
-A privacy-safe static planning brief for inherited-property decisions.
+A privacy-first decision dashboard for a trust inheritance expected between 2040 and 2050: one residence to
+inherit, one three-unit building already held and partly rented, and enough inherited cash to matter for
+federal estate tax.
 
-**Site:** https://wingbangboozle1-lang.github.io/Tino3/
+**Live site:** https://wingbangboozle1-lang.github.io/Tino3/
 
-## Privacy first
+## What this repository publishes
 
-This edition does not introduce user-supplied property records into its public pages. Concurrent sessions had already published other files and history: those are NOT certified privacy-safe and are excluded from the Pages artifact. See R12; a non-destructive integration cannot erase public history. Property A / B are placeholders. Do not attach private evidence to issues or pull requests. The site has no analytics, remote assets, scripts, forms or storage. Source links are ordinary outbound links with no-referrer policy.
+Ten static pages, one stylesheet, one source ledger and three CSV downloads — nothing else. The published
+artifact is an allowlist built by `scripts/package_site.py`; every path an earlier edition published is
+replaced by a content-free withdrawal notice, so a stale URL cannot return an old figure.
 
-## Evidence rules
+| Page | Contents |
+|---|---|
+| `index.html` | Dashboard, recommendation, decision snapshot |
+| `executive-summary.html` | The decision, five numbers, what would change it |
+| `property-a.html` | The residence to inherit: assessment history, carrying costs, 2026–2055 projection |
+| `property-b.html` | The rental: rent roll, operating statement, the unreconciled tax bill, projections |
+| `taxes.html` | Federal, California and local rules, verified; pending law changes |
+| `projections.html` | 30-year outlook and the full assumption register |
+| `decision.html` | Live vs rent vs sell/bonds, sensitivity matrix, break-even |
+| `inheritance.html` | Statutory timeline after the death, with deadlines |
+| `review.html` | 18 flagged items and the repository-history disclosure (R-13) |
+| `sources.html` | 18 official sources, what each one actually verifies |
 
-Each data-table row links an official authority. Missing numeric facts remain blank and are flagged; links on missing-value rows support the framework, not the missing number. Methods are not verified forecasts. Dollar displays are rounded to the nearest $10; official unrounded thresholds control filings. See **Source library** for the precise review scope (retrieved text vs official search excerpt) and **Flagged for Review** for incomplete work, including proposals, local death-tax confirmation and property-specific projections. No claim of exhaustive line-by-line legal verification is made.
+## Privacy rules enforced in code
 
-## Build and test
+- No names, street addresses, ZIP codes, parcel numbers, utility account numbers or unrounded assessment
+  figures in any published file. `scripts/verify.py` fails the build if a ZIP-code pattern, a city name, an
+  e-mail address, a street address or a non-$10 amount appears in a page or in the data files.
+- Properties appear only as `[PROPERTY_A]` and `[PROPERTY_B]`; jurisdictions are described generically, with
+  the official rate documents cited.
+- No forms, no scripts, no analytics, no remote assets. Nothing on the site accepts or stores input.
 
-No dependencies or manual inputs required:
+## Verification standard
 
-```sh
-python scripts/build.py
-python scripts/verify.py
+Every rule on the site was retrieved from the publishing agency's own domain on 10 November 2026 and linked
+from the row that uses it. `assets/sources.json` records what each document verifies. Anything that could not
+be verified is left blank or published on the Flagged for Review page — never inferred.
+
+## Build
+
+```bash
+python3 scripts/model.py        # writes assets/data/model.json and the CSV downloads
+python3 scripts/build.py        # renders the ten pages
+python3 scripts/verify.py       # reproducible-build, citation, link, privacy and rounding checks
+python3 scripts/package_site.py # writes the _site artifact (allowlist + withdrawal notices)
 ```
 
-`build.py` is the content source; generated HTML and the source ledger are committed. Verification checks reproducibility, every data row's citation, official source domains, navigation and local links, and excludes forms/scripts/remote assets. It does not prove legal correctness or externally hosted link availability. Content is a November 10, 2026 snapshot and does not refresh automatically.
+`verify.py` re-runs the model and the renderer and fails if any published byte changes, so a stale committed
+page cannot survive CI. It also fails on any table row that cites neither an official source nor the internal
+assumption register.
 
-GitHub Pages uses an Actions artifact containing only the eight reviewed pages plus `assets/style.css` and `assets/sources.json`. Never upload the entire repository. The verification workflow runs on pushes and pull requests. No private figures are stored in workflow artifacts. Publication is not a recommendation to execute any transaction; obtain qualified fiduciary, tax, legal and investment review.
+## Data
+
+`assets/sources.json` — source ledger (18 entries).
+`assets/data/model.json` — every figure on the site.
+`assets/data/property_a.csv`, `property_b.csv`, `decision.csv` — the same numbers for offline work.
+
+## Limits
+
+This is a planning model, not an appraisal, a title report, a tax return or legal advice. Insurance premiums,
+future market values, future statutory thresholds and county parcel facts are not verifiable from public
+sources today and are flagged as unverified.
+
+## Coordination
+
+`COORDINATION.md` is the shared task board for parallel sessions, including the handoff log, the privacy
+remediation record and the deployment result.
