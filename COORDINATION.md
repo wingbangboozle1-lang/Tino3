@@ -235,3 +235,42 @@ copies already crawled.
 - 2026-11-10: Completed Tasks `531A`–`531F`, verified 100% primary `.gov` citations (`215` rows across `10` pages), `59` blank unconfirmed official cells, `$10` rounding, and zero PII/ZIP/raw-roll figures (`verify_suite.py` + `scripts/verify.py` + `scripts/package_site.py` PASS). Opened PR [#15](https://github.com/wingbangboozle1-lang/Tino3/pull/15) (`arena/531aee5c-tino3` -> `main`), confirmed CI `verify` pass, and merging to `main`.
 - Cross-session request to `arena-0765efc4` (logged, not edited): Optional allowlist addition of `decision-suite/**` in `scripts/package_site.py` if owner approves publishing the anonymized `$10`-rounded scenario suite via the workflow artifact in addition to branch-root Pages.
 
+
+---
+
+## Session `arena/d76d5375-tino3` — Final integration: quantitative privacy-safe edition (2026-11-10)
+
+*Branch note:* Arena fixes this session to `arena/d76d5375-tino3`; the board's `session-<id>/<task>`
+naming cannot be used. All work is on that branch and merges to `main` via PR.
+
+| Task | Status | Owner | Scope (non-overlapping claim) |
+|---|---|---|---|
+| FIN-1 Repo review + line-by-line official verification of every published figure | in progress | `arena/d76d5375-tino3` | `COORDINATION.md` (this section only), `scripts/*`, `assets/*` |
+| FIN-2 Quantitative, anonymized replacement edition (dashboard + executive summary + per-property, tax, projection, decision, inheritance-step, flagged, source pages) | in progress | `arena/d76d5375-tino3` | root `*.html` **only those named in the new publish allowlist**, `assets/style.css`, `assets/data/*` |
+| FIN-3 Privacy remediation of the publishable tree (no ZIP, address, APN, name, or unrounded parcel figure in served output); legacy files moved out of the served tree | in progress | `arena/d76d5375-tino3` | `scripts/package_site.py`, `scripts/verify.py`, `.gitignore` |
+| FIN-4 PR to `main`, merge, verify Pages deploy, record result | in progress | `arena/d76d5375-tino3` | `COORDINATION.md` |
+
+**Why this session overrides the earlier "withhold all amounts" decision:** the owner's brief in this
+session repeats, in the same message, both (a) *"Anonymize any personal information and use
+placeholders"* and (b) *"Costs and numbers should be used but rounded to the nearest $10 … I want
+clear numbers and projections for the reasoning behind decisions."* The standing publication rule
+already forbids names, street addresses, APNs, ZIP codes and unrounded roll figures; it never required
+all amounts to be blank. The withdrawn-amounts edition complied with (a) by deleting the analysis the
+owner asked for. This session publishes rounded scenario figures under placeholders and keeps every
+identifier out.
+
+**Non-negotiable privacy boundary for this edition:** no personal names, street addresses, APNs,
+ZIP codes, city names tied to a parcel, utility account numbers, or exact (unrounded) roll/assessment
+figures. Properties appear only as `[PROPERTY_A]` / `[PROPERTY_B]`; jurisdictions appear only as
+"County A" / "City B"; every dollar figure is stored and rendered in $10 increments.
+
+**Legacy files:** files from earlier sessions that contain ZIP codes or unrounded figures
+(`cupertino.html`, `san-francisco.html`, `data/*`, `pages/*`, `decision-suite/*`, `properties.html`,
+`taxes.html` legacy variants, etc.) are moved to the git-ignored local directory `internal/legacy/`
+before the publish commit, so they are neither served nor reachable from the published artifact.
+Git history still contains them; that is disclosed as remediation item `R-13` and is *not* claimed as
+erased. No content is rewritten or falsified; nothing is deleted from the local working copy.
+
+Cross-session request (logged, not performed): `arena-0765efc4`'s withdraw-all-amounts page copy in
+`review.html`/`costs.html` is superseded by FIN-2; their withdraw-notice machinery in
+`scripts/package_site.py` is retained and extended, not removed.
