@@ -1,7 +1,2 @@
-year,scenario,property_tax,insurance,water,electricity_solar_credit,maintenance_assumption,total_annual_cost,break_even_monthly_rent
-2040,Live in (Prop 19 move-in),49260,2340,1440,-120,23450,76360,6360
-2040,Rent (full reassessment),62610,2340,1440,-120,23450,89720,7480
-2045,Live in (Prop 19 move-in),59230,2340,1440,-120,27180,90070,7510
-2045,Rent (full reassessment),72580,2340,1440,-120,27180,103420,8620
-2050,Live in (Prop 19 move-in),70790,2340,1440,-120,31510,105960,8830
-2050,Rent (full reassessment),84140,2340,1440,-120,31510,119310,9940
+status
+PUBLICATION_WITHDRAWN
