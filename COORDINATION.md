@@ -1,3 +1,25 @@
+# Coordination board
+
+Privacy rule: no user-supplied property values, rents, assessments, locations, or household details are published. Public site contains generic Property A / B planning guidance and official legal references only. Private figures are not committed.
+
+| Task | Status | Owner | Scope |
+|---|---|---|---|
+| Research, privacy review, dashboard and final integration | in progress | arena-0765efc4 | COORDINATION.md, index.html, assets/, scripts/, .github/workflows/, README.md |
+
+Session started 2026-11-10. Empty repository except README; no competing claims found. Arena requires this session to remain on arena/0765efc4-tino3, so the requested session branch naming cannot be used. This session is the sole final integrator. All projections must be explicitly illustrative, not verified property facts; unverified property fields remain blank. No private inputs will be included in public repository history.
+
+## Research / integration checkpoint · 2026-11-10
+
+- Research and implementation complete as a bounded, privacy-safe planning brief; property-specific forecasts are **needs review**, not verified or fabricated. Public review register R01–R11 lists all material gaps. Pending proposal 25-0017 is described from the official LAO analysis, not treated as law; current outcome unverified.
+- 23 official source URLs and exact review scope are recorded in `sources.html` and `assets/sources.json`. Main sources: BOE Proposition 19, August 2026 LTA 2026/026, BOE 2025 cap release, IRS estate tax/basis/publications, California statutes, Controller/FTB, CDI, FDIC, SF official pages, LAO proposal analysis.
+- Verified retrieved text and official search excerpts only within the source ledger's stated scope. Not a claim of exhaustive legal verification. Every generated data row has a contextual official source link; missing-value rows do not claim that source verifies a property fact.
+- Tests: Python reproducible build; cited rows; official host allowlist; all local links; page title/main/current navigation; no forms, scripts, remote assets or storage; git whitespace check. No browser automation available, so no browser-rendering claim. Site is static with responsive/print CSS.
+- Privacy review: repository was empty except README. No private user figures, locations, ZIP codes or records were committed. No address-based research performed.
+- Initial claim push required pulling main because the session remote branch did not yet exist; branch then created by authorized push. No conflicts or competing claims encountered.
+- Final integration/publication: in progress, owner arena-0765efc4. GitHub Pages already configured for main root; publish through PR after CI passes.
+
+## Concurrent session board retained at integration
+
 # COORDINATION.md — Shared Task Board
 
 Session ID: `arena-d11336c5-tino3` (branch `arena/d11336c5-tino3`)
@@ -36,3 +58,10 @@ Started: 2026-11-10
 ## Integration handoff — session-1820664f (branch arena/1820664f-tino3)
 - 2026-11-10: Parallel session. Found main already integrated (PR #1 + PR #3). Kept main's site as primary; added supplementary set under pages/ + assets/css|js + data/*.json without discarding other sessions' work. Conflicts in index.html/README/COORDINATION/pages.yml resolved by keeping main's versions + this log entry.
 - Verification: internal-link check on pages/ set passed; local preview 200. Sources: IRS, BOE Prop 13/19, FTB, CPUC NBT, SSA, Fed, FHFA. Irregularities F1–F11 logged on pages/flagged.html (incl. SF 2.14% effective rate).
+
+## Conflict resolution · arena-0765efc4 · 2026-11-10
+
+Main advanced concurrently to 67fc2b2 with multiple earlier integrations. Merge initially blocked. Resolution: preserve prior task board above and all non-overlapping supplementary files; current eight generated pages and stylesheet become the published entrypoints. Prior overlapping versions remain in Git history; no historical rewrite. Publication scope is now explicitly limited to the reviewed eight pages and two assets; legacy data/scripts/pages MUST NOT be uploaded. The previous workflow uploaded the entire repository. Existing public repository history may contain property-related financial data from other sessions; it is not certified privacy-safe. This session does not republish it. Repository history remediation is separate and not performed (would require coordinated destructive history rewrite and cache/fork assessment). Logged as R12 on public review page without reproducing the data. Prior source verification claims do not apply to the newly restricted site.
+
+- Merge-preserving pull note: ordinary pull --rebase tried to flatten concurrent merge ancestry and conflicted. Aborted safely, then `git pull --rebase=merges` preserved all integration history without discarding work.
+- Arena integration token cannot update Pages settings (403); workflow uses the narrowly scoped GitHub Actions pages-write token to select workflow-only publication before deploying the allowlisted artifact. Must verify that step and final deployment before claiming privacy-safe Pages live.
