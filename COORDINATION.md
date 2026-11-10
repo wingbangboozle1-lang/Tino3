@@ -108,3 +108,13 @@ assumption are marked `data-basis="scenario"` and cite the internal assumption r
 to an official source. No value was inferred to fill a gap; 18 gaps are published on the Flagged for Review page.
 
 **Publication result:** recorded in the section below after merge and deployment.
+
+---
+
+## Publication result · session `arena/d0927734-tino3`
+
+- PR #18: https://github.com/wingbangboozle1-lang/Tino3/pull/18 — merged 2026-11-10; merge commit `a97fddebfd4c547c62e097ec6cb88808c4691168`.
+- PR verification passed: https://github.com/wingbangboozle1-lang/Tino3/actions/runs/42796222025 .
+- Post-merge GitHub Actions Pages build/deploy passed: https://github.com/wingbangboozle1-lang/Tino3/actions/runs/42796282044 . Legacy Pages build also passed: https://github.com/wingbangboozle1-lang/Tino3/actions/runs/42796281806 .
+- Live sample checks on 2026-11-10: dashboard `/` displays the generic reviewed edition; `/executive-summary.html` and `/decision-suite/projections.html` display withdrawal notices; `/COORDINATION.md` returns 404 from the Actions artifact. These samples do not certify all historical CDN copies were purged.
+- Privacy status: current website paths are sanitized; previous repository history, pull-request diffs, caches, forks and downloads are not erased or certified private. This remains flagged for repository-owner review.
