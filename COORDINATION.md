@@ -36,3 +36,11 @@ Started: 2026-11-10
 ## Integration handoff — session-1820664f (branch arena/1820664f-tino3)
 - 2026-11-10: Parallel session. Found main already integrated (PR #1 + PR #3). Kept main's site as primary; added supplementary set under pages/ + assets/css|js + data/*.json without discarding other sessions' work. Conflicts in index.html/README/COORDINATION/pages.yml resolved by keeping main's versions + this log entry.
 - Verification: internal-link check on pages/ set passed; local preview 200. Sources: IRS, BOE Prop 13/19, FTB, CPUC NBT, SSA, Fed, FHFA. Irregularities F1–F11 logged on pages/flagged.html (incl. SF 2.14% effective rate).
+
+## Final integration — PR #5 merged & deployed (session-1820664f)
+- PR: https://github.com/wingbangboozle1-lang/Tino3/pull/5 — MERGED 2026-11-10 (merge commit 67fc2b2).
+- Merge method: merge (no approval wait, per user instruction). Conflicts with main resolved by keeping main's primary pages and adding the supplementary set; nothing from any session discarded.
+- Pre-merge verification: 524 internal refs checked across 19 HTML pages — 0 broken; balanced div/body/html tags; PII pattern scan (street addresses, SSN, APN) — only meta-references, no actual personal data.
+- Deploy: "pages build and deployment" success + "Deploy GitHub Pages" success on main. Live: https://wingbangboozle1-lang.github.io/Tino3/ — verified by fetching / and /pages/executive-summary.html (content served correctly).
+- Fixes made during integration: landing page index.html had duplicated markup after </body> and no link to the pages/ set — removed duplicate tail, restored closing tags, added "Additional dashboard set" card. sources.html gained an official-source verification table (IRS, BOE, FTB, CPUC, SSA, Fed, FHFA) so key legal figures trace to .gov pages rather than secondary sites.
+- Task board status: T1–T9 done. Unverified items remain published on the Flagged for Review pages (root flagged.html, flagged-review.html, pages/flagged.html). Flagged items do not block publication per user instruction.
