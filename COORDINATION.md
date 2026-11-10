@@ -1,27 +1,28 @@
 # COORDINATION.md — Shared Task Board
 
-Session ID: `arena-50c6b81e-tino3` (branch `arena/50c6b81e-tino3`)
-Last updated: 2026-11-10
+Session ID: `arena-d11336c5-tino3` (branch `arena/d11336c5-tino3`)
+Repo: wingbangboozle1-lang/Tino3
+Started: 2026-11-10
 
-> Single-session project: this session is both worker and final integration session.
-> No other sessions have claimed tasks. Scopes below are non-overlapping by file.
+## Task board
 
-| Task | Status | Owner | Files touched | Sources / verification | Irregularities |
-|---|---|---|---|---|---|
-| 1. Research official sources (IRS, BOE, FTB, courts.ca.gov, BLS, SFPUC, Cupertino, CDI/NAIC, CPUC) | done | arena-50c6b81e-tino3 | data/sources.csv, sources-verification.html | See sources-verification.html; each row links to official .gov source | SF property-tax effective rate anomaly flagged (see Flagged page) |
-| 2. Build reproducible projection model | done | arena-50c6b81e-tino3 | scripts/calculate.py, data/projections.csv, data/decision_analysis.csv | Prop 13 2% cap (BOE), Prop 19 $1M cap (BOE), Rev. Proc. 2025-32 $15M (IRS) | Market-growth & stock-return are labelled ASSUMPTIONS, not verified facts |
-| 3. Build GitHub Pages site (dashboard + subpages) | done | arena-50c6b81e-tino3 | index.html, *.html, assets/, .github/workflows/pages.yml | Site builds statically; internal links checked by script | — |
-| 4. Verification pass line-by-line | done | arena-50c6b81e-tino3 | sources-verification.html, flagged-review.html | User-provided values marked UNVERIFIED where no official source can confirm without APN/address | See Flagged page |
-| 5. PR + merge + Pages deploy | in progress | arena-50c6b81e-tino3 | — | PR link recorded below after merge | — |
+| # | Task | Status | Owner session | Files touched | Sources / verification | Irregularities |
+|---|------|--------|---------------|---------------|------------------------|----------------|
+| 1 | Research: federal estate tax, CA inheritance tax, Prop 13/19, step-up basis, capital gains | done | arena-d11336c5-tino3 | research notes (in site sources page) | IRS estate-tax page (2026 threshold $15,000,000 verified via fetch); BOE Prop 19 page boe.ca.gov/prop19/; FTB capital-gains page ftb.ca.gov/file/personal/income-types/capital-gains-and-losses.html | BOE old URL /proptaxes/prop-19.htm returns 404 — use /prop19/ |
+| 2 | Research: insurance, maintenance, utilities, market returns, probate/trust, SF rent ordinance | done | arena-d11336c5-tino3 | site pages | PolicyGenius SF avg; GetHomeInsuranceQuotes Cupertino avg; Insurance.com/NAIC landlord avg; Fannie Mae 1% rule; SF.gov rent ordinance; Goldman Sachs 10-yr forecast | Insurance averages are secondary (not official) — flagged on site |
+| 3 | Build static GitHub Pages site (dashboard + subpages, tables with source links, projections, decision analysis) | in progress | arena-d11336c5-tino3 | index.html, cupertino.html, san-francisco.html, taxes.html, inheritance-process.html, projections.html, decision.html, sources.html, flagged.html, assets/style.css, assets/app.js | All figures rounded to nearest $10; user-provided figures labeled unverified | — |
+| 4 | Final integration: verify links, confirm build, open PR to main, merge, confirm Pages deploy | pending | arena-d11336c5-tino3 | — | — | — |
+
+## Rules followed
+- Personal information anonymized; placeholders only. No PII on site.
+- Costs/numbers rounded to nearest $10.
+- Every table row carries a source link; unverifiable values left flagged as unverified.
+- No hallucinations: assumptions labeled as assumptions.
 
 ## Handoff log
-- 2026-11-10: Session claimed all tasks (single session, no conflicts). Empty repo (README only) — no prior work to conflict with.
-- 2026-11-10: Research, model, site, verification completed in this session. PR opened from integration branch to main.
+- 2026-11-10: Session arena-d11336c5-tino3 claimed tasks 1-4 (single-session repo; no other sessions active). Pushing claim immediately.
 
-## PR / deploy record
-- PR: (to be filled after creation)
-- Merge result: (to be filled)
-- Pages deploy: (to be filled)
-
-## Privacy rule (all sessions)
-Personal information is anonymized with placeholders ([DECEDENT], [BENEFICIARY], [TRUSTEE], Property A/B). No personal data appears on the site.
+## Integration handoff — session arena-50c6b81e-tino3 (PR #3)
+- 2026-11-10: Parallel session. PR #3 (branch arena/50c6b81e-tino3) conflicted with PR #1 already merged to main.
+- Resolution: kept PR #1 pages as primary (index.html, projections.html, assets/style.css); added PR #3 supplementary pages + data/ + scripts/ without discarding either session's work. README merged. This entry logs the merge per COORDINATION rules.
+- Verification: internal-link + PII scan on combined tree; both sets anonymized, $10 rounding, source-linked rows.

@@ -1,18 +1,32 @@
-# Tino3 — Cupertino & San Francisco House Inheritance Decision Dashboard
+# Tino3 — Cupertino & San Francisco Inheritance Decision Dashboard
 
-Anonymized decision dashboard for a trust inheritance expected ~2040–2050:
-**live in vs. rent vs. sell & reinvest** Property A (Cupertino 95014) while keeping
-Property B (San Francisco 94122, 3 units / 2 rented) in the analysis.
+Anonymized planning dashboard for a trust inheritance expected around 2040–2050.
+All personal information is anonymized (city + ZIP only; placeholders [DECEDENT] / [BENEFICIARY] / [TRUSTEE]).
+All dollars rounded to nearest $10. Every table row carries a source link;
+unverifiable values are flagged on the Flagged for Review page.
 
-- **Live site:** GitHub Pages (deploys from `main` via `.github/workflows/pages.yml`)
-- **Start:** `index.html` → Executive Summary → Decision Analysis
-- **Model:** `python3 scripts/calculate.py` (writes `data/*.csv`)
-- **Site build:** `python3 scripts/build_site.py` (regenerates all `*.html`)
-- **Verification:** every verified row links to an official .gov source in
-  `sources-verification.html` / `data/sources.csv`; unverified items are blank
-  and listed on `flagged-review.html`.
-- **Privacy:** placeholders only ([DECEDENT], [BENEFICIARY], [TRUSTEE]).
-  No personal information appears on the site. All decision-analysis money
-  figures are rounded to the nearest $10.
+## Site pages (GitHub Pages, static — no build step)
+Primary set (session arena-d11336c5-tino3, merged via PR #1):
+- `index.html` — Dashboard + executive summary
+- `cupertino.html` — Cupertino 95014 detail
+- `san-francisco.html` — San Francisco 94122 rental detail
+- `taxes.html` — Federal / state / Prop 13 / Prop 19 / step-up / capital gains + calculator
+- `inheritance-process.html` — Step-by-step inheritance process (trust vs. probate)
+- `projections.html` — Year-by-year projections to 2050
+- `decision.html` — Live vs. rent vs. sell-and-invest recommendation
+- `sources.html` — Sources & verification log
+- `flagged.html` — Flagged for Review (unverified items)
 
-Coordination / task board: see `COORDINATION.md`.
+Supplementary set (session arena-50c6b81e-tino3, integrated via PR #3):
+- `executive-summary.html`, `properties.html`, `taxes-estate.html`, `costs.html`,
+  `decision-analysis.html`, `inheritance-steps.html`, `sources-verification.html`,
+  `flagged-review.html`, `methodology.html`
+- Reproducible model: `scripts/calculate.py` → `data/*.csv`; site builder: `scripts/build_site.py`
+
+## Coordination
+See `COORDINATION.md` for the shared task board, session claims, and handoff log.
+Two sessions worked in parallel; PR #3 integration merged both sets without discarding either.
+
+## Disclaimer
+Planning information only, not legal or tax advice. Verify all figures with official sources
+(IRS, CA BOE, CA FTB, SF.gov, county assessors) and licensed professionals before acting.
