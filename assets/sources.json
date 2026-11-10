@@ -1,0 +1,117 @@
+{
+  "proposal": {
+    "title": "LAO \u00b7 Proposed initiative 25-0017",
+    "url": "https://www.lao.ca.gov/ballot/2025/250422.pdf",
+    "reviewed": "2026-11-10"
+  },
+  "prop19": {
+    "title": "BOE \u00b7 Proposition 19",
+    "url": "https://www.boe.ca.gov/prop19/",
+    "reviewed": "2026-11-10"
+  },
+  "cap": {
+    "title": "BOE \u00b7 2025 adjustment",
+    "url": "https://www.boe.ca.gov/news/2025/NR-25-02.htm",
+    "reviewed": "2026-11-10"
+  },
+  "faq": {
+    "title": "BOE \u00b7 August 2026 guidance",
+    "url": "https://www.boe.ca.gov/proptaxes/pdf/lta26026.pdf",
+    "reviewed": "2026-11-10"
+  },
+  "prop13": {
+    "title": "BOE \u00b7 Property tax overview",
+    "url": "https://www.boe.ca.gov/proptaxes/pdf/pub29.pdf",
+    "reviewed": "2026-11-10"
+  },
+  "estate": {
+    "title": "IRS \u00b7 Estate tax",
+    "url": "https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax",
+    "reviewed": "2026-11-10"
+  },
+  "706": {
+    "title": "IRS \u00b7 Form 706 instructions",
+    "url": "https://www.irs.gov/instructions/i706",
+    "reviewed": "2026-11-10"
+  },
+  "basis": {
+    "title": "IRS \u00b7 Inherited property basis",
+    "url": "https://www.irs.gov/faqs/interest-dividends-other-types-of-income/gifts-inheritances/gifts-inheritances",
+    "reviewed": "2026-11-10"
+  },
+  "ca": {
+    "title": "State Controller \u00b7 Estate tax",
+    "url": "https://www.sco.ca.gov/ardtax_estate_tax.html",
+    "reviewed": "2026-11-10"
+  },
+  "ftb": {
+    "title": "FTB \u00b7 Gifts and inheritance",
+    "url": "https://www.ftb.ca.gov/file/personal/income-types/gifts-and-inheritance.html",
+    "reviewed": "2026-11-10"
+  },
+  "rent": {
+    "title": "IRS \u00b7 Rental property",
+    "url": "https://www.irs.gov/publications/p527",
+    "reviewed": "2026-11-10"
+  },
+  "home": {
+    "title": "IRS \u00b7 Selling your home",
+    "url": "https://www.irs.gov/publications/p523",
+    "reviewed": "2026-11-10"
+  },
+  "gains": {
+    "title": "IRS \u00b7 Capital gains",
+    "url": "https://www.irs.gov/taxtopics/tc409",
+    "reviewed": "2026-11-10"
+  },
+  "insurance": {
+    "title": "CDI \u00b7 Finding residential insurance",
+    "url": "https://www.insurance.ca.gov/01-consumers/105-type/5-residential/Top10Tips_FindingResidentialIns.cfm",
+    "reviewed": "2026-11-10"
+  },
+  "quote": {
+    "title": "CDI \u00b7 Pricing tool limitations",
+    "url": "https://www.insurance.ca.gov/0400-news/0100-press-releases/2018/release138-18.cfm",
+    "reviewed": "2026-11-10"
+  },
+  "shop": {
+    "title": "CDI \u00b7 Shopping for insurance",
+    "url": "https://www.insurance.ca.gov/0150-seniors/0200beforebuy/Shop4ResIns.cfm",
+    "reviewed": "2026-11-10"
+  },
+  "notice": {
+    "title": "California \u00b7 Probate Code 16061.7",
+    "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=16061.7.&lawCode=PROB",
+    "reviewed": "2026-11-10"
+  },
+  "death": {
+    "title": "California \u00b7 Revenue & Taxation Code 480",
+    "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=480.&lawCode=RTC",
+    "reviewed": "2026-11-10"
+  },
+  "fdic": {
+    "title": "FDIC \u00b7 Deposit coverage",
+    "url": "https://www.fdic.gov/resources/deposit-insurance/understanding-deposit-insurance",
+    "reviewed": "2026-11-10"
+  },
+  "sfrent": {
+    "title": "SF \u00b7 Rental inventory compliance",
+    "url": "https://www.sf.gov/notice-of-owner-noncompliance-with-housing-inventory",
+    "reviewed": "2026-11-10"
+  },
+  "sffee": {
+    "title": "SF \u00b7 Rent Board fee",
+    "url": "https://www.sf.gov/rent-board-fee",
+    "reviewed": "2026-11-10"
+  },
+  "sftax": {
+    "title": "SF Treasurer \u00b7 Secured tax",
+    "url": "https://sftreasurer.org/property/secured-property-taxes",
+    "reviewed": "2026-11-10"
+  },
+  "sftransfer": {
+    "title": "SF \u00b7 Recording and transfer tax",
+    "url": "https://www.sf.gov/reports--march-2024--fees-record-document-san-francisco",
+    "reviewed": "2026-11-10"
+  }
+}
