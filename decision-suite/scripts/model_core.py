@@ -103,7 +103,7 @@ PROP_B_HISTORY = [
 
 def prop19_cap_for_year(year: int, hpi_growth: float = 0.04) -> int:
     """
-    Exact statutory Prop 19 cap for 2025-2026 ($1,044,586 per BOE LTA 2025/009, displayed rounded to $10),
+    Statutory Prop 19 cap for 2025-2026 ($1,044,590 rounded to nearest $10 per BOE LTA 2025/009),
     adjusted biennially every odd year (2027, 2029, ..., 2055) by 2-year California HPI compounding.
     """
     exact_2025 = 1_044_586.0
@@ -176,13 +176,13 @@ def build_all_data() -> dict:
         ins_owner_est = r10(1_500 * ((1 + ins_infl) ** t))
         ins_ho3_real = r10(3_000 * ((1 + ins_infl) ** t))
         ins_dp3_real = r10(3_600 * ((1 + ins_infl) ** t))
-        water_yr = r10(1_500 * ((1 + water_a_infl) ** t))  # $125/mo midpoint of $100-$150/mo
+        water_yr = r10(1_500 * ((1 + water_a_infl) ** t))  # $1,500/yr midpoint of $100-$150/mo
 
         # Solar / electric: legacy NEM credit (-$180/yr) through 2039; post-20-yr NEM sunset (2040+) NBT + fixed charge + inverter reserve
         if yr < 2040:
             elec_yr = -180
         else:
-            elec_yr = r10(540 * ((1 + cpi_base) ** (yr - 2026)))  # ~$45/mo real fixed charge + inverter reserve net of solar self-consumption
+            elec_yr = r10(540 * ((1 + cpi_base) ** (yr - 2026)))  # ~$540/yr real fixed charge + inverter reserve net of solar self-consumption
 
         maint_live = r10(mv_base * 0.005)   # 0.50% of value (high land-share Silicon Valley SFR)
         maint_rent = r10(mv_base * 0.0065)  # 0.65% with tenant turnover wear
@@ -233,7 +233,7 @@ def build_all_data() -> dict:
 
         ins_landlord_real = r10(4_500 * ((1 + ins_infl) ** t))  # 3-unit commercial/DP-3 habitational policy
         ins_owner_est = r10(1_500 * ((1 + ins_infl) ** t))
-        water_sewer_yr = r10(4_380 * ((1 + water_b_infl) ** t))  # $365/mo midpoint of $330-$400/mo
+        water_sewer_yr = r10(4_380 * ((1 + water_b_infl) ** t))  # $4,380/yr midpoint of $330-$400/mo
         elec_common_yr = r10(600 * ((1 + cpi_base) ** t))        # $50/mo midpoint of $30-$70/mo
         maint_3unit_yr = r10(mv_base * 0.0085)                   # 0.85% older 3-unit coastal maintenance reserve
 
