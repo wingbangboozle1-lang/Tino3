@@ -1,1 +1,1 @@
-const links=[...document.querySelectorAll('.sidebar nav a')];const sections=[...document.querySelectorAll('main section')];const observer=new IntersectionObserver(entries=>{for(const entry of entries){if(entry.isIntersecting){links.forEach(link=>link.classList.toggle('active',link.hash===`#${entry.target.id}`))}}},{rootMargin:'-15% 0px -70% 0px'});sections.forEach(section=>observer.observe(section));
+/* PUBLICATION_WITHDRAWN: earlier content removed. */
