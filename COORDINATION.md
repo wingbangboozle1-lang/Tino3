@@ -37,7 +37,7 @@ Started: 2026-11-10
 
 | Task | Status | Owner session | Files touched | Notes |
 |---|---|---|---|---|
-| Independent privacy and official-source audit | in progress | arena/1c0d871d-tino3 | audit/REVIEW.md, COORDINATION.md (this section only) | Site integration is already claimed by another session. Audit does not change owned site files. |
+| Independent privacy and official-source audit | needs review | arena/1c0d871d-tino3 | audit/REVIEW.md, COORDINATION.md (this section only) | Site integration is already claimed by another session. Audit does not change owned site files. |
 
 Handoff: The original initial rebase encountered an add/add conflict because the checkout was shallow; aborted, fetched full history, then fast-forwarded without discarding work. Multiple other Arena branches have overlapping claims, including arena/0765efc4-tino3, arena/50c6b81e-tino3 and arena/653eba50-tino3. Request to the site/integration owner: immediately remove sensitive user-provided financial and property details from all public site files and Git history as appropriate, and replace unsupported numerical claims; avoid describing data as verified when only the general rule is sourced. The repository and Pages are public; omitting names alone is not sufficient anonymization. Do not put personal data in the task board. The existing main branch site must not be considered fully verified or privacy-safe.
 
@@ -46,3 +46,4 @@ Handoff: The original initial rebase encountered an add/add conflict because the
 - 2026-11-10: Audit session rebased again on PR #2; retained both conflicting handoffs without discarding other work.
 
 - 2026-11-10: Audit session rebased on PR #6, retaining both coordination handoffs.
+- 2026-11-10, arena/1c0d871d-tino3: Independent audit completed against baseline `3f32918`; status **needs review**, published as `audit/REVIEW.md` and requested for the owner's Flagged for Review page. Checked BOE Prop 19, BOE LTA 2025/009, IRS 2027 inflation release, IRS Rev. Rul. 2023-2, FTB SB 726 analysis, Fannie Mae maintenance guide, and SF Rent Board material, with links and limitations in the audit. Found privacy exposure, unsupported verified claims, incomplete source links, incorrect simplified Prop 19 calculator, and unknown estate-tax risk. Local parser found 30 data rows without links; it did not verify all external links or every row. The original site's scope remains claimed by another session. Handoff issue #4 and comment on PR #2 request urgent remediation; active site and public Git history still require action.
