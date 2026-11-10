@@ -1,0 +1,38 @@
+{
+  "generated_date": "2026-11-10",
+  "session_id": "arena-531aee5c-tino3",
+  "federal_estate_and_gift": {
+    "exemption_2026_single": 15000000,
+    "exemption_2026_married_portability": 30000000,
+    "exemption_2027_single": 15480000,
+    "exemption_2027_married_portability": 30960000,
+    "annual_gift_2026": 19000,
+    "annual_gift_2027": 20000,
+    "top_marginal_rate": "40%",
+    "statutory_authority": "26 U.S.C. \u00a7\u00a72001, 2010(c)(3) (OBBBA / WFTC \u00a770106); IRS IR-2026-133 / Rev. Proc. 2026-35",
+    "official_url": "https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts"
+  },
+  "california_state_and_local_inheritance": {
+    "state_inheritance_tax": 0,
+    "state_estate_tax": 0,
+    "local_inheritance_tax": 0,
+    "statutory_authority": "CA Revenue & Taxation Code \u00a7\u00a713301\u201313302 (enacted via Proposition 6, June 1982; voter approval required to repeal)",
+    "official_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=13301"
+  },
+  "prop_13_and_prop_19": {
+    "prop_13_base_rate": "1.00% + voter-approved local debt & flat parcel charges",
+    "prop_13_annual_inflation_cap": "Lesser of October-to-October CCPI or 2.000% (R&TC \u00a751)",
+    "prop_19_cap_2025_2027_rounded_10": 1044590,
+    "prop_19_formula": "New Taxable Value = FBYV + max(0, FMV - FBYV - Cap), less $7,000 Homeowners' Exemption if occupied within 1 yr",
+    "prop_19_move_out_rule": "Moving out later removes the Prop 19 exclusion on the next Jan 1 lien date (BOE Pub. 800-1)",
+    "official_url": "https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf"
+  },
+  "basis_and_capital_gains": {
+    "revocable_trust_step_up": "Full FMV step-up at death under IRC \u00a71014 when included in gross estate",
+    "irrevocable_trust_trap": "NO IRC \u00a71014 step-up for irrevocable grantor trust assets excluded from gross estate (IRS Rev. Rul. 2023-2)",
+    "federal_ltcg_plus_niit": "0% / 15% / 20% + 3.8% NIIT above $200,000 single / $250,000 MFJ",
+    "california_capital_gains": "Taxed as ordinary income: 1% to 12.3% + 1% Mental Health Services Tax over $1,000,000 (13.3% top rate)",
+    "treasury_interest_ca_exemption": "U.S. Treasury obligation interest is 100% exempt from California income tax (31 U.S.C. \u00a73124)",
+    "official_url": "https://www.irs.gov/irb/2023-16_IRB#REV-RUL-2023-2"
+  }
+}

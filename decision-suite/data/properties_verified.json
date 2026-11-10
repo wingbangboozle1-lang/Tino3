@@ -1,0 +1,258 @@
+{
+  "generated_date": "2026-11-10",
+  "session_id": "arena-531aee5c-tino3",
+  "privacy_placeholders": {
+    "property_a": "[PROPERTY_A] \u2014 Silicon Valley Single-Family Residence with Solar (Santa Clara County Jurisdiction)",
+    "property_b": "[PROPERTY_B] \u2014 Coastal 3-Unit Mixed-Occupancy Residence (City & County of San Francisco Jurisdiction)",
+    "parties": [
+      "[DECEDENT / TRUSTOR]",
+      "[BENEFICIARY / HEIR]",
+      "[SUCCESSOR_TRUSTEE]",
+      "[FAMILY_REVOCABLE_TRUST]"
+    ]
+  },
+  "property_a_history_rounded_10": [
+    {
+      "year": 2014,
+      "reported_tax": 5970,
+      "reported_tax_chg": "",
+      "reported_av": 440310,
+      "reported_av_chg": "+0.5%",
+      "boe_ccpi_factor": "1.00454 (+0.454%)",
+      "confirmed_official": "",
+      "status": "UNVERIFIED \u2014 Parcel Roll Requires APN"
+    },
+    {
+      "year": 2015,
+      "reported_tax": 6130,
+      "reported_tax_chg": "+2.8%",
+      "reported_av": 449100,
+      "reported_av_chg": "+2%",
+      "boe_ccpi_factor": "1.01998 (+1.998%)",
+      "confirmed_official": "",
+      "status": "UNVERIFIED \u2014 Ratio Matches BOE CCPI"
+    },
+    {
+      "year": 2016,
+      "reported_tax": 6410,
+      "reported_tax_chg": "+4.6%",
+      "reported_av": 455950,
+      "reported_av_chg": "+1.5%",
+      "boe_ccpi_factor": "1.01525 (+1.525%)",
+      "confirmed_official": "",
+      "status": "UNVERIFIED \u2014 Ratio Matches BOE CCPI"
+    },
+    {
+      "year": 2017,
+      "reported_tax": 6380,
+      "reported_tax_chg": "-0.5%",
+      "reported_av": 465070,
+      "reported_av_chg": "+2%",
+      "boe_ccpi_factor": "1.02000 (+2.000%)",
+      "confirmed_official": "",
+      "status": "UNVERIFIED \u2014 Ratio Matches BOE CCPI"
+    },
+    {
+      "year": 2018,
+      "reported_tax": 6380,
+      "reported_tax_chg": "0.0%",
+      "reported_av": 474370,
+      "reported_av_chg": "+2%",
+      "boe_ccpi_factor": "1.02000 (+2.000%)",
+      "confirmed_official": "",
+      "status": "UNVERIFIED \u2014 Ratio Matches BOE CCPI"
+    },
+    {
+      "year": 2019,
+      "reported_tax": 6570,
+      "reported_tax_chg": "+2.8%",
+      "reported_av": 483850,
+      "reported_av_chg": "+2%",
+      "boe_ccpi_factor": "1.02000 (+2.000%)",
+      "confirmed_official": "",
+      "status": "UNVERIFIED \u2014 Ratio Matches BOE CCPI"
+    },
+    {
+      "year": 2020,
+      "reported_tax": 6570,
+      "reported_tax_chg": "0.0%",
+      "reported_av": 493530,
+      "reported_av_chg": "+2%",
+      "boe_ccpi_factor": "1.02000 (+2.000%)",
+      "confirmed_official": "",
+      "status": "UNVERIFIED \u2014 Ratio Matches BOE CCPI"
+    },
+    {
+      "year": 2021,
+      "reported_tax": 6660,
+      "reported_tax_chg": "+1.5%",
+      "reported_av": 498640,
+      "reported_av_chg": "+1%",
+      "boe_ccpi_factor": "1.01036 (+1.036%)",
+      "confirmed_official": "",
+      "status": "UNVERIFIED \u2014 Ratio Matches BOE CCPI"
+    },
+    {
+      "year": 2022,
+      "reported_tax": 6760,
+      "reported_tax_chg": "+1.4%",
+      "reported_av": 508610,
+      "reported_av_chg": "+2%",
+      "boe_ccpi_factor": "1.02000 (+2.000%)",
+      "confirmed_official": "",
+      "status": "UNVERIFIED \u2014 Ratio Matches BOE CCPI"
+    },
+    {
+      "year": 2023,
+      "reported_tax": 6920,
+      "reported_tax_chg": "+2.4%",
+      "reported_av": 518790,
+      "reported_av_chg": "+2%",
+      "boe_ccpi_factor": "1.02000 (+2.000%)",
+      "confirmed_official": "",
+      "status": "UNVERIFIED \u2014 Ratio Matches BOE CCPI"
+    },
+    {
+      "year": 2024,
+      "reported_tax": 7000,
+      "reported_tax_chg": "+1.2%",
+      "reported_av": 529160,
+      "reported_av_chg": "+2%",
+      "boe_ccpi_factor": "1.02000 (+2.000%)",
+      "confirmed_official": "",
+      "status": "UNVERIFIED \u2014 Ratio Matches BOE CCPI"
+    },
+    {
+      "year": 2025,
+      "reported_tax": 7210,
+      "reported_tax_chg": "+2.9%",
+      "reported_av": 539740,
+      "reported_av_chg": "+2%",
+      "boe_ccpi_factor": "1.02000 (+2.000%)",
+      "confirmed_official": "",
+      "status": "UNVERIFIED \u2014 Ratio Matches BOE CCPI"
+    },
+    {
+      "year": 2026,
+      "reported_tax": null,
+      "reported_tax_chg": "",
+      "reported_av": 550540,
+      "reported_av_chg": "+2%",
+      "boe_ccpi_factor": "1.02000 (+2.000%)",
+      "confirmed_official": "",
+      "status": "UNVERIFIED \u2014 2026 Tax Not Provided (Blank)"
+    }
+  ],
+  "property_b_history_rounded_10": [
+    {
+      "year": 2016,
+      "reported_tax": 1680,
+      "reported_tax_chg": "+1.6%",
+      "reported_av": 96560,
+      "reported_av_chg": "+1.5%",
+      "boe_ccpi_factor": "1.01525 (+1.525%)",
+      "confirmed_official": "",
+      "status": "UNVERIFIED \u2014 Parcel Roll Requires APN"
+    },
+    {
+      "year": 2017,
+      "reported_tax": 1740,
+      "reported_tax_chg": "+3.9%",
+      "reported_av": 98490,
+      "reported_av_chg": "+2%",
+      "boe_ccpi_factor": "1.02000 (+2.000%)",
+      "confirmed_official": "",
+      "status": "UNVERIFIED \u2014 Ratio Matches BOE CCPI"
+    },
+    {
+      "year": 2018,
+      "reported_tax": 2060,
+      "reported_tax_chg": "+18.4%",
+      "reported_av": 100460,
+      "reported_av_chg": "+2%",
+      "boe_ccpi_factor": "1.02000 (+2.000%)",
+      "confirmed_official": "",
+      "status": "FLAGGED \u2014 +18.4% Jump Driven by New Parcel Tax"
+    },
+    {
+      "year": 2019,
+      "reported_tax": 2130,
+      "reported_tax_chg": "+3.5%",
+      "reported_av": 102470,
+      "reported_av_chg": "+2%",
+      "boe_ccpi_factor": "1.02000 (+2.000%)",
+      "confirmed_official": "",
+      "status": "UNVERIFIED \u2014 Ratio Matches BOE CCPI"
+    },
+    {
+      "year": 2020,
+      "reported_tax": 2200,
+      "reported_tax_chg": "+3%",
+      "reported_av": 104510,
+      "reported_av_chg": "+2%",
+      "boe_ccpi_factor": "1.02000 (+2.000%)",
+      "confirmed_official": "",
+      "status": "UNVERIFIED \u2014 Ratio Matches BOE CCPI"
+    },
+    {
+      "year": 2021,
+      "reported_tax": 2070,
+      "reported_tax_chg": "-5.9%",
+      "reported_av": 105600,
+      "reported_av_chg": "+1%",
+      "boe_ccpi_factor": "1.01036 (+1.036%)",
+      "confirmed_official": "",
+      "status": "UNVERIFIED \u2014 Ratio Matches BOE CCPI"
+    },
+    {
+      "year": 2022,
+      "reported_tax": 2110,
+      "reported_tax_chg": "+2%",
+      "reported_av": 107660,
+      "reported_av_chg": "+2%",
+      "boe_ccpi_factor": "1.02000 (+2.000%)",
+      "confirmed_official": "",
+      "status": "FLAGGED \u2014 Implied Roll Growth ~1.96% vs 2.00% Cap"
+    },
+    {
+      "year": 2023,
+      "reported_tax": 2180,
+      "reported_tax_chg": "+3.4%",
+      "reported_av": 109810,
+      "reported_av_chg": "+2%",
+      "boe_ccpi_factor": "1.02000 (+2.000%)",
+      "confirmed_official": "",
+      "status": "UNVERIFIED \u2014 Ratio Matches BOE CCPI"
+    },
+    {
+      "year": 2024,
+      "reported_tax": 2320,
+      "reported_tax_chg": "+6.2%",
+      "reported_av": 112010,
+      "reported_av_chg": "+2%",
+      "boe_ccpi_factor": "1.02000 (+2.000%)",
+      "confirmed_official": "",
+      "status": "UNVERIFIED \u2014 Ratio Matches BOE CCPI"
+    },
+    {
+      "year": 2025,
+      "reported_tax": 2440,
+      "reported_tax_chg": "+5.3%",
+      "reported_av": 114250,
+      "reported_av_chg": "+2%",
+      "boe_ccpi_factor": "1.02000 (+2.000%)",
+      "confirmed_official": "",
+      "status": "FLAGGED \u2014 1.1827% Ad Valorem + ~$1,090 Parcel Charges"
+    },
+    {
+      "year": 2026,
+      "reported_tax": null,
+      "reported_tax_chg": "",
+      "reported_av": null,
+      "reported_av_chg": "",
+      "boe_ccpi_factor": "1.02000 (+2.000%)",
+      "confirmed_official": "",
+      "status": "UNVERIFIED \u2014 2026 Roll & Bill Not Provided (Blank)"
+    }
+  ]
+}
