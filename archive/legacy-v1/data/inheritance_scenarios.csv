@@ -1,7 +1,2 @@
-inherit_year,property,market_at_inheritance,factored_base_no_transfer,assessed_if_move_in_prop19,tax_if_move_in,assessed_if_rent_or_sell_full_reassess,tax_if_rent_full_reassess,tax_if_no_transfer_hypothetical,effective_rate_used
-2040,Cupertino,4689030,726420,3689030,49260,4689030,62610,9700,1.335
-2040,San Francisco,2722660,153760,1722660,36780,2722660,58120,3280,2.135
-2045,Cupertino,5435870,802030,4435870,59230,5435870,72580,10710,1.335
-2045,San Francisco,3156310,169770,2156310,46030,3156310,67380,3620,2.135
-2050,Cupertino,6301660,885500,5301660,70790,6301660,84140,11820,1.335
-2050,San Francisco,3659030,187440,2659030,56770,3659030,78110,4000,2.135
+status
+PUBLICATION_WITHDRAWN

@@ -16,3 +16,11 @@ They are **not** the current product and they are **not** re-verified.
 - Several of them present an "empty framework" with no financial figures; the current edition publishes
   the figures with the identifying details removed.
 - Their claims have not been re-verified. Do not rely on them. Use the [current dashboard](../index.html).
+
+## `other-edition-2026-11-10/`
+
+A concurrent session's quantitative edition (`arena/d76d5375-tino3`, merged as PR #21): two per-property
+pages, `EXECUTIVE_SUMMARY.md`, and `assets/data/*.csv`, `model.json`. It is preserved here because the
+current edition replaced the root pages and no longer ships `assets/style.css`, which those pages link
+to. A copy of that stylesheet sits in `other-edition-2026-11-10/assets/` so they still render. Its
+figures were not re-verified by the current edition.
