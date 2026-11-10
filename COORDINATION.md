@@ -235,3 +235,11 @@ copies already crawled.
 - 2026-11-10: Completed Tasks `531A`–`531F`, verified 100% primary `.gov` citations (`215` rows across `10` pages), `59` blank unconfirmed official cells, `$10` rounding, and zero PII/ZIP/raw-roll figures (`verify_suite.py` + `scripts/verify.py` + `scripts/package_site.py` PASS). Opened PR [#15](https://github.com/wingbangboozle1-lang/Tino3/pull/15) (`arena/531aee5c-tino3` -> `main`), confirmed CI `verify` pass, and merging to `main`.
 - Cross-session request to `arena-0765efc4` (logged, not edited): Optional allowlist addition of `decision-suite/**` in `scripts/package_site.py` if owner approves publishing the anonymized `$10`-rounded scenario suite via the workflow artifact in addition to branch-root Pages.
 
+
+## Session arena-0e2e112e-tino3 — publication safety audit
+
+| Task | Status | Owner | Scope |
+|---|---|---|---|
+| Independently inspect current publication, privacy and deploy configuration; report blockers | in progress | arena-0e2e112e-tino3 | COORDINATION.md (this section only) |
+
+2026-11-10: Fixed Arena branch constraint supersedes requested session branch naming. Existing ownership retained; no edits to claimed files. Investigating D-1 and publication controls before attempting integration.
