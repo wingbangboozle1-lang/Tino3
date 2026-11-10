@@ -5,8 +5,8 @@ Checks
  1. Reproducible build: re-running the model and the renderer must not change a byte.
  2. Structure: title, <main>, exactly one aria-current, no scripts/forms/remote assets.
  3. Links: internal targets exist; every external host is on the official allowlist.
- 4. Citations: every data row carries a citation; rows resting only on an internal
-    assumption register must be marked data-basis="scenario".
+ 4. Citations: every table row links to an official publisher on the host allowlist.
+    The source ledger must say how each source was checked.
  5. Privacy: no ZIP code, parcel number, street address, city/county name, owner name,
     or e-mail address anywhere in the published output.
  6. Rounding: every dollar amount displayed is a multiple of $10.
@@ -21,20 +21,20 @@ from urllib.parse import urlparse, unquote
 
 ROOT = Path(__file__).resolve().parents[1]
 PAGES = ["index.html", "executive-summary.html", "property-a.html", "property-b.html", "taxes.html",
-         "projections.html", "decision.html", "inheritance.html", "review.html", "sources.html"]
+         "projections.html", "decision.html", "inheritance.html", "review.html", "audit.html", "sources.html"]
 ASSETS = ["assets/style.css", "assets/sources.json", "assets/data/model.json",
           "assets/data/property_a.csv", "assets/data/property_b.csv", "assets/data/decision.csv"]
 
 ALLOWED_HOSTS = {
-    "www.irs.gov", "irs.gov",
-    "www.boe.ca.gov", "boe.ca.gov",
-    "leginfo.legislature.ca.gov",
-    "www.ftb.ca.gov", "ftb.ca.gov",
-    "www.cpuc.ca.gov", "cpuc.ca.gov",
-    "www.insurance.ca.gov",
-    "www.lao.ca.gov",
-    "www.sos.ca.gov",
-    "sfbos.archive.sf.gov",
+    # federal
+    "www.irs.gov", "irs.gov", "home.treasury.gov", "www.tsp.gov", "www.huduser.gov", "fred.stlouisfed.org",
+    # state
+    "www.boe.ca.gov", "boe.ca.gov", "leginfo.legislature.ca.gov", "www.ftb.ca.gov", "ftb.ca.gov",
+    "www.cpuc.ca.gov", "cpuc.ca.gov", "www.insurance.ca.gov", "www.lao.ca.gov", "www.sos.ca.gov", "www.sco.ca.gov",
+    "elections.cdn.sos.ca.gov",
+    # local government (jurisdiction A and jurisdiction B)
+    "sfbos.archive.sf.gov", "sftreasurer.org", "www.sf.gov",
+    "clerkrecorder.santaclaracounty.gov", "files.santaclaracounty.gov",
 }
 
 # Identifier patterns that must never appear in the published edition.
@@ -122,10 +122,9 @@ class Page(HTMLParser):
                     has_internal = any(not urlparse(h).scheme for h in self.row)
                     if has_external:
                         self.fact_rows += 1
-                    elif has_internal and self.basis == "scenario":
-                        self.scenario_rows += 1
                     else:
-                        self.errors.append("row cites neither an official source nor a scenario basis")
+                        # Every row must link to an official publisher. An internal link alone is not enough.
+                        self.errors.append("table row without a link to an official publisher")
                 self.rows += 1
             self.row = None
 
@@ -184,6 +183,15 @@ def main() -> int:
             for m in rx.finditer(text):
                 failures.append(f"{name}: possible {label}: {m.group(0)!r}")
 
+    # 6b. the source ledger: official host, and a statement of how each entry was checked
+    import json
+    ledger = json.loads((ROOT / "assets" / "sources.json").read_text(encoding="utf-8"))["sources"]
+    for sid, src in ledger.items():
+        if urlparse(src["url"]).hostname not in ALLOWED_HOSTS:
+            failures.append(f"sources.json: {sid} is not on an official host")
+        if not src.get("checked"):
+            failures.append(f"sources.json: {sid} does not say how it was checked")
+
     # 7. every tracked non-allowlisted file must be a content-free withdrawal notice
     b = subprocess.run([sys.executable, "scripts/privacy_boundary.py"], cwd=ROOT, capture_output=True, text=True)
     if b.returncode != 0:
@@ -196,7 +204,7 @@ def main() -> int:
         return 1
 
     print(f"PASS: {len(PAGES)} reproducible pages; {total_rows} table rows "
-          f"({total_fact} officially cited, {total_scenario} scenario-basis with internal register); "
+          f"(all {total_fact} link to an official publisher); {len(ledger)} ledger sources; "
           f"local links, official hosts, privacy scan and $10 rounding all clean.")
     print("Scope: structural and privacy checks only. They do not prove legal completeness, "
           "and they cannot verify an insurance quote, an appraisal or a future statute.")

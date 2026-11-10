@@ -8,7 +8,7 @@ federal estate tax.
 
 ## What this repository publishes
 
-Ten static pages, one stylesheet, one source ledger and three CSV downloads — nothing else. The published
+Eleven static pages, one stylesheet, one source ledger and three CSV downloads, plus the separate cross-check edition under `plan/` — nothing else. The published
 artifact is an allowlist built by `scripts/package_site.py`; every path an earlier edition published is
 replaced by a content-free withdrawal notice, so a stale URL cannot return an old figure.
 
@@ -16,21 +16,23 @@ replaced by a content-free withdrawal notice, so a stale URL cannot return an ol
 |---|---|
 | `index.html` | Dashboard, recommendation, decision snapshot |
 | `executive-summary.html` | The decision, five numbers, what would change it |
-| `property-a.html` | The residence to inherit: assessment history, carrying costs, 2026–2055 projection |
-| `property-b.html` | The rental: rent roll, operating statement, the unreconciled tax bill, projections |
+| `property-a.html` | The residence to inherit: inputs, assessment-factor check, what the inheritance does to the assessed value |
+| `property-b.html` | The rental: inputs, tax-bill breakdown, rent rules, reassessment exposure if it is in the same estate |
 | `taxes.html` | Federal, California and local rules, verified; pending law changes |
-| `projections.html` | 30-year outlook and the full assumption register |
-| `decision.html` | Live vs rent vs sell/bonds, sensitivity matrix, break-even |
+| `projections.html` | Year-by-year value, assessed value, tax and running costs, 2026–2060, and the ten years after an inheritance |
+| `decision.html` | Sell vs rent vs move in for 2040/2045/2050, break-evens, sensitivities, the assumption register |
 | `inheritance.html` | Statutory timeline after the death, with deadlines |
-| `review.html` | 18 flagged items and the repository-history disclosure (R-13) |
-| `sources.html` | 18 official sources, what each one actually verifies |
+| `review.html` | 25 flagged items: unverified values left blank, owner questions, record irregularities, the history disclosure |
+| `audit.html` | Independent verification: twelve corrections to the first quantitative edition, repository review |
+| `sources.html` | 43 official sources, what each one supports and how each was checked |
 
 ## Privacy rules enforced in code
 
 - No names, street addresses, ZIP codes, parcel numbers, utility account numbers or unrounded assessment
-  figures in any published file. `scripts/verify.py` fails the build if a ZIP-code pattern, a city name, an
+  figures in any published file. Assessment-roll values and tax bills can be matched to a parcel, so they are
+  generalised further: assessed values to the nearest $10,000, bills to the nearest $100. `scripts/verify.py` fails the build if a ZIP-code pattern, a city name, an
   e-mail address, a street address or a non-$10 amount appears in a page or in the data files.
-- Properties appear only as `[PROPERTY_A]` and `[PROPERTY_B]`; jurisdictions are described generically, with
+- Properties appear only as Property A and Property B; jurisdictions are described generically, with
   the official rate documents cited.
 - No forms, no scripts, no analytics, no remote assets. Nothing on the site accepts or stores input.
 
@@ -44,18 +46,18 @@ be verified is left blank or published on the Flagged for Review page — never 
 
 ```bash
 python3 scripts/model.py        # writes assets/data/model.json and the CSV downloads
-python3 scripts/build.py        # renders the ten pages
+python3 scripts/build.py        # renders the eleven pages
 python3 scripts/verify.py       # reproducible-build, citation, link, privacy and rounding checks
 python3 scripts/package_site.py # writes the _site artifact (allowlist + withdrawal notices)
 ```
 
 `verify.py` re-runs the model and the renderer and fails if any published byte changes, so a stale committed
-page cannot survive CI. It also fails on any table row that cites neither an official source nor the internal
-assumption register.
+page cannot survive CI. It also fails on any table row that does not link to an official publisher, and on any
+ledger entry that does not say how it was checked.
 
 ## Data
 
-`assets/sources.json` — source ledger (18 entries).
+`assets/sources.json` — source ledger (43 entries, each with the words relied on and how it was checked).
 `assets/data/model.json` — every figure on the site.
 `assets/data/property_a.csv`, `property_b.csv`, `decision.csv` — the same numbers for offline work.
 

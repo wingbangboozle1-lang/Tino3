@@ -1,219 +1,492 @@
 {
-  "reviewed_on": "2026-11-10",
-  "reviewer_session": "arena/d76d5375-tino3",
-  "method": "Each entry below was retrieved directly from the publisher's own domain on 2026-11-10 during this session. The 'verifies' field lists only what the retrieved text actually supports. Nothing is inferred.",
-  "sources": {
-    "irs_estate": {
-      "title": "Estate tax (filing threshold table, portability)",
-      "publisher": "Internal Revenue Service",
-      "url": "https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax",
-      "verifies": [
-        "Federal estate-tax filing threshold for 2026 is $15,000,000 (table lists 2011-2026)",
-        "Filing is required when gross estate plus adjusted taxable gifts plus specific gift exemption exceeds the year-of-death threshold",
-        "A surviving spouse may receive unused exclusion only through a timely estate-tax return election"
-      ],
-      "quote": "2026 | $15,000,000 ... A filing is required if the gross estate of the decedent, increased by the decedent's adjusted taxable gifts and specific gift tax exemption, is valued at more than the filing threshold for the year of the decedent's death",
-      "status": "verified"
-    },
-    "irs_estate_faq": {
-      "title": "Frequently asked questions on estate taxes",
-      "publisher": "Internal Revenue Service",
-      "url": "https://www.irs.gov/businesses/small-businesses-self-employed/frequently-asked-questions-on-estate-taxes",
-      "verifies": [
-        "Public Law 119-21 amended IRC 2010(c)(3) to increase the basic exclusion amount to $15,000,000 for calendar year 2026",
-        "Form 706 is due nine months after death; an automatic six-month extension is available by filing Form 4768",
-        "Portability requires a timely filed Form 706"
-      ],
-      "quote": "The Working Families Tax Cuts Bill was signed into law on July 4, 2025 as Public Law 119-21 and amends 2010(c)(3) by increasing the basic exclusion amount to $15,000,000 for gifts for calendar year 2026.",
-      "status": "verified"
-    },
-    "irs_basis": {
-      "title": "Gifts & inheritances (basis of inherited property)",
-      "publisher": "Internal Revenue Service",
-      "url": "https://www.irs.gov/faqs/interest-dividends-other-types-of-income/gifts-inheritances",
-      "verifies": [
-        "Basis of inherited property is generally fair market value on the date of death, whether or not Form 706 is filed",
-        "Alternate valuation is available only if the executor files Form 706 and elects it",
-        "Gain above basis on a later sale is taxable",
-        "The annual gift exclusion is $19,000 for 2025 and 2026"
-      ],
-      "quote": "The basis of property inherited from a decedent is generally ... The fair market value (FMV) of the property on the date of the decedent's death",
-      "status": "verified"
-    },
-    "irs_tc409": {
-      "title": "Topic no. 409, Capital gains and losses",
-      "publisher": "Internal Revenue Service",
-      "url": "https://www.irs.gov/taxtopics/tc409",
-      "verifies": [
-        "Long-term capital gain is taxed at 0%, 15%, or 20% depending on taxable income (2025 thresholds shown)",
-        "A 20% rate applies to the extent taxable income exceeds the 15% thresholds",
-        "A net investment income tax may additionally apply (see Topic 559)"
-      ],
-      "quote": "However, a capital gains rate of 20% applies to the extent that your taxable income exceeds the thresholds set for the 15% capital gain rate.",
-      "status": "verified"
-    },
-    "irs_tc701": {
-      "title": "Topic no. 701, Sale of your home",
-      "publisher": "Internal Revenue Service",
-      "url": "https://www.irs.gov/taxtopics/tc701",
-      "verifies": [
-        "Up to $250,000 of gain ($500,000 on a joint return) may be excluded on the sale of a main home",
-        "Ownership and use tests are generally 24 months out of the last 5 years"
-      ],
-      "quote": "you may qualify to exclude up to $250,000 of that gain from your income, or up to $500,000 of that gain if you file a joint return with your spouse",
-      "status": "verified"
-    },
-    "boe_prop19": {
-      "title": "Proposition 19 (RTC 63.2) comparison tables and filing deadlines",
-      "publisher": "California State Board of Equalization",
-      "url": "https://www.boe.ca.gov/prop19/",
-      "verifies": [
-        "The family-home exclusion applies only where the property is the principal residence of both transferor and transferee",
-        "Effective February 16, 2021; implemented by Revenue & Taxation Code 63.2",
-        "Transferee must file for the homeowners' exemption within 1 year of transfer and claim the exclusion within 3 years or before transfer to a third party"
-      ],
-      "quote": "File for homeowners' exemption within 1 year of transfer - File claim for exclusion within 3 years or before transfer to third party",
-      "status": "verified"
-    },
-    "boe_cap": {
-      "title": "BOE adjusts the Proposition 19 $1 million intergenerational transfer exclusion amount (NR 25-02)",
-      "publisher": "California State Board of Equalization",
-      "url": "https://www.boe.ca.gov/news/2025/NR-25-02.htm",
-      "verifies": [
-        "The exclusion adjustment is $1,044,590 for transfers February 16, 2025 through February 15, 2027",
-        "The excludable amount is the property's factored base year value at transfer plus $1,044,590",
-        "The amount is recalculated every other year using the Federal Housing Finance Agency House Price Index for California"
-      ],
-      "quote": "The excludable amount is capped at an amount equal to the principal residence or family farm's factored base year value (taxable value) at the time of the transfer plus $1,044,586.",
-      "status": "verified"
-    },
-    "rtc13301": {
-      "title": "Revenue & Taxation Code 13301 - Prohibition of gift and death taxes",
-      "publisher": "California Legislative Information",
-      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=13301",
-      "verifies": [
-        "Neither the state nor any political subdivision may impose any gift, inheritance, succession, legacy, income, or estate tax on a transfer occurring by reason of death",
-        "Enacted by initiative Proposition 6, June 8, 1982"
-      ],
-      "quote": "Neither the state nor any political subdivision of the state shall impose any gift, inheritance, succession, legacy, income, or estate tax, or any other tax, on gifts or on the estate or inheritance of any person or on or by reason of any transfer occurring by reason of a death.",
-      "status": "verified"
-    },
-    "rtc51": {
-      "title": "Revenue & Taxation Code 51 - inflation factor for base year values",
-      "publisher": "California Legislative Information",
-      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=51",
-      "verifies": [
-        "Taxable value is the lesser of the inflation-adjusted base year value or full cash value",
-        "The annual inflation increase may not exceed 2 percent of the prior year's value",
-        "The inflation factor uses the October-to-October California CPI change"
-      ],
-      "quote": "In no event shall the percentage increase for any assessment year determined pursuant to subparagraph (A), (B), or (C) exceed 2 percent of the prior year's value.",
-      "status": "verified"
-    },
-    "rtc480": {
-      "title": "Revenue & Taxation Code 480 - change in ownership statement",
-      "publisher": "California Legislative Information",
-      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=480.",
-      "verifies": [
-        "Where an interest in real property transfers by reason of death including through a trust, the trustee or transferee files a change in ownership statement within 150 days after the date of death",
-        "Failure to file after a written request can trigger a penalty of $100 or 10 percent of the taxes on the new base year value, whichever is greater"
-      ],
-      "quote": "in all other cases in which an interest in real property is transferred by reason of death, including a transfer through the medium of a trust, the change in ownership statement or statements shall be filed by the trustee (if the property was held in trust) or the transferee with the county recorder or assessor ... within 150 days after the date of death",
-      "status": "verified"
-    },
-    "prob16061": {
-      "title": "Probate Code 16061.7 - notification by trustee",
-      "publisher": "California Legislative Information",
-      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PROB&sectionNum=16061.7",
-      "verifies": [
-        "The trustee must serve a notification when a revocable trust becomes irrevocable because of a settlor's death",
-        "The notification must be served not later than 60 days after the event requiring service",
-        "Service is on each beneficiary and each heir of the deceased settlor"
-      ],
-      "quote": "The notification by trustee shall be served not later than 60 days following the occurrence of the event requiring service of the notification by trustee",
-      "status": "verified"
-    },
-    "ftb_rates": {
-      "title": "2025 California Tax Rate Schedules (Form 540)",
-      "publisher": "California Franchise Tax Board",
-      "url": "https://www.ftb.ca.gov/forms/2025/2025-540-tax-rate-schedules.pdf",
-      "verifies": [
-        "California brackets run from 1.00% to 12.30%",
-        "The 12.30% bracket begins at $742,950 of taxable income for single filers and $1,485,900 for joint filers (2025, rounded to $10)"
-      ],
-      "quote": "742,953 AND OVER 72,219.84 + 12.30%",
-      "status": "verified"
-    },
-    "ftb_cg": {
-      "title": "Capital gains and losses",
-      "publisher": "California Franchise Tax Board",
-      "url": "https://www.ftb.ca.gov/file/personal/income-types/capital-gains-and-losses.html",
-      "verifies": [
-        "California has no lower rate for capital gains; capital gains are taxed as ordinary income"
-      ],
-      "quote": "California does not have a lower rate for capital gains. All capital gains are taxed as ordinary income.",
-      "status": "verified"
-    },
-    "sf_rate": {
-      "title": "Resolution 447-25 (File 250876) - FY2025-26 combined property tax rate for jurisdiction B",
-      "publisher": "Board of Supervisors (jurisdiction B rate-setting authority)",
-      "url": "https://sfbos.archive.sf.gov/sites/default/files/r0447-25.pdf",
-      "verifies": [
-        "Combined FY2025-26 property tax rate is $1.18268325 per $100 of taxable property value",
-        "The resolution sets only the ad valorem rate; it does not include non-ad-valorem parcel charges",
-        "Passed September 30, 2025"
-      ],
-      "quote": "the combined property tax rate ... shall therefore be $1.18268325 on each $100 valuation of said taxable property",
-      "status": "verified"
-    },
-    "cpuc_nem": {
-      "title": "Net Energy Metering and Net Billing",
-      "publisher": "California Public Utilities Commission",
-      "url": "https://www.cpuc.ca.gov/nem/",
-      "verifies": [
-        "Customers applying for interconnection since April 15, 2023 take service on the net billing tariff under D.22-12-056",
-        "Export compensation is usually lower than the retail rate",
-        "Legacy NEM tariffs are closed to new enrollments; the NBT legacy period is nine years",
-        "End-of-year surplus under NEM is compensated at roughly $0.02-$0.03 per kWh"
-      ],
-      "quote": "The value of the export compensation (which the IOUs term \"Energy Export Credits\") is usually lower than the retail rate",
-      "status": "verified"
-    },
-    "cdi_tool": {
-      "title": "Online homeowner insurance pricing tool helps residents find coverage (release 138-18)",
-      "publisher": "California Department of Insurance",
-      "url": "https://www.insurance.ca.gov/0400-news/0100-press-releases/2018/release138-18.cfm",
-      "verifies": [
-        "The CDI comparison tool shows each company's average premium, not an actual quote",
-        "Consumers enter county and nearest city, coverage type and amount, and home age",
-        "The FAIR Plan is available where standard coverage cannot be obtained"
-      ],
-      "quote": "While this tool does not provide actual premium quotes, it does provide each company's average premium",
-      "status": "verified"
-    },
-    "lao_250017": {
-      "title": "LAO analysis of proposed initiative A.G. File No. 25-0017 (property tax rules for inherited property)",
-      "publisher": "California Legislative Analyst's Office",
-      "url": "https://www.lao.ca.gov/ballot/2025/250422.pdf",
-      "verifies": [
-        "The measure would restore pre-Proposition 19 exclusion rules beginning January 1, 2027",
-        "The expanded rules would apply to all inherited primary homes regardless of value",
-        "The rules would also apply to properties transferred since February 16, 2021",
-        "LAO estimates local revenue losses of about one billion dollars per year initially, growing to about two billion dollars per year"
-      ],
-      "quote": "Beginning January 1, 2027, the measure reverses most of the major changes made by Proposition 19.",
-      "status": "verified (proposal only, not law)"
-    },
-    "sos_measures": {
-      "title": "Qualified Statewide Ballot Measures",
-      "publisher": "California Secretary of State",
-      "url": "https://www.sos.ca.gov/elections/ballot-measures/qualified-ballot-measures",
-      "verifies": [
-        "The November 3, 2026 statewide ballot contains Propositions 1-5 and 37-45",
-        "No inherited-property measure appears among the qualified November 3, 2026 measures listed"
-      ],
-      "quote": "## November 3, 2026, Statewide Ballot Measures ... Proposition 45 ... Modifies Environmental Review for Certain Projects.",
-      "status": "verified"
-    }
+ "reviewed_on": "2026-11-10",
+ "reviewer_session": "arena-c2f4be85 (second, independent pass over the edition published earlier the same day by arena/d76d5375-tino3)",
+ "method": "Each entry records how it was checked. 'Opened' means the page or document was retrieved from the publisher's own domain and the quoted words were read there. 'Official-domain search excerpt' means the words were read in a search result served from the publisher's domain, without opening the whole document. Nothing is marked verified beyond what the quoted words support.",
+ "sources": {
+  "irs_estate": {
+   "publisher": "Internal Revenue Service",
+   "title": "Estate tax: filing thresholds 2011-2026 and portability",
+   "url": "https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax",
+   "verifies": [
+    "Filing threshold for deaths in 2026 is $15,000,000; the table lists every year from 2011",
+    "The gross estate includes cash, securities, real estate and trusts",
+    "A surviving spouse can receive the unused exemption only through an election on a timely filed estate tax return"
+   ],
+   "quote": "2026 | $15,000,000 ... This election is made on a timely filed estate tax return for the decedent with a surviving spouse.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "irs_2027": {
+   "publisher": "Internal Revenue Service",
+   "title": "IR-2026-133: inflation adjustments for tax year 2027 (5 Nov 2026)",
+   "url": "https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts",
+   "verifies": [
+    "Basic exclusion amount for deaths in 2027 is $15,480,000",
+    "Annual gift exclusion rises to $20,000 for 2027, from $19,000 for 2026"
+   ],
+   "quote": "Estates of decedents who die during 2027 have a basic exclusion amount of $15,480,000, up from a total of $15,000,000 for estates of decedents who died in 2026.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "irs_rp2635": {
+   "publisher": "Internal Revenue Service",
+   "title": "Revenue Procedure 2026-35, section 3.44",
+   "url": "https://www.irs.gov/pub/irs-drop/rp-26-35.pdf",
+   "verifies": [
+    "For calendar year 2027 the basic exclusion amount under section 2010(c)(3) is $15,480,000"
+   ],
+   "quote": ".44 Basic Exclusion Amount for Estate Tax. For calendar year 2027, the basic exclusion amount under § 2010(c)(3) is $15,480,000.",
+   "checked": "official-domain search excerpt read in this session (full document not opened)"
+  },
+  "irs_whatsnew": {
+   "publisher": "Internal Revenue Service",
+   "title": "What's new - Estate and gift tax",
+   "url": "https://www.irs.gov/businesses/small-businesses-self-employed/whats-new-estate-and-gift-tax",
+   "verifies": [
+    "Public Law 119-21 (4 July 2025) raised the basic exclusion amount to $15,000,000 for 2026"
+   ],
+   "quote": "WFTC amends § 2010(c)(3) by increasing the basic exclusion amount to $15,000,000 for calendar year 2026.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "irs_rp2532": {
+   "publisher": "Internal Revenue Service",
+   "title": "Revenue Procedure 2025-32",
+   "url": "https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",
+   "verifies": [
+    "The basic exclusion amount is indexed for inflation for 2027 and later years"
+   ],
+   "quote": "The basic exclusion amount will be adjusted for inflation for calendar year 2027 and future years.",
+   "checked": "official-domain search excerpt read in this session (full document not opened)"
+  },
+  "irs_i706": {
+   "publisher": "Internal Revenue Service",
+   "title": "Instructions for Form 706 (Rev. July 2026)",
+   "url": "https://www.irs.gov/pub/irs-pdf/i706.pdf",
+   "verifies": [
+    "Form 706 is due within 9 months after the date of death",
+    "Form 4768 gives an automatic 6-month extension to file",
+    "Portability can be elected only on a timely filed Form 706",
+    "The credit on the $15,000,000 exclusion is $5,945,800, which corresponds to a 40% top rate"
+   ],
+   "quote": "You must file Form 706 to report estate and/or GST tax within 9 months after the date of the decedent's death ... Use Form 4768 ... to apply for an automatic 6-month extension of time to file. ... The basic credit amount is $5,945,800.",
+   "checked": "official-domain search excerpt read in this session (full document not opened)"
+  },
+  "irs_basis": {
+   "publisher": "Internal Revenue Service",
+   "title": "Gifts and inheritances: is money from the sale of inherited property taxable?",
+   "url": "https://www.irs.gov/faqs/interest-dividends-other-types-of-income/gifts-inheritances/gifts-inheritances",
+   "verifies": [
+    "Basis of inherited property is generally fair market value on the date of death, or on the alternate valuation date if elected on Form 706",
+    "Selling for more than that basis is a taxable gain, reported on Schedule D and Form 8949"
+   ],
+   "quote": "The fair market value (FMV) of the property on the date of the decedent's death (whether or not the executor of the estate files an estate tax return ...). ... If you sell the property for more than your basis, you have a taxable gain.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "irs_rr2023_2": {
+   "publisher": "Internal Revenue Service",
+   "title": "Revenue Ruling 2023-2",
+   "url": "https://www.irs.gov/pub/irs-drop/rr-23-02.pdf",
+   "verifies": [
+    "Assets of an irrevocable grantor trust that are not included in the gross estate get no basis adjustment at death",
+    "Property the decedent placed in a trust that stayed revocable is treated as acquired from the decedent (section 1014(b)(2) and (3))"
+   ],
+   "quote": "the basis of Asset is not adjusted to its fair market value on the date of A's death under § 1014 because Asset was not acquired or passed from a decedent as defined in § 1014(b).",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "irs_tc409": {
+   "publisher": "Internal Revenue Service",
+   "title": "Topic no. 409, Capital gains and losses",
+   "url": "https://www.irs.gov/taxtopics/tc409",
+   "verifies": [
+    "Long-term gains are taxed at 0%, 15% or 20% depending on taxable income",
+    "Unrecaptured section 1250 gain on real property is taxed at up to 25%"
+   ],
+   "quote": "a capital gains rate of 20% applies to the extent that your taxable income exceeds the thresholds set for the 15% capital gain rate. ... The portion of any unrecaptured section 1250 gain from selling section 1250 real property is taxed at a maximum 25% rate.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "irs_tc559": {
+   "publisher": "Internal Revenue Service",
+   "title": "Topic no. 559, Net investment income tax",
+   "url": "https://www.irs.gov/taxtopics/tc559",
+   "verifies": [
+    "A 3.8% tax applies to net investment income above $250,000 of modified adjusted gross income (joint) or $200,000 (single)",
+    "Rents and gains from real estate count; excluded home-sale gain does not"
+   ],
+   "quote": "A 3.8 percent net investment income tax (NIIT) applies to individuals, estates, and trusts that have net investment income above applicable threshold amounts.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "irs_tc701": {
+   "publisher": "Internal Revenue Service",
+   "title": "Topic no. 701, Sale of your home",
+   "url": "https://www.irs.gov/taxtopics/tc701",
+   "verifies": [
+    "Up to $250,000 of gain ($500,000 on a joint return) on a main home can be excluded",
+    "The owner must have owned and lived in the home for 2 of the 5 years before the sale"
+   ],
+   "quote": "you may qualify to exclude up to $250,000 of that gain from your income, or up to $500,000 of that gain if you file a joint return with your spouse.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "irs_p925": {
+   "publisher": "Internal Revenue Service",
+   "title": "Publication 925 (2025), Passive Activity and At-Risk Rules",
+   "url": "https://www.irs.gov/pub/irs-pdf/p925.pdf",
+   "verifies": [
+    "Rental losses are passive and generally deductible only against passive income",
+    "A special allowance of up to $25,000 phases out above $100,000 of modified adjusted gross income"
+   ],
+   "quote": "The maximum special allowance of $25,000 ... is reduced by 50% of the amount of your modified adjusted gross income that is more than $100,000.",
+   "checked": "official-domain search excerpt read in this session (full document not opened)"
+  },
+  "irs_p527": {
+   "publisher": "Internal Revenue Service",
+   "title": "Publication 527, Residential Rental Property",
+   "url": "https://www.irs.gov/publications/p527",
+   "verifies": [
+    "Residential rental buildings are depreciated over 27.5 years; land is not depreciated",
+    "The basis of inherited rental property is generally its fair market value at death"
+   ],
+   "quote": "Residential rental property is depreciated over 27.5 years. ... Inheritance. If you inherited your property, the original basis of the property generally is ... (read in an earlier edition on irs.gov; the current edition was not opened).",
+   "checked": "official-domain search excerpt read in this session (full document not opened)"
+  },
+  "sco_estate": {
+   "publisher": "California State Controller",
+   "title": "California Estate Tax",
+   "url": "https://www.sco.ca.gov/ardtax_estate_tax.html",
+   "verifies": [
+    "No California estate tax return is required for deaths on or after 1 January 2005",
+    "The state death tax credit was eliminated on 1 January 2005"
+   ],
+   "quote": "For decedents that die on or after January 1, 2005, there is no longer a requirement to file a California Estate Tax Return.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "rtc13301": {
+   "publisher": "California Legislative Information",
+   "title": "Revenue and Taxation Code section 13301",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=13301",
+   "verifies": [
+    "Neither the state nor any city or county may impose a gift, inheritance or estate tax",
+    "The section was enacted by initiative, Proposition 6 of June 1982"
+   ],
+   "quote": "Neither the state nor any political subdivision of the state shall impose any gift, inheritance, succession, legacy, income, or estate tax, or any other tax, on gifts or on the estate or inheritance of any person or on or by reason of any transfer occurring by reason of a death.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "boe_prop19": {
+   "publisher": "California State Board of Equalization",
+   "title": "Proposition 19: comparison charts, questions and answers, filing checklist",
+   "url": "https://www.boe.ca.gov/prop19/",
+   "verifies": [
+    "The exclusion needs a family home that was the parent's principal residence and becomes the child's",
+    "Value limit: current taxable value plus $1,000,000 (adjusted every two years)",
+    "Homeowners' exemption within 1 year; exclusion claim within 3 years or before a sale to a third party",
+    "A rental home does not qualify",
+    "If the child later moves out, the home is taxed on its market value at the date of inheritance, factored forward",
+    "For a trust, the date of death is the date of change in ownership"
+   ],
+   "quote": "No, Proposition 19 limits the parent-child transfer exclusion to a transfer of (1) a family home that is the principal residence of the transferor and becomes the principal residence of the transferee, or (2) a family farm. Thus, the transfer of a rental home between parents and children would not qualify for the exclusion.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "boe_lta25009": {
+   "publisher": "California State Board of Equalization",
+   "title": "Letter to Assessors 2025/009: adjustment of the $1 million amount",
+   "url": "https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf",
+   "verifies": [
+    "The amount is $1,044,590 after rounding to the nearest $10 (the letter states it to the dollar) for transfers from 16 February 2025 to 15 February 2027",
+    "It is adjusted every second 16 February by ONE year's change in the FHFA House Price Index for California (2.15% for 2024)",
+    "Earlier amounts: $1,000,000 from 2021 and $1,022,600 from 2023"
+   ],
+   "quote": "every other February 16 thereafter, the State Board of Equalization shall adjust the one million dollar ($1,000,000) amount ... to reflect the percentage change in the House Price Index for California for the prior calendar year ... the annual percentage change in the House Price Index for California for 2024 was 2.15 percent. Accordingly, the $1 million amount is adjusted to $1,044,586.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "boe_lta26026": {
+   "publisher": "California State Board of Equalization",
+   "title": "Letter to Assessors 2026/026: intergenerational transfer exclusion questions and answers (3 Aug 2026)",
+   "url": "https://www.boe.ca.gov/proptaxes/pdf/lta26026.pdf",
+   "verifies": [
+    "In a multi-unit building only the unit occupied as the parent's principal residence can qualify; the rest is reassessed at full cash value (Q5, Q15)",
+    "Property held through an LLC, even a single-member LLC, is not eligible (Q32-Q35)",
+    "A transfer through a trust qualifies if the statute's conditions are met (Q39)",
+    "A trustee with power to distribute non-pro-rata can give the home to one child without a sibling-to-sibling reassessment (Q41-Q42)",
+    "Worked calculations of the new taxable value (Q49-Q51)",
+    "A late claim gives relief only from the year it is filed"
+   ],
+   "quote": "No, only the unit occupied as the principal residence qualifies as the principal residence of the transferor. The remainder of the apartment complex would be ineligible for the intergenerational transfer exclusion and would be reassessed at its full cash value as of the date of transfer.",
+   "checked": "opened on the publisher's site in this session (pages 1-9 and 11-18 of 23)"
+  },
+  "rtc63_2": {
+   "publisher": "California Legislative Information",
+   "title": "Revenue and Taxation Code section 63.2",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=63.2",
+   "verifies": [
+    "The home must become the transferee's principal residence within one year",
+    "New taxable value = prior taxable value plus the part of market value above (prior taxable value + $1,000,000 as adjusted)",
+    "Transfers through a living or testamentary trust are included",
+    "Claim within three years, or within six months of a supplemental or escape assessment notice"
+   ],
+   "quote": "The transfer is required to be of a principal residence of the transferor, and become the principal residence of the transferee within one year of the transfer.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "boe_lta26002": {
+   "publisher": "California State Board of Equalization",
+   "title": "Letter to Assessors 2026/002: 2026-27 California Consumer Price Index",
+   "url": "https://boe.ca.gov/proptaxes/pdf/lta26002.pdf",
+   "verifies": [
+    "Base year values rise by the California CPI change, capped at 2% a year",
+    "Factors: 1.00454 (2014), 1.01998 (2015), 1.01525 (2016), 1.02 (2017-2020), 1.01036 (2021), 1.02 (2022-2026)",
+    "The 2026 factor was computed from August to August because no October 2025 index was published"
+   ],
+   "quote": "Due to the federal government shutdown in the fall of 2025 ... the inflation factor for the 2026 lien date was calculated using the percentage change from August 2024 to August 2025 ... please prepare your 2026 assessment roll using an inflation factor of 1.02.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "rtc480": {
+   "publisher": "California Legislative Information",
+   "title": "Revenue and Taxation Code section 480",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=480",
+   "verifies": [
+    "When real property passes at death through a trust, the trustee or transferee must file a change in ownership statement within 150 days of the date of death",
+    "Failure to answer a written request within 90 days carries a penalty"
+   ],
+   "quote": "the change in ownership statement or statements shall be filed by the trustee (if the property was held in trust) or the transferee with the county recorder or assessor in each county in which the decedent owned an interest in real property within 150 days after the date of death.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "prob16061_7": {
+   "publisher": "California Legislative Information",
+   "title": "Probate Code section 16061.7",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PROB&sectionNum=16061.7",
+   "verifies": [
+    "When a revocable trust becomes irrevocable at a settlor's death the trustee must notify every beneficiary and heir",
+    "The notice is due within 60 days"
+   ],
+   "quote": "The notification by trustee shall be served not later than 60 days following the occurrence of the event requiring service of the notification by trustee",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "rtc11911": {
+   "publisher": "California Legislative Information",
+   "title": "Revenue and Taxation Code section 11911",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=11911",
+   "verifies": [
+    "A county may tax a sale of real property at 55 cents per $500 of value, which is 0.11%"
+   ],
+   "quote": "a tax at the rate of fifty-five cents ($0.55) for each five hundred dollars ($500) or fractional part thereof.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "rtc11930": {
+   "publisher": "California Legislative Information",
+   "title": "Revenue and Taxation Code section 11930",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=11930",
+   "verifies": [
+    "A transfer by gift or by reason of death, outright or in trust, is exempt from documentary transfer tax"
+   ],
+   "quote": "Any tax imposed pursuant to this part shall not apply to any deed ... if by reason of such inter vivos gift or by reason of the death of any person, such lands ... are transferred outright to, or in trust for the benefit of, any person or entity.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "cnty_a_recorder": {
+   "publisher": "County A Clerk-Recorder",
+   "title": "Recording real estate: documentary transfer tax",
+   "url": "https://clerkrecorder.santaclaracounty.gov/recording-documents/recording-real-estate",
+   "verifies": [
+    "County A charges the 0.11% documentary transfer tax on sales",
+    "Three named cities in the county add a city conveyance tax of 0.33%"
+   ],
+   "quote": "It is computed at a rate of $.55 per $500 or fractional portion of real property value ... Properties located within [three named cities] are taxable at a rate of $1.65 per $500.",
+   "checked": "official-domain search excerpt read in this session (full document not opened)"
+  },
+  "cnty_a_rates": {
+   "publisher": "County A Controller-Treasurer",
+   "title": "Compilation of Tax Rates and Information, fiscal year 2025-26",
+   "url": "https://files.santaclaracounty.gov/exjcpb1531/2025-11/tax-rate-book-2025-2026.pdf",
+   "verifies": [
+    "Total ad valorem rates in the excerpted tax rate areas run from 1.12580% to 1.24090%",
+    "First instalment is delinquent after 10 December and the second after 10 April"
+   ],
+   "quote": "1.12580 ... 1.14200 ... 1.15215 ... 1.15600 ... 1.15930 ... 1.16145 ... 1.16710 ... 1.19360 ... 1.21470 ... 1.24090 (totals by tax rate area, TAX RATES 2025/2026)",
+   "checked": "official-domain search excerpt read in this session (full document not opened)"
+  },
+  "cityb_rate": {
+   "publisher": "City B Treasurer and Tax Collector",
+   "title": "Secured property taxes",
+   "url": "https://sftreasurer.org/property/secured-property-taxes",
+   "verifies": [
+    "The secured property tax rate for fiscal year 2026-27 is 1.18162182%",
+    "A change in ownership leads to a reappraisal and a supplemental bill",
+    "Late instalments carry a 10% penalty"
+   ],
+   "quote": "The secured property tax rate for Fiscal Year 2026-27 is 1.18162182%.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "cityb_res447": {
+   "publisher": "City B Board of Supervisors",
+   "title": "Resolution 447-25: combined property tax rate, fiscal year 2025-26",
+   "url": "https://sfbos.archive.sf.gov/sites/default/files/r0447-25.pdf",
+   "verifies": [
+    "The fiscal year 2025-26 combined rate was 1.18268325%",
+    "The resolution passed on 30 September 2025"
+   ],
+   "quote": "the combined property tax rate ... shall therefore be $1.18268325 on each $100 valuation of said taxable property ... Date Passed: September 30, 2025",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "cityb_transfer": {
+   "publisher": "City B Assessor-Recorder",
+   "title": "Fees to record a document: transfer tax rate table",
+   "url": "https://www.sf.gov/reports--march-2024--fees-record-document-san-francisco",
+   "verifies": [
+    "Transfer tax on a sale: 0.5% up to $250,000; 0.68% below $1,000,000; 0.75% from $1,000,000 to under $5,000,000; 2.25% from $5,000,000 to under $10,000,000",
+    "The rate applies to the entire price, so crossing $5,000,000 triples the tax"
+   ],
+   "quote": "$1,000,000 or more but less than $5,000,000 | $3.75 for each $500 or portion thereof ... $5,000,000 or more but less than $10,000,000 | $11.25 for each $500 or portion thereof",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "cityb_rent": {
+   "publisher": "City B Rent Board",
+   "title": "Learn about rent increases",
+   "url": "https://www.sf.gov/learn-about-rent-increases-san-francisco",
+   "verifies": [
+    "The allowed annual increase for rent-controlled units is 1.6% from 1 March 2026 to 28 February 2027",
+    "It equals 60% of the regional CPI increase",
+    "Rent can be raised only once every 12 months and needs a rent increase licence",
+    "There is no limit on the first rent charged to a new tenant in a vacant covered unit"
+   ],
+   "quote": "Effective March 1, 2026, the allowed rent increase percentage is 1.6%. ... This amount is based on 60% of the increase in the Consumer Price Index for All Urban Consumers in the Bay Area. ... There is no limit on how much rent a landlord may first charge a tenant when renting an empty unit that is covered by rent control.",
+   "checked": "official-domain search excerpt read in this session (full document not opened)"
+  },
+  "cityb_rentfee": {
+   "publisher": "City B Rent Board",
+   "title": "The Rent Board fee",
+   "url": "https://www.sf.gov/rent-board-fee-link",
+   "verifies": [
+    "Owners pay an annual fee of about $60 per dwelling unit, due 1 March",
+    "It applies to units occupied by family members too unless an exemption is filed"
+   ],
+   "quote": "$59.00 per dwelling unit ... This includes single-family homes and condominiums, units built after 1979, vacant units, and units occupied by friends or family members.",
+   "checked": "official-domain search excerpt read in this session (full document not opened)"
+  },
+  "lao_250017": {
+   "publisher": "California Legislative Analyst's Office",
+   "title": "Analysis of proposed initiative A.G. File No. 25-0017: property tax rules for inherited property",
+   "url": "https://www.lao.ca.gov/ballot/2025/250422.pdf",
+   "verifies": [
+    "The proposal would reverse most of Proposition 19's inheritance changes from 1 January 2027, including for transfers since 16 February 2021",
+    "Inherited primary homes would be fully excluded regardless of value",
+    "Other inherited property would be excluded on the first $1 million of combined value"
+   ],
+   "quote": "Beginning January 1, 2027, the measure reverses most of the major changes made by Proposition 19. The expanded special rules would apply to future property transfers. The rules would also apply to properties that have transferred since Proposition 19 took effect on February 16, 2021.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "sos_measures": {
+   "publisher": "California Secretary of State",
+   "title": "Qualified statewide ballot measures",
+   "url": "https://www.sos.ca.gov/elections/ballot-measures/qualified-ballot-measures",
+   "verifies": [
+    "The 3 November 2026 ballot carried Propositions 1-5 and 37-45",
+    "None of them changes the reassessment of inherited property",
+    "Proposition 42 would prohibit new state taxes on personal property and certain retroactive state taxes"
+   ],
+   "quote": "Proposition 42 Prohibits New State Personal Property Taxes and Certain Retroactive State Taxes. Initiative Constitutional Amendment.",
+   "checked": "official-domain search excerpt read in this session (full document not opened)"
+  },
+  "ftb_cg": {
+   "publisher": "California Franchise Tax Board",
+   "title": "Capital gains and losses",
+   "url": "https://www.ftb.ca.gov/file/personal/income-types/capital-gains-and-losses.html",
+   "verifies": [
+    "California has no lower rate for capital gains; they are taxed as ordinary income"
+   ],
+   "quote": "California does not have a lower rate for capital gains. All capital gains are taxed as ordinary income.",
+   "checked": "official-domain search excerpt read in this session (full document not opened)"
+  },
+  "ftb_rates": {
+   "publisher": "California Franchise Tax Board",
+   "title": "2025 California tax rate schedules",
+   "url": "https://www.ftb.ca.gov/forms/2025/2025-540-tax-rate-schedules.pdf",
+   "verifies": [
+    "California rates run from 1% to 12.3%",
+    "On a joint return 9.3% applies to taxable income between about $145,450 and $742,960",
+    "12.3% applies above about $1,485,910 on a joint return and about $742,950 on a single return"
+   ],
+   "quote": "145,448 | 742,958 | 6,403.94 + 9.30% ... 1,485,906 AND OVER 144,439.65 + 12.30%",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "cpuc_nem": {
+   "publisher": "California Public Utilities Commission",
+   "title": "Net Energy Metering and Net Billing",
+   "url": "https://www.cpuc.ca.gov/industries-and-topics/electrical-energy/demand-side-management/customer-generation/net-energy-metering-and-net-billing",
+   "verifies": [
+    "Solar customers on the older net metering tariffs may stay on them for 20 years from the date they connected",
+    "Systems connected since 15 April 2023 are on the net billing tariff, with a nine-year guarantee for the original customer"
+   ],
+   "quote": "customer-generators are allowed to remain on the NEM 2.0 tariff for 20 years from the date they interconnected, or they are permitted to switch to the current tariff.",
+   "checked": "official-domain search excerpt read in this session (full document not opened)"
+  },
+  "cdi_compare": {
+   "publisher": "California Department of Insurance",
+   "title": "Compare insurance premiums",
+   "url": "https://www.insurance.ca.gov/01-consumers/105-type/9-compare-prem/",
+   "verifies": [
+    "The Department surveys insurers and publishes a 2026 homeowners premium comparison tool",
+    "The survey results are not premium quotes; the Department cannot provide quotes"
+   ],
+   "quote": "The results of these surveys are not premium quotes. ... The California Department of Insurance is a regulatory agency and not an insurance agent. As such, we cannot provide actual quotes.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "treasury_cmt": {
+   "publisher": "U.S. Department of the Treasury",
+   "title": "Daily Treasury par yield curve rates, November 2026",
+   "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value_month=202611",
+   "verifies": [
+    "On 9 November 2026 the par yields were 4.38% (1 year), 4.67% (5 years), 4.88% (10 years) and 5.26% (30 years)"
+   ],
+   "quote": "11/09/2026 | ... | 4.38 | 4.56 | 4.58 | 4.67 | 4.76 | 4.88 | 5.29 | 5.26",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "tsp_returns": {
+   "publisher": "Federal Retirement Thrift Investment Board",
+   "title": "Thrift Savings Plan: rates of return",
+   "url": "https://www.tsp.gov/fund-performance/",
+   "verifies": [
+    "The C Fund, which tracks the S&P 500 index, returned 12.09% from November 2025 to October 2026",
+    "Its long-run average was not readable on the official page in this session"
+   ],
+   "quote": "C Fund ... Inception date: January 29, 1988 ... 12.09% ... S&P 500 C Fund Benchmark Index 12.11%",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "fred_hpi_a": {
+   "publisher": "Federal Reserve Bank of St. Louis (data: Federal Housing Finance Agency)",
+   "title": "All-transactions house price index, Property A's metropolitan area",
+   "url": "https://fred.stlouisfed.org/series/ATNHPIUS41940Q",
+   "verifies": [
+    "Index 558.75 in Q2 2026 with Q1 1995 = 100, which is 5.7% a year compounded over 31 years",
+    "It fell from 564.26 to 558.75 between Q2 2025 and Q2 2026"
+   ],
+   "quote": "Q2 2026: 558.75 | Index 1995:Q1=100, Not Seasonally Adjusted ... Q2 2025: 564.26",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "fred_hpi_b": {
+   "publisher": "Federal Reserve Bank of St. Louis (data: Federal Housing Finance Agency)",
+   "title": "All-transactions house price index, Property B's metropolitan division",
+   "url": "https://fred.stlouisfed.org/series/ATNHPIUS41884Q",
+   "verifies": [
+    "Index 506.53 in Q2 2026 with Q1 1995 = 100, which is 5.3% a year compounded over 31 years",
+    "It fell from 507.95 to 506.53 between Q2 2025 and Q2 2026"
+   ],
+   "quote": "Q2 2026: 506.53 | Index 1995:Q1=100, Not Seasonally Adjusted ... Q2 2025: 507.95",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "hud_fmr": {
+   "publisher": "U.S. Department of Housing and Urban Development",
+   "title": "Fair Market Rents",
+   "url": "https://www.huduser.gov/portal/datasets/fmr.html",
+   "verifies": [
+    "Nothing is verified from this source: the official rent table for either area was not opened in this session"
+   ],
+   "quote": "",
+   "checked": "NOT verified: link supplied for manual review only"
+  },
+  "sos_memo": {
+   "publisher": "California Secretary of State",
+   "title": "County Clerk/Registrar of Voters Memorandum 26138 (18 May 2026)",
+   "url": "https://elections.cdn.sos.ca.gov/ccrov/2026/may/26138jh.pdf",
+   "verifies": [
+    "The initiative titled 'Repeals voter-enacted changes to property tax rules for transfers between family members' failed: the signatures filed were below the number required"
+   ],
+   "quote": "the total number of signatures for the hereinafter named initiative filed with all county elections officials is less than 100 percent of the number of qualified voters required to find the petition sufficient; therefore, the petition has failed.",
+   "checked": "opened on the publisher's site in this session"
   }
+ }
 }
