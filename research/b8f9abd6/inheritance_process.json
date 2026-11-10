@@ -1,0 +1,165 @@
+{
+ "checked": "2026-11-10",
+ "session": "arena-b8f9abd6",
+ "steps": [
+  {
+   "step": 1,
+   "phase": "Before death (now to 2040s)",
+   "when": "Now",
+   "who": "Parent(s) / counsel",
+   "action": "Confirm the house is titled in the trust and that the trust is revocable (included in the gross estate) so the date-of-death step-up applies.",
+   "form": "Trust instrument, recorded deed",
+   "basis": "IRC \u00a71014 via IRS FAQ; Rev. Rul. 2023-2",
+   "url": "https://www.irs.gov/irb/2023-16_IRB"
+  },
+  {
+   "step": 2,
+   "phase": "Before death",
+   "when": "Ongoing",
+   "who": "Parent(s)",
+   "action": "Keep the house as the parent's principal residence with the homeowners' exemption on file \u2014 Prop 19 only covers a 'family home' eligible for the exemption through the transferor's ownership and occupation.",
+   "form": "BOE-266 (already on file)",
+   "basis": "R&TC \u00a763.2(e)(5)",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=63.2"
+  },
+  {
+   "step": 3,
+   "phase": "Before death",
+   "when": "Annually, optional",
+   "who": "Parent(s)",
+   "action": "Use annual-exclusion gifts of cash ($19,000 per recipient in 2026; $20,000 in 2027) to reduce a taxable estate. Avoid gifting the house itself: gifted property does not receive the date-of-death basis.",
+   "form": "Form 709 if over the exclusion",
+   "basis": "IR-2026-133; IRS inheritance FAQ",
+   "url": "https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts"
+  },
+  {
+   "step": 4,
+   "phase": "Day 0 \u2013 60",
+   "when": "Within 60 days of death",
+   "who": "Successor trustee",
+   "action": "Trust becomes irrevocable. Serve the statutory notification by trustee on every beneficiary and heir.",
+   "form": "Notification by trustee",
+   "basis": "Probate Code \u00a716061.7(f)",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PROB&sectionNum=16061.7"
+  },
+  {
+   "step": 5,
+   "phase": "Day 0 \u2013 60",
+   "when": "Promptly",
+   "who": "Successor trustee",
+   "action": "Obtain an EIN for the estate/trust (free on IRS.gov) for bank accounts and income tax filings.",
+   "form": "Form SS-4",
+   "basis": "IRS \u2014 Information for executors",
+   "url": "https://www.irs.gov/businesses/small-businesses-self-employed/information-for-executors"
+  },
+  {
+   "step": 6,
+   "phase": "Day 0 \u2013 150",
+   "when": "As of date of death",
+   "who": "Successor trustee + appraiser",
+   "action": "Obtain a date-of-death fair-market-value appraisal of each property \u2014 it sets the heir's stepped-up basis and the Prop 19 market-value test.",
+   "form": "Qualified appraisal",
+   "basis": "IRS inheritance FAQ; R&TC \u00a763.2(d)",
+   "url": "https://www.irs.gov/faqs/interest-dividends-other-types-of-income/gifts-inheritances/gifts-inheritances"
+  },
+  {
+   "step": 7,
+   "phase": "Day 0 \u2013 180",
+   "when": "120 days after notice",
+   "who": "Beneficiaries",
+   "action": "Trust-contest window closes 120 days after notice is served (or 60 days after a requested copy of the trust is delivered, if later).",
+   "form": "\u2014",
+   "basis": "Probate Code \u00a716061.8",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PROB&sectionNum=16061.8"
+  },
+  {
+   "step": 8,
+   "phase": "Day 0 \u2013 150",
+   "when": "Within 150 days of death",
+   "who": "Trustee",
+   "action": "File a change in ownership statement (death of real property owner) with the assessor/recorder in each county where the decedent owned real property. Late filing after the assessor's written request is penalised (greater of $100 or 10% of new-base taxes, capped).",
+   "form": "BOE-502-D",
+   "basis": "R&TC \u00a7480(b)",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=480"
+  },
+  {
+   "step": 9,
+   "phase": "Year 1",
+   "when": "Within 1 year of transfer",
+   "who": "Heir (child)",
+   "action": "DECISION POINT \u2014 to keep part of the parent's low taxable value, move in and make the house the heir's principal residence, and file the homeowners' exemption, both within one year.",
+   "form": "BOE-266",
+   "basis": "R&TC \u00a763.2(a)(1)(A)-(B); BOE Prop 19 page",
+   "url": "https://www.boe.ca.gov/prop19/"
+  },
+  {
+   "step": 10,
+   "phase": "Year 1 \u2013 3",
+   "when": "Within 3 years, or before a sale to a third party",
+   "who": "Heir",
+   "action": "File the Prop 19 parent-child exclusion claim with the county assessor.",
+   "form": "BOE-19-P",
+   "basis": "R&TC \u00a763.2(f)(1)(A)",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=63.2"
+  },
+  {
+   "step": 11,
+   "phase": "Month 9",
+   "when": "9 months after death (extension via Form 4768)",
+   "who": "Executor / trustee",
+   "action": "File Form 706 if the gross estate plus adjusted taxable gifts exceeds the year-of-death filing threshold, or to elect portability for a surviving spouse; pay any estate tax.",
+   "form": "Form 706; Form 4768",
+   "basis": "Instructions for Form 706",
+   "url": "https://www.irs.gov/instructions/i706"
+  },
+  {
+   "step": 12,
+   "phase": "Month 9 \u2013 10",
+   "when": "30 days after the Form 706 due date",
+   "who": "Executor",
+   "action": "If Form 706 is required, report estate-tax values to the IRS and beneficiaries (consistent basis reporting).",
+   "form": "Form 8971 + Schedule A",
+   "basis": "Instructions for Form 706",
+   "url": "https://www.irs.gov/instructions/i706"
+  },
+  {
+   "step": 13,
+   "phase": "Distribution",
+   "when": "After debts/taxes settled",
+   "who": "Trustee",
+   "action": "Record a trustee's deed distributing the house to the heir. No documentary transfer tax applies to a transfer by reason of death.",
+   "form": "Trustee's deed",
+   "basis": "R&TC \u00a711930",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=11930"
+  },
+  {
+   "step": 14,
+   "phase": "Tax years after death",
+   "when": "Annual",
+   "who": "Trustee / heir",
+   "action": "File the decedent's final Form 1040 and the trust/estate's Form 1041 for income earned during administration (e.g., rent).",
+   "form": "Form 1040, Form 1041",
+   "basis": "IRS \u2014 Information for executors (Pub. 559)",
+   "url": "https://www.irs.gov/businesses/small-businesses-self-employed/information-for-executors"
+  },
+  {
+   "step": 15,
+   "phase": "If selling",
+   "when": "Year of sale",
+   "who": "Heir or trustee",
+   "action": "Report the sale on Schedule D / Form 8949 using the stepped-up basis; gain over basis is taxable (federal rates per Topic 409; CA taxes it as income).",
+   "form": "Schedule D, Form 8949",
+   "basis": "IRS inheritance FAQ; Topic 409",
+   "url": "https://www.irs.gov/taxtopics/tc409"
+  }
+ ],
+ "prop19_example": {
+  "label": "Hypothetical round numbers \u2014 NOT the owner's property",
+  "taxable_value_before_transfer": 400000,
+  "market_value_at_transfer": 2500000,
+  "exclusion_amount": 1044586,
+  "rule": "R&TC \u00a763.2(d): if market value >= taxable value + exclusion, new taxable value = taxable value + (market value - taxable value - exclusion)",
+  "new_taxable_value_if_heir_moves_in": 1455410,
+  "new_taxable_value_if_not_principal_residence": 2500000
+ }
+}
