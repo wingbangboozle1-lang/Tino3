@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Taxes &amp; Law — Tino3</title><link rel="stylesheet" href="assets/style.css"></head>
+<body>
+<header class="topbar"><div class="topbar-inner"><div class="brand">Tino3<small>Cupertino &amp; San Francisco — Inheritance Decision Dashboard</small></div>
+<nav class="nav"><a href="index.html">Dashboard</a><a href="cupertino.html">Cupertino</a><a href="san-francisco.html">San Francisco</a><a class="active" href="taxes.html">Taxes &amp; Law</a><a href="inheritance-process.html">Inheritance Steps</a><a href="projections.html">Projections</a><a href="decision.html">Decision</a><a href="sources.html">Sources</a><a href="flagged.html">Flagged for Review</a></nav></div></header>
+<div class="wrap">
+<h1>Taxes &amp; inheritance law — local, state, federal</h1>
+<p class="small">Law as of Nov 2026. Every row links to an official source where possible. All dollars rounded to nearest $10.</p>
+
+<h2>1. Federal estate &amp; gift tax</h2>
+<table><tr><th>Item</th><th class="num">Amount / rule</th><th>Source</th><th>Status</th></tr>
+<tr><td>Basic exclusion, deaths in 2026 (per person)</td><td class="num">$15,000,000</td><td class="src"><a href="https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax">IRS — Estate tax (filing threshold table)</a></td><td><span class="tag verified">VERIFIED</span></td></tr>
+<tr><td>Basic exclusion, deaths in 2025 (per person)</td><td class="num">$13,990,000</td><td class="src"><a href="https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax">IRS — Estate tax</a></td><td><span class="tag verified">VERIFIED</span></td></tr>
+<tr><td>Married couple with portability (2026)</td><td class="num">$30,000,000</td><td class="src"><a href="https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax">IRS — Estate tax (portability)</a></td><td><span class="tag verified">VERIFIED</span></td></tr>
+<tr><td>Top estate/gift tax rate above exclusion</td><td class="num">40%</td><td class="src"><a href="https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax">IRS — Estate tax</a></td><td><span class="tag verified">VERIFIED</span></td></tr>
+<tr><td>Annual gift exclusion (2026, per recipient)</td><td class="num">$19,000</td><td class="src"><a href="https://www.irs.gov/newsroom/working-families-tax-cuts-individuals-and-workers">IRS — Working Families Tax Cuts</a></td><td><span class="tag verified">VERIFIED</span></td></tr>
+<tr><td>TCJA sunset / OBBBA</td><td class="num">Sunset repealed; $15M permanent, indexed from 2027</td><td class="src"><a href="https://www.irs.gov/newsroom/working-families-tax-cuts-individuals-and-workers">IRS — Working Families Tax Cuts (OBBBA)</a></td><td><span class="tag verified">VERIFIED</span></td></tr>
+<tr><td>Modeled federal estate tax on $4,900,000 houses</td><td class="num">$0</td><td class="src"><a href="https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax">IRS threshold vs. modeled estate</a></td><td><span class="tag assumption">MODELED</span></td></tr>
+<tr><td>Cash inheritance amount (unknown)</td><td class="num">—</td><td class="src"><a href="flagged.html">Not provided — flagged</a></td><td><span class="tag unverified">UNVERIFIED</span></td></tr>
+</table>
+<div class="note ok"><strong>Headroom:</strong> Houses alone ($4,900,000) leave ~$10,100,000 of headroom under the $15,000,000 single-person exemption (~$25,100,000 under the $30,000,000 couple exemption). Estate tax only becomes a concern if the cash inheritance + house growth pushes the taxable estate above the exemption. See <a href="projections.html">Projections</a> for the 2040–2050 estate-size scenarios.</div>
+
+<h2>2. California estate &amp; inheritance tax</h2>
+<table><tr><th>Item</th><th class="num">Rule</th><th>Source</th><th>Status</th></tr>
+<tr><td>CA state estate tax</td><td class="num">None</td><td class="src"><a href="https://www.boe.ca.gov/prop19/">BOE (no CA estate tax; Prop 19 governs property tax)</a></td><td><span class="tag verified">VERIFIED</span></td></tr>
+<tr><td>CA inheritance tax (paid by beneficiary)</td><td class="num">None</td><td class="src"><a href="https://www.boe.ca.gov/prop19/">BOE</a></td><td><span class="tag verified">VERIFIED</span></td></tr>
+<tr><td>CA income tax on inheritance itself</td><td class="num">None (inheritance is not income)</td><td class="src"><a href="https://www.ftb.ca.gov/file/personal/income-types/capital-gains-and-losses.html">FTB — capital gains (basis rules)</a></td><td><span class="tag verified">VERIFIED</span></td></tr>
+</table>
+
+<h2>3. Property tax — Prop 13 &amp; Prop 19 (the big one)</h2>
+<table><tr><th>Item</th><th class="num">Rule</th><th>Source</th><th>Status</th></tr>
+<tr><td>Prop 13 base rate cap</td><td class="num">1.00% of assessed value</td><td class="src"><a href="https://www.boe.ca.gov/prop19/">BOE — Prop 19</a></td><td><span class="tag verified">VERIFIED</span></td></tr>
+<tr><td>Prop 13 annual assessment growth cap</td><td class="num">2%/yr (or inflation if lower)</td><td class="src"><a href="https://www.boe.ca.gov/prop19/">BOE — Prop 19</a></td><td><span class="tag verified">VERIFIED</span></td></tr>
+<tr><td>Prop 19 effective date (parent-child changes)</td><td class="num">Feb 16, 2021</td><td class="src"><a href="https://www.boe.ca.gov/prop19/">BOE — Prop 19</a></td><td><span class="tag verified">VERIFIED</span></td></tr>
+<tr><td>Prop 19 exclusion cap (Feb 16, 2025–Feb 15, 2027)</td><td class="num">$1,044,590 above FBYV</td><td class="src"><a href="https://www.boe.ca.gov/prop19/">BOE — Prop 19 (indexed every 2 yrs)</a></td><td><span class="tag verified">VERIFIED</span></td></tr>
+<tr><td>Move-in deadline for exclusion</td><td class="num">Within 1 year of transfer</td><td class="src"><a href="https://www.boe.ca.gov/prop19/">BOE — Prop 19 FAQ</a></td><td><span class="tag verified">VERIFIED</span></td></tr>
+<tr><td>BOE-19-P filing deadline</td><td class="num">Within 3 years of transfer</td><td class="src"><a href="https://www.boe.ca.gov/prop19/">BOE — Prop 19 filing checklist</a></td><td><span class="tag verified">VERIFIED</span></td></tr>
+<tr><td>Rental / vacation property exclusion</td><td class="num">None — full reassessment</td><td class="src"><a href="https://www.boe.ca.gov/prop19/">BOE — Prop 19 FAQ (rental = no)</a></td><td><span class="tag verified">VERIFIED</span></td></tr>
+<tr><td>Future Prop 19 cap (2040s transfers)</td><td class="num">—</td><td class="src"><a href="flagged.html">Adjusts every 2 yrs; future amount unknown</a></td><td><span class="tag unverified">UNVERIFIED</span></td></tr>
+</table>
+
+<h2>4. Step-up in basis &amp; capital gains on sale</h2>
+<table><tr><th>Item</th><th class="num">Rule</th><th>Source</th><th>Status</th></tr>
+<tr><td>Step-up in basis at death (IRC §1014)</td><td class="num">Basis = FMV at date of death</td><td class="src"><a href="https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax">IRS — Estate tax (FMV basis)</a></td><td><span class="tag verified">VERIFIED</span></td></tr>
+<tr><td>Gain if sold promptly at FMV</td><td class="num">~$0 (pre-death gain erased)</td><td class="src"><a href="https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax">IRS — Estate tax</a></td><td><span class="tag verified">VERIFIED</span></td></tr>
+<tr><td>Primary-residence exclusion (IRC §121)</td><td class="num">$250,000 single / $500,000 MFJ</td><td class="src"><a href="https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax">IRS (see also Pub. 523)</a></td><td><span class="tag verified">VERIFIED</span></td></tr>
+<tr><td>Federal LTCG rates</td><td class="num">0% / 15% / 20% + 3.8% NIIT</td><td class="src"><a href="https://www.ftb.ca.gov/file/personal/income-types/capital-gains-and-losses.html">FTB (federal Schedule D)</a></td><td><span class="tag verified">VERIFIED</span></td></tr>
+<tr><td>CA capital gains treatment</td><td class="num">Taxed as ordinary income, 1%–13.3%</td><td class="src"><a href="https://www.ftb.ca.gov/file/personal/income-types/capital-gains-and-losses.html">FTB — "No lower rate for capital gains"</a></td><td><span class="tag verified">VERIFIED</span></td></tr>
+<tr><td>Combined top rate (high-income CA seller)</td><td class="num">~37.1% (20% + 3.8% + 13.3%)</td><td class="src"><a href="https://www.ftb.ca.gov/file/personal/income-types/capital-gains-and-losses.html">FTB + federal rates</a></td><td><span class="tag verified">VERIFIED</span></td></tr>
+</table>
+<div class="note info"><strong>Why step-up matters:</strong> Cupertino's pre-death gain (market $3,100,000 vs. original purchase price — unknown) is erased at death. Selling soon after inheritance therefore costs ~$0 in capital gains. Waiting years lets post-inheritance appreciation accumulate and become taxable. Original purchase price is <span class="tag unverified">UNVERIFIED</span> (not provided) but irrelevant if step-up applies.</div>
+
+<h2>5. Prop 19 calculator (try it)</h2>
+<div class="card">
+<label>Market value at transfer ($): <input id="calcFmv" type="number" value="3100000" style="width:140px"></label><br>
+<label>Prop 19 cap ($): <input id="calcCap" type="number" value="1044590" style="width:140px"></label><br>
+<label>Effective tax rate (%): <input id="calcRate" type="number" value="1.34" step="0.01" style="width:80px"></label><br>
+<label>Scenario: <select id="calcMode"><option value="movein">Heir moves in (FMV − cap)</option><option value="full">Rent / no move-in (full FMV)</option></select></label>
+<p id="calcOut" style="margin-top:10px"></p>
+<p class="small">Simplified calculator. Exact move-in result also needs the parent's factored base-year value (FBYV): if FMV ≤ FBYV + cap, assessed stays at FBYV. Confirm with the county assessor.</p>
+</div>
+
+<h2>6. Pending / possible law changes (watch list)</h2>
+<table><tr><th>Proposal / risk</th><th>Effect if enacted</th><th>Source</th><th>Status</th></tr>
+<tr><td>Step-up repeal proposals (e.g., Treasury FY2025 $5M exclusion concept)</td><td>Pre-death gains taxed at death; selling after inheritance would no longer be ~$0</td><td class="src"><a href="https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax">IRS (no repeal enacted as of Nov 2026)</a></td><td><span class="tag unverified">PROPOSAL ONLY</span></td></tr>
+<tr><td>Future Congress changes to $15M exemption</td><td>Exemption could be lowered; estate tax could apply to smaller estates</td><td class="src"><a href="https://www.irs.gov/newsroom/working-families-tax-cuts-individuals-and-workers">IRS — OBBBA (no sunset, but Congress can amend)</a></td><td><span class="tag unverified">UNVERIFIED</span></td></tr>
+<tr><td>CA Prop 19 cap adjustments</td><td>Cap rises with CA House Price Index every 2 yrs; helps move-in scenario slightly</td><td class="src"><a href="https://www.boe.ca.gov/prop19/">BOE — Prop 19</a></td><td><span class="tag verified">VERIFIED RULE</span></td></tr>
+<tr><td>CA split-roll / commercial reassessment proposals</td><td>Could raise taxes on commercial/rental parcels; residential Prop 13 base unchanged unless voters act</td><td class="src"><a href="flagged.html">No enacted change as of Nov 2026</a></td><td><span class="tag unverified">UNVERIFIED</span></td></tr>
+</table>
+
+<p><a href="index.html">← Back to Dashboard</a> | <a href="inheritance-process.html">Inheritance Steps →</a></p>
+</div>
+<footer>Tino3 — anonymized planning dashboard. Planning information only, not legal/tax advice.</footer>
+<script src="assets/app.js"></script>
+</body></html>
