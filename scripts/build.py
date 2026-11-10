@@ -78,7 +78,7 @@ BADGE = {"V": ("b-v", "Verified"), "O": ("b-o", "Owner-supplied"), "A": ("b-a", 
 LEGEND = ('<p class="legend">' + "".join(f'<span class="b {c}">{t}</span>' for c, t in BADGE.values()) +
           ' Verified = the figure was read in text from the official publisher\'s own domain on 10 November 2026; the source library says whether the whole page was opened or an excerpt was read. Owner-supplied = taken from the '
           'owner\'s records, not independently checked. Assumption = a scenario input. Computed = arithmetic on the '
-          'rows above. Unverified = no official confirmation, so the value is blank.</p>')
+          'rows above. Unverified = no official confirmation, so the value is blank. On owner-supplied, assumed and computed rows the link points to the official rule or data series the row rests on; it does not confirm the value.</p>')
 
 
 def tbl(caption, headers, rows, cls=""):
@@ -481,15 +481,17 @@ fl = [
  ("FL-21", "County form names and the trust's tax filing", "The steps cite the statutes. Form numbers and the trust's income tax return were not verified.", "The assessor's forms page; a tax preparer", "rtc480"),
  ("FL-22", "Building share of value, bedrooms, condition", "Drive depreciation and maintenance. Assumed.", "The assessor's land and improvement split; an inspection", "irs_p527"),
  ("FL-23", "Sources read as excerpts", "Twelve sources were read as excerpts served from the official domain, not as whole documents. They are marked in the source library.", "Open each link", "irs_i706"),
- ("FL-24", "Privacy of the repository's history", "Earlier commits in this public repository contain exact figures and location details. This edition cannot remove them.", "The owner's decision on rewriting history or making the repository private", "irs_basis"),
- ("FL-25", "Jurisdictions visible through source links", "The pages name County A and City B, but the official local links identify them to anyone who opens one.", "The owner's decision on whether to drop local sources", "cityb_rate"),
 ]
 rows = [([i, item, why, BLANK, fix], "U", S(src)) for i, item, why, fix, src in fl]
 body = f"""<div class="note"><strong>Nothing on this page blocks the plan.</strong> These are the items that could not be confirmed from an official source, or that only the owner can settle.
 Each value is left blank rather than estimated. The list is ordered by how much each item could change the answer.</div>
-{tbl("Flagged for Review", ["No.", "Item", "Why it is flagged", "Value", "What settles it"], rows)}{LEGEND}{PRIV}"""
+{tbl("Flagged for Review", ["No.", "Item", "Why it is flagged", "Value", "What settles it"], rows)}{LEGEND}
+<section><h2>Two privacy disclosures</h2><ul>
+<li><strong>Repository history.</strong> Earlier commits in this public repository contain exact figures and location details. This edition cannot remove them. Rewriting the history or making the repository private is the owner's decision.</li>
+<li><strong>Jurisdictions.</strong> The pages name only County A and City B, but the official local links identify them to anyone who opens one. Dropping the local sources would remove that, at the cost of unsourced local rates.</li>
+</ul></section>{PRIV}"""
 PAGES["review.html"] = page("review.html", "Flagged for review", "Flagged for review", "Unverified, unknown or irregular",
-                            "Twenty-five open items with the official page that bears on each.", body)
+                            "Twenty-three open items with the official page that bears on each, and two privacy disclosures.", body)
 
 # ------------------------------------------------------------------------------------------------ audit
 corr = [
@@ -506,23 +508,24 @@ corr = [
  ("C-11", "Comparison period", "Every case ended in 2055, so an inheritance in 2050 was judged over five years.", "Ten years after each inheritance year.", "irs_basis"),
  ("C-12", "Roll values in public files", "Assessment histories were published to the nearest $10, and one bill to the dollar.", "Generalised to the nearest $10,000 and $100. Year-over-year changes are shown as percentages.", "boe_lta26002"),
 ]
-rows = [([i, item, old, new], "V", S(src)) for i, item, old, new, src in corr]
+CB = {"C-01": "V", "C-02": "V", "C-03": "C", "C-04": "C", "C-05": "V", "C-06": "C", "C-07": "V", "C-08": "A", "C-09": "V", "C-10": "V", "C-11": "C", "C-12": "C"}
+rows = [([i, item, old, new], CB[i], S(src)) for i, item, old, new, src in corr]
 repo = [
- ("R-01", "Published pages", "Eleven pages are generated from one model and one source ledger. A stale page fails the build.", "boe_lta26002"),
- ("R-02", "Retired pages and data files", "Paths used by earlier editions hold withdrawal notices with no figures. The build fails if any other tracked file appears.", "irs_basis"),
- ("R-03", "Source ledger", "Each source now records how it was checked: opened, read as an official excerpt, or carried forward from the earlier edition.", "irs_estate"),
- ("R-04", "Checks", "Every table row must link to an official publisher. Dollar amounts must be multiples of $10. City names, ZIP codes, parcel numbers and e-mail addresses fail the build.", "rtc13301"),
- ("R-05", "Publishing", "The site is served from the main branch. Both publishing paths carry the same sanitised files. Earlier sessions report that the setting itself could not be changed with the available permissions.", "sos_measures"),
- ("R-06", "Repository history", "Earlier commits contain exact figures and location details. Not rewritten. Needs the owner's decision.", "irs_basis"),
- ("R-07", "Open pull requests from other sessions", "Left untouched. They contain earlier editions and are not part of this site.", "irs_basis"),
+ ("Published pages", "Eleven pages are generated from one model and one source ledger. A stale page fails the build."),
+ ("Retired pages and data files", "Paths used by earlier editions hold withdrawal notices with no figures. The build fails if any other tracked file appears."),
+ ("Source ledger", "Each source records how it was checked: opened, or read as an excerpt served from the official domain."),
+ ("Checks", "Every table row must link to an official publisher. Dollar amounts must be multiples of $10. City names, ZIP codes, parcel numbers and e-mail addresses fail the build."),
+ ("Publishing", "The site is served from the main branch. Both publishing paths carry the same sanitised files. Earlier sessions report that the setting itself could not be changed with the available permissions."),
+ ("Repository history", "Earlier commits contain exact figures and location details. Not rewritten. Needs the owner's decision."),
+ ("Open pull requests from other sessions", "Left untouched. They contain earlier editions and are not part of this site."),
 ]
-rrows = [([i, area, finding], "V", S(src)) for i, area, finding, src in repo]
+rlist = "<ul>" + "".join(f"<li><strong>{area}.</strong> {finding}</li>" for area, finding in repo) + "</ul>"
 body = f"""
 <section><h2>What this page is</h2>
 <p>A second session re-checked the edition published earlier the same day, line by line, against the official sources. Twelve items were corrected. The largest effects came from C-04, C-05 and C-06.
 The earlier edition's source work was sound: its quotations matched the official pages wherever they were re-opened.</p>
 {tbl("Corrections to the earlier edition", ["No.", "Item", "Earlier edition", "This edition"], rows)}{LEGEND}</section>
-<section><h2>Repository review</h2>{tbl("State of the repository", ["No.", "Area", "Finding"], rrows)}</section>
+<section><h2>Repository review</h2><p>Findings from reading the repository itself. These are observations, not sourced facts.</p>{rlist}</section>
 <section><h2>How this edition relates to the cross-check</h2>
 <p>A separate <a href="plan/index.html">cross-check edition</a> was built by another session with its own model and its own source ledger. It leaves unverifiable inputs blank and reports break-evens.
 Both reach the same default: sell Property A in the first year and keep Property B. The cross-check compares selling with Treasuries only and finds that margin thin; this edition agrees
