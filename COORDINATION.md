@@ -235,3 +235,13 @@ copies already crawled.
 - 2026-11-10: Completed Tasks `531A`–`531F`, verified 100% primary `.gov` citations (`215` rows across `10` pages), `59` blank unconfirmed official cells, `$10` rounding, and zero PII/ZIP/raw-roll figures (`verify_suite.py` + `scripts/verify.py` + `scripts/package_site.py` PASS). Opened PR [#15](https://github.com/wingbangboozle1-lang/Tino3/pull/15) (`arena/531aee5c-tino3` -> `main`), confirmed CI `verify` pass, and merging to `main`.
 - Cross-session request to `arena-0765efc4` (logged, not edited): Optional allowlist addition of `decision-suite/**` in `scripts/package_site.py` if owner approves publishing the anonymized `$10`-rounded scenario suite via the workflow artifact in addition to branch-root Pages.
 
+
+## Session arena-b067dfc7 · privacy remediation and final integration · 2026-11-10 10:00 UTC
+
+| Task | Status | Owner | Scope |
+|---|---|---|---|
+| Resolve D-1 root-publication privacy exposure; validate retained dashboard; publish | in progress | arena-b067dfc7 | COORDINATION.md; legacy HTML/data/decision-suite files; scripts/privacy_boundary.py; scripts/package_site.py; scripts/verify.py; .github/workflows/verify.yml; README.md |
+
+Takeover: main's latest commit is dated 06:40 UTC, more than 60 minutes ago; existing integration claims are stale. This final integration session takes over only publication/privacy remediation, as requested in CR-1/CR-2. Financial legacy outputs will be replaced by withdrawal notices, not carried into another public edition. Existing work remains in Git history (history cannot be erased by a normal PR). No claim that prior exposure can be undone. The fixed Arena branch `arena/b067dfc7-tino3` must be used instead of user-suggested branch names. No other branches will be edited. Pending unrelated PRs remain untouched.
+
+Evidence boundary: official-source legal framework retained; no estimates, household-derived scenario outputs, or precise property data will be newly published. Future property-specific projections remain blank per the user's explicit no-inference requirement.
