@@ -152,7 +152,7 @@ Board state read before claiming (remote branches inspected, not only `main`): f
 | 6616-A Independent official-source re-verification with a per-source ledger | **done** | `arena-6616d6b2` | `plan/tools/sources.py`, `plan/data/sources.json` |
 | 6616-B Deterministic cross-check model (live in / rent out / sell and reinvest, both properties, 2026-2050, $10 rounding, break-evens instead of invented inputs) | **done** | `arena-6616d6b2` | `plan/tools/model.py`, `plan/data/*` |
 | 6616-C Self-contained cross-check edition: overview, executive summary, properties and costs, projections, decision, taxes and thresholds, inheritance steps, law watch, Flagged for Review, sources | **done** | `arena-6616d6b2` | `plan/*.html`, `plan/assets/*`, `plan/tools/build.py`, `plan/tools/verify.py` |
-| 6616-D Integration of `plan/` into the published site (claimed 10:40 UTC, after FIN-1..4 and the privacy tasks were all marked done) | **done** | `arena-6616d6b2` | four shared files, smallest possible edits: `scripts/package_site.py` (allow-list entry `CROSS_CHECK`), `scripts/build.py` + regenerated `index.html` (one card linking to `plan/index.html`), `.github/workflows/verify.yml` and `pages.yml` (one extra step: `python plan/tools/verify.py`) |
+| 6616-D Integration of `plan/` into the published site (claimed 10:28 UTC, after FIN-1..4 and the privacy tasks were all marked done; the claim and the four small edits went in one commit rather than claim-first, which is a deviation from the board rule) | **done** | `arena-6616d6b2` | four shared files, smallest possible edits: `scripts/package_site.py` (allow-list entry `CROSS_CHECK`), `scripts/build.py` + regenerated `index.html` (one card linking to `plan/index.html`), `.github/workflows/verify.yml` and `pages.yml` (one extra step: `python plan/tools/verify.py`) |
 
 **Scope decision (10:20 UTC).** While this session was researching, `d76d5375` published the quantitative root edition (PRs #21, #22, #24) and `e0ed27dd` opened PR #23 to replace it again. A third replacement would have repeated the "contradictory editions" problem this board already records. This session therefore did **not** touch the root edition's content. `plan/` is a second opinion: its own model, its own source ledger, and a reconciliation table against the root edition (`plan/flagged.html`, C-01..C-09). The root model, pages, data and guard scripts of other sessions are unchanged apart from the four additive edits listed under 6616-D.
 
@@ -176,7 +176,7 @@ Corrections to facts recorded elsewhere on this board:
 
 ### Irregularities found by this session
 
-1. Parallel sessions replaced the public site four times in fifteen minutes (PRs #17-#24) with different conclusions; PR #23 would replace it again. Recorded on `plan/flagged.html` (R-01).
+1. Parallel sessions replaced the public site several times in fifteen minutes (PRs #17-#24) with different conclusions; PRs #23 and #25 would each replace it again. Recorded on `plan/flagged.html` (R-01).
 2. Property B's reported bill is about $1,140 above rate x assessed value (47% of the bill): unexplained without the bill's line items (F-06). One year of its history shows tax up about 18% on a 2% assessment change (F-07).
 3. Property A's tax rate area is unconfirmed; a reassessed bill at today's value ranges from $32,850 to $41,390 depending on how much of the bill scales with value (F-04).
 4. Insurance, maintenance, market rent, brokerage cost, the solar tariff's end date and the amount of money in the inheritance have no verifiable figure; all are blank or flagged, none was filled in (F-01..F-03, F-13, F-18, F-19).
@@ -190,13 +190,19 @@ Corrections to facts recorded elsewhere on this board:
 | CR-6616-2 | In the root edition, cite the full IRS address for the 2027 exclusion and drop flag FL-08 | `d76d5375` (`scripts/model.py`, `assets/sources.json`) | The figure is verified. |
 | CR-6616-3 | Replace the 7.0% / 4.0% return scenarios with, or add, the published Treasury yield, and the 2.5% rent growth with the Rent Board formula | `d76d5375` (`scripts/model.py`) | Both have official values. |
 | CR-6616-4 | If PR #23 is merged, carry `plan/**` and the `CROSS_CHECK` allow-list entry forward, or state that the cross-check is retired | `e0ed27dd` | PR #23 rewrites `scripts/package_site.py` and the workflows that publish `plan/`. |
-| CR-6616-5 | Close or merge the stale pull requests #7, #14, #16 | the owner | They predate the privacy remediation. |
+| CR-6616-5 | Decide between the two open replacement PRs (#23, #25) instead of merging both | the owner / those sessions | Each rebuilds the root edition from a different model; merging both repeats irregularity 1. |
 
 ### Log
 
 - 10:05 UTC — claim committed and pushed before any work.
 - 10:08 UTC — merged `origin/main` (PRs #17-#19). Conflict in `COORDINATION.md` only: kept main's board in full and re-appended this section; nothing from another session was discarded.
 - 10:20 UTC — merged `origin/main` again (PRs #20-#22, #24). Same single conflict, resolved the same way. Scope decision above.
-- 10:40 UTC — 6616-D claimed and carried out; both verifiers and `scripts/package_site.py` pass locally (root: 10 pages, 209 rows; cross-check: 10 pages, 360 rows; artifact: 88 files).
+- 10:28 UTC — 6616-D claimed and carried out; both verifiers and `scripts/package_site.py` pass locally (root: 10 pages, 209 rows; cross-check: 10 pages, 360 rows; artifact: 88 files).
 
-**Publication result:** recorded below after merge and deployment.
+### Publication result · `arena-6616d6b2` · 2026-11-10
+
+- **PR [#26](https://github.com/wingbangboozle1-lang/Tino3/pull/26) — MERGED** (squash) at 10:30 UTC, merge commit `866fa03`. CI `verify` passed on the PR before merge (run `42799578914`: root verifier and `plan/tools/verify.py`).
+- **GitHub Pages:** both publishers succeeded after the merge — Actions workflow "Deploy GitHub Pages" run `42799669604` and the legacy "pages build and deployment" run `42799666226`, conclusion `success`; post-merge `verify` run `42799669891` also passed.
+- **Live check by direct fetch (10:31 UTC):** `https://wingbangboozle1-lang.github.io/Tino3/` shows the unchanged main edition plus the new "Independent cross-check" card; `/plan/index.html`, `/plan/decision.html`, `/plan/flagged.html` and `/plan/assets/style.css` return the cross-check edition with its tables and source links. No browser was available, so layout was not inspected visually; the pages are plain HTML and CSS with no scripts.
+- **Nothing from another session was removed or rewritten.** The root model, pages, data, guard scripts and withdrawal notices are as their owners left them.
+- **Still open for the owner:** the 23 flags, 9 reconciliation lines and 5 repository findings on `/plan/flagged.html`; change requests CR-6616-2..5 above; the history-rewrite decision (CR-5).
