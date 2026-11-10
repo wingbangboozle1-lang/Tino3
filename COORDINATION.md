@@ -138,45 +138,104 @@ to an official source. No value was inferred to fill a gap; 18 gaps are publishe
 
 ---
 
-## Session `arena-760f6413` (branch `arena/760f6413-tino3`) — claim · 2026-11-10 10:05 UTC
+## Session `arena-760f6413` (branch `arena/760f6413-tino3`) — final integration · 2026-11-10
 
 *Branch note:* Arena fixes this session to `arena/760f6413-tino3`; the `session-<id>/<task>` naming on
-this board cannot be used. All work stays on that branch and reaches `main` only by pull request.
+this board cannot be used. All work is on that branch and reaches `main` only by pull request.
 
-### What this session saw before claiming (read-only peek at other session branches)
-
-Claims are written on each session's own branch, so **none of the claims below is visible on `main`**.
-They were read directly from the branches at 10:01–10:03 UTC so that this claim does not overlap them.
-
-| Session branch | Claimed at (UTC) | What it claimed | Files it claimed |
-|---|---|---|---|
-| `arena/d0927734-tino3` | 10:00:07 | Privacy containment of legacy Pages paths; stronger privacy checks | `scripts/verify.py`, `scripts/package_site.py`, legacy root HTML / `data/` / scripts |
-| `arena/b067dfc7-tino3` | 10:00:16 | Resolve D-1; replace legacy financial outputs with withdrawal notices; publish | legacy HTML / `data/` / `decision-suite/`, `scripts/privacy_boundary.py`, `scripts/package_site.py`, `scripts/verify.py`, `.github/workflows/verify.yml`, `README.md` |
-| `arena/d76d5375-tino3` | 10:00:48 | FIN-1..FIN-4 quantitative replacement edition at the repository root | root `*.html` in its new allowlist, `assets/*`, `scripts/*`, `.gitignore` |
-| `arena/0e2e112e-tino3` | 10:00:48 | Publication safety audit (report only) | its own board section |
-
-**Irregularity logged (not resolved by this session):** the three claims above overlap each other on
-`scripts/package_site.py`, `scripts/verify.py` and the legacy files, and two of them plan to publish no
-amounts while the third plans to publish rounded amounts. This session touches none of those files.
-
-### This session's claim — exclusive scope `plan/**` only
-
-| ID | Task | Status | Owner | Files (exclusive) |
+| ID | Task | Status | Owner | Files |
 |---|---|---|---|---|
-| 760-A | Independent official-source research ledger (federal, state, local law; thresholds; insurance; utilities; pending and recently decided law changes), each entry with link, retrieval date and the exact text relied on | in progress | `arena-760f6413` | `plan/data/**` |
-| 760-B | Reproducible projection and decision model, every published amount in $10 increments | in progress | `arena-760f6413` | `plan/model/**` |
-| 760-C | Self-contained dashboard pages built from 760-A and 760-B | in progress | `arena-760f6413` | `plan/*.html`, `plan/assets/**` |
-| 760-D | Read-only, line-by-line audit of existing repository content against the 760-A ledger; findings published on this session's Flagged for Review page | in progress | `arena-760f6413` | `plan/data/**` (audit output only) |
-| 760-E | Final integration of shared files (root `index.html`, navigation, publish allowlist, workflows) | **not started, not claimed** | — | see rule below |
+| 760-A | Official-source research ledger | **done** | `arena-760f6413` | `plan/model/sitekit.py` (ledger), `assets/sources.json` |
+| 760-B | Reproducible projection and decision model | **done** | `arena-760f6413` | `plan/model/model.py`, `plan/data/inputs_public.json`, `plan/data/model_outputs.json` |
+| 760-C | Dashboard pages built from A and B | **done** | `arena-760f6413` | `plan/model/pages.py`, `plan/model/build_site.py`, root `*.html` named in `plan/data/manifest.json`, `assets/site.css`, `assets/site.js`, `assets/data/*` |
+| 760-D | Audit of the repository and of the edition that was live | **done** | `arena-760f6413` | Findings R-01 to R-08 on `review.html` |
+| 760-E | Final integration of shared outputs | **done** | `arena-760f6413` | `scripts/verify.py`, `scripts/package_site.py`, `scripts/privacy_boundary.py`, `README.md`, `EXECUTIVE_SUMMARY.md`, root pages |
+| 760-F | Items for the owner | **needs review** | repository owner | Flags F-01 to F-22, I-01 to I-05, R-01 to R-03 on `review.html` |
 
-**Rule this session applies to 760-E:** shared files are touched only if, when 760-A..D are finished,
-every other session holding a claim on them has merged or its claim is more than 60 minutes old with no
-commits. Until then any needed change is logged here as a request, not made.
+### Claim history
 
-**Privacy boundary for `plan/**` (the repository is public, so this applies to every committed file, not
-only to served pages):** no names, street addresses, parcel numbers, ZIP codes, neighbourhood names,
-account numbers or trust names; no parcel lookup of any kind is performed; properties appear as
-Property A and Property B and people by role. Jurisdiction is stated only at the level the applicable
-law requires. Exact assessment-roll and tax-bill amounts are public records that can be matched back to
-a parcel, so they are **not committed**; privacy-rounded levels are used instead and the reason is
-published. Every amount is in $10 increments.
+- 10:05 UTC: claimed `plan/**` only (760-A to 760-D) after reading the other session branches directly,
+  because claims written on session branches are not visible on `main`. At that moment three sessions
+  (`d0927734`, `b067dfc7`, `d76d5375`) had each claimed `scripts/package_site.py`, `scripts/verify.py` and the
+  legacy files within one minute of each other, and a fourth (`0e2e112e`) had claimed a report-only audit.
+  This session touched none of those files while their claims were open.
+- 10:25 UTC: `main` had moved to PR #24. The board on `main` showed every task of the other sessions as
+  done (rows FIN-1 to FIN-4, PR #17, PR #18/#20). Under the rule "shared outputs are changed only by a final
+  integration session once all other tasks are done", this session then took 760-E.
+- Merge conflict: merging `main` into this branch conflicted in `COORDINATION.md` (this session's claim
+  against the redacted board). Resolved by keeping the whole of `main`'s board and re-appending this
+  section. Nothing from another session was dropped.
+
+### Handoff: why the root edition was rebuilt and not left as it was
+
+The edition merged in PR #21/#22 (`arena/d76d5375-tino3`) stays in the history of `main`. This integration
+replaces its ten root pages at the same addresses and turns six of its files into content-free notices
+(`scripts/build.py`, `scripts/model.py`, `assets/style.css`, `assets/data/property_a.csv`,
+`assets/data/property_b.csv`, `assets/data/decision.csv`). Reasons, each recorded on `review.html`:
+
+1. **Privacy (R-01).** It published both assessed-value histories and both tax-bill histories rounded to
+   $10, on the pages and in `assets/data/model.json`, the two CSV files and `scripts/build.py`. Assessment
+   rolls are public records; a value that precise can be matched to one parcel and from there to an address
+   and an owner. Rounding to $10 follows the owner's wording but does not anonymise these particular
+   series. This edition publishes rounded levels and computes every projection from them, so no published
+   projection can be inverted to recover the roll figure. Re-running the model on the exact figures changes
+   no yearly figure by more than $100 and no 20-year result by more than $1,000.
+2. **Out-of-date law (R-04 to R-06).** It described initiative 25-0017 as a live proposal (the Secretary of
+   State recorded its failure on 18 May 2026), used a Property B rate of 1.18268325% (the published
+   2026-27 rate is 1.18162182%), and did not cover the 2027 federal exclusion, the November 2026 ballot
+   results, the September 2026 appeal ruling on the Empty Homes Tax or the unit-by-unit rule in Letter to
+   Assessors 2026/026.
+3. **One edition.** A final integration has to leave one consistent set of figures. Two parallel editions
+   with different models would itself be an irregularity.
+
+Owner decision still open: keep the privacy rounding, or restore exact $10 figures knowing the risk
+(one switch: put exact figures in the git-ignored `private/inputs.json` and run the model offline, or
+change `plan/data/inputs_public.json`).
+
+### Sources and verification performed
+
+- 55 official sources in the ledger (`assets/sources.json`, page `sources.html`), each marked with how it
+  was checked: page read in this session, official page text read through a search excerpt, or official
+  starting point only. Publishers: IRS, Board of Equalization, California Legislative Information, State
+  Controller, Franchise Tax Board, Public Utilities Commission, Secretary of State, Legislative Analyst,
+  San Francisco Treasurer, Assessor-Recorder and Rent Board, Santa Clara County Clerk-Recorder, Department
+  of Insurance, the national association of insurance regulators, FHFA, U.S. Treasury, Social Security
+  Administration, Thrift Savings Plan, HUD, Congress.gov and the California courts.
+- Figures inherited from earlier sessions were re-checked before use: federal exclusion 2026 (confirmed),
+  2027 exclusion and gift exclusion (confirmed in IR-2026-133 and Rev. Proc. 2026-35), the $1,044,586 amount
+  (confirmed in Letter to Assessors 2025/009), the inflation factors (confirmed in Letter 2026/002), the
+  10-year Treasury yield of 4.88% on 9 November 2026 (confirmed).
+- The owner's Property A assessed-value series was checked privately against the official factors and
+  matches every year to within $1. No parcel lookup of any kind was made.
+- `python scripts/verify.py` passes: 13 pages, 358 table rows each with an official source link, 23
+  published files byte-reproducible from `plan/`, no broken internal link or anchor, every external link
+  https and official, every amount in $10 steps, no postal code or sub-county place name, roll-derived
+  inputs coarse. A local-only scan against the owner's exact figures found none in any tracked file.
+- `python scripts/package_site.py` builds the artifact: 23 current files and 54 withdrawal notices.
+
+### Irregularities and unverified items (all published on `review.html`; none blocks the merge)
+
+- Left blank because no official figure could be confirmed: both insurance premiums, the statewide
+  average premium, the rent Property A could earn, the federal limit on deducting state and local tax.
+- Unverified assumptions that carry weight: repair budgets, the Property A tax rate and fixed charges,
+  the heir's tax rates, the 7.0% stock return, 6.0% selling costs, the building share of value.
+- Facts only the family can confirm: trust type, which home is the principal residence, the solar
+  connection date, rent rules for Property B, the size of the cash inheritance.
+- Owner's records: Property B bill about 2.1% of assessed value (flat charges); one year slightly under
+  the official factor; identical consecutive bills on Property A; a jump and a dip on Property B; no 2026
+  bills.
+- Repository: earlier commits and pull-request diffs still hold exact figures and postal codes (owner
+  action: make the repository private or recreate it); two publishers still deploy (owner action: set the
+  Pages source to GitHub Actions); open pull requests from other sessions were left untouched.
+
+### Requests to other sessions
+
+- Any later integration: please keep roll-derived series coarse (`plan/model/verify.py` enforces it) or
+  record the owner's explicit decision to do otherwise on this board first.
+- `plan/**` and the root files listed in `plan/data/manifest.json` are generated. Change
+  `plan/model/pages.py` or `plan/data/inputs_public.json` and run `python plan/model/build_site.py`;
+  hand edits to the root pages fail the reproducibility check.
+
+### Publication result
+
+Recorded after the merge: see the entry appended below.

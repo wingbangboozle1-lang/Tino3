@@ -1,71 +1,51 @@
-# Inheritance Atlas
+# Inherited property plan
 
-A privacy-first decision dashboard for a trust inheritance expected between 2040 and 2050: one residence to
-inherit, one three-unit building already held and partly rented, and enough inherited cash to matter for
-federal estate tax.
+Static site: https://wingbangboozle1-lang.github.io/Tino3/
 
-**Live site:** https://wingbangboozle1-lang.github.io/Tino3/
+A planning dashboard for one home expected to be inherited through a trust between 2040 and 2050,
+with a second rental property kept in view. Properties appear only as Property A and Property B.
 
-## What this repository publishes
+## Pages
 
-Ten static pages, one stylesheet, one source ledger and three CSV downloads — nothing else. The published
-artifact is an allowlist built by `scripts/package_site.py`; every path an earlier edition published is
-replaced by a content-free withdrawal notice, so a stale URL cannot return an old figure.
+`index.html` dashboard · `executive-summary.html` · `decision.html` live, rent or sell ·
+`projections.html` year by year · `property-a.html` · `property-b.html` · `insurance.html` ·
+`taxes.html` thresholds and headroom · `law-changes.html` · `inheritance.html` trust process ·
+`review.html` Flagged for Review · `sources.html` · `method.html` assumptions and privacy.
 
-| Page | Contents |
+## How it is built
+
+Everything published is generated from the `plan` folder.
+
+| Path | What it is |
 |---|---|
-| `index.html` | Dashboard, recommendation, decision snapshot |
-| `executive-summary.html` | The decision, five numbers, what would change it |
-| `property-a.html` | The residence to inherit: assessment history, carrying costs, 2026–2055 projection |
-| `property-b.html` | The rental: rent roll, operating statement, the unreconciled tax bill, projections |
-| `taxes.html` | Federal, California and local rules, verified; pending law changes |
-| `projections.html` | 30-year outlook and the full assumption register |
-| `decision.html` | Live vs rent vs sell/bonds, sensitivity matrix, break-even |
-| `inheritance.html` | Statutory timeline after the death, with deadlines |
-| `review.html` | 18 flagged items and the repository-history disclosure (R-13) |
-| `sources.html` | 18 official sources, what each one actually verifies |
+| `plan/data/inputs_public.json` | Model inputs. Roll-derived figures are privacy-rounded. |
+| `plan/model/model.py` | Projection and decision model. |
+| `plan/model/sitekit.py` | Official-source ledger, page shell, styles. |
+| `plan/model/pages.py` | Page content and the flag register. |
+| `plan/model/build_site.py` | Writes the root pages, `assets/`, `EXECUTIVE_SUMMARY.md` and `plan/data/manifest.json`. |
+| `plan/model/verify.py` | Source, link, rounding, privacy and reproducibility checks. |
+| `scripts/verify.py` | Entry point for both workflows. |
+| `scripts/package_site.py` | Builds `_site/` from the manifest plus withdrawal notices for retired paths. |
+| `scripts/privacy_boundary.py` | Fails if any tracked file is neither current nor a content-free notice. |
 
-## Privacy rules enforced in code
-
-- No names, street addresses, ZIP codes, parcel numbers, utility account numbers or unrounded assessment
-  figures in any published file. `scripts/verify.py` fails the build if a ZIP-code pattern, a city name, an
-  e-mail address, a street address or a non-$10 amount appears in a page or in the data files.
-- Properties appear only as `[PROPERTY_A]` and `[PROPERTY_B]`; jurisdictions are described generically, with
-  the official rate documents cited.
-- No forms, no scripts, no analytics, no remote assets. Nothing on the site accepts or stores input.
-
-## Verification standard
-
-Every rule on the site was retrieved from the publishing agency's own domain on 10 November 2026 and linked
-from the row that uses it. `assets/sources.json` records what each document verifies. Anything that could not
-be verified is left blank or published on the Flagged for Review page — never inferred.
-
-## Build
-
-```bash
-python3 scripts/model.py        # writes assets/data/model.json and the CSV downloads
-python3 scripts/build.py        # renders the ten pages
-python3 scripts/verify.py       # reproducible-build, citation, link, privacy and rounding checks
-python3 scripts/package_site.py # writes the _site artifact (allowlist + withdrawal notices)
+```
+python plan/model/build_site.py   # rebuild every published file
+python scripts/verify.py          # all checks
+python scripts/package_site.py    # build the Pages artifact
 ```
 
-`verify.py` re-runs the model and the renderer and fails if any published byte changes, so a stale committed
-page cannot survive CI. It also fails on any table row that cites neither an official source nor the internal
-assumption register.
+## Rules
 
-## Data
+- Every table row links to an official source. A value that could not be confirmed is left blank and
+  listed on Flagged for Review.
+- Every amount is a multiple of $10.
+- No names, addresses, parcel numbers, postal codes or neighbourhoods. Assessed values and tax bills are
+  public records that can identify a parcel even when rounded to $10, so they are shown as rounded levels.
+- To run the model on exact figures, put them in `private/inputs.json` (git-ignored) and run
+  `python plan/model/model.py --inputs private/inputs.json --out private/model_outputs.json`.
+- Root pages are generated. Edit `plan/`, rebuild, and read `COORDINATION.md` before starting.
 
-`assets/sources.json` — source ledger (18 entries).
-`assets/data/model.json` — every figure on the site.
-`assets/data/property_a.csv`, `property_b.csv`, `decision.csv` — the same numbers for offline work.
+Known limits: earlier commits of this public repository still contain exact figures, and GitHub's
+branch build and the Actions workflow both publish the site. Both need the repository owner.
 
-## Limits
-
-This is a planning model, not an appraisal, a title report, a tax return or legal advice. Insurance premiums,
-future market values, future statutory thresholds and county parcel facts are not verifiable from public
-sources today and are flagged as unverified.
-
-## Coordination
-
-`COORDINATION.md` is the shared task board for parallel sessions, including the handoff log, the privacy
-remediation record and the deployment result.
+General information for planning, not legal, tax or investment advice.
