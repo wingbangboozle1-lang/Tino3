@@ -161,6 +161,7 @@ P["index.html"] = (head("Overview", "index.html") + hero(
 <article class="card"><h3><a href="taxes.html">Tax &amp; law</a></h3><p>Federal estate, California death taxes, Proposition 13 and 19, capital gains, pending changes.</p></article>
 <article class="card"><h3><a href="inheritance.html">Inheritance steps</a></h3><p>Day-by-day obligations, statutory deadlines and the filings that protect the assessment.</p></article>
 <article class="card"><h3><a href="review.html">Flagged for review</a></h3><p>Every unverified value, every assumption, and one disclosure about earlier repository history.</p></article>
+<article class="card"><h3><a href="plan/index.html">Independent cross-check</a></h3><p>A second model built only from official figures and break-evens, with a line-by-line reconciliation against this edition.</p></article>
 </div></section>""" + FOOT)
 
 # ---------------------------------------------------------------- executive summary
