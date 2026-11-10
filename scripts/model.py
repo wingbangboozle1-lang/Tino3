@@ -1,425 +1,387 @@
 #!/usr/bin/env python3
-"""Deterministic planning model for the inheritance decision.
+"""Planning model for the inherited-home decision (second, independently verified edition).
 
-Rules enforced here:
-  * Every dollar amount that leaves this script is rounded to the nearest $10.
-  * Owner-supplied figures are labelled "owner-provided" and "unverified"; they are inputs, not facts.
-  * Every scenario assumption is explicit and carries a stable id so the site can display it.
-  * No names, addresses, ZIP codes, parcel numbers or unrounded roll figures exist in this file.
-Output: assets/data/model.json  (consumed by scripts/build.py)
+What this file guarantees
+  * Every dollar figure written out is rounded to the nearest $10.
+  * No name, address, ZIP code, parcel number or city name appears here.
+  * Assessment-roll values and tax bills are public records that can be matched back to a parcel,
+    so they enter this public model GENERALISED: assessed values to the nearest $10,000 and tax
+    bills to the nearest $100. Nothing below can be matched to a roll entry.
+  * Every assumption has an id, a value, a reason and an official reference (see ASSUMPTIONS).
+
+Output: assets/data/model.json and three CSV files, consumed by scripts/build.py.
 """
 from __future__ import annotations
+import csv
 import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "assets" / "data" / "model.json"
+OUT = ROOT / "assets" / "data"
 
 
 def r10(x: float) -> int:
-    """Nearest $10."""
     return int(round(float(x) / 10.0) * 10)
 
 
-# ----------------------------------------------------------------------------
-# ASSUMPTIONS (each one is displayed on the site with its basis and a source id
-# where a source exists; scenario assumptions carry no source because they are
-# not law or verified data).
-# ----------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------
+# Owner-supplied inputs (not independently verified). Roll-derived values are generalised.
+# ---------------------------------------------------------------------------------------------
+IN = {
+    "a_value": 3_100_000,     # owner estimate, November 2026
+    "a_av_2026": 550_000,     # assessed value, generalised to the nearest $10,000
+    "a_av_2025": 540_000,
+    "a_bill_2025": 7_200,     # tax bill, generalised to the nearest $100
+    "a_water": 1_500,         # $100-$150 a month; midpoint
+    "a_electric": -180,       # solar: owner reports a $10-$20 monthly credit; midpoint
+    "a_ins_guess": 1_500,     # owner's guess, no quote
+    "b_value": 1_800_000,     # owner estimate, November 2026
+    "b_av_2025": 110_000,     # assessed value, generalised to the nearest $10,000
+    "b_bill_2025": 2_400,     # tax bill, generalised to the nearest $100
+    "b_rent_mo": 7_150,       # two rented units, combined
+    "b_water": 4_380,         # $330-$400 a month for the building; midpoint
+    "b_electric": 600,        # $30-$70 a month; midpoint
+    "b_ins_guess": 1_500,     # owner's guess, no quote
+}
+
+# ---------------------------------------------------------------------------------------------
+# Verified figures (source ids refer to assets/sources.json)
+# ---------------------------------------------------------------------------------------------
+V = {
+    "fed_excl_2026": 15_000_000,      # irs_estate
+    "fed_excl_2027": 15_480_000,      # irs_2027
+    "prop19_amount": 1_044_586,       # boe_lta25009 (shown rounded to $10)
+    "prop13_cap": 0.02,               # boe_lta26002
+    "rate_b_2026": 0.0118162182,      # cityb_rate   (fiscal year 2026-27)
+    "rate_b_2025": 0.0118268325,      # cityb_res447 (fiscal year 2025-26)
+    "rate_a_low": 0.011258, "rate_a_high": 0.012409,   # cnty_a_rates (range across tax rate areas)
+    "county_transfer_tax": 0.0011,    # rtc11911
+    "treasury_10y": 0.0488,           # treasury_cmt, 9 Nov 2026
+    "rent_cap_share_of_cpi": 0.60,    # cityb_rent
+    "depreciation_years": 27.5,       # irs_p527
+    "fed_gain": 0.20, "fed_recapture": 0.25, "niit": 0.038, "ca_top": 0.123,  # irs_tc409, irs_tc559, ftb_rates
+    "home_sale_exclusion_joint": 500_000, "home_sale_exclusion_single": 250_000,  # irs_tc701
+}
+
+# ---------------------------------------------------------------------------------------------
+# Assumptions (scenario inputs, not facts). Each is shown on the site with its reason.
+# ---------------------------------------------------------------------------------------------
 A = {
-    "appreciation": {"low": 0.03, "base": 0.04, "high": 0.05, "basis": "Scenario assumptions, not forecasts."},
-    "cpi": 0.025,
-    "prop13_growth": 0.02,
-    "prop19_cap_growth": 0.030,
-    "fed_exclusion_2026": 15_000_000,
-    "fed_exclusion_indexing": 0.025,
-    "equity_return": 0.070,
-    "bond_return": 0.040,
-    "cash_return": 0.030,
-    "rent_growth": 0.025,
-    "rent_yield_a": 0.030,
-    "vacancy": 0.03,
-    "income_tax": 0.333,
-    "gain_tax": 0.323,
-    "niit": 0.038,
-    "sell_cost": 0.0511,
-    "maint_rate_a": 0.0050,
-    "maint_rate_b": 0.0100,
-    "horizon_end": 2055,
-    "inherit_years": [2040, 2045, 2050],
+    "g": 0.04, "g_low": 0.03, "g_high": 0.05,
+    "inflation": 0.025,
+    "rate_a": 0.0118,
+    "stock_return": 0.07, "stock_dividend": 0.015,
+    "rent_a_mo": 6_500, "rent_growth": 0.03,
+    "vacancy": 0.05,
+    "unit3_rent_mo": 3_580,
+    "building_share_a": 0.30, "building_share_b": 0.40,
+    "maint_a": 9_300, "maint_b": 10_800,
+    "sale_cost": 0.05,
+    "t_ord": 0.333, "t_div": 0.281, "t_treasury": 0.278,
+    "fed_excl_index": 0.025,
+    "hold_years": 10,
+    "years": [2040, 2045, 2050],
 }
+T_GAIN = V["fed_gain"] + V["niit"] + V["ca_top"]            # 36.1%
+T_RECAP = V["fed_recapture"] + V["niit"] + V["ca_top"]      # 41.1%
+SELL_COST = A["sale_cost"] + V["county_transfer_tax"]       # 5.11%
+RENT_CTRL = V["rent_cap_share_of_cpi"] * A["inflation"]      # 1.5%
 
-# Owner-provided, already rounded, treated as unverified planning inputs.
-INPUTS = {
-    "a_value_2026": 3_100_000,
-    "a_fbyv_2026": 550_540,
-    "a_tax_2025": 7_210,
-    "a_assessed_2025": 539_740,
-    "a_water_yr": 1_560,          # $130/mo midpoint of the stated $100-$150 range
-    "a_electric_yr": -180,        # net solar credit, stated $10-$20/month profit
-    "a_insurance_owner_est": 1_500,
-    "a_insurance_scenario": 3_000,  # flagged: no verified quote; own scenario band
-    "b_value_2026": 1_800_000,
-    "b_assessed_2025": 114_250,
-    "b_tax_2025": 2_439,
-    "b_rent_mo": 7_150,
-    "b_water_yr": 4_380,          # $365/mo midpoint of the stated $330-$400 range
-    "b_electric_yr": 600,         # $50/mo midpoint of the stated $30-$70 range
-    "b_insurance_owner_est": 1_500,
-    "b_insurance_scenario": 3_600,
-}
+# Fixed charges on each bill = bill minus (rate x assessed value); they do not scale with value.
+FIXED_A = r10(IN["a_bill_2025"] - A["rate_a"] * IN["a_av_2025"])          # about $830
+FIXED_B = r10(IN["b_bill_2025"] - V["rate_b_2025"] * IN["b_av_2025"])     # about $1,100
 
-# Verified rates
-RATE_B = 0.0118268325          # SF FY2025-26 combined rate per $100 (src sf_rate)
-PROP19_CAP_2025 = 1_044_586    # src boe_cap
+ASSUMPTIONS = [
+    ("g", "House price growth, both properties", "3% / 4% / 5% a year", "Scenario band. The official index for each area rose 5.3% to 5.7% a year since 1995 but was flat to slightly down over the last four quarters, so the base case sits below the long-run rate.", ["fred_hpi_a", "fred_hpi_b"]),
+    ("inflation", "General inflation, used for costs", "2.5% a year", "Scenario. The 2% assessment cap has been binding in every year since 2022 because the California CPI ran above 2%.", ["boe_lta26002"]),
+    ("rate_a", "Ad valorem tax rate, Property A", "1.18%", "The owner's bill does not show the tax rate area, so the rate cannot be read off the county table. 1.18% sits inside the verified county range of 1.126% to 1.241%.", ["cnty_a_rates"]),
+    ("fixed", "Fixed charges on each tax bill", "about $830 (A) and $1,100 (B) a year, rising with inflation", "The part of each bill that the percentage rate does not explain. Fixed charges do not grow when the assessed value is reset.", ["cnty_a_rates", "cityb_rate"]),
+    ("cap_growth", "Growth of the Proposition 19 amount", "one year of house price growth, every second year", "Follows the adjustment rule as written: one year's index change, applied every other February.", ["boe_lta25009"]),
+    ("stock_return", "Stock index fund, total return", "7.0% a year, of which 1.5% is dividends", "Scenario, not a forecast. One recent official 12-month figure for an S&P 500 index fund is 12.09%; a long-run official average could not be read in this session.", ["tsp_returns"]),
+    ("treasury", "Treasury alternative", "4.88% a year", "The 10-year Treasury par yield on 9 November 2026, held constant.", ["treasury_cmt"]),
+    ("rent_a", "Market rent, Property A", "$6,500 a month in 2026, rising 3% a year", "Scenario. No official rent figure for this home could be verified; see Flagged for Review. The break-even rent is reported so the conclusion does not rest on this number.", ["hud_fmr"]),
+    ("vacancy", "Vacancy and turnover allowance", "5% of rent", "Scenario.", ["irs_p527"]),
+    ("unit3", "Rent for the third unit of Property B when the family moves out", "$3,580 a month in 2026", "Set equal to the average of the two rented units. A new tenancy may start at any rent, then rises with the capped increase.", ["cityb_rent"]),
+    ("rent_ctrl", "Rent growth for sitting tenants in Property B", "1.5% a year", "60% of the assumed 2.5% inflation, which is the published formula. The current allowed increase is 1.6%.", ["cityb_rent"]),
+    ("building", "Share of value that is building, not land", "30% (A) and 40% (B)", "Scenario. Only the building is depreciated. The assessor's land and improvement split was not supplied.", ["irs_p527"]),
+    ("maint", "Maintenance and repairs", "$9,300 a year (A) and $10,800 a year (B) in 2026, rising with inflation", "Scenario: 1.0% of building value for A and 1.5% for B. The owner states that A costs less to maintain than B.", ["irs_p527"]),
+    ("sale_cost", "Cost of selling Property A", "5.11% of the price", "5.0% scenario allowance for agents, escrow, title and preparation, plus the verified 0.11% county transfer tax.", ["rtc11911", "cnty_a_recorder"]),
+    ("t_ord", "Tax on rental income and on rental losses used", "33.3%", "Scenario household: 24% federal plus 9.3% California. Losses are assumed usable against Property B's rental income.", ["irs_p925", "ftb_rates"]),
+    ("t_gain", "Tax on a large one-time gain", "36.1%", "20% federal, 3.8% net investment income tax and 12.3% California. Depreciation taken is taxed at 41.1%.", ["irs_tc409", "irs_tc559", "ftb_cg"]),
+    ("t_div", "Tax on dividends and on Treasury interest", "28.1% and 27.8%", "15% + 3.8% + 9.3% on dividends. Treasury interest is assumed free of state tax: that exemption was not re-verified here.", ["irs_tc409", "irs_tc559"]),
+    ("home_excl", "Home-sale exclusion if the family lives in A", "$500,000", "Joint return. It is $250,000 on a single return.", ["irs_tc701"]),
+    ("fed_excl_index", "Federal estate exclusion after 2027", "2.5% a year", "Scenario. The amount is indexed by law; the future index is unknown.", ["irs_rp2532", "irs_2027"]),
+    ("hold_years", "Comparison period", "10 years after the inheritance", "Every option is cashed out at the end and all taxes are paid, so the options are compared on the same footing.", ["irs_basis"]),
+]
 
-RATE_A = INPUTS["a_tax_2025"] / INPUTS["a_assessed_2025"]   # derived effective rate
 
-
-def money(x) -> str:
-    return f"${r10(x):,}"
+# ---------------------------------------------------------------------------------------------
+# Building blocks
+# ---------------------------------------------------------------------------------------------
+def infl(year, base=2026):
+    return (1 + A["inflation"]) ** (year - base)
 
 
 def a_value(year, g):
-    return INPUTS["a_value_2026"] * (1 + g) ** (year - 2026)
+    return IN["a_value"] * (1 + g) ** (year - 2026)
 
 
 def b_value(year, g):
-    return INPUTS["b_value_2026"] * (1 + g) ** (year - 2026)
+    return IN["b_value"] * (1 + g) ** (year - 2026)
 
 
-def a_fbyv(year):
-    return INPUTS["a_fbyv_2026"] * (1 + A["prop13_growth"]) ** (year - 2026)
+def a_base(year):
+    """Property A's assessed value if nothing changes: +2% a year."""
+    return IN["a_av_2026"] * (1 + V["prop13_cap"]) ** (year - 2026)
 
 
-def b_assessed(year):
-    # 2026 = 2025 roll value elevated by the 2% cap, then 2%/yr
-    return r10(INPUTS["b_assessed_2025"] * (1 + A["prop13_growth"]) ** (year - 2025))
+def b_base(year):
+    return IN["b_av_2025"] * (1 + V["prop13_cap"]) ** (year - 2025)
 
 
-def prop19_cap(year):
-    return PROP19_CAP_2025 * (1 + A["prop19_cap_growth"]) ** (year - 2025)
+def prop19_amount(year, g):
+    """One year's house price change, applied every second February from 2027."""
+    n = 0 if year < 2027 else (year - 2027) // 2 + 1
+    return V["prop19_amount"] * (1 + g) ** n
 
 
-def tax_a_owned(year):
-    """Property A tax if the family keeps holding it (no death, no reassessment)."""
-    assessed = r10(INPUTS["a_fbyv_2026"] * (1 + A["prop13_growth"]) ** (year - 2026))
-    return assessed, r10(assessed * RATE_A)
+def tax_a(assessed, year):
+    return assessed * A["rate_a"] + FIXED_A * infl(year)
 
 
-def b_operating(year, g, owner_occupies_one_unit=True):
-    n = year - 2026
-    gross = INPUTS["b_rent_mo"] * 12 * (1 + A["rent_growth"]) ** n
-    if not owner_occupies_one_unit:
-        gross += (INPUTS["b_rent_mo"] / 2) * 12 * (1 + A["rent_growth"]) ** n
-    vac = gross * A["vacancy"]
-    water = INPUTS["b_water_yr"] * (1 + A["cpi"]) ** n
-    elec = INPUTS["b_electric_yr"] * (1 + A["cpi"]) ** n
-    ins = INPUTS["b_insurance_scenario"] * (1 + A["cpi"]) ** n
-    maint = b_value(year, g) * A["maint_rate_b"]
-    assessed = b_assessed(year)
-    tax = assessed * RATE_B
-    NOI = gross - vac - water - elec - ins - maint - tax
-    after_tax = NOI - max(0.0, NOI) * A["income_tax"]
-    return {
-        "gross": r10(gross), "vacancy": r10(vac), "water": r10(water), "electric": r10(elec),
-        "insurance": r10(ins), "maintenance": r10(maint), "tax": r10(tax), "assessed": assessed,
-        "noi": r10(NOI), "after_tax": r10(after_tax),
-    }
+def tax_b(assessed, year):
+    return assessed * V["rate_b_2026"] + FIXED_B * infl(year, 2025)
 
 
-def a_carrying(year, g, occupied):
-    n = year - 2026
-    ins = (INPUTS["a_insurance_scenario"] if not occupied else INPUTS["a_insurance_owner_est"]) * (1 + A["cpi"]) ** n
-    water = INPUTS["a_water_yr"] * (1 + A["cpi"]) ** n
-    elec = INPUTS["a_electric_yr"] * (1 + A["cpi"]) ** n
-    maint = a_value(year, g) * A["maint_rate_a"]
-    return {"insurance": r10(ins), "water": r10(water), "electric": r10(elec), "maintenance": r10(maint)}
+def stock_after_tax(p0, n, rs=None):
+    rs = A["stock_return"] if rs is None else rs
+    p = basis = p0
+    for _ in range(n):
+        div = p * A["stock_dividend"]
+        tax = div * A["t_div"]
+        p = p * (1 + rs) - tax
+        basis += div - tax
+    return p - max(0.0, p - basis) * T_GAIN
 
 
-def a_rental(year, g):
-    n = year - 2026
-    gross = a_value(year, g) * A["rent_yield_a"]
-    vac = gross * A["vacancy"]
-    c = a_carrying(year, g, occupied=False)
-    return {"gross": r10(gross), "vacancy": r10(vac), **c}
+def treasury_after_tax(p0, n):
+    return p0 * (1 + V["treasury_10y"] * (1 - A["t_treasury"])) ** n
 
 
-def inherit_taxes(year, g, law="prop19"):
-    """Property tax in the first inheritance year under each option."""
-    fmv = a_value(year, g)
-    fbyv = r10(a_fbyv(year))
-    cap = r10(prop19_cap(year))
-    if law == "prop19":
-        blended = fbyv + max(0.0, fmv - fbyv - cap)
-        live = r10(blended)
-    else:  # proposal 25-0017 / pre-Prop 19 style full exclusion: base year value retained
-        live = fbyv
-    rented = r10(fmv)
-    return {
-        "fmv": r10(fmv), "fbyv": fbyv, "cap": cap,
-        "assessed_live": live, "assessed_rent": rented,
-        "tax_live": r10(live * RATE_A), "tax_rent": r10(rented * RATE_A),
-        "tax_exclusion_full": r10(fbyv * RATE_A),
-    }
+def reassess(year, g, law="current"):
+    """Assessed value of Property A in the year of inheritance under each use."""
+    fmv, base, amt = a_value(year, g), a_base(year), prop19_amount(year, g)
+    live = base + max(0.0, fmv - base - amt) if law == "current" else base
+    rent = fmv if law == "current" else base
+    return {"fmv": fmv, "base": base, "amount": amt, "live": live, "rent": rent}
 
 
-def terminal_tax_on_gain(final, basis):
-    return max(0.0, final - basis) * A["gain_tax"]
-
-
-def run_strategy(strategy, Y, g, reinvest=None, law="prop19"):
-    """Return year-1 cash flow, cumulative after-tax cash, terminal net worth at 2055."""
-    end = A["horizon_end"]
-    tx = inherit_taxes(Y, g, law)
-    cash = 0.0
-    cash_bucket = 0.0
-    portfolio = 0.0
-    basis = 0.0
-    yr1 = None
-
-    if strategy in ("S1", "S2"):
-        if strategy == "S1":
-            a_assessed = tx["assessed_live"]
+def run(option, year, g, law="current", rs=None, rent_mo=None, ins_mult=1.0, n=None):
+    """Wealth from Property A and the third unit of Property B, n years after inheriting."""
+    n = n or A["hold_years"]
+    rs = A["stock_return"] if rs is None else rs
+    rent_mo = A["rent_a_mo"] if rent_mo is None else rent_mo
+    rz = reassess(year, g, law)
+    fmv = rz["fmv"]
+    start = fmv * (1 - SELL_COST)
+    stock_end = stock_after_tax(start, n, rs)
+    r_eq = (stock_end / start) ** (1 / n) - 1          # after-tax return used for all cash flows
+    flows = []
+    if option == "sell_stock":
+        return {"wealth": stock_end, "first_cash": 0.0, "cash_total": 0.0, "asset": stock_end, "tax_first": 0.0, "r_eq": r_eq}
+    if option == "sell_treasury":
+        w = treasury_after_tax(start, n)
+        return {"wealth": w, "first_cash": 0.0, "cash_total": 0.0, "asset": w, "tax_first": 0.0, "r_eq": r_eq}
+    dep = A["building_share_a"] * fmv / V["depreciation_years"]
+    tax_first = rent_first = 0.0
+    for t in range(n):
+        y = year + t
+        ins = IN["a_ins_guess"] * ins_mult * infl(y)
+        maint = A["maint_a"] * infl(y)
+        if option == "live":
+            ptax = tax_a(rz["live"] * (1 + V["prop13_cap"]) ** t, y)
+            unit3 = (A["unit3_rent_mo"] * 12 * (1 + A["rent_growth"]) ** (year - 2026)
+                     * (1 + RENT_CTRL) ** t * (1 - A["vacancy"]) * (1 - A["t_ord"]))
+            cf = unit3 - (ptax + ins + maint + IN["a_water"] * infl(y) + IN["a_electric"])
         else:
-            # Under the pending full-exclusion proposal, a rental transfer would keep the base year value.
-            a_assessed = tx["assessed_live"] if law == "proposal" else tx["assessed_rent"]
+            ptax = tax_a(rz["rent"] * (1 + V["prop13_cap"]) ** t, y)
+            rent = rent_mo * 12 * (1 + A["rent_growth"]) ** (y - 2026) * (1 - A["vacancy"])
+            noi = rent - ptax - ins - maint
+            cf = noi - A["t_ord"] * (noi - dep)
+            if t == 0:
+                rent_first = rent
+        if t == 0:
+            tax_first = ptax
+        flows.append(cf)
+    fv = sum(cf * (1 + r_eq) ** (n - 1 - t) for t, cf in enumerate(flows))
+    net_sale = fmv * (1 + g) ** n * (1 - SELL_COST)
+    if option == "live":
+        gain_tax = T_GAIN * max(0.0, net_sale - fmv - V["home_sale_exclusion_joint"])
     else:
-        proceeds = tx["fmv"] * (1 - A["sell_cost"])
-        portfolio = proceeds
-        basis = proceeds
-
-    def grow_bucket(b, rate):
-        return b * (1 + rate)
-
-    for year in range(Y, end + 1):
-        n = year - Y
-        b_op = b_operating(year, g, owner_occupies_one_unit=(strategy != "S1"))
-        cf = b_op["after_tax"]
-        if strategy == "S1":
-            c = a_carrying(year, g, occupied=True)
-            a_assessed_year = r10(a_assessed * (1 + A["prop13_growth"]) ** n)
-            tax = a_assessed_year * RATE_A
-            cf += -(c["insurance"] + c["water"] + c["electric"] + c["maintenance"] + tax)
-        elif strategy == "S2":
-            r = a_rental(year, g)
-            a_assessed_year = r10(a_assessed * (1 + A["prop13_growth"]) ** n)
-            tax = a_assessed_year * RATE_A
-            noi = r["gross"] - r["vacancy"] - r["insurance"] - r["water"] - r["electric"] - r["maintenance"] - tax
-            cf += noi - max(0.0, noi) * A["income_tax"]
-        else:  # S3A / S3B
-            if reinvest == "bond":
-                interest = portfolio * A["bond_return"]
-                portfolio += interest - interest * A["income_tax"]
-            else:
-                portfolio *= (1 + A["equity_return"])
-        if yr1 is None:
-            yr1 = r10(cf)
-        cash += cf
-        cash_bucket = grow_bucket(cash_bucket, A["cash_return"]) + cf
-
-    net = b_value(end, g) + cash_bucket
-    if strategy in ("S1", "S2"):
-        net += a_value(end, g)
-    else:
-        net += portfolio - terminal_tax_on_gain(portfolio, basis)
-    return {"yr1_cash": yr1, "cum_cash": r10(cash), "terminal_net_worth": r10(net), "tax_first_year": tx["tax_live"] if strategy == "S1" else tx["tax_rent"] if strategy == "S2" else 0}
+        d = dep * n
+        gain_tax = T_RECAP * d + T_GAIN * max(0.0, net_sale - fmv)
+    asset = net_sale - gain_tax
+    return {"wealth": asset + fv, "first_cash": flows[0], "cash_total": sum(flows), "asset": asset,
+            "tax_first": tax_first, "r_eq": r_eq, "rent_first": rent_first}
 
 
-def breakeven_return(Y, g, target):
-    """Reinvest return that makes S3A terminal net worth equal to `target`."""
-    lo, hi = 0.0, 0.25
-    for _ in range(80):
+def bisect(f, lo, hi):
+    for _ in range(70):
         mid = (lo + hi) / 2
-        A["equity_return"] = mid
-        v = run_strategy("S3A", Y, g)["terminal_net_worth"]
-        if v < target:
+        if f(mid) < 0:
             lo = mid
         else:
             hi = mid
-    A["equity_return"] = 0.070
-    return mid
+    return (lo + hi) / 2
+
+
+OPTIONS = [("sell_stock", "Sell A, buy a stock index fund"), ("sell_treasury", "Sell A, buy Treasuries"),
+           ("rent", "Keep A and rent it out"), ("live", "Move into A")]
 
 
 def build():
-    g = A["appreciation"]["base"]
-    data = {"assumptions": [], "history_a": [], "history_b": [], "projections_a": [], "projections_b": [],
-            "carrying": [], "inheritance": [], "decision": [], "estate": [], "sensitivity": [], "sources_rates": {}}
+    g = A["g"]
+    n = A["hold_years"]
+    d = {"inputs": {k: v for k, v in IN.items()}, "verified": {}, "fixed": {"a": FIXED_A, "b": FIXED_B},
+         "rates": {"t_gain": T_GAIN, "t_recap": T_RECAP, "sell_cost": SELL_COST, "rent_ctrl": RENT_CTRL},
+         "assumptions": [{"id": i, "item": a, "value": b, "reason": c, "src": s} for i, a, b, c, s in ASSUMPTIONS]}
+    d["verified"] = {"prop19_amount": r10(V["prop19_amount"]), "fed_excl_2026": V["fed_excl_2026"],
+                     "fed_excl_2027": V["fed_excl_2027"], "rate_b_2026": V["rate_b_2026"], "rate_b_2025": V["rate_b_2025"],
+                     "rate_a_low": V["rate_a_low"], "rate_a_high": V["rate_a_high"], "treasury_10y": V["treasury_10y"]}
 
-    RATE_INFO = {
-        "rate_a_derived": round(RATE_A * 100, 3),
-        "rate_a_source": "derived: owner-provided 2025 bill divided by owner-provided 2025 assessed value",
-        "rate_b": round(RATE_B * 100, 5),
-        "rate_b_source": "sf_rate",
-        "prop19_cap_2025": r10(PROP19_CAP_2025),
-    }
-    data["sources_rates"] = RATE_INFO
+    # Year-by-year, nothing changes (no death, no sale): 2026-2060
+    d["proj_a"], d["proj_b"] = [], []
+    for y in range(2026, 2061):
+        av = a_base(y)
+        row = {"year": y, "value_low": r10(a_value(y, 0.03)), "value_base": r10(a_value(y, 0.04)),
+               "value_high": r10(a_value(y, 0.05)), "assessed": r10(av), "property_tax": r10(tax_a(av, y)),
+               "insurance": r10(IN["a_ins_guess"] * infl(y)), "water": r10(IN["a_water"] * infl(y)),
+               "electricity": IN["a_electric"], "maintenance": r10(A["maint_a"] * infl(y))}
+        row["total_cost"] = row["property_tax"] + row["insurance"] + row["water"] + row["electricity"] + row["maintenance"]
+        d["proj_a"].append(row)
+        bv = b_base(y)
+        rent = IN["b_rent_mo"] * 12 * (1 + RENT_CTRL) ** (y - 2026)
+        rb = {"year": y, "value_low": r10(b_value(y, 0.03)), "value_base": r10(b_value(y, 0.04)),
+              "value_high": r10(b_value(y, 0.05)), "assessed": r10(bv), "property_tax": r10(tax_b(bv, y)),
+              "rent": r10(rent), "vacancy": r10(rent * A["vacancy"]), "insurance": r10(IN["b_ins_guess"] * infl(y)),
+              "water": r10(IN["b_water"] * infl(y)), "electricity": r10(IN["b_electric"] * infl(y)),
+              "maintenance": r10(A["maint_b"] * infl(y))}
+        rb["net_income"] = (rb["rent"] - rb["vacancy"] - rb["property_tax"] - rb["insurance"] - rb["water"]
+                            - rb["electricity"] - rb["maintenance"])
+        d["proj_b"].append(rb)
 
-    # Assumption register
-    for key, label, value, basis in [
-        ("appreciation", "Property appreciation (nominal, per year)", "3.0% / 4.0% / 5.0%", "Scenario band; the base case is 4.0%. Not a forecast."),
-        ("cpi", "General inflation / cost growth", "2.5%", "Scenario assumption used for insurance, water, utilities and rent growth."),
-        ("prop13_growth", "Assessed-value growth while owned (RTC 51)", "2.0%", "Statutory 2% cap applies while California CPI exceeds 2%."),
-        ("prop19_cap_growth", "Proposition 19 exclusion cap growth", "3.0%", "The real cap is recalculated every two years from the FHFA House Price Index for California; the growth rate is a scenario assumption."),
-        ("fed_exclusion_2026", "Federal estate exclusion, 2026", "$15,000,000", "Statutory amount for deaths in 2026."),
-        ("fed_exclusion_indexing", "Federal exclusion indexing after 2026", "2.5%", "Scenario assumption; the 2027 published amount was not retrievable from an official page in this review."),
-        ("equity_return", "Diversified equity return (nominal)", "7.0%", "Scenario assumption for the sell-and-reinvest comparison."),
-        ("bond_return", "Bond / Treasury return (nominal)", "4.0%", "Scenario assumption; current market yields were not re-verified in this review."),
-        ("cash_return", "Return on accumulated cash", "3.0%", "Scenario assumption for reinvested cash flow."),
-        ("rent_growth", "Rent growth (nominal)", "2.5%", "Scenario assumption. The local rent-stabilisation cap on annual increases was not re-verified."),
-        ("rent_yield_a", "Gross rent yield on Property A", "3.0% of market value per year", "Scenario assumption used because no verified market rent exists for a future year."),
-        ("vacancy", "Vacancy and collection allowance", "3.0% of gross rent", "Scenario assumption."),
-        ("income_tax", "Marginal tax rate on rental income", "33.3%", "Scenario: 24% federal plus 9.3% California. Depreciation is ignored, which overstates tax."),
-        ("gain_tax", "Tax rate on realised long-term gain", "32.3%", "20% federal (IRS Topic 409) plus 12.3% California top bracket (FTB). A 3.8% net investment income tax may add to this."),
-        ("sell_cost", "Selling cost on Property A", "5.11%", "Scenario: 5.0% commission and escrow plus 0.11% base documentary transfer tax. City-level transfer taxes not verified."),
-        ("maint_rate_a", "Maintenance on Property A", "0.50% of value", "Scenario assumption."),
-        ("maint_rate_b", "Maintenance on Property B", "1.00% of value", "Scenario assumption; an older multi-unit building."),
-        ("horizon_end", "Comparison horizon", "2055", "Ten years after the latest modelled inheritance year."),
-        ("inherit_years", "Modelled inheritance years", "2040 / 2045 / 2050", "Owner's stated planning window, with the midpoint treated as the base case."),
-    ]:
-        data["assumptions"].append({"id": key, "item": label, "value": value, "basis": basis})
-
-    # Historic assessment schedules (owner-provided, rounded to $10, unverified)
-    hist_a = [(2014, 5_970, 440_310), (2015, 6_130, 449_100), (2016, 6_410, 455_950),
-              (2017, 6_380, 465_070), (2018, 6_380, 474_370), (2019, 6_570, 483_850),
-              (2020, 6_570, 493_530), (2021, 6_660, 498_640), (2022, 6_760, 508_610),
-              (2023, 6_920, 518_790), (2024, 7_000, 529_160), (2025, 7_210, 539_740),
-              (2026, None, 550_540)]
-    for year, tax, av in hist_a:
-        data["history_a"].append({"year": year, "tax": tax, "assessed": av,
-                                  "status": "2026 bill not provided" if tax is None else "Owner-provided, unverified"})
-    hist_b = [(2016, 1_680, 96_560), (2017, 1_740, 98_490), (2018, 2_060, 100_460),
-              (2019, 2_130, 102_470), (2020, 2_200, 104_510), (2021, 2_070, 105_600),
-              (2022, 2_110, 107_660), (2023, 2_180, 109_810), (2024, 2_320, 112_010),
-              (2025, 2_440, 114_250)]
-    for year, tax, av in hist_b:
-        data["history_b"].append({"year": year, "tax": tax, "assessed": av,
-                                  "status": "Owner-provided, unverified"})
-
-    # Year-by-year projections
-    for year in range(2026, A["horizon_end"] + 1):
-        assessed, tax = tax_a_owned(year)
-        c = a_carrying(year, g, occupied=True)
-        total = tax + c["insurance"] + c["water"] + c["electric"] + c["maintenance"]
-        data["projections_a"].append({
-            "year": year,
-            "fmv_low": r10(a_value(year, 0.03)), "fmv_base": r10(a_value(year, 0.04)), "fmv_high": r10(a_value(year, 0.05)),
-            "assessed": assessed, "tax": tax,
-            "insurance": c["insurance"], "water": c["water"], "electric": c["electric"], "maintenance": c["maintenance"],
-            "total_carrying": r10(total),
-        })
-        op = b_operating(year, g)
-        data["projections_b"].append({
-            "year": year,
-            "fmv_low": r10(b_value(year, 0.03)), "fmv_base": r10(b_value(year, 0.04)), "fmv_high": r10(b_value(year, 0.05)),
-            "assessed": op["assessed"], "tax": op["tax"],
-            "rent": op["gross"], "water": op["water"], "electric": op["electric"],
-            "insurance": op["insurance"], "maintenance": op["maintenance"],
-            "noi": op["noi"], "after_tax": op["after_tax"],
-        })
-
-    # Current-year carrying cost comparison
-    c26 = a_carrying(2026, g, occupied=True)
-    _, tax26 = tax_a_owned(2026)
-    b26 = b_operating(2026, g)
-    data["carrying"] = [
-        {"item": "Property tax", "a": tax26, "b": b26["tax"], "note_a": "Derived from the owner-provided 2025 bill and assessed value.", "note_b": "Reported 2025 bill; ad valorem at the verified local rate would be lower (see flagged items)."},
-        {"item": "Home / landlord insurance", "a": INPUTS["a_insurance_owner_est"], "b": INPUTS["b_insurance_scenario"], "note_a": "Owner estimate. No verified quote exists.", "note_b": "Scenario figure for a three-unit rental; the owner estimate is lower. No verified quote exists."},
-        {"item": "Water and sewer", "a": INPUTS["a_water_yr"], "b": INPUTS["b_water_yr"], "note_a": "Midpoint of the owner-stated monthly range.", "note_b": "Midpoint of the owner-stated monthly range for three units."},
-        {"item": "Electricity (net of solar credit)", "a": INPUTS["a_electric_yr"], "b": INPUTS["b_electric_yr"], "note_a": "Negative: the owner reports a net credit.", "note_b": "Owner-stated monthly range."},
-        {"item": "Maintenance and repairs", "a": c26["maintenance"], "b": b26["maintenance"], "note_a": "Scenario: 0.50% of value.", "note_b": "Scenario: 1.00% of value."},
-    ]
-
-    # Inheritance-year property tax outcomes
-    for Y in A["inherit_years"]:
-        for law in ("prop19", "proposal"):
-            tx = inherit_taxes(Y, g, law)
-            data["inheritance"].append({"year": Y, "law": law, **tx})
-
-    # Decision comparison
-    strategies = [("S1", "Live in Property A", "Owner occupies A; the third unit of Property B is rented."),
-                  ("S2", "Rent Property A", "Owner occupies the third unit of B; A is rented and fully reassessed."),
-                  ("S3A", "Sell A, reinvest in equities", "Owner occupies the third unit of B; proceeds invested at the 7.0% scenario."),
-                  ("S3B", "Sell A, hold bonds", "Owner occupies the third unit of B; proceeds invested at the 4.0% scenario.")]
-    for Y in A["inherit_years"]:
+    # Property A after the inheritance: assessed value and tax, by use
+    d["after"] = []
+    for y0 in A["years"]:
+        rz = reassess(y0, g)
         rows = []
-        for code, name, note in strategies:
-            res = run_strategy(code, Y, g, reinvest="bond" if code == "S3B" else None)
-            rows.append({"code": code, "name": name, "note": note, **res})
-        best = max(r["terminal_net_worth"] for r in rows)
-        for r in rows:
-            r["gap_vs_best"] = r["terminal_net_worth"] - best
-        data["decision"].append({"year": Y, "rows": rows,
-                                 "breakeven_reinvest": round(breakeven_return(Y, g, [r for r in rows if r["code"] == "S2"][0]["terminal_net_worth"]) * 100, 1),
-                                 "hold_rent_terminal": [r for r in rows if r["code"] == "S2"][0]["terminal_net_worth"]})
+        for t in range(n + 1):
+            y = y0 + t
+            f = (1 + V["prop13_cap"]) ** t
+            rows.append({"year": y, "value": r10(a_value(y, g)),
+                         "assessed_unchanged": r10(a_base(y)), "tax_unchanged": r10(tax_a(a_base(y), y)),
+                         "assessed_live": r10(rz["live"] * f), "tax_live": r10(tax_a(rz["live"] * f, y)),
+                         "assessed_rent": r10(rz["rent"] * f), "tax_rent": r10(tax_a(rz["rent"] * f, y))})
+        d["after"].append({"year": y0, "fmv": r10(rz["fmv"]), "base": r10(rz["base"]), "amount": r10(rz["amount"]),
+                           "live": r10(rz["live"]), "rent": r10(rz["rent"]),
+                           "saving": r10(tax_a(rz["rent"], y0) - tax_a(rz["live"], y0)), "rows": rows})
 
-    # Law-change sensitivity: proposal 25-0017 style full exclusion
-    for Y in A["inherit_years"]:
-        base = run_strategy("S2", Y, g)
-        prop = run_strategy("S2", Y, g, law="proposal")
-        data["sensitivity"].append({"kind": "law", "year": Y,
-                                    "label": "Rent A under current Proposition 19 versus a full-exclusion proposal",
-                                    "current": base["terminal_net_worth"], "proposal": prop["terminal_net_worth"],
-                                    "delta": prop["terminal_net_worth"] - base["terminal_net_worth"]})
+    # Decision tables
+    d["decision"] = []
+    for y0 in A["years"]:
+        for gg in (0.03, 0.04, 0.05):
+            res = {k: run(k, y0, gg) for k, _ in OPTIONS}
+            best = max(v["wealth"] for v in res.values())
+            deflate = infl(y0 + n)
+            rows = []
+            for k, name in OPTIONS:
+                v = res[k]
+                rows.append({"option": k, "name": name, "wealth": r10(v["wealth"]), "wealth_today": r10(v["wealth"] / deflate),
+                             "asset": r10(v["asset"]), "first_cash": r10(v["first_cash"]), "cash_total": r10(v["cash_total"]),
+                             "tax_first": r10(v["tax_first"]), "rent_first": r10(v.get("rent_first", 0.0)), "gap": r10(v["wealth"] - best),
+                             "gap_today": r10((v["wealth"] - best) / deflate)})
+            live_cost = (max(res[k]["wealth"] for k in ("sell_stock", "sell_treasury", "rent")) - res["live"]["wealth"]) / (12 * n)
+            d["decision"].append({"year": y0, "g": gg, "rows": rows, "start": r10(a_value(y0, gg) * (1 - SELL_COST)),
+                                  "r_eq": round(res["live"]["r_eq"] * 100, 2),
+                                  "live_cost_month": r10(live_cost), "live_cost_month_today": r10(live_cost / deflate)})
 
-    # Appreciation x reinvestment sensitivity (2045 base year)
-    Y = 2045
-    for gg in (0.03, 0.04, 0.05):
-        for rr in (0.04, 0.05, 0.06, 0.07):
-            A["equity_return"] = rr
-            sell = run_strategy("S3A", Y, gg)["terminal_net_worth"]
-            hold = run_strategy("S2", Y, gg)["terminal_net_worth"]
-            live = run_strategy("S1", Y, gg)["terminal_net_worth"]
-            data["sensitivity"].append({"kind": "matrix", "year": Y, "appreciation": gg, "reinvest": rr,
-                                        "sell": sell, "rent": hold, "live": live,
-                                        "winner": "Sell" if sell >= max(hold, live) else ("Rent" if hold >= live else "Live")})
-    A["equity_return"] = 0.070
+    # Sensitivities for the middle year
+    y0 = 2045
+    d["matrix"] = []
+    for gg in (0.03, 0.04, 0.05, 0.06):
+        for rs in (0.05, 0.06, 0.07, 0.08):
+            w = {k: run(k, y0, gg, rs=rs)["wealth"] for k in ("sell_stock", "rent", "live")}
+            best = max(w, key=w.get)
+            d["matrix"].append({"g": gg, "rs": rs, "sell": r10(w["sell_stock"]), "rent": r10(w["rent"]), "live": r10(w["live"]),
+                                "winner": {"sell_stock": "Sell", "rent": "Rent", "live": "Live"}[best]})
+    base = {k: run(k, y0, g)["wealth"] for k, _ in OPTIONS}
+    d["sens"] = []
+    for label, kw in (("Rent for A is $5,000 a month, not $6,500", {"rent_mo": 5_000}),
+                      ("Rent for A is $8,000 a month, not $6,500", {"rent_mo": 8_000}),
+                      ("Insurance costs three times the owner's guess", {"ins_mult": 3.0}),
+                      ("The pre-2021 exclusion is restored (proposal 25-0017)", {"law": "restored"})):
+        w = {k: run(k, y0, g, **kw)["wealth"] for k, _ in OPTIONS}
+        best = max(w, key=w.get)
+        d["sens"].append({"case": label, "sell_stock": r10(w["sell_stock"]), "sell_treasury": r10(w["sell_treasury"]),
+                          "rent": r10(w["rent"]), "live": r10(w["live"]), "rent_change": r10(w["rent"] - base["rent"]),
+                          "live_change": r10(w["live"] - base["live"]), "winner": dict(OPTIONS)[best]})
+    d["breakeven"] = {
+        "stock_return": round(bisect(lambda r: run("sell_stock", y0, g, rs=r)["wealth"] - run("rent", y0, g, rs=r)["wealth"], 0.0, 0.2) * 100, 1),
+        "house_growth": round(bisect(lambda x: run("rent", y0, x)["wealth"] - run("sell_stock", y0, x)["wealth"], 0.0, 0.2) * 100, 1),
+        "rent_month": r10(bisect(lambda m: run("rent", y0, g, rent_mo=m)["wealth"] - base["sell_stock"], 1_000, 60_000)),
+        "rent_month_vs_treasury": r10(bisect(lambda m: run("rent", y0, g, rent_mo=m)["wealth"] - base["sell_treasury"], 1_000, 60_000)),
+    }
+    rz = reassess(y0, g)
+    restored = reassess(y0, g, "restored")
+    d["law"] = {"year": y0, "tax_live_current": r10(tax_a(rz["live"], y0)), "tax_rent_current": r10(tax_a(rz["rent"], y0)),
+                "tax_restored": r10(tax_a(restored["live"], y0))}
 
-    # Estate / inheritance tax headroom
-    for Y in (2026, 2032, 2040, 2045, 2050):
-        excl = A["fed_exclusion_2026"] * (1 + A["fed_exclusion_indexing"]) ** (Y - 2026)
-        estate = a_value(Y, g) + b_value(Y, g)
-        data["estate"].append({
-            "year": Y,
-            "exclusion_single": r10(excl),
-            "exclusion_married": r10(excl * 2),
-            "estate_two_properties": r10(estate),
-            "cash_headroom_single": r10(max(0, excl - estate)),
-            "cash_headroom_married": r10(max(0, excl * 2 - estate)),
-            "ca_inheritance_tax": 0,
-        })
+    # Property B if it passes in the same estate
+    d["b_reset"] = []
+    for yy in A["years"]:
+        fmv = b_value(yy, g)
+        keep, reset = tax_b(b_base(yy), yy), tax_b(fmv, yy)
+        rent = IN["b_rent_mo"] * 12 * (1 + RENT_CTRL) ** (yy - 2026)
+        costs = (IN["b_ins_guess"] + IN["b_water"] + IN["b_electric"] + A["maint_b"]) * infl(yy) + rent * A["vacancy"]
+        d["b_reset"].append({"year": yy, "value": r10(fmv), "assessed_keep": r10(b_base(yy)), "tax_keep": r10(keep),
+                             "tax_reset": r10(reset), "increase": r10(reset - keep), "rent": r10(rent),
+                             "net_keep": r10(rent - costs - keep), "net_reset": r10(rent - costs - reset)})
 
-    # CSV downloads (public, rounded, no identifiers)
-    def csv(name, rows):
-        import csv as _csv
-        if not rows:
-            return
-        path = OUT.parent / name
-        with path.open("w", newline="", encoding="utf-8") as f:
-            w = _csv.DictWriter(f, fieldnames=list(rows[0].keys()), quoting=_csv.QUOTE_MINIMAL)
+    # Federal estate tax headroom
+    d["estate"] = []
+    for yy in (2026, 2027, 2030, 2035, 2040, 2045, 2050):
+        ex = V["fed_excl_2026"] if yy == 2026 else V["fed_excl_2027"] * (1 + A["fed_excl_index"]) ** (yy - 2027)
+        row = {"year": yy, "exclusion": r10(ex), "exclusion_couple": r10(2 * ex),
+               "status": "Verified" if yy <= 2027 else "Scenario"}
+        for tag, gg in (("low", 0.03), ("base", 0.04), ("high", 0.05)):
+            re_ = a_value(yy, gg) + b_value(yy, gg)
+            row[f"homes_{tag}"] = r10(re_)
+            row[f"room_single_{tag}"] = r10(ex - re_)
+            row[f"room_couple_{tag}"] = r10(2 * ex - re_)
+        row["room_single_half"] = r10(ex / 2 - a_value(yy, g) - b_value(yy, g))
+        d["estate"].append(row)
+
+    # Current-year costs, side by side
+    pa, pb = d["proj_a"][0], d["proj_b"][0]
+    d["now"] = {"a": pa, "b": pb}
+
+    OUT.mkdir(parents=True, exist_ok=True)
+
+    def dump(name, rows):
+        with (OUT / name).open("w", newline="", encoding="utf-8") as f:
+            w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
             w.writeheader()
             w.writerows(rows)
-    csv("property_a.csv", data["projections_a"])
-    csv("property_b.csv", data["projections_b"])
-    csv("decision.csv", [r for blk in data["decision"] for r in blk["rows"]])
-
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
-    # rounding audit: every numeric leaf must be a multiple of 10 when it is a dollar figure
-    bad = []
-    for k in ("projections_a", "projections_b", "decision", "estate", "inheritance", "carrying"):
-        for row in data[k]:
-            for kk, vv in (row.items() if isinstance(row, dict) else []):
-                if isinstance(vv, int) and abs(vv) >= 100 and vv % 10 != 0 and kk != "year":
-                    bad.append((k, kk, vv))
-    print(f"model.json written; rounding violations: {len(bad)}")
-    return data
+    dump("property_a.csv", d["proj_a"])
+    dump("property_b.csv", d["proj_b"])
+    dump("decision.csv", [{"inheritance_year": b["year"], "house_growth": b["g"], **r} for b in d["decision"] for r in b["rows"]])
+    (OUT / "model.json").write_text(json.dumps(d, indent=1) + "\n", encoding="utf-8")
+    return d
 
 
 if __name__ == "__main__":
-    d = build()
-    print(f"rows: history {len(d['history_a'])}+{len(d['history_b'])}, "
-          f"proj {len(d['projections_a'])+len(d['projections_b'])}, decision {len(d['decision'])}, "
-          f"estate {len(d['estate'])}, sensitivity {len(d['sensitivity'])}")
-    for row in d["decision"]:
-        print(row["year"], [(r["code"], r["terminal_net_worth"]) for r in row["rows"]], "breakeven reinvest %", row["breakeven_reinvest"])
+    m = build()
+    for b in m["decision"]:
+        if b["g"] == 0.04:
+            print(b["year"], [(r["option"], r["wealth"]) for r in b["rows"]], "live costs/month today", b["live_cost_month_today"])
+    print("break-even", m["breakeven"], "fixed", m["fixed"])
