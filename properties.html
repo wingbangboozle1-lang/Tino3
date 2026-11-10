@@ -1,1 +1,123 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Properties - Inheritance Decision Dashboard</title><link rel="stylesheet" href="assets/style.css"></head><body><header><div class="wrap"><a class="brand" href="index.html">Inheritance Decision Dashboard</a><nav><a href="index.html">Dashboard</a><a href="executive-summary.html">Executive Summary</a><a href="properties.html">Properties</a><a href="taxes-estate.html">Taxes & Estate</a><a href="costs.html">Annual Costs</a><a href="projections.html">Projections 2026-2050</a><a href="decision-analysis.html">Decision Analysis</a><a href="inheritance-steps.html">Inheritance Steps</a><a href="sources-verification.html">Sources & Verification</a><a href="flagged-review.html">Flagged for Review</a><a href="methodology.html">Methodology</a></nav><p class="privacy">Anonymized: [DECEDENT] / [BENEFICIARY] / [TRUSTEE] / Property A (Cupertino 95014) / Property B (San Francisco 94122). No personal information on this site. Decision-analysis money rounded to nearest $10.</p></div></header><main class="wrap"><h1>Properties - History &amp; Current Snapshot</h1><p class="note">Historical tables are <strong>user-provided</strong> (rounded to $10 here). They cannot be verified from an official source without an APN/address, which is withheld for privacy. They are marked UNVERIFIED. Spot-check: Cupertino 2025 implied rate = $7,207 / $539,743 = <strong>1.335%</strong> (plausible: 1% Prop 13 base + voter bonds). SF 2025 implied rate = $2,439 / $114,248 = <strong>2.135%</strong> - <strong>anomalously high</strong> vs. the ~1.18% nominal SF rate; flagged for review. All projections show both rates.</p><h2>Property A - Cupertino 95014</h2><div class="tablewrap"><table><thead><tr><th>Year</th><th>Property tax (user-provided)</th><th>Tax assessment (user-provided)</th></tr></thead><tbody><tr><td>2026</td><td>--</td><td>$550,540</td></tr><tr><td>2025</td><td>$7,210</td><td>$539,740</td></tr><tr><td>2024</td><td>$7,000</td><td>$529,160</td></tr><tr><td>2023</td><td>$6,920</td><td>$518,790</td></tr><tr><td>2022</td><td>$6,760</td><td>$508,610</td></tr><tr><td>2021</td><td>$6,660</td><td>$498,640</td></tr><tr><td>2020</td><td>$6,570</td><td>$493,530</td></tr><tr><td>2019</td><td>$6,570</td><td>$483,850</td></tr><tr><td>2018</td><td>$6,380</td><td>$474,370</td></tr><tr><td>2017</td><td>$6,380</td><td>$465,070</td></tr><tr><td>2016</td><td>$6,410</td><td>$455,950</td></tr><tr><td>2015</td><td>$6,130</td><td>$449,100</td></tr><tr><td>2014</td><td>$5,970</td><td>$440,310</td></tr></tbody></table></div><p class="note">Assessed growth is consistently ~2%/yr - exactly the Prop 13 cap (BOE Pub. 29). Market value ($3,100,000) is ~5.6x the assessed value - the classic long-held Prop 13 gap. That gap is why inheritance reassessment matters so much.</p><h2>Property B - San Francisco 94122 (Outer Sunset)</h2><div class="tablewrap"><table><thead><tr><th>Year</th><th>Property tax (user-provided)</th><th>Tax assessment (user-provided)</th></tr></thead><tbody><tr><td>2025</td><td>$2,440</td><td>$114,250</td></tr><tr><td>2024</td><td>$2,320</td><td>$112,010</td></tr><tr><td>2023</td><td>$2,180</td><td>$109,810</td></tr><tr><td>2022</td><td>$2,110</td><td>$107,660</td></tr><tr><td>2021</td><td>$2,070</td><td>$105,600</td></tr><tr><td>2020</td><td>$2,200</td><td>$104,510</td></tr><tr><td>2019</td><td>$2,130</td><td>$102,470</td></tr><tr><td>2018</td><td>$2,060</td><td>$100,460</td></tr><tr><td>2017</td><td>$1,740</td><td>$98,490</td></tr><tr><td>2016</td><td>$1,680</td><td>$96,560</td></tr></tbody></table></div><p class="note">SF assessed value is only ~6% of market value ($114,250 vs. $1,800,000) - an even larger Prop 13 gap. Inheritance as a rental triggers full reassessment (Prop 19 eliminated the rental exclusion), so the tax bill jumps from ~$2,440/yr to tens of thousands per year. See Decision Analysis.</p><h2>Current snapshot (2026)</h2><div class="tablewrap"><table><thead><tr><th></th><th>Property A - Cupertino</th><th>Property B - San Francisco</th></tr></thead><tbody><tr><td>Est. market value (Nov 2026)</td><td>$3,100,000</td><td>$1,800,000</td></tr><tr><td>Assessed value</td><td>$550,540</td><td>~$116,530 (projected 2026 at +2%)</td></tr><tr><td>Latest tax</td><td>$7,210 (2025)</td><td>$2,440 (2025)</td></tr><tr><td>Implied effective rate</td><td>1.335%</td><td>2.135% - flagged</td></tr><tr><td>Use</td><td>Primary residence (assumed)</td><td>3 units: 2 rented (~$7,150/mo), 1 owner-occupiable</td></tr><tr><td>Solar</td><td>Installed; usually generates credit</td><td>--</td></tr></tbody></table></div></main><footer class="wrap"><p>Sources linked on <a href="sources-verification.html">Sources and Verification</a>. Unverified items blank-flagged on <a href="flagged-review.html">Flagged for Review</a>. General information, not legal/tax advice. Data: <a href="data/projections.csv">projections.csv</a> / <a href="data/sources.csv">sources.csv</a> / Model: <a href="scripts/calculate.py">calculate.py</a></p></footer></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Properties · Inheritance Decision Atlas</title>
+<meta name="description" content="Property A and Property B facts, roll history and bill reconciliation.">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="index,follow">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <a class="brand" href="index.html"><span class="mark">IDA</span>
+    <span class="bt">Inheritance<br>Decision Atlas</span></a>
+  <button class="navtoggle" aria-expanded="false" aria-controls="nav">Menu</button>
+  <nav id="nav" class="nav" aria-label="Sections">
+    <a href="index.html"><span class="n">01</span><span><b>Dashboard</b><small>Overview and recommendation</small></span></a><a href="executive-summary.html"><span class="n">02</span><span><b>Executive summary</b><small>The whole case on one page</small></span></a><a href="properties.html" aria-current="page"><span class="n">03</span><span><b>Properties</b><small>Facts, roll history, reconciliation</small></span></a><a href="property-tax.html"><span class="n">04</span><span><b>Property tax</b><small>Prop 13 / Prop 19 and forward values</small></span></a><a href="operating-costs.html"><span class="n">05</span><span><b>Running costs</b><small>Insurance, water, power, repairs</small></span></a><a href="taxes-estate.html"><span class="n">06</span><span><b>Taxes &amp; estate</b><small>Federal, state, local, step-up</small></span></a><a href="projections.html"><span class="n">07</span><span><b>Projections</b><small>2026-2055 year by year</small></span></a><a href="decision-analysis.html"><span class="n">08</span><span><b>Decision analysis</b><small>Live vs rent vs sell, after tax</small></span></a><a href="inheritance-process.html"><span class="n">09</span><span><b>Inheritance process</b><small>Step by step with deadlines</small></span></a><a href="laws-watch.html"><span class="n">10</span><span><b>Laws &amp; watch list</b><small>Enacted, scheduled, proposed</small></span></a><a href="flagged-for-review.html"><span class="n">11</span><span><b>Flagged for review</b><small>Unverified values and gaps</small></span></a><a href="sources.html"><span class="n">12</span><span><b>Source library</b><small>Every link used, with scope</small></span></a><a href="privacy.html"><span class="n">13</span><span><b>Privacy</b><small>What is published and what is not</small></span></a>
+  </nav>
+</header>
+<main id="main">
+
+
+<h1>Properties</h1>
+<p class="lede">Two assets, described only by place, county and number. Names, street addresses, parcel
+numbers and ZIP codes are withheld (see <a href="privacy.html">privacy</a>).</p>
+
+<div class="cards">
+  <div class="card top"><div class="k">Property A</div><div class="v sm">Cupertino, Santa Clara County</div>
+    <p>Single-family house with owned solar. Market value $3,100,000 <span class="tag unv">UNVERIFIED</span>.
+    Expected through a trust, 2040&ndash;2050.</p></div>
+  <div class="card top"><div class="k">Property B</div><div class="v sm">San Francisco, Outer Sunset</div>
+    <p>Three livable units, two let at $7,150/mo combined, one occupied by the family.
+    Market value $1,800,000 <span class="tag unv">UNVERIFIED</span>.</p></div>
+</div>
+
+<section><h2>Property A &mdash; roll history as supplied by the owner</h2><p class="sub">Assessed value rises about 2% a year, which is the Prop 13 cap doing its job.</p><div class="tw"><table class="">
+<caption>Property A, 2014-2026</caption>
+<thead><tr><th scope="col">Year</th><th scope="col">Property tax</th><th scope="col">Tax assessment</th><th scope="col">Tax change</th><th scope="col">Effective rate</th><th scope="col">Status</th></tr></thead>
+<tbody>
+<tr><td>2026</td><td><span class="num">&mdash;</span></td><td><span class="num">$550,540</span></td><td><span class="num">2.0%</span></td><td><span class="num">&mdash;</span></td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>2025</td><td><span class="num">$7,210</span></td><td><span class="num">$539,740</span></td><td><span class="num">2.9%</span></td><td><span class="num">1.34%</span></td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>2024</td><td><span class="num">$7,000</span></td><td><span class="num">$529,160</span></td><td><span class="num">1.2%</span></td><td><span class="num">1.32%</span></td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>2023</td><td><span class="num">$6,920</span></td><td><span class="num">$518,790</span></td><td><span class="num">2.4%</span></td><td><span class="num">1.33%</span></td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>2022</td><td><span class="num">$6,760</span></td><td><span class="num">$508,610</span></td><td><span class="num">1.4%</span></td><td><span class="num">1.33%</span></td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>2021</td><td><span class="num">$6,660</span></td><td><span class="num">$498,640</span></td><td><span class="num">1.5%</span></td><td><span class="num">1.34%</span></td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>2020</td><td><span class="num">$6,560</span></td><td><span class="num">$493,530</span></td><td><span class="num">&mdash;</span></td><td><span class="num">1.33%</span></td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>2019</td><td><span class="num">$6,560</span></td><td><span class="num">$483,850</span></td><td><span class="num">2.8%</span></td><td><span class="num">1.36%</span></td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>2018</td><td><span class="num">$6,380</span></td><td><span class="num">$474,370</span></td><td><span class="num">&mdash;</span></td><td><span class="num">1.35%</span></td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>2017</td><td><span class="num">$6,380</span></td><td><span class="num">$465,070</span></td><td><span class="num">-0.5%</span></td><td><span class="num">1.37%</span></td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>2016</td><td><span class="num">$6,410</span></td><td><span class="num">$455,950</span></td><td><span class="num">4.6%</span></td><td><span class="num">1.41%</span></td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>2015</td><td><span class="num">$6,130</span></td><td><span class="num">$449,100</span></td><td><span class="num">2.8%</span></td><td><span class="num">1.36%</span></td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>2014</td><td><span class="num">$5,960</span></td><td><span class="num">$440,300</span></td><td><span class="num">&mdash;</span></td><td><span class="num">1.35%</span></td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+</tbody></table></div>
+<p class="tnote">Owner-supplied, displayed rounded to the nearest $10 as required. The 2026 tax cell is blank because the 2026 bill was not supplied; the 2026 assessment is the owner's figure. The effective rate is a computed cross-check, not an official figure.</p></section>
+
+<section><h2>Property B &mdash; roll history as supplied by the owner</h2><p class="sub">A 2.1% effective rate on a 1.18% official rate looks wrong until you add the parcel taxes.</p><div class="tw"><table class="">
+<caption>Property B, 2016-2025</caption>
+<thead><tr><th scope="col">Year</th><th scope="col">Property tax</th><th scope="col">Tax assessment</th><th scope="col">Tax change</th><th scope="col">Effective rate</th><th scope="col">Status</th></tr></thead>
+<tbody>
+<tr><td>2025</td><td><span class="num">$2,440</span></td><td><span class="num">$114,250</span></td><td><span class="num">5.3%</span></td><td><span class="num">2.13%</span></td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>2024</td><td><span class="num">$2,320</span></td><td><span class="num">$112,010</span></td><td><span class="num">6.2%</span></td><td><span class="num">2.07%</span></td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>2023</td><td><span class="num">$2,180</span></td><td><span class="num">$109,810</span></td><td><span class="num">3.4%</span></td><td><span class="num">1.98%</span></td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>2022</td><td><span class="num">$2,110</span></td><td><span class="num">$107,660</span></td><td><span class="num">2.0%</span></td><td><span class="num">1.96%</span></td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>2021</td><td><span class="num">$2,070</span></td><td><span class="num">$105,600</span></td><td><span class="num">-5.9%</span></td><td><span class="num">1.96%</span></td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>2020</td><td><span class="num">$2,200</span></td><td><span class="num">$104,510</span></td><td><span class="num">3.0%</span></td><td><span class="num">2.10%</span></td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>2019</td><td><span class="num">$2,130</span></td><td><span class="num">$102,460</span></td><td><span class="num">3.5%</span></td><td><span class="num">2.08%</span></td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>2018</td><td><span class="num">$2,060</span></td><td><span class="num">$100,460</span></td><td><span class="num">18.4%</span></td><td><span class="num">2.05%</span></td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>2017</td><td><span class="num">$1,740</span></td><td><span class="num">$98,490</span></td><td><span class="num">3.9%</span></td><td><span class="num">1.77%</span></td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>2016</td><td><span class="num">$1,680</span></td><td><span class="num">$96,560</span></td><td><span class="num">1.6%</span></td><td><span class="num">1.73%</span></td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+</tbody></table></div>
+<p class="tnote">Owner-supplied, rounded to the nearest $10. Two irregularities are flagged rather than explained: the 2018 tax jump of 18.4% against a 2% assessment change, and the 2021 tax fall of 5.9% against a 1% assessment rise (F-03). Neither matches a rate change and both need the actual bills.</p></section>
+
+<section><h2>Reconciling the bills against the official rates</h2><p class="sub">This is the test that makes the forward projections credible: the same formula has to reproduce the past.</p><div class="tw"><table class="">
+<thead><tr><th scope="col">Line</th><th scope="col">Property A (2025)</th><th scope="col">Property B (2025)</th><th scope="col">Source</th></tr></thead>
+<tbody>
+<tr><td>Owner-supplied assessed value</td><td>$539,740</td><td>$114,250</td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>Official ad valorem rate</td><td>1.1488%</td><td>1.1816%</td><td class="src"><a href="https://files.santaclaracounty.gov/exjcpb1521/2026-04/assessment-information-2026-booklet-english-3-23-26-web.pdf" target="_blank" rel="noopener noreferrer">SCC Assessor 2026<span class="ext" aria-hidden="true">↗</span></a> <a href="https://sftreasurer.org/property/secured-property-taxes" target="_blank" rel="noopener noreferrer">SF Tax Collector<span class="ext" aria-hidden="true">↗</span></a></td></tr>
+<tr><td>Ad valorem component</td><td>$6,200</td><td>$1,350</td><td class="src"><a href="https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=51" target="_blank" rel="noopener noreferrer">RTC 51<span class="ext" aria-hidden="true">↗</span></a></td></tr>
+<tr><td>Residual = observed bill minus ad valorem</td><td>$1,010</td><td>$1,090</td><td class="src"><a href="sources.html#computed" class="internal">COMPUTED</a></td></tr>
+<tr><td>Named official parcel charges identified</td><td>&mdash;</td><td>$829.22</td><td class="src"><a href="https://sftreasurer.org/property/parcel-tax-exemptions-and-special-assessments" target="_blank" rel="noopener noreferrer">SF parcel taxes<span class="ext" aria-hidden="true">↗</span></a></td></tr>
+<tr><td>Model reproduces the observed bill</td><td><b>$7,210</b> vs $7,210</td><td><b>$2,440</b> vs $2,440</td><td class="src"><a href="sources.html#computed" class="internal">COMPUTED</a></td></tr>
+<tr><td>Effective rate on assessed value</td><td>1.34%</td><td>2.13%</td><td class="src"><a href="sources.html#computed" class="internal">COMPUTED</a></td></tr>
+</tbody></table></div>
+<p class="tnote">The model carries the residual as a flat annual charge that inflates with CPI. Every forward tax figure on this site is built this way, so the arithmetic tracks the owner's real bills.</p></section>
+
+<section><h2>What is known, estimated, and missing</h2><div class="tw"><table class="">
+<thead><tr><th scope="col">Item</th><th scope="col">Property A</th><th scope="col">Property B</th><th scope="col">Status</th><th scope="col">Source</th></tr></thead>
+<tbody>
+<tr><td>Market value, Nov 2026</td><td>$3,100,000</td><td>$1,800,000</td><td><span class="tag unv">UNVERIFIED</span> owner estimate</td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>Assessed value</td><td>$550,540 (2026)</td><td>$114,250 (2025)</td><td><span class="tag unv">UNVERIFIED</span> owner</td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>Annual property tax</td><td>$7,210 (2025)</td><td>$2,440 (2025)</td><td><span class="tag unv">UNVERIFIED</span> owner</td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>Ad valorem rate applied</td><td>1.1488% typical area</td><td>1.18162182%</td><td><span class="tag ver">VERIFIED</span></td><td class="src"><a href="https://files.santaclaracounty.gov/exjcpb1521/2026-04/assessment-information-2026-booklet-english-3-23-26-web.pdf" target="_blank" rel="noopener noreferrer">SCC Assessor 2026<span class="ext" aria-hidden="true">↗</span></a> <a href="https://sftreasurer.org/property/secured-property-taxes" target="_blank" rel="noopener noreferrer">SF Tax Collector<span class="ext" aria-hidden="true">↗</span></a></td></tr>
+<tr><td>Insurance premium</td><td>$1,500/yr</td><td>$1,500/yr</td><td><span class="tag unv">UNVERIFIED</span> estimate</td><td class="src"><a href="https://www.insurance.ca.gov/01-consumers/180-climate-change/sustainable-insurance-strategy.Cfm" target="_blank" rel="noopener noreferrer">CDI market snapshot<span class="ext" aria-hidden="true">↗</span></a></td></tr>
+<tr><td>Water</td><td>$120/mo (mid of $100-150)</td><td>$360/mo (mid of $330-400)</td><td><span class="tag unv">UNVERIFIED</span> owner</td><td class="src"><a href="https://www.sfpuc.gov/sites/default/files/agendas-minutes-rate-fairness-board/6a-Rates-Presentation.pdf" target="_blank" rel="noopener noreferrer">SFPUC rates<span class="ext" aria-hidden="true">↗</span></a></td></tr>
+<tr><td>Electricity</td><td>Net credit, −$20/mo</td><td>$50/mo</td><td><span class="tag unv">UNVERIFIED</span> owner</td><td class="src"><a href="https://www.cpuc.ca.gov/industries-and-topics/electrical-energy/demand-side-management/net-energy-metering" target="_blank" rel="noopener noreferrer">CPUC NEM/NBT<span class="ext" aria-hidden="true">↗</span></a></td></tr>
+<tr><td>Gross rent</td><td>Not let &mdash; blank</td><td>$7,150/mo</td><td><span class="tag unv">UNVERIFIED</span> owner</td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>Market rent if let</td><td><span class="tag gap">BLANK</span> no official quote</td><td>n/a</td><td>Left blank by rule; a derived indicative figure is used and labelled</td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>Repairs and maintenance</td><td>Assumed 0.50% of value</td><td>Assumed 1.00% of value</td><td><span class="tag asm">ASSUMPTION</span></td><td class="src"><a href="sources.html#computed" class="internal">COMPUTED</a></td></tr>
+<tr><td>Square footage, beds, baths, year built</td><td>Not supplied</td><td>Not supplied</td><td><span class="tag gap">BLANK</span></td><td class="src"><a href="sources.html#owner-inputs" class="internal">OWNER</a></td></tr>
+<tr><td>Cash and other assets in the estate</td><td><span class="tag gap">BLANK</span></td><td><span class="tag gap">BLANK</span></td><td>Required for the federal test</td><td class="src"><a href="https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax" target="_blank" rel="noopener noreferrer">IRS estate tax<span class="ext" aria-hidden="true">↗</span></a></td></tr>
+</tbody></table></div>
+<p class="tnote">Nothing in the BLANK rows has been filled in from comparable sales, listing sites or guesswork.</p></section>
+
+<div class="callout warn"><p class="ctitle">The one input that would change the most</p><p>Which of the two houses is the
+transferor's principal residence. If it is Property B and you occupy it after the death, Proposition 19
+can hold its taxable value near the transferor's base plus the adjusted cap instead of resetting to
+market. On today's numbers that is roughly $641,170 of
+taxable value, or about $7,580 a year of
+property tax at the San Francisco rate. It is not a certainty, it requires occupancy, and it requires
+filing on time. See <a href="property-tax.html">property tax</a>.</p></div>
+
+<footer class="foot">
+  <p><b>Inheritance Decision Atlas</b> · planning model reviewed 10 November 2026 · all amounts rounded to the nearest $10.</p>
+  <p>General information for planning, not legal, tax, investment or fiduciary advice. Values marked
+  <span class="tag unv">UNVERIFIED</span> come from the property owner and are not checked against a public record.
+  See <a href="flagged-for-review.html">Flagged for review</a> and <a href="privacy.html">Privacy</a>.</p>
+</footer>
+</main>
+<script src="assets/site.js"></script>
+</body>
+</html>

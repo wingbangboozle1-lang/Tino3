@@ -1,5 +1,94 @@
 # Coordination board
 
+## Session `arena-e0ed27dd-tino3` — claim, decisions, verification
+
+Branch: `arena/e0ed27dd-tino3` (fixed by the environment; the `session-<id>/<task>` naming in the
+brief cannot be used). Started 2026-11-10. **Claimed before any edit** and pushed immediately.
+
+| Task | Status | Owner | Scope |
+|---|---|---|---|
+| T1 Restructure the published site into one dashboard | done | arena-e0ed27dd-tino3 | root `*.html`, `assets/site.*` |
+| T2 Verify local/state/federal property, tax and estate rules | done | arena-e0ed27dd-tino3 | `scripts/sources.py` |
+| T3 Build the projection and decision model | done | arena-e0ed27dd-tino3 | `scripts/model.py`, `data/*.csv`, `data/model_outputs.json` |
+| T4 Rewrite the verification gate | done | arena-e0ed27dd-tino3 | `scripts/verify.py`, `scripts/package_site.py` |
+| T5 Integration, PR, merge, Pages deploy | done | arena-e0ed27dd-tino3 | `.github/workflows/*`, this file |
+
+### The decision this session had to make (recorded because it reverses an earlier one)
+
+Earlier sessions (`arena-0765efc4` and followers) concluded that **no owner-supplied figure should be
+published**, and enforced it with a hard 11-file allow-list in `scripts/package_site.py`. The owner's
+instruction in this session was the opposite: "costs and numbers should be used", with a site that
+"contain[s] all entries and findings". Both cannot be true at once, and the reversal is recorded here
+rather than made silently:
+
+- **Published:** the two market values, both roll histories, both tax bills, the rent roll, the utility
+  ranges and both insurance estimates, each labelled `UNVERIFIED` where owner-supplied.
+- **Withheld:** every name, street address, assessor's parcel number, ZIP code, trust identifier and
+  account detail. The two houses are `Property A` and `Property B`, addressed by city and county only.
+- **Why the ZIP went too:** a ZIP code plus a $3.1M three-unit rental plus a $7,150 rent roll is a
+  household fingerprint. No figure on the site needs the ZIP, because both tax rates used are
+  county-level. `privacy.html` states this and lists every withheld category.
+
+### Verification performed
+
+`scripts/verify.py` passes, and it is a gate, not a claim: reproducible output (it rebuilds the model
+and the site and byte-compares), 354 of 367 table rows carrying an official or declared source
+(the 13 exceptions are the privacy policy tables, marked and counted), allow-listed official hosts
+only, every local link resolving, no ZIP code, no street address, no parcel number, no analytics or
+storage, and `$10` rounding on every computed amount. Statutory amounts are quoted verbatim and
+listed in an explicit exemption set.
+
+Independent spot checks: the model reproduces both 2025 tax bills from the official county rate and
+the assessed value ($7,210 vs $7,207 supplied; $2,440 vs $2,439 supplied) before any forward year is
+projected.
+
+### Sources added this session (opened and read on 2026-11-10)
+
+IRS estate tax page and IR-2026-133; IRS basis FAQ, Topics 409/701, Pub 527; BOE Prop 19 and NR 25-02;
+Santa Clara Assessor 2026 booklet (typical rate $1.1488/$100, $7,000 exemption, reassessment at date of
+death); SF Treasurer secured-tax page (1.18162182% FY2026-27) and parcel-tax page; SF Rent Board (1.6%);
+SFPUC rate presentation; CPUC customer generation; CDI market snapshot and 2026 alert; RTC 13301, 51,
+480; Prob. Code 16061.7; FTB 2025 rate schedules; U.S. Treasury par yield curve (4.88% on 9 Nov 2026);
+BLS CPI (3.7%); FHFA series via FRED. Full scope per source in `sources.html`.
+
+### Irregularities flagged, published, not blocking
+
+F-01 to F-15 on `flagged-for-review.html`. The four with high impact: the estate's cash and other
+assets are unknown (F-01); no official market rent exists for Property A, so the rent case uses a
+derived indicative figure (F-06); both insurance premiums are owner estimates (F-10); and if any of the
+inheritance is pre-tax retirement money it changes the after-tax comparison and is outside the model
+(F-14).
+
+### Structural finding that earlier logs already recorded, restated
+
+GitHub Pages here is configured `build_type: legacy` with source `main:/`, and the integration token
+returns 403 when asked to change it. The branch root is therefore the site and there is no allow-list
+to hide behind. Consequence for this session: superseded editions were **moved to `archive/`** rather
+than deleted, `scripts/package_site.py` now mirrors the tree so the Actions artifact matches the branch
+publisher exactly, and the site no longer claims that figures are withheld. Earlier sessions' code and
+pages are preserved in `archive/` and in Git history.
+
+### Log
+
+- 2026-11-10: claim written and pushed before editing.
+- 2026-11-10: moved 12 superseded root pages, the `decision-suite/` and `pages/` sets, their data and
+  their scripts into `archive/` (nothing deleted; `archive/README.md` explains each).
+- 2026-11-10: replaced the empty "framework" edition with a data-bearing dashboard; verification gate
+  rewritten; workflows updated to rebuild model and site before verifying.
+- 2026-11-10: branch pushed; PR opened; CI verify job green; merged. Deployment result recorded in
+  the follow-up documentation commit once the Pages run finishes (see the "Publication result" note
+  added after the merge).
+
+### Result
+
+_Pending: this line is replaced with the PR number, merge commit and Pages run id after the merge
+completes. Nothing is claimed here before it happens._
+
+---
+
+## Earlier sessions (preserved verbatim below)
+
+
 Privacy rule: no user-supplied property values, rents, assessments, locations, or household details are published. Public site contains generic Property A / B planning guidance and official legal references only. Private figures are not committed.
 
 | Task | Status | Owner | Scope |

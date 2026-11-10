@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Privacy · Inheritance Decision Atlas</title>
+<meta name="description" content="What personal information was withheld from the published site and why.">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="index,follow">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <a class="brand" href="index.html"><span class="mark">IDA</span>
+    <span class="bt">Inheritance<br>Decision Atlas</span></a>
+  <button class="navtoggle" aria-expanded="false" aria-controls="nav">Menu</button>
+  <nav id="nav" class="nav" aria-label="Sections">
+    <a href="index.html"><span class="n">01</span><span><b>Dashboard</b><small>Overview and recommendation</small></span></a><a href="executive-summary.html"><span class="n">02</span><span><b>Executive summary</b><small>The whole case on one page</small></span></a><a href="properties.html"><span class="n">03</span><span><b>Properties</b><small>Facts, roll history, reconciliation</small></span></a><a href="property-tax.html"><span class="n">04</span><span><b>Property tax</b><small>Prop 13 / Prop 19 and forward values</small></span></a><a href="operating-costs.html"><span class="n">05</span><span><b>Running costs</b><small>Insurance, water, power, repairs</small></span></a><a href="taxes-estate.html"><span class="n">06</span><span><b>Taxes &amp; estate</b><small>Federal, state, local, step-up</small></span></a><a href="projections.html"><span class="n">07</span><span><b>Projections</b><small>2026-2055 year by year</small></span></a><a href="decision-analysis.html"><span class="n">08</span><span><b>Decision analysis</b><small>Live vs rent vs sell, after tax</small></span></a><a href="inheritance-process.html"><span class="n">09</span><span><b>Inheritance process</b><small>Step by step with deadlines</small></span></a><a href="laws-watch.html"><span class="n">10</span><span><b>Laws &amp; watch list</b><small>Enacted, scheduled, proposed</small></span></a><a href="flagged-for-review.html"><span class="n">11</span><span><b>Flagged for review</b><small>Unverified values and gaps</small></span></a><a href="sources.html"><span class="n">12</span><span><b>Source library</b><small>Every link used, with scope</small></span></a><a href="privacy.html" aria-current="page"><span class="n">13</span><span><b>Privacy</b><small>What is published and what is not</small></span></a>
+  </nav>
+</header>
+<main id="main">
+
+
+<h1>Privacy</h1>
+<p class="lede">You asked for personal information to be excluded from the published site and replaced with
+placeholders. This page states exactly what that meant in practice, and where the line was drawn.</p>
+
+<section><h2>Withheld from every page</h2><div class="tw"><table class="policy">
+<thead><tr><th scope="col">Category</th><th scope="col">Treatment</th><th scope="col">Why</th></tr></thead>
+<tbody>
+<tr><td>Names of any person</td><td>Removed and never reproduced. Roles only: transferor, trustee, beneficiary.</td><td class="src">Directly identifying</td></tr>
+<tr><td>Street addresses</td><td>Removed. Property A and Property B only.</td><td class="src">Directly identifying a household</td></tr>
+<tr><td>Assessor's parcel numbers</td><td>Removed.</td><td class="src">Identifies a single parcel</td></tr>
+<tr><td>ZIP codes</td><td>Removed, including the two you supplied. City and county are kept.</td><td class="src">Coarse but combinable; the tax rates used are county-level, so the ZIP is not needed for any figure here.</td></tr>
+<tr><td>Trust name, trust date, attorney, trustee institutions</td><td>Removed.</td><td class="src">Identifies the estate</td></tr>
+<tr><td>Account, loan and policy numbers</td><td>Never collected and never published.</td><td class="src">Directly identifying</td></tr>
+<tr><td>Occupancy, tenancy and household details beyond unit counts</td><td>Reduced to unit counts and a rent roll total.</td><td class="src">Indirectly identifying</td></tr>
+</tbody></table></div></section>
+
+<section><h2>Published, on purpose</h2>
+<p>The financial figures you supplied &mdash; two market values, both roll histories, both tax bills, the rent roll,
+the utility ranges and the insurance estimates &mdash; are published. They are what makes the analysis
+checkable, and without them the site would be the empty framework it should not be. They are also published
+with the identifiers stripped, and every one of them is labelled
+<span class="tag unv">UNVERIFIED</span> because none came from a public record.</p>
+<p>If you would rather the figures were not public either, that is a single-point change: the model reads its
+inputs from <code>scripts/model.py</code>, and the pages can be regenerated with the amounts suppressed while
+keeping every rule and every projection method.</p>
+</section>
+
+<section><h2>How the site itself behaves</h2><div class="tw"><table class="policy">
+<thead><tr><th scope="col">Property</th><th scope="col">Status</th></tr></thead>
+<tbody>
+<tr><td>Analytics, trackers, pixels</td><td class="src">None.</td></tr>
+<tr><td>Cookies or local storage</td><td class="src">None.</td></tr>
+<tr><td>Forms or data collection of any kind</td><td class="src">None.</td></tr>
+<tr><td>Third-party scripts, fonts or images</td><td class="src">None; one local stylesheet and one local script for the mobile menu.</td></tr>
+<tr><td>Outbound links</td><td class="src">Ordinary links with &lt;code&gt;rel='noopener noreferrer'&lt;/code&gt; and a no-referrer policy.</td></tr>
+<tr><td>Hosting</td><td class="src">GitHub Pages, which necessarily logs requests as any web server does.</td></tr>
+</tbody></table></div></section>
+
+<section><h2>One honest caveat about history</h2>
+<p>This repository was built by several automated sessions before this one. Earlier versions of the site were
+published from the repository root at various points, and Git history is public. Those earlier versions did not
+contain names, addresses or parcel numbers, but some did contain the two ZIP codes and property figures. Removing
+a file from the latest commit does not remove it from history, and this project has not rewritten history. If
+complete removal matters, that is a separate, deliberate operation on the repository itself.</p>
+</section>
+
+<footer class="foot">
+  <p><b>Inheritance Decision Atlas</b> · planning model reviewed 10 November 2026 · all amounts rounded to the nearest $10.</p>
+  <p>General information for planning, not legal, tax, investment or fiduciary advice. Values marked
+  <span class="tag unv">UNVERIFIED</span> come from the property owner and are not checked against a public record.
+  See <a href="flagged-for-review.html">Flagged for review</a> and <a href="privacy.html">Privacy</a>.</p>
+</footer>
+</main>
+<script src="assets/site.js"></script>
+</body>
+</html>

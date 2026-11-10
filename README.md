@@ -1,26 +1,60 @@
-# Inheritance Atlas
+# Inheritance Decision Atlas
 
-A privacy-safe static planning brief for inherited-property decisions.
+A static decision dashboard for one question: when a Cupertino house arrives through a trust between
+2040 and 2050, should it be lived in, rented, or sold and reinvested?
 
-**Site:** https://wingbangboozle1-lang.github.io/Tino3/
+**Live site:** https://wingbangboozle1-lang.github.io/Tino3/
 
-## Privacy first
+## What it contains
 
-This edition does not introduce user-supplied property records into its public pages. Concurrent sessions had already published other files and history: those are NOT certified privacy-safe and are excluded from the Pages artifact. See R12; a non-destructive integration cannot erase public history. Property A / B are placeholders. Do not attach private evidence to issues or pull requests. The site has no analytics, remote assets, scripts, forms or storage. Source links are ordinary outbound links with no-referrer policy.
+| Page | What it answers |
+|---|---|
+| `index.html` | Dashboard: five figures, one recommendation |
+| `executive-summary.html` | The full case, twelve findings, three next actions |
+| `properties.html` | Both properties and the reconciliation of their tax bills |
+| `property-tax.html` | Prop 13 and Prop 19 mechanics, forward assessed values |
+| `operating-costs.html` | Insurance, water, electricity, repairs, the SF rent roll |
+| `taxes-estate.html` | Federal, California and local treatment; step-up; estate headroom |
+| `projections.html` | Every year from 2026 to 2055, both houses |
+| `decision-analysis.html` | Live vs rent vs sell, after tax, with break-even thresholds |
+| `inheritance-process.html` | Twelve steps with the statutory deadlines |
+| `laws-watch.html` | Enacted, scheduled and merely proposed rules |
+| `flagged-for-review.html` | Fifteen unverified or assumed items, and what would settle each |
+| `sources.html` | Twenty-four official sources with the scope of each |
+| `privacy.html` | Exactly what was withheld and why |
 
 ## Evidence rules
 
-Each data-table row links an official authority. Missing numeric facts remain blank and are flagged; links on missing-value rows support the framework, not the missing number. Methods are not verified forecasts. Dollar displays are rounded to the nearest $10; official unrounded thresholds control filings. See **Source library** for the precise review scope (retrieved text vs official search excerpt) and **Flagged for Review** for incomplete work, including proposals, local death-tax confirmation and property-specific projections. No claim of exhaustive line-by-line legal verification is made.
+- Every table row links an official publisher, or is explicitly labelled as owner-supplied or computed.
+- A value that could not be confirmed from an official source was **left blank and flagged**, never inferred.
+- All computed amounts are displayed rounded to the nearest $10; statutory amounts are quoted verbatim.
+- No names, street addresses, parcel numbers, ZIP codes, or account details appear anywhere.
+- No analytics, cookies, forms, remote assets or storage. One local stylesheet and one local script
+  (mobile menu only).
 
 ## Build and test
 
-No dependencies or manual inputs required:
+No dependencies. Python 3.11+.
 
 ```sh
-python scripts/build.py
-python scripts/verify.py
+python scripts/model.py            # writes data/*.csv and data/model_outputs.json
+cd scripts && python webbuild.py   # writes the 13 HTML pages
+cd .. && python scripts/verify.py  # reproducible, cited, host-allow-listed, private, rounded
+python scripts/package_site.py     # assembles _site/
 ```
 
-`build.py` is the content source; generated HTML and the source ledger are committed. Verification checks reproducibility, every data row's citation, official source domains, navigation and local links, and excludes forms/scripts/remote assets. It does not prove legal correctness or externally hosted link availability. Content is a November 10, 2026 snapshot and does not refresh automatically.
+`verify.py` fails the build if any page is stale, any data row lacks an official citation, any link
+leaves the allow-listed official hosts or is broken locally, any ZIP code or street address appears,
+or any computed amount is not rounded to $10. It does not prove legal correctness and it cannot check
+that a government page still says the same thing.
 
-GitHub Pages uses an Actions artifact containing only the eight reviewed pages plus `assets/style.css` and `assets/sources.json`. Never upload the entire repository. The verification workflow runs on pushes and pull requests. No private figures are stored in workflow artifacts. Publication is not a recommendation to execute any transaction; obtain qualified fiduciary, tax, legal and investment review.
+## Publication
+
+This repository's GitHub Pages site is configured with `build_type: legacy`, which publishes the
+**branch root** rather than a workflow artifact. There is therefore no allow-list: whatever is at the
+root is public. `scripts/package_site.py` mirrors the whole tree into `_site/` so the Actions artifact
+and the branch publisher always agree, and the current site keeps superseded editions under `archive/`
+instead of deleting other sessions' work.
+
+**Not advice.** This is a planning model on stated assumptions. Obtain qualified legal, tax and
+fiduciary review before executing anything.
