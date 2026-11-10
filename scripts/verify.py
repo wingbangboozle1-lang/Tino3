@@ -183,6 +183,11 @@ def main() -> int:
             for m in rx.finditer(text):
                 failures.append(f"{name}: possible {label}: {m.group(0)!r}")
 
+    # 7. every tracked non-allowlisted file must be a content-free withdrawal notice
+    b = subprocess.run([sys.executable, "scripts/privacy_boundary.py"], cwd=ROOT, capture_output=True, text=True)
+    if b.returncode != 0:
+        failures.append("privacy boundary: " + (b.stdout + b.stderr).strip().splitlines()[-1] if (b.stdout + b.stderr).strip() else "privacy boundary failed")
+
     if failures:
         print("FAIL")
         for f in dict.fromkeys(failures):
