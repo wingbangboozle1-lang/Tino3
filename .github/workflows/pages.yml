@@ -20,10 +20,6 @@ jobs:
           python-version: '3.12'
       - run: python scripts/verify.py
       - run: python scripts/package_site.py
-      - name: Restrict Pages to the reviewed workflow artifact
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh api "repos/${{ github.repository }}/pages" --method PUT -f build_type=workflow
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
