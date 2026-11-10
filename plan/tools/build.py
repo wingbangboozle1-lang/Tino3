@@ -448,10 +448,10 @@ rc_rows = [
     R("C-09", "Recommendation for Property A", "Sell at inheritance; margin thin", "Sell in the first year by default; two switch tests; margin thin", "The two editions agree.", s=("irs_basis", "treasury")),
 ]
 rp_rows = [
-    R("R-01", "Several sessions published competing editions on the same day", "The site was replaced four times on 10 November 2026 (pull requests 17 to 24) and a further replacement is open (23). Conclusions differed between editions.", "Keep one main edition; treat this cross-check as a second opinion only.", s=("gh_prs",)),
+    R("R-01", "Several sessions published competing editions on the same day", "The site was replaced several times on 10 November 2026 (pull requests 17 to 24) and two further replacements are open (23 and 25). Conclusions differed between editions.", "Keep one main edition; treat this cross-check as a second opinion only.", s=("gh_prs",)),
     R("R-02", "Earlier commits contain unrounded figures and postal codes", "Current files are sanitised; Git history is not.", "Owner to decide whether to rewrite history.", s=("gh_prs",)),
     R("R-03", "Two publishers", "The site is built both from the branch root and by a workflow artifact; the setting could not be changed by a session (403).", "Both now carry the same allow-list; owner can switch the Pages source to Actions.", s=("gh_prs",)),
-    R("R-04", "Open stale pull requests", "Numbers 7, 14, 16 and 23 were open when this was written.", "Close or merge deliberately.", s=("gh_prs",)),
+    R("R-04", "Open pull requests that would replace the site again", "Numbers 23 and 25 were open when this was last checked; each rebuilds the main edition from a different model.", "Merge at most one, deliberately, and carry this cross-check forward or retire it explicitly.", s=("gh_prs",)),
     R("R-05", "About fifty retired paths are kept as withdrawal notices", "They prevent old pages being served but clutter the repository.", "Remove once caches have expired.", s=("gh_prs",)),
 ]
 page("flagged.html", "Flagged for Review",
