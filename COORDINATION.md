@@ -132,9 +132,57 @@ It does not edit any root HTML, `assets/`, `scripts/`, `data/`, `decision-suite/
 
 | Task | Status | Owner | Scope (non-overlapping) |
 |---|---|---|---|
-| RES-LAW · Law-change watch: federal estate/gift exemption 2026→2050 projection, step-up basis, CA estate/inheritance tax status, Prop 19 and pending amendments, Nov 2026 ballot outcomes | in progress | `arena-b8f9abd6-tino3` | `research/b8f9abd6/**`, this section of `COORDINATION.md` |
-| RES-PROC · Step-by-step trust inheritance process with official forms and statutory deadlines | in progress | `arena-b8f9abd6-tino3` | `research/b8f9abd6/**`, this section |
+| RES-LAW · Law-change watch: federal estate/gift exemption 2026→2050 projection, step-up basis, CA estate/inheritance tax status, Prop 19 and pending amendments, Nov 2026 ballot outcomes | done (on branch; awaiting integration) | `arena-b8f9abd6-tino3` | `research/b8f9abd6/**`, this section of `COORDINATION.md` |
+| RES-PROC · Step-by-step trust inheritance process with official forms and statutory deadlines | done (on branch; awaiting integration) | `arena-b8f9abd6-tino3` | `research/b8f9abd6/**`, this section |
 
 Privacy: research modules contain **no** owner-supplied figures, ZIP codes, addresses, names or parcel data —
 only public law and official-source citations, consumable by the final integration session.
 - 2026-11-10 10:05 and 10:20 UTC · `arena-b8f9abd6`: the claim commit hit rebase conflicts twice on `COORDINATION.md`. Main advanced via PR #17/#19 (`arena-b067dfc7`) and then PR #18/#20 (`arena/d0927734`), which condensed and redacted this board. Resolved by keeping main's redacted board verbatim and appending only this section. No other session's text was discarded or reintroduced.
+
+### Completion record · `arena-b8f9abd6` · 2026-11-10
+
+**Deliverable** (branch `arena/b8f9abd6-tino3`, commit `7c59851`): `research/b8f9abd6/`. It contains 26 law-watch rows,
+a 15-step trust-inheritance sequence, the federal exclusion for 2026–2050 (official 2026/2027 values, later years blank
+and flagged, plus 2.0/2.5/3.2 % scenario and stress columns), estate-tax headroom examples on hypothetical estate sizes,
+a Prop 19 worked example on round hypothetical numbers, and a standalone `law-watch.html` with no scripts and no remote
+assets. Public law only: no owner figures, ZIP codes, addresses or names.
+
+**Verification performed.** Each rule below was read on the linked official page on 2026-11-10 (fetched text, not a search snippet):
+- IRS estate tax threshold table ($15,000,000 for 2026): https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax
+- IRS What's new (P.L. 119-21, §2010(c)(3)): https://www.irs.gov/businesses/small-businesses-self-employed/whats-new-estate-and-gift-tax
+- IR-2026-133 ($15,480,000 for 2027; $20,000 gift exclusion): https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts
+- Form 706 instructions (Table A 40% top rate; due 9 months; Form 8971 30 days; portability Rev. Proc. 2022-32): https://www.irs.gov/instructions/i706
+- IRS inheritance basis FAQ: https://www.irs.gov/faqs/interest-dividends-other-types-of-income/gifts-inheritances/gifts-inheritances · Rev. Rul. 2023-2: https://www.irs.gov/irb/2023-16_IRB · Topic 701: https://www.irs.gov/taxtopics/tc701 · Topic 409: https://www.irs.gov/taxtopics/tc409 · Executors/EIN: https://www.irs.gov/businesses/small-businesses-self-employed/information-for-executors
+- Congress.gov S.587 / H.R.1301 (introduced 02/13/2025, no further action): https://www.congress.gov/bill/119th-congress/senate-bill/587/all-info · https://www.congress.gov/bill/119th-congress/house-bill/1301/all-info
+- CA State Controller (no CA estate tax return for deaths on or after 1/1/2005): https://www.sco.ca.gov/ardtax_estate_tax.html
+- R&TC §63.2: https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=63.2 · §480: https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=480 · §11930: https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=11930 · §11911: https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=11911 · Prob. Code §16061.7: https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PROB&sectionNum=16061.7 · §16061.8: https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PROB&sectionNum=16061.8
+- BOE Prop 19: https://www.boe.ca.gov/prop19/ · NR 25-02 ($1,044,586): https://www.boe.ca.gov/news/2025/nr-25-02.htm · LTA 2026/002 (factor 1.02): https://www.boe.ca.gov/proptaxes/pdf/lta26002.pdf · Homeowners' exemption: https://www.boe.ca.gov/proptaxes/homeowners_exemption.htm
+- SOS memo #26138 (initiative 25-0017 failed): https://elections.cdn.sos.ca.gov/ccrov/2026/may/26138jh.pdf · LAO 25-0017: https://lao.ca.gov/BallotAnalysis/Initiative/2025-017 · SOS circulating list: https://www.sos.ca.gov/elections/ballot-measures/initiative-and-referendum-status/initiatives-referenda-cleared-circulation · SOS Nov 2026 results: https://electionresults.sos.ca.gov/returns/ballot-measures · LAO Prop 3: https://voterguide.sos.ca.gov/propositions/3/analysis.htm · LAO Prop 42: https://voterguide.sos.ca.gov/propositions/42/analysis.htm
+- CPUC NEM/NBT (20-year NEM 2.0 legacy, D.14-03-041): https://www.cpuc.ca.gov/nem/
+- `python research/b8f9abd6/verify_research.py` passes. It checks that the build is reproducible, every row links an official
+  host, all 307 dollar cells are $10 multiples, official cells are blank unless verified, and there are no ZIP-like tokens.
+  It also checks that the page has no scripts or remote assets.
+
+**Irregularities and needs-review items** (for the Flagged for Review page; none block anything):
+- RB-01 · The Nov 3, 2026 ballot results (Props 3, 40, 42, 43) are unofficial until certification by Dec 11, 2026. Re-check.
+- RB-02 · The Prop 19 exclusion for transfers from Feb 16, 2027 has not been published yet. Re-check in spring 2027.
+- RB-03 · Federal exclusion values for 2028 onward are projections only. Their official cells are blank.
+- RB-04 · The owner's solar interconnection date and tariff are unknown. The "no electric bill / small monthly credit" assumption
+  may stop holding once the 20-year NEM 2.0 legacy period ends (CPUC). This is unverified for the property.
+- RB-05 · It is unclear whether the second (SF) house is also held in the parents' trust. If it is, Prop 19 gives it no exclusion,
+  because it is not the parent's principal residence, and it would be fully reassessed at transfer. This is a key input that
+  needs owner confirmation.
+- RB-06 · San Francisco's charter-city transfer-tax schedule was not verified in this module.
+- RB-07 · Repository CI is fail-closed (`scripts/privacy_boundary.py`, allowlist `APPROVED`; `scripts/package_site.py` replaces
+  every non-allowlisted .html/.json/.csv with a withdrawal notice). `python scripts/verify.py` therefore **fails on this
+  branch by design** until `research/b8f9abd6/**` is allowlisted. The research files are not defective. For that reason
+  this session has **not** opened a PR to `main`.
+- RB-08 · GitHub Pages is still `build_type: legacy` (main root), alongside the Actions deploy. `PUT /pages` returned 403 for this
+  session too, so the owner must set Settings → Pages → Source = "GitHub Actions".
+
+**Cross-session request** (logged, not performed) → the active final integrator (`arena/d76d5375`, owner of `scripts/*` and
+`assets/*`), or whichever session takes over integration:
+1. Merge `arena/b8f9abd6-tino3` (or cherry-pick `7c59851`).
+2. Add `research/b8f9abd6/**` to `APPROVED` in `scripts/privacy_boundary.py`, and add `research/b8f9abd6/law-watch.html` plus
+   its JSON/CSV to `PAGES`/`ASSETS` so `package_site.py` publishes them instead of withdrawal notices.
+3. Link "Law watch & inheritance steps" from the site navigation, and copy RB-01…RB-08 to the Flagged for Review page.
