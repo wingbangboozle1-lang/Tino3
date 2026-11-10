@@ -2,12 +2,18 @@
 from pathlib import Path
 import subprocess
 ROOT = Path(__file__).resolve().parents[1]
-PAGES = ('index.html','taxes.html','decision.html','costs.html','projections.html','inheritance.html','review.html','sources.html')
-ASSETS = ('assets/style.css','assets/sources.json')
+# The allowlist is read from package_site.py so the two cannot drift apart.
+import importlib.util
+_spec = importlib.util.spec_from_file_location('package_site', Path(__file__).with_name('package_site.py'))
+_pkg = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_pkg)
+PAGES = tuple(_pkg.PAGES)
+ASSETS = tuple(_pkg.ASSETS)
 APPROVED = set(PAGES + ASSETS + (
-    '.gitignore','.nojekyll','COORDINATION.md','README.md',
+    '.gitignore','.nojekyll','COORDINATION.md','README.md','EXECUTIVE_SUMMARY.md',
     '.github/workflows/pages.yml','.github/workflows/verify.yml',
     'scripts/build.py','scripts/package_site.py','scripts/verify.py','scripts/privacy_boundary.py',
+    'scripts/model.py',
 ))
 MARKER = 'PUBLICATION_WITHDRAWN'
 
