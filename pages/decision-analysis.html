@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Decision Analysis — Inheritance Decision Dashboard</title>
+<link rel="stylesheet" href="../assets/css/style.css"></head>
+<body>
+<header class="top"><div class="brand">Inheritance Decision Dashboard<small>Decision analysis — live / rent / sell &amp; reinvest</small></div></header>
+<nav class="main"><a href="../index.html">Dashboard</a><a href="executive-summary.html">Executive Summary</a><a href="properties.html">Properties</a><a href="costs.html">Costs</a><a href="inheritance-tax.html">Inheritance Tax</a><a class="active" href="decision-analysis.html">Decision Analysis</a><a href="process.html">Inheritance Process</a><a href="methodology.html">Methodology</a><a href="sources.html">Sources</a><a href="flagged.html">Flagged for Review</a></nav>
+<main>
+<h1>Decision Analysis</h1>
+<p class="note">Everything on this page is <span class="badge model">Modelled</span> under the assumptions below. Official tax rates are <span class="badge ok">Official</span> (linked). All $ rounded to nearest $10. Change any control and the tables recompute.</p>
+
+<div class="card"><h2>Assumptions (changeable)</h2>
+<div class="controls">
+<label>Inheritance year<br><select id="yr"><option>2040</option><option>2045</option><option selected>2050</option></select></label>
+<label>Market growth /yr<br><select id="g"><option value="0.02">2% (low)</option><option value="0.03" selected>3% (base)</option><option value="0.04">4% (high)</option></select></label>
+<label>Reinvest return /yr<br><select id="r"><option value="0.05">5%</option><option value="0.07" selected>7% (base)</option><option value="0.09">9%</option></select></label>
+<label>Rent growth /yr<br><select id="rg"><option value="0.02">2%</option><option value="0.03" selected>3% (base)</option></select></label>
+<label>Fed cap-gains<br><select id="fed"><option value="0.15" selected>15%</option><option value="0.20">20%</option></select></label>
+<label>CA cap-gains<br><select id="ca"><option value="0.093" selected>9.3%</option><option value="0.133">13.3%</option></select></label>
+<button id="run">Recompute</button>
+</div>
+<p class="note">Fixed (see Methodology): Prop 13 assessed +2%/yr; Prop 19 cap $1,044,586 (2025–26, held flat — conservative); water/electric +3%/yr; insurance +5%/yr; maintenance 0.5% (A) / 1.0% (B) of market; step-up at death; selling costs 6% (assumption).</p>
+</div>
+
+<div class="card"><h2>Property A — three paths at inheritance (modelled)</h2>
+<table id="tblA"><tr><th>Path</th><th>Year-1 tax</th><th>Year-1 operating cost</th><th>Year-1 net cash</th><th>10-yr wealth (modelled)</th></tr></table>
+<p class="note">“10-yr wealth” = home equity (live/rent) or reinvested proceeds (sell), after modelled costs/taxes. Rent for Property A is <em>not</em> family-provided — the model assumes $4,500/mo in 2026 dollars grown at rent-growth rate (labelled assumption; replace with a market quote). See Methodology.</p>
+</div>
+
+<div class="card"><h2>Property B — keep as rental (modelled)</h2>
+<table id="tblB"><tr><th>Year</th><th>Gross rent (2 units)</th><th>Operating cost</th><th>Net before income tax</th></tr></table>
+<p class="note">Property B is retained in all three Property A paths. Its Prop 19 full reassessment is included from the inheritance year.</p>
+</div>
+
+<div class="card"><h2>Break-even: rent Property A vs. sell &amp; reinvest</h2>
+<p id="breakeven" class="note">—</p>
+<p class="note">Break-even reinvest return = the return at which 10-year reinvested proceeds equal 10-year rental wealth (equity + cumulative net rent). If your expected after-tax return exceeds it, selling wins on pure wealth; if below, renting wins. Live-in is a lifestyle choice — compare its imputed rent saving to the sell path.</p>
+</div>
+
+<div class="card"><h2>What would change the answer?</h2>
+<table><tr><th>If this happens…</th><th>…then</th></tr>
+<tr><td>You occupy Property A within 1 year</td><td>Tax ~$13,800/yr lower than renting it (2026 values) — live-in dominates on cost</td></tr>
+<tr><td>Property A rent &lt; ~$3,800/mo (2026 $)</td><td>Renting loses to selling at 7% reinvest return (modelled)</td></tr>
+<tr><td>SF parcel rate verified at ~1.18% (not 2.14%)</td><td>Property B net improves ~$17,300/yr — rental case strengthens materially</td></tr>
+<tr><td>Federal exclusion cut to ~$7M</td><td>Still no estate tax on $4.9M houses alone; cash inheritance above $7M taxed at 40%</td></tr>
+<tr><td>Insurance grows 10%/yr (not 5%)</td><td>Both properties' nets fall ~$1,000–$2,000/yr by 2035 — does not flip the ranking</td></tr>
+</table></div>
+</main>
+<footer>© <span data-year></span> · <a href="sources.html">Sources</a> · <a href="flagged.html">Flagged for Review</a></footer>
+<script src="../assets/js/app.js"></script>
+<script>
+(function(){
+  const CAP=1044586;
+  function compute(){
+    const Y=+document.getElementById("yr").value, g=+document.getElementById("g").value, R=+document.getElementById("r").value,
+          rg=+document.getElementById("rg").value, fed=+document.getElementById("fed").value, ca=+document.getElementById("ca").value;
+    const n=Y-2026;
+    const mA=3100000*Math.pow(1+g,n), aA=550537*Math.pow(1.02,n);
+    const mB=1800000*Math.pow(1+g,n), aB=114248*Math.pow(1.02,n);
+    // Prop19
+    const pOcc=prop19(mA,aA,CAP,0.01335,true), pRent=prop19(mA,aA,CAP,0.01335,false);
+    const taxB=round10(mB*0.02135);
+    // Year-1 operating (2026$ grown to Y)
+    const grow=(x,rate)=>x*Math.pow(1+rate,n);
+    const insA=grow(1500,0.05), insB=grow(2000,0.05);
+    const watA=grow(1500,0.03), watB=grow(4400,0.03);
+    const eleB=grow(600,0.03);
+    const maintA=0.005*mA, maintB=0.01*mB;
+    const opLive=pOcc.tax+watA+insA+maintA, opRent=pRent.tax+watA+grow(2000,0.05)+maintA;
+    // Property A rent assumption $4,500/mo 2026$
+    const rentA=grow(4500*12,rg);
+    const netRentA=rentA-opRent;
+    // Sell path: step-up => gain ~0 at sale; net proceeds after 6% costs
+    const proceeds=mA*0.94;
+    const fvSell=proceeds*Math.pow(1+R,10);
+    const fvRent=mA*Math.pow(1+g,10)+netRentA*10; // approx (no reinvest of rent)
+    const fvLive=mA*Math.pow(1+g,10)-opLive*10;
+    const tA=document.getElementById("tblA");
+    tA.innerHTML="<tr><th>Path</th><th>Year-1 tax</th><th>Year-1 operating cost</th><th>Year-1 net cash</th><th>10-yr wealth (modelled)</th></tr>"
+      +"<tr><td>Live in</td><td>"+fmt$(pOcc.tax)+"</td><td>"+fmt$(opLive)+"</td><td>— (housing consumed)</td><td>"+fmt$(fvLive)+"</td></tr>"
+      +"<tr><td>Rent out</td><td>"+fmt$(pRent.tax)+"</td><td>"+fmt$(opRent)+"</td><td>"+fmt$(netRentA)+"</td><td>"+fmt$(fvRent)+"</td></tr>"
+      +"<tr><td>Sell &amp; reinvest</td><td>—</td><td>—</td><td>—</td><td>"+fmt$(fvSell)+"</td></tr>";
+    // Property B 5-yr table
+    const tB=document.getElementById("tblB");
+    let html="<tr><th>Year</th><th>Gross rent (2 units)</th><th>Operating cost</th><th>Net before income tax</th></tr>";
+    for(let k=0;k<=4;k++){
+      const yy=Y+k, mm=mB*Math.pow(1+g,k);
+      const rent=grow(7150*12,rg)*Math.pow(1+rg,k);
+      const op=taxB+grow(4400,0.03)*Math.pow(1.03,k)+grow(600,0.03)*Math.pow(1.03,k)+grow(2000,0.05)*Math.pow(1.05,k)+0.01*mm;
+      html+="<tr><td>"+yy+"</td><td>"+fmt$(rent)+"</td><td>"+fmt$(op)+"</td><td>"+fmt$(rent-op)+"</td></tr>";
+    }
+    tB.innerHTML=html;
+    // Break-even approx: solve R where fvSell=fvRent
+    let lo=0,hi=0.20;
+    for(let i=0;i<40;i++){const mid=(lo+hi)/2; const fv=proceeds*Math.pow(1+mid,10); if(fv<fvRent)lo=mid;else hi=mid;}
+    document.getElementById("breakeven").textContent="Break-even reinvest return ≈ "+(((lo+hi)/2)*100).toFixed(1)+"%/yr (modelled, "+Y+" inheritance, "+(g*100)+"% home growth). Above it, sell wins; below it, rent wins.";
+  }
+  document.getElementById("run").addEventListener("click",compute);
+  compute();
+})();
+</script>
+</body></html>
