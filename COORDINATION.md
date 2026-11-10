@@ -8,8 +8,17 @@ then commit and push the claim immediately.
 
 | Session ID | Branch | Status | Scope |
 |---|---|---|---|
-| `arena-8af4b895` | `arena/8af4b895-tino3` | **done** — merged to `main` | Whole repository (sole claimant) |
-| _(no other session)_ | — | — | No other session claimed work at any point during this build |
+| `arena-8af4b895` | `arena/8af4b895-tino3` | **built, not merged** | Whole repository at build time |
+| `arena-0765efc4` | merged to `main` via PRs #8, #9, #10 | **published** | Privacy-first edition; controls the live site |
+| `arena-d11336c5`, `arena-653eba50`, `arena-50c6b81e`, `session-1820664f` | merged earlier via PRs #1, #2, #3 | **published then withdrawn** | Earlier editions, superseded |
+
+**Correction to the claim above.** When this session started, `main` was at `8805699` (a single 7-byte
+README) and this session appeared to be the sole claimant. That was true of the local checkout but not
+of the remote: while this session worked, four other sessions published to `main`, the last of them
+(`arena-0765efc4`) replacing the published site with a restricted privacy-first edition. The stale
+local view is the root cause of the conflict recorded below. Lesson for later sessions: run
+`git fetch origin` and re-read `COORDINATION.md` from `origin/main` *before* building, not just at
+claim time.
 
 **Branch-naming note.** The convention in this repository's brief is `session-<id>/<task>`. This
 session is bound by the Arena harness to one fixed branch, `arena/8af4b895-tino3`, and may not create
@@ -33,7 +42,7 @@ in substance: one owner, one scope, one branch, no concurrent edits.
 | 10 | Executive summary (site page + standalone Markdown) | done | `arena-8af4b895` | `pages/executive-summary.html`, `EXECUTIVE-SUMMARY.md`, `tools/md_summary.py` |
 | 11 | Flagged-for-review register | done | `arena-8af4b895` | `pages/flagged.html` |
 | 12 | Site shell, navigation, CSS, link checker | done | `arena-8af4b895` | `index.html`, `assets/style.css`, `tools/site_lib.py`, `tools/build_site.py`, `tools/check_links.py` |
-| 13 | **Final integration**: re-verify combined data, build, link check, PR, merge, confirm Pages | done | `arena-8af4b895` | all |
+| 13 | **Final integration**: re-verify combined data, build, link check, PR, merge, confirm Pages | **blocked — PR closed unmerged** (see "Integration blocked" below) | `arena-8af4b895` | all |
 
 Status vocabulary: `unclaimed` · `in progress` · `done` · `needs review`.
 `needs review` means the item is published on the Flagged for Review page and does not block a merge.
@@ -202,4 +211,79 @@ publication:
 * Pull request opened from `arena/8af4b895-tino3` → `main`, merged, Pages deploy confirmed.
   PR and deploy result recorded below.
 
-<!-- INTEGRATION RESULT -->
+### Integration blocked — 2026-11-10 (recorded, not resolved by publication)
+
+**The conflict.** `gh pr merge 12` failed: *"merge commit cannot be cleanly created."* `git fetch`
+showed `main` had advanced from `8805699` to `24e8ab9` through PRs #1, #2, #3, #8, #9 and #10 —
+59 files, including a working site, two GitHub Actions workflows and six generations of `COORDINATION.md`.
+The merge base was still `8805699`, and this branch adds files at the same paths (`index.html`,
+`README.md`, `pages/*.html`, `.gitignore`, `.nojekyll`, `COORDINATION.md`), so the conflict is structural.
+
+**Why this branch was not force-merged.** The published edition is not simply a competing layout; it is a
+different privacy position, adopted deliberately and documented:
+
+| | Published edition (`main`, `arena-0765efc4`) | This branch |
+|---|---|---|
+| Property amounts | **Withheld.** "No personal records, property amounts, addresses, or account details are published"; empty amount cells mean unverified, not zero | Published: exact assessed values, per-year bill histories, rents, values |
+| ZIP codes | Not published | Published (`95014`, `94122`) |
+| Position on forecasts | "No reliable profit ranking or dollar forecast can be produced under the no-inference rule" | Full six-plan ranking with terminal wealth to 2065 |
+| Legacy data | Withdrawn with privacy-safe tombstones at every legacy path; repository history flagged as R12, *not certified privacy-safe* | — |
+
+The decisive fact is in `main`'s own `COORDINATION.md`: an earlier integration session concluded that
+**repository history may already contain property-related financial data that is not certified
+privacy-safe (R12)**, and deliberately stopped republishing it. Merging this branch would republish
+exactly the class of material that session withdrew — exact assessed values against a named ZIP, which
+together are searchable against public parcel records and therefore re-identify a specific property.
+
+The brief's own ordering settles the tie: privacy is "top priority and highest urgency", and personal
+information "must not appear in the final website product and must not appear on the website." It also
+says that on a merge conflict: *"stop, resolve it without discarding the other session's work, and log
+what happened."* Both point the same way, so this session stopped, logged, and did not merge.
+
+**What was therefore done:**
+
+* PR #12 opened and then **closed unmerged**, with the reason recorded on the PR.
+* No file on `main` was modified, reverted or deleted. The published privacy-first edition is untouched.
+* The full analysis is preserved on this branch and in `EXECUTIVE-SUMMARY.md`. Nothing was destroyed;
+  it is simply not published.
+* The recommendation and its reasoning are reported to the user in-conversation, where they are not
+  indexed or addressable.
+
+**What would unblock it.** A decision by the user, not by an agent, on one question: *are the
+property-level figures (assessed values, tax bills, rents, ZIP codes) publishable?* Two defensible
+answers exist and they lead to different sites.
+
+* *If yes* — this branch can be rebased onto `main`, the two editions reconciled, the workflow
+  allowlist in `scripts/package_site.py` extended to the new pages, and the combined tree re-verified
+  line by line. That is a substantial integration job and should be one session's whole scope.
+* *If no* — the correct output is a **third** edition: this analysis with all parcel-identifying detail
+  removed. That means no ZIP codes, no per-year exact bill histories (twelve columns of exact assessed
+  values are a unique fingerprint), and values expressed as rounded planning bands. The projections,
+  the Prop 19 mechanics and the plan ranking survive intact, because they depend on the *ratio* of
+  value to base rather than the absolute numbers. That edition could then be merged without
+  contradicting the published privacy position.
+
+Neither of those should be done silently. Republishing data is a one-way door; an agent choosing it on
+the user's behalf, against another session's documented withdrawal and against the brief's stated
+priority ordering, would be the wrong call.
+
+**Verification of this branch, for the record.** The build itself is sound and independently checked:
+
+* `tools/check_links.py`: 12 pages, 24 external URLs inventoried, 341 internal edges, all links,
+  anchors and reachability pass, no template artefacts.
+* Local HTTP smoke test: `/`, `/pages/taxes.html`, `/pages/sources.html`, `/assets/style.css` all 200.
+* 23 official sources registered with a narrow statement of what each establishes.
+* Three dead external URLs found during verification and replaced before commit; two arithmetic and
+  formatting defects found in review and fixed.
+
+So the branch is *correct*; it is withheld on a privacy judgement, not a technical one.
+
+### Final status
+
+| Item | Status |
+|---|---|
+| Tasks 1–12 (research, model, site, checks) | **done**, verified, on this branch |
+| Task 13 (merge and publish) | **blocked** on a user privacy decision; see above |
+| PR #12 | opened, then **closed unmerged** |
+| Files on `main` | untouched |
+| Live site | unchanged — still the privacy-first edition from PR #9 |
