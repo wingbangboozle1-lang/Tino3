@@ -1,13 +1,13 @@
 code,name,note,yr1_cash,cum_cash,terminal_net_worth,tax_first_year,gap_vs_best
-S1,Live in Property A,Owner occupies A; the third unit of Property B is rented.,6690,51070,15352770,49970,-3192190
+S1,Live in Property A,Owner occupies A; the third unit of Property B is rented.,6690,51100,15352800,49970,-3192160
 S2,Rent Property A,Owner occupies the third unit of B; A is rented and fully reassessed.,82690,1798840,17493250,71710,-1051710
 S3A,"Sell A, reinvest in equities",Owner occupies the third unit of B; proceeds invested at the 7.0% scenario.,48350,887050,18544960,0,0
 S3B,"Sell A, hold bonds",Owner occupies the third unit of B; proceeds invested at the 4.0% scenario.,48350,887050,13619560,0,-4925400
-S1,Live in Property A,Owner occupies A; the third unit of Property B is rented.,-1970,-62770,15211400,62040,-1972290
+S1,Live in Property A,Owner occupies A; the third unit of Property B is rented.,-1970,-62740,15211440,62040,-1972250
 S2,Rent Property A,Owner occupies the third unit of B; A is rented and fully reassessed.,95080,1285650,16760930,87250,-422760
 S3A,"Sell A, reinvest in equities",Owner occupies the third unit of B; proceeds invested at the 7.0% scenario.,52960,636180,17183690,0,0
 S3B,"Sell A, hold bonds",Owner occupies the third unit of B; proceeds invested at the 4.0% scenario.,52960,636180,13957560,0,-3226130
-S1,Live in Property A,Owner occupies A; the third unit of Property B is rented.,-13860,-99630,15174620,76930,-924690
+S1,Live in Property A,Owner occupies A; the third unit of Property B is rented.,-13860,-99610,15174640,76930,-924670
 S2,Rent Property A,Owner occupies the third unit of B; A is rented and fully reassessed.,109450,728670,16064200,106150,-35110
 S3A,"Sell A, reinvest in equities",Owner occupies the third unit of B; proceeds invested at the 7.0% scenario.,57800,361780,16099310,0,0
 S3B,"Sell A, hold bonds",Owner occupies the third unit of B; proceeds invested at the 4.0% scenario.,57800,361780,14416870,0,-1682440

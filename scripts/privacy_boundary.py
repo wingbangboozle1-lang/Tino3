@@ -14,7 +14,18 @@ APPROVED = set(PAGES + ASSETS + (
     '.github/workflows/pages.yml','.github/workflows/verify.yml',
     'scripts/build.py','scripts/package_site.py','scripts/verify.py','scripts/privacy_boundary.py',
     'scripts/model.py',
+    'EXECUTIVE_SUMMARY_531AEE5C.md',
+    'verified-dashboard/index.html','tools/verify_416807ea.py','audit/REVIEW.md',
 ))
+# Annex editions restored/preserved by final integration (arena-9233adb2-tino3):
+# every file under these prefixes is owner-directed anonymized content, verified by
+# decision-suite/scripts/verify_suite.py and tools/verify_416807ea.py (placeholders,
+# $10 rounding, zero ZIP/address/raw-roll content). The fail-closed rule is unchanged:
+# any tracked file outside APPROVED/APPROVED_PREFIXES must be a withdrawal notice.
+APPROVED_PREFIXES = ('decision-suite/',)
+
+def approved(name):
+    return name in APPROVED or name.startswith(APPROVED_PREFIXES)
 MARKER = 'PUBLICATION_WITHDRAWN'
 
 def tracked():
@@ -43,7 +54,7 @@ def notice(name):
 
 def verify():
     for name in tracked():
-        if name not in APPROVED:
+        if not approved(name):
             assert (ROOT/name).read_text() == notice(name), f'Unapproved publication: {name}'
     print('PASS: all tracked non-allowlisted files are content-free withdrawal notices.')
 

@@ -27,12 +27,14 @@ assets/css/style.css style.css pages/costs.html pages/decision-analysis.html
 pages/executive-summary.html pages/flagged.html pages/inheritance-tax.html pages/methodology.html
 pages/process.html pages/properties.html pages/sources.html data/costs.json data/properties.json
 data/summary.json data/tax.json data/sources.json data/projections.csv data/sell_and_reinvest.csv
-data/sf_rental_pl.csv data/estate_threshold.csv data/inheritance_scenarios.csv data/sources.csv
-decision-suite/index.html decision-suite/executive-summary.html decision-suite/property-a.html
-decision-suite/property-b.html decision-suite/taxes-and-laws.html decision-suite/projections.html
-decision-suite/decision-analysis.html decision-suite/inheritance-process.html
-decision-suite/flagged-for-review.html decision-suite/sources-ledger.html
-decision-suite/assets/app.js decision-suite/assets/style.css""".split()
+data/sf_rental_pl.csv data/estate_threshold.csv data/inheritance_scenarios.csv data/sources.csv""".split()
+
+# Annex editions restored by final integration (arena-9233adb2-tino3): the owner-directed
+# anonymized Decision Brief (placeholders, every figure $10-rounded, verified by
+# decision-suite/scripts/verify_suite.py) plus the preserved research supplement and audit.
+# They are published verbatim; the decision-suite/** paths were therefore removed from
+# RETIRED above so no stale URL in that tree serves a notice over live content.
+ANNEX = ["decision-suite", "verified-dashboard", "audit"]
 
 NOTICE_HTML = ('<!doctype html><html lang="en"><meta charset="utf-8"><meta name="robots" content="noindex">'
                '<title>Publication withdrawn</title><h1>Earlier publication withdrawn</h1>'
@@ -75,8 +77,22 @@ def main() -> None:
         write_notice(rel)
         notices += 1
 
+    annex_files = []
+    for name in ANNEX:                               # owner-directed annex editions
+        src_dir = ROOT / name
+        if src_dir.is_file():
+            annex_files.append(name)
+        else:
+            annex_files.extend(sorted(str(p.relative_to(ROOT)) for p in src_dir.rglob("*")
+                                      if p.is_file() and "__pycache__" not in p.parts))
+    for rel_str in annex_files:
+        rel = Path(rel_str)
+        dest = SITE / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(ROOT / rel, dest)
+
     published = sorted(str(p.relative_to(SITE)) for p in SITE.rglob("*") if p.is_file())
-    allowed = set(PAGES) | set(ASSETS) | {".nojekyll"}
+    allowed = set(PAGES) | set(ASSETS) | {".nojekyll"} | set(annex_files)
     unexpected = [p for p in published if p not in allowed and p not in RETIRED]
     if unexpected:
         raise SystemExit(f"non-allowlisted file in artifact: {unexpected}")

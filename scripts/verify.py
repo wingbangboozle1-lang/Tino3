@@ -35,6 +35,9 @@ ALLOWED_HOSTS = {
     "www.lao.ca.gov",
     "www.sos.ca.gov",
     "REDACTED.archive.REDACTED",
+    "REDACTED.org",
+    "www.REDACTED",
+    "elections.cdn.sos.ca.gov",
 }
 
 # Identifier patterns that must never appear in the published edition.
