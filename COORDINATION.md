@@ -21,3 +21,9 @@ Started: 2026-11-10
 
 ## Handoff log
 - 2026-11-10: Session arena-d11336c5-tino3 claimed tasks 1-4 (single-session repo; no other sessions active). Pushing claim immediately.
+
+## Integration record (final)
+- PR: https://github.com/wingbangboozle1-lang/Tino3/pull/1 — MERGED into main (2026-11-10T06:08:49Z).
+- GitHub Pages: https://wingbangboozle1-lang.github.io/Tino3/ — build status `built` (2026-11-10T06:09:58Z), source main:/.
+- Internal link check: all internal hrefs/srcs resolve; nav + footer present on all 9 pages.
+- Flagged irregularities published on Flagged for Review page; non-blocking per instructions.
