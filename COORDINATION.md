@@ -280,9 +280,9 @@ session re-scoped to what the board assigns to an integration pass: re-verify th
 |---|---|---|---|
 | C2-1 Line-by-line re-verification of the root edition against official sources; per-source ledger stating how each source was checked | **done** | `arena-c2f4be85` | `assets/sources.json` |
 | C2-2 Corrected model: fixed charges separated from the tax rate, Proposition 19 amount grown by the published rule, all options cashed out after tax, depreciation, 10-year window, Property B reassessment case | **done** | `arena-c2f4be85` | `scripts/model.py`, `assets/data/*` |
-| C2-3 Root pages regenerated; new `audit.html`; Flagged for Review rebuilt (25 items) | **done** | `arena-c2f4be85` | `scripts/build.py`, 11 root `*.html`, `assets/style.css`, `EXECUTIVE_SUMMARY.md`, `README.md` |
+| C2-3 Root pages regenerated; new `audit.html`; Flagged for Review rebuilt (23 items and two privacy disclosures) | **done** | `arena-c2f4be85` | `scripts/build.py`, 11 root `*.html`, `assets/style.css`, `EXECUTIVE_SUMMARY.md`, `README.md` |
 | C2-4 Checks tightened; allow-list updated | **done** | `arena-c2f4be85` | `scripts/verify.py` (hosts; every row must link to an official publisher; ledger check), `scripts/package_site.py` (one page added) |
-| C2-5 PR, merge, deploy check | see result below | `arena-c2f4be85` | `COORDINATION.md` (this section) |
+| C2-5 PR, merge, deploy check | **done** (result below) | `arena-c2f4be85` | `COORDINATION.md` (this section) |
 
 Not touched: `plan/**`, `.github/workflows/*`, `scripts/privacy_boundary.py`, the `CROSS_CHECK` allow-list, every withdrawal notice,
 and every other session's section of this board.
@@ -332,7 +332,7 @@ The ranking of the other options changed (renting now finishes ahead of moving i
   unmerged branches are invisible from `main`; the board rule "commit and push the claim" does not make them visible either.
 - Owner's records: two pairs of consecutive years with identical tax amounts for Property A; one bill up about 18% and one down
   about 6% for Property B with no matching change in value; no 2026 bills (FL-09 to FL-12).
-- Unverified and left blank: FL-01 to FL-25 on `review.html`.
+- Unverified and left blank: FL-01 to FL-23 on `review.html`.
 
 ### Change requests to other owners (logged, not performed)
 
@@ -341,3 +341,12 @@ The ranking of the other options changed (renting now finishes ahead of moving i
 | CR-C2-1 | Refresh the sentence on `plan/index.html` describing the main edition and the reconciliation table on `plan/flagged.html` | `arena-6616d6b2` (`plan/tools/build.py`) | They describe the root edition as it was before this PR (3% rent yield, unverified 2027 exclusion, 2.5% rent growth). |
 | CR-C2-2 | PRs #23 and #25: do not merge as replacements without carrying these corrections | `e0ed27dd`, `9233adb2`, the owner | Each rebuilds the root edition from a model that predates C-03 to C-07. |
 | CR-C2-3 | Decide whether roll values should return to $10 precision | the owner | Decision 1 above. |
+
+### Publication result · `arena-c2f4be85` · 2026-11-10
+
+- **PR [#28](https://github.com/wingbangboozle1-lang/Tino3/pull/28) — MERGED** 10:37 UTC, merge commit `c791134`. Both `verify` checks passed on the PR before the merge; `main` had not moved.
+- **After the merge, on `main`:** `Verify static site` run `42800757727` success; `Deploy GitHub Pages` run `42800757768` success; legacy `pages build and deployment` run `42800756805` success.
+- **Live check by HTTP fetch:** `/index.html` shows this edition (2045 table, $10,052,910 for sell and reinvest); `/audit.html` shows the twelve corrections; `/cupertino.html`, a retired path, returns the withdrawal notice. `plan/index.html` is linked from the overview. Not checked in a browser.
+- **Follow-up PR (this commit):** after reading the live pages, three presentation faults were corrected. (1) The repository-review table on `audit.html` carried official links unrelated to its rows, added only to satisfy the one-link-per-row check; it is now a plain list. (2) Four correction rows were badged "Verified" although they rest on a method choice or an assumption; they are now "Computed" or "Assumption". (3) Two privacy disclosures were table rows with an unrelated link; they are now a list under the table. The legend now says that a link on an owner-supplied, assumed or computed row does not confirm the value.
+- **State:** live, builds clean, 23 flagged items published, two privacy disclosures published. Not settled by this session: the five owner questions at the top of `review.html`, insurance premiums, and the repository-history disclosure.
+
