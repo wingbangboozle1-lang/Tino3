@@ -53,8 +53,35 @@ def main():
         assert bad not in page, bad
     hrefs = re.findall(r"href='(https?://[^']+)'", page)
     assert hrefs and all(official(h) for h in hrefs), [h for h in hrefs if not official(h)]
+    extra = site_rule_check(HERE / "law-watch.html")
     print(f"PASS: {len(law)} law rows + {len(proc['steps'])} steps cite official hosts; "
           f"{n} dollar cells are $10 multiples; {len(hrefs)} page links official; reproducible; no ZIP-like tokens.")
+
+# Hosts used here that are official (.gov) but absent from the site's ALLOWED_HOSTS at the time of writing.
+# The integrator must add them to scripts/verify.py before publishing this page.
+EXTRA_OFFICIAL_HOSTS = {"www.congress.gov", "www.sco.ca.gov", "elections.cdn.sos.ca.gov",
+                        "electionresults.sos.ca.gov", "voterguide.sos.ca.gov"}
+
+def site_rule_check(page_path):
+    """Apply the published-site checks from scripts/verify.py to this page (forward compatibility)."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("site_verify", HERE.parents[1] / "scripts" / "verify.py")
+    sv = importlib.util.module_from_spec(spec); spec.loader.exec_module(sv)
+    text = page_path.read_text(encoding="utf-8")
+    pg = sv.Page(page_path); pg.feed(text)
+    errs = [e for e in pg.errors
+            if not (e.startswith("non-official host ") and (urlparse(e.split(" ", 3)[-1]).hostname in EXTRA_OFFICIAL_HOSTS))]
+    if pg.main != 1 or pg.title != 1 or pg.current != 1:
+        errs.append(f"main/title/aria-current = {pg.main}/{pg.title}/{pg.current}")
+    for label, rx in list(sv.FORBIDDEN.items()) + list(sv.SCAN_TEXT.items()):
+        errs += [f"{label}: {m.group(0)!r}" for m in rx.finditer(text)]
+    errs += [f"cents: {m.group(0)}" for m in sv.DECIMAL_AMOUNT.finditer(text)]
+    errs += [f"unrounded: {m.group(0)}" for m in sv.DOLLAR.finditer(text)
+             if not m.group(2) and int(m.group(1).replace(",", "")) % 10]
+    assert not errs, errs
+    print(f"PASS (site rules from scripts/verify.py): {pg.rows} rows, {pg.fact_rows} officially cited; "
+          f"needs ALLOWED_HOSTS additions: {sorted(EXTRA_OFFICIAL_HOSTS)}")
+    return pg
 
 if __name__ == "__main__":
     main()
