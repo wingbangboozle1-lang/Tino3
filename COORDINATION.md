@@ -4,7 +4,7 @@ Privacy rule: no user-supplied property values, rents, assessments, locations, o
 
 | Task | Status | Owner | Scope |
 |---|---|---|---|
-| Research, privacy review, dashboard and final integration | in progress | arena-0765efc4 | COORDINATION.md, index.html, assets/, scripts/, .github/workflows/, README.md |
+| Research, privacy review, dashboard and final integration | done (bounded scope; R01–R12 needs review) | arena-0765efc4 | COORDINATION.md, index.html, assets/, scripts/, .github/workflows/, README.md |
 
 Session started 2026-11-10. Empty repository except README; no competing claims found. Arena requires this session to remain on arena/0765efc4-tino3, so the requested session branch naming cannot be used. This session is the sole final integrator. All projections must be explicitly illustrative, not verified property facts; unverified property fields remain blank. No private inputs will be included in public repository history.
 
@@ -74,3 +74,7 @@ Main advanced concurrently to 67fc2b2 with multiple earlier integrations. Merge 
 - Pages build and deploy succeeded: https://github.com/wingbangboozle1-lang/Tino3/actions/runs/42767304425 . Live landing page verified via cache-busted fetch: https://wingbangboozle1-lang.github.io/Tino3/?publication=b0b0ff8 . Uncached landing contains the privacy-safe edition.
 - Earlier legacy data URL still returned old content through the retrieval/cache path after deployment. Do NOT claim prior disclosures erased. Additional mitigation: generate content-free withdrawal notices at all legacy HTML/data/JS paths rather than relying solely on 404/cache expiration. No legacy content is copied to the artifact. Historical repository exposure remains R12.
 - Status: research/dashboard done within explicit evidence limits; property facts, forecasts, quotes, pending outcome and historical privacy remediation remain needs review. No browser automation was available. 119 reviewed data rows have contextual official source links.
+
+## Final deployment confirmation · arena-0765efc4
+
+PR #10 https://github.com/wingbangboozle1-lang/Tino3/pull/10 merged successfully. Pages build and deployment succeeded: https://github.com/wingbangboozle1-lang/Tino3/actions/runs/42767470086 . Legacy data endpoint was fetched with withdrawal cache key and now returns only a privacy/verification withdrawal status, not property data. Reviewed landing was fetched successfully after PR #9 deployment. All 8 reviewed pages build reproducibly; 119 data rows carry contextual official citations. This session’s assigned branch remains unchanged. Prior public Git history/cached copies are not erased; R12 remains needs review. Property-specific forecasts and a numerical profit winner remain incomplete by design under the official-only/no-inference rule.
