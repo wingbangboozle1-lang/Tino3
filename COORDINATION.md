@@ -142,3 +142,75 @@ the owner's behalf.
   of 8 pages + 2 assets.
 - Confirmed this branch leaves the working tree clean against `origin/main`.
 - Recorded this resolution rather than silently reverting, per the board's rule on conflicts.
+
+---
+
+## Deployment verification · session `arena-f0c2842a` · 2026-11-10 06:22 UTC
+
+PR #11 was merged (`275ca69`), and both workflows succeeded:
+
+- Verify static site — success
+- Deploy GitHub Pages — success (run 42767816608)
+
+I then read the **live** site rather than assuming the deployment matched the artifact. It does not.
+Recording the finding here because fixing it requires editing files owned by another session.
+
+### Finding D-1 · highest severity · the live site serves two mutually contradictory editions
+
+The published origin currently serves both of the following at the same time.
+
+**Edition 1 publishes the owner's figures.** `index.html`, `cupertino.html`, `san-francisco.html` and
+`executive-summary.html` are live and contain the estimated market values, the assessed values, the
+annual tax figures, the monthly rent, and both ZIP codes. Example, read from
+`/executive-summary.html` on 10 Nov 2026:
+
+> "Property A | Cupertino, ZIP 95014 - est. $3,100,000 (Nov 2026) - solar installed"
+
+**Edition 2 promises the opposite.** `review.html` and `costs.html` are also live and state:
+
+> R01 · Highest — "No addresses, ZIP codes, private trust records or supplied financial figures are
+> published."
+> costs.html — "Actual figures and history are withheld for privacy... All property amount cells
+> remain blank."
+
+Both pages are reachable. The second edition's central privacy claim is therefore false on its face, in
+public, right now.
+
+### Why it happens
+
+Two publishers are racing on the same origin:
+
+1. `.github/workflows/pages.yml` deploys `_site/`, produced by `scripts/package_site.py`, which is a hard
+   allowlist of 8 pages plus withdrawal notices at every other HTML path.
+2. GitHub's **legacy** Pages build (`build_type: legacy`, source `main` /) also deploys the whole branch
+   root on every push to `main`. `gh run list` shows `pages build and deployment` (dynamic) running
+   alongside the Actions deploy.
+
+Whichever finishes last wins, path by path. That is why `executive-summary.html` — which is **not** in
+the allowlist and should carry a withdrawal notice — is serving its full original content.
+
+Note also that the repository root genuinely contains those files on `main`, so the legacy publisher
+has real content to serve. The allowlist is enforced only inside the Actions artifact; it cannot
+constrain the other publisher.
+
+### Why I have not fixed it myself
+
+- Changing the Pages source requires `PATCH /repos/{owner}/{repo}/pages`, which returns **403** for this
+  token. Both this session and `arena-0765efc4` hit the same wall (their PR #8 and #9 notes).
+- Deleting the root HTML files would discard four other sessions' work, which the board forbids.
+- Removing the privacy claims from `review.html` / `costs.html` would edit another session's page.
+
+### Change request (logged, not performed)
+
+| # | Request | Owner of the file | Why |
+|---|---|---|---|
+| CR-1 | Resolve the dual-publisher race: either set Pages source to `workflow` (requires repo-owner credentials), or stop deploying from the branch root | repo owner / last integration session | D-1 |
+| CR-2 | Delete or replace the non-allowlisted root HTML files on `main` | last integration session | They are the content the legacy publisher serves |
+| CR-3 | Until D-1 is fixed, correct the privacy language on `review.html` and `costs.html` so it does not claim figures are withheld while they are published | `arena-0765efc4` | A false privacy claim is worse than no claim |
+| CR-4 | Decide, explicitly and in writing, whether the owner's figures are meant to be public | **the owner** | Nobody else can make this call |
+
+### Disclosure
+
+The correct status of the public site is: **live, functional, and privacy-inconsistent.** Do not
+represent it as privacy-reviewed. I have not attempted a destructive history rewrite and I cannot erase
+copies already crawled.
