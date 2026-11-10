@@ -1,0 +1,31 @@
+item,figure,source_title,source_url,source_type,status
+Federal estate exemption 2026 per person,$15,000,000,"IRS Rev. Proc. 2025-32 (2026 inflation adjustments); OBBBA P.L. 119-21 §70106 made $15M permanent, indexed from 2027","https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",Official IRS PDF,Verified
+Federal estate top rate,40%,"IRS Rev. Proc. 2025-32; IRC §2001","https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",Official IRS PDF,Verified
+Annual gift exclusion 2026,$19,000 per recipient,"IRS Rev. Proc. 2025-32 §4.42","https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",Official IRS PDF,Verified
+California estate tax,None,"California FTB / BOE — California has no estate or inheritance tax (repealed 1982; §13302 collects $0 after federal credit ended 2004)","https://www.ftb.ca.gov/file/personal/income-types/rental.html",Official FTB,Verified (see Flagged note on FTB page scope)
+Prop 13 assessed growth cap,2% per year,"California BOE Publication 29 — California Property Tax: An Overview","https://www.boe.ca.gov/proptaxes/pdf/pub29.pdf",Official BOE PDF,Verified
+Prop 13 base rate,1% + voter-approved bonds,"California BOE Publication 29","https://www.boe.ca.gov/proptaxes/pdf/pub29.pdf",Official BOE PDF,Verified
+Prop 19 parent-child exclusion conditions,"Principal residence of both transferor & transferee; value limit = taxable value + $1,000,000 (biennially adjusted); file homeowners exemption within 1 yr; claim within 3 yrs; other real property excluded","https://www.boe.ca.gov/prop19/",Official BOE,Verified
+Prop 19 claim form,BOE-19-P (parent-child) / BOE-19-G (grandparent-grandchild),"California BOE Proposition 19 page","https://www.boe.ca.gov/prop19/",Official BOE,Verified
+Step-up in basis,FMV at date of death (IRC §1014),"IRS Publication 559 — Survivors Executors and Administrators","https://www.irs.gov/publications/p559",Official IRS,Verified
+Inherited property holding period,Long-term regardless of actual holding period,"IRS Publication 550 / Topic 409 Capital Gains and Losses","https://www.irs.gov/taxtopics/tc409",Official IRS,Verified
+Federal long-term capital gains 2026,0% / 15% / 20% by income,"IRS Rev. Proc. 2025-32","https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",Official IRS PDF,Verified
+California capital gains,Taxed as ordinary income 1%–12.3% (+1% over $1M); no lower rate,"California FTB — California does not have a lower rate for capital gains","https://www.ftb.ca.gov/file/personal/income-types/rental.html",Official FTB,Verified
+Home sale exclusion (IRC §121),$250,000 single / $500,000 MFJ; 2-of-5-year test; not inflation-indexed,"IRS Topic 409 / Publication 523 Selling Your Home","https://www.irs.gov/taxtopics/tc409",Official IRS,Verified
+Net investment income tax,3.8% over $200,000 single / $250,000 MFJ,"IRS Topic 559 Net Investment Income Tax","https://www.irs.gov/taxtopics/tc559",Official IRS,Verified
+Rental income tax,Schedule E; CA passive activity; nonresidents taxed on CA-source rent,"California FTB Rental income page","https://www.ftb.ca.gov/file/personal/income-types/rental.html",Official FTB,Verified
+Formal probate timeline,Typically 9–18 months; filing fee typically $435; forms DE-111 / DE-157 / DE-160,"California Courts Self-Help — Overview of formal probate","https://selfhelp.courts.ca.gov/probate/formal-probate",Official courts.ca.gov,Verified
+Trust administration notice,60 days to beneficiaries/heirs (Prob. Code §16061.7); 150 days to Assessor if CA real property,"California Courts / Santa Clara Superior Court Probate Trusts page","https://santaclara.courts.ca.gov/divisions/probate-division/probate-trusts",Official courts.ca.gov,Verified
+CPI inflation,2.4% Feb 2025–Feb 2026; 3.7% Sep 2025–Sep 2026,"U.S. Bureau of Labor Statistics CPI","https://www.bls.gov/cpi/",Official BLS,Verified
+SF just-cause eviction,17 just causes under SF Admin Code §37.9(a); owner-occupancy is cause #8 with limits,"City & County of San Francisco — Overview of Just Cause Evictions","https://www.sf.gov/information--overview-just-cause-evictions",Official sfgov,Verified
+SF rent control cap (state law),5% + CPI or 10% whichever lower (units not covered by SF Ordinance),"SF Rent Board / sfgov Rent Control page","https://www.sf.gov/information--rent-control",Official sfgov,Verified
+CA homeowners insurance benchmark,NAIC HO-3 avg $1,655 (2023 data); CDI all-forms avg $2,339.99 across 6,052,334 policies (2025 experience year),"NAIC Homeowners Report; California Dept. of Insurance data call (via CDI)","https://www.insurance.ca.gov/",Official CDI,Verified (benchmark only — property-specific quote still required)
+Cupertino market value Nov 2026,$3,100,000,User-provided (no APN/address disclosed for privacy),,User-provided,UNVERIFIED — cannot confirm from official source without APN
+SF market value Nov 2026,$1,800,000,User-provided (no APN/address disclosed for privacy),,User-provided,UNVERIFIED — cannot confirm from official source without APN
+Cupertino tax/assessed history 2014–2025,See Properties page,User-provided table,,User-provided,UNVERIFIED — spot-check math only (see Flagged page)
+SF tax/assessed history 2016–2025,See Properties page,User-provided table,,User-provided,UNVERIFIED — SF implied rate anomaly flagged
+SF gross rent,$7,150/month,User-provided,,User-provided,UNVERIFIED — lease records not reviewed
+Cupertino water $100–$150/mo; solar credit $10–$20/mo,User-provided ranges,,User-provided,UNVERIFIED — utility bills not reviewed; NEM 3.0 context: CPUC Net Billing Tariff (D.22-12-056) pays avoided-cost ~4–8¢/kWh for new PG&E/SCE/SDG&E solar since Apr 15 2023 — https://www.cpuc.ca.gov/industries-and-topics/electrical-energy/electric-power-procurement-and-generation/net-energy-metering
+SF water $330–$400/mo; electric $30–$70/mo,User-provided ranges,,User-provided,UNVERIFIED — utility bills not reviewed; SFPUC retail rates adopted annually — https://www.sfpuc.gov/
+Cash inheritance amount,(blank),Not provided — amount not disclosed,,— ,UNVERIFIED — left blank per verification rule; estate-threshold math shown as headroom only
+Cupertino market rent,(blank),Not provided,,— ,UNVERIFIED — left blank; break-even rent shown instead

@@ -21,3 +21,8 @@ Started: 2026-11-10
 
 ## Handoff log
 - 2026-11-10: Session arena-d11336c5-tino3 claimed tasks 1-4 (single-session repo; no other sessions active). Pushing claim immediately.
+
+## Integration handoff — session arena-50c6b81e-tino3 (PR #3)
+- 2026-11-10: Parallel session. PR #3 (branch arena/50c6b81e-tino3) conflicted with PR #1 already merged to main.
+- Resolution: kept PR #1 pages as primary (index.html, projections.html, assets/style.css); added PR #3 supplementary pages + data/ + scripts/ without discarding either session's work. README merged. This entry logs the merge per COORDINATION rules.
+- Verification: internal-link + PII scan on combined tree; both sets anonymized, $10 rounding, source-linked rows.
