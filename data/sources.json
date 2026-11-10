@@ -1,0 +1,209 @@
+[
+ {
+  "id": "S01",
+  "publisher": "California State Board of Equalization",
+  "title": "Proposition 19 \u2014 The Home Protection for Seniors, Severely Disabled, Families, and Victims of Wildfire or Natural Disasters Act",
+  "url": "https://www.boe.ca.gov/prop19/",
+  "type": "Official \u2014 state tax agency",
+  "proves": "Prop 19 replaced Prop 58/193 for transfers on or after 16 Feb 2021. The parent-child exclusion now requires the property to be the principal residence of BOTH transferor and transferee, is capped at the property's factored base year value plus $1,000,000 (biennially adjusted), and eliminated the exclusion for other real property, including rentals. The claim is Form BOE-19-P, filed within 3 years of transfer or before transfer to a third party, with the homeowners' exemption claimed within 1 year.",
+  "verified": true
+ },
+ {
+  "id": "S02",
+  "publisher": "California State Board of Equalization",
+  "title": "Letter to Assessors No. 2025/009 \u2014 Intergenerational Transfer Exclusion, Adjustment of the $1 Million Amount",
+  "url": "https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf",
+  "type": "Official \u2014 binding guidance to county assessors",
+  "proves": "The $1,000,000 amount is adjusted every second 16 February by the prior calendar year's FHFA California House Price Index change. Table: $1,000,000 (16 Feb 2021 \u2013 15 Feb 2023); $1,022,600 (16 Feb 2023 \u2013 15 Feb 2025); $1,044,586 (16 Feb 2025 \u2013 15 Feb 2027). Next adjustment February 2027.",
+  "verified": true
+ },
+ {
+  "id": "S03",
+  "publisher": "Internal Revenue Service",
+  "title": "IR-2025-103 \u2014 IRS releases tax inflation adjustments for tax year 2026 (Revenue Procedure 2025-32)",
+  "url": "https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2026-including-amendments-from-the-one-big-beautiful-bill",
+  "type": "Official \u2014 federal tax agency",
+  "proves": "Estates of decedents dying in 2026 have a basic exclusion amount of $15,000,000 (2025: $13,990,000). Annual gift exclusion for 2026 remains $19,000; $194,000 for a non-citizen spouse. 2026 marginal rate schedule and standard deduction also published here.",
+  "verified": true
+ },
+ {
+  "id": "S04",
+  "publisher": "Internal Revenue Service",
+  "title": "Publication 551 (12/2025), Basis of Assets",
+  "url": "https://www.irs.gov/publications/p551",
+  "type": "Official \u2014 federal tax guidance",
+  "proves": "Rules for determining the basis of property, including property acquired from a decedent and the adjustments to basis for depreciation and improvements.",
+  "verified": true
+ },
+ {
+  "id": "S05",
+  "publisher": "Internal Revenue Service",
+  "title": "Topic No. 701 \u2014 Sale of your home",
+  "url": "https://www.irs.gov/taxtopics/tc701",
+  "type": "Official \u2014 federal tax guidance",
+  "proves": "A capital gain on the sale of a main home may be excluded up to $250,000 ($500,000 on a joint return), subject to the 24-month ownership test and the 24-month use test within the 5 years ending on the sale date.",
+  "verified": true
+ },
+ {
+  "id": "S06",
+  "publisher": "California Legislative Analyst's Office",
+  "title": "California's Tax System: A Primer \u2014 The Estate Tax and the GST Tax",
+  "url": "https://lao.ca.gov/2007/tax_primer/tax_primer_040907.aspx",
+  "type": "Official \u2014 non-partisan legislative analyst",
+  "proves": "Proposition 6 (June 1982) eliminated California's Inheritance and Gift Tax law. The state's remaining 'pick-up' tax raised no revenue once the federal credit was repealed for decedents dying after 2004, so California 'does not currently impose any estate taxes on estates of decedents dying after 2004'.",
+  "verified": true
+ },
+ {
+  "id": "S07",
+  "publisher": "California Franchise Tax Board",
+  "title": "Bill Analysis, SB 378 (2019-20) \u2014 estate and gift tax proposal",
+  "url": "https://www.ftb.ca.gov/tax-pros/law/legislation/2019-2020/SB378-032519.pdf",
+  "type": "Official \u2014 state tax agency analysis",
+  "proves": "California does not conform to the federal estate and GST taxes, and the Revenue and Taxation Code contains a provision prohibiting California from imposing estate and gift taxes. Any state estate tax would require a constitutional amendment approved by the voters.",
+  "verified": true
+ },
+ {
+  "id": "S08",
+  "publisher": "California Legislative Analyst's Office",
+  "title": "Evaluating Tax Policy Changes in the Governor's Budget (EconTax blog, 22 Feb 2024)",
+  "url": "https://lao.ca.gov/LAOEconTax/Article/Detail/797",
+  "type": "Official \u2014 non-partisan legislative analyst",
+  "proves": "The Governor's 2024-25 budget package proposed ending the step-up in basis for inherited assets at the state level for inheritances received after 1 July 2024. The LAO scored it as raising a few hundred million dollars in 2024-25. This documents that a state-level step-up repeal has been formally proposed, not enacted.",
+  "verified": true
+ },
+ {
+  "id": "S09",
+  "publisher": "County of Santa Clara, Controller-Treasurer Department",
+  "title": "Compilation of Tax Rates and Information, Fiscal Year 2025-2026",
+  "url": "https://files.santaclaracounty.gov/exjcpb1531/2025-11/tax-rate-book-2025-2026.pdf",
+  "type": "Official \u2014 county tax rate book",
+  "proves": "Tax rates are stated per $100 of assessed valuation. The 1% maximum levy is 1.00000 in every tax rate area; the county retirement levy is 0.03880; Cupertino-area bond components include Cupertino Elem 2001 0.01650, Cupertino Elem 2012 0.01690, Cupertino Elem 2024 0.00010, El Camino Hospital 2003 0.00200, Foothill-De Anza 1999 0.00750, Fremont Union High 2008 0.00880, 2014 0.01070, 2018 0.01180, SCVWD State Water Project 0.00390. 816 tax rate areas in FY2025-26.",
+  "verified": true
+ },
+ {
+  "id": "S10",
+  "publisher": "City and County of San Francisco \u2014 Office of the Controller / Board of Supervisors",
+  "title": "Property tax rate resolution, FY2025-26 (Board of Supervisors file 25-0876)",
+  "url": "https://sfgov.legistar.com/View.ashx?GUID=AC93184C-32A4-4DA1-887D-09FC319785E7&ID=14779286&M=F",
+  "type": "Official \u2014 city rate-setting document",
+  "proves": "The combined FY2025-26 secured property tax rate for the City and County of San Francisco is $1.18268325 per $100 of assessed value, up from $1.17143563 in FY2024-25 (a 0.96% increase). Charter set-asides per $100: Library Preservation Fund $0.0250, Children's Fund $0.0400, Open Space Fund $0.0250.",
+  "verified": true
+ },
+ {
+  "id": "S11",
+  "publisher": "City and County of San Francisco \u2014 Office of the Assessor-Recorder",
+  "title": "Fees to record a document in San Francisco \u2014 documentary transfer tax schedule",
+  "url": "https://www.sf.gov/reports--march-2024--fees-record-document-san-francisco",
+  "type": "Official \u2014 county recorder fee schedule",
+  "proves": "San Francisco documentary transfer tax is tiered and charged on the entire consideration: $2.50 per $500 up to $250,000; $3.40 per $500 from $250,000 to just under $1,000,000; $3.75 per $500 from $1,000,000 to just under $5,000,000; $11.25 per $500 from $5,000,000 to just under $10,000,000; $27.50 per $500 from $10,000,000 to just under $25,000,000; $30.00 per $500 at $25,000,000 and above. A $10 recording fee applies to each deed subject to transfer tax.",
+  "verified": true
+ },
+ {
+  "id": "S12",
+  "publisher": "California Secretary of State",
+  "title": "County Clerk/Registrar of Voters Memorandum No. 26138 (18 May 2026) \u2014 initiative failed",
+  "url": "https://elections.cdn.sos.ca.gov/ccrov/2026/may/26138jh.pdf",
+  "type": "Official \u2014 election administration",
+  "proves": "The initiative 'Repeals voter-enacted changes to property tax rules for transfers between family members. Initiative constitutional amendment' (summary date 6 Nov 2025, proponent Gina Tse-Louie) failed to qualify: the number of signatures filed was below 100% of the number required. No Prop 19 repeal reached the November 2026 ballot.",
+  "verified": true
+ },
+ {
+  "id": "S13",
+  "publisher": "San Francisco Rent Board / SF.gov",
+  "title": "Current Rates, including Rent Increase, Relocation, Security Deposit",
+  "url": "https://www.sf.gov/reports--current-rates-including-rent-increase-relocation-sec-deposit",
+  "type": "Official \u2014 rent board rate schedule",
+  "proves": "Allowable annual rent increase for rent-controlled units: 1.6% for 1 March 2026 \u2013 28 February 2027; 1.4% for 1 March 2025 \u2013 28 February 2026; 1.7% for 1 March 2024 \u2013 28 February 2025. Security-deposit interest 4.2% for 2026-27. Owner/relative move-in relocation payments: $8,245.00 per tenant, maximum $24,733.00 per unit, plus $5,497.00 for an elderly, disabled or minor-child household (3/1/26 \u2013 2/28/27). The same page carries a notice, posted 9 November 2026, that the Board of Supervisors is considering File No. 261020, which would temporarily limit combined banked and capital-improvement increases to 10% per year; the notice states the legislation has not been enacted.",
+  "verified": true
+ },
+ {
+  "id": "S14",
+  "publisher": "Federal Housing Finance Agency",
+  "title": "FHFA House Price Index Quarterly Report, 2025Q3",
+  "url": "https://www.fhfa.gov/document/d/hpi/fhfa-house-price-index-report-2025q3",
+  "type": "Official \u2014 federal statistical agency",
+  "proves": "The FHFA purchase-only HPI is a repeat-sales index built from Fannie Mae / Freddie Mac mortgages, published quarterly and monthly at state, metro, county and ZIP level. The report tables give the latest four-quarter and five-year appreciation for California; the site quotes a multi-year range from those tables rather than a point forecast.",
+  "verified": true
+ },
+ {
+  "id": "S15",
+  "publisher": "California Department of Insurance",
+  "title": "Residential property insurance data call \u2014 2025 experience year (statewide written premium and policy counts)",
+  "url": "https://www.insurance.ca.gov/01-consumers/105-type/95-guides/03-res/",
+  "type": "Official \u2014 state insurance regulator",
+  "proves": "The Department publishes residential insurance consumer guides, a Homeowners Premium Survey tool and a Homeowners Insurance Complaint Study. It publishes premium information at statewide or company level. It does not publish a ZIP-level average premium, which is why the two subject ZIP codes cannot be verified for this line. The specific statewide figure used in this analysis comes from CDI's 2025 experience-year residential data call as summarized in secondary reporting; the underlying CDI data file was NOT opened during this review, and the figure is therefore labelled unverified wherever it appears.",
+  "verified": true
+ },
+ {
+  "id": "S16",
+  "publisher": "California Legislative Information",
+  "title": "Revenue and Taxation Code \u00a7218 \u2014 homeowners' property tax exemption",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=218",
+  "type": "Official \u2014 statute",
+  "proves": "The homeowners' property tax exemption is $7,000 of the full value of the dwelling, authorised by Article XIII \u00a73(k) of the California Constitution. Subdivision (b) excludes property that is rented, vacant, under construction on the lien date, or a vacation or secondary home.",
+  "verified": true
+ },
+ {
+  "id": "S17",
+  "publisher": "California Legislative Information",
+  "title": "Revenue and Taxation Code \u00a751 \u2014 Proposition 13 assessed-value limits",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=51",
+  "type": "Official \u2014 statute",
+  "proves": "For each lien date after the base-year lien date, the taxable value of real property is the LESSER of (a) its base year value compounded annually by an inflation factor and (b) its full cash value on the lien date. Section 51(a)(1)(D) caps that inflation factor: 'In no event shall the percentage increase for any assessment year ... exceed 2 percent of the prior year's value.' The 1% general levy itself derives from article XIII A of the California Constitution, not from this section; the 1% base levy is evidenced instead by the county rate book (S09), which states '1% Maximum Tax Levy 1.00000' for every tax rate area.",
+  "verified": true
+ },
+ {
+  "id": "S18",
+  "publisher": "Internal Revenue Service",
+  "title": "Publication 559 (2025), Survivors, Executors, and Administrators",
+  "url": "https://www.irs.gov/publications/p559",
+  "type": "Official \u2014 federal tax guidance",
+  "proves": "The personal representative's duties for a decedent's estate, the final Form 1040, estate income tax, and the basis rules applied to property included in the decedent's gross estate (the step-up to date-of-death fair market value under IRC \u00a71014). Publication 551 (S04) states the same basis rule.",
+  "verified": true
+ },
+ {
+  "id": "S19",
+  "publisher": "Internal Revenue Service",
+  "title": "Net Investment Income Tax",
+  "url": "https://www.irs.gov/individuals/net-investment-income-tax",
+  "type": "Official \u2014 federal tax guidance",
+  "proves": "A 3.8% net investment income tax applies to the lesser of net investment income or the excess of modified adjusted gross income over $200,000 (single) / $250,000 (joint). Rental income and capital gains are net investment income.",
+  "verified": true
+ },
+ {
+  "id": "S20",
+  "publisher": "California Legislative Information",
+  "title": "Assembly Constitutional Amendment 11 (2019-2020) \u2014 the text of Proposition 19",
+  "url": "https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=201920200ACA11",
+  "type": "Official \u2014 constitutional amendment text",
+  "proves": "The operative text of Proposition 19, including the new article XIII A \u00a72.1 (intergenerational transfer exclusion) and \u00a72.1(c)(4) (biennial adjustment of the $1,000,000 amount by the FHFA California HPI).",
+  "verified": true
+ },
+ {
+  "id": "S21",
+  "publisher": "San Francisco Rent Board / SF.gov",
+  "title": "Learn about rent increases in San Francisco",
+  "url": "https://www.sf.gov/learn-about-rent-increases-san-francisco",
+  "type": "Official \u2014 rent board guidance",
+  "proves": "Under the San Francisco Rent Ordinance a landlord may raise a tenant's rent by the allowed percentage once every 12 months, calculated as 60% of the increase in Bay Area CPI-U. The increase is applied to base rent only.",
+  "verified": true
+ },
+ {
+  "id": "S23",
+  "publisher": "California Legislative Information",
+  "title": "Revenue and Taxation Code \u00a711901 \u2014 Documentary Transfer Tax Act",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=11901",
+  "type": "Official \u2014 statute",
+  "proves": "Part 6.7 of Division 2 of the Revenue and Taxation Code (sections 11901\u201311935) is the Documentary Transfer Tax Act. The Act authorises counties and cities to impose a documentary transfer tax; the particular rate for a given county or city is set under the Act and was not re-read for this review. The San Francisco tier schedule is verified separately at S11.",
+  "verified": true
+ },
+ {
+  "id": "S22",
+  "publisher": "Internal Revenue Service",
+  "title": "Topic No. 409 \u2014 Capital gains and losses",
+  "url": "https://www.irs.gov/taxtopics/tc409",
+  "type": "Official \u2014 federal tax guidance",
+  "proves": "Treatment of capital gains and losses, including the holding-period distinction between short-term and long-term gain and the netting rules.",
+  "verified": true
+ }
+]

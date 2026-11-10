@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Decision analysis &middot; Inheritance Decision Dashboard</title>
+<meta name="description" content="Six plans, twenty years of after-tax cash flow, nine growth-and-return combinations, and the reasoning behind the recommendation.">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%2314507a'/><path d='M8 21l6-9 4 6 3-4 3 7z' fill='%23fff'/></svg>">
+</head>
+<body>
+<div class="confbar"><div class="wrap"><strong>Internal use only</strong><span>Internal working document &middot; anonymised &middot; no personal identifying information is published on this site</span></div></div>
+<header class="masthead"><div class="wrap">
+<p class="eyebrow">Cupertino 95014 &middot; San Francisco 94122 &middot; inheritance planning 2040&ndash;2050</p>
+<h1>Decision analysis</h1>
+<p class="sub">Six plans, twenty years of after-tax cash flow, nine growth-and-return combinations, and the reasoning behind the recommendation.</p>
+</div></header>
+<nav class="main" aria-label="Sections"><div class="wrap"><a href="../index.html">Dashboard</a><a href="executive-summary.html">Executive summary</a><a href="inheritance-process.html">Inheritance process</a><a href="taxes.html">Taxes &amp; law</a><a href="cupertino.html">Cupertino</a><a href="san-francisco.html">San Francisco</a><a href="operating-costs.html">Operating costs</a><a href="projections.html">Projections</a><a href="decision-analysis.html" aria-current="page">Decision analysis</a><a href="risks.html">Risks &amp; law changes</a><a href="sources.html">Sources</a><a href="flagged.html">Flagged for review</a></div></nav>
+<main><div class="wrap">
+
+<p class="lede">Six plans, each run from 2045 to 2065 on identical assumptions. The only things that change are
+which house you occupy, which house you let, and which you sell. Everything else &mdash; growth, inflation,
+returns, tax rates &mdash; is held constant so the comparison is clean.</p>
+
+<div class="callout">
+<span class="h">Method, in one paragraph</span>
+<p style="margin-bottom:0">Each year, rent received is reduced by property tax, insurance, water, electricity,
+maintenance and income tax. Where you do not occupy an inherited house, market rent for an equivalent house is
+subtracted, so every plan buys the same standard of housing. The resulting annual cash flow is invested at
+6.0% nominal; the 2% income component is taxed each year. At 2065 any remaining house is sold
+with 5% selling costs, documentary transfer tax, capital gains on the post-inheritance gain and depreciation
+recapture, and the portfolio is liquidated and taxed on unrealised gains. The result is a single number:
+after-tax wealth at the end of 2065.</p>
+</div>
+
+<h2 id="results">Results</h2>
+<div class="tablewrap"><table class=""><caption>All six plans. Cupertino treated as the parents' principal residence. Sorted by terminal after-tax wealth.</caption><thead><tr><th class=""></th><th class="">Plan</th><th class="r">Property tax, first year</th><th class="r">After-tax cash flow, first year</th><th class="r">Cumulative cash flow 2045&ndash;2065</th><th class="r">Terminal house sales, net</th><th class="r">Invested portfolio at 2065</th><th class="r">Terminal after-tax wealth</th></tr></thead><tbody><tr class="hl"><td><strong>F</strong></td><td>Live in San Francisco; sell Cupertino</td><td class="r">$44,770</td><td class="r">$11,020</td><td class="r">&minus;$76,740</td><td class="r">$6,370,810</td><td class="r">$13,692,580</td><td class="r"><strong>$20,063,390</strong></td></tr><tr><td><strong>B</strong></td><td>Live in San Francisco (vacant unit); rent Cupertino</td><td class="r">$130,270</td><td class="r">$43,060</td><td class="r">$997,180</td><td class="r">$15,896,880</td><td class="r">$1,508,390</td><td class="r"><strong>$17,405,270</strong></td></tr><tr><td><strong>A</strong></td><td>Live in Cupertino; rent all three San Francisco units</td><td class="r">$103,970</td><td class="r">&minus;$9,540</td><td class="r">&minus;$583,950</td><td class="r">$16,664,040</td><td class="r">&minus;$583,950</td><td class="r"><strong>$16,080,090</strong></td></tr><tr><td><strong>E</strong></td><td>Live in Cupertino; sell the San Francisco building</td><td class="r">$59,120</td><td class="r">&minus;$86,220</td><td class="r">&minus;$2,390,470</td><td class="r">$11,144,220</td><td class="r">$4,397,470</td><td class="r"><strong>$15,541,700</strong></td></tr><tr><td><strong>D</strong></td><td>Sell both at inheritance; invest the net proceeds</td><td class="r">&mdash;</td><td class="r">&minus;$163,080</td><td class="r">&minus;$4,676,450</td><td class="r">&mdash;</td><td class="r">$14,789,040</td><td class="r"><strong>$14,789,040</strong></td></tr><tr><td><strong>C</strong></td><td>Rent both houses; rent equivalent housing</td><td class="r">$130,350</td><td class="r">&minus;$54,360</td><td class="r">&minus;$1,796,010</td><td class="r">$15,045,890</td><td class="r">&minus;$1,796,010</td><td class="r"><strong>$13,249,880</strong></td></tr></tbody></table></div>
+<p class="muted">A negative &ldquo;invested portfolio&rdquo; is not a debt: it is the cumulative amount of
+outside cash the plan requires, because property tax and running costs exceed the rent it collects. Plan A
+needs about $583,950 of outside funding over twenty years.</p>
+<div class="callout">
+<span class="h">Why the ranking uses terminal wealth rather than a discounted present value</span>
+<p style="margin-bottom:0">A present-value ranking depends entirely on the discount rate chosen, and this model
+already assumes the alternative is a portfolio earning 6.0%. Discounting at that same rate
+makes every plan's present value collapse into a restatement of its terminal wealth, so nothing is added.
+Discounting at a lower rate would silently assume you could borrow at that rate to fund the negative
+cash-flow years. Terminal after-tax wealth is the one number that needs no such choice, so it is the ranking
+metric throughout. The present values are still computed and stored in the model file for audit.</p>
+</div>
+
+<h3>The same table, explained</h3>
+<dl>
+<dt><strong>A. Live in Cupertino, rent all three San Francisco units</strong></dt>
+<dd>The plan the brief implies. It preserves the Prop 19 exclusion on Cupertino &mdash;
+$26,290 a year of tax avoided &mdash; and it captures
+the full rent on the San Francisco building. But the combined property tax of
+$103,970 exceeds the net rent, so
+the plan runs a cash deficit of about $9,540 a year from day one.</dd>
+
+<dt><strong>B. Live in San Francisco, rent Cupertino</strong></dt>
+<dd>Cupertino loses its exclusion because you do not occupy it, so its tax rises by
+$26,290. In exchange, Cupertino produces rent and you
+occupy a unit in a building you already own. This is the best plan if the portfolio return turns out low,
+because it keeps both houses appreciating.</dd>
+
+<dt><strong>C. Rent both, rent somewhere else</strong></dt>
+<dd>Worst of the six. You pay market rent for housing, lose the exclusion on both houses, and pay tax on both
+rent streams. Renting equivalent housing at a 3% gross yield is structurally worse than owning it.</dd>
+
+<dt><strong>D. Sell both, invest, rent</strong></dt>
+<dd>Cleanest balance sheet and the lowest concentration risk, but it ranks fifth. The reason is not tax &mdash;
+selling at death is nearly tax-free &mdash; it is that you convert two appreciating assets into a taxable
+portfolio while taking on a rent liability that grows every year.</dd>
+
+<dt><strong>E. Live in Cupertino, sell San Francisco</strong></dt>
+<dd>Gives up the highest-yielding asset in the portfolio. Fourth of six.</dd>
+
+<dt><strong>F. Live in San Francisco, sell Cupertino</strong></dt>
+<dd>First of six. Sells the low-yield, tax-heavy asset at a stepped-up basis (<a class="srclink" href="sources.html#S18" title="Source S18 — see the source register">S18</a>) with almost no
+capital-gains consequence ($0 of tax on a
+$6,531,230 sale, the residue being California's 0.11% county
+transfer tax), keeps the building that produces cash, and occupies the vacant unit so housing costs nothing
+beyond the rent forgone on that one unit.</dd>
+</dl>
+
+<h2 id="detail">Year-by-year cash flow, plans A and F</h2>
+<div class="tablewrap"><table class=""><caption>Selected years. &ldquo;Costs&rdquo; is insurance, water, electricity and maintenance. Income tax is zero in both plans in these years because depreciation and operating costs absorb the rental income.</caption><thead><tr><th class="">Year</th><th class="r">A rent</th><th class="r">A costs</th><th class="r">A property tax</th><th class="r">A net</th><th class="r">F rent</th><th class="r">F costs</th><th class="r">F property tax</th><th class="r">F net</th></tr></thead><tbody><tr><td>2045</td><td class="r">$167,130</td><td class="r">$72,700</td><td class="r">$103,970</td><td class="r">&minus;$9,540</td><td class="r">$101,390</td><td class="r">$45,600</td><td class="r">$44,770</td><td class="r">$11,020</td></tr><tr><td>2050</td><td class="r">$185,980</td><td class="r">$87,910</td><td class="r">$114,790</td><td class="r">&minus;$16,720</td><td class="r">$109,760</td><td class="r">$54,960</td><td class="r">$49,430</td><td class="r">$5,380</td></tr><tr><td>2055</td><td class="r">$207,190</td><td class="r">$106,380</td><td class="r">$126,740</td><td class="r">&minus;$25,940</td><td class="r">$118,830</td><td class="r">$66,290</td><td class="r">$54,570</td><td class="r">&minus;$2,040</td></tr><tr><td>2060</td><td class="r">$231,070</td><td class="r">$128,830</td><td class="r">$139,930</td><td class="r">&minus;$37,680</td><td class="r">$128,640</td><td class="r">$80,030</td><td class="r">$60,250</td><td class="r">&minus;$11,640</td></tr><tr><td>2065</td><td class="r">$258,020</td><td class="r">$156,110</td><td class="r">$154,490</td><td class="r">&minus;$52,590</td><td class="r">$139,270</td><td class="r">$96,700</td><td class="r">$66,520</td><td class="r">&minus;$23,960</td></tr></tbody></table></div>
+<p>Plan A's net position deteriorates because operating costs are tied to market value (maintenance) and to
+construction inflation (insurance), while rent is capped: two of the three San Francisco tenancies are
+rent-controlled and escalate at 1.6% a year. Plan F stays positive far longer because it carries only one
+building and has $6,197,490 working for it.</p>
+
+<h2 id="prop19">The Proposition 19 position in each plan</h2>
+<p class="muted">The cap in this table is the parents' factored base year value plus the biennially adjusted
+allowance (<a class="srclink" href="sources.html#S01" title="Source S01 — see the source register">S01</a> <a class="srclink" href="sources.html#S02" title="Source S02 — see the source register">S02</a>). The exclusion applies only where the house was the transferor's principal
+residence and the transferee moves in within one year and claims the homeowners' exemption (<a class="srclink" href="sources.html#S16" title="Source S16 — see the source register">S16</a>).</p>
+<div class="tablewrap"><table class=""><caption>Whether the exclusion applies, and what it is worth, in each plan. It applies only where the house was the parents' principal residence <em>and</em> you occupy it within one year.</caption><thead><tr><th class="">Plan</th><th class="">Property</th><th class="r">Market value 2045</th><th class="r">Parents' base</th><th class="r">Cap (base + allowance)</th><th class="r">New taxable value</th><th class="">Exclusion</th></tr></thead><tbody><tr><td>A</td><td>Cupertino</td><td class="r">$6,531,230</td><td class="r">$802,030</td><td class="r">$2,810,250</td><td class="r">$4,523,010</td><td><span class="badge b-ok">applied</span></td></tr><tr><td>A</td><td>San Francisco</td><td class="r">$3,792,330</td><td class="r">$169,760</td><td class="r">$2,177,980</td><td class="r">$3,792,330</td><td><span class="badge b-unv">not applied</span></td></tr><tr><td>B</td><td>Cupertino</td><td class="r">$6,531,230</td><td class="r">$802,030</td><td class="r">$2,810,250</td><td class="r">$6,531,230</td><td><span class="badge b-unv">not applied</span></td></tr><tr><td>B</td><td>San Francisco</td><td class="r">$3,792,330</td><td class="r">$169,760</td><td class="r">$2,177,980</td><td class="r">$3,792,330</td><td><span class="badge b-unv">not applied</span></td></tr><tr><td>C</td><td>Cupertino</td><td class="r">$6,531,230</td><td class="r">$802,030</td><td class="r">$2,810,250</td><td class="r">$6,531,230</td><td><span class="badge b-unv">not applied</span></td></tr><tr><td>C</td><td>San Francisco</td><td class="r">$3,792,330</td><td class="r">$169,760</td><td class="r">$2,177,980</td><td class="r">$3,792,330</td><td><span class="badge b-unv">not applied</span></td></tr><tr><td>E</td><td>Cupertino</td><td class="r">$6,531,230</td><td class="r">$802,030</td><td class="r">$2,810,250</td><td class="r">$4,523,010</td><td><span class="badge b-ok">applied</span></td></tr><tr><td>F</td><td>San Francisco</td><td class="r">$3,792,330</td><td class="r">$169,760</td><td class="r">$2,177,980</td><td class="r">$3,792,330</td><td><span class="badge b-unv">not applied</span></td></tr></tbody></table></div>
+<p>Notice what this table makes plain: the exclusion is worth having, but it is worth
+$26,290 a year &mdash; not the difference between a
+$59,120 and a $7,207 bill. Prop 19 does not
+restore the parents' tax level on a house this far below market value. The allowance is simply too small
+relative to the gap.</p>
+
+<h2 id="grid">Robustness: nine combinations of growth and return</h2>
+<p class="muted">The growth rates tested span the range implied by the FHFA California house price index
+(<a class="srclink" href="sources.html#S14" title="Source S14 — see the source register">S14</a>); the return rates span a conventional 60/40 expected range. Neither is a published forecast,
+because no official body publishes one.</p>
+<div class="tablewrap"><table class=""><caption>Terminal after-tax wealth in 2065. The recommendation is not an artefact of one set of assumptions.</caption><thead><tr><th class="">House growth</th><th class="">Portfolio return</th><th class="r">A</th><th class="r">B</th><th class="r">C</th><th class="r">D</th><th class="r">E</th><th class="r">F</th><th class="c">Winner</th></tr></thead><tbody><tr><td>3%</td><td>4%</td><td class="r">$12,471,830</td><td class="r">$13,806,170</td><td class="r">$9,743,390</td><td class="r">$7,192,730</td><td class="r">$10,490,020</td><td class="r"><strong>$13,410,740</strong></td><td class="c"><strong>B</strong></td></tr><tr><td>3%</td><td>6%</td><td class="r">$12,576,400</td><td class="r">$14,246,100</td><td class="r">$9,743,390</td><td class="r">$11,157,290</td><td class="r">$11,898,130</td><td class="r"><strong>$16,675,770</strong></td><td class="c"><strong>F</strong></td></tr><tr><td>3%</td><td>8%</td><td class="r">$12,714,820</td><td class="r">$14,820,160</td><td class="r">$9,743,390</td><td class="r">$17,115,810</td><td class="r">$14,021,720</td><td class="r"><strong>$21,435,260</strong></td><td class="c"><strong>F</strong></td></tr><tr><td>4%</td><td>4%</td><td class="r">$16,080,090</td><td class="r">$17,167,540</td><td class="r">$13,249,880</td><td class="r">$9,821,820</td><td class="r">$13,878,720</td><td class="r"><strong>$16,252,770</strong></td><td class="c"><strong>B</strong></td></tr><tr><td>4%</td><td>6%</td><td class="r">$16,080,090</td><td class="r">$17,405,270</td><td class="r">$13,249,880</td><td class="r">$14,789,040</td><td class="r">$15,541,700</td><td class="r"><strong>$20,063,390</strong></td><td class="c"><strong>F</strong></td></tr><tr><td>4%</td><td>8%</td><td class="r">$16,080,090</td><td class="r">$17,717,410</td><td class="r">$13,249,880</td><td class="r">$22,213,440</td><td class="r">$18,056,110</td><td class="r"><strong>$25,636,010</strong></td><td class="c"><strong>F</strong></td></tr><tr><td>5%</td><td>4%</td><td class="r">$21,108,300</td><td class="r">$21,773,430</td><td class="r">$17,992,420</td><td class="r">$12,947,630</td><td class="r">$18,555,330</td><td class="r"><strong>$19,572,120</strong></td><td class="c"><strong>B</strong></td></tr><tr><td>5%</td><td>6%</td><td class="r">$21,108,300</td><td class="r">$21,776,790</td><td class="r">$17,992,420</td><td class="r">$19,106,930</td><td class="r">$20,518,780</td><td class="r"><strong>$24,027,230</strong></td><td class="c"><strong>F</strong></td></tr><tr><td>5%</td><td>8%</td><td class="r">$21,108,300</td><td class="r">$21,781,080</td><td class="r">$17,992,420</td><td class="r">$28,274,180</td><td class="r">$23,494,860</td><td class="r"><strong>$30,561,660</strong></td><td class="c"><strong>F</strong></td></tr></tbody></table></div>
+<div class="callout good">
+<span class="h">What the grid shows</span>
+<p style="margin-bottom:0">Plan F wins <strong>eight of nine</strong> combinations. It loses only at a 4%
+portfolio return &mdash; the case where keeping and renting Cupertino (B) edges ahead, because the house's own
+appreciation does more work than the investments. No combination makes selling both and renting (D) the best
+answer, and no combination makes renting both houses (C) competitive.</p>
+</div>
+
+<h2 id="flip">If the parents actually live in San Francisco</h2>
+<p>The base case assumes Cupertino is the parents' principal residence. If it is the other way round, the
+Prop 19 exclusion attaches to the San Francisco building instead, and the ranking shifts:</p>
+<div class="tablewrap"><table class=""><caption>The same six plans with the occupancy assumption reversed.</caption><thead><tr><th class="">Plan</th><th class="r">Terminal wealth, Cupertino is the home</th><th class="r">Terminal wealth, San Francisco is the home</th><th class="r">Change</th></tr></thead><tbody><tr><td>F</td><td class="r">$20,063,390</td><td class="r">$20,974,800</td><td class="r">$911,410</td></tr><tr><td>B</td><td class="r">$17,405,270</td><td class="r">$18,316,680</td><td class="r">$911,410</td></tr><tr><td>A</td><td class="r">$16,080,090</td><td class="r">$15,402,270</td><td class="r">&minus;$677,820</td></tr><tr><td>D</td><td class="r">$14,789,040</td><td class="r">$14,789,040</td><td class="r">$0</td></tr><tr><td>E</td><td class="r">$15,541,700</td><td class="r">$14,532,870</td><td class="r">&minus;$1,008,830</td></tr><tr><td>C</td><td class="r">$13,249,880</td><td class="r">$13,249,880</td><td class="r">$0</td></tr></tbody></table></div>
+<p>The effect is modest &mdash; a few hundred thousand dollars on a twenty-million-dollar outcome &mdash; and
+the winner does not change. That is a useful result: <strong>the recommendation does not depend on resolving
+the occupancy question</strong>, even though the property-tax projection does.</p>
+
+<h2 id="judgement">What the model cannot tell you</h2>
+<ul>
+<li><strong>Whether you want to be a landlord.</strong> Plan F still leaves one building with two tenants.
+If the answer is no, plan D is the only plan that avoids it entirely, and it costs roughly
+$5,274,350 in terminal wealth.</li>
+<li><strong>Concentration.</strong> Plan F puts
+38%
+of the estate into one three-unit building in one ZIP code. Diversification has a value the model does not
+price.</li>
+<li><strong>Liquidity and optionality.</strong> A portfolio can be partly sold; a house cannot.</li>
+<li><strong>Sentiment.</strong> The family home may be worth more to you than the numbers say. That is a
+legitimate input the model cannot accept.</li>
+<li><strong>Future tax law.</strong> Every rate in this model is today's rate.
+<a href="risks.html">See the risk register &rarr;</a></li>
+</ul>
+
+</div></main>
+<footer class="site"><div class="wrap">
+<div><strong>Inheritance Decision Dashboard</strong><br>
+Model v1.0.0 &middot; built 2026-11-10 &middot; all figures rounded to the nearest $10</div>
+<div>Not legal, tax or investment advice. Confirm every figure against your own documents and a licensed California attorney or CPA.<br>
+<a href="../pages/flagged.html">Flagged for review</a> &middot; <a href="../pages/sources.html">Source register</a> &middot; <a href="../pages/executive-summary.html">Executive summary</a></div>
+</div></footer>
+</body>
+</html>

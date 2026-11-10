@@ -1,0 +1,4071 @@
+{
+ "meta": {
+  "model_version": "1.0.0",
+  "build_date": "2026-11-10",
+  "base_year": 2026,
+  "inherit_year": 2045,
+  "horizon_end": 2065
+ },
+ "assumptions": {
+  "g_market": 0.04,
+  "g_market_low": 0.03,
+  "g_market_high": 0.05,
+  "g_cpi": 0.025,
+  "g_cpi_low": 0.02,
+  "g_cpi_high": 0.035,
+  "insurance_loading": 0.02,
+  "prop13_cap": 0.02,
+  "prop19_allowance_2026": 1044586,
+  "g_prop19_allowance": 0.035,
+  "g_invest": 0.06,
+  "g_invest_low": 0.04,
+  "g_invest_high": 0.08,
+  "tax_invest_gain": 0.371,
+  "portfolio_income_yield": 0.02,
+  "tax_portfolio_income": 0.371,
+  "tax_rental_income": 0.451,
+  "depreciation_years": 27.5,
+  "building_share_cup": 0.75,
+  "building_share_sf": 0.6,
+  "selling_cost": 0.05,
+  "vacancy": 0.05,
+  "management": 0.08,
+  "discount": 0.06,
+  "rent_cup_2026": 93000,
+  "g_rent": 0.03,
+  "g_rent_cup": 0.03
+ },
+ "rates": {
+  "svc_2025_26_components": {
+   "1% maximum levy": 1.0,
+   "county retirement levy": 0.0388,
+   "Cupertino Elem 2001": 0.0165,
+   "Cupertino Elem 2012": 0.0169,
+   "Cupertino Elem 2024": 0.0001,
+   "El Camino Hospital 2003": 0.002,
+   "Foothill-De Anza Coll 1999": 0.0075,
+   "Fremont Union High 2008": 0.0088,
+   "Fremont Union High 2014": 0.0107,
+   "Fremont Union High 2018": 0.0118,
+   "SCVWD State Water Proj": 0.0039
+  },
+  "svc_rate": 0.011169999999999998,
+  "svc_rate_published_range": "1.08%-1.30% of assessed value",
+  "sf_rate": 0.0118268325,
+  "sf_transfer_tiers": [
+   {
+    "from": 100,
+    "to": 250000,
+    "per_500": 2.5,
+    "pct": 0.5
+   },
+   {
+    "from": 250000,
+    "to": 1000000,
+    "per_500": 3.4,
+    "pct": 0.68
+   },
+   {
+    "from": 1000000,
+    "to": 5000000,
+    "per_500": 3.75,
+    "pct": 0.75
+   },
+   {
+    "from": 5000000,
+    "to": 10000000,
+    "per_500": 11.25,
+    "pct": 2.25
+   },
+   {
+    "from": 10000000,
+    "to": 25000000,
+    "per_500": 27.5,
+    "pct": 5.5
+   },
+   {
+    "from": 25000000,
+    "to": null,
+    "per_500": 30.0,
+    "pct": 6.0
+   }
+  ],
+  "svc_transfer": 0.0011,
+  "homeowners_exemption": 7000,
+  "sec121_joint": 500000
+ },
+ "properties": [
+  {
+   "key": "cup",
+   "name": "Cupertino",
+   "zip": "95014",
+   "fmv_2026": 3100000,
+   "assessed_2026": 550537,
+   "tax_2026": 7207,
+   "tax_2025": 7003,
+   "eff_rate_reported": 0.013090854928914859,
+   "published_rate": 0.011169999999999998,
+   "building_share": 0.75,
+   "maintenance_pct": 0.003,
+   "insurance_2026": 2340,
+   "water_month": 125,
+   "electric_month": -15,
+   "units": 1
+  },
+  {
+   "key": "sf",
+   "name": "San Francisco (Outer Sunset)",
+   "zip": "94122",
+   "fmv_2026": 1800000,
+   "assessed_2025": 114248,
+   "assessed_2026": 116530,
+   "tax_2025": 2439,
+   "tax_2026": 2490,
+   "eff_rate_reported": 0.02134829493732932,
+   "published_rate": 0.0118268325,
+   "building_share": 0.6,
+   "maintenance_pct": 0.0085,
+   "insurance_2026": 2340,
+   "water_month": 365,
+   "electric_month": 50,
+   "units": 3,
+   "rent_occupied_month": 7150,
+   "rent_vacant_month": 3575
+  }
+ ],
+ "projection": [
+  {
+   "year": 2026,
+   "cup_fmv": 3100000,
+   "cup_assessed": 550540,
+   "cup_tax": 7210,
+   "cup_basis": "reported",
+   "sf_fmv": 1800000,
+   "sf_assessed": 116530,
+   "sf_tax": 2490,
+   "sf_basis": "reported",
+   "cumulative": 2026
+  },
+  {
+   "year": 2027,
+   "cup_fmv": 3224000,
+   "cup_assessed": 561550,
+   "cup_tax": 7350,
+   "cup_basis": "reported",
+   "sf_fmv": 1872000,
+   "sf_assessed": 118860,
+   "sf_tax": 2540,
+   "sf_basis": "reported",
+   "cumulative": 2027
+  },
+  {
+   "year": 2028,
+   "cup_fmv": 3352960,
+   "cup_assessed": 572780,
+   "cup_tax": 7500,
+   "cup_basis": "reported",
+   "sf_fmv": 1946880,
+   "sf_assessed": 121240,
+   "sf_tax": 2590,
+   "sf_basis": "reported",
+   "cumulative": 2028
+  },
+  {
+   "year": 2029,
+   "cup_fmv": 3487080,
+   "cup_assessed": 584230,
+   "cup_tax": 7650,
+   "cup_basis": "reported",
+   "sf_fmv": 2024760,
+   "sf_assessed": 123660,
+   "sf_tax": 2640,
+   "sf_basis": "reported",
+   "cumulative": 2029
+  },
+  {
+   "year": 2030,
+   "cup_fmv": 3626560,
+   "cup_assessed": 595920,
+   "cup_tax": 7800,
+   "cup_basis": "reported",
+   "sf_fmv": 2105750,
+   "sf_assessed": 126140,
+   "sf_tax": 2700,
+   "sf_basis": "reported",
+   "cumulative": 2030
+  },
+  {
+   "year": 2031,
+   "cup_fmv": 3771620,
+   "cup_assessed": 607840,
+   "cup_tax": 7960,
+   "cup_basis": "reported",
+   "sf_fmv": 2189980,
+   "sf_assessed": 128660,
+   "sf_tax": 2750,
+   "sf_basis": "reported",
+   "cumulative": 2031
+  },
+  {
+   "year": 2032,
+   "cup_fmv": 3922490,
+   "cup_assessed": 619990,
+   "cup_tax": 8120,
+   "cup_basis": "reported",
+   "sf_fmv": 2277570,
+   "sf_assessed": 131230,
+   "sf_tax": 2800,
+   "sf_basis": "reported",
+   "cumulative": 2032
+  },
+  {
+   "year": 2033,
+   "cup_fmv": 4079390,
+   "cup_assessed": 632390,
+   "cup_tax": 8280,
+   "cup_basis": "reported",
+   "sf_fmv": 2368680,
+   "sf_assessed": 133860,
+   "sf_tax": 2860,
+   "sf_basis": "reported",
+   "cumulative": 2033
+  },
+  {
+   "year": 2034,
+   "cup_fmv": 4242560,
+   "cup_assessed": 645040,
+   "cup_tax": 8440,
+   "cup_basis": "reported",
+   "sf_fmv": 2463420,
+   "sf_assessed": 136530,
+   "sf_tax": 2920,
+   "sf_basis": "reported",
+   "cumulative": 2034
+  },
+  {
+   "year": 2035,
+   "cup_fmv": 4412270,
+   "cup_assessed": 657940,
+   "cup_tax": 8610,
+   "cup_basis": "reported",
+   "sf_fmv": 2561960,
+   "sf_assessed": 139260,
+   "sf_tax": 2980,
+   "sf_basis": "reported",
+   "cumulative": 2035
+  },
+  {
+   "year": 2036,
+   "cup_fmv": 4588760,
+   "cup_assessed": 671100,
+   "cup_tax": 8790,
+   "cup_basis": "reported",
+   "sf_fmv": 2664440,
+   "sf_assessed": 142050,
+   "sf_tax": 3040,
+   "sf_basis": "reported",
+   "cumulative": 2036
+  },
+  {
+   "year": 2037,
+   "cup_fmv": 4772310,
+   "cup_assessed": 684520,
+   "cup_tax": 8960,
+   "cup_basis": "reported",
+   "sf_fmv": 2771020,
+   "sf_assessed": 144890,
+   "sf_tax": 3100,
+   "sf_basis": "reported",
+   "cumulative": 2037
+  },
+  {
+   "year": 2038,
+   "cup_fmv": 4963200,
+   "cup_assessed": 698210,
+   "cup_tax": 9140,
+   "cup_basis": "reported",
+   "sf_fmv": 2881860,
+   "sf_assessed": 147790,
+   "sf_tax": 3160,
+   "sf_basis": "reported",
+   "cumulative": 2038
+  },
+  {
+   "year": 2039,
+   "cup_fmv": 5161730,
+   "cup_assessed": 712180,
+   "cup_tax": 9320,
+   "cup_basis": "reported",
+   "sf_fmv": 2997130,
+   "sf_assessed": 150740,
+   "sf_tax": 3220,
+   "sf_basis": "reported",
+   "cumulative": 2039
+  },
+  {
+   "year": 2040,
+   "cup_fmv": 5368200,
+   "cup_assessed": 726420,
+   "cup_tax": 9510,
+   "cup_basis": "reported",
+   "sf_fmv": 3117020,
+   "sf_assessed": 153760,
+   "sf_tax": 3290,
+   "sf_basis": "reported",
+   "cumulative": 2040
+  },
+  {
+   "year": 2041,
+   "cup_fmv": 5582920,
+   "cup_assessed": 740950,
+   "cup_tax": 9700,
+   "cup_basis": "reported",
+   "sf_fmv": 3241700,
+   "sf_assessed": 156830,
+   "sf_tax": 3350,
+   "sf_basis": "reported",
+   "cumulative": 2041
+  },
+  {
+   "year": 2042,
+   "cup_fmv": 5806240,
+   "cup_assessed": 755770,
+   "cup_tax": 9890,
+   "cup_basis": "reported",
+   "sf_fmv": 3371370,
+   "sf_assessed": 159970,
+   "sf_tax": 3420,
+   "sf_basis": "reported",
+   "cumulative": 2042
+  },
+  {
+   "year": 2043,
+   "cup_fmv": 6038490,
+   "cup_assessed": 770880,
+   "cup_tax": 10090,
+   "cup_basis": "reported",
+   "sf_fmv": 3506220,
+   "sf_assessed": 163170,
+   "sf_tax": 3490,
+   "sf_basis": "reported",
+   "cumulative": 2043
+  },
+  {
+   "year": 2044,
+   "cup_fmv": 6280030,
+   "cup_assessed": 786300,
+   "cup_tax": 10290,
+   "cup_basis": "reported",
+   "sf_fmv": 3646470,
+   "sf_assessed": 166430,
+   "sf_tax": 3560,
+   "sf_basis": "reported",
+   "cumulative": 2044
+  },
+  {
+   "year": 2045,
+   "cup_fmv": 6531230,
+   "cup_assessed": 802030,
+   "cup_tax": 10500,
+   "cup_basis": "reported",
+   "sf_fmv": 3792330,
+   "sf_assessed": 169760,
+   "sf_tax": 3630,
+   "sf_basis": "reported",
+   "cumulative": 2045
+  },
+  {
+   "year": 2046,
+   "cup_fmv": 6792480,
+   "cup_assessed": 818070,
+   "cup_tax": 10710,
+   "cup_basis": "continued Prop 13",
+   "sf_fmv": 3944020,
+   "sf_assessed": 173160,
+   "sf_tax": 3700,
+   "sf_basis": "continued Prop 13",
+   "cumulative": 2046
+  },
+  {
+   "year": 2047,
+   "cup_fmv": 7064180,
+   "cup_assessed": 834430,
+   "cup_tax": 10920,
+   "cup_basis": "continued Prop 13",
+   "sf_fmv": 4101780,
+   "sf_assessed": 176620,
+   "sf_tax": 3770,
+   "sf_basis": "continued Prop 13",
+   "cumulative": 2047
+  },
+  {
+   "year": 2048,
+   "cup_fmv": 7346750,
+   "cup_assessed": 851120,
+   "cup_tax": 11140,
+   "cup_basis": "continued Prop 13",
+   "sf_fmv": 4265850,
+   "sf_assessed": 180150,
+   "sf_tax": 3850,
+   "sf_basis": "continued Prop 13",
+   "cumulative": 2048
+  },
+  {
+   "year": 2049,
+   "cup_fmv": 7640620,
+   "cup_assessed": 868140,
+   "cup_tax": 11360,
+   "cup_basis": "continued Prop 13",
+   "sf_fmv": 4436490,
+   "sf_assessed": 183760,
+   "sf_tax": 3930,
+   "sf_basis": "continued Prop 13",
+   "cumulative": 2049
+  },
+  {
+   "year": 2050,
+   "cup_fmv": 7946240,
+   "cup_assessed": 885500,
+   "cup_tax": 11590,
+   "cup_basis": "continued Prop 13",
+   "sf_fmv": 4613950,
+   "sf_assessed": 187430,
+   "sf_tax": 4010,
+   "sf_basis": "continued Prop 13",
+   "cumulative": 2050
+  },
+  {
+   "year": 2051,
+   "cup_fmv": 8264090,
+   "cup_assessed": 903210,
+   "cup_tax": 11820,
+   "cup_basis": "continued Prop 13",
+   "sf_fmv": 4798510,
+   "sf_assessed": 191180,
+   "sf_tax": 4090,
+   "sf_basis": "continued Prop 13",
+   "cumulative": 2051
+  },
+  {
+   "year": 2052,
+   "cup_fmv": 8594660,
+   "cup_assessed": 921280,
+   "cup_tax": 12060,
+   "cup_basis": "continued Prop 13",
+   "sf_fmv": 4990450,
+   "sf_assessed": 195000,
+   "sf_tax": 4170,
+   "sf_basis": "continued Prop 13",
+   "cumulative": 2052
+  },
+  {
+   "year": 2053,
+   "cup_fmv": 8938440,
+   "cup_assessed": 939700,
+   "cup_tax": 12300,
+   "cup_basis": "continued Prop 13",
+   "sf_fmv": 5190060,
+   "sf_assessed": 198900,
+   "sf_tax": 4250,
+   "sf_basis": "continued Prop 13",
+   "cumulative": 2053
+  },
+  {
+   "year": 2054,
+   "cup_fmv": 9295980,
+   "cup_assessed": 958500,
+   "cup_tax": 12550,
+   "cup_basis": "continued Prop 13",
+   "sf_fmv": 5397670,
+   "sf_assessed": 202880,
+   "sf_tax": 4340,
+   "sf_basis": "continued Prop 13",
+   "cumulative": 2054
+  },
+  {
+   "year": 2055,
+   "cup_fmv": 9667820,
+   "cup_assessed": 977670,
+   "cup_tax": 12800,
+   "cup_basis": "continued Prop 13",
+   "sf_fmv": 5613570,
+   "sf_assessed": 206940,
+   "sf_tax": 4420,
+   "sf_basis": "continued Prop 13",
+   "cumulative": 2055
+  },
+  {
+   "year": 2056,
+   "cup_fmv": 10054530,
+   "cup_assessed": 997220,
+   "cup_tax": 13050,
+   "cup_basis": "continued Prop 13",
+   "sf_fmv": 5838120,
+   "sf_assessed": 211080,
+   "sf_tax": 4510,
+   "sf_basis": "continued Prop 13",
+   "cumulative": 2056
+  },
+  {
+   "year": 2057,
+   "cup_fmv": 10456710,
+   "cup_assessed": 1017170,
+   "cup_tax": 13320,
+   "cup_basis": "continued Prop 13",
+   "sf_fmv": 6071640,
+   "sf_assessed": 215300,
+   "sf_tax": 4600,
+   "sf_basis": "continued Prop 13",
+   "cumulative": 2057
+  },
+  {
+   "year": 2058,
+   "cup_fmv": 10874980,
+   "cup_assessed": 1037510,
+   "cup_tax": 13580,
+   "cup_basis": "continued Prop 13",
+   "sf_fmv": 6314510,
+   "sf_assessed": 219610,
+   "sf_tax": 4690,
+   "sf_basis": "continued Prop 13",
+   "cumulative": 2058
+  },
+  {
+   "year": 2059,
+   "cup_fmv": 11309980,
+   "cup_assessed": 1058260,
+   "cup_tax": 13850,
+   "cup_basis": "continued Prop 13",
+   "sf_fmv": 6567090,
+   "sf_assessed": 224000,
+   "sf_tax": 4790,
+   "sf_basis": "continued Prop 13",
+   "cumulative": 2059
+  },
+  {
+   "year": 2060,
+   "cup_fmv": 11762380,
+   "cup_assessed": 1079420,
+   "cup_tax": 14130,
+   "cup_basis": "continued Prop 13",
+   "sf_fmv": 6829770,
+   "sf_assessed": 228480,
+   "sf_tax": 4880,
+   "sf_basis": "continued Prop 13",
+   "cumulative": 2060
+  },
+  {
+   "year": 2061,
+   "cup_fmv": 12232880,
+   "cup_assessed": 1101010,
+   "cup_tax": 14410,
+   "cup_basis": "continued Prop 13",
+   "sf_fmv": 7102960,
+   "sf_assessed": 233050,
+   "sf_tax": 4980,
+   "sf_basis": "continued Prop 13",
+   "cumulative": 2061
+  },
+  {
+   "year": 2062,
+   "cup_fmv": 12722190,
+   "cup_assessed": 1123030,
+   "cup_tax": 14700,
+   "cup_basis": "continued Prop 13",
+   "sf_fmv": 7387080,
+   "sf_assessed": 237710,
+   "sf_tax": 5080,
+   "sf_basis": "continued Prop 13",
+   "cumulative": 2062
+  },
+  {
+   "year": 2063,
+   "cup_fmv": 13231080,
+   "cup_assessed": 1145490,
+   "cup_tax": 15000,
+   "cup_basis": "continued Prop 13",
+   "sf_fmv": 7682560,
+   "sf_assessed": 242460,
+   "sf_tax": 5180,
+   "sf_basis": "continued Prop 13",
+   "cumulative": 2063
+  },
+  {
+   "year": 2064,
+   "cup_fmv": 13760320,
+   "cup_assessed": 1168400,
+   "cup_tax": 15300,
+   "cup_basis": "continued Prop 13",
+   "sf_fmv": 7989860,
+   "sf_assessed": 247310,
+   "sf_tax": 5280,
+   "sf_basis": "continued Prop 13",
+   "cumulative": 2064
+  },
+  {
+   "year": 2065,
+   "cup_fmv": 14310730,
+   "cup_assessed": 1191770,
+   "cup_tax": 15600,
+   "cup_basis": "continued Prop 13",
+   "sf_fmv": 8309460,
+   "sf_assessed": 252260,
+   "sf_tax": 5390,
+   "sf_basis": "continued Prop 13",
+   "cumulative": 2065
+  }
+ ],
+ "scenarios_parent_cup": [
+  {
+   "short": "A",
+   "name": "A. Live in Cupertino; rent all three San Francisco units",
+   "live_in": "cup",
+   "parent_residence": "cup",
+   "sold_at_inheritance": [],
+   "tax_at_inheritance": {
+    "cup": 59120,
+    "sf": 44850
+   },
+   "prop19": {
+    "cup": {
+     "fmv": 6531230,
+     "fbyv": 802030,
+     "allowance": 2008220,
+     "cap": 2810250,
+     "new_base": 4523010,
+     "exclusion_applied": true
+    },
+    "sf": {
+     "fmv": 3792330,
+     "fbyv": 169760,
+     "allowance": 2008220,
+     "cap": 2177980,
+     "new_base": 3792330,
+     "exclusion_applied": false
+    }
+   },
+   "sale_at_inheritance": {},
+   "first_year_cashflow": -9540,
+   "last_year_cashflow": -52590,
+   "cumulative_cashflow": -583950,
+   "terminal_sales": {
+    "cup": {
+     "price": 14310730,
+     "selling_cost": 715540,
+     "transfer_tax": 15740,
+     "gain": 7063970,
+     "capital_gains_tax": 2435230,
+     "net": 11144220,
+     "depreciation_taken": 0
+    },
+    "sf": {
+     "price": 8309460,
+     "selling_cost": 415470,
+     "transfer_tax": 186960,
+     "gain": 5839230,
+     "capital_gains_tax": 2187210,
+     "net": 5519820,
+     "depreciation_taken": 1737580
+    }
+   },
+   "terminal_portfolio": -583950,
+   "total_terminal_wealth": 16080090,
+   "npv": 4903360,
+   "cashflows": [
+    {
+     "year": 2045,
+     "rent": 167130,
+     "opex": 72700,
+     "proptax": 103970,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -9540,
+     "portfolio_end": -9540
+    },
+    {
+     "year": 2046,
+     "rent": 170730,
+     "opex": 75510,
+     "proptax": 106050,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -10830,
+     "portfolio_end": -20370
+    },
+    {
+     "year": 2047,
+     "rent": 174410,
+     "opex": 78430,
+     "proptax": 108170,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -12200,
+     "portfolio_end": -32570
+    },
+    {
+     "year": 2048,
+     "rent": 178170,
+     "opex": 81470,
+     "proptax": 110330,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -13630,
+     "portfolio_end": -46200
+    },
+    {
+     "year": 2049,
+     "rent": 182030,
+     "opex": 84630,
+     "proptax": 112540,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -15140,
+     "portfolio_end": -61330
+    },
+    {
+     "year": 2050,
+     "rent": 185980,
+     "opex": 87910,
+     "proptax": 114790,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -16720,
+     "portfolio_end": -78060
+    },
+    {
+     "year": 2051,
+     "rent": 190020,
+     "opex": 91320,
+     "proptax": 117090,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -18390,
+     "portfolio_end": -96450
+    },
+    {
+     "year": 2052,
+     "rent": 194160,
+     "opex": 94870,
+     "proptax": 119430,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -20140,
+     "portfolio_end": -116590
+    },
+    {
+     "year": 2053,
+     "rent": 198400,
+     "opex": 98560,
+     "proptax": 121820,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -21980,
+     "portfolio_end": -138570
+    },
+    {
+     "year": 2054,
+     "rent": 202740,
+     "opex": 102400,
+     "proptax": 124250,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -23910,
+     "portfolio_end": -162470
+    },
+    {
+     "year": 2055,
+     "rent": 207190,
+     "opex": 106380,
+     "proptax": 126740,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -25940,
+     "portfolio_end": -188410
+    },
+    {
+     "year": 2056,
+     "rent": 211740,
+     "opex": 110530,
+     "proptax": 129270,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -28070,
+     "portfolio_end": -216480
+    },
+    {
+     "year": 2057,
+     "rent": 216400,
+     "opex": 114840,
+     "proptax": 131860,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -30300,
+     "portfolio_end": -246780
+    },
+    {
+     "year": 2058,
+     "rent": 221170,
+     "opex": 119320,
+     "proptax": 134500,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -32640,
+     "portfolio_end": -279420
+    },
+    {
+     "year": 2059,
+     "rent": 226060,
+     "opex": 123980,
+     "proptax": 137190,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -35100,
+     "portfolio_end": -314530
+    },
+    {
+     "year": 2060,
+     "rent": 231070,
+     "opex": 128830,
+     "proptax": 139930,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -37680,
+     "portfolio_end": -352210
+    },
+    {
+     "year": 2061,
+     "rent": 236210,
+     "opex": 133870,
+     "proptax": 142730,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -40390,
+     "portfolio_end": -392600
+    },
+    {
+     "year": 2062,
+     "rent": 241460,
+     "opex": 139110,
+     "proptax": 145580,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -43230,
+     "portfolio_end": -435830
+    },
+    {
+     "year": 2063,
+     "rent": 246850,
+     "opex": 144560,
+     "proptax": 148490,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -46200,
+     "portfolio_end": -482030
+    },
+    {
+     "year": 2064,
+     "rent": 252360,
+     "opex": 150220,
+     "proptax": 151460,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -49320,
+     "portfolio_end": -531360
+    },
+    {
+     "year": 2065,
+     "rent": 258020,
+     "opex": 156110,
+     "proptax": 154490,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -52590,
+     "portfolio_end": -583950
+    }
+   ]
+  },
+  {
+   "short": "B",
+   "name": "B. Live in San Francisco (vacant unit); rent Cupertino",
+   "live_in": "sf",
+   "parent_residence": "cup",
+   "sold_at_inheritance": [],
+   "tax_at_inheritance": {
+    "cup": 85500,
+    "sf": 44770
+   },
+   "prop19": {
+    "cup": {
+     "fmv": 6531230,
+     "fbyv": 802030,
+     "allowance": 2008220,
+     "cap": 2810250,
+     "new_base": 6531230,
+     "exclusion_applied": false
+    },
+    "sf": {
+     "fmv": 3792330,
+     "fbyv": 169760,
+     "allowance": 2008220,
+     "cap": 2177980,
+     "new_base": 3792330,
+     "exclusion_applied": false
+    }
+   },
+   "sale_at_inheritance": {},
+   "first_year_cashflow": 43060,
+   "last_year_cashflow": 50460,
+   "cumulative_cashflow": 997180,
+   "terminal_sales": {
+    "cup": {
+     "price": 14310730,
+     "selling_cost": 715540,
+     "transfer_tax": 15740,
+     "gain": 10804580,
+     "capital_gains_tax": 4053390,
+     "net": 9526070,
+     "depreciation_taken": 3740610
+    },
+    "sf": {
+     "price": 8309460,
+     "selling_cost": 415470,
+     "transfer_tax": 186960,
+     "gain": 4101660,
+     "capital_gains_tax": 1336210,
+     "net": 6370810,
+     "depreciation_taken": 0
+    }
+   },
+   "terminal_portfolio": 1508390,
+   "total_terminal_wealth": 17405270,
+   "npv": 5538680,
+   "cashflows": [
+    {
+     "year": 2045,
+     "rent": 243910,
+     "opex": 70590,
+     "proptax": 130270,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 43060,
+     "portfolio_end": 45320
+    },
+    {
+     "year": 2046,
+     "rent": 249810,
+     "opex": 73350,
+     "proptax": 132870,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 43590,
+     "portfolio_end": 93590
+    },
+    {
+     "year": 2047,
+     "rent": 255870,
+     "opex": 76220,
+     "proptax": 135530,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 44120,
+     "portfolio_end": 144940
+    },
+    {
+     "year": 2048,
+     "rent": 262080,
+     "opex": 79200,
+     "proptax": 138240,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 44640,
+     "portfolio_end": 199550
+    },
+    {
+     "year": 2049,
+     "rent": 268450,
+     "opex": 82300,
+     "proptax": 141010,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 45140,
+     "portfolio_end": 257560
+    },
+    {
+     "year": 2050,
+     "rent": 274990,
+     "opex": 85520,
+     "proptax": 143830,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 45640,
+     "portfolio_end": 319140
+    },
+    {
+     "year": 2051,
+     "rent": 281700,
+     "opex": 88880,
+     "proptax": 146700,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 46120,
+     "portfolio_end": 384470
+    },
+    {
+     "year": 2052,
+     "rent": 288590,
+     "opex": 92360,
+     "proptax": 149640,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 46590,
+     "portfolio_end": 453720
+    },
+    {
+     "year": 2053,
+     "rent": 295660,
+     "opex": 95990,
+     "proptax": 152630,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 47040,
+     "portfolio_end": 527100
+    },
+    {
+     "year": 2054,
+     "rent": 302920,
+     "opex": 99760,
+     "proptax": 155680,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 47480,
+     "portfolio_end": 604790
+    },
+    {
+     "year": 2055,
+     "rent": 310370,
+     "opex": 103680,
+     "proptax": 158800,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 47890,
+     "portfolio_end": 687000
+    },
+    {
+     "year": 2056,
+     "rent": 318020,
+     "opex": 107760,
+     "proptax": 161970,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 48290,
+     "portfolio_end": 773950
+    },
+    {
+     "year": 2057,
+     "rent": 325870,
+     "opex": 112000,
+     "proptax": 165210,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 48660,
+     "portfolio_end": 865860
+    },
+    {
+     "year": 2058,
+     "rent": 333930,
+     "opex": 116410,
+     "proptax": 168520,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 49000,
+     "portfolio_end": 962970
+    },
+    {
+     "year": 2059,
+     "rent": 342200,
+     "opex": 121000,
+     "proptax": 171890,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 49320,
+     "portfolio_end": 1065510
+    },
+    {
+     "year": 2060,
+     "rent": 350700,
+     "opex": 125770,
+     "proptax": 175320,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 49600,
+     "portfolio_end": 1173740
+    },
+    {
+     "year": 2061,
+     "rent": 359420,
+     "opex": 130740,
+     "proptax": 178830,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 49850,
+     "portfolio_end": 1287930
+    },
+    {
+     "year": 2062,
+     "rent": 368370,
+     "opex": 135900,
+     "proptax": 182410,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 50070,
+     "portfolio_end": 1408350
+    },
+    {
+     "year": 2063,
+     "rent": 377560,
+     "opex": 141270,
+     "proptax": 186050,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 50240,
+     "portfolio_end": 1535290
+    },
+    {
+     "year": 2064,
+     "rent": 387000,
+     "opex": 146850,
+     "proptax": 189780,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 50380,
+     "portfolio_end": 1669040
+    },
+    {
+     "year": 2065,
+     "rent": 396690,
+     "opex": 152660,
+     "proptax": 193570,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 50460,
+     "portfolio_end": 1809910
+    }
+   ]
+  },
+  {
+   "short": "C",
+   "name": "C. Rent both houses; rent equivalent housing",
+   "live_in": null,
+   "parent_residence": "cup",
+   "sold_at_inheritance": [],
+   "tax_at_inheritance": {
+    "cup": 85500,
+    "sf": 44850
+   },
+   "prop19": {
+    "cup": {
+     "fmv": 6531230,
+     "fbyv": 802030,
+     "allowance": 2008220,
+     "cap": 2810250,
+     "new_base": 6531230,
+     "exclusion_applied": false
+    },
+    "sf": {
+     "fmv": 3792330,
+     "fbyv": 169760,
+     "allowance": 2008220,
+     "cap": 2177980,
+     "new_base": 3792330,
+     "exclusion_applied": false
+    }
+   },
+   "sale_at_inheritance": {},
+   "first_year_cashflow": -54360,
+   "last_year_cashflow": -125450,
+   "cumulative_cashflow": -1796010,
+   "terminal_sales": {
+    "cup": {
+     "price": 14310730,
+     "selling_cost": 715540,
+     "transfer_tax": 15740,
+     "gain": 10804580,
+     "capital_gains_tax": 4053390,
+     "net": 9526070,
+     "depreciation_taken": 3740610
+    },
+    "sf": {
+     "price": 8309460,
+     "selling_cost": 415470,
+     "transfer_tax": 186960,
+     "gain": 5839230,
+     "capital_gains_tax": 2187210,
+     "net": 5519820,
+     "depreciation_taken": 1737580
+    }
+   },
+   "terminal_portfolio": -1796010,
+   "total_terminal_wealth": 13249880,
+   "npv": 3715010,
+   "cashflows": [
+    {
+     "year": 2045,
+     "rent": 309660,
+     "opex": 70590,
+     "proptax": 130350,
+     "income_tax": 0,
+     "housing": 163080,
+     "net": -54360,
+     "portfolio_end": -54360
+    },
+    {
+     "year": 2046,
+     "rent": 317530,
+     "opex": 73350,
+     "proptax": 132960,
+     "income_tax": 0,
+     "housing": 167970,
+     "net": -56740,
+     "portfolio_end": -111100
+    },
+    {
+     "year": 2047,
+     "rent": 325620,
+     "opex": 76220,
+     "proptax": 135620,
+     "income_tax": 0,
+     "housing": 173010,
+     "net": -59220,
+     "portfolio_end": -170320
+    },
+    {
+     "year": 2048,
+     "rent": 333920,
+     "opex": 79200,
+     "proptax": 138330,
+     "income_tax": 0,
+     "housing": 178200,
+     "net": -61810,
+     "portfolio_end": -232130
+    },
+    {
+     "year": 2049,
+     "rent": 342450,
+     "opex": 82300,
+     "proptax": 141100,
+     "income_tax": 0,
+     "housing": 183540,
+     "net": -64490,
+     "portfolio_end": -296620
+    },
+    {
+     "year": 2050,
+     "rent": 351210,
+     "opex": 85520,
+     "proptax": 143920,
+     "income_tax": 0,
+     "housing": 189050,
+     "net": -67280,
+     "portfolio_end": -363900
+    },
+    {
+     "year": 2051,
+     "rent": 360210,
+     "opex": 88880,
+     "proptax": 146800,
+     "income_tax": 0,
+     "housing": 194720,
+     "net": -70190,
+     "portfolio_end": -434090
+    },
+    {
+     "year": 2052,
+     "rent": 369450,
+     "opex": 92360,
+     "proptax": 149730,
+     "income_tax": 0,
+     "housing": 200560,
+     "net": -73210,
+     "portfolio_end": -507290
+    },
+    {
+     "year": 2053,
+     "rent": 378950,
+     "opex": 95990,
+     "proptax": 152730,
+     "income_tax": 0,
+     "housing": 206580,
+     "net": -76350,
+     "portfolio_end": -583640
+    },
+    {
+     "year": 2054,
+     "rent": 388710,
+     "opex": 99760,
+     "proptax": 155780,
+     "income_tax": 0,
+     "housing": 212780,
+     "net": -79610,
+     "portfolio_end": -663250
+    },
+    {
+     "year": 2055,
+     "rent": 398730,
+     "opex": 103680,
+     "proptax": 158900,
+     "income_tax": 0,
+     "housing": 219160,
+     "net": -83010,
+     "portfolio_end": -746260
+    },
+    {
+     "year": 2056,
+     "rent": 409030,
+     "opex": 107760,
+     "proptax": 162070,
+     "income_tax": 0,
+     "housing": 225740,
+     "net": -86540,
+     "portfolio_end": -832800
+    },
+    {
+     "year": 2057,
+     "rent": 419610,
+     "opex": 112000,
+     "proptax": 165320,
+     "income_tax": 0,
+     "housing": 232510,
+     "net": -90220,
+     "portfolio_end": -923020
+    },
+    {
+     "year": 2058,
+     "rent": 430480,
+     "opex": 116410,
+     "proptax": 168620,
+     "income_tax": 0,
+     "housing": 239480,
+     "net": -94040,
+     "portfolio_end": -1017050
+    },
+    {
+     "year": 2059,
+     "rent": 441650,
+     "opex": 121000,
+     "proptax": 171990,
+     "income_tax": 0,
+     "housing": 246670,
+     "net": -98010,
+     "portfolio_end": -1115070
+    },
+    {
+     "year": 2060,
+     "rent": 453130,
+     "opex": 125770,
+     "proptax": 175430,
+     "income_tax": 0,
+     "housing": 254070,
+     "net": -102150,
+     "portfolio_end": -1217210
+    },
+    {
+     "year": 2061,
+     "rent": 464920,
+     "opex": 130740,
+     "proptax": 178940,
+     "income_tax": 0,
+     "housing": 261690,
+     "net": -106450,
+     "portfolio_end": -1323660
+    },
+    {
+     "year": 2062,
+     "rent": 477040,
+     "opex": 135900,
+     "proptax": 182520,
+     "income_tax": 0,
+     "housing": 269540,
+     "net": -110920,
+     "portfolio_end": -1434580
+    },
+    {
+     "year": 2063,
+     "rent": 489490,
+     "opex": 141270,
+     "proptax": 186170,
+     "income_tax": 0,
+     "housing": 277630,
+     "net": -115570,
+     "portfolio_end": -1550150
+    },
+    {
+     "year": 2064,
+     "rent": 502290,
+     "opex": 146850,
+     "proptax": 189900,
+     "income_tax": 0,
+     "housing": 285950,
+     "net": -120410,
+     "portfolio_end": -1670560
+    },
+    {
+     "year": 2065,
+     "rent": 515440,
+     "opex": 152660,
+     "proptax": 193690,
+     "income_tax": 0,
+     "housing": 294530,
+     "net": -125450,
+     "portfolio_end": -1796010
+    }
+   ]
+  },
+  {
+   "short": "D",
+   "name": "D. Sell both at inheritance; invest the net proceeds",
+   "live_in": null,
+   "parent_residence": "cup",
+   "sold_at_inheritance": [
+    "cup",
+    "sf"
+   ],
+   "tax_at_inheritance": {},
+   "prop19": {
+    "cup": null,
+    "sf": null
+   },
+   "sale_at_inheritance": {
+    "cup": {
+     "price": 6531230,
+     "selling_cost": 326560,
+     "transfer_tax": 7180,
+     "capital_gains_tax": 0,
+     "net": 6197490
+    },
+    "sf": {
+     "price": 3792330,
+     "selling_cost": 189620,
+     "transfer_tax": 28440,
+     "capital_gains_tax": 0,
+     "net": 3574270
+    }
+   },
+   "first_year_cashflow": -163080,
+   "last_year_cashflow": -294530,
+   "cumulative_cashflow": -4676450,
+   "terminal_sales": {},
+   "terminal_portfolio": 14789040,
+   "total_terminal_wealth": 14789040,
+   "npv": 7162800,
+   "cashflows": [
+    {
+     "year": 2045,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 163080,
+     "net": -163080,
+     "portfolio_end": 10113900
+    },
+    {
+     "year": 2046,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 167970,
+     "net": -167970,
+     "portfolio_end": 10468890
+    },
+    {
+     "year": 2047,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 173010,
+     "net": -173010,
+     "portfolio_end": 10837240
+    },
+    {
+     "year": 2048,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 178200,
+     "net": -178200,
+     "portfolio_end": 11219500
+    },
+    {
+     "year": 2049,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 183540,
+     "net": -183540,
+     "portfolio_end": 11616230
+    },
+    {
+     "year": 2050,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 189050,
+     "net": -189050,
+     "portfolio_end": 12028020
+    },
+    {
+     "year": 2051,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 194720,
+     "net": -194720,
+     "portfolio_end": 12455490
+    },
+    {
+     "year": 2052,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 200560,
+     "net": -200560,
+     "portfolio_end": 12899290
+    },
+    {
+     "year": 2053,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 206580,
+     "net": -206580,
+     "portfolio_end": 13360090
+    },
+    {
+     "year": 2054,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 212780,
+     "net": -212780,
+     "portfolio_end": 13838600
+    },
+    {
+     "year": 2055,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 219160,
+     "net": -219160,
+     "portfolio_end": 14335550
+    },
+    {
+     "year": 2056,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 225740,
+     "net": -225740,
+     "portfolio_end": 14851710
+    },
+    {
+     "year": 2057,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 232510,
+     "net": -232510,
+     "portfolio_end": 15387880
+    },
+    {
+     "year": 2058,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 239480,
+     "net": -239480,
+     "portfolio_end": 15944900
+    },
+    {
+     "year": 2059,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 246670,
+     "net": -246670,
+     "portfolio_end": 16523650
+    },
+    {
+     "year": 2060,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 254070,
+     "net": -254070,
+     "portfolio_end": 17125030
+    },
+    {
+     "year": 2061,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 261690,
+     "net": -261690,
+     "portfolio_end": 17750020
+    },
+    {
+     "year": 2062,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 269540,
+     "net": -269540,
+     "portfolio_end": 18399600
+    },
+    {
+     "year": 2063,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 277630,
+     "net": -277630,
+     "portfolio_end": 19074830
+    },
+    {
+     "year": 2064,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 285950,
+     "net": -285950,
+     "portfolio_end": 19776800
+    },
+    {
+     "year": 2065,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 294530,
+     "net": -294530,
+     "portfolio_end": 20506640
+    }
+   ]
+  },
+  {
+   "short": "E",
+   "name": "E. Live in Cupertino; sell the San Francisco building",
+   "live_in": "cup",
+   "parent_residence": "cup",
+   "sold_at_inheritance": [
+    "sf"
+   ],
+   "tax_at_inheritance": {
+    "cup": 59120
+   },
+   "prop19": {
+    "cup": {
+     "fmv": 6531230,
+     "fbyv": 802030,
+     "allowance": 2008220,
+     "cap": 2810250,
+     "new_base": 4523010,
+     "exclusion_applied": true
+    },
+    "sf": null
+   },
+   "sale_at_inheritance": {
+    "sf": {
+     "price": 3792330,
+     "selling_cost": 189620,
+     "transfer_tax": 28440,
+     "capital_gains_tax": 0,
+     "net": 3574270
+    }
+   },
+   "first_year_cashflow": -86220,
+   "last_year_cashflow": -147260,
+   "cumulative_cashflow": -2390470,
+   "terminal_sales": {
+    "cup": {
+     "price": 14310730,
+     "selling_cost": 715540,
+     "transfer_tax": 15740,
+     "gain": 7063970,
+     "capital_gains_tax": 2435230,
+     "net": 11144220,
+     "depreciation_taken": 0
+    }
+   },
+   "terminal_portfolio": 4397470,
+   "total_terminal_wealth": 15541700,
+   "npv": 5707510,
+   "cashflows": [
+    {
+     "year": 2045,
+     "rent": 0,
+     "opex": 27100,
+     "proptax": 59120,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -86220,
+     "portfolio_end": 3671450
+    },
+    {
+     "year": 2046,
+     "rent": 0,
+     "opex": 28180,
+     "proptax": 60300,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -88480,
+     "portfolio_end": 3771360
+    },
+    {
+     "year": 2047,
+     "rent": 0,
+     "opex": 29310,
+     "proptax": 61510,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -90810,
+     "portfolio_end": 3874060
+    },
+    {
+     "year": 2048,
+     "rent": 0,
+     "opex": 30480,
+     "proptax": 62740,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -93210,
+     "portfolio_end": 3979650
+    },
+    {
+     "year": 2049,
+     "rent": 0,
+     "opex": 31690,
+     "proptax": 63990,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -95680,
+     "portfolio_end": 4088190
+    },
+    {
+     "year": 2050,
+     "rent": 0,
+     "opex": 32960,
+     "proptax": 65270,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -98230,
+     "portfolio_end": 4199750
+    },
+    {
+     "year": 2051,
+     "rent": 0,
+     "opex": 34270,
+     "proptax": 66580,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -100850,
+     "portfolio_end": 4314420
+    },
+    {
+     "year": 2052,
+     "rent": 0,
+     "opex": 35640,
+     "proptax": 67910,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -103550,
+     "portfolio_end": 4432280
+    },
+    {
+     "year": 2053,
+     "rent": 0,
+     "opex": 37070,
+     "proptax": 69270,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -106330,
+     "portfolio_end": 4553400
+    },
+    {
+     "year": 2054,
+     "rent": 0,
+     "opex": 38550,
+     "proptax": 70650,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -109200,
+     "portfolio_end": 4677880
+    },
+    {
+     "year": 2055,
+     "rent": 0,
+     "opex": 40090,
+     "proptax": 72070,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -112160,
+     "portfolio_end": 4805790
+    },
+    {
+     "year": 2056,
+     "rent": 0,
+     "opex": 41700,
+     "proptax": 73510,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -115200,
+     "portfolio_end": 4937220
+    },
+    {
+     "year": 2057,
+     "rent": 0,
+     "opex": 43370,
+     "proptax": 74980,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -118340,
+     "portfolio_end": 5072250
+    },
+    {
+     "year": 2058,
+     "rent": 0,
+     "opex": 45100,
+     "proptax": 76480,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -121580,
+     "portfolio_end": 5210980
+    },
+    {
+     "year": 2059,
+     "rent": 0,
+     "opex": 46910,
+     "proptax": 78010,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -124920,
+     "portfolio_end": 5353480
+    },
+    {
+     "year": 2060,
+     "rent": 0,
+     "opex": 48790,
+     "proptax": 79570,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -128360,
+     "portfolio_end": 5499860
+    },
+    {
+     "year": 2061,
+     "rent": 0,
+     "opex": 50750,
+     "proptax": 81160,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -131910,
+     "portfolio_end": 5650190
+    },
+    {
+     "year": 2062,
+     "rent": 0,
+     "opex": 52790,
+     "proptax": 82780,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -135570,
+     "portfolio_end": 5804580
+    },
+    {
+     "year": 2063,
+     "rent": 0,
+     "opex": 54910,
+     "proptax": 84440,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -139350,
+     "portfolio_end": 5963110
+    },
+    {
+     "year": 2064,
+     "rent": 0,
+     "opex": 57120,
+     "proptax": 86120,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -143240,
+     "portfolio_end": 6125880
+    },
+    {
+     "year": 2065,
+     "rent": 0,
+     "opex": 59410,
+     "proptax": 87850,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -147260,
+     "portfolio_end": 6292980
+    }
+   ]
+  },
+  {
+   "short": "F",
+   "name": "F. Live in San Francisco; sell Cupertino",
+   "live_in": "sf",
+   "parent_residence": "cup",
+   "sold_at_inheritance": [
+    "cup"
+   ],
+   "tax_at_inheritance": {
+    "sf": 44770
+   },
+   "prop19": {
+    "cup": null,
+    "sf": {
+     "fmv": 3792330,
+     "fbyv": 169760,
+     "allowance": 2008220,
+     "cap": 2177980,
+     "new_base": 3792330,
+     "exclusion_applied": false
+    }
+   },
+   "sale_at_inheritance": {
+    "cup": {
+     "price": 6531230,
+     "selling_cost": 326560,
+     "transfer_tax": 7180,
+     "capital_gains_tax": 0,
+     "net": 6197490
+    }
+   },
+   "first_year_cashflow": 11020,
+   "last_year_cashflow": -23960,
+   "cumulative_cashflow": -76740,
+   "terminal_sales": {
+    "sf": {
+     "price": 8309460,
+     "selling_cost": 415470,
+     "transfer_tax": 186960,
+     "gain": 4101660,
+     "capital_gains_tax": 1336210,
+     "net": 6370810,
+     "depreciation_taken": 0
+    }
+   },
+   "terminal_portfolio": 13692580,
+   "total_terminal_wealth": 20063390,
+   "npv": 8182320,
+   "cashflows": [
+    {
+     "year": 2045,
+     "rent": 101390,
+     "opex": 45600,
+     "proptax": 44770,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 11020,
+     "portfolio_end": 6534950
+    },
+    {
+     "year": 2046,
+     "rent": 103010,
+     "opex": 47330,
+     "proptax": 45660,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 10020,
+     "portfolio_end": 6889100
+    },
+    {
+     "year": 2047,
+     "rent": 104660,
+     "opex": 49130,
+     "proptax": 46580,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 8950,
+     "portfolio_end": 7260750
+    },
+    {
+     "year": 2048,
+     "rent": 106330,
+     "opex": 51000,
+     "proptax": 47510,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 7830,
+     "portfolio_end": 7650760
+    },
+    {
+     "year": 2049,
+     "rent": 108030,
+     "opex": 52940,
+     "proptax": 48460,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 6640,
+     "portfolio_end": 8060020
+    },
+    {
+     "year": 2050,
+     "rent": 109760,
+     "opex": 54960,
+     "proptax": 49430,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 5380,
+     "portfolio_end": 8489480
+    },
+    {
+     "year": 2051,
+     "rent": 111520,
+     "opex": 57050,
+     "proptax": 50420,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 4050,
+     "portfolio_end": 8940120
+    },
+    {
+     "year": 2052,
+     "rent": 113300,
+     "opex": 59230,
+     "proptax": 51420,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 2650,
+     "portfolio_end": 9412970
+    },
+    {
+     "year": 2053,
+     "rent": 115110,
+     "opex": 61500,
+     "proptax": 52450,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 1170,
+     "portfolio_end": 9909130
+    },
+    {
+     "year": 2054,
+     "rent": 116960,
+     "opex": 63850,
+     "proptax": 53500,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -390,
+     "portfolio_end": 10429740
+    },
+    {
+     "year": 2055,
+     "rent": 118830,
+     "opex": 66290,
+     "proptax": 54570,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -2040,
+     "portfolio_end": 10975990
+    },
+    {
+     "year": 2056,
+     "rent": 120730,
+     "opex": 68830,
+     "proptax": 55660,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -3770,
+     "portfolio_end": 11549140
+    },
+    {
+     "year": 2057,
+     "rent": 122660,
+     "opex": 71470,
+     "proptax": 56780,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -5590,
+     "portfolio_end": 12150510
+    },
+    {
+     "year": 2058,
+     "rent": 124620,
+     "opex": 74220,
+     "proptax": 57910,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -7510,
+     "portfolio_end": 12781480
+    },
+    {
+     "year": 2059,
+     "rent": 126620,
+     "opex": 77070,
+     "proptax": 59070,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -9520,
+     "portfolio_end": 13443510
+    },
+    {
+     "year": 2060,
+     "rent": 128640,
+     "opex": 80030,
+     "proptax": 60250,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -11640,
+     "portfolio_end": 14138110
+    },
+    {
+     "year": 2061,
+     "rent": 130700,
+     "opex": 83120,
+     "proptax": 61460,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -13870,
+     "portfolio_end": 14866890
+    },
+    {
+     "year": 2062,
+     "rent": 132790,
+     "opex": 86320,
+     "proptax": 62690,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -16210,
+     "portfolio_end": 15631530
+    },
+    {
+     "year": 2063,
+     "rent": 134920,
+     "opex": 89650,
+     "proptax": 63940,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -18670,
+     "portfolio_end": 16433780
+    },
+    {
+     "year": 2064,
+     "rent": 137080,
+     "opex": 93100,
+     "proptax": 65220,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -21250,
+     "portfolio_end": 17275500
+    },
+    {
+     "year": 2065,
+     "rent": 139270,
+     "opex": 96700,
+     "proptax": 66520,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -23960,
+     "portfolio_end": 18158640
+    }
+   ]
+  }
+ ],
+ "scenarios_parent_sf": [
+  {
+   "short": "A",
+   "name": "A. Live in Cupertino; rent all three San Francisco units (SF is the parents' home)",
+   "live_in": "cup",
+   "parent_residence": "sf",
+   "sold_at_inheritance": [],
+   "tax_at_inheritance": {
+    "cup": 85410,
+    "sf": 44850
+   },
+   "prop19": {
+    "cup": {
+     "fmv": 6531230,
+     "fbyv": 802030,
+     "allowance": 2008220,
+     "cap": 2810250,
+     "new_base": 6531230,
+     "exclusion_applied": false
+    },
+    "sf": {
+     "fmv": 3792330,
+     "fbyv": 169760,
+     "allowance": 2008220,
+     "cap": 2177980,
+     "new_base": 3792330,
+     "exclusion_applied": false
+    }
+   },
+   "sale_at_inheritance": {},
+   "first_year_cashflow": -35830,
+   "last_year_cashflow": -91660,
+   "cumulative_cashflow": -1261780,
+   "terminal_sales": {
+    "cup": {
+     "price": 14310730,
+     "selling_cost": 715540,
+     "transfer_tax": 15740,
+     "gain": 7063970,
+     "capital_gains_tax": 2435230,
+     "net": 11144220,
+     "depreciation_taken": 0
+    },
+    "sf": {
+     "price": 8309460,
+     "selling_cost": 415470,
+     "transfer_tax": 186960,
+     "gain": 5839230,
+     "capital_gains_tax": 2187210,
+     "net": 5519820,
+     "depreciation_taken": 1737580
+    }
+   },
+   "terminal_portfolio": -1261780,
+   "total_terminal_wealth": 15402270,
+   "npv": 4517300,
+   "cashflows": [
+    {
+     "year": 2045,
+     "rent": 167130,
+     "opex": 72700,
+     "proptax": 130260,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -35830,
+     "portfolio_end": -35830
+    },
+    {
+     "year": 2046,
+     "rent": 170730,
+     "opex": 75510,
+     "proptax": 132860,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -37650,
+     "portfolio_end": -73470
+    },
+    {
+     "year": 2047,
+     "rent": 174410,
+     "opex": 78430,
+     "proptax": 135520,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -39550,
+     "portfolio_end": -113020
+    },
+    {
+     "year": 2048,
+     "rent": 178170,
+     "opex": 81470,
+     "proptax": 138230,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -41530,
+     "portfolio_end": -154550
+    },
+    {
+     "year": 2049,
+     "rent": 182030,
+     "opex": 84630,
+     "proptax": 141000,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -43590,
+     "portfolio_end": -198150
+    },
+    {
+     "year": 2050,
+     "rent": 185980,
+     "opex": 87910,
+     "proptax": 143820,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -45750,
+     "portfolio_end": -243890
+    },
+    {
+     "year": 2051,
+     "rent": 190020,
+     "opex": 91320,
+     "proptax": 146690,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -48000,
+     "portfolio_end": -291890
+    },
+    {
+     "year": 2052,
+     "rent": 194160,
+     "opex": 94870,
+     "proptax": 149630,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -50340,
+     "portfolio_end": -342230
+    },
+    {
+     "year": 2053,
+     "rent": 198400,
+     "opex": 98560,
+     "proptax": 152620,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -52780,
+     "portfolio_end": -395010
+    },
+    {
+     "year": 2054,
+     "rent": 202740,
+     "opex": 102400,
+     "proptax": 155670,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -55330,
+     "portfolio_end": -450340
+    },
+    {
+     "year": 2055,
+     "rent": 207190,
+     "opex": 106380,
+     "proptax": 158790,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -57980,
+     "portfolio_end": -508320
+    },
+    {
+     "year": 2056,
+     "rent": 211740,
+     "opex": 110530,
+     "proptax": 161960,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -60750,
+     "portfolio_end": -569070
+    },
+    {
+     "year": 2057,
+     "rent": 216400,
+     "opex": 114840,
+     "proptax": 165200,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -63640,
+     "portfolio_end": -632710
+    },
+    {
+     "year": 2058,
+     "rent": 221170,
+     "opex": 119320,
+     "proptax": 168500,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -66650,
+     "portfolio_end": -699370
+    },
+    {
+     "year": 2059,
+     "rent": 226060,
+     "opex": 123980,
+     "proptax": 171870,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -69790,
+     "portfolio_end": -769160
+    },
+    {
+     "year": 2060,
+     "rent": 231070,
+     "opex": 128830,
+     "proptax": 175310,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -73070,
+     "portfolio_end": -842220
+    },
+    {
+     "year": 2061,
+     "rent": 236210,
+     "opex": 133870,
+     "proptax": 178820,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -76480,
+     "portfolio_end": -918710
+    },
+    {
+     "year": 2062,
+     "rent": 241460,
+     "opex": 139110,
+     "proptax": 182390,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -80040,
+     "portfolio_end": -998750
+    },
+    {
+     "year": 2063,
+     "rent": 246850,
+     "opex": 144560,
+     "proptax": 186040,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -83750,
+     "portfolio_end": -1082500
+    },
+    {
+     "year": 2064,
+     "rent": 252360,
+     "opex": 150220,
+     "proptax": 189760,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -87620,
+     "portfolio_end": -1170120
+    },
+    {
+     "year": 2065,
+     "rent": 258020,
+     "opex": 156110,
+     "proptax": 193560,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -91660,
+     "portfolio_end": -1261780
+    }
+   ]
+  },
+  {
+   "short": "B",
+   "name": "B. Live in San Francisco (vacant unit); rent Cupertino (SF is the parents' home)",
+   "live_in": "sf",
+   "parent_residence": "sf",
+   "sold_at_inheritance": [],
+   "tax_at_inheritance": {
+    "cup": 85500,
+    "sf": 21020
+   },
+   "prop19": {
+    "cup": {
+     "fmv": 6531230,
+     "fbyv": 802030,
+     "allowance": 2008220,
+     "cap": 2810250,
+     "new_base": 6531230,
+     "exclusion_applied": false
+    },
+    "sf": {
+     "fmv": 3792330,
+     "fbyv": 169760,
+     "allowance": 2008220,
+     "cap": 2177980,
+     "new_base": 1784110,
+     "exclusion_applied": true
+    }
+   },
+   "sale_at_inheritance": {},
+   "first_year_cashflow": 66810,
+   "last_year_cashflow": 85760,
+   "cumulative_cashflow": 1609560,
+   "terminal_sales": {
+    "cup": {
+     "price": 14310730,
+     "selling_cost": 715540,
+     "transfer_tax": 15740,
+     "gain": 10804580,
+     "capital_gains_tax": 4053390,
+     "net": 9526070,
+     "depreciation_taken": 3740610
+    },
+    "sf": {
+     "price": 8309460,
+     "selling_cost": 415470,
+     "transfer_tax": 186960,
+     "gain": 4101660,
+     "capital_gains_tax": 1336210,
+     "net": 6370810,
+     "depreciation_taken": 0
+    }
+   },
+   "terminal_portfolio": 2419810,
+   "total_terminal_wealth": 18316680,
+   "npv": 5887460,
+   "cashflows": [
+    {
+     "year": 2045,
+     "rent": 243910,
+     "opex": 70590,
+     "proptax": 106520,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 66810,
+     "portfolio_end": 70320
+    },
+    {
+     "year": 2046,
+     "rent": 249810,
+     "opex": 73350,
+     "proptax": 108650,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 67820,
+     "portfolio_end": 145400
+    },
+    {
+     "year": 2047,
+     "rent": 255870,
+     "opex": 76220,
+     "proptax": 110820,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 68830,
+     "portfolio_end": 225490
+    },
+    {
+     "year": 2048,
+     "rent": 262080,
+     "opex": 79200,
+     "proptax": 113040,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 69840,
+     "portfolio_end": 310860
+    },
+    {
+     "year": 2049,
+     "rent": 268450,
+     "opex": 82300,
+     "proptax": 115300,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 70850,
+     "portfolio_end": 401780
+    },
+    {
+     "year": 2050,
+     "rent": 274990,
+     "opex": 85520,
+     "proptax": 117600,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 71860,
+     "portfolio_end": 498550
+    },
+    {
+     "year": 2051,
+     "rent": 281700,
+     "opex": 88880,
+     "proptax": 119960,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 72870,
+     "portfolio_end": 601470
+    },
+    {
+     "year": 2052,
+     "rent": 288590,
+     "opex": 92360,
+     "proptax": 122350,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 73870,
+     "portfolio_end": 710850
+    },
+    {
+     "year": 2053,
+     "rent": 295660,
+     "opex": 95990,
+     "proptax": 124800,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 74870,
+     "portfolio_end": 827040
+    },
+    {
+     "year": 2054,
+     "rent": 302920,
+     "opex": 99760,
+     "proptax": 127300,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 75860,
+     "portfolio_end": 950370
+    },
+    {
+     "year": 2055,
+     "rent": 310370,
+     "opex": 103680,
+     "proptax": 129840,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 76850,
+     "portfolio_end": 1081230
+    },
+    {
+     "year": 2056,
+     "rent": 318020,
+     "opex": 107760,
+     "proptax": 132440,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 77820,
+     "portfolio_end": 1219990
+    },
+    {
+     "year": 2057,
+     "rent": 325870,
+     "opex": 112000,
+     "proptax": 135090,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 78780,
+     "portfolio_end": 1367060
+    },
+    {
+     "year": 2058,
+     "rent": 333930,
+     "opex": 116410,
+     "proptax": 137790,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 79730,
+     "portfolio_end": 1522860
+    },
+    {
+     "year": 2059,
+     "rent": 342200,
+     "opex": 121000,
+     "proptax": 140550,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 80660,
+     "portfolio_end": 1687830
+    },
+    {
+     "year": 2060,
+     "rent": 350700,
+     "opex": 125770,
+     "proptax": 143360,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 81570,
+     "portfolio_end": 1862430
+    },
+    {
+     "year": 2061,
+     "rent": 359420,
+     "opex": 130740,
+     "proptax": 146230,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 82460,
+     "portfolio_end": 2047150
+    },
+    {
+     "year": 2062,
+     "rent": 368370,
+     "opex": 135900,
+     "proptax": 149150,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 83320,
+     "portfolio_end": 2242490
+    },
+    {
+     "year": 2063,
+     "rent": 377560,
+     "opex": 141270,
+     "proptax": 152130,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 84160,
+     "portfolio_end": 2448990
+    },
+    {
+     "year": 2064,
+     "rent": 387000,
+     "opex": 146850,
+     "proptax": 155180,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 84980,
+     "portfolio_end": 2667200
+    },
+    {
+     "year": 2065,
+     "rent": 396690,
+     "opex": 152660,
+     "proptax": 158280,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 85760,
+     "portfolio_end": 2897710
+    }
+   ]
+  },
+  {
+   "short": "C",
+   "name": "C. Rent both houses; rent equivalent housing (SF is the parents' home)",
+   "live_in": null,
+   "parent_residence": "sf",
+   "sold_at_inheritance": [],
+   "tax_at_inheritance": {
+    "cup": 85500,
+    "sf": 44850
+   },
+   "prop19": {
+    "cup": {
+     "fmv": 6531230,
+     "fbyv": 802030,
+     "allowance": 2008220,
+     "cap": 2810250,
+     "new_base": 6531230,
+     "exclusion_applied": false
+    },
+    "sf": {
+     "fmv": 3792330,
+     "fbyv": 169760,
+     "allowance": 2008220,
+     "cap": 2177980,
+     "new_base": 3792330,
+     "exclusion_applied": false
+    }
+   },
+   "sale_at_inheritance": {},
+   "first_year_cashflow": -54360,
+   "last_year_cashflow": -125450,
+   "cumulative_cashflow": -1796010,
+   "terminal_sales": {
+    "cup": {
+     "price": 14310730,
+     "selling_cost": 715540,
+     "transfer_tax": 15740,
+     "gain": 10804580,
+     "capital_gains_tax": 4053390,
+     "net": 9526070,
+     "depreciation_taken": 3740610
+    },
+    "sf": {
+     "price": 8309460,
+     "selling_cost": 415470,
+     "transfer_tax": 186960,
+     "gain": 5839230,
+     "capital_gains_tax": 2187210,
+     "net": 5519820,
+     "depreciation_taken": 1737580
+    }
+   },
+   "terminal_portfolio": -1796010,
+   "total_terminal_wealth": 13249880,
+   "npv": 3715010,
+   "cashflows": [
+    {
+     "year": 2045,
+     "rent": 309660,
+     "opex": 70590,
+     "proptax": 130350,
+     "income_tax": 0,
+     "housing": 163080,
+     "net": -54360,
+     "portfolio_end": -54360
+    },
+    {
+     "year": 2046,
+     "rent": 317530,
+     "opex": 73350,
+     "proptax": 132960,
+     "income_tax": 0,
+     "housing": 167970,
+     "net": -56740,
+     "portfolio_end": -111100
+    },
+    {
+     "year": 2047,
+     "rent": 325620,
+     "opex": 76220,
+     "proptax": 135620,
+     "income_tax": 0,
+     "housing": 173010,
+     "net": -59220,
+     "portfolio_end": -170320
+    },
+    {
+     "year": 2048,
+     "rent": 333920,
+     "opex": 79200,
+     "proptax": 138330,
+     "income_tax": 0,
+     "housing": 178200,
+     "net": -61810,
+     "portfolio_end": -232130
+    },
+    {
+     "year": 2049,
+     "rent": 342450,
+     "opex": 82300,
+     "proptax": 141100,
+     "income_tax": 0,
+     "housing": 183540,
+     "net": -64490,
+     "portfolio_end": -296620
+    },
+    {
+     "year": 2050,
+     "rent": 351210,
+     "opex": 85520,
+     "proptax": 143920,
+     "income_tax": 0,
+     "housing": 189050,
+     "net": -67280,
+     "portfolio_end": -363900
+    },
+    {
+     "year": 2051,
+     "rent": 360210,
+     "opex": 88880,
+     "proptax": 146800,
+     "income_tax": 0,
+     "housing": 194720,
+     "net": -70190,
+     "portfolio_end": -434090
+    },
+    {
+     "year": 2052,
+     "rent": 369450,
+     "opex": 92360,
+     "proptax": 149730,
+     "income_tax": 0,
+     "housing": 200560,
+     "net": -73210,
+     "portfolio_end": -507290
+    },
+    {
+     "year": 2053,
+     "rent": 378950,
+     "opex": 95990,
+     "proptax": 152730,
+     "income_tax": 0,
+     "housing": 206580,
+     "net": -76350,
+     "portfolio_end": -583640
+    },
+    {
+     "year": 2054,
+     "rent": 388710,
+     "opex": 99760,
+     "proptax": 155780,
+     "income_tax": 0,
+     "housing": 212780,
+     "net": -79610,
+     "portfolio_end": -663250
+    },
+    {
+     "year": 2055,
+     "rent": 398730,
+     "opex": 103680,
+     "proptax": 158900,
+     "income_tax": 0,
+     "housing": 219160,
+     "net": -83010,
+     "portfolio_end": -746260
+    },
+    {
+     "year": 2056,
+     "rent": 409030,
+     "opex": 107760,
+     "proptax": 162070,
+     "income_tax": 0,
+     "housing": 225740,
+     "net": -86540,
+     "portfolio_end": -832800
+    },
+    {
+     "year": 2057,
+     "rent": 419610,
+     "opex": 112000,
+     "proptax": 165320,
+     "income_tax": 0,
+     "housing": 232510,
+     "net": -90220,
+     "portfolio_end": -923020
+    },
+    {
+     "year": 2058,
+     "rent": 430480,
+     "opex": 116410,
+     "proptax": 168620,
+     "income_tax": 0,
+     "housing": 239480,
+     "net": -94040,
+     "portfolio_end": -1017050
+    },
+    {
+     "year": 2059,
+     "rent": 441650,
+     "opex": 121000,
+     "proptax": 171990,
+     "income_tax": 0,
+     "housing": 246670,
+     "net": -98010,
+     "portfolio_end": -1115070
+    },
+    {
+     "year": 2060,
+     "rent": 453130,
+     "opex": 125770,
+     "proptax": 175430,
+     "income_tax": 0,
+     "housing": 254070,
+     "net": -102150,
+     "portfolio_end": -1217210
+    },
+    {
+     "year": 2061,
+     "rent": 464920,
+     "opex": 130740,
+     "proptax": 178940,
+     "income_tax": 0,
+     "housing": 261690,
+     "net": -106450,
+     "portfolio_end": -1323660
+    },
+    {
+     "year": 2062,
+     "rent": 477040,
+     "opex": 135900,
+     "proptax": 182520,
+     "income_tax": 0,
+     "housing": 269540,
+     "net": -110920,
+     "portfolio_end": -1434580
+    },
+    {
+     "year": 2063,
+     "rent": 489490,
+     "opex": 141270,
+     "proptax": 186170,
+     "income_tax": 0,
+     "housing": 277630,
+     "net": -115570,
+     "portfolio_end": -1550150
+    },
+    {
+     "year": 2064,
+     "rent": 502290,
+     "opex": 146850,
+     "proptax": 189900,
+     "income_tax": 0,
+     "housing": 285950,
+     "net": -120410,
+     "portfolio_end": -1670560
+    },
+    {
+     "year": 2065,
+     "rent": 515440,
+     "opex": 152660,
+     "proptax": 193690,
+     "income_tax": 0,
+     "housing": 294530,
+     "net": -125450,
+     "portfolio_end": -1796010
+    }
+   ]
+  },
+  {
+   "short": "D",
+   "name": "D. Sell both at inheritance; invest the net proceeds (SF is the parents' home)",
+   "live_in": null,
+   "parent_residence": "sf",
+   "sold_at_inheritance": [
+    "cup",
+    "sf"
+   ],
+   "tax_at_inheritance": {},
+   "prop19": {
+    "cup": null,
+    "sf": null
+   },
+   "sale_at_inheritance": {
+    "cup": {
+     "price": 6531230,
+     "selling_cost": 326560,
+     "transfer_tax": 7180,
+     "capital_gains_tax": 0,
+     "net": 6197490
+    },
+    "sf": {
+     "price": 3792330,
+     "selling_cost": 189620,
+     "transfer_tax": 28440,
+     "capital_gains_tax": 0,
+     "net": 3574270
+    }
+   },
+   "first_year_cashflow": -163080,
+   "last_year_cashflow": -294530,
+   "cumulative_cashflow": -4676450,
+   "terminal_sales": {},
+   "terminal_portfolio": 14789040,
+   "total_terminal_wealth": 14789040,
+   "npv": 7162800,
+   "cashflows": [
+    {
+     "year": 2045,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 163080,
+     "net": -163080,
+     "portfolio_end": 10113900
+    },
+    {
+     "year": 2046,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 167970,
+     "net": -167970,
+     "portfolio_end": 10468890
+    },
+    {
+     "year": 2047,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 173010,
+     "net": -173010,
+     "portfolio_end": 10837240
+    },
+    {
+     "year": 2048,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 178200,
+     "net": -178200,
+     "portfolio_end": 11219500
+    },
+    {
+     "year": 2049,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 183540,
+     "net": -183540,
+     "portfolio_end": 11616230
+    },
+    {
+     "year": 2050,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 189050,
+     "net": -189050,
+     "portfolio_end": 12028020
+    },
+    {
+     "year": 2051,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 194720,
+     "net": -194720,
+     "portfolio_end": 12455490
+    },
+    {
+     "year": 2052,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 200560,
+     "net": -200560,
+     "portfolio_end": 12899290
+    },
+    {
+     "year": 2053,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 206580,
+     "net": -206580,
+     "portfolio_end": 13360090
+    },
+    {
+     "year": 2054,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 212780,
+     "net": -212780,
+     "portfolio_end": 13838600
+    },
+    {
+     "year": 2055,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 219160,
+     "net": -219160,
+     "portfolio_end": 14335550
+    },
+    {
+     "year": 2056,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 225740,
+     "net": -225740,
+     "portfolio_end": 14851710
+    },
+    {
+     "year": 2057,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 232510,
+     "net": -232510,
+     "portfolio_end": 15387880
+    },
+    {
+     "year": 2058,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 239480,
+     "net": -239480,
+     "portfolio_end": 15944900
+    },
+    {
+     "year": 2059,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 246670,
+     "net": -246670,
+     "portfolio_end": 16523650
+    },
+    {
+     "year": 2060,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 254070,
+     "net": -254070,
+     "portfolio_end": 17125030
+    },
+    {
+     "year": 2061,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 261690,
+     "net": -261690,
+     "portfolio_end": 17750020
+    },
+    {
+     "year": 2062,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 269540,
+     "net": -269540,
+     "portfolio_end": 18399600
+    },
+    {
+     "year": 2063,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 277630,
+     "net": -277630,
+     "portfolio_end": 19074830
+    },
+    {
+     "year": 2064,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 285950,
+     "net": -285950,
+     "portfolio_end": 19776800
+    },
+    {
+     "year": 2065,
+     "rent": 0,
+     "opex": 0,
+     "proptax": 0,
+     "income_tax": 0,
+     "housing": 294530,
+     "net": -294530,
+     "portfolio_end": 20506640
+    }
+   ]
+  },
+  {
+   "short": "E",
+   "name": "E. Live in Cupertino; sell the San Francisco building (SF is the parents' home)",
+   "live_in": "cup",
+   "parent_residence": "sf",
+   "sold_at_inheritance": [
+    "sf"
+   ],
+   "tax_at_inheritance": {
+    "cup": 85410
+   },
+   "prop19": {
+    "cup": {
+     "fmv": 6531230,
+     "fbyv": 802030,
+     "allowance": 2008220,
+     "cap": 2810250,
+     "new_base": 6531230,
+     "exclusion_applied": false
+    },
+    "sf": null
+   },
+   "sale_at_inheritance": {
+    "sf": {
+     "price": 3792330,
+     "selling_cost": 189620,
+     "transfer_tax": 28440,
+     "capital_gains_tax": 0,
+     "net": 3574270
+    }
+   },
+   "first_year_cashflow": -112510,
+   "last_year_cashflow": -186330,
+   "cumulative_cashflow": -3068300,
+   "terminal_sales": {
+    "cup": {
+     "price": 14310730,
+     "selling_cost": 715540,
+     "transfer_tax": 15740,
+     "gain": 7063970,
+     "capital_gains_tax": 2435230,
+     "net": 11144220,
+     "depreciation_taken": 0
+    }
+   },
+   "terminal_portfolio": 3388640,
+   "total_terminal_wealth": 14532870,
+   "npv": 5321450,
+   "cashflows": [
+    {
+     "year": 2045,
+     "rent": 0,
+     "opex": 27100,
+     "proptax": 85410,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -112510,
+     "portfolio_end": 3643780
+    },
+    {
+     "year": 2046,
+     "rent": 0,
+     "opex": 28180,
+     "proptax": 87120,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -115300,
+     "portfolio_end": 3714000
+    },
+    {
+     "year": 2047,
+     "rent": 0,
+     "opex": 29310,
+     "proptax": 88860,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -118170,
+     "portfolio_end": 3784910
+    },
+    {
+     "year": 2048,
+     "rent": 0,
+     "opex": 30480,
+     "proptax": 90640,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -121110,
+     "portfolio_end": 3856440
+    },
+    {
+     "year": 2049,
+     "rent": 0,
+     "opex": 31690,
+     "proptax": 92450,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -124140,
+     "portfolio_end": 3928540
+    },
+    {
+     "year": 2050,
+     "rent": 0,
+     "opex": 32960,
+     "proptax": 94300,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -127250,
+     "portfolio_end": 4001160
+    },
+    {
+     "year": 2051,
+     "rent": 0,
+     "opex": 34270,
+     "proptax": 96180,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -130460,
+     "portfolio_end": 4074230
+    },
+    {
+     "year": 2052,
+     "rent": 0,
+     "opex": 35640,
+     "proptax": 98110,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -133750,
+     "portfolio_end": 4147670
+    },
+    {
+     "year": 2053,
+     "rent": 0,
+     "opex": 37070,
+     "proptax": 100070,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -137140,
+     "portfolio_end": 4221410
+    },
+    {
+     "year": 2054,
+     "rent": 0,
+     "opex": 38550,
+     "proptax": 102070,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -140620,
+     "portfolio_end": 4295360
+    },
+    {
+     "year": 2055,
+     "rent": 0,
+     "opex": 40090,
+     "proptax": 104110,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -144200,
+     "portfolio_end": 4369430
+    },
+    {
+     "year": 2056,
+     "rent": 0,
+     "opex": 41700,
+     "proptax": 106190,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -147890,
+     "portfolio_end": 4443500
+    },
+    {
+     "year": 2057,
+     "rent": 0,
+     "opex": 43370,
+     "proptax": 108320,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -151680,
+     "portfolio_end": 4517480
+    },
+    {
+     "year": 2058,
+     "rent": 0,
+     "opex": 45100,
+     "proptax": 110480,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -155590,
+     "portfolio_end": 4591240
+    },
+    {
+     "year": 2059,
+     "rent": 0,
+     "opex": 46910,
+     "proptax": 112690,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -159610,
+     "portfolio_end": 4664650
+    },
+    {
+     "year": 2060,
+     "rent": 0,
+     "opex": 48790,
+     "proptax": 114950,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -163740,
+     "portfolio_end": 4737570
+    },
+    {
+     "year": 2061,
+     "rent": 0,
+     "opex": 50750,
+     "proptax": 117250,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -168000,
+     "portfolio_end": 4809840
+    },
+    {
+     "year": 2062,
+     "rent": 0,
+     "opex": 52790,
+     "proptax": 119590,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -172380,
+     "portfolio_end": 4881290
+    },
+    {
+     "year": 2063,
+     "rent": 0,
+     "opex": 54910,
+     "proptax": 121980,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -176890,
+     "portfolio_end": 4951750
+    },
+    {
+     "year": 2064,
+     "rent": 0,
+     "opex": 57120,
+     "proptax": 124420,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -181540,
+     "portfolio_end": 5021030
+    },
+    {
+     "year": 2065,
+     "rent": 0,
+     "opex": 59410,
+     "proptax": 126910,
+     "income_tax": 0,
+     "housing": 0,
+     "net": -186330,
+     "portfolio_end": 5088910
+    }
+   ]
+  },
+  {
+   "short": "F",
+   "name": "F. Live in San Francisco; sell Cupertino (SF is the parents' home)",
+   "live_in": "sf",
+   "parent_residence": "sf",
+   "sold_at_inheritance": [
+    "cup"
+   ],
+   "tax_at_inheritance": {
+    "sf": 21020
+   },
+   "prop19": {
+    "cup": null,
+    "sf": {
+     "fmv": 3792330,
+     "fbyv": 169760,
+     "allowance": 2008220,
+     "cap": 2177980,
+     "new_base": 1784110,
+     "exclusion_applied": true
+    }
+   },
+   "sale_at_inheritance": {
+    "cup": {
+     "price": 6531230,
+     "selling_cost": 326560,
+     "transfer_tax": 7180,
+     "capital_gains_tax": 0,
+     "net": 6197490
+    }
+   },
+   "first_year_cashflow": 34770,
+   "last_year_cashflow": 11340,
+   "cumulative_cashflow": 535640,
+   "terminal_sales": {
+    "sf": {
+     "price": 8309460,
+     "selling_cost": 415470,
+     "transfer_tax": 186960,
+     "gain": 4101660,
+     "capital_gains_tax": 1336210,
+     "net": 6370810,
+     "depreciation_taken": 0
+    }
+   },
+   "terminal_portfolio": 14604000,
+   "total_terminal_wealth": 20974800,
+   "npv": 8531110,
+   "cashflows": [
+    {
+     "year": 2045,
+     "rent": 101390,
+     "opex": 45600,
+     "proptax": 21020,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 34770,
+     "portfolio_end": 6559950
+    },
+    {
+     "year": 2046,
+     "rent": 103010,
+     "opex": 47330,
+     "proptax": 21440,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 34240,
+     "portfolio_end": 6940920
+    },
+    {
+     "year": 2047,
+     "rent": 104660,
+     "opex": 49130,
+     "proptax": 21870,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 33660,
+     "portfolio_end": 7341300
+    },
+    {
+     "year": 2048,
+     "rent": 106330,
+     "opex": 51000,
+     "proptax": 22300,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 33030,
+     "portfolio_end": 7762080
+    },
+    {
+     "year": 2049,
+     "rent": 108030,
+     "opex": 52940,
+     "proptax": 22750,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 32340,
+     "portfolio_end": 8204250
+    },
+    {
+     "year": 2050,
+     "rent": 109760,
+     "opex": 54960,
+     "proptax": 23210,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 31600,
+     "portfolio_end": 8668890
+    },
+    {
+     "year": 2051,
+     "rent": 111520,
+     "opex": 57050,
+     "proptax": 23670,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 30800,
+     "portfolio_end": 9157120
+    },
+    {
+     "year": 2052,
+     "rent": 113300,
+     "opex": 59230,
+     "proptax": 24140,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 29930,
+     "portfolio_end": 9670100
+    },
+    {
+     "year": 2053,
+     "rent": 115110,
+     "opex": 61500,
+     "proptax": 24630,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 28990,
+     "portfolio_end": 10209070
+    },
+    {
+     "year": 2054,
+     "rent": 116960,
+     "opex": 63850,
+     "proptax": 25120,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 27990,
+     "portfolio_end": 10775320
+    },
+    {
+     "year": 2055,
+     "rent": 118830,
+     "opex": 66290,
+     "proptax": 25620,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 26910,
+     "portfolio_end": 11370220
+    },
+    {
+     "year": 2056,
+     "rent": 120730,
+     "opex": 68830,
+     "proptax": 26130,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 25760,
+     "portfolio_end": 11995180
+    },
+    {
+     "year": 2057,
+     "rent": 122660,
+     "opex": 71470,
+     "proptax": 26660,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 24530,
+     "portfolio_end": 12651710
+    },
+    {
+     "year": 2058,
+     "rent": 124620,
+     "opex": 74220,
+     "proptax": 27190,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 23220,
+     "portfolio_end": 13341370
+    },
+    {
+     "year": 2059,
+     "rent": 126620,
+     "opex": 77070,
+     "proptax": 27730,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 21810,
+     "portfolio_end": 14065820
+    },
+    {
+     "year": 2060,
+     "rent": 128640,
+     "opex": 80030,
+     "proptax": 28290,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 20320,
+     "portfolio_end": 14826790
+    },
+    {
+     "year": 2061,
+     "rent": 130700,
+     "opex": 83120,
+     "proptax": 28850,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 18730,
+     "portfolio_end": 15626110
+    },
+    {
+     "year": 2062,
+     "rent": 132790,
+     "opex": 86320,
+     "proptax": 29430,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 17050,
+     "portfolio_end": 16465670
+    },
+    {
+     "year": 2063,
+     "rent": 134920,
+     "opex": 89650,
+     "proptax": 30020,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 15250,
+     "portfolio_end": 17347490
+    },
+    {
+     "year": 2064,
+     "rent": 137080,
+     "opex": 93100,
+     "proptax": 30620,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 13350,
+     "portfolio_end": 18273670
+    },
+    {
+     "year": 2065,
+     "rent": 139270,
+     "opex": 96700,
+     "proptax": 31230,
+     "income_tax": 0,
+     "housing": 0,
+     "net": 11340,
+     "portfolio_end": 19246440
+    }
+   ]
+  }
+ ],
+ "grid": [
+  {
+   "g": 0.03,
+   "inv": 0.04,
+   "wealth": {
+    "A": 12471830,
+    "B": 13806170,
+    "C": 9743390,
+    "D": 7192730,
+    "E": 10490020,
+    "F": 13410740
+   },
+   "best": "B",
+   "best_wealth": 13806170,
+   "runner_up": "F"
+  },
+  {
+   "g": 0.03,
+   "inv": 0.06,
+   "wealth": {
+    "A": 12576400,
+    "B": 14246100,
+    "C": 9743390,
+    "D": 11157290,
+    "E": 11898130,
+    "F": 16675770
+   },
+   "best": "F",
+   "best_wealth": 16675770,
+   "runner_up": "B"
+  },
+  {
+   "g": 0.03,
+   "inv": 0.08,
+   "wealth": {
+    "A": 12714820,
+    "B": 14820160,
+    "C": 9743390,
+    "D": 17115810,
+    "E": 14021720,
+    "F": 21435260
+   },
+   "best": "F",
+   "best_wealth": 21435260,
+   "runner_up": "D"
+  },
+  {
+   "g": 0.04,
+   "inv": 0.04,
+   "wealth": {
+    "A": 16080090,
+    "B": 17167540,
+    "C": 13249880,
+    "D": 9821820,
+    "E": 13878720,
+    "F": 16252770
+   },
+   "best": "B",
+   "best_wealth": 17167540,
+   "runner_up": "F"
+  },
+  {
+   "g": 0.04,
+   "inv": 0.06,
+   "wealth": {
+    "A": 16080090,
+    "B": 17405270,
+    "C": 13249880,
+    "D": 14789040,
+    "E": 15541700,
+    "F": 20063390
+   },
+   "best": "F",
+   "best_wealth": 20063390,
+   "runner_up": "B"
+  },
+  {
+   "g": 0.04,
+   "inv": 0.08,
+   "wealth": {
+    "A": 16080090,
+    "B": 17717410,
+    "C": 13249880,
+    "D": 22213440,
+    "E": 18056110,
+    "F": 25636010
+   },
+   "best": "F",
+   "best_wealth": 25636010,
+   "runner_up": "D"
+  },
+  {
+   "g": 0.05,
+   "inv": 0.04,
+   "wealth": {
+    "A": 21108300,
+    "B": 21773430,
+    "C": 17992420,
+    "D": 12947630,
+    "E": 18555330,
+    "F": 19572120
+   },
+   "best": "B",
+   "best_wealth": 21773430,
+   "runner_up": "A"
+  },
+  {
+   "g": 0.05,
+   "inv": 0.06,
+   "wealth": {
+    "A": 21108300,
+    "B": 21776790,
+    "C": 17992420,
+    "D": 19106930,
+    "E": 20518780,
+    "F": 24027230
+   },
+   "best": "F",
+   "best_wealth": 24027230,
+   "runner_up": "B"
+  },
+  {
+   "g": 0.05,
+   "inv": 0.08,
+   "wealth": {
+    "A": 21108300,
+    "B": 21781080,
+    "C": 17992420,
+    "D": 28274180,
+    "E": 23494860,
+    "F": 30561660
+   },
+   "best": "F",
+   "best_wealth": 30561660,
+   "runner_up": "D"
+  }
+ ],
+ "prop19_lifetime": {
+  "cup": {
+   "annual_saving_first_year": 26290,
+   "twenty_one_year_saving": 677830,
+   "new_base_if_excluded": 4523010,
+   "new_base_if_full": 6531230
+  },
+  "sf": {
+   "annual_saving_first_year": 23750,
+   "twenty_one_year_saving": 612380,
+   "new_base_if_excluded": 1784110,
+   "new_base_if_full": 3792330
+  }
+ },
+ "stepup": {
+  "pre_inheritance_appreciation": 5423560,
+  "rate_assumed": 0.371,
+  "tax_avoided": 2012140
+ },
+ "estate": {
+  "thresholds": [
+   {
+    "year": 2026,
+    "single": 15000000,
+    "married_portable": 30000000,
+    "basis": "verified (S03)"
+   },
+   {
+    "year": 2030,
+    "single": 16557190,
+    "married_portable": 33114390,
+    "basis": "verified 2026 (S03); projected 2026+ at 2.5%/yr"
+   },
+   {
+    "year": 2035,
+    "single": 18732940,
+    "married_portable": 37465890,
+    "basis": "verified 2026 (S03); projected 2026+ at 2.5%/yr"
+   },
+   {
+    "year": 2040,
+    "single": 21194610,
+    "married_portable": 42389210,
+    "basis": "verified 2026 (S03); projected 2026+ at 2.5%/yr"
+   },
+   {
+    "year": 2045,
+    "single": 23979750,
+    "married_portable": 47959510,
+    "basis": "verified 2026 (S03); projected 2026+ at 2.5%/yr"
+   },
+   {
+    "year": 2050,
+    "single": 27130890,
+    "married_portable": 54261780,
+    "basis": "verified 2026 (S03); projected 2026+ at 2.5%/yr"
+   }
+  ],
+  "top_rate": 0.4,
+  "ca_state_estate_tax": 0,
+  "annual_gift_exclusion_2026": 19000
+ },
+ "post_reassessment_yield": {
+  "cup": {
+   "gross_rent": 142530,
+   "opex": 24990,
+   "property_tax": 85500,
+   "net": 32030,
+   "net_yield_on_value": 0.0049,
+   "value": 6531230
+  },
+  "sf": {
+   "gross_rent": 167130,
+   "opex": 45600,
+   "property_tax": 44850,
+   "net": 76690,
+   "net_yield_on_value": 0.0202,
+   "value": 3792330
+  }
+ },
+ "inheritance_year_sensitivity": [
+  {
+   "year": 2040,
+   "property": "Cupertino",
+   "fmv": 5368200,
+   "fbyv": 726420,
+   "allowance": 1690870,
+   "cap": 2417290,
+   "new_base_excluded": 3677330,
+   "tax_excluded": 48140,
+   "new_base_full": 5368200,
+   "tax_full": 70270,
+   "annual_saving": 22130
+  },
+  {
+   "year": 2040,
+   "property": "San Francisco (Outer Sunset)",
+   "fmv": 3117020,
+   "fbyv": 153760,
+   "allowance": 1690870,
+   "cap": 1844620,
+   "new_base_excluded": 3117020,
+   "tax_excluded": 36860,
+   "new_base_full": 3117020,
+   "tax_full": 36860,
+   "annual_saving": 0
+  },
+  {
+   "year": 2045,
+   "property": "Cupertino",
+   "fmv": 6531230,
+   "fbyv": 802030,
+   "allowance": 2008220,
+   "cap": 2810250,
+   "new_base_excluded": 4523010,
+   "tax_excluded": 59210,
+   "new_base_full": 6531230,
+   "tax_full": 85500,
+   "annual_saving": 26290
+  },
+  {
+   "year": 2045,
+   "property": "San Francisco (Outer Sunset)",
+   "fmv": 3792330,
+   "fbyv": 169760,
+   "allowance": 2008220,
+   "cap": 2177980,
+   "new_base_excluded": 3792330,
+   "tax_excluded": 44850,
+   "new_base_full": 3792330,
+   "tax_full": 44850,
+   "annual_saving": 0
+  },
+  {
+   "year": 2050,
+   "property": "Cupertino",
+   "fmv": 7946240,
+   "fbyv": 885500,
+   "allowance": 2385130,
+   "cap": 3270640,
+   "new_base_excluded": 5561110,
+   "tax_excluded": 72800,
+   "new_base_full": 7946240,
+   "tax_full": 104020,
+   "annual_saving": 31220
+  },
+  {
+   "year": 2050,
+   "property": "San Francisco (Outer Sunset)",
+   "fmv": 4613950,
+   "fbyv": 187430,
+   "allowance": 2385130,
+   "cap": 2572560,
+   "new_base_excluded": 4613950,
+   "tax_excluded": 54570,
+   "new_base_full": 4613950,
+   "tax_full": 54570,
+   "annual_saving": 0
+  }
+ ]
+}

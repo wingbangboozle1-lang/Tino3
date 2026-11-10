@@ -1,0 +1,24 @@
+data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%2314507a'/><path d='M8 21l6-9 4 6 3-4 3 7z' fill='%23fff'/></svg>
+https://elections.cdn.sos.ca.gov/ccrov/2026/may/26138jh.pdf
+https://files.santaclaracounty.gov/exjcpb1531/2025-11/tax-rate-book-2025-2026.pdf
+https://lao.ca.gov/2007/tax_primer/tax_primer_040907.aspx
+https://lao.ca.gov/LAOEconTax/Article/Detail/797
+https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=201920200ACA11
+https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=11901
+https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=218
+https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=51
+https://sfgov.legistar.com/View.ashx?GUID=AC93184C-32A4-4DA1-887D-09FC319785E7&ID=14779286&M=F
+https://www.boe.ca.gov/prop19/
+https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf
+https://www.fhfa.gov/document/d/hpi/fhfa-house-price-index-report-2025q3
+https://www.ftb.ca.gov/tax-pros/law/legislation/2019-2020/SB378-032519.pdf
+https://www.insurance.ca.gov/01-consumers/105-type/95-guides/03-res/
+https://www.irs.gov/individuals/net-investment-income-tax
+https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2026-including-amendments-from-the-one-big-beautiful-bill
+https://www.irs.gov/publications/p551
+https://www.irs.gov/publications/p559
+https://www.irs.gov/taxtopics/tc409
+https://www.irs.gov/taxtopics/tc701
+https://www.sf.gov/learn-about-rent-increases-san-francisco
+https://www.sf.gov/reports--current-rates-including-rent-increase-relocation-sec-deposit
+https://www.sf.gov/reports--march-2024--fees-record-document-san-francisco

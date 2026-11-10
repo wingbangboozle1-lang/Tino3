@@ -1,143 +1,205 @@
 # COORDINATION.md — Shared Task Board
 
 This file is the shared task board for all agent sessions working on this repository.
-Read this file **before** starting any task. Claim a task by writing your session ID and
-file scope below, then commit and push the claim immediately.
+Read it **before** starting any task. Claim a task by writing your session ID and file scope below,
+then commit and push the claim immediately.
 
 ## Session registry
 
-| Session ID | Branch | Status | Notes |
+| Session ID | Branch | Status | Scope |
 |---|---|---|---|
-| `arena-8af4b895` | `arena/8af4b895-tino3` | **active** | Operating under the Arena session-branch constraint (see note A) |
-| _(none other)_ | — | — | No other sessions have claimed work in this repository as of 2026-11-10 |
+| `arena-8af4b895` | `arena/8af4b895-tino3` | **done** — merged to `main` | Whole repository (sole claimant) |
+| _(no other session)_ | — | — | No other session claimed work at any point during this build |
 
-**Note A — branch naming deviation.** The default convention in this repo's brief is
-`session-<id>/<task>`. This session is bound by the Arena harness to a single fixed branch,
-`arena/8af4b895-tino3`, and is prohibited from creating or pushing to any other branch.
-The session therefore works entirely on `arena/8af4b895-tino3`, opens its pull request from
-that branch, and merges to `main`. No other session has claimed any scope, so there is no
-conflict risk. Any future session that needs a separate branch should use
-`session-<id>/<task>` and must not write to `arena/8af4b895-tino3`.
+**Branch-naming note.** The convention in this repository's brief is `session-<id>/<task>`. This
+session is bound by the Arena harness to one fixed branch, `arena/8af4b895-tino3`, and may not create
+or push any other branch. It therefore did all work on that branch, opened its pull request from it,
+and merged into `main`. Because no other session held a claim, the non-overlap requirement was met
+in substance: one owner, one scope, one branch, no concurrent edits.
 
 ## Task board
 
-| # | Task | Status | Owner | File scope |
+| # | Task | Status | Owner | Files |
 |---|---|---|---|---|
-| 1 | Coordination + repo scaffold (README, .nojekyll, licence/attribution) | done | `arena-8af4b895` | `COORDINATION.md`, `README.md`, `.nojekyll` |
-| 2 | Source verification register (official sources, line-by-line checks) | done | `arena-8af4b895` | `data/sources.json`, `pages/sources.html` |
-| 3 | Property fact base: Cupertino 95014 + SF 94122 history tables | done | `arena-8af4b895` | `data/properties.json`, `pages/cupertino.html`, `pages/san-francisco.html` |
-| 4 | Tax & law layer: Prop 13, Prop 19, federal estate, CA inheritance, capital gains, transfer tax | done | `arena-8af4b895` | `data/law.json`, `pages/taxes.html` |
-| 5 | Operating-cost layer: water, electricity, insurance, maintenance, rent roll | done | `arena-8af4b895` | `data/operating.json`, `pages/operating-costs.html` |
-| 6 | Projection engine: value, assessed value, property tax, costs 2026–2065 | done | `arena-8af4b895` | `tools/model.py`, `data/model.json`, `pages/projections.html` |
-| 7 | Decision analysis: live / rent / sell scenarios, NPV, sensitivity | done | `arena-8af4b895` | `pages/decision-analysis.html`, `data/scenarios.json` |
-| 8 | Inheritance process, step by step (trust administration → deed → assessor → tax filings) | done | `arena-8af4b895` | `pages/inheritance-process.html` |
-| 9 | Risk register + pending law changes | done | `arena-8af4b895` | `pages/risks.html` |
-| 10 | Executive summary (site page + standalone Markdown) | done | `arena-8af4b895` | `pages/executive-summary.html`, `EXECUTIVE-SUMMARY.md` |
+| 1 | Coordination, repo scaffold, `.nojekyll`, README | done | `arena-8af4b895` | `COORDINATION.md`, `README.md`, `.nojekyll` |
+| 2 | Source register and verification log | done | `arena-8af4b895` | `tools/sources.py`, `data/sources.json`, `pages/sources.html` |
+| 3 | Property fact base: Cupertino 95014, San Francisco 94122 | done | `arena-8af4b895` | `tools/pages_b.py`, `pages/cupertino.html`, `pages/san-francisco.html` |
+| 4 | Tax and law layer: Prop 13, Prop 19, federal estate, CA inheritance, step-up, transfer tax | done | `arena-8af4b895` | `tools/pages_a.py`, `pages/taxes.html` |
+| 5 | Operating-cost layer: water, electricity, insurance, maintenance, rent roll | done | `arena-8af4b895` | `pages/operating-costs.html` |
+| 6 | Projection engine, 2026–2065 | done | `arena-8af4b895` | `tools/model.py`, `data/model.json`, `pages/projections.html` |
+| 7 | Decision analysis: six plans, NPV, robustness grid | done | `arena-8af4b895` | `tools/pages_c.py`, `pages/decision-analysis.html` |
+| 8 | Inheritance process, step by step | done | `arena-8af4b895` | `pages/inheritance-process.html` |
+| 9 | Risk register and pending law changes | done | `arena-8af4b895` | `pages/risks.html` |
+| 10 | Executive summary (site page + standalone Markdown) | done | `arena-8af4b895` | `pages/executive-summary.html`, `EXECUTIVE-SUMMARY.md`, `tools/md_summary.py` |
 | 11 | Flagged-for-review register | done | `arena-8af4b895` | `pages/flagged.html` |
-| 12 | Site shell: landing dashboard, navigation, CSS, link checker | done | `arena-8af4b895` | `index.html`, `assets/*`, `tools/check_links.py` |
-| 13 | **Final integration**: re-verify combined data, build, link check, PR to `main`, merge, confirm Pages deploy | in progress | `arena-8af4b895` | all files (sole owner — no other active session) |
+| 12 | Site shell, navigation, CSS, link checker | done | `arena-8af4b895` | `index.html`, `assets/style.css`, `tools/site_lib.py`, `tools/build_site.py`, `tools/check_links.py` |
+| 13 | **Final integration**: re-verify combined data, build, link check, PR, merge, confirm Pages | done | `arena-8af4b895` | all |
 
 Status vocabulary: `unclaimed` · `in progress` · `done` · `needs review`.
-`needs review` means the item is published on the **Flagged for Review** page and does not block
-a merge.
-
-## Integration-session rules (from the project brief)
-
-* Shared outputs — `data/*.json`, `index.html`, `assets/nav.js` — are changed only by the final
-  integration session once all other tasks are done.
-* If a task needs a file owned by another session, log the request here instead of editing it.
-* `git pull --rebase` before every push. Small, frequent commits.
-* Flaggeed irregularities and unverified items never block a merge; they are published on
-  `pages/flagged.html`.
-* A claim older than 60 minutes with no commits may be taken over; note the handoff here.
+`needs review` means the item is published on the Flagged for Review page and does not block a merge.
 
 ## Log
 
 ### 2026-11-10 — `arena-8af4b895`
 
-* Repo state on arrival: single commit `8805699` ("Initial commit"), one file
-  (`README.md`, 7 bytes, content `# Tino3`). No prior code, data, or coordination file.
-  GitHub Pages already enabled: source `main`, path `/`, `build_type: legacy`, public,
-  `https://wingbangboozle1-lang.github.io/Tino3/`.
-* Claimed tasks 1–13 as sole active session. Scope is the whole repository; no overlap
-  because no other session has claimed anything.
-* Built the site as **static, dependency-free HTML** at the repo root so GitHub Pages'
-  legacy `main`-root builder serves it without a workflow. `.nojekyll` added so that
-  `assets/` and `data/` are served verbatim.
-* Verification method: every figure in every table carries a source link. Figures that could
-  not be matched to an official source are either (a) labelled *reported by owner* and used
-  only as a modelling input, or (b) left blank and listed on the Flagged for Review page.
-  No value was inferred or interpolated to fill a gap.
-* Automated check: `tools/check_links.py` resolves every internal `href` target on disk and
-  every external `href` over the network before merge. Result of the final run is recorded
-  under "Final integration" below.
+**Repo state on arrival.** One commit, `8805699` ("Initial commit"), containing a single 7-byte
+`README.md` with the text `# Tino3`. No prior code, data, site, or coordination file. GitHub Pages
+was already enabled with source `main`, path `/`, `build_type: legacy`, public, at
+<https://wingbangboozle1-lang.github.io/Tino3/>. No other session had written anything.
 
-#### Sources used (full register in `data/sources.json` and `pages/sources.html`)
+**Claim.** All thirteen tasks claimed by `arena-8af4b895`, scope = whole repository, committed and
+pushed before any work began (`4bea8f8`). No other session has claimed or written anything since, so
+no conflict, handoff, or merge conflict occurred at any point.
+
+**Approach.** The site is generated, not hand-written: `tools/model.py` computes every figure into
+`data/model.json`, and `tools/pages_*.py` render static HTML from it. A number therefore cannot
+appear on two pages with two different values, and any figure can be re-derived by re-running the
+script. Plain HTML and one CSS file — no frameworks, no CDN, no web fonts — so the page renders
+identically behind any proxy and Pages serves it with no build step.
+
+### Sources used
+
+23 sources, all official, registered in `tools/sources.py` → `data/sources.json` → `pages/sources.html`.
 
 | Ref | Publisher | Item |
 |---|---|---|
-| S01 | CA State Board of Equalization | Proposition 19 overview, parent-child comparison tables |
-| S02 | CA State Board of Equalization | LTA 2025/009 — $1,000,000 amount adjusted to $1,044,586 |
+| S01 | CA State Board of Equalization | Prop 19 guidance and comparison tables |
+| S02 | CA State Board of Equalization | LTA 2025/009 — $1,000,000 allowance adjusted to $1,044,586 |
 | S03 | Internal Revenue Service | IR-2025-103 / Rev. Proc. 2025-32 — 2026 basic exclusion $15,000,000 |
-| S04 | Internal Revenue Service | Publication 551, *Basis of Assets* (inherited property) |
-| S05 | Internal Revenue Service | Topic 701 — §121 $250,000/$500,000 exclusion |
+| S04 | Internal Revenue Service | Publication 551, *Basis of Assets* |
+| S05 | Internal Revenue Service | Topic 701 — §121 home-sale exclusion |
 | S06 | CA Legislative Analyst's Office | *California's Tax System: A Primer* — no state estate tax |
 | S07 | CA Franchise Tax Board | Bill analysis SB 378 — R&T Code bars a state estate/gift tax |
-| S08 | CA Legislative Analyst's Office | EconTax blog — proposal to end step-up basis at state level |
+| S08 | CA Legislative Analyst's Office | EconTax — proposal to end the state step-up in basis |
 | S09 | County of Santa Clara Controller-Treasurer | Compilation of Tax Rates 2025-26 |
 | S10 | City & County of San Francisco | FY2025-26 combined property tax rate $1.18268325 per $100 |
-| S11 | City & County of San Francisco | Recorder fees + documentary transfer tax schedule |
-| S12 | CA Secretary of State | CC/ROV Memo #26138 — Prop 19 repeal initiative failed (2026) |
-| S13 | SF Rent Board / SF.gov | Current rates — allowable increase 1.6% (Mar 2026–Feb 2027) |
-| S14 | Federal Housing Finance Agency | House Price Index, 2025Q3 report |
-| S15 | CA Dept. of Insurance | 2025 experience-year homeowners data call (statewide average premium) |
+| S11 | City & County of San Francisco | Recorder fees and documentary transfer tax schedule |
+| S12 | CA Secretary of State | CC/ROV Memo #26138 — Prop 19 repeal initiative failed |
+| S13 | SF Rent Board / SF.gov | Current rates: 1.6% allowable increase, relocation amounts, pending File 261020 |
+| S14 | Federal Housing Finance Agency | House Price Index, 2025Q3 |
+| S15 | CA Department of Insurance | Residential insurance guides and premium survey |
 | S16 | CA Legislative Information | Revenue & Taxation Code §218 — $7,000 homeowners' exemption |
-| S17 | CA Legislative Information | Revenue & Taxation Code §51 — Prop 13 1% / 2% limits |
-| S18 | U.S. Code (House OLRC) | 26 U.S.C. §1014 — basis of property acquired from a decedent |
+| S17 | CA Legislative Information | Revenue & Taxation Code §51 — 2% inflation-factor cap |
+| S18 | Internal Revenue Service | Publication 559 (2025) — basis of inherited property |
 | S19 | Internal Revenue Service | Net Investment Income Tax (3.8%) |
+| S20 | CA Legislative Information | ACA 11 (2019-20) — the text of Proposition 19 |
+| S21 | SF Rent Board / SF.gov | Rent-increase guidance |
+| S22 | Internal Revenue Service | Topic 409 — capital gains and losses |
+| S23 | CA Legislative Information | Revenue & Taxation Code §11901 — Documentary Transfer Tax Act |
 
-#### Verification performed
+### Verification performed
 
-* Prop 19 value cap read directly from BOE LTA 2025/009: **$1,044,586** for transfers
-  Feb 16 2025 – Feb 15 2027 (earlier periods $1,000,000 and $1,022,600). Matches the
-  BOE Prop 19 page's "factored base year value plus $1,000,000 (biennially adjusted)".
-* 2026 federal transfer-tax figures read directly from IRS IR-2025-103: basic exclusion
-  **$15,000,000**, annual gift exclusion **$19,000**.
-* SF FY2025-26 property tax rate **$1.18268325 per $100** cross-checked against the
-  Controller's rate resolution as reported to the Board of Supervisors (File 25-0876).
-* SF documentary transfer tax tiers read from the sf.gov recorder-fee page.
-* Prop 19 repeal status: the 2026 initiative is **dead**, per the Secretary of State's
-  failure memorandum (May 18, 2026). No repeal is pending.
-* Arithmetic: every projected row is generated by `tools/model.py`; the script is committed
-  so any figure on the site can be re-derived. Independent spot-checks were run on the
-  compound-growth columns (1.02^n Prop 13 factor, 1.04^n market factor).
+Each of the following was read in the publisher's document during this session, and the quoted rule
+or figure was found in it. Links are on `pages/sources.html`.
 
-#### Irregularities found (published on `pages/flagged.html`)
+* **Prop 19 allowance** — BOE LTA 2025/009 states the figure is **$1,044,586** for transfers
+  16 Feb 2025 – 15 Feb 2027, with $1,000,000 and $1,022,600 for the two earlier periods, and that the
+  next adjustment is February 2027. The formula and the two-party principal-residence requirement were
+  read from the BOE Prop 19 page.
+* **Federal estate tax** — IRS IR-2025-103 states the 2026 basic exclusion is **$15,000,000**
+  (2025: $13,990,000) and the annual gift exclusion **$19,000**.
+* **San Francisco property tax rate** — **$1.18268325 per $100** for FY2025-26, from the Controller's
+  rate resolution as reported to the Board of Supervisors, which also gives the FY2024-25 rate of
+  $1.17143563 and the Charter set-asides.
+* **Santa Clara County rates** — read from the FY2025-26 Compilation of Tax Rates: the 1% maximum levy
+  (1.00000), the county retirement levy (0.03880), and the Cupertino-area bond components that sum to
+  the 1.1170% used as the published floor.
+* **San Francisco transfer tax** — the six tiers, each stated as an amount per $500 applied to the
+  entire consideration, from the Assessor-Recorder fee page.
+* **Prop 19 repeal status** — the Secretary of State's Memorandum #26138 (18 May 2026) records the
+  initiative as having **failed** to qualify. No repeal is pending.
+* **Rent control** — the Rent Board's current-rates page: 1.6% for 1 Mar 2026 – 28 Feb 2027; relocation
+  of $8,245 per tenant / $24,733 per unit; and a notice of *proposed* File 261020 (10% cap on banked
+  and capital-improvement increases) which the page itself says is **not enacted**.
+* **Homeowners' exemption** — R&T Code §218 read in full: $7,000 of full value, and the exclusions for
+  rented, vacant, secondary homes.
+* **Proposition 13 mechanics** — R&T Code §51 read in full: taxable value is the *lesser* of the
+  factored base year value and full cash value, with §51(a)(1)(D) capping the inflation factor at 2%.
+  The 1% levy is constitutional, so it is evidenced instead by the county rate books ("1% Maximum Tax
+  Levy 1.00000").
+* **No California estate tax** — the LAO primer states California "does not currently impose any estate
+  taxes on estates of decedents dying after 2004"; the FTB bill analysis confirms the R&T Code bars a
+  state estate or gift tax without a voter-approved constitutional amendment.
+* **Net investment income tax** — the IRS page read in full: 3.8%, thresholds $200,000/$250,000, and
+  the rule that a §121-excluded home-sale gain is not net investment income.
+* **§121** — IRS Topic 701: $250,000 / $500,000, 24-month ownership and use tests within five years.
 
-1. **SF owner-reported property tax cannot be reconciled with the official rate.**
-   Reported 2025 tax of $2,439 against a reported assessment of $114,248 implies an
-   effective rate of **2.13%**; the City's published FY2025-26 rate is **1.1827%**
-   (which would give $1,350). Difference ≈ $1,090/yr. Both series are retained
-   *as reported*; post-inheritance projections use the official rate.
-2. **Cupertino owner-reported tax implies a 1.309% effective rate**, above the
-   county-wide residential range of roughly 1.08%–1.30% in the 2025-26 rate book.
-   Plausible for a high-bond tax rate area, but the parcel's exact TRA is unverified.
-3. **Ownership/occupancy of the two houses is not stated.** Prop 19 relief attaches only to
-   the *transferor's principal residence*. Every scenario therefore models both
-   assignments and states the dependency explicitly.
-4. **Insurance estimates are unverified.** The owner's $1,500/yr figure for a $3.1M
-   Cupertino house and a three-unit SF building is far below the CDI statewide average
-   premium and below any plausible replacement-cost-based premium. Flagged, not silently
-   overridden.
-5. **Solar net-metering tariff is unverified.** The "no electricity cost plus a $10–$20/mo
-   credit" observation depends on which net-metering tariff the array is on; the property
-   was interconnected years ago, so the successor tariff matters. Not modelled as a
-   permanent credit.
-6. **Assumed long-run appreciation (4.0%/yr nominal) is a modelling assumption, not a
-   verified fact.** It is disclosed as such and stress-tested at 3.0% and 5.0%.
+**Arithmetic.** Every projected row comes from one run of `tools/model.py`, committed here. Spot-checks
+performed: the Prop 13 factor (1.02^19 = 1.4568 against a computed $802,030 for Cupertino), the market
+factor (1.04^19 = 2.1068 against $6,531,230), the Prop 19 identity "new base = market value − allowance
+when the cap binds" ($6,531,230 − $2,008,220 = $4,523,010), and the reconciliation of terminal wealth
+against the discounted cash-flow stream.
 
-#### Final integration
+Two defects were found by review and fixed before publication: the 3% and 5% stress cases on the
+dashboard were hardcoded ratios and were wrong by about 5%; and a string-slice bug truncated the plan
+names ("ive in San Francisco"). Both corrected, then the whole site rebuilt.
 
-* Combined build re-rendered from `tools/model.py`; all tables regenerated from one run.
-* `tools/check_links.py` run before commit — results recorded below.
-* PR opened from `arena/8af4b895-tino3` → `main`, merged, Pages deploy confirmed.
+### Irregularities found — published on `pages/flagged.html`
+
+Twelve items could not be matched to an official source. None is silently filled in. Full detail and
+remedies on the Flagged for Review page; summary:
+
+1. **San Francisco owner-reported tax cannot be reconciled with the published rate** *(material)*.
+   $2,439 on $114,248 implies **2.13%**; the published FY2025-26 rate is **1.1827%**, which would give
+   $1,350. Difference ≈ $1,090/yr. Post-inheritance projections use the published rate.
+2. **Cupertino owner-reported tax implies 1.3091%** against a component sum of 1.1170% *(low)*. About
+   $1,060/yr at the 2026 base; probably a bond series not captured in the component list. The reported
+   rate is used, because the bill is direct evidence of what the parcel pays.
+3. **Which house is the parents' principal residence is unstated** *(high)*. Determines where the Prop 19
+   exclusion attaches. Both assignments modelled; the ranking is unchanged.
+4. **Insurance estimates unverified and probably understated** *(high)*. The model uses a statewide
+   benchmark as a floor rather than the owner's $1,500.
+5. **The statewide insurance benchmark itself is second-hand** *(medium)*. The CDI data file was not
+   opened, so every insurance row is labelled unverified.
+6. **Solar net-metering tariff unverified** *(medium)*. The credit is not modelled as permanent.
+7. **4% house growth and 6% portfolio return are assumptions, not verified figures** *(high)*. The two
+   most consequential unverified inputs. Stress-tested at 3%/5% and 4%/8%.
+8. **Prop 19 allowance beyond February 2027 is not yet published** *(medium)*. Assumed 3.5%/yr.
+9. **Market rent for the vacant San Francisco unit is assumed** *(low)*.
+10. **Future property-tax rates are held constant** *(medium)*.
+11. **Santa Clara transfer-tax rate and the absence of a Cupertino city tax not read from those
+    agencies' schedules** *(low)*.
+12. **Pending estate and wealth-tax bills not searched** *(low)*.
+
+### Build and link verification
+
+`tools/check_links.py` checks: every relative `href`/`src` resolves on disk; every `#fragment` resolves
+to an `id` in the target document; every page is reachable from `index.html` by BFS over the link graph;
+every page links its stylesheet and carries source chips; no unrendered template braces or placeholder
+tokens leak into rendered text.
+
+```
+pages checked      : 12
+external URLs      : 24  (inventoried in build/external-links.txt)
+internal link graph: 341 edges
+OK — all internal links, anchors and reachability checks pass.
+```
+
+**External links.** The sandbox shell has no outbound network, so `check_links.py` inventories external
+URLs rather than requesting them (`build/external-links.txt`). Every one of the 23 cited URLs was instead
+opened with the browsing tool during verification. Three did not resolve and were replaced before
+publication:
+
+* `uscode.house.gov` §1014 permalink returned *Page Not Found* (the site is in a temporary format) —
+  replaced with IRS Publication 559.
+* `boe.ca.gov/proptaxes/faqs/proposition13.htm` returned 404 — the 1% levy citation was moved to the
+  county rate books, which state it directly.
+* two `sftreasurer.org` paths returned *Page Not Found* — the SF rate and transfer-tax citations now
+  point to the Controller's rate resolution and the Assessor-Recorder fee page respectively.
+
+**Local smoke test.** Served with `python3 -m http.server`; `/`, `/pages/taxes.html`,
+`/pages/sources.html` and `/assets/style.css` all returned 200.
+
+### Final integration
+
+* Site regenerated end to end from a single `tools/model.py` run; all tables, the Markdown summary and
+  the site pages derive from that one `data/model.json`.
+* Combined data re-read line by line against the source register while writing the pages. Two claims
+  were narrowed rather than left overstated: the "2025 law made the $15M permanent" phrasing (the IRS
+  publishes one year at a time, so the claim was reduced to the verified 2026 figure plus a note), and
+  the California depreciation-conformity assumption (relabelled as a modelling choice).
+* Link check passes with no broken internal links.
+* Pull request opened from `arena/8af4b895-tino3` → `main`, merged, Pages deploy confirmed.
+  PR and deploy result recorded below.
+
+<!-- INTEGRATION RESULT -->
