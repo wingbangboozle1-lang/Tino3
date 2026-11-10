@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Inheritance Tax — Inheritance Decision Dashboard</title>
+<link rel="stylesheet" href="../assets/css/style.css"></head>
+<body>
+<header class="top"><div class="brand">Inheritance Decision Dashboard<small>Inheritance tax — federal / state / local</small></div></header>
+<nav class="main"><a href="../index.html">Dashboard</a><a href="executive-summary.html">Executive Summary</a><a href="properties.html">Properties</a><a href="costs.html">Costs</a><a class="active" href="inheritance-tax.html">Inheritance Tax</a><a href="decision-analysis.html">Decision Analysis</a><a href="process.html">Inheritance Process</a><a href="methodology.html">Methodology</a><a href="sources.html">Sources</a><a href="flagged.html">Flagged for Review</a></nav>
+<main>
+<h1>Inheritance Tax</h1>
+<p class="note">All facts <span class="badge ok">Official</span> with links. All $ rounded to nearest $10.</p>
+
+<div class="card"><h2>Federal — estate &amp; gift tax (2026)</h2>
+<table><tr><th>Item</th><th>2026 value</th><th>Source</th></tr>
+<tr><td>Basic exclusion (estate + lifetime gifts, unified)</td><td>$15,000,000 per person; $30,000,000 per married couple (portability)</td><td><a href="https://www.irs.gov/businesses/small-businesses-self-employed/whats-new-estate-and-gift-tax" target="_blank" rel="noopener">IRS</a></td></tr>
+<tr><td>Annual gift exclusion</td><td>$19,000 per recipient (no return, no exemption used)</td><td><a href="https://www.irs.gov/businesses/small-businesses-self-employed/whats-new-estate-and-gift-tax" target="_blank" rel="noopener">IRS</a></td></tr>
+<tr><td>Top rate above exclusion</td><td>40%</td><td><a href="https://www.irs.gov/businesses/small-businesses-self-employed/whats-new-estate-and-gift-tax" target="_blank" rel="noopener">IRS</a></td></tr>
+<tr><td>Applicable credit (2026)</td><td>$5,945,800</td><td><a href="https://www.irs.gov/irm/part3/irm_03-012-263r" target="_blank" rel="noopener">IRS IRM 3.12.263</a></td></tr>
+<tr><td>Step-up in basis (IRC §1014)</td><td>Inherited basis = FMV at date of death; pre-death gain never taxed on later sale</td><td><a href="https://www.irs.gov/businesses/small-businesses-self-employed/whats-new-estate-and-gift-tax" target="_blank" rel="noopener">IRS</a></td></tr>
+<tr><td>Long-term capital gains</td><td>0% / 15% / 20% by taxable income; +3.8% NIIT above $200,000 (single) / $250,000 (joint)</td><td><a href="https://www.irs.gov/pub/irs-pdf/p17.pdf" target="_blank" rel="noopener">IRS Rev. Proc. 2025-32</a></td></tr>
+</table>
+<div class="okbox"><strong>OBBBA / Working Families Tax Cuts (P.L. 119-21, signed Jul 4, 2025):</strong> the $15M exclusion is <em>permanent</em> from 2026 and inflation-indexed thereafter — the scheduled TCJA sunset to ~$7M did <strong>not</strong> occur. Congress can still amend it in future. (<a href="https://www.irs.gov/businesses/small-businesses-self-employed/whats-new-estate-and-gift-tax" target="_blank" rel="noopener">IRS</a>)</div>
+<p><strong>Worked example (modelled):</strong> estate of $4,900,000 (both houses at family-provided 2026 values) → federal estate tax <strong>$0</strong> (below $15M). Estate of $16,000,000 → tax = 40% × ($16,000,000 − $15,000,000) = <strong>$400,000</strong>. Every $1,000,000 over the exclusion costs $400,000.</p></div>
+
+<div class="card"><h2>California — no estate/inheritance tax; income tax still applies</h2>
+<table><tr><th>Item</th><th>Rule</th><th>Source</th></tr>
+<tr><td>CA estate / inheritance tax</td><td>$0 — California levies neither</td><td><a href="https://www.ftb.ca.gov/" target="_blank" rel="noopener">FTB</a></td></tr>
+<tr><td>CA capital gains</td><td>Ordinary income, 1%–13.3% (top incl. 1% Mental Health Services Tax)</td><td><a href="https://www.ftb.ca.gov/" target="_blank" rel="noopener">FTB</a></td></tr>
+<tr><td>Prop 13 (property tax)</td><td>1% base + bonds; assessed +2%/yr max; reassessed on change of ownership</td><td><a href="https://www.boe.ca.gov/proptaxes/prop13.htm" target="_blank" rel="noopener">BOE</a></td></tr>
+<tr><td>Prop 19 (parent-child)</td><td>Family home only; occupy within 1 yr; cap = factored base + $1,044,586 (2025–26); BOE-19-P within 3 yrs</td><td><a href="https://www.boe.ca.gov/prop19/" target="_blank" rel="noopener">BOE</a></td></tr>
+</table>
+<p class="note">⚠ California's old “pick-up” estate tax (Rev. &amp; Tax. Code §13302) is tied to a federal credit repealed in 2005 and collects $0. Verify the statute text at <a href="https://leginfo.legislature.ca.gov/" target="_blank" rel="noopener">leginfo.legislature.ca.gov</a>. Flagged for manual review on the <a href="flagged.html">Flagged for Review</a> page.</p></div>
+
+<div class="card"><h2>Local — property tax on transfer (the tax that actually bites)</h2>
+<table><tr><th>Property</th><th>If child occupies (Prop 19)</th><th>If rented / vacant</th></tr>
+<tr><td>A — Cupertino</td><td>Partial reassessment → ~$27,600/yr (2026 values, modelled)</td><td>Full reassessment → ~$41,400/yr (modelled)</td></tr>
+<tr><td>B — SF (rental)</td><td>N/A — rentals excluded from Prop 19</td><td>Full reassessment → ~$38,500/yr at family-implied rate (modelled)</td></tr>
+</table>
+<p>See <a href="properties.html">Properties</a> for the full math. The reassessment is the dominant cost of inheritance — far larger than any estate tax on these assets.</p></div>
+
+<div class="card"><h2>Pending-law watch (as of Nov 2026)</h2>
+<table><tr><th>Proposal / risk</th><th>Status</th><th>Effect if enacted</th></tr>
+<tr><td>Federal exclusion reduction</td><td>No sunset in current law (OBBBA permanent); future Congress could lower it</td><td>Estates above a lower threshold would owe 40% — model a $7M-threshold sensitivity</td></tr>
+<tr><td>Prop 19 cap / rules</td><td>Cap adjusted biennially by BOE (CA HPI); no repeal enacted</td><td>Higher cap = smaller partial reassessment; rule changes could widen/narrow exclusion</td></tr>
+<tr><td>CA rent / AB 1482</td><td>Statewide cap in effect; SF ordinance stricter</td><td>Rent growth capped — modelled at 3%/yr</td></tr>
+<tr><td>CA income tax rates</td><td>1%–13.3% in statute; FTB indexes brackets</td><td>Higher top rate raises sell-and-reinvest tax drag</td></tr>
+</table>
+<p class="note">Law-watch items are <span class="badge warn">Unverified</span> as forecasts — they describe current law and stated risks, not predictions. Re-check IRS/BOE/FTB pages annually.</p></div>
+</main>
+<footer>© <span data-year></span> · <a href="sources.html">Sources</a> · <a href="flagged.html">Flagged for Review</a></footer>
+<script src="../assets/js/app.js"></script>
+</body></html>

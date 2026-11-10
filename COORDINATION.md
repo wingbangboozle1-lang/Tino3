@@ -29,3 +29,10 @@ Started: 2026-11-10
 - 2026-11-10: Retained PR #3 supplementary pages, data and scripts alongside PR #1 pages; no parallel work discarded.
 - Combined tree must be checked for source accuracy and rounded figures before relying on outputs.
 - PR #3: https://github.com/wingbangboozle1-lang/Tino3/pull/3 — MERGED 2026-11-10 (merge commit 2371569). GitHub Pages deploy: success (run 42766640207). Live: https://wingbangboozle1-lang.github.io/Tino3/ (verified via fetch; supplementary cross-links present).
+- 2026-11-10: Parallel session. PR #3 (branch arena/50c6b81e-tino3) conflicted with PR #1 already merged to main.
+- Resolution: kept PR #1 pages as primary (index.html, projections.html, assets/style.css); added PR #3 supplementary pages + data/ + scripts/ without discarding either session's work. README merged. This entry logs the merge per COORDINATION rules.
+- Verification: internal-link + PII scan on combined tree; both sets anonymized, $10 rounding, source-linked rows.
+
+## Integration handoff — session-1820664f (branch arena/1820664f-tino3)
+- 2026-11-10: Parallel session. Found main already integrated (PR #1 + PR #3). Kept main's site as primary; added supplementary set under pages/ + assets/css|js + data/*.json without discarding other sessions' work. Conflicts in index.html/README/COORDINATION/pages.yml resolved by keeping main's versions + this log entry.
+- Verification: internal-link check on pages/ set passed; local preview 200. Sources: IRS, BOE Prop 13/19, FTB, CPUC NBT, SSA, Fed, FHFA. Irregularities F1–F11 logged on pages/flagged.html (incl. SF 2.14% effective rate).

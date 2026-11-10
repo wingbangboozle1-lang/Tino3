@@ -30,3 +30,9 @@ Two sessions worked in parallel; PR #3 integration merged both sets without disc
 ## Disclaimer
 Planning information only, not legal or tax advice. Verify all figures with official sources
 (IRS, CA BOE, CA FTB, SF.gov, county assessors) and licensed professionals before acting.
+
+## Supplementary set (session-1820664f, branch arena/1820664f-tino3)
+- `pages/` — executive summary, properties, costs, inheritance tax, decision analysis,
+  process, methodology, sources, flagged-for-review (dashboard UI, interactive model)
+- `assets/css/style.css`, `assets/js/app.js` — styles + projection engine
+- `data/*.json` — source registry, property history, cost benchmarks, tax facts
