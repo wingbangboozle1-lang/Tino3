@@ -235,3 +235,48 @@ copies already crawled.
 - 2026-11-10: Completed Tasks `531A`–`531F`, verified 100% primary `.gov` citations (`215` rows across `10` pages), `59` blank unconfirmed official cells, `$10` rounding, and zero PII/ZIP/raw-roll figures (`verify_suite.py` + `scripts/verify.py` + `scripts/package_site.py` PASS). Opened PR [#15](https://github.com/wingbangboozle1-lang/Tino3/pull/15) (`arena/531aee5c-tino3` -> `main`), confirmed CI `verify` pass, and merging to `main`.
 - Cross-session request to `arena-0765efc4` (logged, not edited): Optional allowlist addition of `decision-suite/**` in `scripts/package_site.py` if owner approves publishing the anonymized `$10`-rounded scenario suite via the workflow artifact in addition to branch-root Pages.
 
+
+---
+
+## Session `arena-760f6413` (branch `arena/760f6413-tino3`) — claim · 2026-11-10 10:05 UTC
+
+*Branch note:* Arena fixes this session to `arena/760f6413-tino3`; the `session-<id>/<task>` naming on
+this board cannot be used. All work stays on that branch and reaches `main` only by pull request.
+
+### What this session saw before claiming (read-only peek at other session branches)
+
+Claims are written on each session's own branch, so **none of the claims below is visible on `main`**.
+They were read directly from the branches at 10:01–10:03 UTC so that this claim does not overlap them.
+
+| Session branch | Claimed at (UTC) | What it claimed | Files it claimed |
+|---|---|---|---|
+| `arena/d0927734-tino3` | 10:00:07 | Privacy containment of legacy Pages paths; stronger privacy checks | `scripts/verify.py`, `scripts/package_site.py`, legacy root HTML / `data/` / scripts |
+| `arena/b067dfc7-tino3` | 10:00:16 | Resolve D-1; replace legacy financial outputs with withdrawal notices; publish | legacy HTML / `data/` / `decision-suite/`, `scripts/privacy_boundary.py`, `scripts/package_site.py`, `scripts/verify.py`, `.github/workflows/verify.yml`, `README.md` |
+| `arena/d76d5375-tino3` | 10:00:48 | FIN-1..FIN-4 quantitative replacement edition at the repository root | root `*.html` in its new allowlist, `assets/*`, `scripts/*`, `.gitignore` |
+| `arena/0e2e112e-tino3` | 10:00:48 | Publication safety audit (report only) | its own board section |
+
+**Irregularity logged (not resolved by this session):** the three claims above overlap each other on
+`scripts/package_site.py`, `scripts/verify.py` and the legacy files, and two of them plan to publish no
+amounts while the third plans to publish rounded amounts. This session touches none of those files.
+
+### This session's claim — exclusive scope `plan/**` only
+
+| ID | Task | Status | Owner | Files (exclusive) |
+|---|---|---|---|---|
+| 760-A | Independent official-source research ledger (federal, state, local law; thresholds; insurance; utilities; pending and recently decided law changes), each entry with link, retrieval date and the exact text relied on | in progress | `arena-760f6413` | `plan/data/**` |
+| 760-B | Reproducible projection and decision model, every published amount in $10 increments | in progress | `arena-760f6413` | `plan/model/**` |
+| 760-C | Self-contained dashboard pages built from 760-A and 760-B | in progress | `arena-760f6413` | `plan/*.html`, `plan/assets/**` |
+| 760-D | Read-only, line-by-line audit of existing repository content against the 760-A ledger; findings published on this session's Flagged for Review page | in progress | `arena-760f6413` | `plan/data/**` (audit output only) |
+| 760-E | Final integration of shared files (root `index.html`, navigation, publish allowlist, workflows) | **not started, not claimed** | — | see rule below |
+
+**Rule this session applies to 760-E:** shared files are touched only if, when 760-A..D are finished,
+every other session holding a claim on them has merged or its claim is more than 60 minutes old with no
+commits. Until then any needed change is logged here as a request, not made.
+
+**Privacy boundary for `plan/**` (the repository is public, so this applies to every committed file, not
+only to served pages):** no names, street addresses, parcel numbers, ZIP codes, neighbourhood names,
+account numbers or trust names; no parcel lookup of any kind is performed; properties appear as
+Property A and Property B and people by role. Jurisdiction is stated only at the level the applicable
+law requires. Exact assessment-roll and tax-bill amounts are public records that can be matched back to
+a parcel, so they are **not committed**; privacy-rounded levels are used instead and the reason is
+published. Every amount is in $10 increments.
