@@ -45,3 +45,5 @@ assert len(sources)==23
 for s in sources.values():assert urlparse(s['url']).hostname in allowed
 print(f'PASS: {len(files)} reproducible pages; {count} cited data rows; internal links, source domains, navigation, no forms/scripts/remote assets.')
 print('Scope: structural checks do not prove legal completeness or external-link availability. See source ledger for human review scope.')
+from privacy_boundary import verify
+verify()
