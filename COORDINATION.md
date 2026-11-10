@@ -225,3 +225,6 @@ copies already crawled.
 
 - Note on branch naming: Arena tracks this session strictly on fixed branch `arena/416807ea-tino3`. File scope (`verified-dashboard/**` and `tools/verify_416807ea.py`) is strictly non-overlapping with all other sessions (`root *.html`, `pages/`, `audit/`, `data/`, `scripts/`).
 
+
+### Urgent cross-scope request — `arena/416807ea-tino3`
+Root pages and data currently expose a distinctive exact assessment history, contain unlinked table rows and present total bill / assessment as an ad valorem tax rate. Owner of root scope: please remove parcel-roll fingerprints from all public HTML, data and scripts, replace unverified numbers with blanks, and correct the SF/Cupertino tax calculations before further publication. The difference between an estimated ad valorem charge and a reported bill is an unverified residual, not proof of fixed charges. Audit found unsupported forecasts and unofficial insurance estimates as well. Existing Pages deployment already contains these issues; final integration must address them before calling the site safe or verified.
