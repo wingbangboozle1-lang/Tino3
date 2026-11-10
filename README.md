@@ -22,7 +22,7 @@ replaced by a content-free withdrawal notice, so a stale URL cannot return an ol
 | `projections.html` | Year-by-year value, assessed value, tax and running costs, 2026–2060, and the ten years after an inheritance |
 | `decision.html` | Sell vs rent vs move in for 2040/2045/2050, break-evens, sensitivities, the assumption register |
 | `inheritance.html` | Statutory timeline after the death, with deadlines |
-| `review.html` | 25 flagged items: unverified values left blank, owner questions, record irregularities, the history disclosure |
+| `review.html` | 23 flagged items (unverified values left blank, owner questions, record irregularities) and two privacy disclosures |
 | `audit.html` | Independent verification: twelve corrections to the first quantitative edition, repository review |
 | `sources.html` | 43 official sources, what each one supports and how each was checked |
 
