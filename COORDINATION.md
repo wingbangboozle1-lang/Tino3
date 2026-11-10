@@ -235,3 +235,27 @@ copies already crawled.
 - 2026-11-10: Completed Tasks `531A`–`531F`, verified 100% primary `.gov` citations (`215` rows across `10` pages), `59` blank unconfirmed official cells, `$10` rounding, and zero PII/ZIP/raw-roll figures (`verify_suite.py` + `scripts/verify.py` + `scripts/package_site.py` PASS). Opened PR [#15](https://github.com/wingbangboozle1-lang/Tino3/pull/15) (`arena/531aee5c-tino3` -> `main`), confirmed CI `verify` pass, and merging to `main`.
 - Cross-session request to `arena-0765efc4` (logged, not edited): Optional allowlist addition of `decision-suite/**` in `scripts/package_site.py` if owner approves publishing the anonymized `$10`-rounded scenario suite via the workflow artifact in addition to branch-root Pages.
 
+
+
+---
+
+## Session `arena-6616d6b2` (branch `arena/6616d6b2-tino3`) · claimed 2026-11-10 10:05 UTC
+
+*Branch note:* Arena pins this session to `arena/6616d6b2-tino3`; the `session-<id>/<task>` naming cannot be used.
+
+Board state read before claiming (remote branches inspected, not only `main`): four other sessions opened at 10:00 UTC —
+`arena-b067dfc7` (legacy-path privacy remediation), `arena-d0927734` (privacy containment), `arena-0e2e112e` (audit only),
+`arena/d76d5375` (FIN-1..4: root `*.html`, `scripts/*`, `assets/*`, `.gitignore`). Their claims live on their own branches,
+not on `main`, so they are repeated here to make the overlap visible.
+
+| Task | Status | Owner | File scope (disjoint from every claim above) |
+|---|---|---|---|
+| 6616-A Independent official-source re-verification of every law, rate and threshold used (federal, state, county, city) with a per-fact evidence ledger | in progress | `arena-6616d6b2` | `plan/data/**` |
+| 6616-B Deterministic projection + decision model (live / rent / sell-and-reinvest, both properties, 2026-2050, $10 rounding) | in progress | `arena-6616d6b2` | `plan/tools/**` |
+| 6616-C Self-contained dashboard edition generated from A+B (landing, executive summary, properties, costs, taxes, projections, decision, inheritance steps, law watch, sources, Flagged for Review) | in progress | `arena-6616d6b2` | `plan/**` |
+| 6616-D Final integration (root index/navigation, workflows, README) | unclaimed by this session until the sessions above are done or stale (>60 min without commits) | - | none yet |
+
+Rules this session is holding itself to:
+- No edits outside `plan/**` and this section of `COORDINATION.md` until 6616-D is legitimately open.
+- Privacy boundary: no names, street addresses, APNs, ZIP codes, neighbourhood names, account numbers or unrounded roll figures in any tracked file this session writes. Properties are "Property A" / "Property B"; people are placeholders. Dollar figures are stored and rendered in $10 increments, as the brief requires ("costs and numbers should be used but rounded to the nearest $10").
+- A value is marked verified only if this session retrieved the official page and read the figure there; otherwise the cell is blank and the row is flagged.
