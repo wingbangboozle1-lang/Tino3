@@ -253,7 +253,7 @@ Cash received or paid along the way earns the same after-tax return as the stock
 <li><strong>The sale is almost tax-free.</strong> The basis resets to the value at death, so the gain built up over the parents' lifetime is never taxed. Waiting ten years to sell turns later growth into a taxable gain at about 36%.</li>
 <li><strong>The low property tax cannot be kept.</strong> Under current law the assessed value rises from about {usd(A45['base'])} to {usd(A45['live'])} if a child moves in, or {usd(A45['rent'])} if the home is rented (2045). Tax follows.</li>
 <li><strong>The rent is small against the value.</strong> First-year rent of {usd(RENT['rent_first'])} loses {usd(RENT['tax_first'])} to the reset property tax. After insurance, maintenance and income tax, {usd(RENT['first_cash'])} is left: under 1% of the home's value. The sale proceeds in Treasuries at 4.88% earn several times that.</li>
-<li><strong>Concentration.</strong> Keeping the home leaves most of the family's wealth in two houses in one region. Selling spreads it.</li>
+<li><strong>Concentration.</strong> Keeping the home leaves a large sum in two properties in one region. Selling spreads it.</li>
 </ol></section>
 <section><h2>When the answer changes</h2>
 {tbl("Break-even points, inheritance in 2045", ["Test", "Break-even", "Reading"], brk)}
@@ -338,7 +338,7 @@ rows = [
  (["Rent Board fee", "about $60 a unit a year", "Charged on family-occupied units too unless an exemption is filed."], "V", S("cityb_rentfee")),
  (["Water, whole building", "$4,380 a year", "Midpoint of the owner's $330 to $400 a month."], "O", S("irs_p527")),
  (["Electricity", "$600 a year", "Midpoint of the owner's $30 to $70 a month."], "O", S("irs_p527")),
- (["Landlord insurance premium", BLANK, "The owner's guess is $1,500 a year. A multi-unit rental needs a landlord policy; no official figure or quote confirms the price."], "U", S("cdi_compare", flag=True)),
+ (["Landlord insurance premium", BLANK, "The owner's guess is $1,500 a year. No official figure or quote confirms it."], "U", S("cdi_compare", flag=True)),
  (["Maintenance", N(NOW_B["maintenance"]), "1.5% of an assumed building value."], "A", S("irs_p527", asm=True)),
  (["Net income, 2026, before income tax", N(NOW_B["net_income"]), "Rent less 5% vacancy, tax, the insurance guess, water, electricity and maintenance."], "C", S("cityb_rate", "cityb_rent", asm=True)),
  (["Whether the rent ordinance covers the building", BLANK, "Depends on the date of first occupancy. No parcel or address lookup was performed."], "U", S("cityb_rent", flag=True)),
@@ -354,7 +354,7 @@ ttx = [
 body = f"""
 <section><h2>What is known</h2>{tbl("Property B: inputs and current income", ["Item", "Value", "Note"], rows)}{LEGEND}
 <p>The owner's assessed values for 2016 to 2025 follow the state factors in every year but one, where the rise was slightly below the factor. The year is reported to the owner privately.
-One year's tax bill rose about 18% and another fell about 6% while the assessed value moved 2% and 1%. Fixed charges, not value, explain moves of that kind; the bills' line items would confirm it.</p></section>
+One year's tax bill rose about 18% and another fell about 6% while the assessed value moved 2% and 1%. A change in fixed charges would explain moves of that kind; the bills' line items would confirm or refute it.</p></section>
 <section><h2>If Property B passes in the same estate</h2>
 <p>The records supplied do not say who holds title. If the parents do, the building changes ownership at the same death and is reassessed. In a multi-unit building the family-home exclusion covers only the unit that was the parent's principal residence and becomes the child's.
 The table shows the building reassessed in full. If the current owner is already the heir, none of this applies.</p>
@@ -448,9 +448,9 @@ steps = [
 ]
 body = f"""{tbl("From today to the years after the inheritance", ["Step", "When", "What to do", "Who", "Why it matters"], steps)}{LEGEND}
 <section><h2>What a trust does and does not do</h2><ul>
-<li>A revocable trust avoids probate and keeps the property in the taxable estate, which is what resets the basis.</li>
+<li>A revocable trust keeps the property in the taxable estate, which is what resets the basis.</li>
 <li>A trust does not prevent reassessment. The assessor looks through the trust to the people who benefit.</li>
-<li>A trust does not shelter anything from the federal estate tax. The exclusion does that.</li>
+<li>A revocable trust does not take property out of the federal taxable estate. The exclusion is what shelters it.</li>
 </ul>
 <p>The official names and numbers of the county forms, and the trust's own income tax filing during administration, were not verified in this session; they are on the Flagged for Review page.</p></section>{PRIV}"""
 PAGES["inheritance.html"] = page("inheritance.html", "Inheritance steps", "Inheritance by trust", "Step by step, with deadlines",
@@ -463,11 +463,11 @@ fl = [
  ("FL-03", "Whether the trust is revocable", "The basis reset depends on it.", "The trust document", "irs_rr2023_2"),
  ("FL-04", "Cash, securities, earlier taxable gifts, marital status", "The owner says the cash may exceed the exclusion. No amount was supplied, so the room is shown without it.", "A list of assets and gift tax returns", "irs_estate"),
  ("FL-05", "Home insurance premium, Property A", "The owner's guess of $1,500 a year is unconfirmed. The state survey tool is interactive and gives samples, not quotes.", "Two written quotes at replacement cost", "cdi_compare"),
- ("FL-06", "Landlord insurance premium, Property B", "The owner's guess of $1,500 a year is unconfirmed and is likely low for a multi-unit rental.", "Two written landlord-policy quotes", "cdi_compare"),
+ ("FL-06", "Landlord insurance premium, Property B", "The owner's guess of $1,500 a year is unconfirmed.", "Two written landlord-policy quotes", "cdi_compare"),
  ("FL-07", "Market rent for Property A", "The $6,500 a month is an assumption. The federal rent table for the area was not opened.", "A written rental analysis; the federal table", "hud_fmr"),
  ("FL-08", "Tax rate area of Property A", "The rate is printed on the bill. Only the county-wide range was verified.", "The bill's tax rate area and rate", "cnty_a_rates"),
  ("FL-09", "Fixed charges on both tax bills", "Property B's bill is about 80% above rate times value. One year's bill rose about 18% and another fell about 6% with no matching change in value.", "The line items on each bill", "cityb_rate"),
- ("FL-10", "Duplicate tax amounts in Property A's record", "Two pairs of consecutive years carry the same tax amount although the assessed value rose 2%. Probably a copying error.", "The bills for those years", "boe_lta26002"),
+ ("FL-10", "Duplicate tax amounts in Property A's record", "Two pairs of consecutive years carry the same tax amount although the assessed value rose 2%. The cause is not known.", "The bills for those years", "boe_lta26002"),
  ("FL-11", "One year of Property B's assessed value", "It rose slightly less than the state factor. The year is reported to the owner privately.", "The assessor's roll history", "boe_lta26002"),
  ("FL-12", "2026 figures", "No 2026 tax bill for Property A and no 2026 assessed value or bill for Property B were supplied.", "The 2026-27 bills", "boe_lta26002"),
  ("FL-13", "Solar connection date and tariff", "The 20-year period decides when the electricity credit ends.", "The utility's interconnection letter", "cpuc_nem"),
