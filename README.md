@@ -6,7 +6,7 @@ A privacy-safe static planning brief for inherited-property decisions.
 
 ## Privacy first
 
-No user-supplied property financial records, household identifying combinations, addresses, ZIP codes, account information, or trust documents are included in the public site or committed source. Property A / B are placeholders. Do not attach private evidence to issues or pull requests. The site has no analytics, remote assets, scripts, forms or storage. Source links are ordinary outbound links with no-referrer policy.
+This edition does not introduce user-supplied property records into its public pages. Concurrent sessions had already published other files and history: those are NOT certified privacy-safe and are excluded from the Pages artifact. See R12; a non-destructive integration cannot erase public history. Property A / B are placeholders. Do not attach private evidence to issues or pull requests. The site has no analytics, remote assets, scripts, forms or storage. Source links are ordinary outbound links with no-referrer policy.
 
 ## Evidence rules
 
@@ -23,4 +23,4 @@ python scripts/verify.py
 
 `build.py` is the content source; generated HTML and the source ledger are committed. Verification checks reproducibility, every data row's citation, official source domains, navigation and local links, and excludes forms/scripts/remote assets. It does not prove legal correctness or externally hosted link availability. Content is a November 10, 2026 snapshot and does not refresh automatically.
 
-GitHub Pages is configured to publish the root of `main`. The verification workflow runs on pushes and pull requests. No private figures are stored in workflow artifacts. Publication is not a recommendation to execute any transaction; obtain qualified fiduciary, tax, legal and investment review.
+GitHub Pages uses an Actions artifact containing only the eight reviewed pages plus `assets/style.css` and `assets/sources.json`. Never upload the entire repository. The verification workflow runs on pushes and pull requests. No private figures are stored in workflow artifacts. Publication is not a recommendation to execute any transaction; obtain qualified fiduciary, tax, legal and investment review.
