@@ -1,23 +1,88 @@
-"""Publish allowlist only: do not deploy legacy financial data or repository files."""
-from pathlib import Path
+"""Build the published artifact.
+
+Publication is an allowlist, not a copy of the repository. Only the pages, stylesheet and data
+files named below can reach the deployed site. Every path that an older edition published is
+overwritten with a content-free withdrawal notice, so a request for a stale URL cannot return
+an old figure.
+"""
+from __future__ import annotations
 import shutil
-R=Path(__file__).resolve().parents[1]
-D=R/'_site'
-if D.exists():shutil.rmtree(D)
-for name in ('index.html','taxes.html','decision.html','costs.html','projections.html','inheritance.html','review.html','sources.html','assets/style.css','assets/sources.json'):
-    dest=D/name;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(R/name,dest)
-(D/'.nojekyll').touch()
-assert len(list(D.rglob('*.*')))==11
-# Explicitly overwrite old published entrypoints with safe withdrawal notices.
-# No original legacy file content is read or copied.
-for pattern in ('*.html','pages/*.html','data/*.json','data/*.csv','assets/app.js','assets/js/*.js','script.js'):
-    for old in R.glob(pattern):
-        relative=old.relative_to(R); dest=D/relative
-        if dest.exists(): continue
-        dest.parent.mkdir(parents=True,exist_ok=True)
-        if old.suffix=='.html':
-            dest.write_text('<!doctype html><html lang="en"><meta charset="utf-8"><meta name="robots" content="noindex"><title>Publication withdrawn</title><h1>Earlier publication withdrawn</h1><p>Unverified property data is no longer published here. Use the reviewed planning edition.</p><a href="'+('../' if str(relative).startswith('pages/') else '')+'index.html">Open reviewed edition</a></html>')
-        elif old.suffix=='.json':dest.write_text('{"status":"withdrawn","reason":"privacy and verification review"}\n')
-        elif old.suffix=='.csv':dest.write_text('status\nwithdrawn\n')
-        else:dest.write_text('/* Earlier publication withdrawn for privacy review. */\n')
-print('Packaged reviewed edition and content-free withdrawal notices at legacy URLs; no legacy data copied.')
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+SITE = ROOT / "_site"
+
+PAGES = ["index.html", "executive-summary.html", "property-a.html", "property-b.html", "taxes.html",
+         "projections.html", "decision.html", "inheritance.html", "review.html", "sources.html"]
+ASSETS = ["assets/style.css", "assets/sources.json",
+          "assets/data/model.json", "assets/data/property_a.csv",
+          "assets/data/property_b.csv", "assets/data/decision.csv"]
+
+# Paths that earlier editions published. They are withdrawn even though the files no longer
+# exist in the repository, because the previous deployment still answers on those URLs.
+RETIRED = """cupertino.html san-francisco.html costs.html decision-analysis.html flagged.html
+flagged-review.html inheritance-process.html inheritance-steps.html methodology.html properties.html
+sources-verification.html taxes-estate.html script.js assets/app.js assets/js/app.js
+assets/css/style.css style.css pages/costs.html pages/decision-analysis.html
+pages/executive-summary.html pages/flagged.html pages/inheritance-tax.html pages/methodology.html
+pages/process.html pages/properties.html pages/sources.html data/costs.json data/properties.json
+data/summary.json data/tax.json data/sources.json data/projections.csv data/sell_and_reinvest.csv
+data/sf_rental_pl.csv data/estate_threshold.csv data/inheritance_scenarios.csv data/sources.csv
+decision-suite/index.html decision-suite/executive-summary.html decision-suite/property-a.html
+decision-suite/property-b.html decision-suite/taxes-and-laws.html decision-suite/projections.html
+decision-suite/decision-analysis.html decision-suite/inheritance-process.html
+decision-suite/flagged-for-review.html decision-suite/sources-ledger.html
+decision-suite/assets/app.js decision-suite/assets/style.css""".split()
+
+NOTICE_HTML = ('<!doctype html><html lang="en"><meta charset="utf-8"><meta name="robots" content="noindex">'
+               '<title>Publication withdrawn</title><h1>Earlier publication withdrawn</h1>'
+               '<p>Unverified property data is no longer published here. Use the reviewed planning edition.</p>'
+               '<a href="{prefix}index.html">Open the reviewed edition</a></html>')
+
+
+def write_notice(rel: Path) -> None:
+    dest = SITE / rel
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    prefix = "../" if rel.parts and rel.parts[0] in {"pages", "data", "decision-suite", "assets"} else ""
+    if rel.suffix == ".html":
+        dest.write_text(NOTICE_HTML.format(prefix=prefix), encoding="utf-8")
+    elif rel.suffix == ".json":
+        dest.write_text('{"status":"withdrawn","reason":"privacy and verification review"}\n', encoding="utf-8")
+    elif rel.suffix == ".csv":
+        dest.write_text("status\nwithdrawn\n", encoding="utf-8")
+    else:
+        dest.write_text("/* Earlier publication withdrawn for privacy review. */\n", encoding="utf-8")
+
+
+def main() -> None:
+    if SITE.exists():
+        shutil.rmtree(SITE)
+
+    for name in PAGES + ASSETS:                      # allowlist only
+        src = ROOT / name
+        if not src.exists():
+            raise SystemExit(f"allowlisted file missing: {name}")
+        dest = SITE / name
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(src, dest)
+    (SITE / ".nojekyll").touch()
+
+    notices = 0
+    for rel_str in RETIRED:                          # withdraw every retired path
+        rel = Path(rel_str)
+        if (SITE / rel).exists():
+            continue
+        write_notice(rel)
+        notices += 1
+
+    published = sorted(str(p.relative_to(SITE)) for p in SITE.rglob("*") if p.is_file())
+    allowed = set(PAGES) | set(ASSETS) | {".nojekyll"}
+    unexpected = [p for p in published if p not in allowed and p not in RETIRED]
+    if unexpected:
+        raise SystemExit(f"non-allowlisted file in artifact: {unexpected}")
+    print(f"Packaged {len(PAGES)} pages and {len(ASSETS)} assets; "
+          f"{notices} withdrawal notices at retired paths; no legacy data copied.")
+
+
+if __name__ == "__main__":
+    main()
