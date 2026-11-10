@@ -1,219 +1,426 @@
-{
-  "reviewed_on": "2026-11-10",
-  "reviewer_session": "arena/d76d5375-tino3",
-  "method": "Each entry below was retrieved directly from the publisher's own domain on 2026-11-10 during this session. The 'verifies' field lists only what the retrieved text actually supports. Nothing is inferred.",
-  "sources": {
-    "irs_estate": {
-      "title": "Estate tax (filing threshold table, portability)",
-      "publisher": "Internal Revenue Service",
-      "url": "https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax",
-      "verifies": [
-        "Federal estate-tax filing threshold for 2026 is $15,000,000 (table lists 2011-2026)",
-        "Filing is required when gross estate plus adjusted taxable gifts plus specific gift exemption exceeds the year-of-death threshold",
-        "A surviving spouse may receive unused exclusion only through a timely estate-tax return election"
-      ],
-      "quote": "2026 | $15,000,000 ... A filing is required if the gross estate of the decedent, increased by the decedent's adjusted taxable gifts and specific gift tax exemption, is valued at more than the filing threshold for the year of the decedent's death",
-      "status": "verified"
-    },
-    "irs_estate_faq": {
-      "title": "Frequently asked questions on estate taxes",
-      "publisher": "Internal Revenue Service",
-      "url": "https://www.irs.gov/businesses/small-businesses-self-employed/frequently-asked-questions-on-estate-taxes",
-      "verifies": [
-        "Public Law 119-21 amended IRC 2010(c)(3) to increase the basic exclusion amount to $15,000,000 for calendar year 2026",
-        "Form 706 is due nine months after death; an automatic six-month extension is available by filing Form 4768",
-        "Portability requires a timely filed Form 706"
-      ],
-      "quote": "The Working Families Tax Cuts Bill was signed into law on July 4, 2025 as Public Law 119-21 and amends 2010(c)(3) by increasing the basic exclusion amount to $15,000,000 for gifts for calendar year 2026.",
-      "status": "verified"
-    },
-    "irs_basis": {
-      "title": "Gifts & inheritances (basis of inherited property)",
-      "publisher": "Internal Revenue Service",
-      "url": "https://www.irs.gov/faqs/interest-dividends-other-types-of-income/gifts-inheritances",
-      "verifies": [
-        "Basis of inherited property is generally fair market value on the date of death, whether or not Form 706 is filed",
-        "Alternate valuation is available only if the executor files Form 706 and elects it",
-        "Gain above basis on a later sale is taxable",
-        "The annual gift exclusion is $19,000 for 2025 and 2026"
-      ],
-      "quote": "The basis of property inherited from a decedent is generally ... The fair market value (FMV) of the property on the date of the decedent's death",
-      "status": "verified"
-    },
-    "irs_tc409": {
-      "title": "Topic no. 409, Capital gains and losses",
-      "publisher": "Internal Revenue Service",
-      "url": "https://www.irs.gov/taxtopics/tc409",
-      "verifies": [
-        "Long-term capital gain is taxed at 0%, 15%, or 20% depending on taxable income (2025 thresholds shown)",
-        "A 20% rate applies to the extent taxable income exceeds the 15% thresholds",
-        "A net investment income tax may additionally apply (see Topic 559)"
-      ],
-      "quote": "However, a capital gains rate of 20% applies to the extent that your taxable income exceeds the thresholds set for the 15% capital gain rate.",
-      "status": "verified"
-    },
-    "irs_tc701": {
-      "title": "Topic no. 701, Sale of your home",
-      "publisher": "Internal Revenue Service",
-      "url": "https://www.irs.gov/taxtopics/tc701",
-      "verifies": [
-        "Up to $250,000 of gain ($500,000 on a joint return) may be excluded on the sale of a main home",
-        "Ownership and use tests are generally 24 months out of the last 5 years"
-      ],
-      "quote": "you may qualify to exclude up to $250,000 of that gain from your income, or up to $500,000 of that gain if you file a joint return with your spouse",
-      "status": "verified"
-    },
-    "boe_prop19": {
-      "title": "Proposition 19 (RTC 63.2) comparison tables and filing deadlines",
-      "publisher": "California State Board of Equalization",
-      "url": "https://www.boe.ca.gov/prop19/",
-      "verifies": [
-        "The family-home exclusion applies only where the property is the principal residence of both transferor and transferee",
-        "Effective February 16, 2021; implemented by Revenue & Taxation Code 63.2",
-        "Transferee must file for the homeowners' exemption within 1 year of transfer and claim the exclusion within 3 years or before transfer to a third party"
-      ],
-      "quote": "File for homeowners' exemption within 1 year of transfer - File claim for exclusion within 3 years or before transfer to third party",
-      "status": "verified"
-    },
-    "boe_cap": {
-      "title": "BOE adjusts the Proposition 19 $1 million intergenerational transfer exclusion amount (NR 25-02)",
-      "publisher": "California State Board of Equalization",
-      "url": "https://www.boe.ca.gov/news/2025/NR-25-02.htm",
-      "verifies": [
-        "The exclusion adjustment is $1,044,590 for transfers February 16, 2025 through February 15, 2027",
-        "The excludable amount is the property's factored base year value at transfer plus $1,044,590",
-        "The amount is recalculated every other year using the Federal Housing Finance Agency House Price Index for California"
-      ],
-      "quote": "The excludable amount is capped at an amount equal to the principal residence or family farm's factored base year value (taxable value) at the time of the transfer plus $1,044,586.",
-      "status": "verified"
-    },
-    "rtc13301": {
-      "title": "Revenue & Taxation Code 13301 - Prohibition of gift and death taxes",
-      "publisher": "California Legislative Information",
-      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=13301",
-      "verifies": [
-        "Neither the state nor any political subdivision may impose any gift, inheritance, succession, legacy, income, or estate tax on a transfer occurring by reason of death",
-        "Enacted by initiative Proposition 6, June 8, 1982"
-      ],
-      "quote": "Neither the state nor any political subdivision of the state shall impose any gift, inheritance, succession, legacy, income, or estate tax, or any other tax, on gifts or on the estate or inheritance of any person or on or by reason of any transfer occurring by reason of a death.",
-      "status": "verified"
-    },
-    "rtc51": {
-      "title": "Revenue & Taxation Code 51 - inflation factor for base year values",
-      "publisher": "California Legislative Information",
-      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=51",
-      "verifies": [
-        "Taxable value is the lesser of the inflation-adjusted base year value or full cash value",
-        "The annual inflation increase may not exceed 2 percent of the prior year's value",
-        "The inflation factor uses the October-to-October California CPI change"
-      ],
-      "quote": "In no event shall the percentage increase for any assessment year determined pursuant to subparagraph (A), (B), or (C) exceed 2 percent of the prior year's value.",
-      "status": "verified"
-    },
-    "rtc480": {
-      "title": "Revenue & Taxation Code 480 - change in ownership statement",
-      "publisher": "California Legislative Information",
-      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=480.",
-      "verifies": [
-        "Where an interest in real property transfers by reason of death including through a trust, the trustee or transferee files a change in ownership statement within 150 days after the date of death",
-        "Failure to file after a written request can trigger a penalty of $100 or 10 percent of the taxes on the new base year value, whichever is greater"
-      ],
-      "quote": "in all other cases in which an interest in real property is transferred by reason of death, including a transfer through the medium of a trust, the change in ownership statement or statements shall be filed by the trustee (if the property was held in trust) or the transferee with the county recorder or assessor ... within 150 days after the date of death",
-      "status": "verified"
-    },
-    "prob16061": {
-      "title": "Probate Code 16061.7 - notification by trustee",
-      "publisher": "California Legislative Information",
-      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PROB&sectionNum=16061.7",
-      "verifies": [
-        "The trustee must serve a notification when a revocable trust becomes irrevocable because of a settlor's death",
-        "The notification must be served not later than 60 days after the event requiring service",
-        "Service is on each beneficiary and each heir of the deceased settlor"
-      ],
-      "quote": "The notification by trustee shall be served not later than 60 days following the occurrence of the event requiring service of the notification by trustee",
-      "status": "verified"
-    },
-    "ftb_rates": {
-      "title": "2025 California Tax Rate Schedules (Form 540)",
-      "publisher": "California Franchise Tax Board",
-      "url": "https://www.ftb.ca.gov/forms/2025/2025-540-tax-rate-schedules.pdf",
-      "verifies": [
-        "California brackets run from 1.00% to 12.30%",
-        "The 12.30% bracket begins at $742,950 of taxable income for single filers and $1,485,900 for joint filers (2025, rounded to $10)"
-      ],
-      "quote": "742,953 AND OVER 72,219.84 + 12.30%",
-      "status": "verified"
-    },
-    "ftb_cg": {
-      "title": "Capital gains and losses",
-      "publisher": "California Franchise Tax Board",
-      "url": "https://www.ftb.ca.gov/file/personal/income-types/capital-gains-and-losses.html",
-      "verifies": [
-        "California has no lower rate for capital gains; capital gains are taxed as ordinary income"
-      ],
-      "quote": "California does not have a lower rate for capital gains. All capital gains are taxed as ordinary income.",
-      "status": "verified"
-    },
-    "sf_rate": {
-      "title": "Resolution 447-25 (File 250876) - FY2025-26 combined property tax rate for jurisdiction B",
-      "publisher": "Board of Supervisors (jurisdiction B rate-setting authority)",
-      "url": "https://sfbos.archive.sf.gov/sites/default/files/r0447-25.pdf",
-      "verifies": [
-        "Combined FY2025-26 property tax rate is $1.18268325 per $100 of taxable property value",
-        "The resolution sets only the ad valorem rate; it does not include non-ad-valorem parcel charges",
-        "Passed September 30, 2025"
-      ],
-      "quote": "the combined property tax rate ... shall therefore be $1.18268325 on each $100 valuation of said taxable property",
-      "status": "verified"
-    },
-    "cpuc_nem": {
-      "title": "Net Energy Metering and Net Billing",
-      "publisher": "California Public Utilities Commission",
-      "url": "https://www.cpuc.ca.gov/nem/",
-      "verifies": [
-        "Customers applying for interconnection since April 15, 2023 take service on the net billing tariff under D.22-12-056",
-        "Export compensation is usually lower than the retail rate",
-        "Legacy NEM tariffs are closed to new enrollments; the NBT legacy period is nine years",
-        "End-of-year surplus under NEM is compensated at roughly $0.02-$0.03 per kWh"
-      ],
-      "quote": "The value of the export compensation (which the IOUs term \"Energy Export Credits\") is usually lower than the retail rate",
-      "status": "verified"
-    },
-    "cdi_tool": {
-      "title": "Online homeowner insurance pricing tool helps residents find coverage (release 138-18)",
-      "publisher": "California Department of Insurance",
-      "url": "https://www.insurance.ca.gov/0400-news/0100-press-releases/2018/release138-18.cfm",
-      "verifies": [
-        "The CDI comparison tool shows each company's average premium, not an actual quote",
-        "Consumers enter county and nearest city, coverage type and amount, and home age",
-        "The FAIR Plan is available where standard coverage cannot be obtained"
-      ],
-      "quote": "While this tool does not provide actual premium quotes, it does provide each company's average premium",
-      "status": "verified"
-    },
-    "lao_250017": {
-      "title": "LAO analysis of proposed initiative A.G. File No. 25-0017 (property tax rules for inherited property)",
-      "publisher": "California Legislative Analyst's Office",
-      "url": "https://www.lao.ca.gov/ballot/2025/250422.pdf",
-      "verifies": [
-        "The measure would restore pre-Proposition 19 exclusion rules beginning January 1, 2027",
-        "The expanded rules would apply to all inherited primary homes regardless of value",
-        "The rules would also apply to properties transferred since February 16, 2021",
-        "LAO estimates local revenue losses of about one billion dollars per year initially, growing to about two billion dollars per year"
-      ],
-      "quote": "Beginning January 1, 2027, the measure reverses most of the major changes made by Proposition 19.",
-      "status": "verified (proposal only, not law)"
-    },
-    "sos_measures": {
-      "title": "Qualified Statewide Ballot Measures",
-      "publisher": "California Secretary of State",
-      "url": "https://www.sos.ca.gov/elections/ballot-measures/qualified-ballot-measures",
-      "verifies": [
-        "The November 3, 2026 statewide ballot contains Propositions 1-5 and 37-45",
-        "No inherited-property measure appears among the qualified November 3, 2026 measures listed"
-      ],
-      "quote": "## November 3, 2026, Statewide Ballot Measures ... Proposition 45 ... Modifies Environmental Review for Certain Projects.",
-      "status": "verified"
-    }
-  }
-}
+[
+ {
+  "id": "IRS-ESTATE",
+  "publisher": "Internal Revenue Service",
+  "title": "Estate tax (filing thresholds by year of death)",
+  "url": "https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "IRS-NEW",
+  "publisher": "Internal Revenue Service",
+  "title": "What's new: estate and gift tax",
+  "url": "https://www.irs.gov/businesses/small-businesses-self-employed/whats-new-estate-and-gift-tax",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "IRS-706",
+  "publisher": "Internal Revenue Service",
+  "title": "Instructions for Form 706 (Rev. July 2026)",
+  "url": "https://www.irs.gov/pub/irs-pdf/i706.pdf",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "IRS-IR133",
+  "publisher": "Internal Revenue Service",
+  "title": "IR-2026-133: inflation adjustments for tax year 2027",
+  "url": "https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "IRS-RP2635",
+  "publisher": "Internal Revenue Service",
+  "title": "Revenue Procedure 2026-35",
+  "url": "https://www.irs.gov/pub/irs-drop/rp-26-35.pdf",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "IRS-INHERIT",
+  "publisher": "Internal Revenue Service",
+  "title": "FAQ: is money from the sale of inherited property taxable?",
+  "url": "https://www.irs.gov/faqs/interest-dividends-other-types-of-income/gifts-inheritances/gifts-inheritances",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "IRS-P551",
+  "publisher": "Internal Revenue Service",
+  "title": "Publication 551, Basis of Assets",
+  "url": "https://www.irs.gov/publications/p551",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "IRS-T409",
+  "publisher": "Internal Revenue Service",
+  "title": "Topic no. 409, Capital gains and losses",
+  "url": "https://www.irs.gov/taxtopics/tc409",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "IRS-T701",
+  "publisher": "Internal Revenue Service",
+  "title": "Topic no. 701, Sale of your home",
+  "url": "https://www.irs.gov/taxtopics/tc701",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "IRS-T559",
+  "publisher": "Internal Revenue Service",
+  "title": "Topic no. 559, Net investment income tax",
+  "url": "https://www.irs.gov/taxtopics/tc559",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "IRS-T414",
+  "publisher": "Internal Revenue Service",
+  "title": "Topic no. 414, Rental income and expenses",
+  "url": "https://www.irs.gov/taxtopics/tc414",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "IRS-P527",
+  "publisher": "Internal Revenue Service",
+  "title": "Publication 527, Residential Rental Property",
+  "url": "https://www.irs.gov/pub/irs-pdf/p527.pdf",
+  "checked": "Official page text read through a search excerpt",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "IRS-RR232",
+  "publisher": "Internal Revenue Service",
+  "title": "Revenue Ruling 2023-2 (Internal Revenue Bulletin 2023-16)",
+  "url": "https://www.irs.gov/irb/2023-16_IRB",
+  "checked": "Official page text read through a search excerpt",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "IRS-1041",
+  "publisher": "Internal Revenue Service",
+  "title": "Instructions for Form 1041",
+  "url": "https://www.irs.gov/instructions/i1041",
+  "checked": "Official page text read through a search excerpt",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "IRS-OBBB",
+  "publisher": "Internal Revenue Service",
+  "title": "One, Big, Beautiful Bill provisions",
+  "url": "https://www.irs.gov/obbb",
+  "checked": "Official starting point for manual review; this session could not read the value there",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "BOE-P19",
+  "publisher": "California State Board of Equalization",
+  "title": "Proposition 19: charts, FAQs, filing checklist",
+  "url": "https://www.boe.ca.gov/prop19/",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "BOE-LTA2509",
+  "publisher": "California State Board of Equalization",
+  "title": "Letter to Assessors 2025/009: adjustment of the $1 million amount",
+  "url": "https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "BOE-LTA2626",
+  "publisher": "California State Board of Equalization",
+  "title": "Letter to Assessors 2026/026: intergenerational transfer exclusion Q&A",
+  "url": "https://www.boe.ca.gov/proptaxes/pdf/lta26026.pdf",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "BOE-LTA2602",
+  "publisher": "California State Board of Equalization",
+  "title": "Letter to Assessors 2026/002: 2026-27 inflation factor and history",
+  "url": "https://boe.ca.gov/proptaxes/pdf/lta26002.pdf",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "BOE-HOX",
+  "publisher": "California State Board of Equalization",
+  "title": "Homeowners' Exemption",
+  "url": "https://www.boe.ca.gov/proptaxes/homeowners_exemption.htm",
+  "checked": "Official page text read through a search excerpt",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "CA-RTC480",
+  "publisher": "California Legislative Information",
+  "title": "Revenue and Taxation Code section 480",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=480",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "CA-PROB16061",
+  "publisher": "California Legislative Information",
+  "title": "Probate Code section 16061.7",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PROB&sectionNum=16061.7",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "CA-RTC13301",
+  "publisher": "California Legislative Information",
+  "title": "Revenue and Taxation Code section 13301",
+  "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=13301",
+  "checked": "Official page text read through a search excerpt",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "CA-AB942",
+  "publisher": "California Legislative Information",
+  "title": "AB 942 (2025-2026) bill status",
+  "url": "https://leginfo.legislature.ca.gov/faces/billStatusClient.xhtml?bill_id=202520260AB942",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "SCO-ESTATE",
+  "publisher": "California State Controller",
+  "title": "California Estate Tax",
+  "url": "https://www.sco.ca.gov/ardtax_estate_tax.html",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "FTB-CG",
+  "publisher": "California Franchise Tax Board",
+  "title": "Capital gains and losses",
+  "url": "https://www.ftb.ca.gov/file/personal/income-types/capital-gains-and-losses.html",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "FTB-RATES",
+  "publisher": "California Franchise Tax Board",
+  "title": "2025 California Tax Rate Schedules",
+  "url": "https://www.ftb.ca.gov/forms/2025/2025-540-tax-rate-schedules.pdf",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "FTB-541",
+  "publisher": "California Franchise Tax Board",
+  "title": "Form 541 fiduciary income tax booklet (2019 edition)",
+  "url": "https://www.ftb.ca.gov/forms/2019/2019-541-booklet.html",
+  "checked": "Official page text read through a search excerpt",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "CPUC-NEM",
+  "publisher": "California Public Utilities Commission",
+  "title": "Net Energy Metering and Net Billing",
+  "url": "https://www.cpuc.ca.gov/industries-and-topics/electrical-energy/demand-side-management/customer-generation/net-energy-metering-and-net-billing",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "SOS-FAIL",
+  "publisher": "California Secretary of State",
+  "title": "CC/ROV memorandum 26138: initiative 1994 failed to qualify",
+  "url": "https://elections.cdn.sos.ca.gov/ccrov/2026/may/26138jh.pdf",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "SOS-RESULTS",
+  "publisher": "California Secretary of State",
+  "title": "State ballot measures: unofficial results, 3 November 2026 election",
+  "url": "https://electionresults.sos.ca.gov/returns/ballot-measures",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "SOS-P3",
+  "publisher": "California Secretary of State",
+  "title": "Official Voter Information Guide: Proposition 3",
+  "url": "https://voterguide.sos.ca.gov/propositions/3/",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "SOS-P42",
+  "publisher": "California Secretary of State",
+  "title": "Official Voter Information Guide: Proposition 42",
+  "url": "https://voterguide.sos.ca.gov/propositions/42/",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "LAO-250017",
+  "publisher": "California Legislative Analyst's Office",
+  "title": "Analysis of initiative A.G. File No. 25-0017",
+  "url": "https://lao.ca.gov/BallotAnalysis/Initiative/2025-017",
+  "checked": "Official page text read through a search excerpt",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "SF-TAX",
+  "publisher": "San Francisco Treasurer and Tax Collector",
+  "title": "Secured Property Taxes",
+  "url": "https://sftreasurer.org/property/secured-property-taxes",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "SF-FEES",
+  "publisher": "San Francisco Assessor-Recorder",
+  "title": "Fees to record a document; transfer tax rates",
+  "url": "https://www.sf.gov/reports--march-2024--fees-record-document-san-francisco",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "SF-RENT",
+  "publisher": "San Francisco Rent Board",
+  "title": "Current rates, including the allowable rent increase",
+  "url": "https://www.sf.gov/reports--current-rates-including-rent-increase-relocation-sec-deposit",
+  "checked": "Official page text read through a search excerpt",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "SF-EHT",
+  "publisher": "San Francisco Treasurer and Tax Collector",
+  "title": "Empty Homes Tax",
+  "url": "https://sftreasurer.org/business/taxes-fees/empty-homes-tax-eht",
+  "checked": "Official page text read through a search excerpt",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "SF-HEIRS",
+  "publisher": "San Francisco Treasurer and Tax Collector",
+  "title": "Information for Heirs",
+  "url": "https://sftreasurer.org/property/information-heirs",
+  "checked": "Official starting point for manual review; this session could not read the value there",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "SCC-DTT",
+  "publisher": "Santa Clara County Clerk-Recorder",
+  "title": "Recording real estate: documentary transfer tax",
+  "url": "https://clerkrecorder.santaclaracounty.gov/recording-documents/recording-real-estate",
+  "checked": "Official page text read through a search excerpt",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "CDI-TOOL",
+  "publisher": "California Department of Insurance",
+  "title": "Homeowners Insurance Comparison Tool (2026)",
+  "url": "https://interactive.web.insurance.ca.gov/apex_extprd/f?p=111:20",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "CDI-DATA",
+  "publisher": "California Department of Insurance",
+  "title": "Data and analysis on wildfires and insurance",
+  "url": "https://www.insurance.ca.gov/01-consumers/200-wrr/DataAnalysisOnWildfiresAndInsurance.cfm",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "NAIC-HO",
+  "publisher": "National Association of Insurance Commissioners",
+  "title": "Homeowners report: data for 2023",
+  "url": "https://content.naic.org/sites/default/files/publication-hmr-zu-homeowners-report.pdf",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "FHFA-HPI",
+  "publisher": "Federal Housing Finance Agency",
+  "title": "House Price Index quarterly report, 2026 second quarter",
+  "url": "https://www.fhfa.gov/document/d/hpi/fhfa-house-price-index-report-2026q2",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "UST-YIELD",
+  "publisher": "U.S. Department of the Treasury",
+  "title": "Daily Treasury par yield curve rates, November 2026",
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value_month=202611",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "SSA-TR",
+  "publisher": "Social Security Administration",
+  "title": "2026 Trustees Report: long-range sensitivity analysis",
+  "url": "https://www.ssa.gov/oact/TR/2026/VI_D_LRsens.html",
+  "checked": "Official page text read through a search excerpt",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "TSP-RET",
+  "publisher": "Federal Retirement Thrift Investment Board",
+  "title": "Thrift Savings Plan rates of return",
+  "url": "https://www.tsp.gov/fund-performance/",
+  "checked": "Page read by this session",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "HUD-FMR",
+  "publisher": "U.S. Department of Housing and Urban Development",
+  "title": "Fair Market Rents",
+  "url": "https://www.huduser.gov/portal/datasets/fmr.html",
+  "checked": "Official starting point for manual review; this session could not read the value there",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "CONG-S587",
+  "publisher": "Congress.gov",
+  "title": "S.587, Death Tax Repeal Act of 2025",
+  "url": "https://www.congress.gov/bill/119th-congress/senate-bill/587",
+  "checked": "Official page text read through a search excerpt",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "CONG-HR1301",
+  "publisher": "Congress.gov",
+  "title": "H.R.1301, Death Tax Repeal Act",
+  "url": "https://www.congress.gov/bill/119th-congress/house-bill/1301",
+  "checked": "Official page text read through a search excerpt",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "CRT-SELF",
+  "publisher": "Judicial Branch of California",
+  "title": "Self-help guide: wills, estates and living trusts",
+  "url": "https://selfhelp.courts.ca.gov/wills-estates-probate/legal-documents",
+  "checked": "Official page text read through a search excerpt",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "GH-REPO",
+  "publisher": "GitHub",
+  "title": "This repository's pull requests and history",
+  "url": "https://github.com/wingbangboozle1-lang/Tino3/pulls",
+  "checked": "Repository record read through the GitHub API",
+  "retrieved": "2026-11-10"
+ },
+ {
+  "id": "CRT-SCC",
+  "publisher": "Superior Court of California, County of Santa Clara",
+  "title": "Living trusts",
+  "url": "https://santaclara.courts.ca.gov/self-help/self-help-probate/self-help-probate-medicalfinancialend-life-issues/living-trusts",
+  "checked": "Official page text read through a search excerpt",
+  "retrieved": "2026-11-10"
+ }
+]
