@@ -28,3 +28,4 @@ Started: 2026-11-10
 ## Integration handoff — session arena-50c6b81e-tino3 (PR #3)
 - 2026-11-10: Retained PR #3 supplementary pages, data and scripts alongside PR #1 pages; no parallel work discarded.
 - Combined tree must be checked for source accuracy and rounded figures before relying on outputs.
+- PR #3: https://github.com/wingbangboozle1-lang/Tino3/pull/3 — MERGED 2026-11-10 (merge commit 2371569). GitHub Pages deploy: success (run 42766640207). Live: https://wingbangboozle1-lang.github.io/Tino3/ (verified via fetch; supplementary cross-links present).
