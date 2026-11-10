@@ -180,9 +180,27 @@ assets. Public law only: no owner figures, ZIP codes, addresses or names.
 - RB-08 · GitHub Pages is still `build_type: legacy` (main root), alongside the Actions deploy. `PUT /pages` returned 403 for this
   session too, so the owner must set Settings → Pages → Source = "GitHub Actions".
 
-**Cross-session request** (logged, not performed) → the active final integrator (`arena/d76d5375`, owner of `scripts/*` and
-`assets/*`), or whichever session takes over integration:
-1. Merge `arena/b8f9abd6-tino3` (or cherry-pick `7c59851`).
-2. Add `research/b8f9abd6/**` to `APPROVED` in `scripts/privacy_boundary.py`, and add `research/b8f9abd6/law-watch.html` plus
-   its JSON/CSV to `PAGES`/`ASSETS` so `package_site.py` publishes them instead of withdrawal notices.
-3. Link "Law watch & inheritance steps" from the site navigation, and copy RB-01…RB-08 to the Flagged for Review page.
+**Correction to the published edition (found 2026-11-10 10:15 UTC, logged for the owner of `scripts/*`).**
+- RB-09 · The live `review.html` FL-08 and the `scripts/model.py` assumption `fed_exclusion_indexing` say the 2027 federal
+  exclusion "was not retrievable" because an IRS URL returned 404. The release exists at a longer URL, which this session
+  fetched and read: IR-2026-133, Nov 5, 2026, **$15,480,000 for 2027** and a $20,000 annual gift exclusion (Rev. Proc. 2026-35):
+  https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts
+  FL-08 can therefore be closed as verified. The official 2026→2027 step is +3.2%, so the site's 2.5% indexing is a
+  conservative scenario (it projects a lower exclusion than the official step implies).
+
+**Cross-session request** (logged, not performed) → the owner of `scripts/*` (`arena/d76d5375`, which merged PR #21), or
+whichever session next takes over integration:
+1. Merge `arena/b8f9abd6-tino3`. It touches only `research/b8f9abd6/**` and this section.
+2. Allowlist the module. In `scripts/package_site.py`, add `research/b8f9abd6/law-watch.html` to `PAGES` and
+   `research/b8f9abd6/{law_watch.json,inheritance_process.json,estate_threshold_projection.csv,estate_tax_examples.csv}`
+   to `ASSETS`. In `scripts/privacy_boundary.py`, add `research/b8f9abd6/{README.md,build_research.py,verify_research.py}`
+   to `APPROVED`.
+3. In `scripts/verify.py`, add the official hosts `www.congress.gov`, `www.sco.ca.gov`, `elections.cdn.sos.ca.gov`,
+   `electionresults.sos.ca.gov` and `voterguide.sos.ca.gov` to `ALLOWED_HOSTS`. `verify_research.py` already runs the
+   site's own page checks against `law-watch.html` (structure, aria-current, per-row official citation, privacy
+   regexes, cents, $10 rounding) and they pass apart from those hosts.
+4. Link "Law watch & inheritance steps" from the navigation, copy RB-01…RB-09 to Flagged for Review, and close FL-08 per RB-09.
+
+Until that is done, `python scripts/verify.py` fails on this branch **by design**. The fail-closed boundary rejects any
+non-allowlisted tracked file. For that reason this session has not opened a PR to `main`, and it did not edit
+`scripts/*`, which another session owns and which has a fresh claim.

@@ -45,7 +45,7 @@ LAW = [
       source="IRS — IR-2026-133 (2027 inflation adjustments)",
       url="https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts"),
  dict(id="L04", level="Federal", topic="Estate tax rate above the exclusion",
-      rule="Unified rate schedule tops out at 40% on taxable amounts over $1,000,000 (Form 706 Table A). With an exclusion above $1M, each dollar over the exclusion is taxed at 40%.",
+      rule="Unified rate schedule tops out at 40% on taxable amounts over $1,000,000 (Form 706 Table A). With an exclusion above $1,000,000, each dollar over the exclusion is taxed at 40%.",
       status="verified", status_as_of="In force",
       impact="Tax = 40% x (taxable estate - available exclusion) when the estate exceeds the exclusion.",
       source="IRS — Instructions for Form 706 (07/2026), Table A",
@@ -100,13 +100,13 @@ LAW = [
       source="California State Controller — California Estate Tax",
       url="https://www.sco.ca.gov/ardtax_estate_tax.html"),
  dict(id="L13", level="State (CA)", topic="Proposition 19 parent-child exclusion (R&TC §63.2)",
-      rule="Only the transferor's principal residence qualifies; it must become the child's principal residence within 1 year; homeowners' exemption must be filed within 1 year; claim within 3 years or before transfer to a third party. New taxable value = taxable value + (market value - (taxable value + $1M as adjusted)) when market value exceeds that sum.",
+      rule="Only the transferor's principal residence qualifies; it must become the child's principal residence within 1 year; homeowners' exemption must be filed within 1 year; claim within 3 years or before transfer to a third party. New taxable value = taxable value + (market value - (taxable value + $1,000,000 as adjusted)) when market value exceeds that sum.",
       status="verified", status_as_of="In force since Feb 16, 2021",
       impact="The decisive property-tax rule for the inherited home: moving in preserves part of the low base; renting or holding vacant triggers full reassessment to market value.",
       source="California Legislative Information — R&TC §63.2",
       url="https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=63.2"),
  dict(id="L14", level="State (CA)", topic="Prop 19 exclusion amount (current period)",
-      rule="$1,044,586 for transfers Feb 16, 2025 – Feb 15, 2027 (adjusted every other year by FHFA California HPI; up 2.15% from $1,022,600).",
+      rule="$1,044,590 (rounded to $10; BOE publishes the exact figure) for transfers Feb 16, 2025 – Feb 15, 2027; adjusted every other year by the FHFA California house price index (+2.15% from the prior period).",
       status="verified", status_as_of="Next adjustment due for transfers from Feb 16, 2027 (not yet published at check)",
       impact="Grows with California house prices, so it will be larger by 2040–2050, but the formula still taxes everything above taxable value + exclusion.",
       source="BOE — News Release NR 25-02 (LTA 2025/009)",
@@ -130,11 +130,11 @@ LAW = [
       source="CA Secretary of State — CC/ROV Memorandum #26138",
       url="https://elections.cdn.sos.ca.gov/ccrov/2026/may/26138jh.pdf"),
  dict(id="L18", level="State (CA)", topic="LAO fiscal analysis of No. 25-0017",
-      rule="LAO: measure would reverse most Prop 19 changes; revenue loss ~ $1B/yr initially rising to ~ $2B/yr.",
+      rule="LAO: measure would reverse most Prop 19 changes; revenue loss of about $1 billion per year initially, rising to about $2 billion per year.",
       status="verified", status_as_of="Oct 22, 2025 analysis",
       impact="Shows the scale of revenue at stake, a reason repeal is politically difficult.",
       source="Legislative Analyst's Office — A.G. File No. 25-0017",
-      url="https://lao.ca.gov/BallotAnalysis/Initiative/2025-017"),
+      url="https://www.lao.ca.gov/BallotAnalysis/Initiative/2025-017"),
  dict(id="L19", level="State (CA)", topic="Initiatives now circulating",
       rule="SOS list of initiatives cleared for circulation (checked 2026-11-10) shows five measures (26-0001 to 26-0005); none concerns Prop 19 or inherited-property reassessment.",
       status="verified", status_as_of="As of check date",
@@ -173,9 +173,9 @@ LAW = [
       source="California Legislative Information — R&TC §11930",
       url="https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=11930"),
  dict(id="L25", level="Local (county/city)", topic="County documentary transfer tax rate on a sale",
-      rule="County rate $0.55 per $500 of consideration (= $1.10 per $1,000); a city in that county may levy half that amount, credited against the county tax. Charter-city rates (e.g., San Francisco) are set locally and are not covered by this row.",
+      rule="County rate 55 cents per $500 of consideration (110 cents per $1,000); a city in that county may levy half that amount, credited against the county tax. Charter-city rates are set locally and are not covered by this row.",
       status="verified", status_as_of="In force",
-      impact="On a sale, budget the county rate at minimum; SF's own rate schedule must be checked separately (not verified here).",
+      impact="On a sale, budget the county rate at minimum; a charter city's own rate schedule must be checked separately (not verified here).",
       source="California Legislative Information — R&TC §11911",
       url="https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=11911"),
  dict(id="L26", level="State (CA, utility)", topic="Rooftop solar NEM legacy period",
@@ -338,11 +338,14 @@ def write_html(proj, ex):
                 money(e["federal_estate_tax_married_with_portability"]), "$0", link(e["rate_source"], "Form 706 Table A")]
                for e in ex if e["year_of_death"] in (2026, 2045)]
     p = PROP19_EXAMPLE
+    S632 = "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=63.2"
+    NR = "https://www.boe.ca.gov/news/2025/nr-25-02.htm"
     p19 = [["Taxable value before transfer (hypothetical)", money(p["taxable_value_before_transfer"])],
            ["Market value at transfer (hypothetical)", money(p["market_value_at_transfer"])],
-           ["Exclusion amount (Feb 2025 – Feb 2027, official)", money(p["exclusion_amount"])],
+           ["Exclusion amount (Feb 2025 – Feb 2027, official, shown rounded to $10)", money(r10(p["exclusion_amount"]))],
            ["New taxable value if heir moves in within 1 year", money(p["new_taxable_value_if_heir_moves_in"])],
            ["New taxable value if not heir's principal residence", money(p["new_taxable_value_if_not_principal_residence"])]]
+    p19 = [r + [link(NR if "Exclusion" in r[0] else S632, "BOE NR 25-02" if "Exclusion" in r[0] else "R&TC §63.2(d)")] for r in p19]
     doc = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer"><title>Law watch &amp; inheritance process — research module</title>
@@ -355,7 +358,7 @@ table{{border-collapse:collapse;width:100%;font-size:.88rem}} th,td{{padding:6px
 th{{background:#f1f5f9;position:sticky;top:0}} .verified{{color:#166534;font-weight:600}} .unverified{{color:#b91c1c;font-weight:600}}
 .note{{background:#fff7ed;border:1px solid #fed7aa;padding:10px;border-radius:8px}}
 </style></head><body>
-<header><p><a href="../../index.html">← Dashboard</a></p>
+<header><nav aria-label="Site"><a href="../../index.html">← Dashboard</a> · <a href="law-watch.html" aria-current="page">Law watch &amp; inheritance steps</a></nav>
 <h1>Law watch &amp; step-by-step trust inheritance process</h1>
 <p>Research module RES-LAW / RES-PROC · session arena-b8f9abd6 · checked {CHECKED}. Contains public law only — no owner figures, addresses, ZIP codes or names. Dollar outputs rounded to the nearest $10; statutory amounts shown exactly as published.</p></header>
 <main>
@@ -369,7 +372,7 @@ th{{background:#f1f5f9;position:sticky;top:0}} .verified{{color:#166534;font-wei
 <p>Hypothetical taxable estates (not the owner's). Tax = 40% × amount over the exclusion. California levies $0 estate or inheritance tax. Full 2026–2050 grid in <code>estate_tax_examples.csv</code>.</p>
 {table(["Year","Exclusion basis","Taxable estate","Exclusion (single)","Headroom (+) / excess (−)","Federal tax (single)","Federal tax (married, portability)","CA tax","Source"], ex_rows)}
 <h2>4. Prop 19 formula — worked example on round hypothetical numbers</h2>
-{table(["Item","Amount"], p19)}
+{table(["Item","Amount","Official source"], p19)}
 <p>Source: {link("https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=63.2", "R&TC §63.2(d)")}, {link("https://www.boe.ca.gov/news/2025/nr-25-02.htm", "BOE NR 25-02")}.</p>
 <h2>5. Step-by-step: inheriting a California house through a trust</h2>
 {table(["#","Phase","Deadline","Who","Action","Form","Legal basis","Official source"], step_rows)}
