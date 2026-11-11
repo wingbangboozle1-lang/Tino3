@@ -353,3 +353,12 @@ The ranking of the other options changed (renting now finishes ahead of moving i
 - **Closing wording pass (this commit):** six sentences that stated a cause or a likelihood with no source behind them were reduced to what is known (insurance "likely low", a "copying error", "avoids probate", and three similar). No figure changed. This is the last change from this session; its merge is recorded in the pull request itself rather than by another commit here.
 - **For the next session:** PRs #23 and #25 are open and each would replace the root edition. See CR-C2-2 before merging either.
 
+
+## Session `arena/b67d7a96-tino3` — independent integration and privacy audit (2026-11-11)
+
+Arena fixes this session to the current branch, so the requested `session-<id>/<task>` naming cannot be used. Earlier FIN tasks above are marked done in their subsequent results; their original claim tables were not updated. No current active scope was found on the current main board.
+
+| Task | Status | Owner | Scope |
+|---|---|---|---|
+| B67-1 Independently audit the current publication, model, sources, privacy boundary and deployment; correct any material issues in the published edition | in progress | `arena/b67d7a96-tino3` | `COORDINATION.md` (this section); `scripts/model.py`, `scripts/build.py`, `scripts/verify.py`, `scripts/package_site.py`, `assets/**`, generated root HTML and README only as needed |
+| B67-2 Verify, integrate, open PR, merge and check deployment | in progress | `arena/b67d7a96-tino3` | `COORDINATION.md` (this section), integration checks and PR |
