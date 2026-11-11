@@ -484,11 +484,37 @@ Board read at 04:20 UTC on 11 November 2026: the round register at the top of th
 
 | Task | Status | Owner | Files touched |
 |---|---|---|---|
-| PB-1 Apply the owner's statement that Property B is already owned by the beneficiary: decision framing, estate-room arithmetic under the statement, flag FL-01, wording on the pages that treat title as unknown | in progress | `arena/e07bc3a2-tino3` | `scripts/build.py`, generated root pages, `EXECUTIVE_SUMMARY.md` (both via the build) |
-| PB-2 Verification pass, PR to `main`, merge, Pages deploy check, result log | in progress | `arena/e07bc3a2-tino3` | `COORDINATION.md` (this section only) |
+| PB-1 Apply the owner's statement that Property B is already owned by the beneficiary: decision framing, estate-room arithmetic under the statement, flag FL-01, wording on the pages that treat title as unknown | **done** | `arena/e07bc3a2-tino3` | `scripts/build.py`, generated root pages, `EXECUTIVE_SUMMARY.md` (both via the build) |
+| PB-2 Verification pass, PR to `main`, merge, Pages deploy check, result log | **done** (result below) | `arena/e07bc3a2-tino3` | `COORDINATION.md` (this section only) |
 
 Scope rules this session holds itself to: no new black-swan page or module (four claims already, one merged); no edits to `plan/**`, `.github/workflows/*`, `scripts/privacy_boundary.py`, withdrawal notices, or any other session's board section; no name, address, postal code, parcel number or unrounded roll figure in any commit, message or pull request. `scripts/model.py` and `assets/sources.json` are not touched: the statement is an owner-supplied fact about title, so it changes framing and the estate-room arithmetic shown, not the model's verified inputs.
 
 ### Log (`arena/e07bc3a2-tino3`)
 
 - 04:20 UTC — board, register and branch states read; claim written and pushed before any other file was edited.
+
+### Result log · `arena/e07bc3a2-tino3` · 2026-11-11
+
+**What changed (PB-1).** The owner statement now appears wherever title to Property B was previously described as unknown: the overview five facts, the executive-summary rows and plan in order, the inheritance steps, the Property B contingency section, the estate-room section on the tax page, and flag FL-01. One new computed figure was added, $10-rounded and asserted against the model's own estate arithmetic inside the build (drift over $10 fails the build): under the statement, one person's 2045 federal estate-tax room is **$17,612,290** instead of **$13,819,960**, larger by Property B's 2045 value of **$3,792,330** ($13,819,960 + $3,792,330 = $17,612,290 exactly as displayed). The contingency tables ("if Property B passes in the same estate") were kept and are now labelled as the case that applies only if the deed shows the parents. FL-01 stays open with its value blank: the statement is owner-supplied and no deed was seen. No model input, verified figure, projection, ranking, source-ledger entry, `plan/**` file, workflow or withdrawal notice was touched; `scripts/model.py` and `assets/sources.json` were not edited.
+
+**Sources verified in this session:**
+
+- IRS, *Estate tax* (filing thresholds 2011-2026, gross-estate definition): https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax - opened on the IRS site on 11 November 2026; the 2026 threshold $15,000,000 and "everything you own or have certain interests in at the date of death" wording match the page and support the statement's treatment of an heir-owned property as outside the gross estate.
+- The 2045 scenario exclusion reuses the ledgered `irs_2027` ($15,480,000) and `irs_rp2532` read by the previous session; not re-opened, not changed.
+- Contingency reassessment rule unchanged: BOE Letter 2026/026 (`boe_lta26026`).
+
+**Verification performed:** `python scripts/verify.py` PASS (12 reproducible pages, 430 table rows all linked to an official publisher, 53 ledger sources, privacy scan and $10 rounding clean); `python plan/tools/verify.py` PASS (cross-check edition byte-identical); `python scripts/package_site.py` PASS (12 pages, 28 assets, 49 retirement notices); rendered output inspected for all three room figures and the statement wording.
+
+**Publication result:**
+
+- **PR [#35](https://github.com/wingbangboozle1-lang/Tino3/pull/35) - MERGED** 2026-11-11T04:26:35Z, merge commit `ee69b7615a1293247547c6b714c308dc8c1955c4`. CI `verify` passed on the PR before merge (run 42959211647).
+- **After the merge, on `main`:** `Verify static site` run 42959268933 success; `Deploy GitHub Pages` run 42959268968 success; legacy `pages build and deployment` run 42959268315 success.
+- **Live check by HTTP fetch (cache-busted, after deploy):** `/taxes.html` serves the statement paragraph with the three room figures and the IRS link; `/review.html` serves the updated FL-01 with its value blank. No browser automation was available; layout was not inspected visually.
+
+**Irregularities found and handled:**
+
+1. The statement room figure first computed as `r10(exclusion - A)` differed by $10 from `room(both homes) + B value` because the model rounds the sum first. Fixed by building the published figure from the published components so the page adds up exactly; the build now asserts both readings agree within $10.
+2. Not mine to fix, handed to the sessions that claimed the work: (a) FL-18 still says only a 12-month stock figure was read, but `https://www.tsp.gov/c-fund/` (opened 11 Nov 2026) publishes 10-year 15.41% and lifetime 11.40% averages as of October 2026 - useful to `7f9e7fe8` / `e4c5b872` / `4eefd177` (ledger re-verification claim) and to whoever words FL-18; (b) the California Department of Insurance statewide average written homeowners premium for 2017 is $1,070 (rounded from $1,074) in the CDI Part I PDF https://www.insurance.ca.gov/0400-news/0200-studies-reports/0250-homeowners-study/upload/A-Homeowners-2_v1-2.pdf, while the current Part I file (2008-2023) is an .xlsx that could not be read as text in this session - useful to `0b455c89` (insurance research claim, S-2).
+3. Round-level observation, already recorded in the register: four sessions claimed a black-swan section; `bde5056d` merged first (PR #32) and the merged `stress.html` was left untouched by this session.
+
+**For the round's final integration (I-3, `2f0b4adb`):** this session's claim is complete and merged; the Property B statement item listed as unclaimed in the register is closed by PR #35; no file outside `scripts/build.py` and its generated outputs was edited, so nothing here collides with the open claims.
