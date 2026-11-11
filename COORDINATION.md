@@ -893,7 +893,7 @@ are closed. No task claimed by those sessions is started here.
 
 | Task | Status | Owner | File scope (non-overlapping until F3-2 starts) |
 |---|---|---|---|
-| F3-1 Independent requirements-traceability audit: map every numbered item in the owner's brief to the published page that answers it, an official publisher URL, and a status; open the official pages in this session and record exactly what each supports. Publish the anonymized traceability matrix and the verification log as new files. | **in progress** | `arena/f31530e0-tino3` | new `integration/**` only; `COORDINATION.md` (this section only) |
+| F3-1 Independent requirements-traceability audit: map every numbered item in the owner's brief to the published page that answers it, an official publisher URL, and a status; open the official pages in this session and record exactly what each supports. Publish the anonymized traceability matrix and the verification log as new files. | **done** | `arena/f31530e0-tino3` | new `integration/**` only; `COORDINATION.md` (this section only) |
 | F3-2 Final integration, starts only after A4-1..A4-4 and BD-1..BD-4 are done/merged or their claims are stale under the 60-minute rule: merge the completed branches, re-verify the combined data line by line, confirm the site builds with no broken links, add the traceability page to the published allowlist and navigation as an integration-only shared change, PR, merge, confirm Pages deploy, record result. | **waiting** | `arena/f31530e0-tino3` | `integration/**`, `COORDINATION.md` (this section only), and at integration time only: `index.html`, `scripts/package_site.py`, `scripts/verify.py` |
 
 Until F3-2 starts this session does **not** edit `scripts/model.py`, `scripts/build.py`, `assets/*`,
@@ -909,3 +909,84 @@ unrounded roll figure; every published dollar figure is in $10 increments.
 `COORDINATION.md`. Resolved by taking `origin/main`'s board verbatim and appending only this session's
 section below it, so no other session's section was discarded. No shared site file was edited during
 the rebase. The rewritten claim commit was force-pushed with lease to this session's own branch only.
+
+### Conflict log (F3-1, 13:17 UTC)
+
+A second `git pull --rebase origin main` after PRs #46 to #50 produced the same end-of-file append
+conflict. Resolved identically: `origin/main`'s board taken verbatim, this session's section appended
+below it, no other section discarded. No shared site file was edited. The rewritten claim commit was
+force-pushed with lease to this session's own branch only.
+
+### F3-1 result · `arena/f31530e0-tino3` · 2026-11-11
+
+**What was built (new files only).** A four-page, privacy-safe traceability edition under
+`integration/**`: `index.html` (requirements matrix and category cards), `executive-summary.html`
+(important details), `findings.html` (official-source verification ledger), and `flagged.html`
+(unverified items, irregularities and owner decisions). Reproducible JSON ledgers and four CSV
+downloads sit in `integration/data/`; `integration/tools/build.py` renders them and
+`integration/tools/verify.py` fails closed on stale output, broken links, non-official hosts,
+uncited table rows, PII patterns, and any dollar amount not a multiple of $10. The verifier stores
+salted SHA-256 digests rather than place names in clear text and ignores official publisher URLs
+when scanning, so a source link required for manual review is not mistaken for a disclosure.
+
+**Requirements coverage.** 24 numbered brief items are mapped one row each to an answer page, a
+value, a status, and at least one official publisher URL. The 42-source ledger records the exact
+words relied on, what each supports, how the document was checked, and its category. 12 summary
+rows and 15 flagged items are published; unverified values are blank, not inferred. Every one of
+the 93 table rows links to an official publisher. Nothing in this edition is a fourth financial
+model; it is an index and an independent check of the three editions already merged.
+
+**Sources opened on the publisher's own domain on 11 November 2026.** IRS estate-tax thresholds,
+IR-2026-133, What's New, Form 706 HTML instructions, the inherited-basis FAQ, Rev. Rul. 2023-2,
+Publications 527 and Topic 701; California State Controller estate tax; FTB gifts/inheritance and
+capital gains; RTC 13301 and 31 U.S.C. 3124 via GovInfo; BOE Proposition 19, LTA 2025/009,
+LTA 2026/026 and LTA 2026/002; RTC 63.2, Probate Code 16061.7, RTC 480 and Civil Code 1947.12;
+the County A tax-rate book, City B secured-tax and rent-increase pages; CDI premium survey and
+note; CPUC net-metering page; HUD Fair Market Rent documentation; Federal Reserve 2% FAQ, SSA
+Trustees assumptions, CBO outlook, BLS June 2022 CPI article, Federal Reserve History Great
+Recession, FRED California HPI, TSP C Fund returns and Treasury November 2026 yield curve; LAO
+25-0017, SOS memorandum 26138, 2026 qualified-measure list and unofficial election results; and
+GitHub Docs on Pages publication and pull requests. Full URLs, quotes and check notes are in
+`integration/data/sources.json` and `integration/findings.html`.
+
+**Verification performed.** `python3 integration/tools/verify.py` PASS: 4 reproducible pages, 93
+table rows all linked to an official publisher, 42 ledger sources, 24 sequential requirements,
+local links, official hosts, privacy scan and $10 rounding clean. Root, plan/ and analysis/
+verifiers and the packager were also run locally on the rebased tree and passed. No shared root
+page, asset, model, plan, analysis, workflow, withdrawal notice or other session's board section
+was edited for F3-1.
+
+**Irregularities found and logged (non-blocking).**
+
+1. The root source ledger still says the long-run stock return was unreadable; the official TSP C
+   Fund page publishes 10-year 15.41% and lifetime 11.40% averages as of October 2026. Recorded as
+   FL-I6 for the root ledger owner.
+2. The Form 706 HTML instructions were opened, but the unified rate table was not; the 40% estate
+   rate remains unverified (FL-I7). The 2026 credit corroborates it arithmetically.
+3. The live root `review.html` now serves 23 open flags with FL-17 closed; the 2026-11-11
+   certification of the 3 November 2026 election results is still pending (FL-I11).
+4. Open PR #44 (`arena/30ee04a6-tino3`) is conflicting and predates later merged corrections. It
+   remains open; F3-2 will rebase and integrate it or close it with a handoff log, not merge it as
+   is (FL-I13).
+5. PX-2 requests RQ-PX-2 (remove generator `.py` files from the published allow-list), RQ-PX-3
+   (replace clear-text place names in the three scanners with digests), and RQ-PX-4 (drop the
+   RETIRED place-named URL paths) are accepted for integration-only action at F3-2, not performed
+   while sibling claims are active.
+6. The dual Pages publisher and public Git history remain owner decisions; a normal content commit
+   cannot erase them (FL-I1, FL-I2).
+
+### F3-2 start condition and scope (integration only)
+
+F3-2 starts only when A4-1..A4-4, BD-1..BD-4, PX-1..PX-3, CA-1..CA-3, F2-1..F2-3, P8-1..P8-4,
+P-1..P-3 and the owner of open PR #44 are done/merged or their claims are more than 60 minutes
+without a commit, with a handoff logged here. At that point this session may change, as
+integration-owned shared output only: `scripts/build.py` and its regenerated root `*.html` (one
+navigation entry and one overview card for the traceability edition); `scripts/package_site.py`
+(add `integration/**` content to the allow-list, remove generator sources and RETIRED notices);
+`scripts/privacy_boundary.py` (approve the new tool files); `scripts/verify.py` (call the
+integration verifier and use digest-based place-name scanning); the three scanner files for
+RQ-PX-3; and `COORDINATION.md` (this section only). Workflows are changed only if a build/check
+failure makes it necessary. No financial model, projection, published figure, other session's board
+section, or withdrawal notice is changed. The integration branch is merged to `main` through one
+PR from `arena/f31530e0-tino3` after all checks and a no-broken-link sweep; the PR link, merge
+result and cache-busted live Pages check are recorded here.

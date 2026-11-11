@@ -1,0 +1,191 @@
+{
+  "flags": [
+    {
+      "id": "FL-I1",
+      "item": "Historical repository exposure",
+      "status": "Needs review",
+      "value": "Not verified - left blank",
+      "settles": "Repository-owner decision on history rewrite or making the repository private.",
+      "sources": [
+        "github_pages",
+        "github_pr"
+      ],
+      "note": "Earlier commits and pull-request diffs contain exact figures and location details. A content update cannot erase Git objects, forks, caches or downloads."
+    },
+    {
+      "id": "FL-I2",
+      "item": "Local official links reveal jurisdictions",
+      "status": "Needs review",
+      "value": "Not verified - left blank",
+      "settles": "Owner decision: keep local rates with links, or drop them for stronger privacy.",
+      "sources": [
+        "cityb_rate",
+        "cityb_rent",
+        "cnty_a_rates"
+      ],
+      "note": "Pages say County A and City B, but the local publisher URLs identify the jurisdictions to anyone who opens one."
+    },
+    {
+      "id": "FL-I3",
+      "item": "Roll-value rounding precision",
+      "status": "Needs review",
+      "value": "Not verified - left blank",
+      "settles": "Owner decision on returning assessed values and bills to $10 precision.",
+      "sources": [
+        "github_pages",
+        "boe_lta26002",
+        "cityb_rate"
+      ],
+      "note": "The brief asks for $10; the site generalizes public-roll values to $10,000 and bills to $100 to prevent reverse matching."
+    },
+    {
+      "id": "FL-I4",
+      "item": "Home and landlord insurance premiums",
+      "status": "Unverified",
+      "value": "Not verified - left blank",
+      "settles": "Two written quotes at replacement cost for each policy type.",
+      "sources": [
+        "cdi_compare",
+        "cdi_note"
+      ],
+      "note": "The state regulator states its survey is not a quote and cannot provide actual quotes."
+    },
+    {
+      "id": "FL-I5",
+      "item": "Water, electricity and maintenance inputs",
+      "status": "Owner-supplied",
+      "value": "Not verified - left blank",
+      "settles": "Utility bills, interconnection letter, and a maintenance record.",
+      "sources": [
+        "cpuc_nem",
+        "irs_p527"
+      ],
+      "note": "Solar credits depend on a 20-year legacy period from an unknown interconnection date; no official property-specific water rate was used."
+    },
+    {
+      "id": "FL-I6",
+      "item": "Long-run stock return ledger note",
+      "status": "Needs review",
+      "value": "Not verified - left blank",
+      "settles": "Refresh the root source ledger and FL-18 wording.",
+      "sources": [
+        "tsp_cfund"
+      ],
+      "note": "The official C Fund page publishes 10-year 15.41% and lifetime 11.40% averages as of October 2026; the older ledger says the long-run average was unreadable."
+    },
+    {
+      "id": "FL-I7",
+      "item": "40% estate-tax rate table",
+      "status": "Unverified",
+      "value": "Not verified - left blank",
+      "settles": "Open Table A in the Form 706 instructions.",
+      "sources": [
+        "irs_i706",
+        "irs_estate"
+      ],
+      "note": "The 2026 credit corroborates the rate arithmetically, but the rate table was not opened in this session."
+    },
+    {
+      "id": "FL-I8",
+      "item": "Property tax fixed charges and duplicate amounts",
+      "status": "Unverified",
+      "value": "Not verified - left blank",
+      "settles": "Line items on the original bills.",
+      "sources": [
+        "cityb_rate",
+        "boe_lta26002",
+        "cnty_a_rates"
+      ],
+      "note": "One bill exceeds rate times assessed value; two pairs of consecutive years show identical tax amounts; one year rose about 18% and another fell about 6%."
+    },
+    {
+      "id": "FL-I9",
+      "item": "2026 tax bills and assessed values",
+      "status": "Unverified",
+      "value": "Not verified - left blank",
+      "settles": "The 2026-27 bills and assessor roll.",
+      "sources": [
+        "boe_lta26002",
+        "cityb_rate"
+      ],
+      "note": "No 2026 bill for Property A and no 2026 assessed value or bill for Property B were supplied."
+    },
+    {
+      "id": "FL-I10",
+      "item": "Title, trust terms, principal residence and estate assets",
+      "status": "Unverified",
+      "value": "Not verified - left blank",
+      "settles": "Deed, trust instrument, homeowners' exemption, asset list and gift-tax returns.",
+      "sources": [
+        "irs_rr2023_2",
+        "boe_lta26026",
+        "irs_estate",
+        "rtc63_2"
+      ],
+      "note": "These decide the basis reset, the exclusion, the estate room and the reassessment contingency."
+    },
+    {
+      "id": "FL-I11",
+      "item": "3 November 2026 election certification",
+      "status": "Pending",
+      "value": "Not verified - left blank",
+      "settles": "The certified statement of vote.",
+      "sources": [
+        "sos_results",
+        "sos_measures",
+        "sos_memo"
+      ],
+      "note": "Unofficial results are published; certification is due 11 December 2026. The inherited-property initiative failed to qualify."
+    },
+    {
+      "id": "FL-I12",
+      "item": "Local rent proposal and statewide cap",
+      "status": "Pending",
+      "value": "Not verified - left blank",
+      "settles": "Enacted ordinance text and the certified result.",
+      "sources": [
+        "cityb_rent",
+        "civ1947_12"
+      ],
+      "note": "A local proposal posted 9 November 2026 is not enacted; the statewide cap has a statutory sunset."
+    },
+    {
+      "id": "FL-I13",
+      "item": "Open conflicting pull request",
+      "status": "Needs review",
+      "value": "Not verified - left blank",
+      "settles": "Rebase by its owner or a documented decision to close it unmerged.",
+      "sources": [
+        "github_pr",
+        "github_pages"
+      ],
+      "note": "An open PR from another session predates the merged corrections; it is not merged into this edition."
+    },
+    {
+      "id": "FL-I14",
+      "item": "Future thresholds and 50-year projections",
+      "status": "Scenario",
+      "value": "Not verified - left blank",
+      "settles": "Official enactments and actual future data.",
+      "sources": [
+        "irs_2027",
+        "ssa_trustees",
+        "cbo_outlook",
+        "fred_casthpi"
+      ],
+      "note": "2040-2050 exclusions, values and returns are scenario arithmetic, not law or forecasts."
+    },
+    {
+      "id": "FL-I15",
+      "item": "Property-specific market rent and tax-rate area",
+      "status": "Unverified",
+      "value": "Not verified - left blank",
+      "settles": "Written rental analysis and the tax bill's rate area.",
+      "sources": [
+        "hud_fmr",
+        "cnty_a_rates"
+      ],
+      "note": "Area rent values were not retrieved, and only the county-wide rate range was verified, to protect location privacy."
+    }
+  ]
+}

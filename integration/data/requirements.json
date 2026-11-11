@@ -1,0 +1,475 @@
+{
+  "brief": "Owner's brief of 11 November 2026, paraphrased under the privacy boundary",
+  "reviewed_on": "11 November 2026",
+  "reviewer_session": "arena/f31530e0-tino3",
+  "legend": "Verified = read on the publisher domain. Owner-supplied = household record, not independently checked. Assumption = scenario input. Computed = arithmetic on published rows. Unverified = no official confirmation, so the value is blank. A link on an owner-supplied, assumed or computed row points to the official rule that row rests on; it does not confirm the value.",
+  "requirements": [
+    {
+      "id": "R-01",
+      "category": "Scope",
+      "text": "Collect, organize and analyze a full list of requirements.",
+      "pages": [
+        "index.html"
+      ],
+      "value": "24 mapped items",
+      "status": "Covered",
+      "basis": "Process",
+      "sources": [
+        "github_pages",
+        "github_pr"
+      ],
+      "note": "One row per numbered brief item, with the page that answers it, a status, and an official source."
+    },
+    {
+      "id": "R-02",
+      "category": "Executive summary",
+      "text": "Outline the important details in an executive summary.",
+      "pages": [
+        "../executive-summary.html",
+        "executive-summary.html"
+      ],
+      "value": "Rounded figures",
+      "status": "Covered",
+      "basis": "Computed / verified",
+      "sources": [
+        "irs_estate",
+        "irs_basis",
+        "boe_prop19"
+      ],
+      "note": "The root executive summary and this section's summary both use $10-rounded values."
+    },
+    {
+      "id": "R-03",
+      "category": "Privacy",
+      "text": "Anonymize personal information; placeholders only; internal-use facts must not appear on the site.",
+      "pages": [
+        "../review.html",
+        "flagged.html"
+      ],
+      "value": "Blank",
+      "status": "Covered; flagged",
+      "basis": "Unverified",
+      "sources": [
+        "github_pages",
+        "cdi_compare",
+        "cityb_rate"
+      ],
+      "note": "Property A / Property B placeholders, no name, street address, postal code, APN or utility account; local links still reveal jurisdictions to a reader who opens them."
+    },
+    {
+      "id": "R-04",
+      "category": "Ownership distinction",
+      "text": "Property A is inherited; Property B is already owned by the inheritor. Factor that into the analysis.",
+      "pages": [
+        "../property-b.html",
+        "../taxes.html",
+        "../analysis/ownership-distinction.html"
+      ],
+      "value": "Statement applied",
+      "status": "Covered; flagged",
+      "basis": "Owner-supplied",
+      "sources": [
+        "irs_estate",
+        "boe_lta26026",
+        "rtc63_2"
+      ],
+      "note": "Deed not seen; headroom and reassessment shown both under the statement and as a contingency."
+    },
+    {
+      "id": "R-05",
+      "category": "Black swans",
+      "text": "Separate section for black-swan economic conditions that mimic non-uniform growth and inflation over 50 years.",
+      "pages": [
+        "../black-swans.html",
+        "../stress.html",
+        "../analysis/black-swan.html"
+      ],
+      "value": "Two-part section",
+      "status": "Covered",
+      "basis": "Verified / computed",
+      "sources": [
+        "fed_2goal",
+        "ssa_trustees",
+        "cbo_outlook",
+        "bls_ted2022",
+        "fedhist_recession",
+        "fred_casthpi"
+      ],
+      "note": "Part 1 is official history and baseline anchors; part 2 replays verified episodes against the decision."
+    },
+    {
+      "id": "R-06",
+      "category": "Rounding",
+      "text": "Use costs and numbers rounded to the nearest $10 so they cannot be traced online; report them in the decision analysis.",
+      "pages": [
+        "../decision.html",
+        "../sources.html",
+        "flagged.html"
+      ],
+      "value": "$10 / generalized roll",
+      "status": "Covered; flagged",
+      "basis": "Computed",
+      "sources": [
+        "irs_estate",
+        "boe_lta26002",
+        "github_pages"
+      ],
+      "note": "Roll values and bills are generalized further to $10,000 / $100 for privacy; this exceeds the brief's $10 rule and is flagged for the owner."
+    },
+    {
+      "id": "R-07",
+      "category": "Timing and law",
+      "text": "Trust inheritance around 2040-2050, guided by current local, state and federal property and tax law.",
+      "pages": [
+        "../inheritance.html",
+        "../taxes.html"
+      ],
+      "value": "2040 / 2045 / 2050",
+      "status": "Covered",
+      "basis": "Verified / scenario",
+      "sources": [
+        "prob16061_7",
+        "rtc480",
+        "irs_basis",
+        "boe_prop19"
+      ],
+      "note": "Future years are scenarios, not forecasts; statutory deadlines are from current code."
+    },
+    {
+      "id": "R-08",
+      "category": "Options",
+      "text": "Live in, rent, or sell and reinvest after taxes; include property tax, insurance, water, electricity and step-by-step inheritance.",
+      "pages": [
+        "../decision.html",
+        "../projections.html",
+        "../inheritance.html"
+      ],
+      "value": "Four options",
+      "status": "Covered",
+      "basis": "Computed",
+      "sources": [
+        "irs_basis",
+        "boe_prop19",
+        "irs_p527",
+        "irs_tc701",
+        "cpuc_nem",
+        "cdi_compare"
+      ],
+      "note": "All options are cashed out and taxed at the end of the comparison window; unverified insurance premiums stay blank."
+    },
+    {
+      "id": "R-09",
+      "category": "Property A costs",
+      "text": "Water, solar electricity credit, primary-residence insurance research, maintenance and repair costs.",
+      "pages": [
+        "../property-a.html",
+        "../projections.html"
+      ],
+      "value": "Blank / owner-supplied",
+      "status": "Covered; flagged",
+      "basis": "Owner-supplied / unverified",
+      "sources": [
+        "cpuc_nem",
+        "cdi_compare",
+        "cdi_note",
+        "irs_p527"
+      ],
+      "note": "No official insurer quote exists; water and solar credit are owner-supplied, and the 20-year tariff depends on an unknown interconnection date."
+    },
+    {
+      "id": "R-10",
+      "category": "Property A facts",
+      "text": "Current market estimate and 2014-2026 property-tax and assessed-value history.",
+      "pages": [
+        "../property-a.html",
+        "../projections.html"
+      ],
+      "value": "Rounded / generalized",
+      "status": "Covered; flagged",
+      "basis": "Owner-supplied",
+      "sources": [
+        "irs_basis",
+        "boe_lta26002",
+        "cnty_a_rates"
+      ],
+      "note": "Current estimate is owner-supplied; duplicate tax amounts and the missing 2026 bill are flagged."
+    },
+    {
+      "id": "R-11",
+      "category": "Property B facts",
+      "text": "Current market estimate, 2016-2025 property-tax and assessed-value history, and the three-unit rental setup.",
+      "pages": [
+        "../property-b.html",
+        "../projections.html"
+      ],
+      "value": "Rounded / generalized",
+      "status": "Covered; flagged",
+      "basis": "Owner-supplied",
+      "sources": [
+        "boe_lta26002",
+        "cityb_rate",
+        "cityb_rent"
+      ],
+      "note": "Fixed charges, rate year and one assessment-year irregularity are flagged; no 2026 figures were supplied."
+    },
+    {
+      "id": "R-12",
+      "category": "Property B costs",
+      "text": "Two rented units, one available unit, rental income, water, electricity and landlord insurance research.",
+      "pages": [
+        "../property-b.html",
+        "../projections.html"
+      ],
+      "value": "Blank / owner-supplied",
+      "status": "Covered; flagged",
+      "basis": "Owner-supplied / unverified",
+      "sources": [
+        "cityb_rent",
+        "civ1947_12",
+        "cpuc_nem",
+        "cdi_compare",
+        "cdi_note"
+      ],
+      "note": "No official landlord premium; rent increases are capped for sitting tenants, and the local proposal is not enacted."
+    },
+    {
+      "id": "R-13",
+      "category": "Decision framing",
+      "text": "Keep Property B in view when guiding the decision for Property A.",
+      "pages": [
+        "../decision.html",
+        "../analysis/ownership-distinction.html"
+      ],
+      "value": "Same default",
+      "status": "Covered",
+      "basis": "Computed",
+      "sources": [
+        "irs_estate",
+        "boe_lta26026",
+        "uscode3124"
+      ],
+      "note": "The recommended plan keeps Property B; the ownership asymmetry changes estate room and basis treatment."
+    },
+    {
+      "id": "R-14",
+      "category": "Projections",
+      "text": "Project property tax, repair/maintenance, electricity, water and insurance year by year.",
+      "pages": [
+        "../projections.html",
+        "../analysis/projections.html"
+      ],
+      "value": "2026-2060 / 2026-2076",
+      "status": "Covered; flagged",
+      "basis": "Computed / assumption",
+      "sources": [
+        "boe_lta26002",
+        "cpuc_nem",
+        "cdi_compare",
+        "irs_p527",
+        "cityb_rate"
+      ],
+      "note": "Insurance is blank; electricity credit ends in a scenario when the legacy tariff period expires."
+    },
+    {
+      "id": "R-15",
+      "category": "Decision quality",
+      "text": "Clean, organized, streamlined decision process that removes uncertainty; state the best plan and why.",
+      "pages": [
+        "../executive-summary.html",
+        "../decision.html"
+      ],
+      "value": "Sell and reinvest",
+      "status": "Covered",
+      "basis": "Computed",
+      "sources": [
+        "irs_basis",
+        "boe_prop19",
+        "irs_estate",
+        "tsp_cfund",
+        "treasury_cmt"
+      ],
+      "note": "Break-evens, sensitivities and the assumption register are published; no manual input is required."
+    },
+    {
+      "id": "R-16",
+      "category": "Maximize profit",
+      "text": "Maximize profit and lower costs using projections based on inflation, economic and tax factors.",
+      "pages": [
+        "../decision.html",
+        "../stress.html",
+        "../analysis/decision.html"
+      ],
+      "value": "After-tax ending wealth",
+      "status": "Covered",
+      "basis": "Computed",
+      "sources": [
+        "irs_estate",
+        "boe_prop19",
+        "ssa_trustees",
+        "cbo_outlook",
+        "tsp_cfund",
+        "treasury_cmt"
+      ],
+      "note": "All options are compared after tax and selling costs in nominal and inflation-adjusted terms."
+    },
+    {
+      "id": "R-17",
+      "category": "Law watch",
+      "text": "Research potential changes to laws currently being discussed and their effect on the decision.",
+      "pages": [
+        "../taxes.html",
+        "findings.html"
+      ],
+      "value": "Current law only",
+      "status": "Covered; flagged",
+      "basis": "Verified",
+      "sources": [
+        "lao_250017",
+        "sos_memo",
+        "sos_measures",
+        "sos_results",
+        "cityb_rent",
+        "irs_2027",
+        "irs_whatsnew"
+      ],
+      "note": "The inherited-property initiative failed; 2026 results are unofficial until certification; future thresholds are scenarios."
+    },
+    {
+      "id": "R-18",
+      "category": "Estate threshold",
+      "text": "Research inheritance tax thresholds at local, state and federal level, headroom, and future projections.",
+      "pages": [
+        "../taxes.html",
+        "../decision.html"
+      ],
+      "value": "$15,000,000 / $15,480,000",
+      "status": "Covered; flagged",
+      "basis": "Verified / scenario",
+      "sources": [
+        "irs_estate",
+        "irs_2027",
+        "irs_whatsnew",
+        "irs_i706",
+        "sco_estate",
+        "ftb_gifts",
+        "rtc13301",
+        "uscode3124"
+      ],
+      "note": "No state or local death-transfer tax; cash balance, gifts, marital status and portability are unverified and left blank."
+    },
+    {
+      "id": "R-19",
+      "category": "Research standard",
+      "text": "No manual input; work line by line from official verified sources; no hallucinations.",
+      "pages": [
+        "../sources.html",
+        "findings.html"
+      ],
+      "value": "Independent ledger",
+      "status": "Covered",
+      "basis": "Verified",
+      "sources": [
+        "irs_estate",
+        "boe_prop19",
+        "github_pr",
+        "github_pages"
+      ],
+      "note": "This independent ledger records the exact words relied on and how each document was checked."
+    },
+    {
+      "id": "R-20",
+      "category": "Repo review",
+      "text": "Review the repository line by line, provide links for manual review and flag irregularities.",
+      "pages": [
+        "../audit.html",
+        "../review.html",
+        "flagged.html"
+      ],
+      "value": "Flagged",
+      "status": "Covered; flagged",
+      "basis": "Verified / process",
+      "sources": [
+        "github_pages",
+        "github_pr",
+        "irs_estate",
+        "boe_lta26002",
+        "cityb_rate",
+        "tsp_cfund"
+      ],
+      "note": "Root audit page records prior corrections; this section adds the independent traceability and source log."
+    },
+    {
+      "id": "R-21",
+      "category": "Site creation",
+      "text": "Create a GitHub Pages live site with a clean landing page and subpages organized by category.",
+      "pages": [
+        "../index.html",
+        "index.html"
+      ],
+      "value": "Static dashboard",
+      "status": "Covered",
+      "basis": "Process",
+      "sources": [
+        "github_pages",
+        "github_pr"
+      ],
+      "note": "No forms, scripts, analytics or remote assets; the published artifact uses an allowlist."
+    },
+    {
+      "id": "R-22",
+      "category": "Tables and verification",
+      "text": "Contain all entries and findings in simple tables; every table row links to an official site; unverified values blank and flagged.",
+      "pages": [
+        "../sources.html",
+        "../review.html",
+        "findings.html",
+        "flagged.html"
+      ],
+      "value": "Enforced in code",
+      "status": "Covered",
+      "basis": "Verified",
+      "sources": [
+        "github_pages",
+        "cdi_compare",
+        "cdi_note",
+        "irs_estate",
+        "hud_fmr"
+      ],
+      "note": "The verifier fails on any table row without an official link, on PII patterns, and on any non-$10 dollar amount."
+    },
+    {
+      "id": "R-23",
+      "category": "Parallel sessions",
+      "text": "Use COORDINATION.md, claim non-overlapping scopes, commit/push claims, rebase before pushes, log conflicts.",
+      "pages": [
+        "../index.html",
+        "flagged.html"
+      ],
+      "value": "Claimed and logged",
+      "status": "Covered; flagged",
+      "basis": "Process",
+      "sources": [
+        "github_pr",
+        "github_pages"
+      ],
+      "note": "Claims on separate branches are invisible from main until merged; the board register documents the overlap."
+    },
+    {
+      "id": "R-24",
+      "category": "Publication",
+      "text": "Create a PR from the integration branch, merge without waiting, confirm Pages deploy, publish a Flagged for Review page.",
+      "pages": [
+        "../review.html",
+        "flagged.html"
+      ],
+      "value": "Deploy confirmed",
+      "status": "Covered",
+      "basis": "Process",
+      "sources": [
+        "github_pr",
+        "github_pages"
+      ],
+      "note": "The PR link and merge result are recorded in COORDINATION.md; flagged items do not block the merge."
+    }
+  ]
+}

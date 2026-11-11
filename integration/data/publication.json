@@ -1,0 +1,8 @@
+{
+  "edition": "Requirements traceability and independent verification, 11 November 2026",
+  "session": "arena/f31530e0-tino3",
+  "privacy": "Placeholders only; no name, street address, postal code, parcel number, city or neighborhood tied to a parcel, utility account number or unrounded roll figure. Every published dollar amount is a multiple of $10.",
+  "verification": "Static pages generated from the JSON ledgers by integration/tools/build.py; integration/tools/verify.py checks reproducibility, structure, internal links, official-host citations, privacy patterns and $10 rounding.",
+  "site": "Published through the repository allowlist in scripts/package_site.py and linked from the root dashboard.",
+  "coordination": "The PR link, merge result and deploy confirmation are recorded in COORDINATION.md."
+}
