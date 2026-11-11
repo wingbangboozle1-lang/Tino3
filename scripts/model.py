@@ -118,8 +118,9 @@ ASSUMPTIONS = [
 # ---------------------------------------------------------------------------------------------
 # Building blocks
 # ---------------------------------------------------------------------------------------------
-def infl(year, base=2026):
-    return (1 + A["inflation"]) ** (year - base)
+def infl(year, base=2026, rate=None):
+    r = A["inflation"] if rate is None else rate
+    return (1 + r) ** (year - base)
 
 
 def a_value(year, g):
@@ -145,12 +146,12 @@ def prop19_amount(year, g):
     return V["prop19_amount"] * (1 + g) ** n
 
 
-def tax_a(assessed, year):
-    return assessed * A["rate_a"] + FIXED_A * infl(year)
+def tax_a(assessed, year, rate=None):
+    return assessed * A["rate_a"] + FIXED_A * infl(year, rate=rate)
 
 
-def tax_b(assessed, year):
-    return assessed * V["rate_b_2026"] + FIXED_B * infl(year, 2025)
+def tax_b(assessed, year, rate=None):
+    return assessed * V["rate_b_2026"] + FIXED_B * infl(year, 2025, rate=rate)
 
 
 def stock_after_tax(p0, n, rs=None):
@@ -186,16 +187,20 @@ def _terminal_growth(g, g_path, n):
     return (1 + g) ** n
 
 
-def run(option, year, g, law="current", rs=None, rent_mo=None, ins_mult=1.0, n=None, g_path=None, rs_path=None):
+def run(option, year, g, law="current", rs=None, rent_mo=None, ins_mult=1.0, n=None,
+        infl_rate=None, g_path=None, rs_path=None):
     """Wealth from Property A and the third unit of Property B, n years after inheriting.
 
     g is the house price growth used to anchor market value at the inheritance year. g_path, when given,
     is a list of n annual growth rates applied after the inheritance instead of g (used for crash
     analogues). rs_path, when given, is a list of n annual stock total returns instead of rs.
+    infl_rate, when given, overrides the inflation rate for costs, fixed charges and the rent cap
+    (used by the black-swan inflation stress case).
     """
     n = n or A["hold_years"]
     rs = rs_path if rs_path is not None else (A["stock_return"] if rs is None else rs)
     rent_mo = A["rent_a_mo"] if rent_mo is None else rent_mo
+    rent_ctrl = V["rent_cap_share_of_cpi"] * (A["inflation"] if infl_rate is None else infl_rate)
     rz = reassess(year, g, law)
     fmv = rz["fmv"]
     start = fmv * (1 - SELL_COST)
@@ -211,15 +216,15 @@ def run(option, year, g, law="current", rs=None, rent_mo=None, ins_mult=1.0, n=N
     tax_first = rent_first = 0.0
     for t in range(n):
         y = year + t
-        ins = IN["a_ins_guess"] * ins_mult * infl(y)
-        maint = A["maint_a"] * infl(y)
+        ins = IN["a_ins_guess"] * ins_mult * infl(y, rate=infl_rate)
+        maint = A["maint_a"] * infl(y, rate=infl_rate)
         if option == "live":
-            ptax = tax_a(rz["live"] * (1 + V["prop13_cap"]) ** t, y)
+            ptax = tax_a(rz["live"] * (1 + V["prop13_cap"]) ** t, y, rate=infl_rate)
             unit3 = (A["unit3_rent_mo"] * 12 * (1 + A["rent_growth"]) ** (year - 2026)
-                     * (1 + RENT_CTRL) ** t * (1 - A["vacancy"]) * (1 - A["t_ord"]))
-            cf = unit3 - (ptax + ins + maint + IN["a_water"] * infl(y) + IN["a_electric"])
+                     * (1 + rent_ctrl) ** t * (1 - A["vacancy"]) * (1 - A["t_ord"]))
+            cf = unit3 - (ptax + ins + maint + IN["a_water"] * infl(y, rate=infl_rate) + IN["a_electric"])
         else:
-            ptax = tax_a(rz["rent"] * (1 + V["prop13_cap"]) ** t, y)
+            ptax = tax_a(rz["rent"] * (1 + V["prop13_cap"]) ** t, y, rate=infl_rate)
             rent = rent_mo * 12 * (1 + A["rent_growth"]) ** (y - 2026) * (1 - A["vacancy"])
             noi = rent - ptax - ins - maint
             cf = noi - A["t_ord"] * (noi - dep)
@@ -425,8 +430,13 @@ def build():
     for label, kw in (("Rent for A is $5,000 a month, not $6,500", {"rent_mo": 5_000}),
                       ("Rent for A is $8,000 a month, not $6,500", {"rent_mo": 8_000}),
                       ("Insurance costs three times the owner's guess", {"ins_mult": 3.0}),
-                      ("The pre-2021 exclusion is restored (proposal 25-0017)", {"law": "restored"})):
-        w = {k: run(k, y0, g, **kw)["wealth"] for k, _ in OPTIONS}
+                      ("The pre-2021 exclusion is restored (proposal 25-0017)", {"law": "restored"}),
+                      # Black-swan stress cases (session arena/d2fd135b-tino3): each changes one input
+                      # and leaves every other assumption exactly as the base case.
+                      ("Stocks return 4.0% a year instead of 7.0%", {"rs": 0.04}),
+                      ("Inflation runs 4.0% a year instead of 2.5%", {"infl_rate": 0.04}),
+                      ("House prices do not rise for ten years", {"g": 0.0})):
+        w = {k: run(k, y0, **{"g": g, **kw})["wealth"] for k, _ in OPTIONS}
         best = max(w, key=w.get)
         d["sens"].append({"case": label, "sell_stock": r10(w["sell_stock"]), "sell_treasury": r10(w["sell_treasury"]),
                           "rent": r10(w["rent"]), "live": r10(w["live"]), "rent_change": r10(w["rent"] - base["rent"]),
