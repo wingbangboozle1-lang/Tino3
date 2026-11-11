@@ -986,13 +986,13 @@ from that branch to `main`.
 `EXECUTIVE_SUMMARY.md`), `arena/ca7ad6a2-tino3` (CA-1..CA-3: `scripts/*`, `analysis/tools/*`, source ledgers,
 root/analysis pages, `README.md`, `EXECUTIVE_SUMMARY.md`), `arena/f2039411-tino3` (F2-1..F2-3: `analysis/**`),
 `arena/bd680fbc-tino3` (BD-1..BD-4: board only, open PR #41). All of those file scopes are left untouched.
-`plan/**` is unclaimed by every active sibling, so this session claims it alone.
+`plan/**` appeared unclaimed at the time. The 12:55 UTC register later showed that `arena/82853ea6-tino3` had claimed it at 12:57:25 UTC, two minutes before this session's 12:59:51 UTC claim; see the conflict log below.
 
 | Task | Status | Owner | File scope |
 |---|---|---|---|
-| P-1 Independent, line-by-line verification of the `plan/**` cross-check edition (10 pages, 360 cited rows, 45 ledger sources) against the publishers' own pages; links for manual review; irregularities logged | claimed | `arena/a2416305-tino3` | `plan/**` only; this board section |
-| P-2 Close owner-brief gaps inside that edition only: verified official anchors for insurance/utility/maintenance costs, estate-tax threshold projections and law watch, black-swan economic conditions, step-by-step trust inheritance; every table row source-linked, unverifiable values blank and flagged, all dollar amounts $10-rounded, placeholder-only privacy | pending | `arena/a2416305-tino3` | `plan/tools/*`, `plan/*.html`, `plan/data/*`, `plan/assets/style.css` |
-| P-3 Final integration on this pinned branch: run all four repository verifiers and the packager, check every local link and the live deploy, open a PR to `main`, merge it without approval, confirm GitHub Pages deploy, record PR link/merge result/sources/irregularities here | pending | `arena/a2416305-tino3` | this board section only; no shared outputs |
+| P-1 Independent, line-by-line verification of the `plan/**` cross-check edition (10 pages, 454 cited rows at the time of the earlier claim, 47 ledger sources) against the publishers' own pages; links for manual review; irregularities logged | **done** | `arena/a2416305-tino3` | `plan/**` only; this board section |
+| P-2 Close owner-brief gaps inside that edition only: verified official anchors for insurance/utility/maintenance costs, estate-tax threshold projections and law watch, black-swan economic conditions, step-by-step trust inheritance; every table row source-linked, unverifiable values blank and flagged, all dollar amounts $10-rounded, placeholder-only privacy | **done** | `arena/a2416305-tino3` | `plan/tools/*`, `plan/*.html`, `plan/data/*`, `plan/assets/style.css` |
+| P-3 Final integration on this pinned branch: run all four repository verifiers and the packager, check every local link and the live deploy, open a PR to `main`, merge it without approval, confirm GitHub Pages deploy, record PR link/merge result/sources/irregularities here | **in progress** | `arena/a2416305-tino3` | this board section only; no shared outputs |
 
 **Not touched:** `scripts/*`, `assets/*`, `analysis/**`, `decision-suite/**`, `.github/workflows/*`, root `*.html`,
 `README.md`, `EXECUTIVE_SUMMARY.md`, withdrawal notices, other sessions' board sections, open PR #41. If a change to a
@@ -1002,3 +1002,69 @@ card, so no shared navigation edit is required for this edition to be reachable.
 
 **Privacy:** no names, street addresses, ZIP codes, parcel numbers, account numbers, exact assessment-roll entries or
 household identifiers in any commit, page, data file or PR text. Property A / Property B and role placeholders only.
+
+### Results · `arena/a2416305-tino3` · 11 November 2026 (after rebase onto PR #47 and PR #50)
+
+**Parallel-session conflict (logged per the board rule).** While this session was working from the older `plan/**`
+model, `arena/82853ea6-tino3` claimed the same scope at 12:57:25 UTC and merged PR #47 (`0ff54a3`, later carried
+into `5e1b0db` by PRs #48-#50). Its board request CR-P8-3 asks the later session to rebase and add findings on top
+rather than regenerate from the older model. That request was followed:
+
+1. The older, uncommitted draft was stashed locally and **not** published; it would have overwritten the earlier
+   session's uneven-economy replay, reconciliation table and 47-source ledger.
+2. `git pull --rebase origin main` was run. One content conflict in `COORDINATION.md` (append against the other
+   sessions' sections) was resolved by removing only the conflict markers and keeping **every** side; nothing was
+   discarded. `git rebase --continue` completed; branch head is now based on `5e1b0db`.
+3. All of PR #47's `plan/**` content is preserved: the Property B ownership statement, the 41-window official
+   uneven-economy replay, the 15-row cross-edition reconciliation, the refreshed Treasury date and the 47-entry
+   source ledger. This session's work is additive only.
+
+**P-1 — line-by-line verification (done).** Official pages opened on the publisher's own domain on 11 November 2026:
+IRS estate tax, IR-2026-133 (2027 exclusion), Revenue Procedure 2026-35 section 3.44, IRS basis FAQ, FTB gifts and
+inheritances, BOE Proposition 19 / LTA 2025/009 / Publication 29, RTC 13301 / 480 / 11911, Probate Code 16061.7,
+Congress.gov S.587, SOS memorandum 26138, SOS 2026 statewide ballot results, county and city tax pages, FOMC
+longer-run goals, Treasury daily yields (10 November 2026), FHFA/FRED CASTHPI, FRED GS10 and CPIAUCNS, CDI
+residential insurance study and 2017 archived premium table, CDI residential guide, CPUC NEM/NBT (all three
+chunks), BLS 100-year CPI article and June 2022 TED, Federal Reserve History Great Inflation, CBO 2026 outlook,
+2026 SSA Trustees assumptions and TSP rates of return. Ledger: **61 sources, 49 read in full, 9 excerpts (flagged),
+3 look-up/repository links**. Every table row carries an official link; the verification report is published on
+`plan/flagged.html`.
+
+**P-2 — brief coverage added inside `plan/**` only (done).** Additive changes, no new page and no shared file:
+
+| Addition | Where |
+|---|---|
+| Requirement traceability table (14 brief requirements -> page + official link) | `plan/index.html` |
+| Official insurance/utility/maintenance research with blank, flagged property-specific premiums; 2017 statewide benchmark; ZIP-level data deliberately not reproduced | `plan/properties.html#insurance` |
+| 51-year horizon (2026-2076) for value, assessed value, tax and carrying costs; estate headroom projected to 2076 with the 2% assumption flagged | `plan/projections.html`, `plan/taxes.html`, `plan/data/*` |
+| Local / state / federal inheritance-threshold table; "how much can be inherited before any tax" | `plan/taxes.html` |
+| Official economic-history episode register (BLS, Federal Reserve History, CBO, SSA, TSP, CDI) plus a 50-year year-by-year official series table, supplementing the existing 41-window replay | `plan/decision.html#episodes` |
+| Law watch: 2027 exclusion in Rev. Proc. 2026-35 §3.44, S.587 official status, 2026 statewide ballot results (unofficial until certification), two distinct CPUC legacy periods (NEM 2.0 20 years / NBT nine years), CBO and SSA outlook | `plan/laws.html` |
+| Trust steps: Property B has no change-in-ownership statement and no basis step-up; official insurance comparison before renewal | `plan/steps.html` |
+| Line-by-line verification report, flag register F-24..F-30, conflict/privacy irregularities R-09..R-10 | `plan/flagged.html` |
+| 14 new official ledger entries; `cpuc_nem` note corrected; `REOPENED` extended | `plan/tools/sources.py`, `plan/data/sources.json`, `plan/sources.html` |
+
+**Verification performed.** `python3 plan/tools/verify.py` **PASS** — 10 pages rebuilt byte-identically, **698 table
+rows each with an official source link**, 61 ledger sources (49 read in full), local links, privacy scan and $10
+rounding clean. `python3 scripts/verify.py` **PASS** — 13 pages, 496 cited rows, 68 sources. `python3
+analysis/tools/verify.py` **PASS** — 12 pages, 380 cited rows, 52 sources. `python3 scripts/package_site.py`
+**PASS** — 13 pages, 52 assets, 49 withdrawal notices. `python3 scripts/privacy_boundary.py` **PASS**. A separate
+crawl of all 66 packaged HTML pages found **0 broken local links and 0 missing fragments**. All dollar outputs are
+$10-rounded except exact official amounts; no names, addresses, ZIPs or parcel numbers appear.
+
+**Irregularities and unverified items (published on `plan/flagged.html`, non-blocking).** Official premiums for
+either property, Property B's original basis, maintenance, Property A market rent, selling costs and the heir's tax
+bracket remain blank or flagged. The 2076 exclusion is a 2%-a-year scenario, not a statute; 2026 election results
+are unofficial until 11 December 2026; TSP returns are history, not a forecast; ZIP-level insurance statistics are
+summarised but never reproduced. R-09 records the duplicate `plan/**` claim; R-10 records that earlier commits,
+pull-request diffs and external copies are not certified erased. No shared root navigation, `scripts/*`,
+`assets/*`, `analysis/**`, workflow or other session's board section was edited.
+
+**Not touched:** `scripts/*`, `assets/*`, `analysis/**`, `decision-suite/**`, `.github/workflows/*`, root `*.html`,
+`README.md`, `EXECUTIVE_SUMMARY.md`, withdrawal notices, other sessions' board sections. `plan/index.html` is
+already linked from the live root dashboard as the "Independent cross-check" card; no shared navigation change is
+needed.
+
+**P-3 — final integration (in progress).** PR to `main`, merge without approval, Pages deploy confirmation and the
+publication result are recorded below when complete.
+
