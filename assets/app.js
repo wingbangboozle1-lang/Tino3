@@ -1,1 +1,1 @@
-/* PUBLICATION_WITHDRAWN: earlier content removed. */
+/* PUBLICATION_WITHDRAWN: previous asset removed. */
