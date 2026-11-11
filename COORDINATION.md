@@ -410,7 +410,6 @@ The ranking of the other options changed (renting now finishes ahead of moving i
 - **Closing wording pass (this commit):** six sentences that stated a cause or a likelihood with no source behind them were reduced to what is known (insurance "likely low", a "copying error", "avoids probate", and three similar). No figure changed. This is the last change from this session; its merge is recorded in the pull request itself rather than by another commit here.
 - **For the next session:** PRs #23 and #25 are open and each would replace the root edition. See CR-C2-2 before merging either.
 
-
 ---
 
 ## Session `arena/bde5056d-tino3` (branch `arena/bde5056d-tino3`) — black-swan stress tests + executive summary refresh · 2026-11-11
@@ -518,3 +517,32 @@ Scope rules this session holds itself to: no new black-swan page or module (four
 3. Round-level observation, already recorded in the register: four sessions claimed a black-swan section; `bde5056d` merged first (PR #32) and the merged `stress.html` was left untouched by this session.
 
 **For the round's final integration (I-3, `2f0b4adb`):** this session's claim is complete and merged; the Property B statement item listed as unclaimed in the register is closed by PR #35; no file outside `scripts/build.py` and its generated outputs was edited, so nothing here collides with the open claims.
+
+---
+
+## Session `arena/c02d5ccf-tino3` — Ownership-Distinction & 50-Year Black-Swan Decision Analysis Edition (claimed 2026-11-11)
+
+*Branch note:* Arena binds this session to fixed branch `arena/c02d5ccf-tino3`; the `session-<id>/<task>` branch naming cannot be used. All commits, pushes, and the pull request originate from `arena/c02d5ccf-tino3`.
+
+**Pre-claim multi-branch inspection (2026-11-11):** Read `COORDINATION.md` on `main` (`6086d16`) and inspected all remote branches and open PRs before claiming. Open PRs #23 and #25 from 2026-11-10 remain untouched per `CR-C2-2`. Six concurrent 2026-11-11 branches (`arena/7f9e7fe8-tino3`, `arena/0b455c89-tino3`, `arena/e4c5b872-tino3`, `arena/bde5056d-tino3`, `arena/4eefd177-tino3`, `arena/b67d7a96-tino3`) have claimed overlapping edits to `scripts/*`, `assets/*`, `stress.html`, and root `*.html`. To prevent collisions and strictly honor non-overlapping scopes, this session claims **`analysis/**`** (unclaimed on `main` and on every remote branch) for all model, source-verification, and dashboard construction tasks (`C02-A`..`C02-E`), deferring additive shared-file integration (`C02-F`) until `origin/main` is re-inspected after task completion.
+
+| Task ID | Task | Status | Owner | File scope (non-overlapping) |
+|---|---|---|---|---|
+| C02-A | Line-by-line repository review & primary official-source verification ledger (federal, state, local, macroeconomic & insurance authorities) | in progress | `arena/c02d5ccf-tino3` | `analysis/tools/sources.py`, `analysis/data/sources.json`, `analysis/data/repo_audit.json` |
+| C02-B | Ownership-distinction legal & tax model (`[PROPERTY_A]` inherited via trust vs. `[PROPERTY_B]` already owned by `[BENEFICIARY]`): `IRC § 2031` estate exclusion headroom, `CA R&TC § 60` zero reassessment on `[PROPERTY_B]`, `IRC § 1014` step-up asymmetry, `CA R&TC § 63.2` principal-residence & local rent-control opportunity cost | in progress | `arena/c02d5ccf-tino3` | `analysis/tools/model.py`, `analysis/data/ownership_distinction.csv` |
+| C02-C | 50-year baseline (2026–2076) & Black-Swan / non-uniform economic regime engine (historical US/CA multi-cycle replay, 1970s stagflation + Prop 13 cap vs. 60%-CPI rent cap, 2008 housing/equity crash + Prop 8 temporary reduction, sequence-of-returns shock at inheritance, tech-corridor bust, insurance/seismic tail shock, fiscal/estate-law shock) | in progress | `arena/c02d5ccf-tino3` | `analysis/tools/model.py`, `analysis/data/projections_50yr.csv`, `analysis/data/black_swan_regimes.csv`, `analysis/data/decision_matrix.csv`, `analysis/data/model.json` |
+| C02-D | Anonymized `$10`-rounded static dashboard under `analysis/` (Overview, Executive Summary, Ownership Distinction, Properties & Running Costs, Year-by-Year 50-Yr Projections, Black-Swan Economic Regimes, Decision Analysis, Taxes & Estate Thresholds, Step-by-Step Trust Inheritance Process, Repo Audit, Flagged for Review, Official Source Ledger) + fail-closed verifier | in progress | `arena/c02d5ccf-tino3` | `analysis/*.html`, `analysis/assets/style.css`, `analysis/tools/build.py`, `analysis/tools/verify.py` |
+| C02-E | Final integration, allowlist registration, cross-branch rebase check, full verification suite, PR to `main`, merge, and live GitHub Pages confirmation | pending | `arena/c02d5ccf-tino3` | `COORDINATION.md` (this section); additive integration in `scripts/package_site.py`, `.github/workflows/*.yml`, and root navigation only after re-checking `origin/main` |
+
+**Privacy boundary (strictly enforced by `analysis/tools/verify.py` and `scripts/verify.py`):** Zero personal names, street addresses, APNs, ZIP codes, city/county/neighborhood names, utility account numbers, or unrounded parcel-identifying roll figures anywhere in `COORDINATION.md`, code, data, or HTML. Placeholders `[PROPERTY_A]`, `[PROPERTY_B]`, `[GRANTOR]`, `[BENEFICIARY]`, `[SUCCESSOR_TRUSTEE]`, `County A`, and `City B` only; all dollar amounts `$10`-rounded (with public-roll history generalized further so no parcel can be reverse-matched) and all unverified official values left blank and published on `analysis/flagged.html`.
+
+### Cross-session requests logged (not edited while sibling claims are active)
+
+| # | Target scope | Logged note |
+|---|---|---|
+| CR-C02-1 | Root `scripts/model.py` / `scripts/build.py` owners | The updated brief clarifies that `[PROPERTY_B]` is **already owned by `[BENEFICIARY]`** (only `[PROPERTY_A]` + trust financial assets are being inherited). That resolves `index.html` item #1 ("Who holds title to Property B today"), excludes `[PROPERTY_B]` from `[GRANTOR]`'s `IRC § 2031` gross estate (increasing federal estate-tax headroom by `[PROPERTY_B]`'s value), prevents Prop 19 reassessment on `[PROPERTY_B]` at `[GRANTOR]`'s death, and leaves `[PROPERTY_B]` without an `IRC § 1014` basis step-up. |
+| CR-C02-2 | Root `scripts/*` / `arena/b67d7a96-tino3` | Do not replace the quantitative `$10`-rounded edition with a blank/withdrawn-amounts edition; the owner's updated brief explicitly asks for `$10`-rounded numbers, 50-year baseline projections, and a dedicated Black-Swan economic conditions section under strict placeholder anonymization. |
+
+### Rebase & Coordination Log (`arena/c02d5ccf-tino3`)
+- Rebased onto `origin/main` (`d3d1aea`, after PRs #31–#33 and #35–#36). Resolved the end-of-file append conflict in `COORDINATION.md` by preserving 100% of `2f0b4adb`, `bde5056d`, and `e07bc3a2` sections intact and appending this session's section below them; zero conflict in `analysis/**`.
+
