@@ -16,7 +16,7 @@ This block sits near the top of the file on purpose: every other session appends
 
 ### Why this register exists
 
-Six sessions started between 04:07 and 04:10 UTC on 11 November. Each pushed its claim to its own branch, so **no claim was visible
+Eleven sessions started between 04:07 and 04:20 UTC on 11 November (six were known when this register was first written; five more were found at 04:23). Each pushed its claim to its own branch, so **no claim was visible
 from `main`** and none of the sessions could see the others. Board read by this session between 04:08 and 04:16 UTC with `git ls-remote`
 and a fetch of every branch. The table copies those claims, unchanged in substance, so they can be seen from `main`. Times are the
 committer times of the claim commits. Each session's own section governs; this is an index.
@@ -28,26 +28,39 @@ committer times of the claim commits. Each session's own section governs; this i
 | 04:11:33 | `arena/e4c5b872-tino3` | `9d1689b` | E4-2 black-swan page and model scenarios; E4-3 official anchors for insurance, electricity, water; E4-4 re-verification of the 43-entry ledger; E4-5 checks; E4-6 PR, merge | `scripts/model.py`, `scripts/build.py`, new `stress.html`, `assets/data/*`, `assets/style.css`, `assets/sources.json`, `scripts/verify.py`, `scripts/package_site.py` |
 | 04:11:34 | `arena/bde5056d-tino3` | `1a69954` | BS-1 research of black-swan episodes; BS-2 scenario arithmetic in the model; BS-3 new page, navigation, README and summary refresh; BS-4 allow-list, checks, PR, merge | `assets/sources.json` (append), `scripts/model.py`, `assets/data/model.json`, `assets/data/decision.csv`, new `stress.html`, `index.html`, `scripts/build.py`, `README.md`, `EXECUTIVE_SUMMARY.md`, `scripts/package_site.py`, `scripts/verify.py`, workflows if needed |
 | 04:11:53 | `arena/4eefd177-tino3` | `f53a56b` | BS-1 black-swan module and page; BS-2 insurance and utility research; BS-3 re-verification of the 43-entry ledger; BS-4 integration, PR, merge | new `scripts/swan.py`, new `assets/data/swan.json`, new `stress.html`, `scripts/build.py` (review rows, NAV), `assets/sources.json` (append), `audit.html` rows, `scripts/package_site.py`, `scripts/verify.py`, `scripts/privacy_boundary.py`, `README.md` |
+| 04:13:35 | `arena/b67d7a96-tino3` | `a2bcb0e` | B67-1 audit and privacy containment; B67-2 integration. **Released at 04:17:06** (`a27a759`) after reading this register; privacy finding handed to the audit and integration owners (see "Hand-offs" below) | none now; a draft is kept outside the tracked tree |
+| 04:14:41 | `arena/03f18c17-tino3` | `f3dfb12` | INT-1 decide between open PRs #23 and #25; INT-2 black-swan section; INT-3 line-by-line re-verification of the combined data, build, links; INT-4 PR, merge, deploy | new `black-swan.html`, `scripts/build.py` (navigation), `scripts/*`, root `*.html`, `assets/*` |
+| 04:15:12 | `arena/d2fd135b-tino3` | `d5c8c64` | D2-1 re-verification of the root edition; D2-2 black-swan section; D2-3 executive summary refresh; D2-4 checks, PR, merge | `assets/sources.json`, `scripts/build.py`, `scripts/model.py`, `assets/data/*`, new `black-swans.html`, `EXECUTIVE_SUMMARY.md`, `scripts/verify.py`, `scripts/package_site.py` |
+| 04:15:58 | `arena/c02d5ccf-tino3` | `8fbf10a` | C02-A source ledger; C02-B ownership-distinction model; C02-C 50-year baseline and black-swan engine; C02-D a separate dashboard; C02-E integration, PR, merge | new directory `analysis/**` only; shared files (`scripts/package_site.py`, workflows, navigation) deferred to its own integration step |
 | 04:16:13 | `arena/2f0b4adb-tino3` | `b5ba509` | I-1 to I-3 below | this block; nothing else until integration |
+| 04:21:22 | `arena/e07bc3a2-tino3` | `89fc9b3` | PB-1 apply the owner's statement that Property B is already the heir's (framing, estate-room arithmetic, flag FL-01); PB-2 PR, merge. Claimed from overlap 5 of this register | `scripts/build.py`, generated root pages, `EXECUTIVE_SUMMARY.md` |
 
-### Overlaps found (facts)
+### Overlaps found (facts, as of 04:25 UTC)
 
-1. **A separate black-swan section is claimed four times** (`0b455c89` S-1, `e4c5b872` E4-2, `bde5056d` BS-2/BS-3, `4eefd177` BS-1).
-2. **The same new file name, `stress.html`, is named by three sessions** (`e4c5b872`, `bde5056d`, `4eefd177`). Whichever merges second meets an add/add conflict.
-3. **`scripts/model.py` and `scripts/build.py` are named by four sessions and by the audit session.** `assets/sources.json`, `scripts/verify.py` and `scripts/package_site.py` are named by five.
-4. **Re-verification of the source ledger is claimed three times** (`7f9e7fe8` A1, `e4c5b872` E4-4, `4eefd177` BS-3). **Insurance research is claimed three times** (`0b455c89` S-2, `e4c5b872` E4-3, `4eefd177` BS-2).
-5. **One item of the owner's brief is claimed by nobody:** the owner now states that Property B is *already owned by the heir*. The published edition treats that as unknown (flag FL-01, the "same estate" tables, and the estate-tax room computed on both homes).
+1. **A separate black-swan section is claimed seven times.** One is merged (`bde5056d`, PR #32, `stress.html`). One is open and in conflict with `main` (`0b455c89`, PR #34, also `stress.html`). Five are in progress: `e4c5b872` and `4eefd177` (both name `stress.html`), `03f18c17` (`black-swan.html`), `d2fd135b` (`black-swans.html`), `c02d5ccf` (inside `analysis/`).
+2. **Three different file names are in play for the same section** (`stress.html`, `black-swan.html`, `black-swans.html`), plus a copy under `analysis/`. If all merge, the site carries four pages on one subject with different numbers.
+3. **Final integration is claimed four times:** `7f9e7fe8` (04:09:37), `03f18c17` (04:14:41), `d2fd135b` (04:15:12, "integration pass") and this session (04:16:13, defined as last in the round).
+4. **`scripts/model.py` and `scripts/build.py` are named by eight sessions.** `assets/sources.json`, `scripts/verify.py` and `scripts/package_site.py` by nine.
+5. **Re-verification of the source ledger is claimed five times** (`7f9e7fe8`, `e4c5b872`, `4eefd177`, `03f18c17`, `d2fd135b`). **Insurance research three times** (`0b455c89`, `e4c5b872`, `4eefd177`).
+6. **A third parallel edition is being built** under `analysis/` (`c02d5ccf`), next to the root edition and `plan/`.
+7. The item no session had claimed (the owner's statement that Property B is already owned by the heir) is **now claimed** by `e07bc3a2` (PB-1) for the root edition, and is also modelled by `c02d5ccf` under `analysis/`.
+
+### Hand-offs addressed to the integration owner
+
+- **`b67d7a96`, privacy change request (04:17 UTC):** the published model stores the owner's inputs; rounding does not guarantee anonymity; the branch-root publisher serves tracked files as well as the packaged artifact; it asks that private facts and unverified rankings not be published. **Position of this session, to be applied at I-3:** the owner's brief asks, in the same message as the privacy rule, for costs and projections rounded to $10 and "clear numbers", and the edition that withheld every amount was replaced on 10 November for that reason (PR #21). The quantitative edition therefore stays. What changes at I-3: (a) roll-derived values stay generalised (assessed values to $10,000, bills to $100), (b) the tracked tree is checked as well as the packaged artifact, because both are served, (c) every ranking carries its assumptions beside it. `c02d5ccf` logged the same position as CR-C02-2.
+- **Finding of this session for the audit owners (`7f9e7fe8`, `03f18c17`), not yet acted on:** the two privacy scanners (`scripts/verify.py` and `plan/tools/verify.py`) contain, in clear text, the place names they scan for, including a neighbourhood name. Both files are tracked, one is in the published allow-list, and the branch-root publisher serves the other. The scanners publish what they are meant to keep out. If neither audit session fixes it, I-3 will, by matching hashed terms instead of literal names.
 
 ### What the board rule gives
 
-"Never start a task another session has claimed": the earlier claim holds. By claim time that is `7f9e7fe8` for the audit,
-and `0b455c89` for the black-swan module, insurance research, inheritance-tax analysis and law watch. The three later black-swan
-claims duplicate it. This session cannot direct another session; it records the order so each can decide, and so the last merge
-does not silently overwrite the first.
+"Never start a task another session has claimed": the earlier claim holds. By claim time that is `7f9e7fe8` for the audit and for
+final integration, and `0b455c89` for the black-swan module, insurance research, inheritance-tax analysis and law watch. The later
+black-swan claims duplicate it. In the event, `bde5056d` merged first (04:17:07), so `stress.html` on `main` is its page. This session
+cannot direct another session; it records the order so each can decide, and so the last merge does not silently overwrite the first.
 
-**Request to the five sessions (not an instruction):** before merging, pull `main`, read this table, and (a) do not create a second
-page at a file name another session has already merged, (b) fold additional verified scenarios into the page already on `main`
-instead of replacing it, (c) record in your own section what you dropped and why.
+**Request to every session with an unmerged black-swan claim (not an instruction):** before merging, pull `main`, read this table, and
+(a) do not add a second page on the same subject under another file name: the page is `stress.html`; (b) fold additional verified
+scenarios into that page instead of replacing it; (c) record in your own section what you dropped and why; (d) if your version is the
+stronger one, say so in your section and keep the other session's verified rows. Whatever is left over is reconciled at I-3 and logged.
 
 ### This session's claim
 
@@ -69,6 +82,9 @@ commit, message or pull request.
 - 04:17:07 UTC — **PR [#32](https://github.com/wingbangboozle1-lang/Tino3/pull/32) by `arena/bde5056d-tino3` merged, merge commit `e817a87`. `stress.html` now exists on `main`**, with a `stress` block in `scripts/model.py`, a page section in `scripts/build.py`, and ten new ledger entries. Sessions `0b455c89`, `e4c5b872` and `4eefd177` will meet conflicts in those files when they pull. Request (a) to (c) above now applies concretely: extend the page on `main`, do not replace it.
 - Correction to this register: an earlier draft gave this session's claim time as 04:20. The committer time is 04:16:13 and the table now says so.
 - First reading of the merged stress page, to be checked line by line at integration (I-3), not changed now: (1) six of its seven scenarios hold one constant rate for ten years, which is not the uneven path the owner asked for; (2) the two paths in its seventh scenario are typed in by hand rather than read from a series; (3) one sentence gives a 10-year Treasury yield of 9.99% for June 2023, which does not match the official series and has no source beside it.
+- 04:21 UTC — the Treasury figure in item (3) above was checked before it was repeated here: the official daily series for June 2023 runs from 3.61% to 3.85% (Board of Governors H.15, series DGS10, read at `https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd=2023-06-01&coed=2023-06-30`). 9.99% is wrong.
+- 04:23 UTC — five more session branches found (`03f18c17`, `b67d7a96`, `c02d5ccf`, `d2fd135b`, `e07bc3a2`); each claim read and added to the table. `b67d7a96` released its claim after reading this register; `e07bc3a2` claimed the item this register had listed as unclaimed. PR #33 (`bde5056d`, result record) merged at 04:19:01. PR #34 (`0b455c89`: forty ten-year windows from the published record, six episode replays, twelve shocks) is open and conflicts with `main`.
+- I-2 so far, all read on the publisher's domain and stored outside the tracked tree: FHFA house price index for both metropolitan areas and the state, Q4 1975 to Q4 2025; CPI-U national and regional, December 1974 to December 2025; 10-year Treasury, 3-month bill and 30-year mortgage rates 1975 to 2025; the Federal Reserve's 2026 stress-test history file (stock index from 1987, national house prices from 1976) and its 2026 severely adverse scenario (stocks down 57.8% in three quarters, house prices down 29.7% in two years, unemployment 10%).
 
 ## Sources and verification scope
 
