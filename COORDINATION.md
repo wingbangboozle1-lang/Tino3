@@ -9,6 +9,63 @@ Privacy rule: public pages use generic Property A / Property B placeholders. Do 
 | Coordination record review and independent publication check | done | `arena/d0927734-tino3` (PR #18) | `COORDINATION.md`; verification and live-state review |
 | Historical disclosure and future property-specific calculations | needs review | repository owner / qualified advisers | Prior repository versions and private evidence; not part of public edition |
 
+## Round of 11 November 2026 — claim register and final integration (`arena/2f0b4adb-tino3`)
+
+*Branch note:* Arena fixes this session to `arena/2f0b4adb-tino3`; the `session-<id>/<task>` naming cannot be used.
+This block sits near the top of the file on purpose: every other session appends at the end, so edits here merge without conflict.
+
+### Why this register exists
+
+Six sessions started between 04:07 and 04:13 UTC on 11 November. Each pushed its claim to its own branch, so **no claim was visible
+from `main`** and none of the sessions could see the others. Board read by this session at 04:13 to 04:20 UTC with `git ls-remote`
+and a fetch of every branch. The table copies those claims, unchanged in substance, so they can be seen from `main`. Times are the
+committer times of the claim commits. Each session's own section governs; this is an index.
+
+| Claimed (UTC) | Session branch | Claim commit | Tasks claimed | Files named in the claim |
+|---|---|---|---|---|
+| 04:09:37 | `arena/7f9e7fe8-tino3` | `be0a89e` | A1 audit of the public edition (privacy, source accuracy, arithmetic, links) and repair; A2 reproduce and test; A3 PR, merge, deploy | `scripts/*`, `assets/*`, root generated HTML, `README.md`, `EXECUTIVE_SUMMARY.md`, `plan/**` as needed, `.github/workflows/*` |
+| 04:10:10 | `arena/0b455c89-tino3` | `1d6cb25` | S-1 black-swan module; S-2 insurance and running-cost research; S-3 inheritance-tax analysis (exclusion, headroom, inherited retirement accounts); S-4 law watch; S-5 render, PR, merge | new `scripts/stress.py`, new `assets/data/stress.json`, a new page, `assets/sources.json` (append), `scripts/model.py` (new blocks), `scripts/build.py`, `scripts/verify.py`, `scripts/package_site.py`, `README.md`, `EXECUTIVE_SUMMARY.md` |
+| 04:11:33 | `arena/e4c5b872-tino3` | `9d1689b` | E4-2 black-swan page and model scenarios; E4-3 official anchors for insurance, electricity, water; E4-4 re-verification of the 43-entry ledger; E4-5 checks; E4-6 PR, merge | `scripts/model.py`, `scripts/build.py`, new `stress.html`, `assets/data/*`, `assets/style.css`, `assets/sources.json`, `scripts/verify.py`, `scripts/package_site.py` |
+| 04:11:34 | `arena/bde5056d-tino3` | `1a69954` | BS-1 research of black-swan episodes; BS-2 scenario arithmetic in the model; BS-3 new page, navigation, README and summary refresh; BS-4 allow-list, checks, PR, merge | `assets/sources.json` (append), `scripts/model.py`, `assets/data/model.json`, `assets/data/decision.csv`, new `stress.html`, `index.html`, `scripts/build.py`, `README.md`, `EXECUTIVE_SUMMARY.md`, `scripts/package_site.py`, `scripts/verify.py`, workflows if needed |
+| 04:11:53 | `arena/4eefd177-tino3` | `f53a56b` | BS-1 black-swan module and page; BS-2 insurance and utility research; BS-3 re-verification of the 43-entry ledger; BS-4 integration, PR, merge | new `scripts/swan.py`, new `assets/data/swan.json`, new `stress.html`, `scripts/build.py` (review rows, NAV), `assets/sources.json` (append), `audit.html` rows, `scripts/package_site.py`, `scripts/verify.py`, `scripts/privacy_boundary.py`, `README.md` |
+| 04:20 | `arena/2f0b4adb-tino3` | this commit | I-1 to I-3 below | this block; nothing else until integration |
+
+### Overlaps found (facts)
+
+1. **A separate black-swan section is claimed four times** (`0b455c89` S-1, `e4c5b872` E4-2, `bde5056d` BS-2/BS-3, `4eefd177` BS-1).
+2. **The same new file name, `stress.html`, is named by three sessions** (`e4c5b872`, `bde5056d`, `4eefd177`). Whichever merges second meets an add/add conflict.
+3. **`scripts/model.py` and `scripts/build.py` are named by four sessions and by the audit session.** `assets/sources.json`, `scripts/verify.py` and `scripts/package_site.py` are named by five.
+4. **Re-verification of the source ledger is claimed three times** (`7f9e7fe8` A1, `e4c5b872` E4-4, `4eefd177` BS-3). **Insurance research is claimed three times** (`0b455c89` S-2, `e4c5b872` E4-3, `4eefd177` BS-2).
+5. **One item of the owner's brief is claimed by nobody:** the owner now states that Property B is *already owned by the heir*. The published edition treats that as unknown (flag FL-01, the "same estate" tables, and the estate-tax room computed on both homes).
+
+### What the board rule gives
+
+"Never start a task another session has claimed": the earlier claim holds. By claim time that is `7f9e7fe8` for the audit,
+and `0b455c89` for the black-swan module, insurance research, inheritance-tax analysis and law watch. The three later black-swan
+claims duplicate it. This session cannot direct another session; it records the order so each can decide, and so the last merge
+does not silently overwrite the first.
+
+**Request to the five sessions (not an instruction):** before merging, pull `main`, read this table, and (a) do not create a second
+page at a file name another session has already merged, (b) fold additional verified scenarios into the page already on `main`
+instead of replacing it, (c) record in your own section what you dropped and why.
+
+### This session's claim
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| I-1 Claim register on `main`, kept current as the branches move | **in progress** | `arena/2f0b4adb-tino3` | `COORDINATION.md`, this block only |
+| I-2 Independent reference data: official series and rules read by this session, kept apart from the other sessions' work so that it can be used to re-verify theirs line by line | **in progress** | `arena/2f0b4adb-tino3` | no shared file; working notes stay outside the published tree until integration |
+| I-3 Final integration, last in the round. Starts only when every claim above is merged, withdrawn, or 60 minutes without a commit. Merge what is unmerged, keep one black-swan page, apply the owner's statement that Property B is already the heir's, re-verify the combined data line by line against I-2, build, check links, PR, merge, confirm the deploy | **waiting** | `arena/2f0b4adb-tino3` | shared files, at integration time only |
+
+Rules this session holds itself to: no fifth black-swan implementation while four are in progress; no edit to `scripts/*`, `assets/*`,
+`plan/**`, any page or any workflow before I-3 starts; no name, address, postal code, parcel number or unrounded roll figure in any
+commit, message or pull request.
+
+### Log (`arena/2f0b4adb-tino3`)
+
+- 04:13 UTC — read the whole board on `main` (`6086d16`). Every claim there is done or more than 17 hours old.
+- 04:13 to 04:20 UTC — `git ls-remote` showed five new session branches created since 04:09; fetched each and read its claim. Register written.
+
 ## Sources and verification scope
 
 The reviewed dashboard links to official authorities, including:
