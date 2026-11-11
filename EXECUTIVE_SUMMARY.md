@@ -1,28 +1,21 @@
-# Executive summary
+# Executive summary · public edition
 
-Reviewed 10-11 November 2026. Anonymised: Property A (single-family home, County A), Property B (small multi-unit building, City B).
-Dollar figures are rounded to the nearest $10. Planning analysis, not legal, tax or investment advice.
+Reviewed **11 November 2026**. Property A is the home expected to transfer through a trust in 2040–2050; Property B is **already owned by the beneficiary** and provides existing housing/rental income. The other owner's death does not, by itself, transfer B. Trust provisions, deed and retained interests still need private verification. [IRS estate-tax scope](https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax) · [California change-in-ownership rule](https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=60).
 
-**Best plan on these numbers: sell Property A soon after inheriting it, reinvest, and keep Property B.**
+**Decision:** Preserve B's independent housing/rental position. Do **not** claim that selling, renting or occupying A maximizes after-tax wealth yet: the trust, future value, verified rent, insurance, repairs, future tax rate and size/composition of the estate are unknown. When A passes, evaluate after-tax sale proceeds against rent/occupancy and reinvestment at the then-prevailing law and prices. Selling near death may have limited capital gain if the asset qualifies for a date-of-death basis adjustment, but it is not categorically tax-free. [IRS inherited basis](https://www.irs.gov/faqs/interest-dividends-other-types-of-income/gifts-inheritances/gifts-inheritances) · [IRS trust ruling](https://www.irs.gov/pub/irs-drop/rr-23-02.pdf).
 
-Inheritance in 2045, house prices rising 4% a year, measured ten years later after all taxes and selling costs:
-
-| Option | Wealth after 10 years | Behind the best by |
+| Public benchmark | Verified / illustrative amount | Official source |
 |---|---|---|
-| Sell, stock index fund | $10,052,910 | $0 |
-| Sell, Treasuries | $8,761,920 | $1,291,000 |
-| Rent the home out | $8,583,650 | $1,469,260 |
-| Move in | $7,945,640 | $2,107,270 |
+| Federal basic exclusion for 2026 deaths (estate-level, not a per-heir allowance) | $15,000,000 | [IRS estate table](https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax) |
+| Federal basic exclusion for 2027 deaths | $15,480,000 | [IRS 2027 announcement](https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts) |
+| California/state/local inheritance levy under current prohibition | $0 | [RTC §13301](https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=13301) |
+| Base 1% ad valorem levy on a **hypothetical** $1,000,000 assessed-value unit (additional bonds/charges excluded) | $10,000 annually | [Official local tax guide](https://files.santaclaracounty.gov/exjcpb1531/2025-11/tax-rate-book-2025-2026.pdf) |
+| Actual A/B assessed values, taxes, premiums, rent, estate headroom and after-tax option wealth | — **unverified** | [IRS estate-tax scope](https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax) · [Insurance regulator](https://interactive.web.insurance.ca.gov/apex_extprd/f?p=111%3A20) |
 
-- The sale is almost tax-free: the tax basis resets to the value at death, provided the trust is revocable.
-- The low property tax does not survive. About $7,320 a year today becomes $60,150 if a child moves in and $78,400 if rented (2045).
-- Renting wins only if stocks return under 4.7% a year or the home appreciates about 7.0% a year.
-- Living in the home costs about $8,580 a month in today's dollars compared with selling.
-- Federal estate tax: $15,000,000 per person in 2026 and $15,480,000 in 2027; California has none.
-- The owner states Property B is already owned by the heir, so under that statement it sits outside the decedent's estate; if it were in the same estate its tax would reset: $3,730 to $46,610 a year in 2045.
-- Under that same statement one person's estate-tax room in 2045 is $17,612,290 instead of $13,819,960, larger by Property B's 2045 value of $3,792,330. The deed was not seen (FL-01).
-- Insurance premiums are unverified and left blank; tripling the owner's guess does not change the ranking.
-- Black-swan stress tests (stocks at 4.0%, inflation at 4.0%, flat house prices): selling still finishes first; a lost decade only moves the proceeds to Treasuries. See black-swans.html.
-- Black swan stress tests (stress.html): verified 1929, 1965-82, 2000-02, 2007-09 and 2020 episodes re-run against the 2045 inheritance. The sale decision holds in 5 of 7 analogues; only the reinvestment vehicle changes with the regime.
+**Black swans:** Official 1976–2026 statewide FHFA house-price observations and BOE CCPI/assessment factors are replayed non-uniformly over hypothetical 2026–2076 labels, without extrapolating a private home's dollar value. A 2007–09 US housing downturn averaged about 30%, while the S&P 500 fell about 57% in a different interval; simultaneous risk matters. [FHFA series via FRED](https://fred.stlouisfed.org/data/CASTHPI) · [Federal Reserve history](https://www.federalreservehistory.org/essays/great-recession-of-200709).
 
-Site: index.html. Stress tests: stress.html. Economic conditions: black-swans.html. Open items: review.html. Sources: sources.html.
+**Timelines:** Current California trustee notice generally within 60 days after the relevant trigger; a trust-transferred real-property interest generally reported within 150 days after death; federal Form 706 generally due within 9 months when required. Recheck these in the actual death year. [Probate Code §16061.7](https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PROB&sectionNum=16061.7) · [RTC §480](https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=480) · [IRS filing](https://www.irs.gov/businesses/small-businesses-self-employed/filing-estate-and-gift-tax-returns).
+
+**Privacy:** Prior public versions exposed owner-supplied household amounts. The new site and current tracked legacy paths withdraw them; an ordinary PR cannot erase old Git commits or third-party copies. See the site's **Flagged for Review** page. All property-specific unverified amounts are blank; rounding to $10 alone does not make a combined household financial profile anonymous.
+
+Site: https://wingbangboozle1-lang.github.io/Tino3/ · Sources: `sources.html` · Open items: `review.html`.

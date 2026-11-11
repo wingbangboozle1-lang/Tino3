@@ -1,1 +1,1 @@
-"""PUBLICATION_WITHDRAWN: legacy generator disabled to prevent republication."""
+"""PUBLICATION_WITHDRAWN: previous generator disabled."""
