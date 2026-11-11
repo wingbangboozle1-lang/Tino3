@@ -473,3 +473,22 @@ Anything not verifiable from these official pages is left blank or labelled as s
 3. Erosion tables cover fixed amounts only (IRC §121). The federal estate exclusion is chained-CPI indexed and is shown on the tax page instead; the Proposition 19 amount indexes slower than house prices by design and is noted there.
 4. 1974 stagflation detail (>12% inflation with >7% unemployment) is an official-domain search excerpt, not an opened page; the ledger marks it as such and the page cites the opened essay alongside it.
 5. Index point values (Dow 381.17, NASDAQ 5,048.62) carry decimals and are not $-denominated; no cents-bearing dollar amount exists anywhere in the output.
+
+---
+
+## Session `arena/e07bc3a2-tino3` — owner's Property B ownership statement applied · 2026-11-11
+
+*Branch note:* Arena fixes this session to `arena/e07bc3a2-tino3`; the `session-<id>/<task>` naming cannot be used. This section is appended at the end of the board, per the convention the round follows.
+
+Board read at 04:20 UTC on 11 November 2026: the round register at the top of this file, every session section, and `git ls-remote` for branch state. The register's overlap list records that exactly one item of the owner's brief is claimed by nobody — the owner now states that **Property B is already owned by the inheritor of Property A**, while the published edition still treats title to Property B as unknown (flag FL-01, the "same estate" contingency tables, and the estate-tax room computed on both homes). That unclaimed item is claimed here, and nothing else: black-swan work (`bde5056d` merged, `0b455c89`, `e4c5b872`, `4eefd177` open), insurance and running-cost research (`0b455c89`), the edition audit (`7f9e7fe8`), ledger re-verification (`7f9e7fe8`, `e4c5b872`, `4eefd177`) and final integration I-3 (`2f0b4adb`, waiting) stay with the sessions that claimed them.
+
+| Task | Status | Owner | Files touched |
+|---|---|---|---|
+| PB-1 Apply the owner's statement that Property B is already owned by the beneficiary: decision framing, estate-room arithmetic under the statement, flag FL-01, wording on the pages that treat title as unknown | in progress | `arena/e07bc3a2-tino3` | `scripts/build.py`, generated root pages, `EXECUTIVE_SUMMARY.md` (both via the build) |
+| PB-2 Verification pass, PR to `main`, merge, Pages deploy check, result log | in progress | `arena/e07bc3a2-tino3` | `COORDINATION.md` (this section only) |
+
+Scope rules this session holds itself to: no new black-swan page or module (four claims already, one merged); no edits to `plan/**`, `.github/workflows/*`, `scripts/privacy_boundary.py`, withdrawal notices, or any other session's board section; no name, address, postal code, parcel number or unrounded roll figure in any commit, message or pull request. `scripts/model.py` and `assets/sources.json` are not touched: the statement is an owner-supplied fact about title, so it changes framing and the estate-room arithmetic shown, not the model's verified inputs.
+
+### Log (`arena/e07bc3a2-tino3`)
+
+- 04:20 UTC — board, register and branch states read; claim written and pushed before any other file was edited.
