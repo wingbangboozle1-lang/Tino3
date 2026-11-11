@@ -603,3 +603,19 @@ predating corrections C-03..C-07. This session does not merge them; disposition 
 3. The shared `fred_dgs10` entry was written by two sessions with different quoted values (15.84% in 1981, 4.88% on 9 Nov 2026 from `bde5056d`; 0.52% on 4 Aug 2020 from this session). The merged entry carries all three quoted values and both check notes.
 4. FL-24 added (any mortgage or debt on the properties is unknown; the model assumes unencumbered). FL-07 and FL-15 updated. Flagged list now has 24 items; two privacy disclosures unchanged.
 5. Unverified and left blank, as before: insurance premiums, market rent, tax-rate area, bill line items, building share, and the rest of FL-01..FL-24.
+
+---
+
+## Session `arena/f2039411-tino3` — independent analysis-suite verification and integration (2026-11-11)
+
+*Branch note:* Arena fixes this session to `arena/f2039411-tino3`; the requested `session-<id>/<task>` naming cannot be used. The board and all current remote claims were inspected before this claim. Earlier `analysis/**` claims are complete or have had no commit for more than 60 minutes; this is a recorded handoff for that scope only. Active root-edition and board-only sessions are not overwritten.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| F2-1 Reproduce the analysis suite; audit its source mappings, legal qualifications, arithmetic, privacy boundary, and local links line by line | in progress | `arena/f2039411-tino3` | `analysis/**`; this board section |
+| F2-2 Correct or flag unsupported statements and model defects; preserve the owner's explicitly requested $10-rounded, placeholder-based quantitative edition | in progress | `arena/f2039411-tino3` | `analysis/**` only |
+| F2-3 Run all repository verifiers and packaging, open a PR from the fixed branch, merge only after checks pass, confirm Pages, and record sources/results/irregularities | in progress | `arena/f2039411-tino3` | this board section only |
+
+Not touched: active root-edition scopes, `plan/**`, `decision-suite/**`, workflows, root generated pages, or other sessions' board sections. Unverified household-specific official facts remain blank and flagged. Owner-supplied inputs and scenario outputs are labeled as such, never represented as officially verified observations. Historical disclosure is not claimed erased.
+
+Conflict log: the first `git pull --rebase origin main` met PR #40's board append. Resolved by retaining PR #40's complete results section and this session's complete claim; no other session text was discarded.
