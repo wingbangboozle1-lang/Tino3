@@ -785,11 +785,59 @@ as "not touched" by `4ff01a4d` and `bd680fbc`. This session therefore takes `pla
 
 | Task | Status | Owner | File scope |
 |---|---|---|---|
-| P8-1 Line-by-line audit of the `plan/` edition: every ledger source re-opened on the publisher's domain where reachable, arithmetic re-derived independently, privacy scan | in progress | `arena/82853ea6-tino3` | `plan/tools/*`, `plan/data/*`, `plan/*.html` (generated) |
-| P8-2 Gap check of `plan/` against the owner's brief (black-swan conditions, insurance research, estate-tax headroom, law watch, step-by-step process) and repair inside `plan/` only | pending | `arena/82853ea6-tino3` | `plan/**` |
-| P8-3 Cross-edition reconciliation (root vs `plan/` vs `analysis/` headline figures), published on `plan/flagged.html`; defects found in other sessions' scopes are logged here as requests, not edited | pending | `arena/82853ea6-tino3` | `plan/**`; this section |
-| P8-4 Verifiers, packaging, PR to `main`, merge, Pages deploy check, result recorded | pending | `arena/82853ea6-tino3` | `COORDINATION.md` (this section only) |
+| P8-1 Line-by-line audit of the `plan/` edition: ledger sources re-opened on the publisher's domain, arithmetic re-derived, privacy scan | **done** | `arena/82853ea6-tino3` | `plan/tools/*`, `plan/data/*`, `plan/*.html` (generated) |
+| P8-2 Gap check of `plan/` against the owner's brief and repair inside `plan/` only | **done** | `arena/82853ea6-tino3` | `plan/**` |
+| P8-3 Cross-edition reconciliation (root vs `plan/` vs `analysis/`), published on `plan/flagged.html`; defects in other scopes logged as requests | **done** | `arena/82853ea6-tino3` | `plan/**`; this section |
+| P8-4 Verifiers, packaging, PR to `main`, merge, Pages deploy check, result recorded | **in progress** | `arena/82853ea6-tino3` | `COORDINATION.md` (this section only) |
 
 Not touched: `scripts/*`, `assets/*`, root `*.html`, `analysis/**`, `decision-suite/**`, `README.md`, `EXECUTIVE_SUMMARY.md`,
 workflows, withdrawal notices, other sessions' sections. No name, street address, postal code, city name, parcel number or
 unrounded roll figure in any commit, message or pull request.
+
+### Result · `arena/82853ea6-tino3` · 2026-11-11
+
+**What changed (all inside `plan/**`; no new file, so the allow-list in `scripts/package_site.py` is untouched):**
+
+1. **Defect corrected: the cross-check still counted Property B in the parent's estate.** The owner's statement that B already belongs to the heir had been applied to the root and `analysis/` editions (PR #35, PR #37) but not to `plan/`. Headroom table, estate-tax table, headline tiles, recommendation, steps and law watch now treat the estate as Property A plus money; "B in the same estate" is kept only as a labelled contingency because the deed was not seen (flag F-10). 2026 room beside Property A: $11,900,000; contingency $10,100,000.
+2. **Gap closed: `plan/` had no uneven-economy (black swan) analysis.** Added as a section of `plan/decision.html` (`#uneven`). It invents no scenario: the ten years after a 2045 inheritance are replayed along all 41 real ten-year stretches that start in 1975 to 2015, using three official series read in full in this session. Result: selling Property A ahead in 23, keeping ahead in 18. Selling won all 21 stretches that began after the house index had risen 5% a year or more over the previous five years; keeping won all 8 that began after a five-year fall. Shares are deliberately not replayed (no official total-return series back to 1975 was read); a "return needed to match keeping" column is given instead (range -1.35% to 12.46%, middle 5.74%).
+3. **Treasury reading moved to 10 November 2026** (10-year 4.98%; was 4.88% on 9 November). Every yield-dependent figure in `plan/` was regenerated.
+4. **Reconciliation table rewritten** against the editions as merged today (15 rows, `plan/flagged.html`), and the repository-review rows brought up to date (PRs #23, #25, #34 closed; three editions live; branch-root publisher).
+
+**Sources opened in this session on the publisher's own domain and compared with the figure used (15):**
+
+| Source | Figure confirmed |
+|---|---|
+| https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts | 2027 basic exclusion $15,480,000; 2026 $15,000,000; gift exclusion $20,000 / $19,000; top rate 37% |
+| https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax | filing thresholds 2011 to 2026, all 16 rows match `EXCL_HISTORY` |
+| https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf | $1,044,586 for 16 Feb 2025 to 15 Feb 2027; next adjustment February 2027 |
+| https://www.boe.ca.gov/prop19/ | principal residence of transferor and transferee; one-year homeowners' exemption filing; three-year claim |
+| https://www.boe.ca.gov/proptaxes/homeowners_exemption.htm | $7,000; form BOE-266; 15 February |
+| https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=11911.&lawCode=RTC | 55 cents per $500; city half-rate credited |
+| https://sftreasurer.org/property/secured-property-taxes | secured rate 1.18162182% for fiscal year 2026-27; 10 December / 10 April |
+| https://www.sf.gov/news--annual-rent-increase-3126-22827-announced | 1.6% (1.4% the year before) |
+| https://elections.cdn.sos.ca.gov/ccrov/2026/may/26138jh.pdf | initiative 1994 failed, 18 May 2026 |
+| https://www.congress.gov/bill/119th-congress/senate-bill/587 | still "Introduced"; latest action 13 Feb 2025 |
+| https://interactive.web.insurance.ca.gov/apex_extprd/f?p=111:20 | 2026 survey tool; premiums are hypothetical, not quotes; wildfire surcharge 15% to over 300% not reflected. **No premium could be read from it** (interactive), so insurance stays the owner's figure, flagged |
+| https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value_month=202611 | 9 Nov row matches the earlier revision; 10 Nov row now used |
+| https://fred.stlouisfed.org/data/CASTHPI.txt | all six values used before match; 52 second-quarter values and four peak/trough values added |
+| https://fred.stlouisfed.org/data/GS10.txt | June averages 1975 to 2025 (new) |
+| https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPIAUCNS&cosd=1974-01-01&coed=2026-12-31&fq=Annual&fam=avg | annual averages 1975 to 2025 (new) |
+
+The other 32 ledger entries were **not** re-opened by this session; `plan/sources.html` says so on each row ("Not re-opened; last read 10 November 2026"). Six entries remain "search excerpt only" as before.
+
+**Verification performed:** `python3 plan/tools/verify.py` PASS (10 pages rebuilt byte-identically, 454 table rows each with an official link, 47 sources, privacy and $10 rounding clean); `python3 scripts/verify.py` PASS; `python3 analysis/tools/verify.py` PASS; `python3 scripts/package_site.py` PASS; a separate crawl of the packaged `_site` found 0 broken local links or fragments in 1,046. Drawdown dates and recovery quarters were checked by hand against the quarterly series.
+
+**Irregularities and unverified items (all published on `plan/flagged.html`; none blocks the merge):**
+
+- Insurance premiums for both properties: still unverified (no official figure can be read without running the state's interactive tool by hand); the owner's $1,500 guesses are used and flagged. Maintenance, market rent of Property A, brokerage cost, the heir's tax bracket, the heir's basis in Property B and the amount of money in the estate remain blank.
+- The uneven-economy replay rests on a statewide index, overlapping windows and a single 50-year history; the "sold all 21 / kept all 8" pattern is a description of the record, not a forecast. Coupons are assumed reinvested at the starting yield.
+- The three editions give different margins for the same default (sell A, keep B) because the root and `analysis/` editions assume a 7% share return, a market rent, maintenance and a 5% selling cost, while `plan/` assumes none of them. The owner should pick one reference edition (R-01).
+- Jurisdiction is inferable from the official source links (F-23), unchanged.
+
+**Requests to other scopes (logged, not edited):**
+
+| # | Scope / owner | Request |
+|---|---|---|
+| CR-P8-1 | root `scripts/model.py` (`4ff01a4d` / `ca7ad6a2`) | The root edition still reads the 10-year Treasury at 4.88% (9 Nov 2026); the Treasury page showed 4.98% for 10 Nov when opened in this session. Informational. |
+| CR-P8-2 | root and `analysis/` owners | Rent of $6,500 a month for A, maintenance of $9,300 / $10,800 a year, 5% selling cost and the 7% share return are assumptions, not verified values. They are labelled as such; under the owner's "never infer" rule they belong on the flag register of each edition as well. |
+| CR-P8-3 | `arena/a2416305-tino3` (claimed `plan/**` at 12:59:51, after this session's 12:57:25) | This session's `plan/` work is in the PR below. Please rebase onto it and add findings on top rather than regenerate from the older model. |
