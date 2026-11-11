@@ -972,3 +972,33 @@ Method and limits: the topic comparison below is a phrase search of the raw HTML
 - 13:11 UTC: **merge conflict** on rebasing onto `main` (`eba253d`): this section and the section of `82853ea6` (PRs #47, #48) were both appended at the end of the file. Resolved by taking `main`'s file byte for byte and re-appending this section after it. Checked: `main`'s text was an exact prefix of the result; no line of any other session was changed or removed.
 - 13:16 to 13:20 UTC: rebased again onto `main` (`5e1b0db`, after PRs #49 and #50), no conflict. Every count in this section recomputed on that commit before pushing; three statements of the draft were found wrong in that pass and fixed before they were published (how the late branches were fetched, a description of five older branches, and a file-name count that PR #49 had made stale).
 - 13:21 UTC: pull request [#51](https://github.com/wingbangboozle1-lang/Tino3/pull/51) opened from this branch, changing this section only. It is merged once; the merge commit and the checks after it are shown on that page and recorded in the last commit of this branch, not in a further commit on `main`.
+---
+
+## Session `arena/a2416305-tino3` — independent cross-check edition: line-by-line verification, brief coverage, integration (2026-11-11)
+
+*Branch note:* Arena pins this session to `arena/a2416305-tino3` (branched from `f6b28738`, PR #39 merge). The requested
+`session-<id>/<task>` naming cannot be used: this session commits and pushes only to its pinned branch and opens its PR
+from that branch to `main`.
+
+**Board read before claiming.** This session read `COORDINATION.md` on `main`, all remote branch tips and open PRs at
+12:57 UTC on 2026-11-11. Active sibling claims found on their own branches: `arena/4ff01a4d-tino3` (A4-1..A4-4:
+`scripts/model.py`, `scripts/build.py`, `assets/sources.json`, root generated pages, `README.md`,
+`EXECUTIVE_SUMMARY.md`), `arena/ca7ad6a2-tino3` (CA-1..CA-3: `scripts/*`, `analysis/tools/*`, source ledgers,
+root/analysis pages, `README.md`, `EXECUTIVE_SUMMARY.md`), `arena/f2039411-tino3` (F2-1..F2-3: `analysis/**`),
+`arena/bd680fbc-tino3` (BD-1..BD-4: board only, open PR #41). All of those file scopes are left untouched.
+`plan/**` is unclaimed by every active sibling, so this session claims it alone.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| P-1 Independent, line-by-line verification of the `plan/**` cross-check edition (10 pages, 360 cited rows, 45 ledger sources) against the publishers' own pages; links for manual review; irregularities logged | claimed | `arena/a2416305-tino3` | `plan/**` only; this board section |
+| P-2 Close owner-brief gaps inside that edition only: verified official anchors for insurance/utility/maintenance costs, estate-tax threshold projections and law watch, black-swan economic conditions, step-by-step trust inheritance; every table row source-linked, unverifiable values blank and flagged, all dollar amounts $10-rounded, placeholder-only privacy | pending | `arena/a2416305-tino3` | `plan/tools/*`, `plan/*.html`, `plan/data/*`, `plan/assets/style.css` |
+| P-3 Final integration on this pinned branch: run all four repository verifiers and the packager, check every local link and the live deploy, open a PR to `main`, merge it without approval, confirm GitHub Pages deploy, record PR link/merge result/sources/irregularities here | pending | `arena/a2416305-tino3` | this board section only; no shared outputs |
+
+**Not touched:** `scripts/*`, `assets/*`, `analysis/**`, `decision-suite/**`, `.github/workflows/*`, root `*.html`,
+`README.md`, `EXECUTIVE_SUMMARY.md`, withdrawal notices, other sessions' board sections, open PR #41. If a change to a
+shared output (root index or navigation) is needed, it is logged here as a request rather than performed while sibling
+claims are active. `plan/index.html` is already linked from the live root dashboard as the "Independent cross-check"
+card, so no shared navigation edit is required for this edition to be reachable.
+
+**Privacy:** no names, street addresses, ZIP codes, parcel numbers, account numbers, exact assessment-roll entries or
+household identifiers in any commit, page, data file or PR text. Property A / Property B and role placeholders only.
