@@ -15,12 +15,16 @@ SRC = json.loads((ROOT / "assets" / "sources.json").read_text(encoding="utf-8"))
 
 NAV = [("index.html", "Overview"), ("executive-summary.html", "Executive summary"),
        ("decision.html", "Decision analysis"), ("projections.html", "Year-by-year projections"),
-       ("stress.html", "Black swan stress tests"),
-       ("black-swans.html", "Black-swan conditions"),
+       ("black-swans.html", "Conditions and history"), ("stress.html", "Stress tests"),
        ("property-a.html", "Property A"), ("property-b.html", "Property B"),
        ("taxes.html", "Tax, thresholds, law watch"), ("inheritance.html", "Inheritance steps"),
        ("review.html", "Flagged for review"), ("audit.html", "Independent verification"),
        ("sources.html", "Source library")]
+
+# Navigation is grouped so a reader sees the shape of the site: one decision, one black-swan
+# section in two parts, two properties, the rules and the evidence.
+NAV_GROUPS = [("The decision", 0, 4), ("Black swans", 4, 6), ("The properties", 6, 8),
+              ("Tax and process", 8, 10), ("Evidence", 10, 13)]
 
 SHORT = {"Internal Revenue Service": "IRS", "California State Board of Equalization": "BOE",
          "California Legislative Information": "CA code", "California Franchise Tax Board": "FTB",
@@ -31,6 +35,7 @@ SHORT = {"Internal Revenue Service": "IRS", "California State Board of Equalizat
          "Federal Reserve Bank of St. Louis (data: Federal Housing Finance Agency)": "FHFA index",
          "Federal Reserve History": "Fed History",
          "Board of Governors of the Federal Reserve System": "Federal Reserve",
+         "U.S. Government Publishing Office (GovInfo)": "US Code (GPO)",
          "Bureau of Labor Statistics": "BLS", "Congressional Budget Office": "CBO",
          "Social Security Administration": "SSA",
          "Federal Reserve Bank of St. Louis (data: Board of Governors)": "FRED (Fed funds)",
@@ -63,7 +68,8 @@ LABEL = {"irs_estate": "Estate tax thresholds", "irs_2027": "2027 amounts", "irs
          "bls_ted2022": "CPI, June 2022", "bls_mlr100": "CPI, 100 years", "bls_btn11": "Inflation periods",
          "fedhist_1929": "Crash of 1929", "fedhist_greatinflation": "The Great Inflation",
          "fedhist_greatrecession": "The Great Recession", "nyfed_covid": "COVID-19 and the Fed",
-         "fred_ussthpi": "US house price index", "fred_nasdaqcom": "NASDAQ Composite"}
+         "fred_ussthpi": "US house price index", "fred_nasdaqcom": "NASDAQ Composite",
+         "uscode3124": "31 USC 3124"}
 
 e = html.escape
 
@@ -120,8 +126,12 @@ def tbl(caption, headers, rows, cls=""):
 
 def page(name, title, eyebrow, h1, lead, body):
     cur = 'aria-current="page" '
-    nav = "".join(f'<a {cur if href == name else ""}href="{href}"><span>{i:02d}</span>{label}</a>'
-                  for i, (href, label) in enumerate(NAV, 1))
+    links = []
+    for group, start, stop in NAV_GROUPS:
+        links.append(f'<div class="nav-group">{group}</div>')
+        links.extend(f'<a {cur if href == name else ""}href="{href}"><span>{i:02d}</span>{label}</a>'
+                     for i, (href, label) in enumerate(NAV, 1) if start < i <= stop)
+    nav = "".join(links)
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Inherited-home decision dashboard: sell, rent or move in. Official sources, anonymised.">
 <meta name="referrer" content="no-referrer"><meta name="robots" content="noindex">
@@ -129,7 +139,7 @@ def page(name, title, eyebrow, h1, lead, body):
 <title>{title} &middot; Inheritance decision dashboard</title><link rel="stylesheet" href="assets/style.css"></head><body>
 <a class="skip" href="#main">Skip to content</a>
 <aside><a class="brand" href="index.html">Inheritance decision dashboard<small>Property A and Property B</small></a>
-<div class="nav-label">PAGES</div><nav aria-label="Main navigation">{nav}</nav>
+<nav aria-label="Main navigation">{nav}</nav>
 <div class="aside-note">Anonymised. Dollar figures rounded to $10. Reviewed 10-11 November 2026.</div></aside>
 <main id="main"><div class="top"><span>{eyebrow}</span><span>Reviewed 10-11 Nov 2026</span></div>
 <div class="hero"><div class="eyebrow">{eyebrow}</div><h1>{h1}</h1><p>{lead}</p></div>
@@ -178,6 +188,13 @@ PRIV = ('<div class="privacy"><strong>Privacy.</strong> Properties are Property 
         'Assessment-roll values and tax bills are public records that can be matched to a parcel, so they appear here only '
         'in generalised form: assessed values to the nearest $10,000 and bills to the nearest $100. '
         'Every other figure is rounded to the nearest $10.</div>')
+PART1 = ('<div class="part-band"><strong>Black swans, part 1 of 2 &mdash; conditions and history.</strong> '
+         'What the baseline assumes, fifty years of official inflation data, and the amounts that do not rise with '
+         'inflation. Part 2 re-runs the inheritance decision against verified episodes: '
+         '<a href="stress.html">stress tests</a>.</div>')
+PART2 = ('<div class="part-band"><strong>Black swans, part 2 of 2 &mdash; stress tests.</strong> '
+         'The verified episodes and the inheritance decision re-run under each of them. Part 1 sets out the baseline '
+         'and the fifty-year record it contradicts: <a href="black-swans.html">conditions and history</a>.</div>')
 PAGES = {}
 
 # ------------------------------------------------------------------------------------------------ overview
@@ -206,16 +223,41 @@ Renting the home out ends with {usd(RENT['wealth'])} and moving in ends with {us
 <li><strong>How much cash and securities are in the estate.</strong> Federal estate tax starts above the exclusion; under the owner's statement about Property B, only Property A and the cash use part of it.</li>
 <li><strong>Insurance premiums.</strong> No official figure or quote could be confirmed. The ranking does not change at three times the owner's guess.</li>
 </ol></section>
-<section><h2>Where to look</h2><div class="cards">
-<div class="card"><div class="k">Start here</div><p><a href="executive-summary.html">Executive summary</a>: every important number with its source.</p></div>
-<div class="card"><div class="k">The reasoning</div><p><a href="decision.html">Decision analysis</a>: results for 2040, 2045 and 2050, break-even points and all assumptions.</p></div>
-<div class="card"><div class="k">The numbers</div><p><a href="projections.html">Year-by-year projections</a> to 2060 for value, assessed value, tax and running costs.</p></div>
-<div class="card"><div class="k">When the baseline breaks</div><p><a href="black-swans.html">Black-swan conditions</a>: fifty years of official economic history and stress tests for the plan.</p></div>
-<div class="card"><div class="k">The rules</div><p><a href="taxes.html">Tax, thresholds and law watch</a>, and the <a href="inheritance.html">inheritance steps</a> with deadlines.</p></div>
-<div class="card"><div class="k">The black swans</div><p><a href="stress.html">Black swan stress tests</a>: verified 1929, 1970s, 2000 and 2008 episodes re-run against the 2045 inheritance, and the amounts that do not rise with inflation.</p></div>
-<div class="card"><div class="k">What is not settled</div><p><a href="review.html">Flagged for Review</a> and the <a href="audit.html">independent verification</a> of the earlier edition.</p></div>
-<div class="card"><div class="k">Second opinion</div><p><a href="plan/index.html">Independent cross-check</a>: a separate model by another session, built only from official figures and break-evens. It reaches the same default.</p></div>
-<div class="card"><div class="k">50-year &amp; ownership suite</div><p><a href="analysis/index.html">50-year projections &amp; historical replay</a>: 2026&ndash;2076 schedules, 1977&ndash;2026 California cycle replay with Proposition 8 relief, 60/40 Treasury barbell, 20-year solar sunset and Property B ownership-asymmetry tables.</p></div>
+<section><h2>Where to look</h2>
+<h3 class="grp">The decision</h3>
+<div class="cards">
+<div class="card"><div class="k">The answer</div><p><a href="executive-summary.html">Executive summary</a>: the decision, every important number with its source, and what would change it.</p></div>
+<div class="card"><div class="k">The reasoning</div><p><a href="decision.html">Decision analysis</a>: results for 2040, 2045 and 2050, break-even points and every assumption.</p></div>
+<div class="card"><div class="k">The numbers</div><p><a href="projections.html">Year-by-year projections</a> to 2060: market value, assessed value, property tax and running costs.</p></div>
+</div>
+<h3 class="grp">Black swans &mdash; one section, two pages</h3>
+<div class="cards">
+<div class="card"><div class="k">Part 1 &middot; Conditions and history</div><p><a href="black-swans.html">Fifty years of official inflation data</a>, the baseline it contradicts, and the amounts that do not rise with inflation.</p></div>
+<div class="card"><div class="k">Part 2 &middot; Stress tests</div><p><a href="stress.html">1929, 1965&ndash;82, 2000&ndash;02, 2007&ndash;09 and 2020 episodes</a> re-run against the 2045 inheritance, and what would have to change for the answer to move.</p></div>
+</div>
+<h3 class="grp">The two properties</h3>
+<div class="cards">
+<div class="card"><div class="k">Property A</div><p><a href="property-a.html">The home to inherit</a>: inputs, the assessment history against the state factors, and what the inheritance does to the assessed value.</p></div>
+<div class="card"><div class="k">Property B</div><p><a href="property-b.html">The rented building already owned</a>: rent, the capped increases, running costs, and the reassessment exposure if it were in the same estate.</p></div>
+</div>
+<h3 class="grp">Rules and process</h3>
+<div class="cards">
+<div class="card"><div class="k">The rules</div><p><a href="taxes.html">Tax, thresholds and law watch</a>: federal, California and local, with the estate-tax room year by year.</p></div>
+<div class="card"><div class="k">The process</div><p><a href="inheritance.html">Inheritance steps</a>: seventeen steps from today to the years after the death, with every deadline.</p></div>
+</div>
+<h3 class="grp">Evidence and open items</h3>
+<div class="cards">
+<div class="card"><div class="k">What is not settled</div><p><a href="review.html">Flagged for Review</a>: values left blank because no official source confirms them.</p></div>
+<div class="card"><div class="k">How it was checked</div><p><a href="audit.html">Independent verification</a>: what an independent pass corrected, and how the arithmetic was re-checked.</p></div>
+<div class="card"><div class="k">Every source</div><p><a href="sources.html">Source library</a>: each document, the words relied on, and how it was checked.</p></div>
+</div>
+</section>
+<section><h2>Three editions in one repository</h2>
+<p>This dashboard is one of three editions kept side by side. They answer the same question with separate models, so their figures differ; each page states which model it comes from. Do not mix a number from one edition with a table in another.</p>
+<div class="cards">
+<div class="card win"><div class="k">This edition &middot; 13 pages</div><p>The pages in the menu. One model, one source ledger of 68 entries, re-checked line by line on 11 November 2026. Act on these numbers.</p></div>
+<div class="card"><div class="k">Cross-check &middot; 10 pages</div><p><a href="plan/index.html">A second model</a> built from official figures only, leaving unverifiable inputs blank and reporting break-evens instead. It reaches the same default: sell and keep Property B.</p></div>
+<div class="card"><div class="k">50-year suite &middot; 12 pages</div><p><a href="analysis/index.html">2026&ndash;2076 schedules</a>, a 1977&ndash;2026 state cycle replay with decline-in-value relief, a 60/40 Treasury barbell and the ownership-asymmetry tables.</p></div>
 </div></section>{PRIV}"""
 PAGES["index.html"] = page("index.html", "Overview", "Overview", "Sell, rent or move in?",
                            "A costed answer for a home expected to be inherited through a trust between 2040 and 2050, "
@@ -236,6 +278,7 @@ rows = [
  (["Property B, if in the same estate", f"tax rises from {usd(BR45['tax_keep'])} to {usd(BR45['tax_reset'])} in 2045", "In a multi-unit building only the unit that was the parent's home and becomes the child's home can be excluded. The owner states Property B is already owned by the beneficiary; if the deed confirms it, none of this applies."], "C", S("boe_lta26026", "cityb_rate", asm=True, flag=True)),
  (["Federal estate tax", "$15,000,000 per person in 2026; $15,480,000 in 2027", "A married couple can use two exclusions, but only if the first estate files Form 706 on time to elect it. Tax above the exclusion is 40%."], "V", S("irs_estate", "irs_2027", "irs_i706")),
  (["Room for cash under the exclusion", f"{usd(E45['room_single_base'])} in 2045 for one person", f"Scenario exclusion {usd(E45['exclusion'])} less both homes at {usd(E45['homes_base'])}. Under the owner's statement that Property B is already the heir's, the room is {usd(ROOM_B_OWNED)} instead. The cash amount itself was not supplied."], "C", S("irs_estate", "irs_rp2532", asm=True, flag=True)),
+ (["Estate tax above the threshold", "40 cents of every dollar over the room", "An estate $5,000,000 above the room would owe about $2,000,000 before credits. The tax falls on the estate, not on the heir, and is due with Form 706 nine months after the death. California and its cities impose none."], "C", S("irs_estate", "irs_i706", "rtc13301")),
  (["California and local death taxes", "None", "No state estate or inheritance tax return since 2005. Cities and counties are barred from imposing one."], "V", S("sco_estate", "rtc13301")),
  (["Insurance", BLANK, "No official premium figure or insurer quote was confirmed for either property. The owner's guesses are used as placeholders; tripling them does not change the ranking."], "U", S("cdi_compare", flag=True)),
  (["Law under discussion", "The initiative to repeal the 2021 inheritance rules failed for lack of signatures", f"It would have restored the pre-2021 exclusion. If a later measure did so, Property A's 2045 tax would be {usd(LAW['tax_restored'])}. Selling would still come out ahead."], "V", S("sos_memo", "lao_250017", "sos_measures")),
@@ -387,7 +430,7 @@ notes_html = "<ul>" + "".join(
     f'<li><strong>{sid}.</strong> {note} Winner on this model: <strong>{next(x for x in STRESS if x["id"] == sid)["winner"]}</strong>.</li>'
     for sid, note, _ in stress_notes) + "</ul>"
 
-body = f"""
+body = f"""{PART2}
 <div class="answer"><p><strong>Selling Property A and reinvesting wins in 5 of the 7 historical analogues; renting wins only when equities flatline for a decade. Moving in never wins. The reinvestment vehicle, however, depends on the regime.</strong></p>
 <p>Over 2040-2060 the economy will not move in a straight line. The official record contains a depression, two inflationary oil shocks, a dot-com collapse, a housing crash, a pandemic crash and a 9.1% inflation print. This page re-runs the 2045 inheritance decision under the shapes of seven real episodes. The sale decision itself is robust; the vehicle and the margin are not.</p></div>
 
@@ -550,7 +593,7 @@ stress = [
    f"The break-even stock return is {BE['stock_return']}% over ten years: below it, renting wins. Sequencing risk is the reason proceeds are spread, not left in one fund on one day."], "C",
   S("frh_1987", "treasury_cmt", asm=True)),
 ]
-body = f"""
+body = f"""{PART1}
 <section><h2>Why this page exists</h2>
 <p>The rest of this site projects one smooth path: house prices at 3%, 4% or 5% a year, costs at 2.5%, stocks at 7%.
 That is a baseline, not a forecast. Over any fifty-year period, growth and inflation are never smooth.
@@ -663,7 +706,7 @@ hist_ex = [(2011, 5_000_000), (2012, 5_120_000), (2013, 5_250_000), (2014, 5_340
 thr = [([str(y), N(v), N(2 * v)], "V", S("irs_estate")) for y, v in hist_ex] + [(["2027", N(15_480_000), N(30_960_000)], "V", S("irs_2027", "irs_rp2635"))]
 fed = [
  (["Estate tax exclusion", "$15,000,000 (2026); $15,480,000 (2027)", "Per person. Set by Public Law 119-21 and indexed for inflation from 2027."], "V", S("irs_estate", "irs_2027", "irs_whatsnew", "irs_rp2532")),
- (["Rate above the exclusion", ("n", "40%"), "The published credit of $5,945,800 on $15,000,000 corresponds to a 40% top rate. The rate table itself was not opened."], "V", S("irs_i706", flag=True)),
+ (["Rate above the exclusion", ("n", "40%"), "Marginal rate. The 2026 instructions publish a basic credit of $5,945,800 for a $15,000,000 exclusion, which is exactly $345,800 plus 40% of the excess over $1,000,000; the rate table itself was not opened (FL-16)."], "V", S("irs_i706", flag=True)),
  (["Two exclusions for a married couple", "Only by election", "The first estate must file Form 706 on time to pass the unused amount to the survivor, even if no tax is due."], "V", S("irs_estate", "irs_i706")),
  (["Form 706 due date", "9 months after death", "Form 4768 gives an automatic 6-month extension to file."], "V", S("irs_i706")),
  (["Annual gift exclusion", "$19,000 (2026); $20,000 (2027)", "Per recipient. Larger gifts use up the lifetime exclusion."], "V", S("irs_2027")),
@@ -674,6 +717,7 @@ fed = [
  (["Sale of a main home", "$250,000 or $500,000 excluded", "Needs two years of ownership and use in the five years before the sale."], "V", S("irs_tc701")),
  (["Rental depreciation", "27.5 years", "On the building only. An inherited rental starts again from the value at death."], "V", S("irs_p527")),
  (["Rental losses", "Passive", "Usable against other rental income. The $25,000 allowance against other income phases out above $100,000."], "V", S("irs_p925")),
+ (["State tax on Treasury interest", "None", "Obligations of the United States, and the interest on them, are exempt from state and local tax. The exemption does not extend to estate or inheritance tax, and gain on a sale is decided under the federal code."], "V", S("uscode3124", "treasury_cmt")),
 ]
 st = [
  (["California estate or inheritance tax", "None", "No return for deaths since 2005."], "V", S("sco_estate")),
@@ -716,7 +760,8 @@ body = f"""
 <p>The exclusion covers everything in the estate: both homes, cash, securities and earlier taxable gifts. The amount of cash was not supplied, so the table shows the room left after the two homes.
 The 2026 and 2027 exclusions are the published amounts. From 2030 the exclusion is a scenario: $15,480,000 rising 2.5% a year. The last column cuts it in half to test a change of law. A negative number means estate tax would be due at 40% on that amount even with no other assets.</p>
 {tbl("Room under the federal exclusion after both homes", ["Year of death", "Exclusion, one person", "Exclusion, couple", "Both homes at 4%", "Room, one person, 3%", "Room, one person, 4%", "Room, one person, 5%", "Room, couple, 4%", "Room if the exclusion is halved"], est)}
-<p>The table assumes both homes are in the estate, the conservative reading. The owner states (11 November 2026) that Property B is already owned by the beneficiary, so it is not part of the decedent's taxable estate <a href="https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax" target="_blank" rel="noopener noreferrer">IRS &middot; Estate tax thresholds</a>. If the deed confirms the statement, one person's room in 2045 is {usd(ROOM_B_OWNED)} instead of {usd(E45['room_single_base'])}, larger by Property B's 2045 value of {usd(B_VALUE_2045)}. The statement is owner-supplied; no deed was seen (flag FL-01).</p></section>
+<p>The table assumes both homes are in the estate, the conservative reading. The owner states (11 November 2026) that Property B is already owned by the beneficiary, so it is not part of the decedent's taxable estate <a href="https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax" target="_blank" rel="noopener noreferrer">IRS &middot; Estate tax thresholds</a>. If the deed confirms the statement, one person's room in 2045 is {usd(ROOM_B_OWNED)} instead of {usd(E45['room_single_base'])}, larger by Property B's 2045 value of {usd(B_VALUE_2045)}. The statement is owner-supplied; no deed was seen (flag FL-01).</p>
+<p><strong>What happens above the threshold.</strong> Each dollar of taxable estate above the exclusion costs the estate 40 cents. An estate $5,000,000 over the room would owe about $2,000,000 before credits. The tax is levied on the estate, not on the person who receives the property, and it is due with Form 706 nine months after the death; California and its cities add nothing. Because the exclusion is indexed and the room depends on house prices and on the cash balance, the comparison that matters in the year of death is the published exclusion against the date-of-death values, not today's numbers.</p></section>
 <section><h2>Law changes under discussion</h2>{tbl("Law watch", ["Item", "Status on 10 November 2026", "What it would change", "Effect on this decision"], watch)}</section>{PRIV}"""
 PAGES["taxes.html"] = page("taxes.html", "Tax, thresholds, law watch", "Tax and law", "Rules, thresholds and what may change",
                            "Federal, state and local. Each rule was read on the official publisher's site.", body)
@@ -770,7 +815,6 @@ fl = [
  ("FL-15", "Result of the 3 November 2026 measures", "Results are not certified; certification is due 11 December 2026. The unofficial count on 10 November 2026 had Proposition 42 ahead with 51.5% yes and Proposition 40 rejected with 52.6% no.", "The certified statement of vote", "sos_results"),
  ("FL-24", "Any mortgage or debt on either property", "The model assumes both properties are unencumbered. A loan would have to be repaid from a sale, or would reduce the room under the federal exclusion.", "Loan statements or the trustee's schedule of assets", "irs_estate"),
  ("FL-16", "The 40% estate tax rate", "Derived from the published credit amount. The rate table was not opened.", "Table A in the Form 706 instructions", "irs_i706"),
- ("FL-17", "State tax on Treasury interest", "Assumed exempt. Not re-verified in this session.", "Franchise Tax Board guidance", "ftb_rates"),
  ("FL-18", "Long-run stock return", "7.0% is an assumption. Only a 12-month official figure was read.", "The fund's long-run return table", "tsp_returns"),
  ("FL-19", "City B vacancy tax", "Reported struck down on appeal in September 2026 by secondary sources only.", "The Court of Appeal opinion", "cityb_rate"),
  ("FL-20", "Pending bills on the basis reset", "None was verified. Treated as hypothetical.", "A search of current federal bills", "irs_basis"),
@@ -787,7 +831,7 @@ Each value is left blank rather than estimated. The list is ordered by how much 
 <li><strong>Jurisdictions.</strong> The pages name only County A and City B, but the official local links identify them to anyone who opens one. Dropping the local sources would remove that, at the cost of unsourced local rates.</li>
 </ul></section>{PRIV}"""
 PAGES["review.html"] = page("review.html", "Flagged for review", "Flagged for review", "Unverified, unknown or irregular",
-                            "Twenty-four open items with the official page that bears on each, and two privacy disclosures.", body)
+                            f"{len(fl)} open items with the official page that bears on each, and two privacy disclosures.", body)
 
 # ------------------------------------------------------------------------------------------------ audit
 corr = [
@@ -813,7 +857,7 @@ repo = [
  ("Checks", "Every table row must link to an official publisher. Dollar amounts must be multiples of $10. City names, ZIP codes, parcel numbers and e-mail addresses fail the build."),
  ("Publishing", "The site is served from the main branch. Both publishing paths carry the same sanitised files. Earlier sessions report that the setting itself could not be changed with the available permissions."),
  ("Repository history", "Earlier commits contain exact figures and location details. Not rewritten. Needs the owner's decision."),
- ("Open pull requests from other sessions", "Two open pull requests (#23 and #25) that would have replaced this edition with a pre-correction model were closed without merging on 11 November 2026; their branches remain for reference."),
+ ("Pull requests from other sessions", "Three pull requests (#23, #25 and #34) would each have replaced this edition with a model that predates the corrections listed above. They were closed without merging on 11 November 2026; their branches remain for reference. The substantive additions in #34 - a 40-window historical replay and an insurance framework - are covered by the two black-swan pages and by the sensitivity cases on the decision page, including insurance at three times the owner's guess."),
 ]
 rlist = "<ul>" + "".join(f"<li><strong>{area}.</strong> {finding}</li>" for area, finding in repo) + "</ul>"
 body = f"""
@@ -822,7 +866,11 @@ body = f"""
 The earlier edition's source work was sound: its quotations matched the official pages wherever they were re-opened.</p>
 {tbl("Corrections to the earlier edition", ["No.", "Item", "Earlier edition", "This edition"], rows)}{LEGEND}</section>
 <section><h2>What the 11 November 2026 pass added</h2>
-<p>Twelve sources in the ledger were opened or re-opened on the publisher's own domain on 11 November 2026: the IRS estate page and the 2027 inflation release, the Proposition 19 page and Letters 2025/009 and 2026/002, Revenue and Taxation Code section 63.2, the local secured-tax page, the rent-increase page, the Treasury yield table, the inherited-basis FAQ, the HUD dataset documentation and the Federal Reserve inflation-goal FAQ. Every quoted figure matched what was already published; no number changed. Fifteen sources were added for the new <a href="black-swans.html">black-swan conditions</a> page (Federal Reserve, Federal Reserve History, BLS, CBO, SSA, the state election results service and six FRED series), the source library now holds 58 entries, and three stress cases were added to the model: stocks at 4.0% a year, inflation at 4.0% a year, and a flat decade for house prices. Selling still finishes first in all three. The law watch gained the unofficial 3 November 2026 ballot results and a pending local rent measure, and the flagged list gained one item: any debt on the properties.</p></section>
+<p>Twelve sources in the ledger were opened or re-opened on the publisher's own domain on 11 November 2026: the IRS estate page and the 2027 inflation release, the Proposition 19 page and Letters 2025/009 and 2026/002, Revenue and Taxation Code section 63.2, the local secured-tax page, the rent-increase page, the Treasury yield table, the inherited-basis FAQ, the HUD dataset documentation and the Federal Reserve inflation-goal FAQ. Every quoted figure matched what was already published; no number changed. Fifteen sources were added for the new <a href="black-swans.html">black-swan conditions</a> page (Federal Reserve, Federal Reserve History, BLS, CBO, SSA, the state election results service and six FRED series), the source library now holds {len(SRC)} entries, and three stress cases were added to the model: stocks at 4.0% a year, inflation at 4.0% a year, and a flat decade for house prices. Selling still finishes first in all three. The law watch gained the unofficial 3 November 2026 ballot results and a pending local rent measure, and the flagged list gained one item: any debt on the properties.</p></section>
+<section><h2>Second pass, 11 November 2026</h2>
+<p>A third session re-checked this edition on 11 November 2026 before publishing it. Thirteen ledger entries were re-opened on the publishers' own domains: the IRS estate page, the 2026 Form 706 instructions, the 2027 inflation release, the Proposition 19 page and Letter 2025/009, Revenue and Taxation Code sections 63.2 and 13301, the local secured-tax page, the local rent-increase page, the Department of Insurance premium-survey page, the Secretary of State's initiative memorandum and its unofficial election results, and the Treasury yield table. The figures already published matched in every case; no number changed.</p>
+<p>Three things were added or corrected. First, a gap: the state-tax treatment of Treasury interest had been left as an unverified assumption (FL-17). It is now read in 31 U.S.C. 3124 on the U.S. Government Publishing Office's own site, which exempts Treasury obligations and their interest from state and local tax but expressly not from an estate or inheritance tax; the flag is closed and the rule appears on the tax page. Second, the 40% estate-tax rate is now tied to the published 2026 credit of $5,945,800, which is exactly $345,800 plus 40% of the excess over $1,000,000; the rate table itself is still not opened, so FL-16 stays open. Third, a stale count on this page (58 sources) was replaced by a number the build computes.</p>
+<p>The arithmetic was re-checked independently of the renderer: all 35 projection years for each property were recomputed from the model's own formulas (tax = rate x assessed value plus fixed charges; running costs summed; assessed value capped at 2%), the estate-room rows were recomputed from the exclusion less both homes, and the 2045 reassessment was recomputed from the Proposition 19 formula. Every published figure agreed to the nearest $10. The page structure was also changed: the menu is now grouped into five sections, the two black-swan pages are labelled as parts 1 and 2 of one section instead of appearing twice under different names, and the overview states which of the three editions in this repository a reader is looking at.</p></section>
 <section><h2>Repository review</h2><p>Findings from reading the repository itself. These are observations, not sourced facts.</p>{rlist}</section>
 <section><h2>How this edition relates to the cross-check</h2>
 <p>A separate <a href="plan/index.html">cross-check edition</a> was built by another session with its own model and its own source ledger. It leaves unverifiable inputs blank and reports break-evens.
@@ -874,12 +922,14 @@ Inheritance in 2045, house prices rising 4% a year, measured ten years later aft
 - Renting wins only if stocks return under {BE['stock_return']}% a year or the home appreciates about {BE['house_growth']}% a year.
 - Living in the home costs about ${B45['live_cost_month_today']:,} a month in today's dollars compared with selling.
 - Federal estate tax: $15,000,000 per person in 2026 and $15,480,000 in 2027; California has none.
+- Above the exclusion the estate pays 40 cents for every dollar: an estate $5,000,000 over the room owes about $2,000,000 before credits. The tax is on the estate, not on the heir, and is due with Form 706 nine months after the death. California and its cities impose no death tax.
 - The owner states Property B is already owned by the heir, so under that statement it sits outside the decedent's estate; if it were in the same estate its tax would reset: ${BR45['tax_keep']:,} to ${BR45['tax_reset']:,} a year in 2045.
 - Under that same statement one person's estate-tax room in 2045 is ${ROOM_B_OWNED:,} instead of ${E45['room_single_base']:,}, larger by Property B's 2045 value of ${B_VALUE_2045:,}. The deed was not seen (FL-01).
 - Insurance premiums are unverified and left blank; tripling the owner's guess does not change the ranking.
-- Black-swan stress tests (stocks at 4.0%, inflation at 4.0%, flat house prices): selling still finishes first; a lost decade only moves the proceeds to Treasuries. See black-swans.html.
-- Black swan stress tests (stress.html): verified 1929, 1965-82, 2000-02, 2007-09 and 2020 episodes re-run against the 2045 inheritance. The sale decision holds in 5 of 7 analogues; only the reinvestment vehicle changes with the regime.
+- Black swans, part 1 (black-swans.html): the baseline's official anchors, fifty years of state inflation data, and the fixed amounts whose real value erodes.
+- Black swans, part 2 (stress.html): stock returns at 4.0%, inflation at 4.0% or a flat decade for house prices - selling still finishes first, and a lost decade only moves the proceeds to Treasuries. Verified 1929, 1965-82, 2000-02, 2007-09 and 2020 episodes re-run against the 2045 inheritance: the sale decision holds in 5 of 7 analogues, and only the reinvestment vehicle changes with the regime.
+- Re-checked on 11 November 2026 by a third pass: 13 sources re-opened on the publishers' sites, every projection row recomputed from the model's formulas, one open flag closed (31 U.S.C. 3124, Treasury interest is free of state tax) and one stale count corrected. No figure changed.
 
-Site: index.html. Stress tests: stress.html. Economic conditions: black-swans.html. Open items: review.html. Sources: sources.html.
+Site: index.html. Open items: review.html. How it was checked: audit.html. Sources: sources.html.
 """, encoding="utf-8")
 print(f"built {len(PAGES)} pages")

@@ -108,7 +108,7 @@ ASSUMPTIONS = [
     ("sale_cost", "Cost of selling Property A", "5.11% of the price", "5.0% scenario allowance for agents, escrow, title and preparation, plus the verified 0.11% county transfer tax.", ["rtc11911", "cnty_a_recorder"]),
     ("t_ord", "Tax on rental income and on rental losses used", "33.3%", "Scenario household: 24% federal plus 9.3% California. Losses are assumed usable against Property B's rental income.", ["irs_p925", "ftb_rates"]),
     ("t_gain", "Tax on a large one-time gain", "36.1%", "20% federal, 3.8% net investment income tax and 12.3% California. Depreciation taken is taxed at 41.1%.", ["irs_tc409", "irs_tc559", "ftb_cg"]),
-    ("t_div", "Tax on dividends and on Treasury interest", "28.1% and 27.8%", "15% + 3.8% + 9.3% on dividends. Treasury interest is assumed free of state tax: that exemption was not re-verified here.", ["irs_tc409", "irs_tc559"]),
+    ("t_div", "Tax on dividends and on Treasury interest", "28.1% and 27.8%", "15% + 3.8% + 9.3% on dividends. Treasury interest is free of state tax under 31 U.S.C. 3124, verified on 11 November 2026, so it carries federal tax only.", ["irs_tc409", "irs_tc559", "uscode3124"]),
     ("home_excl", "Home-sale exclusion if the family lives in A", "$500,000", "Joint return. It is $250,000 on a single return.", ["irs_tc701"]),
     ("fed_excl_index", "Federal estate exclusion after 2027", "2.5% a year", "Scenario. The amount is indexed by law; the future index is unknown.", ["irs_rp2532", "irs_2027"]),
     ("hold_years", "Comparison period", "10 years after the inheritance", "Every option is cashed out at the end and all taxes are paid, so the options are compared on the same footing.", ["irs_basis"]),

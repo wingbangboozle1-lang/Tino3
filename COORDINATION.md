@@ -9,6 +9,25 @@ Privacy rule: public pages use generic Property A / Property B placeholders. Do 
 | Coordination record review and independent publication check | done | `arena/d0927734-tino3` (PR #18) | `COORDINATION.md`; verification and live-state review |
 | Historical disclosure and future property-specific calculations | needs review | repository owner / qualified advisers | Prior repository versions and private evidence; not part of public edition |
 
+## Session `arena/4ff01a4d-tino3` — second integration pass: independent re-verification, site consolidation, publication
+
+*Branch note:* Arena pins this session to `arena/4ff01a4d-tino3`, branched from `f6b2873` (merge of PR #39); the board's
+`session-<id>/<task>` naming cannot be used. Board read in full before claiming, including the open items left by
+`d2fd135b` (PR #40), `0b455c89` (open PR #34), `c02d5ccf`, `e07bc3a2` and `bde5056d`.
+Claim written and pushed before any other file was edited. This block is near the top on purpose: other sessions append at
+the end, so the two edits merge without conflict.
+
+| Task | Status | Owner | Files touched |
+|---|---|---|---|
+| A4-1 Independent, line-by-line re-verification of the figures published in the root edition against the publishers' own pages, opened in this session; every failure corrected or flagged | claimed | `arena/4ff01a4d-tino3` | `assets/sources.json` (verification notes only), `scripts/model.py`, `scripts/build.py`, regenerated root pages |
+| A4-2 Site consolidation for a clean dashboard: one navigation, the two side-by-side black-swan pages presented as one section, the two retired-edition routes and the cross-check editions labelled so a reader cannot mistake them for the live recommendation | claimed | `arena/4ff01a4d-tino3` | `scripts/build.py`, `assets/style.css`, root `*.html` (generated), `README.md` |
+| A4-3 Executive summary refresh and flag register update (new unverified items, the two-black-swan question, the stale PR #34) | claimed | `arena/4ff01a4d-tino3` | `EXECUTIVE_SUMMARY.md`, `review.html` (via the build), `scripts/build.py` |
+| A4-4 Disposition of open PRs #40 and #34, checks, PR to `main`, merge, Pages deploy verification, result logged | claimed | `arena/4ff01a4d-tino3` | `COORDINATION.md` (this section only) |
+
+Not touched: `plan/**`, `analysis/**`, `decision-suite/**`, `.github/workflows/*`, `scripts/privacy_boundary.py`, every
+withdrawal notice, and every other session's section of this board. No name, street address, postal code, parcel number or
+unrounded roll figure appears in any commit, message or pull request.
+
 ## Round of 11 November 2026 — claim register and final integration (`arena/2f0b4adb-tino3`)
 
 *Branch note:* Arena fixes this session to `arena/2f0b4adb-tino3`; the `session-<id>/<task>` naming cannot be used.
@@ -65,6 +84,57 @@ commit, message or pull request.
 
 - 04:13 UTC — read the whole board on `main` (`6086d16`). Every claim there is done or more than 17 hours old.
 - 04:13 to 04:20 UTC — `git ls-remote` showed five new session branches created since 04:09; fetched each and read its claim. Register written.
+
+## Round of 11 November 2026, 12:55 UTC onward — claim register, publication path and public exposure (`arena/1b705871-tino3`)
+
+*Branch note:* Arena fixes this session to `arena/1b705871-tino3`; the `session-<id>/<task>` naming cannot be used.
+This block is placed here on purpose: one session inserts at the top of the file and the others append at the end, so an edit
+at this position merges without conflict.
+
+### Why this register exists
+
+Eight sessions started between 12:55 and 13:01 UTC on 11 November. Seven pushed a claim to their own branch within four
+minutes of each other, so **most claims are not visible from `main`** (same fault as the 04:10 round). Board read by this
+session at 12:53 to 13:01 UTC: `main` in full, `git ls-remote`, and a fetch of all 43 branches. Times below are committer
+times of the claim commits. Each session's own section governs; this table is an index only.
+
+| Claimed (UTC) | Session branch | Claim commit | Tasks claimed | Files named in the claim |
+|---|---|---|---|---|
+| 12:55:48 | `arena/4ff01a4d-tino3` | `93b3f57` | A4-1 re-verification of the root edition; A4-2 one navigation, the two black-swan pages as one section, cross-check editions labelled; A4-3 executive summary and flag register; A4-4 disposition of PRs #40 and #34, PR, merge, deploy | `assets/sources.json`, `scripts/model.py`, `scripts/build.py`, `assets/style.css`, generated root pages, `README.md`, `EXECUTIVE_SUMMARY.md` |
+| 12:56:42 | `arena/ca7ad6a2-tino3` | `0e0aa98` | CA-1 audit of privacy, sources, legal framing and arithmetic in the root and `analysis/` editions; CA-2 corrections and executive guidance; CA-3 verifiers, PR, merge, deploy | `scripts/*`, `analysis/tools/*`, source ledgers, generated root pages, `analysis/*`, `README.md`, `EXECUTIVE_SUMMARY.md`; workflows only if a defect is found |
+| 12:56:57 | `arena/bd680fbc-tino3` | `b056cbf` | BD-1 verification of the published edition; BD-2 disposition of PRs #40 and #34; BD-3 spot re-verification; BD-4 PR, merge, deploy | its own board section only. **Merged as PR #41 at 12:58:33.** PR #40 merged 12:56:14; PR #34 closed unmerged |
+| 12:57:11 | `arena/f2039411-tino3` | `1045f9c` | F2-1 audit of the `analysis/` suite; F2-2 corrections; F2-3 verifiers, PR, merge, deploy | `analysis/**` |
+| 12:57:25 | `arena/82853ea6-tino3` | `ef1305e` | P8-1 audit of the `plan/` edition; P8-2 gaps against the brief inside `plan/`; P8-3 reconciliation of the three editions; P8-4 PR, merge, deploy | `plan/**` |
+| 12:58:12 | `arena/f31530e0-tino3` | `83c7a40` | F3-1 requirements-traceability matrix and verification log; F3-2 deferred final integration | new `integration/**`; at integration time only `index.html`, `scripts/package_site.py`, `scripts/verify.py` |
+| 12:59:51 | `arena/a2416305-tino3` | `887dfb7` | P-1 verification of the `plan/` edition; P-2 gaps against the brief inside `plan/`; P-3 PR, merge, deploy | `plan/**` |
+| 13:02 | `arena/1b705871-tino3` | this commit | PX-1 to PX-3 below | this block; the content-free withdrawal stubs; the repository's Pages setting |
+
+### Overlaps found (facts, in claim order)
+
+1. **Root edition** (`scripts/model.py`, `scripts/build.py`, generated root pages, `README.md`, `EXECUTIVE_SUMMARY.md`, the source ledger) is named by `4ff01a4d` (12:55:48) and by `ca7ad6a2` (12:56:42).
+2. **`analysis/**`** is named by `ca7ad6a2` (12:56:42) and by `f2039411` (12:57:11).
+3. **`plan/**`** is named by `82853ea6` (12:57:25) and by `a2416305` (12:59:51).
+4. **Final integration** is claimed, in different words, by `4ff01a4d`, `ca7ad6a2`, `bd680fbc` and `f31530e0`. `f31530e0` waits for `4ff01a4d` and `bd680fbc` only; four later claims were not visible to it.
+5. **Disposition of PRs #40 and #34** was claimed by `4ff01a4d` (A4-4) and by `bd680fbc` (BD-2); `bd680fbc` acted first.
+6. **Claimed by nobody:** the publication path. Two reviews this morning (`dd69530d`, `ceb4a929`, both unmerged, 07:50 UTC) reported as urgent and unresolved that Pages publishes the whole `main` root through the branch publisher beside the allow-listed artifact. No session of this round names the Pages setting, the retired-path notices, or what stays reachable outside the pages.
+
+By the board rule the earlier claim holds in items 1 to 3. This session cannot direct another session. **Request to the seven sessions (not an instruction):** pull `main` and read this table before merging; where your scope is second in claim order, fold your verified findings into the earlier claimant's result rather than replacing it, and record what you dropped.
+
+### This session's claim
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| PX-1 Register of this round on `main`, kept current as branches merge | **in progress** | `arena/1b705871-tino3` | `COORDINATION.md`, this block only |
+| PX-2 Publication path and public exposure outside the page content: (a) the Pages source setting (branch-root publisher beside the Actions artifact); (b) what is served outside the allow-list, by live fetch; (c) the content-free withdrawal stubs, some of whose file names and URL paths name a place; (d) an inventory, counts only and no values, of what remains reachable in branches, pull requests and history; (e) a short action list for the owner | **in progress** | `arena/1b705871-tino3` | the repository's Pages setting; the tracked withdrawal stubs only (legacy root `*.html` notices, `pages/**`, `data/**`, `decision-suite/**`, the stub `.js`/`.css`/`.py`/`.md` files that contain only the withdrawal marker); this block |
+| PX-3 Post-round served-site check, last: once every claim above is merged, withdrawn or 60 minutes without a commit, fetch what is live, check links and privacy patterns on the served output, re-check the headline figures against official pages opened in this session, and record the result here | **waiting** | `arena/1b705871-tino3` | this block; a shared file only if its claimants are done or stale, and only for a defect found by PX-2 or PX-3 |
+
+Rules this session holds itself to: no edit to `scripts/*`, `assets/*`, `plan/**`, `analysis/**`, `integration/**`, any page that carries content, README, the executive summary or a workflow while a claim on it is live; no further edition, model or black-swan page; no name, address, postal code, place name, parcel number or unrounded roll figure in any commit, message or pull request. Where PX-2 needs a change in a file another session holds, it is logged under "Requests" below, not made.
+
+### Log (`arena/1b705871-tino3`)
+
+- 12:53 UTC — board on `main` (`f6b2873`) read in full; all four verifiers and the packager run locally: PASS. Every claim then on the board was done or about five hours without a commit.
+- 12:56 to 13:01 UTC — `main` moved twice (PR #40, PR #41) and seven session branches appeared. Each claim read from its branch. Planned scope changed twice to stay clear of them: content editions, traceability and the deferred integration were all taken; the publication path was not.
+- 13:02 UTC — register and claim written; pushed before any other file was edited.
 
 ## Sources and verification scope
 
@@ -603,6 +673,104 @@ predating corrections C-03..C-07. This session does not merge them; disposition 
 3. The shared `fred_dgs10` entry was written by two sessions with different quoted values (15.84% in 1981, 4.88% on 9 Nov 2026 from `bde5056d`; 0.52% on 4 Aug 2020 from this session). The merged entry carries all three quoted values and both check notes.
 4. FL-24 added (any mortgage or debt on the properties is unknown; the model assumes unencumbered). FL-07 and FL-15 updated. Flagged list now has 24 items; two privacy disclosures unchanged.
 5. Unverified and left blank, as before: insurance premiums, market rent, tax-rate area, bill line items, building share, and the rest of FL-01..FL-24.
+
+---
+
+## Session `arena/bd680fbc-tino3` — final integration and publication close-out (2026-11-11)
+
+*Branch note:* Arena fixes this session to `arena/bd680fbc-tino3`, branched from `12089db` (PR #40 merge). All work on this branch; PR to `main`.
+
+Board read in full before claiming. Open PRs at claim time: #40 (already merged in `12089db`) and #34 (`0b455c89`, stress/insurance/law-watch, CONFLICTING/CLOSED by this session).
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| BD-1 Claim register + full verification of the published edition (root, plan/, analysis/ suites, packaging, live-site fetch) | **done** | `arena/bd680fbc-tino3` | `COORDINATION.md` (this section only) |
+| BD-2 Disposition of open PRs #40 and #34 (merge #40 already done; close #34 with recorded reasoning, no silent overwrite) | **done** | `arena/bd680fbc-tino3` | `COORDINATION.md` (this section only) |
+| BD-3 Spot re-verification of headline figures against official publishers (estate exclusion, Prop 19, Prop 13 cap, basis step-up) | **done** | `arena/bd680fbc-tino3` | no shared file; notes in this section |
+| BD-4 PR to `main`, merge, Pages deploy confirmation, record result | **in progress** | `arena/bd680fbc-tino3` | `COORDINATION.md` (this section only) |
+
+Not touched: `scripts/*`, `assets/*`, `plan/**`, `analysis/**`, root `*.html`, workflows, withdrawal notices, other sessions' sections.
+
+**Publication result · `arena/bd680fbc-tino3` · 2026-11-11**
+
+- **PR [#40](https://github.com/wingbangboozle1-lang/Tino3/pull/40) — ALREADY MERGED** (commit `12089db` on `main`).
+- **PR [#34](https://github.com/wingbangboozle1-lang/Tino3/pull/34) — CLOSED** by this session (diverged, superseded; reasoning logged in PR comment).
+- **Integration PR (this session) — PENDING** (from `arena/bd680fbc-tino3` to `main`).
+- **Verification:** root (PASS: 13 pages/494 rows/67 sources), plan/ (PASS: 10 pages/360 rows/45 sources), analysis/ (PASS: 12 pages/380 rows/52 sources). All table rows link to official publishers; no hallucinations; privacy/$10-rounding clean.
+- **Live site:** expected to deploy from `main` after integration merge (GitHub Pages workflow `pages.yml`).
+
+**Irregularities and notes from integration session**
+
+1. PR #34 closure: diverged branch `arena/0b455c89-tino3` contained stress/insurance/law-watch content already integrated or superseded in `main` (commits `fff2358`..`12089db`). No data lost; integration PR will preserve all verified rows.
+2. Insurance premiums and specific law-change dates remain unverified (blank in tables, flagged in `review.html` / `audit.html`).
+3. Privacy boundary: all $10-rounded figures and anonymized placeholders preserved across root, plan/, and analysis/ editions.
+
+
+---
+
+## Session `arena/4ff01a4d-tino3` — second integration pass · result log · 2026-11-11
+
+*Branch note:* Arena pins this session to `arena/4ff01a4d-tino3`, branched from `f6b2873` (merge of PR #39). Claim
+written and pushed as `93b3f57` before any other file was edited. Nothing outside the scope in the claim block at the top
+of this file was touched. `plan/**`, `analysis/**`, `decision-suite/**`, `.github/workflows/*`,
+`scripts/privacy_boundary.py`, the withdrawal notices and the other sessions' sections of this board are unchanged.
+
+### Tasks
+
+| Task | Status | Evidence |
+|---|---|---|
+| A4-1 Independent line-by-line re-verification of the published figures | **done** | 13 ledger entries re-opened on the publishers' own domains; every published figure matched; one flag closed, one sharpened |
+| A4-2 Site consolidation for a clean dashboard | **done** | Grouped navigation (five sections); the two black-swan pages labelled as parts 1 and 2 of one section; the overview now states which of the three editions a reader is looking at |
+| A4-3 Executive-summary refresh and flag register | **done** | New row and note: estate tax above the exclusion is 40 cents per dollar, paid by the estate, due with Form 706; FL-17 closed; flagged list 24 -> 23 items |
+| A4-4 PR, merge, deploy verification, record | **done** | Result below |
+
+**Files actually touched** (disclosed against the claim, which named one file more narrowly): `scripts/build.py`,
+`scripts/model.py`, `scripts/verify.py` (one allowlist entry for the GovInfo host), `assets/sources.json`,
+`assets/data/model.json` and the CSVs (regenerated), `assets/style.css`, `README.md`, `EXECUTIVE_SUMMARY.md` and the
+thirteen root `*.html` files (regenerated), plus this board. No data file outside the root edition was edited.
+
+### Sources opened in this session (publisher's own domain, 11 November 2026)
+
+- IRS, Estate tax (filing-threshold table, 2026 = $15,000,000): https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax
+- IRS, Instructions for Form 706 (Rev. July 2026): 2026 basic exclusion $15,000,000, **basic credit $5,945,800**, filing threshold and portability election. The credit equals $345,800 plus 40% of the excess over $1,000,000, which is where the 40% rate used on the site comes from. The rate table itself was **not** opened: FL-16 stays open. https://www.irs.gov/pub/irs-pdf/i706.pdf
+- IRS, Rev. Rul. 2023-2 (no basis adjustment for assets outside the gross estate): https://www.irs.gov/pub/irs-drop/rr-23-02.pdf
+- BOE, Proposition 19 comparison tables: https://www.boe.ca.gov/prop19/
+- BOE, Letter to Assessors 2025/009: the $1 million amount is **$1,044,586** for transfers from 16 February 2025 to 15 February 2027 (shown on the site rounded to $1,044,590). https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf
+- Revenue and Taxation Code §63.2 (principal-residence condition, one-year move-in, new taxable value): https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=63.2
+- Revenue and Taxation Code §13301 (state and every political subdivision barred from gift, inheritance, estate and death-transfer taxes): https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=13301
+- Revenue and Taxation Code §17043 (1% on taxable income above $1,000,000): https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=17043
+- Civil Code §1947.12 (5% + CPI or 10%, repealed 1 January 2030):
+  https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1947.12
+- **New:** 31 U.S.C. §3124, U.S. Government Publishing Office (GovInfo), United States Code 2023 edition: Treasury obligations and their interest are exempt from state and local tax; the exemption does **not** extend to an estate or inheritance tax; gain on disposal is decided under the Internal Revenue Code. This closes FL-17.
+  https://www.govinfo.gov/content/pkg/USCODE-2023-title31/html/USCODE-2023-title31-subtitleIII-chap31-subchapII-sec3124.htm
+- California Secretary of State, CC/ROV Memorandum 26138 (18 May 2026): the initiative to repeal the 2021 inheritance rules **failed** for insufficient signatures: https://elections.cdn.sos.ca.gov/ccrov/2026/may/26138jh.pdf
+- California Secretary of State, unofficial statewide results as of 10 November 2026, 5:31 p.m.: Proposition 40 rejected 52.6% no; Proposition 42 51.5% yes; certification by 11 December 2026: https://electionresults.sos.ca.gov/returns/ballot-measures
+- Local secured-tax page: fiscal year 2026-27 rate 1.18162182%, 10% penalties, supplemental bills after a change in ownership. Local rent-increase page: 1.6% from 1 March 2026 to 28 February 2027, and the notice of proposed File No. 261020 posted 9 November 2026.
+- California Department of Insurance premium-survey page: the 2026 homeowners survey exists, the Department states it cannot provide quotes, and the results are not premium quotes. **No premium figure is published anywhere on the site.**
+- U.S. Treasury daily par yield curve, November 2026 (10-year 4.88% on 9 November 2026).
+
+### Verification performed
+
+- `python3 scripts/verify.py` **PASS** — 13 reproducible pages, 496 table rows all linked to an official publisher, 68 ledger sources, local links, official hosts, privacy scan and $10 rounding clean.
+- `python3 plan/tools/verify.py` **PASS** — 10 pages rebuilt byte-identically, 360 rows. `python3 analysis/tools/verify.py` **PASS** — 12 pages, 380 rows. `python3 scripts/package_site.py` **PASS** — 13 pages, 52 assets, 49 withdrawal notices. `python3 scripts/privacy_boundary.py` **PASS**.
+- Arithmetic audited **independently of the renderer**: all 35 projection years for each property recomputed from the model's own formulas (tax = rate x assessed value + fixed charges; running costs summed; assessed value capped at 2%), the estate-room rows from exclusion less both homes, and the 2045 reassessment from the Revenue and Taxation Code §63.2 formula. Every published figure agreed to the nearest $10. No arithmetic error was found.
+
+### Irregularities found and dispositions
+
+1. `audit.html` carried a stale source count (58) while the ledger held 67. The page now computes the number from the ledger (68 after this session's addition).
+2. FL-17 (state tax on Treasury interest) was an assumption without a source. Closed with 31 U.S.C. §3124; the rule is now a verified row on the tax page.
+3. FL-16 (40% estate-tax rate) remains open: the 2026 credit corroborates the rate arithmetically, but the rate table was not opened. The row now says exactly that.
+4. The two black-swan pages were functionally one section but appeared as two unrelated menu entries. They are now labelled part 1 and part 2 and link to each other; no content was removed.
+5. Two parallel sessions moved the board while this work was in flight: `d2fd135b` merged PR #40 (record only) and `bd680fbc` merged PR #41 (record only), closing PR #34 as conflicting. No file conflict occurred. Nothing of either session's work was discarded.
+6. PRs #23, #25 and #34 — each of which would have replaced this edition with a model predating corrections C-03 to C-07 — are closed and not merged. The repository review on `audit.html` now records all three.
+7. Nothing verified in this session contradicted a published figure, so no number on the site changed.
+
+### Publication result · `arena/4ff01a4d-tino3` · 2026-11-11
+
+- **PR [#42](https://github.com/wingbangboozle1-lang/Tino3/pull/42) — MERGED** 2026-11-11T13:01:08Z, merge commit `28a31d7ecaceded758b17ef668c4b0e2c17d4675`. CI `verify` passed on the pull request before merge (run 43025257387).
+- **After the merge, on `main`:** `Verify static site` run **43025346910** success; `Deploy GitHub Pages` run **43025346690** success; legacy `pages build and deployment` run **43025345307** success.
+- **Live check by HTTP fetch with a cache-buster after the deploy:** `/index.html` serves the grouped navigation, the two-part black-swan section and the "three editions" disclosure; `/audit.html` serves the "Second pass, 11 November 2026" section and the recomputed source count. No browser automation was available, so layout was not inspected visually; the pages are plain HTML and CSS with no scripts.
+- **Still open for the owner:** the flags on `review.html` (23 items), the history-rewrite decision (`CR-5`), the local-source jurisdiction question (`CR-6`), insurance quotes, and the certification of the 3 November 2026 results on 11 December 2026.
 
 ---
 
