@@ -65,6 +65,8 @@ RENT_CAP_NOW = 0.016
 INFL = 0.02                                         # FOMC longer-run goal
 HPI = {"1975Q1": 41.65, "1996Q2": 200.89, "2006Q2": 643.96, "2016Q2": 553.43,
        "2025Q2": 966.27, "2026Q2": 974.97}
+CDI_AVG_2017_EXACT = 1_074             # CDI archived Part I statewide average written premium, 2017
+CDI_AVG_2017 = r10(CDI_AVG_2017_EXACT)
 
 
 def cagr(a, b, n):
@@ -78,7 +80,7 @@ G = {"low": G_LOW, "base": G_BASE, "high": G_HIGH}
 R10Y = TREASURY["10y"]
 HORIZON = 10
 T_YEARS = (2040, 2045, 2050)
-YEARS = list(range(2026, 2051))
+YEARS = list(range(2026, 2077))  # 2026-2076: a fifty-one-year window
 
 
 def mid(p):
@@ -264,7 +266,7 @@ def decision(T, g):
 
 def headroom():
     out = []
-    for y in (2026, 2027, 2030, 2035, 2040, 2045, 2050):
+    for y in (2026, 2027, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070, 2075, 2076):
         ex = exclusion(y)
         a, b = market(A, y, G_BASE), market(B, y, G_BASE)
         ah, bh = market(A, y, G_HIGH), market(B, y, G_HIGH)

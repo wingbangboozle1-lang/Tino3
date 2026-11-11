@@ -17,7 +17,7 @@ OUT = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else HERE.parent
 CHECKED = "11 November 2026"
 
 NAV = [("index.html", "Overview"), ("summary.html", "Executive summary"), ("properties.html", "Properties and costs"),
-       ("projections.html", "Projections 2026-2050"), ("decision.html", "Decision and uneven-economy test"),
+       ("projections.html", "Projections 2026-2076"), ("decision.html", "Decision and uneven-economy test"),
        ("taxes.html", "Taxes and thresholds"), ("steps.html", "Inheritance steps"), ("laws.html", "Law watch"),
        ("flagged.html", "Flagged for Review"), ("sources.html", "Sources")]
 
@@ -109,6 +109,10 @@ H = o["history"]
 SH = ("fred_hpi", "fred_gs10", "fred_cpi")
 TD = asm["treasury_date"]
 SP19 = ("boe_p19", "boe_cap", "boe_guid")
+CDI_AVG_EXACT = M.CDI_AVG_2017_EXACT
+CDI_AVG = M.CDI_AVG_2017
+N_EXCERPT = sum(1 for v in SOURCES.values() if v[3] == "excerpt")
+N_READ = sum(1 for v in SOURCES.values() if v[3] == "read")
 
 # ------------------------------- recommendation (shared) -------------------------------
 REC = f"""<div class="rec"><h2>Recommended plan</h2>
@@ -131,13 +135,16 @@ kp = f"""<div class="kpis">
 <div class="kpi"><span>Property B net rent</span><b>{usd(t['b_net_keep'])}</b><p>Per year before maintenance and income tax. Already the heir's: not reassessed by this inheritance.</p></div>
 <div class="kpi"><span>Rent needed to beat selling A</span><b>{pc(d45['be_yield_vs_sell'])} of value</b><p>{usd(d45['be_rent_vs_sell_2026'])} a month in today's dollars (2045 base case). Actual market rent: blank, unverified.</p></div>
 <div class="kpi"><span>Return needed to beat living in A</span><b>{pc(d45['r_star'])}</b><p>After-tax yearly return on the sale money. 10-year Treasury on {TD}: {pc(asm['r10y']*100)} before tax.</p></div>
+<div class="kpi"><span>Official insurance benchmark, 2017</span><b>{usd(CDI_AVG)}</b><p>Statewide average written homeowners premium; exact official figure {off(CDI_AVG_EXACT)}. No official premium exists for either property, so those cells are blank.</p></div>
 </div>"""
 cards = "".join(f'<a href="{h}"><b>{e(tt)}</b><span>{d}</span></a>' for h, tt, d in [
     ("summary.html", "Executive summary", "The answer, the numbers behind it and what would change it."),
     ("properties.html", "Properties and costs", "Inputs, tax-rate make-up, today's running costs."),
-    ("projections.html", "Projections 2026-2050", "Year-by-year value, assessed value, tax, insurance, water, electricity, maintenance."),
+    ("projections.html", "Projections 2026-2076", "Fifty-one years of value, assessed value, tax, insurance, water, electricity and maintenance."),
     ("decision.html", "Decision analysis", "Live in, rent out, or sell and reinvest: ten-year comparison and break-evens."),
     ("decision.html#uneven", "Uneven-economy (black swan) test", "The same decision replayed along every ten-year stretch of official house-price, interest-rate and inflation data since 1975."),
+    ("decision.html#episodes", "Official economic history", "Fifty years of official house-price, inflation and interest-rate readings, plus the episodes the baseline must survive."),
+    ("properties.html#insurance", "Insurance and utility research", "Official statewide premium benchmarks, solar-billing rules and the values that must stay blank."),
     ("taxes.html", "Taxes and thresholds", "Federal, state and local taxes, the tax-free threshold and the room left under it."),
     ("steps.html", "Inheritance steps", "What the successor trustee and the heir file, and by when."),
     ("laws.html", "Law watch", "Pending and recent changes and what each would do to the numbers."),
@@ -157,12 +164,32 @@ idx_rows = [
     R("Uneven-economy test: ten-year stretches since 1975 in which selling A / keeping A came out ahead", f"{H['n_sell']} / {H['n_keep']} of {H['n']}", b("calc"), s=SH, num=(1,)),
     R(f"10-year Treasury yield, {TD}", pc(asm["r10y"] * 100), b("off"), s=("treasury",), num=(1,)),
     R("California house-price growth, last 20 / 30 years", f"{pc(hp['y20'])} / {pc(hp['y30'])} a year", b("calc"), s=SG, num=(1,)),
+    R("Statewide average written homeowners premium, 2017", off(CDI_AVG_EXACT), b("off"), s=("cdi_avg2017",), num=(1,)),
+    R("Official premium for Property A or Property B", "", b("blank"), s=("cdi_report", "cdi_guide"), flag=True),
+    R("Projection horizon", "2026-2076, fifty-one years", b("calc"), s=("fred_hpi", "boe_infl")),
 ]
+trace_spec = [
+    ("Executive summary and the clear best plan", '<a href="summary.html">Executive summary</a>', "Published", ("irs_estate", "irs_2027")),
+    ("Privacy: placeholders, no personal data", '<a href="flagged.html">Flagged for Review</a>', "Published; Git history disclosed as an irregularity", ("boe_pub29", "gh_prs")),
+    ("Costs rounded to $10", '<a href="properties.html">Properties and costs</a> and every table', "Enforced by the verifier", ("coa_rates",)),
+    ("Property B already owned by the heir", '<a href="taxes.html">Taxes and thresholds</a>, <a href="steps.html">Inheritance steps</a>', "Applied to estate tax, reassessment and basis", ("irs_estate", "boe_pub29", "irs_basis")),
+    ("Separate black-swan economic conditions section", '<a href="decision.html#uneven">Uneven-economy test</a> and <a href="decision.html#episodes">Official economic history</a>', "Forty-one official ten-year replays plus a fifty-year official series", ("bls_100", "fred_hpi", "cbo_2026", "ssa_2026")),
+    ("Baseline projections over a fifty-year horizon", '<a href="projections.html">Projections 2026-2076</a>', "Fifty-one years for both properties", ("fred_hpi", "fomc", "cbo_2026", "treasury")),
+    ("Inheritance thresholds: local, state, federal", '<a href="taxes.html">Taxes and thresholds</a>', "Verified; future years labelled assumptions", ("irs_estate", "irs_rp2635", "rtc_13301", "coa_rates")),
+    ("Insurance, utilities, maintenance research", '<a href="properties.html#insurance">Insurance and utilities</a>', "Official anchors published; parcel-specific premiums blank", ("cdi_report", "cdi_avg2017", "cpuc_nem", "cpuc_water")),
+    ("Step-by-step trust inheritance process", '<a href="steps.html">Inheritance steps</a>', "Statutory deadlines with official links", ("prob_16061", "rtc_480", "irs_estate")),
+    ("Live in, rent or sell and reinvest after taxes", '<a href="decision.html">Decision analysis</a>', "Break-evens where a value is unverified", ("irs_basis", "boe_p19", "treasury")),
+    ("Potential law changes being discussed", '<a href="laws.html">Law watch</a>', "Official status for each item", ("irs_rp2532", "sos_2026", "congress_s587", "sos_memo")),
+    ("Every table row has an official source link", '<a href="sources.html">Source ledger</a>', "Checked on every page by the verifier", ("irs_estate",)),
+    ("Irregularities and unverified values", '<a href="flagged.html">Flagged for Review</a>', "Published, non-blocking", ("gh_prs",)),
+]
+trace_rows = [R(a, bb, c, s=src) for a, bb, c, src in trace_spec]
 page("index.html", "Overview",
      "A second, independent pass over the inheritance decision for two California homes: should the heir live in Property A, rent it out, or sell it and reinvest? This edition uses only figures read on official pages plus the owner's own figures, and solves for break-evens instead of assuming what it cannot verify.",
      f"""<div class="note"><b>How this relates to the main dashboard.</b> The <a href="../index.html">main edition</a> answers the same question with scenario assumptions (a 7% stock return, an assumed market rent, a 33.3% tax rate, assumed maintenance and selling costs). This cross-check replaces each of those with an official figure or a break-even, and reconciles the two on the <a href="flagged.html">Flagged for Review page</a>. Both reach the same default for Property A (sell in the first year) and both find the margin thin.</div>
 {kp}{REC}
 <h2>Headline numbers</h2>{table("Key figures and where they come from", ["Item", "Value", "Basis"], idx_rows)}
+<h2>Requirement traceability</h2>{table("Where each part of the brief is answered", ["Brief requirement", "Where", "Status", "Official source"], trace_rows)}
 <h2>Sections</h2><div class="cards">{cards}</div>""")
 
 # ------------------------------------- summary -----------------------------------------
@@ -183,6 +210,12 @@ sum_rows = [
       f"The winner followed the conditions at the start: selling won all {sum(x['sell'] for x in H['runup'] if x['lo'] >= 5)} stretches that began after house prices had risen 5% a year or more for five years; keeping won all {H['runup'][0]['keep']} that began after a five-year fall.", s=SH),
     R("9. Running costs", f"Property A {usd(t['a_total'])} a year today; Property B nets {usd(t['b_net_keep'])} a year.",
       "Before maintenance, which the owner did not quantify and no official source prices.", s=("coa_rates", "cityb_tax", "fomc"), flag=True),
+    R("10. Insurance research", f"Official statewide average written homeowners premium, 2017: {usd(CDI_AVG)} (exact {off(CDI_AVG_EXACT)}).",
+      "No official premium exists for either specific property, so those cells are blank and flagged. Owner estimates are labelled, never presented as verified.", s=("cdi_avg2017", "cdi_report", "cdi_guide"), flag=True),
+    R("11. Estate thresholds and projections", f"{off(M.EXCL[2026])} in 2026, {off(M.EXCL[2027])} in 2027 under Revenue Procedure 2026-35 section 3.44; none at state or local level.",
+      f"Room for money beside Property A in 2045: {usd(next(h for h in o['headroom'] if h['year']==2045)['room_a'])}. The projected {usd(o['headroom'][-1]['exclusion'])} exclusion in 2076 is a 2%-a-year assumption, not an official figure.", s=("irs_estate", "irs_rp2635", "rtc_13301", "coa_rates")),
+    R("12. Law watch", "The 2026 repeal initiative failed; S.587 is still at the introduced stage; the 3 November 2026 statewide ballot contains no property-tax transfer repeal.",
+      "The 2027 exclusion and the Proposition 19 amount are the two figures that will be republished before the inheritance.", s=("sos_memo", "sos_2026", "congress_s587", "irs_2027", "boe_cap")),
 ]
 chg_rows = [
     R("A written rent estimate for Property A", f"Above {pc(d45['be_yield_vs_sell'])} of value a year", "Keep A as a rental instead of selling", s=("irs_414", "boe_p19")),
@@ -193,7 +226,7 @@ chg_rows = [
     R("A change to the family-home rules", "Not pending: the 2026 repeal initiative failed", "Would let the heir keep the owner's assessed value; see Law watch", s=("sos_memo",)),
 ]
 page("summary.html", "Executive summary",
-     "Nine findings, one recommendation, and the six things that would change it. Every figure links to the official page it rests on.",
+     "Twelve findings, one recommendation, and the six things that would change it. Every figure links to the official page it rests on.",
      f"""{table("Findings", ["Finding", "Number", "What it means"], sum_rows)}{REC}
 <h2>What would change the recommendation</h2>{table("Switch points (2045 inheritance, base case)", ["If this", "Is", "Then"], chg_rows)}
 <p class="small">Base case: house prices grow {pc(GB*100)} a year (midpoint of the 20-year and 30-year California figures), other costs grow 2% a year, and sale proceeds earn the 10-year Treasury yield. Low and high cases are on the decision page.</p>""")
@@ -233,6 +266,24 @@ bq_rows = [
     R("Bill the owner reported for 2025", usd(M.B["bill"]), b("own"), s=("cityb_tax",), num=(1,)),
     R("Difference: direct charges and special assessments, not itemised", usd(rt["fixed_b"]), b("flag"), s=("cityb_tax",), num=(1,), flag=True),
 ]
+ins_rows = [
+    R("Official statewide average written homeowners premium, 2017", usd(CDI_AVG), b("off"),
+      "Exact official figure: " + off(CDI_AVG_EXACT) + ". An archived statewide average written premium for owner-occupied homeowners multiple-peril policies; not a quote for either home.", s=("cdi_avg2017",), num=(1,)),
+    R("Primary-residence policy for Property A", "", b("blank"),
+      f"Unverified. No insurer quote and no official parcel-level premium. The owner's estimate of {usd(M.A['insurance'])} a year is labelled owner-supplied.", s=("cdi_report", "cdi_guide", "cdi_tool"), flag=True),
+    R("Landlord / rental policy for Property B", "", b("blank"),
+      f"Unverified. The owner's estimate is {usd(M.B['insurance'])} a year. The CDI report covers dwelling-fire and landlord forms for buildings of four units or fewer, but publishes no premium for this building.", s=("cdi_report", "cdi_guide"), flag=True),
+    R("Official premium data that exists", "Part I 2008-2023; Part II ZIP-level 2018-2023", b("off"),
+      "ZIP-level figures are deliberately not reproduced: publishing them could re-identify a parcel. The CDI comparison tool publishes survey premiums for hypothetical homes, not quotes.", s=("cdi_report", "cdi_tool")),
+    R("Water, Property A / Property B", f"{usd(M.A['water_month'][0])}&ndash;{usd(M.A['water_month'][1])} / {usd(M.B['water_month'][0])}&ndash;{usd(M.B['water_month'][1])} a month", b("own"),
+      "Owner-supplied bands. The CPUC regulates investor-owned water utilities, but no official rate was matched to either bill.", s=("cpuc_water",), flag=True),
+    R("Electricity, Property A", "Solar credit of about $10&ndash;$20 a month", b("own"),
+      "Owner-supplied. CPUC: NEM tariffs are closed to new enrolment; NEM 2.0 customers may stay 20 years from interconnection, while the NBT legacy period is nine years.", s=("cpuc_nem",), flag=True),
+    R("Electricity, Property B", "$30&ndash;$70 a month", b("own"),
+      "Owner-supplied band. BLS recorded a 13.7% rise in electricity CPI in the year to June 2022, so a flat 2% cost assumption is conservative.", s=("bls_2022", "cpuc_nem"), flag=True),
+    R("Maintenance and repair", "", b("blank"),
+      "No figure supplied and no official source prices it. Left blank and excluded from every total; the projection tables show what $1,000 of today's maintenance becomes instead.", s=("irs_414",), flag=True),
+]
 page("properties.html", "Properties and costs",
      "What the owner supplied, how the tax bills break down against the published rates, and what each home costs to run today. Owner figures are labelled; nothing here was taken from a parcel record.",
      f"""{table("Inputs", ["Item", "Property A", "Property B", "Basis", "Note"], in_rows)}
@@ -242,7 +293,10 @@ page("properties.html", "Properties and costs",
 {table("Rates per $100 of assessed value, fiscal year 2025-26", ["Levy", "Rate"], rate_rows)}
 {table("Why it matters: Property A tax if reassessed at today's market value", ["Assumption", "Rate on value", "Tax per year", "Note"], bound_rows)}
 <h2>Property B: the bill is larger than rate x value</h2>{table("Reconciling the reported bill", ["Line", "Amount", "Basis"], bq_rows)}
-<p class="small">Almost half of the Property B bill is not explained by the published rate. The tax collector states that bills add direct charges and special assessments to the rate-based tax; the bill's own lines would confirm what they are. The model carries the difference forward as a fixed charge growing 2% a year.</p>""")
+<p class="small">Almost half of the Property B bill is not explained by the published rate. The tax collector states that bills add direct charges and special assessments to the rate-based tax; the bill's own lines would confirm what they are. The model carries the difference forward as a fixed charge growing 2% a year.</p>
+<h2 id="insurance">Insurance and utilities: what is officially verifiable</h2>
+<p class="small">The owner asked for research on a primary-residence policy and a landlord policy. Official statewide survey data exist; no official premium exists for either specific property. Per the verification rule, those two values are blank and flagged, and the owner's own estimates are labelled, not verified.</p>
+{table("Insurance and utility research", ["Item", "Value", "Basis", "Note"], ins_rows)}""")
 
 # ------------------------------------ projections --------------------------------------
 pa1 = [R(y, usd(r["market_low"]), usd(r["market_base"]), usd(r["market_high"]), usd(r["assessed_keep"]), usd(r["tax_keep"]),
@@ -263,8 +317,8 @@ basis_rows = [
     R("Rent from sitting tenants, Property B", pc(asm["rent_growth"] * 100, 1) + " a year", "Rent Board formula: 60% of inflation. Applies only if the building is covered: flagged.", s=("cityb_rentlearn", "cityb_laws"), num=(1,), flag=True),
     R("Maintenance", "", "No starting figure. The last column of each cost table shows what $1,000 of today's maintenance spending becomes.", s=("fomc",), flag=True),
 ]
-page("projections.html", "Projections 2026-2050",
-     "Year-by-year house value, assessed value, property tax, insurance, water, electricity and maintenance for both homes. These are scenarios built from official growth figures, not forecasts.",
+page("projections.html", "Projections 2026-2076",
+     "Fifty-one years of house value, assessed value, property tax, insurance, water, electricity and maintenance for both homes. These are scenarios built from official growth figures, not forecasts.",
      f"""{table("What drives each column", ["Column", "Growth used", "Where it comes from"], basis_rows)}
 <h2>Property A</h2>
 {table("Property A: value, assessed value and property tax", ["Year", "Value, low", "Value, base", "Value, high", "Assessed value, no transfer", "Tax, no transfer", "Tax if inherited that year, lived in", "Tax if inherited that year, not lived in"], pa1, num=range(1, 8))}
@@ -273,7 +327,7 @@ page("projections.html", "Projections 2026-2050",
 <h2>Property B</h2>
 {table("Property B: value, assessed value and property tax", ["Year", "Value, low", "Value, base", "Value, high", "Assessed value, no transfer", "Tax, no transfer", "Tax if reassessed that year"], pb1, num=range(1, 7))}
 {table("Property B: rent and running costs", ["Year", "Rent, two units", "Property tax, no transfer", "Insurance", "Water", "Electricity", "Net before maintenance", "Net if reassessed that year", "Maintenance: what $1,000 today becomes"], pb2, num=range(1, 9))}
-<p class="small">Downloads: <a href="data/projection_a.csv">projection_a.csv</a>, <a href="data/projection_b.csv">projection_b.csv</a>.</p>""")
+<p class="small">Downloads: <a href="data/projection_a.csv">projection_a.csv</a>, <a href="data/projection_b.csv">projection_b.csv</a>. The horizon is 2026-2076: fifty-one years, long enough to cover an inheritance between 2040 and 2050 plus several decades of ownership afterwards. Years after 2027 extrapolate the statutory 2% indexing assumption; they are scenarios, not official projections.</p>""")
 
 # ------------------------------------- decision ----------------------------------------
 opt_rows = [
@@ -392,6 +446,36 @@ UNEVEN = f"""<h2 id="uneven">Uneven-economy test: the black-swan check</h2>
 {table("All " + str(H['n']) + " ten-year stretches, applied to a " + str(H['T']) + " inheritance", ["Shape of years", "House index, a year", "Treasury yield at start", "Consumer prices, a year", "Sell: wealth after ten years", "Keep and live in: wealth after ten years", "Ahead", "Return on sale money needed to match keeping", "Rent on A needed to beat selling, % of value a year", "Sell, after inflation", "Keep, after inflation"], hw_rows)}
 <p class="small">Method and limits. &ldquo;Sell&rdquo; = sale price less county transfer tax, compounding for ten years at the starting yield (coupons assumed reinvested at that yield; in practice later coupons earn the later rate). &ldquo;Keep&rdquo; = house value after ten years plus the third-unit rent of Property B less A's running costs, reinvested at the same yield. Property tax on A uses the family-home rule and then the maximum 2% yearly rise. Before income tax, maintenance and brokerage, which stay blank. &ldquo;After inflation&rdquo; is the change in buying power against the value at inheritance. The index is statewide, not the neighbourhood. Shares are not replayed because no official total-return series back to 1975 was read; the &ldquo;return needed&rdquo; column is the test for them. The full rows are in <a href="data/model.json">data/model.json</a> under <code>history</code>.</p>"""
 
+ep_spec = [
+    ("BLS", "All-items CPI, 1913-1929", "3.5% a year", "bls_100"),
+    ("BLS", "All-items CPI, December 1929 to June 1933", "-8.3% a year", "bls_100"),
+    ("BLS", "All-items CPI, 1968-1983", "7.3% a year (186.4% total)", "bls_100"),
+    ("BLS", "All-items CPI, later long boom", "2.9% a year", "bls_100"),
+    ("BLS", "12-month CPI-U to June 2022", "9.1%; electricity 13.7%", "bls_2022"),
+    ("Federal Reserve History", "The Great Inflation, 1965-1982", "over 14% in 1980; 3.5% in the later 1980s", "frh_inflation"),
+    ("FHFA / FRED", "California house prices, 1976-1986", pc((M.HPI_Q2[1986] / M.HPI_Q2[1976]) ** 0.1 * 100 - 100) + " a year", "fred_hpi"),
+    ("FHFA / FRED", "California house prices, 2006-2016", pc((M.HPI_Q2[2016] / M.HPI_Q2[2006]) ** 0.1 * 100 - 100) + " a year", "fred_hpi"),
+    ("FHFA / FRED", "Worst one-year fall in the official series", pc((M.HPI_Q2[2009] / M.HPI_Q2[2008] - 1) * 100), "fred_hpi"),
+    ("FHFA / FRED", "California house prices, 2020-2022", pc((M.HPI_Q2[2022] / M.HPI_Q2[2020]) ** 0.5 * 100 - 100) + " a year", "fred_hpi"),
+    ("Federal Reserve", "Longer-run PCE inflation goal", "2.0%", "fomc"),
+    ("CBO", "PCE inflation, 2026 / by 2030", "2.7% / about 2.0%", "cbo_2026"),
+    ("SSA Trustees", "Long-range CPI-W, intermediate / low-cost / high-cost", "2.4% / 3.0% / 1.8%", "ssa_2026"),
+    ("U.S. Treasury", "10-year par yield, " + TD, pc(asm["r10y"] * 100), "treasury"),
+    ("Thrift Savings Plan", "C Fund / G Fund, year to 31 October 2026", "12.09% / 4.61%", "tsp_returns"),
+    ("California Department of Insurance", "Statewide average written homeowners premium, 2017", off(CDI_AVG_EXACT), "cdi_avg2017"),
+]
+ep_rows = [R(pub, label, value, b("off") if pub in ("California Department of Insurance",) else b("calc"), s=(sid,)) for pub, label, value, sid in ep_spec]
+ser_rows = [R(y, pc((M.HPI_Q2[y] / M.HPI_Q2[y-1] - 1) * 100), pc((M.CPI_AVG[y] / M.CPI_AVG[y-1] - 1) * 100),
+              pc(M.GS10_JUN[y]), s=("fred_hpi", "fred_cpi", "fred_gs10"), num=(1, 2, 3), flag=True)
+            for y in range(1976, 2026)]
+EPISODES = f"""<h2 id="episodes">Official economic history behind the black-swan test</h2>
+<div class="note warn"><b>Why this section exists.</b> Growth and inflation are not consistent over fifty years. Official publishers record a 27.4% fall in consumer prices between October 1929 and April 1933, 7.3% a year inflation in 1968-1983, a 9.1% CPI year in 2022 and a one-year fall in the California house index of more than 15% in 2008-2009. A single growth rate hides exactly the risk this decision faces. The replay above uses the official series; the tables below show the episodes and the year-by-year record behind it.</div>
+<h3>Verified economic episodes and official anchors</h3>
+{table("Official economic history read on 11 November 2026", ["Publisher", "Series or episode", "Verified figure", "Basis"], ep_rows)}
+<h3>Year-by-year official record, 1976-2025</h3>
+<p class="small">Each row is one year of the three official series used by the uneven-economy replay: the California all-transactions house-price index (second quarter), the annual average all-items CPI-U, and the June average 10-year Treasury yield. Booms, crashes and flat years arrive in their recorded order, so a constant-growth baseline can be compared with what actually happened.</p>
+{table("Fifty years of official readings", ["Year", "California house index change", "Consumer price index change", "10-year Treasury yield, June"], ser_rows)}
+<p class="small">These are historical observations, not a forecast. The replay above applies them to a 2045 inheritance; this table lets a reader check each input against the publisher's own series. Later years in the projections to 2076 are scenario outputs from official growth figures, not official projections.</p>"""
 page("decision.html", "Decision and uneven-economy test",
      "Live in Property A, rent it out, or sell it and reinvest: the first year in dollars, the ten-year outcome, the break-even points, and the same decision replayed through fifty years of uneven conditions. Property B is kept in every option.",
      f"""{REC}
@@ -406,7 +490,7 @@ page("decision.html", "Decision and uneven-economy test",
 <p class="small">Read across: with base-case growth and a 2045 inheritance, selling wins unless the sale money would earn less than {pc(d45['r_star'])} a year after tax. Renting A out beats living in it once the rent passes {usd(d45['be_rent_vs_live_2026'])} a month in today's dollars, and beats selling once it passes {usd(d45['be_rent_vs_sell_2026'])}. Download: <a href="data/decisions.csv">decisions.csv</a>.</p>
 <h2>Property B: keep it</h2>{table("Property B as an investment (today's figures)", ["Line", "Per year", "Return"], bb_rows)}
 <p class="small">Net rent plus the low-case growth rate ({pc(t['b_yield_keep'] + GL*100)}) is above the Treasury yield, before counting the heir's own unit. Because B is already the heir's, selling it would be taxed on the whole gain since the heir acquired it, which is a further reason to hold it.</p>
-{UNEVEN}""")
+{UNEVEN}{EPISODES}""")
 
 # -------------------------------------- taxes ------------------------------------------
 tx_rows = [
@@ -421,6 +505,13 @@ tx_rows = [
     R("Property-tax reassessment", "Change in ownership at death", "Market value, unless the family-home exclusion applies", f"Property A: {usd(t['a_tax_keep'])} to {usd(t['a_tax_live'])} or {usd(t['a_tax_full'])} a year at today's value", s=SP19),
     R("County transfer tax on a sale", "Sale of real property", "55 cents per $500 of price", f"{usd(d45['transfer_tax'])} on a 2045 sale of A", s=("rtc_11911",)),
     R("Inherited retirement accounts", "Most non-spouse heirs", "Account emptied by the end of the 10th year; withdrawals are taxable", "Applies if the money includes retirement accounts", s=("irs_ira",)),
+]
+lvl_rows = [
+    R("Local (county / city)", "No inheritance or estate tax; property tax is levied on the real property, and a transfer at death is a change in ownership.", "1% of assessed value plus voter-approved bond levies; reassessment to market value on change of ownership.", s=("coa_rates", "cityb_tax", "boe_pub29", "rtc_480")),
+    R("California", "No estate, inheritance, gift, succession or legacy tax.", "Revenue and Taxation Code 13301 prohibits the state and every political subdivision from imposing any tax by reason of a death; a change needs a statewide vote.", s=("rtc_13301", "sco", "ftb_inh")),
+    R("Federal", "Estate tax only on the part of the gross estate above the basic exclusion.", f"{off(M.EXCL[2026])} for 2026 deaths, {off(M.EXCL[2027])} for 2027 under Revenue Procedure 2026-35 section 3.44, 40% on the excess; indexed for inflation for later years.", s=("irs_estate", "irs_2027", "irs_rp2635", "usc_2001")),
+    R("Inheritance as income to the heir", "Not taxable income.", "Property in the gross estate takes a date-of-death income-tax basis; later rent, interest and gains are taxable.", s=("ftb_inh", "irs_basis", "irs_706")),
+    R("Amount that can pass before any tax", f"{usd(t['room_a'])} of money and investments in 2026, with only Property A in the estate.", f"Property B is outside the estate per the brief. The contingency figure counting both homes is {usd(t['room_ab'])}.", s=("irs_estate", "irs_706", "boe_pub29")),
 ]
 hr_rows = [R(h["year"], off(h["exclusion"]) if h["year"] in M.EXCL else usd(h["exclusion"]), usd(h["a"]), usd(h["room_a"]), usd(h["room_a_high"]), usd(h["room_a_two"]), usd(h["b"]), usd(h["room_ab"]),
              s=("irs_estate", "irs_2027") if h["year"] in M.EXCL else ("irs_2027", "fomc", "fred_hpi"), flag=h["year"] not in M.EXCL, num=range(1, 8)) for h in o["headroom"]]
@@ -439,9 +530,10 @@ p19_rows = [
 page("taxes.html", "Taxes and thresholds",
      "Which federal, state and local taxes touch the inheritance, where the tax-free threshold sits, and how much room is left under it now and later.",
      f"""{table("Taxes that can apply", ["Tax", "When it applies", "Rate or amount", "Effect here"], tx_rows)}
+<h2>How much can be inherited before any tax?</h2>{table("Inheritance tax thresholds by level of government", ["Level", "Tax on inheriting", "Threshold or rule"], lvl_rows)}
 <h2>Room under the federal exclusion</h2>
-<p class="small">The amount of money in the inheritance was not given, so it is left blank. The table shows how much money and investments could sit beside Property A before federal estate tax starts. Property B is counted as the heir's own, as the owner states; the last two columns show the contingency in which the deed turns out to name the parent. Years after 2027 index the exclusion at 2% a year, which is an assumption: Congress has reset the figure several times.</p>
-{table("Headroom by year of death", ["Year", "Exclusion per person", "Property A", "Room for money beside A", "Same, high house prices", "Same, two exclusions (married, portability elected)", "Contingency: Property B", "Contingency: room if B were also in the estate"], hr_rows)}
+<p class="small">The amount of money in the inheritance was not given, so it is left blank. The table shows how much money and investments could sit beside Property A before federal estate tax starts. Property B is counted as the heir's own, as the owner states; the last two columns show the contingency in which the deed turns out to name the parent. Years after 2027 index the exclusion at 2% a year, which is an assumption: Congress has reset the figure several times. The {usd(o['headroom'][-1]['exclusion'])} exclusion shown for 2076 is therefore a scenario output, not an official figure.</p>
+{table("Headroom by year of death, 2026-2076", ["Year", "Exclusion per person", "Property A", "Room for money beside A", "Same, high house prices", "Same, two exclusions (married, portability elected)", "Contingency: Property B", "Contingency: room if B were also in the estate"], hr_rows)}
 {table("If death occurred in 2026: estate tax at different amounts of money", ["Money and investments", "Estate with Property A", "Amount over one exclusion", "Tax at 40%", "Tax with two exclusions", "Contingency: tax if B were also in the estate"], cc_rows)}
 <p class="small">Arithmetic only: no debts, expenses, deductions or lifetime gifts are included. The annual gift exclusion is {off(19000)} per recipient for 2026 and {off(20000)} for 2027.</p>
 <h2>How the family-home rule works</h2>{table("Proposition 19 in practice", ["Point", "Rule and effect"], p19_rows)}
@@ -467,6 +559,8 @@ st_rows = [
     R("Ongoing", "Heir", "Replace the insurance on each home with a policy in the new owner's name; use a landlord policy for a rented building.", "Compare premiums with the state's survey tool.", s=("cdi_guide", "cdi_tool")),
     R("Years 1 to 10", "Heir", "Empty any inherited retirement account by the end of the 10th year.", "Withdrawals are taxable income.", s=("irs_ira",)),
     R("After 2 years in A", "Heir, if living in A", "The home-sale exclusion becomes available on gain since the date of death.", f"Up to {off(250000)} ({off(500000)} joint).", s=("irs_701",)),
+    R("At death", "Successor trustee", "No change-in-ownership statement is needed for Property B, and it gets no new income-tax basis: it is already the heir's.", "Only Property A changes ownership and is reassessed. A later sale of B would be taxed on the heir's own gain.", s=("rtc_480", "boe_pub29", "irs_basis"), flag=True),
+    R("Before any insurance renewal", "Heir", "Compare a primary-residence policy for A and a landlord policy for B against the official statewide survey, then obtain written quotes.", "The official survey publishes aggregate premiums, not a quote for either property; the published cells for both premiums stay blank until a quote exists.", s=("cdi_report", "cdi_guide", "cdi_tool"), flag=True),
 ]
 page("steps.html", "Inheritance steps",
      "What happens, in order, when a home held in a revocable trust passes to a child in California: who acts, by when, and what it protects. Placeholders stand in for every person.",
@@ -476,26 +570,29 @@ page("steps.html", "Inheritance steps",
 # --------------------------------------- laws ------------------------------------------
 lw_rows = [
     R("Federal estate exclusion", "In force", f"{off(M.EXCL[2026])} for 2026; {off(M.EXCL[2027])} for 2027, indexed yearly.", f"Room for {usd(t['room_a'])} of money beside Property A today. The figure was {off(5490000)} in 2017 and {off(11180000)} in 2018: Congress can move it either way.", s=("irs_estate", "irs_2027")),
-    R("Bills to repeal the federal estate tax (S.587, H.R.1301)", "Introduced 13 February 2025; no further action recorded", "Would end the federal estate tax.", "No effect on Property A alone, which is already under the exclusion; would matter only if the money exceeds the headroom. Rechecked 11 November 2026: still at the introduced stage.", s=("congress_s587", "congress_hr1301")),
+    R("Bill to repeal the federal estate tax (S.587)", "Introduced 13 February 2025; read twice and referred to Senate Finance; status: Introduced", "Would end the federal estate tax.", "No effect on Property A alone, which is already under the exclusion; would matter only if the money exceeds the headroom.", s=("congress_s587",)),
+    R("Federal exclusion for 2027", "Published 5 November 2026 in IR-2026-133 and Revenue Procedure 2026-35 section 3.44", f"{off(M.EXCL[2027])} for deaths in 2027; indexed yearly after that.", f"Room for {usd(t['room_a'])} of money beside Property A in 2026. Congress has reset the base several times: {off(5490000)} in 2017 and {off(11180000)} in 2018.", s=("irs_2027", "irs_rp2635", "irs_estate")),
     R("Initiative to repeal the Proposition 19 inheritance rules", "Failed 18 May 2026: too few signatures", "Would have let children keep a parent's assessed value again.", f"Had it passed, Property A's tax after inheritance would stay near {usd(d45['tax_keep'])} in 2045 instead of {usd(d45['tax_live'])} to {usd(d45['tax_full'])}.", s=("sos_memo", "boe_p19")),
     R("Proposition 19 family-home amount", "Next adjustment 16 February 2027", f"Now {off(M.CAP_2025_27)}; moves with the California house-price index.", "Each extra $100,000 protected saves about " + usd(M.r10(100000 * M.RATE_A)) + " a year on Property A.", s=("boe_cap",)),
     R("State guidance on Proposition 19", "Issued 3 August 2026", "Confirms the one-year move-in rule, removal of the exclusion on moving out, and that only the parent's unit in a multi-unit building qualifies.", "Matters for Property B only if it turned out to be the parent's: rented units could not keep the old assessed value.", s=("boe_guid",)),
     R("Assessed-value factor", "1.02 for the 2026 roll", "Yearly increase capped at 2%.", "Keeps the owner's tax on Property A near " + usd(t["a_tax_keep"]) + " while ownership is unchanged.", s=("boe_infl26", "boe_infl"), flag=True),
     R("City B rent increase limit", "1.6% from 1 March 2026 to 28 February 2027", "Set each year at 60% of regional inflation.", f"Holds rent growth on sitting tenants below cost growth; Property B's rent rises about {usd(M.r10(t['b_rent'] * 0.016))} this year.", s=("cityb_rent", "cityb_rentlearn")),
     R("City B proposal, Board of Supervisors File No. 261020", "Proposed; not enacted (notice posted 9 November 2026)", "Would cap combined banked and capital-improvement increases at 10% a year.", "Limits catching up on skipped increases after inheriting Property B.", s=("cityb_rentlearn",)),
-    R("Solar billing", "Net billing tariff for applications since 15 April 2023; older net-metering tariffs closed to new customers", "Export credits under the new tariff are usually below the retail rate.", "Property A's credit of $10 to $20 a month depends on its existing tariff; a legacy period applies and its end date for this home is not known.", s=("cpuc_nem",), flag=True),
+    R("Solar billing", "Net billing tariff for applications since 15 April 2023; NEM tariffs closed to new enrolment", "NBT export credits are usually below the retail rate. CPUC confirms two different legacy periods: NEM 2.0 customers may stay 20 years from interconnection, while the NBT legacy period is nine years for the original interconnecting customer.", "Property A's credit of $10 to $20 a month depends on its tariff and interconnection date, neither of which was provided (F-19).", s=("cpuc_nem",), flag=True),
     R("California death taxes", "None; prohibited", "A new state estate or inheritance tax would need voter approval, since the ban was enacted by initiative.", "No effect unless voters change it.", s=("rtc_13301", "sco")),
-    R("Statewide ballot of 3 November 2026", "Results not checked on an official page", "", "Left blank. The failed initiative above was not on it.", s=("sos_memo",), flag=True),
+    R("Statewide ballot of 3 November 2026", "Unofficial results posted 10 November 2026; certification due 11 December 2026", "No measure repealing the family-transfer rules appears. Proposition 42 passed with 51.5%; Proposition 40 failed with 47.4%.", "No direct change to the plan. Results are unofficial, so no legal effect is assumed until certification.", s=("sos_2026",), flag=True),
+    R("Economic outlook that drives the long horizon", "CBO February 2026 and the 2026 Social Security Trustees Report", "CBO: PCE inflation 2.7% in 2026, about 2.0% by 2030; Trustees: long-range CPI-W 2.4% intermediate with a 1.8%-3.0% range.", "The 2% baseline is the Fed's longer-run goal; the range is stress-tested in the black-swan section rather than treated as a forecast.", s=("cbo_2026", "ssa_2026", "fomc")),
+    R("10-year Treasury yield", "Daily official series; " + TD + " published", f"{pc(asm['r10y']*100)} 10-year par yield on {TD} (9 November was 4.88%).", "The model uses the newest published daily figure. Recheck at the time of inheritance.", s=("treasury",)),
 ]
 page("laws.html", "Law watch",
-     "Rules that are pending, recently changed or regularly adjusted, and what each one does to the numbers on this site.",
+     "Rules that are pending, recently changed or regularly adjusted, and what each one does to the numbers on this site. Statuses were checked against official publisher pages on 11 November 2026.",
      f"""{table("Pending and recent changes", ["Item", "Status on " + CHECKED, "What it does", "Effect on this plan"], lw_rows)}
 <p class="small">Recheck this page at least once a year and at the time of inheritance. The exclusion, the family-home amount, the rent limit and the tax rates are all republished annually by the sources linked above.</p>""")
 
 # -------------------------------------- flagged ----------------------------------------
 fl_rows = [
     R("F-01", "Market rent of Property A", "blank", "No official figure for this home. The model reports break-even rents instead. Get a written estimate from a licensed property manager at the time.", s=("hud_fmr",)),
-    R("F-02", "Insurance premium, both homes", f"{usd(M.A['insurance'])} each (owner estimate)", "Owner is unsure. No quote and no official premium obtained; the state survey tool is interactive and was not queried. A rented three-unit building needs a landlord policy.", s=("cdi_tool", "cdi_guide")),
+    R("F-02", "Insurance premium, both homes", f"{usd(M.A['insurance'])} and {usd(M.B['insurance'])} a year (owner estimates)", "Owner is unsure. No quote and no official parcel-level premium exists. The official statewide average written homeowners premium for 2017 was " + off(CDI_AVG_EXACT) + ", published here rounded to " + usd(CDI_AVG) + "; it is an aggregate benchmark, not a quote. Both property-specific cells are blank in the insurance research table. A rented three-unit building needs a landlord policy.", s=("cdi_tool", "cdi_guide", "cdi_report", "cdi_avg2017")),
     R("F-03", "Maintenance", "blank", "Owner gave no figure (only that A costs less than B). Not in any total.", s=("irs_414",)),
     R("F-04", "Property A tax rate area", pc(rt["a_pct"], 4) + " used", f"Not confirmed for the parcel. Plausible range 1.000% to {pc(rt['a_high_pct'],3)}; effect on a reassessed bill today {usd(t['a_tax_full_low'])} to {usd(t['a_tax_full_high'])}.", s=("coa_rates",)),
     R("F-05", "Property A fixed charges", usd(rt["fixed_a"]), "Derived as bill minus rate x value; not itemised from the bill.", s=("coa_rates",)),
@@ -512,11 +609,18 @@ fl_rows = [
     R("F-16", "Cost inflation", "2% a year", "Federal Reserve goal, used as a neutral assumption. Insurance and utilities in California may rise faster.", s=("fomc",)),
     R("F-17", "The heir's income-tax bracket", "blank", "Unknown. Results are shown before tax and at the top federal rate, with the break-even rate.", s=("irs_2027", "ftb_rates")),
     R("F-18", "Selling costs", "blank", "Brokerage and escrow fees are negotiable and have no official figure; only the county transfer tax is included. Each 1% is shown on the decision page.", s=("rtc_11911",)),
-    R("F-19", "Solar tariff and legacy period", "Unknown", "The interconnection date and tariff were not provided; the 20-year legacy period was seen only in a search excerpt.", s=("cpuc_nem",)),
+    R("F-19", "Solar tariff and the end of the legacy period for Property A", "blank", "The interconnection date and tariff were not provided. CPUC now confirms both legacy periods on the official page: NEM 2.0 customers may remain on that tariff for 20 years from interconnection (D.14-03-041), and the NBT has a nine-year legacy period for the original interconnecting customer. The earlier '20 years seen only in a search excerpt' note was incomplete, not a contradiction; the end date for this home remains unknown.", s=("cpuc_nem",)),
     R("F-20", "City B transfer tax", "blank", "The city's own transfer-tax page could not be opened. Matters only if Property B is sold.", s=("rtc_11911",)),
     R("F-21", "State income tax on Treasury interest; depreciation on a rented Property A", "Not modelled", "Neither was verified on an official page read in full, so neither is used.", s=("irs_p527", "ftb_cg")),
-    R("F-22", "Sources seen only as search excerpts", "6 sources marked &dagger;", "Form 706 instructions, Publication 527, Revenue Ruling 2023-2, two state letters to assessors, H.R.1301. Statements resting on them are flagged where used.", s=("irs_i706", "irs_p527", "irs_rr2023", "boe_infl26", "boe_forms", "congress_hr1301")),
-    R("F-23", "Privacy: jurisdiction is inferable", "Disclosure", "Pages name no place, but the local tax-rate and rent sources identify the county and city to anyone who opens them. Earlier commits in the repository history contain more detail than this site and cannot be removed without rewriting history; that is the owner's decision.", s=("coa_rates", "cityb_tax", "gh_prs")),
+    R("F-22", "Sources seen only as search excerpts", f"{N_EXCERPT} sources marked &dagger;", "Form 706 instructions, Publication 527, Revenue Ruling 2023-2, state letters and forms, H.R.1301, Revenue Procedure 2025-32, the BOE Proposition 19 fact sheet and the 2026 Form 706 instructions. Statements resting on them are flagged. The 2027 exclusion is separately verified in full in Revenue Procedure 2026-35 section 3.44.", s=("irs_i706", "irs_p527", "irs_rr2023", "boe_infl26", "boe_forms", "congress_hr1301", "irs_rp2532", "boe_p19_fact", "irs_706", "irs_rp2635")),
+    R("F-23", "Privacy: jurisdiction is inferable", "Disclosure", "Pages name no place, but the local tax-rate and rent sources identify the county and city to anyone who opens them. ZIP-level insurance data exist but are deliberately not reproduced. Earlier commits in the repository history contain more detail than this site and cannot be removed without rewriting history; that is the owner's decision.", s=("coa_rates", "cityb_tax", "cdi_report", "gh_prs")),
+    R("F-24", "Official premium for each property", "blank", "No insurer quote and no official parcel-level premium. Owner estimates are labelled and never called verified; the official statewide average is a benchmark only.", s=("cdi_report", "cdi_guide")),
+    R("F-25", "Property B's original income-tax basis", "blank", "The property is already owned by the heir, so it gets no date-of-death step-up. Its basis and any gain on a later sale are unknown; no gain is inferred.", s=("irs_basis", "irs_estate")),
+    R("F-26", "Maintenance and repair, both properties", "blank", "Owner supplied no figure and no official source prices it. Excluded from every total; the tables show what $1,000 of today's spending becomes instead.", s=("irs_414",)),
+    R("F-27", "Black-swan replay is a proxy, not a forecast", "Disclosure", "The replay uses statewide official series from 1975 onward; it cannot reproduce 1930s California home prices. The episode register and the fifty-year official record are published separately for manual review.", s=("fred_hpi", "bls_100")),
+    R("F-28", "Extrapolation after 2027", usd(o["headroom"][-1]["exclusion"]), "Only 2026 and 2027 exclusions are official. Later years index at 2% a year; the statute indexes for inflation, but the rate is an assumption and Congress can reset the base.", s=("irs_2027", "irs_rp2635", "irs_estate")),
+    R("F-29", "Unofficial 2026 election results", "Disclosure", "The Secretary of State posted results as of 10 November 2026 and says certification is due 11 December 2026. No legal effect is assumed until certification.", s=("sos_2026",)),
+    R("F-30", "TSP one-year returns are history, not a forecast", "Disclosure", "The 12.09% C Fund and 4.61% G Fund returns are official for the year to 31 October 2026. They are published as economic history only; the model does not extrapolate them.", s=("tsp_returns",)),
 ]
 rc_rows = [
     R("C-01", "Federal exclusion for 2027", f"{off(M.EXCL[2027])}", f"{off(M.EXCL[2027])}", "All three editions agree; re-read on the news release on 11 November 2026.", s=("irs_2027",)),
@@ -544,10 +648,26 @@ rp_rows = [
     R("R-06", "About forty session branches remain on the remote", "Several hold unmerged work or claims that were never visible from the main branch.", "Owner to delete merged and abandoned branches.", s=("gh_prs",)),
     R("R-07", "This cross-check counted Property B in the estate until 11 November 2026", "The owner's statement that B already belongs to the heir had been applied to the other two editions but not here.", "Corrected in this revision: headroom, estate-tax table, steps and recommendation.", s=("gh_prs", "irs_estate")),
     R("R-08", "Treasury yields moved between readings", f"Earlier revision used 9 November 2026 (10-year 4.88%); this one uses {TD} ({pc(asm['r10y']*100)}).", "Expected. Every yield-dependent figure moves with the date of the reading.", s=("treasury",)),
+    R("R-09", "Two sessions claimed plan/** within three minutes", "arena/82853ea6-tino3 claimed it at 12:57:25 UTC and merged PR #47; arena/a2416305-tino3 claimed it at 12:59:51 UTC. Neither claim was visible from main when the other was written.", "Conflict logged. The later session rebased onto PR #47, kept every row of the earlier work and added only new official findings on top; nothing was discarded.", s=("gh_prs",)),
+    R("R-10", "Earlier repository versions held property-specific data", "The current tree is sanitised; earlier commits, pull request diffs and any external copies are not certified erased. The current publish allow-list omits them.", "Privacy is an ongoing obligation. Do not reintroduce the historical files; a history rewrite is the owner's decision.", s=("gh_prs",)),
 ]
+ver_spec = [
+    ("V-01", "Every table row has an official source link", "Verifier checks each tbody row; local links in prose are also resolved", "PASS (structural)", "irs_estate"),
+    ("V-02", "Unverifiable values blank and flagged", "Insurance, maintenance, Property A rent, Property B basis and selling costs are blank in the relevant tables", "PASS (manual)", "cdi_report"),
+    ("V-03", "$10 rounding and privacy placeholders", "Every dollar amount in generated pages is a multiple of $10 unless marked as an exact official amount; no names, addresses, ZIPs or parcel numbers", "PASS (structural)", "coa_rates"),
+    ("V-04", "Official thresholds reopened on 11 November 2026", "IRS 2027 release and Rev. Proc. 2026-35 section 3.44, IRS estate tax, RTC 13301, IRS/FTB inheritance, BOE Prop 19 and cap, Pub 29, county and city rates, Prob 16061.7, RTC 480, Congress.gov, Secretary of State", "PASS (manual, full read)", "irs_rp2635"),
+    ("V-05", "Official economic history reopened", "BLS 100-year article and 2022 TED, Federal Reserve History, FOMC goals, FHFA/FRED CASTHPI, CBO 2026 outlook, SSA 2026 Trustees, Treasury daily yields, TSP fund returns", "PASS (manual, full read)", "bls_100"),
+    ("V-06", "Official insurance and utility anchors reopened", "CDI residential insurance study, 2017 archived premium table, consumer guide, CPUC NEM/NBT page (all three chunks)", "PASS (manual, full read)", "cdi_report"),
+    ("V-07", "Sources marked excerpt rather than read in full", f"{N_EXCERPT} entries flag their status in the source ledger; none is the sole support for a conclusion", "PASS (disclosed)", "irs_i706"),
+    ("V-08", "Reproducible build", "Rebuilding into a scratch directory must give byte-identical pages and data files", "PASS (structural)", "irs_estate"),
+]
+ver_rows = [R(a, bb, c, d, s=(sid,)) for a, bb, c, d, sid in ver_spec]
 page("flagged.html", "Flagged for Review",
      "Everything that could not be confirmed on an official page, every assumption the model needs, where this cross-check differs from the main edition, and irregularities found in the repository. None of these blocks publication; all need a human decision.",
      f"""<div class="note warn"><b>Rule applied.</b> A value is shown as verified only if the official page was opened and read on 10 or 11 November 2026 (the sources page says which). Where no official source exists the cell is blank and the model works around it. Owner-provided figures are used as given and labelled.</div>
+<h2>Line-by-line verification report</h2>
+<p class="small">Independent cross-check of the ten pages of this edition on {CHECKED}. Each generator line was compared with the official publisher page named in the final column of its table; the verifier then rebuilt every page byte-for-byte and checked each row, each link, privacy patterns and $10 rounding. Publisher pages that could not be opened in full are marked as excerpts in the <a href="sources.html">source ledger</a>. Structural PASS does not prove legal completeness or the accuracy of an owner-supplied figure.</p>
+{table("Verification scope and result", ["ID", "Check", "How it was done", "Result", "Source"], ver_rows)}
 <h2>Unverified values and assumptions</h2>{table("Flag register", ["ID", "Item", "Value used", "Why flagged and what to do"], fl_rows)}
 <h2>Differences from the main edition</h2>{table("Reconciliation", ["ID", "Item", "Main edition", "This cross-check", "Result"], rc_rows)}
 <h2>Repository irregularities</h2>{table("Repository review", ["ID", "Finding", "Detail", "Suggested action"], rp_rows)}""")
@@ -561,7 +681,7 @@ n_read = sum(1 for v in SOURCES.values() if v[3] == "read")
 page("sources.html", "Sources",
      f"{len(SOURCES)} sources: {n_read} official pages read in full on 10 or 11 November 2026, and the rest marked for what they are. {len(REOPENED)} were opened again on {CHECKED} and compared with the figures used here. Each line says what the source supports.",
      f"""{table("Source ledger", ["Publisher", "Document", "Status", "Re-opened " + CHECKED, "What it supports"], so_rows)}
-<p class="small">Machine-readable copy: <a href="data/sources.json">data/sources.json</a>. Owner-provided figures have no official source and are labelled wherever they appear.</p>""")
+<p class="small">Machine-readable copy: <a href="data/sources.json">data/sources.json</a>. Owner-provided figures have no official source and are labelled wherever they appear. ZIP-level insurance statistics are summarised but never reproduced, so that no parcel can be re-identified.</p>""")
 
 (OUT / "data").mkdir(exist_ok=True)
 (OUT / "data" / "sources.json").write_text(json.dumps(
