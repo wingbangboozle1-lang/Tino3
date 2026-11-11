@@ -353,3 +353,20 @@ The ranking of the other options changed (renting now finishes ahead of moving i
 - **Closing wording pass (this commit):** six sentences that stated a cause or a likelihood with no source behind them were reduced to what is known (insurance "likely low", a "copying error", "avoids probate", and three similar). No figure changed. This is the last change from this session; its merge is recorded in the pull request itself rather than by another commit here.
 - **For the next session:** PRs #23 and #25 are open and each would replace the root edition. See CR-C2-2 before merging either.
 
+
+---
+
+## Session `arena-03f18c17-tino3` (branch `arena/03f18c17-tino3`) — final integration · claimed 2026-11-11
+
+*Branch note:* Arena pins this session to `arena/03f18c17-tino3`; the `session-<id>/<task>` naming cannot be used.
+Board read before claiming; no other live claim found (PRs #23/#25 sessions have had no commits since
+2026-11-10 10:36 UTC, well over the 60-minute takeover threshold).
+
+| Task | Status | Owner | Scope (non-overlapping claim) |
+|---|---|---|---|
+| INT-1 Decide between open replacement PRs #23 and #25 per CR-6616-5 / CR-C2-2 (merge at most one, carrying corrections C-01..C-12; never both) | in progress | `arena-03f18c17-tino3` | PR disposition, recorded in this section |
+| INT-2 Owner-brief gap: separate Black Swan economic-conditions section (long-run growth/inflation inconsistency, stress scenarios vs baseline) with official sources per row | in progress | `arena-03f18c17-tino3` | new `black-swan.html`, nav entry in `index.html` via `scripts/build.py` |
+| INT-3 Line-by-line re-verification of the combined published data against the source ledger; build + broken-link check | in progress | `arena-03f18c17-tino3` | `scripts/*`, root `*.html` regenerated, `assets/*` |
+| INT-4 PR to `main`, merge, verify Pages deploy, record result | in progress | `arena-03f18c17-tino3` | `COORDINATION.md` (this section only) |
+
+Claim committed and pushed before any other work.
