@@ -141,6 +141,24 @@ BE = M["breakeven"]
 LAW = M["law"]
 BR45 = next(x for x in M["b_reset"] if x["year"] == 2045)
 E45 = next(x for x in M["estate"] if x["year"] == 2045)
+
+# Owner statement, 11 November 2026: Property B is already owned by the beneficiary, not by
+# the parents. Under that statement Property B is not part of the decedent's taxable estate, so
+# the federal exclusion is consumed by Property A and the cash only. The statement is
+# owner-supplied: no deed was seen, so it changes the framing shown here and adds one computed
+# room figure, but it does not remove the contingency tables (flag FL-01).
+def r10(x):
+    return int(round(float(x) / 10.0) * 10)
+
+
+EX2045 = 15_480_000 * 1.025 ** 18                     # same arithmetic as the model's estate rows
+A2045 = M["inputs"]["a_value"] * 1.04 ** 19
+B2045 = M["inputs"]["b_value"] * 1.04 ** 19
+assert abs(r10(EX2045 - (A2045 + B2045)) - E45["room_single_base"]) <= 10, "estate-room arithmetic drifted from the model"
+B_VALUE_2045 = r10(B2045)
+# Built from the published figures so the page adds up exactly: room (both homes) + Property B = room (statement).
+ROOM_B_OWNED = E45["room_single_base"] + B_VALUE_2045  # one person's room in 2045 if the statement holds
+assert abs(r10(EX2045 - A2045) - ROOM_B_OWNED) <= 10, "statement room drifted from exclusion less Property A"
 PRIV = ('<div class="privacy"><strong>Privacy.</strong> Properties are Property A (a single-family home in County A) and '
         'Property B (a small multi-unit building in City B). People are [GRANTOR], [SUCCESSOR_TRUSTEE] and [BENEFICIARY]. '
         'Assessment-roll values and tax bills are public records that can be matched to a parcel, so they appear here only '
@@ -161,17 +179,17 @@ Renting the home out ends with {usd(RENT['wealth'])} and moving in ends with {us
 <div class="card win"><div class="k">Best option</div><div class="v">Sell and reinvest</div><p>Ahead of renting by {usd(-RENT['gap'])} and of moving in by {usd(-LIVE['gap'])} after ten years.</p></div>
 <div class="card"><div class="k">Property A tax, 2045</div><div class="v">{usd(LIVE['tax_first'])}</div><p>If a child moves in. {usd(RENT['tax_first'])} if rented. {usd(LAW['tax_restored'])} if nothing changed.</p></div>
 <div class="card"><div class="k">Cost of living in A</div><div class="v">{usd(B45['live_cost_month_today'])} a month</div><p>In today's dollars, compared with selling. That is the price of choosing the home over the money.</p></div>
-<div class="card"><div class="k">Federal estate tax room, 2045</div><div class="v">{usd(E45['room_single_base'])}</div><p>Other assets one person could leave tax-free after both homes. Scenario: see the tax page.</p></div>
+<div class="card"><div class="k">Federal estate tax room, 2045</div><div class="v">{usd(E45['room_single_base'])}</div><p>Other assets one person could leave tax-free after both homes. The owner states Property B is already the heir's; under that statement the room is {usd(ROOM_B_OWNED)}. Scenario: see the tax page.</p></div>
 </div>
 {tbl("Inheritance in 2045, house prices rising 4% a year, result ten years later", ["Option", "Wealth after 10 years", "In today's dollars", "Behind the best by", "Cash in the first year", "Property A tax, first year"], rows)}
 {LEGEND}
 <section><h2>Five facts that could change the answer</h2>
 <p>These are not known from the records supplied. Each one is on the <a href="review.html">Flagged for Review</a> page.</p>
 <ol>
-<li><strong>Who holds title to Property B today.</strong> If it passes in the same estate, its tax resets as well: from about {usd(BR45['tax_keep'])} to {usd(BR45['tax_reset'])} a year in 2045.</li>
+<li><strong>Who holds title to Property B today.</strong> The owner states the building is already owned by the beneficiary; the deed was not seen. Under that statement it is outside the estate and its tax does not reset. If the deed shows the parents instead, the tax resets as well: from about {usd(BR45['tax_keep'])} to {usd(BR45['tax_reset'])} a year in 2045.</li>
 <li><strong>Which home is the parents' principal residence.</strong> Only that home can carry the Proposition 19 exclusion, and only if a child moves in within a year.</li>
 <li><strong>Whether the trust is revocable.</strong> The tax-free sale depends on the home being part of the taxable estate at death.</li>
-<li><strong>How much cash and securities are in the estate.</strong> Federal estate tax starts above the exclusion; the two homes use part of it.</li>
+<li><strong>How much cash and securities are in the estate.</strong> Federal estate tax starts above the exclusion; under the owner's statement about Property B, only Property A and the cash use part of it.</li>
 <li><strong>Insurance premiums.</strong> No official figure or quote could be confirmed. The ranking does not change at three times the owner's guess.</li>
 </ol></section>
 <section><h2>Where to look</h2><div class="cards">
@@ -199,9 +217,9 @@ rows = [
  (["Rent does not carry the home", f"{usd(RENT['first_cash'])} cash in the first year", f"After tax, on a home worth {usd(A45['fmv'])}. The reset property tax takes more than half of the rent."], "C", S("irs_p527", asm=True)),
  (["Break-even points", f"{BE['stock_return']}% stock return; {BE['house_growth']}% house growth", f"Renting beats selling only if stocks return less than {BE['stock_return']}% a year, or the house grows about as fast as stocks. The rent would have to be {usd(BE['rent_month'])} a month in 2026 dollars."], "C", S("treasury_cmt", "fred_hpi_a", asm=True)),
  (["Price of living in Property A", f"{usd(B45['live_cost_month_today'])} a month in today's dollars", "The gap between moving in and the best alternative, spread over ten years. A lifestyle choice, costed."], "C", S("irs_tc701", asm=True)),
- (["Property B, if in the same estate", f"tax rises from {usd(BR45['tax_keep'])} to {usd(BR45['tax_reset'])} in 2045", "In a multi-unit building only the unit that was the parent's home and becomes the child's home can be excluded."], "C", S("boe_lta26026", "cityb_rate", asm=True)),
+ (["Property B, if in the same estate", f"tax rises from {usd(BR45['tax_keep'])} to {usd(BR45['tax_reset'])} in 2045", "In a multi-unit building only the unit that was the parent's home and becomes the child's home can be excluded. The owner states Property B is already owned by the beneficiary; if the deed confirms it, none of this applies."], "C", S("boe_lta26026", "cityb_rate", asm=True, flag=True)),
  (["Federal estate tax", "$15,000,000 per person in 2026; $15,480,000 in 2027", "A married couple can use two exclusions, but only if the first estate files Form 706 on time to elect it. Tax above the exclusion is 40%."], "V", S("irs_estate", "irs_2027", "irs_i706")),
- (["Room for cash under the exclusion", f"{usd(E45['room_single_base'])} in 2045 for one person", f"Scenario exclusion {usd(E45['exclusion'])} less both homes at {usd(E45['homes_base'])}. The cash amount itself was not supplied."], "C", S("irs_estate", "irs_rp2532", asm=True, flag=True)),
+ (["Room for cash under the exclusion", f"{usd(E45['room_single_base'])} in 2045 for one person", f"Scenario exclusion {usd(E45['exclusion'])} less both homes at {usd(E45['homes_base'])}. Under the owner's statement that Property B is already the heir's, the room is {usd(ROOM_B_OWNED)} instead. The cash amount itself was not supplied."], "C", S("irs_estate", "irs_rp2532", asm=True, flag=True)),
  (["California and local death taxes", "None", "No state estate or inheritance tax return since 2005. Cities and counties are barred from imposing one."], "V", S("sco_estate", "rtc13301")),
  (["Insurance", BLANK, "No official premium figure or insurer quote was confirmed for either property. The owner's guesses are used as placeholders; tripling them does not change the ranking."], "U", S("cdi_compare", flag=True)),
  (["Law under discussion", "The initiative to repeal the 2021 inheritance rules failed for lack of signatures", f"It would have restored the pre-2021 exclusion. If a later measure did so, Property A's 2045 tax would be {usd(LAW['tax_restored'])}. Selling would still come out ahead."], "V", S("sos_memo", "lao_250017", "sos_measures")),
@@ -210,7 +228,7 @@ rows = [
 ]
 body = f"""{tbl("Important details", ["Topic", "Finding", "What it means"], rows)}{LEGEND}
 <section><h2>The plan in order</h2><ol>
-<li><strong>Now.</strong> Confirm the trust is revocable and holds title; confirm who owns Property B; confirm which home carries the parents' homeowners' exemption. Do not move either property into an LLC.</li>
+<li><strong>Now.</strong> Confirm the trust is revocable and holds title; confirm the deed matches the owner's statement that Property B is already owned by the beneficiary; confirm which home carries the parents' homeowners' exemption. Do not move either property into an LLC.</li>
 <li><strong>At the inheritance.</strong> Get a date-of-death appraisal. File the change in ownership statement within 150 days. File Form 706 within nine months if the estate is near the exclusion or a spouse survives.</li>
 <li><strong>Decide within the first year.</strong> Sell, unless living in the home is worth about {usd(B45['live_cost_month_today'])} a month in today's dollars to the family. If moving in, occupy within one year and file both claims.</li>
 <li><strong>Reinvest.</strong> A stock index fund has the higher expected result. Treasuries at today's yield finish ahead of renting when house prices grow 4% a year or less. A mix sits between the two.</li>
@@ -486,8 +504,8 @@ body = f"""
 <p>The owner's assessed values for 2016 to 2025 follow the state factors in every year but one, where the rise was slightly below the factor. The year is reported to the owner privately.
 One year's tax bill rose about 18% and another fell about 6% while the assessed value moved 2% and 1%. A change in fixed charges would explain moves of that kind; the bills' line items would confirm or refute it.</p></section>
 <section><h2>If Property B passes in the same estate</h2>
-<p>The records supplied do not say who holds title. If the parents do, the building changes ownership at the same death and is reassessed. In a multi-unit building the family-home exclusion covers only the unit that was the parent's principal residence and becomes the child's.
-The table shows the building reassessed in full. If the current owner is already the heir, none of this applies.</p>
+<p>The owner states (11 November 2026) that the building is already owned by the beneficiary; the deed was not seen, so the question stays flagged (FL-01). If instead the parents hold title, the building changes ownership at the same death and is reassessed. In a multi-unit building the family-home exclusion covers only the unit that was the parent's principal residence and becomes the child's.
+Under the owner's statement none of this applies; the table is kept as the contingency case.</p>
 {tbl("Property B reassessed at market value, house prices rising 4% a year", ["Year", "Market value", "Tax, no change", "Tax, reassessed", "Increase", "Rent, two units", "Net income, no change", "Net income, reassessed"], reset)}</section>
 <section><h2>If Property B is ever sold</h2>{tbl("City B transfer tax on a sale", ["Price", "Rate on the whole price", "Note"], ttx)}</section>{PRIV}"""
 PAGES["property-b.html"] = page("property-b.html", "Property B", "Property B", "The rented building to keep",
@@ -551,7 +569,7 @@ body = f"""
 <p>The exclusion covers everything in the estate: both homes, cash, securities and earlier taxable gifts. The amount of cash was not supplied, so the table shows the room left after the two homes.
 The 2026 and 2027 exclusions are the published amounts. From 2030 the exclusion is a scenario: $15,480,000 rising 2.5% a year. The last column cuts it in half to test a change of law. A negative number means estate tax would be due at 40% on that amount even with no other assets.</p>
 {tbl("Room under the federal exclusion after both homes", ["Year of death", "Exclusion, one person", "Exclusion, couple", "Both homes at 4%", "Room, one person, 3%", "Room, one person, 4%", "Room, one person, 5%", "Room, couple, 4%", "Room if the exclusion is halved"], est)}
-<p>If Property B is already owned by the heir, it is not in the estate and the room is larger by its value.</p></section>
+<p>The table assumes both homes are in the estate, the conservative reading. The owner states (11 November 2026) that Property B is already owned by the beneficiary, so it is not part of the decedent's taxable estate <a href="https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax" target="_blank" rel="noopener noreferrer">IRS &middot; Estate tax thresholds</a>. If the deed confirms the statement, one person's room in 2045 is {usd(ROOM_B_OWNED)} instead of {usd(E45['room_single_base'])}, larger by Property B's 2045 value of {usd(B_VALUE_2045)}. The statement is owner-supplied; no deed was seen (flag FL-01).</p></section>
 <section><h2>Law changes under discussion</h2>{tbl("Law watch", ["Item", "Status on 10 November 2026", "What it would change", "Effect on this decision"], watch)}</section>{PRIV}"""
 PAGES["taxes.html"] = page("taxes.html", "Tax, thresholds, law watch", "Tax and law", "Rules, thresholds and what may change",
                            "Federal, state and local. Each rule was read on the official publisher's site.", body)
@@ -559,7 +577,7 @@ PAGES["taxes.html"] = page("taxes.html", "Tax, thresholds, law watch", "Tax and 
 # ------------------------------------------------------------------------------------------------ inheritance
 steps = [
  (["1", "Now", "Confirm the trust is revocable and that the deed to each property names the trust.", "[GRANTOR]", "The basis resets only for property in the taxable estate."], "V", S("irs_rr2023_2")),
- (["2", "Now", "Establish who holds title to Property B and which home carries the parents' homeowners' exemption.", "[GRANTOR], [BENEFICIARY]", "Decides which property is reassessed and which can be excluded."], "V", S("boe_lta26026", flag=True)),
+ (["2", "Now", "Confirm the deed matches the owner's statement that Property B is already owned by the beneficiary, and which home carries the parents' homeowners' exemption.", "[GRANTOR], [BENEFICIARY]", "Decides which property is reassessed and which can be excluded."], "V", S("boe_lta26026", flag=True)),
  (["3", "Now", "Keep both properties out of any LLC. If there are several children, let the trustee distribute unequally.", "[GRANTOR]", "An LLC ends the exclusion. A swap between siblings is reassessed."], "V", S("boe_lta26026")),
  (["4", "Now", "If married, plan for the first death: Form 706 must be filed to keep the first spouse's unused exclusion.", "[GRANTOR]", "Without the election the second exclusion is lost."], "V", S("irs_estate", "irs_i706")),
  (["5", "Day of death", "The trust becomes irrevocable. For property tax the date of death is the date of change in ownership.", "[SUCCESSOR_TRUSTEE]", "All deadlines below run from this date."], "V", S("boe_prop19")),
@@ -588,7 +606,7 @@ PAGES["inheritance.html"] = page("inheritance.html", "Inheritance steps", "Inher
 
 # ------------------------------------------------------------------------------------------------ flagged for review
 fl = [
- ("FL-01", "Who holds title to Property B", "Not stated in the records. Decides whether the building is reassessed at the same death and whether it is in the estate.", "Current deed or trust schedule", "boe_lta26026"),
+ ("FL-01", "Who holds title to Property B", "The owner states (11 November 2026) that the building is already owned by the beneficiary; the deed was not seen. Title decides whether the building is reassessed at the same death and whether it is in the decedent's estate.", "The current deed or trust schedule", "boe_lta26026"),
  ("FL-02", "Which home is the parents' principal residence", "Only that home can be excluded, and only one unit of a multi-unit building.", "Homeowners' exemption shown on the tax bill", "boe_prop19"),
  ("FL-03", "Whether the trust is revocable", "The basis reset depends on it.", "The trust document", "irs_rr2023_2"),
  ("FL-04", "Cash, securities, earlier taxable gifts, marital status", "The owner says the cash may exceed the exclusion. No amount was supplied, so the room is shown without it.", "A list of assets and gift tax returns", "irs_estate"),
@@ -706,7 +724,8 @@ Inheritance in 2045, house prices rising 4% a year, measured ten years later aft
 - Renting wins only if stocks return under {BE['stock_return']}% a year or the home appreciates about {BE['house_growth']}% a year.
 - Living in the home costs about ${B45['live_cost_month_today']:,} a month in today's dollars compared with selling.
 - Federal estate tax: $15,000,000 per person in 2026 and $15,480,000 in 2027; California has none.
-- If Property B is in the same estate its tax resets too: ${BR45['tax_keep']:,} to ${BR45['tax_reset']:,} a year in 2045.
+- The owner states Property B is already owned by the heir, so under that statement it sits outside the decedent's estate; if it were in the same estate its tax would reset: ${BR45['tax_keep']:,} to ${BR45['tax_reset']:,} a year in 2045.
+- Under that same statement one person's estate-tax room in 2045 is ${ROOM_B_OWNED:,} instead of ${E45['room_single_base']:,}, larger by Property B's 2045 value of ${B_VALUE_2045:,}. The deed was not seen (FL-01).
 - Insurance premiums are unverified and left blank; tripling the owner's guess does not change the ranking.
 - Black swan stress tests (stress.html): verified 1929, 1965-82, 2000-02, 2007-09 and 2020 episodes re-run against the 2045 inheritance. The sale decision holds in 5 of 7 analogues; only the reinvestment vehicle changes with the regime.
 
