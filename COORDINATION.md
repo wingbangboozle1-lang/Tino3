@@ -597,3 +597,5 @@ The completed C02 suite has an additional source-interpretation issue: matching 
 | CEB-3 Correct unsupported assurances and flag the above issues in the completed C02 edition (not the other editions) | in progress | `arena/ceb4a929-tino3` | `analysis/tools/build.py` and its generated `analysis/*.html`; no model changes |
 
 Note: `analysis/privacy-audit-ceb4.md` will not be added because the existing repository privacy-boundary verifier rejects unapproved tracked files; this section records the audit instead.
+
+CEB-3 addendum: to include the reviewed HHS primary source above, also claim `analysis/tools/verify.py` solely to add `www.hhs.gov` to the official-host allowlist. The previous C02 task is marked done. The first verifier run correctly rejected that new host before the allowlist change; no test was bypassed.
