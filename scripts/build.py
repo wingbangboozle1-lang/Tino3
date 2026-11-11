@@ -69,7 +69,7 @@ LABEL = {"irs_estate": "Estate tax thresholds", "irs_2027": "2027 amounts", "irs
          "fedhist_1929": "Crash of 1929", "fedhist_greatinflation": "The Great Inflation",
          "fedhist_greatrecession": "The Great Recession", "nyfed_covid": "COVID-19 and the Fed",
          "fred_ussthpi": "US house price index", "fred_nasdaqcom": "NASDAQ Composite",
-         "uscode3124": "31 USC 3124"}
+         "uscode3124": "31 USC 3124", "ftb_home": "Home-sale exclusion", "boe_lta22012": "Letter 2022/012"}
 
 e = html.escape
 
@@ -176,13 +176,16 @@ def r10(x):
 
 
 EX2045 = 15_480_000 * 1.025 ** 18                     # same arithmetic as the model's estate rows
-A2045 = M["inputs"]["a_value"] * 1.04 ** 19
-B2045 = M["inputs"]["b_value"] * 1.04 ** 19
-assert abs(r10(EX2045 - (A2045 + B2045)) - E45["room_single_base"]) <= 10, "estate-room arithmetic drifted from the model"
-B_VALUE_2045 = r10(B2045)
-# Built from the published figures so the page adds up exactly: room (both homes) + Property B = room (statement).
-ROOM_B_OWNED = E45["room_single_base"] + B_VALUE_2045  # one person's room in 2045 if the statement holds
-assert abs(r10(EX2045 - A2045) - ROOM_B_OWNED) <= 10, "statement room drifted from exclusion less Property A"
+A2045 = r10(M["inputs"]["a_value"] * 1.04 ** 19)
+B2045 = r10(M["inputs"]["b_value"] * 1.04 ** 19)
+# The owner states Property B is already the heir's. That leaves Property A alone as real property
+# in the decedent's gross estate, so the published room is E45["room_single_base"] (exclusion less
+# Property A). The both-homes figure is derived here only so the two readings sit side by side.
+B_VALUE_2045 = B2045
+ROOM_IF_B_INCLUDED = E45["room_if_b_included_base"]
+assert abs(r10(EX2045 - (A2045 + B2045)) - ROOM_IF_B_INCLUDED) <= 10, "both-homes room drifted from the model"
+assert abs(r10(EX2045 - A2045) - E45["room_single_base"]) <= 10, "statement room drifted from the model"
+
 PRIV = ('<div class="privacy"><strong>Privacy.</strong> Properties are Property A (a single-family home in County A) and '
         'Property B (a small multi-unit building in City B). People are [GRANTOR], [SUCCESSOR_TRUSTEE] and [BENEFICIARY]. '
         'Assessment-roll values and tax bills are public records that can be matched to a parcel, so they appear here only '
@@ -210,7 +213,7 @@ Renting the home out ends with {usd(RENT['wealth'])} and moving in ends with {us
 <div class="card win"><div class="k">Best option</div><div class="v">Sell and reinvest</div><p>Ahead of renting by {usd(-RENT['gap'])} and of moving in by {usd(-LIVE['gap'])} after ten years.</p></div>
 <div class="card"><div class="k">Property A tax, 2045</div><div class="v">{usd(LIVE['tax_first'])}</div><p>If a child moves in. {usd(RENT['tax_first'])} if rented. {usd(LAW['tax_restored'])} if nothing changed.</p></div>
 <div class="card"><div class="k">Cost of living in A</div><div class="v">{usd(B45['live_cost_month_today'])} a month</div><p>In today's dollars, compared with selling. That is the price of choosing the home over the money.</p></div>
-<div class="card"><div class="k">Federal estate tax room, 2045</div><div class="v">{usd(E45['room_single_base'])}</div><p>Other assets one person could leave tax-free after both homes. The owner states Property B is already the heir's; under that statement the room is {usd(ROOM_B_OWNED)}. Scenario: see the tax page.</p></div>
+<div class="card"><div class="k">Federal estate tax room, 2045</div><div class="v">{usd(E45['room_single_base'])}</div><p>Other assets one person could leave tax-free after Property A, on the owner's statement that Property B is already the heir's. If both homes were in the estate the room would be {usd(ROOM_IF_B_INCLUDED)}. Scenario: see the tax page.</p></div>
 </div>
 {tbl("Inheritance in 2045, house prices rising 4% a year, result ten years later", ["Option", "Wealth after 10 years", "In today's dollars", "Behind the best by", "Cash in the first year", "Property A tax, first year"], rows)}
 {LEGEND}
@@ -255,7 +258,7 @@ Renting the home out ends with {usd(RENT['wealth'])} and moving in ends with {us
 <section><h2>Three editions in one repository</h2>
 <p>This dashboard is one of three editions kept side by side. They answer the same question with separate models, so their figures differ; each page states which model it comes from. Do not mix a number from one edition with a table in another.</p>
 <div class="cards">
-<div class="card win"><div class="k">This edition &middot; 13 pages</div><p>The pages in the menu. One model, one source ledger of 68 entries, re-checked line by line on 11 November 2026. Act on these numbers.</p></div>
+<div class="card win"><div class="k">This edition &middot; 13 pages</div><p>The pages in the menu. One model, one source ledger of 70 entries, re-checked line by line on 11 November 2026. Act on these numbers.</p></div>
 <div class="card"><div class="k">Cross-check &middot; 10 pages</div><p><a href="plan/index.html">A second model</a> built from official figures only, leaving unverifiable inputs blank and reporting break-evens instead. It reaches the same default: sell and keep Property B.</p></div>
 <div class="card"><div class="k">50-year suite &middot; 12 pages</div><p><a href="analysis/index.html">2026&ndash;2076 schedules</a>, a 1977&ndash;2026 state cycle replay with decline-in-value relief, a 60/40 Treasury barbell and the ownership-asymmetry tables.</p></div>
 </div></section>{PRIV}"""
@@ -277,7 +280,7 @@ rows = [
  (["Price of living in Property A", f"{usd(B45['live_cost_month_today'])} a month in today's dollars", "The gap between moving in and the best alternative, spread over ten years. A lifestyle choice, costed."], "C", S("irs_tc701", asm=True)),
  (["Property B, if in the same estate", f"tax rises from {usd(BR45['tax_keep'])} to {usd(BR45['tax_reset'])} in 2045", "In a multi-unit building only the unit that was the parent's home and becomes the child's home can be excluded. The owner states Property B is already owned by the beneficiary; if the deed confirms it, none of this applies."], "C", S("boe_lta26026", "cityb_rate", asm=True, flag=True)),
  (["Federal estate tax", "$15,000,000 per person in 2026; $15,480,000 in 2027", "A married couple can use two exclusions, but only if the first estate files Form 706 on time to elect it. Tax above the exclusion is 40%."], "V", S("irs_estate", "irs_2027", "irs_i706")),
- (["Room for cash under the exclusion", f"{usd(E45['room_single_base'])} in 2045 for one person", f"Scenario exclusion {usd(E45['exclusion'])} less both homes at {usd(E45['homes_base'])}. Under the owner's statement that Property B is already the heir's, the room is {usd(ROOM_B_OWNED)} instead. The cash amount itself was not supplied."], "C", S("irs_estate", "irs_rp2532", asm=True, flag=True)),
+ (["Room for cash under the exclusion", f"{usd(E45['room_single_base'])} in 2045 for one person", f"Scenario exclusion {usd(E45['exclusion'])} less Property A at {usd(A2045)}, on the owner's statement that Property B is already the heir's. If both homes were in the estate the room would be {usd(ROOM_IF_B_INCLUDED)}. The cash amount itself was not supplied."], "C", S("irs_estate", "irs_rp2532", asm=True, flag=True)),
  (["Estate tax above the threshold", "40 cents of every dollar over the room", "An estate $5,000,000 above the room would owe about $2,000,000 before credits. The tax falls on the estate, not on the heir, and is due with Form 706 nine months after the death. California and its cities impose none."], "C", S("irs_estate", "irs_i706", "rtc13301")),
  (["California and local death taxes", "None", "No state estate or inheritance tax return since 2005. Cities and counties are barred from imposing one."], "V", S("sco_estate", "rtc13301")),
  (["Insurance", BLANK, "No official premium figure or insurer quote was confirmed for either property. The owner's guesses are used as placeholders; tripling them does not change the ranking."], "U", S("cdi_compare", flag=True)),
@@ -349,7 +352,7 @@ Cash received or paid along the way earns the same after-tax return as the stock
 <ul>
 <li><strong>Sell.</strong> The home is sold at its inherited value less 5.11% selling cost. Because the tax basis equals the value at death, no gain is taxed. The proceeds go into a stock index fund or into Treasuries.</li>
 <li><strong>Rent.</strong> The home is reassessed to full market value. Rent, less property tax, insurance, maintenance and vacancy, is taxed after depreciation. The family stays in Property B's third unit.</li>
-<li><strong>Move in.</strong> The Proposition 19 exclusion applies. The family pays the running costs and rents out Property B's third unit. Up to $500,000 of later gain is excluded on sale.</li>
+<li><strong>Move in.</strong> The Proposition 19 exclusion applies. The family pays the running costs and rents out Property B's third unit. The comparison runs the same ten years as the other options, then sells the home: up to $500,000 of the gain is excluded (IRC 121, which California conforms to) and the excess is taxed at the combined rate. Every option is assumed to live rent-free in Property B's third unit while it is not let, so no rent is charged or credited to any option for the family's own housing. The exclusion continues only while the home stays the child's principal residence: on a move-out the assessor enrolls the value set at the inheritance, factored forward.</li>
 </ul></section>
 <section><h2>Results by inheritance year</h2><p>House prices rising 4% a year. The best option in each table is shaded.</p>{"".join(sec)}{LEGEND}</section>
 <section><h2>Every year and growth rate</h2>
@@ -365,7 +368,8 @@ Cash received or paid along the way earns the same after-tax return as the stock
 {tbl("House price growth against stock return, inheritance in 2045", ["House growth", "Stock return", "Sell, stock fund", "Rent", "Move in", "Best"], matrix)}
 {tbl("Other changes, inheritance in 2045, 4% house growth", ["Change", "Sell, stock fund", "Sell, Treasuries", "Rent", "Move in", "Best"], sens)}
 <p>Moving in is the most expensive option in every case tested. It is still a reasonable choice if the family wants the home: the table above prices that choice at about {usd(B45['live_cost_month_today'])} a month in today's dollars.
-If the family does move in, staying at least two years before any sale keeps the $500,000 exclusion available.</p></section>
+If the family does move in, staying at least two years out of the five before any sale keeps the $500,000 exclusion available.</p>
+<p>What the move-in figure does not include, all on the Flagged for Review page: the unindexed $10,000 state-and-local cap on deducting property tax, which is not modelled and applies to the property tax either way (FL-27); the California homeowner deduction (FL-28); and any decline-in-value relief in a crash (FL-29). Each would help the move-in and rent branches, so the gap shown above is, if anything, too wide.</p></section>
 <section id="assumptions"><h2>Assumptions</h2><p>Scenario inputs, not forecasts. The official reference beside each one supports the method or the starting figure, not the future value.</p>
 {tbl("Assumption register", ["Item", "Value used", "Reason"], asm_rows)}</section>
 <p>Download the figures: <a href="assets/data/decision.csv">decision.csv</a>, <a href="assets/data/model.json">model.json</a>.</p>{PRIV}"""
@@ -695,7 +699,9 @@ One year's tax bill rose about 18% and another fell about 6% while the assessed 
 <p>The owner states (11 November 2026) that the building is already owned by the beneficiary; the deed was not seen, so the question stays flagged (FL-01). If instead the parents hold title, the building changes ownership at the same death and is reassessed. In a multi-unit building the family-home exclusion covers only the unit that was the parent's principal residence and becomes the child's.
 Under the owner's statement none of this applies; the table is kept as the contingency case.</p>
 {tbl("Property B reassessed at market value, house prices rising 4% a year", ["Year", "Market value", "Tax, no change", "Tax, reassessed", "Increase", "Rent, two units", "Net income, no change", "Net income, reassessed"], reset)}</section>
-<section><h2>If Property B is ever sold</h2>{tbl("City B transfer tax on a sale", ["Price", "Rate on the whole price", "Note"], ttx)}</section>{PRIV}"""
+<section><h2>If Property B is ever sold</h2>{tbl("City B transfer tax on a sale", ["Price", "Rate on the whole price", "Note"], ttx)}
+<p>The ownership distinction has one cost in the other direction. If Property B is already the beneficiary's, it gets no new basis at the parents' death: the basis is the lower of what the parents paid plus improvements, or the value when it was transferred to the beneficiary, adjusted for what the parents spent on it <a href="https://www.irs.gov/faqs/interest-dividends-other-types-of-income/gifts-inheritances/gifts-inheritances" target="_blank" rel="noopener noreferrer">IRS &middot; Inherited basis</a> <a href="https://www.irs.gov/pub/irs-drop/rr-23-02.pdf" target="_blank" rel="noopener noreferrer">IRS &middot; Rev. Rul. 2023-2</a>. Property A, which is inherited, does get a new basis.
+What the parents paid for Property B was never supplied, so the tax that would eventually fall on a sale of Property B cannot be computed. It is flagged (FL-01), not estimated.</p></section>{PRIV}"""
 PAGES["property-b.html"] = page("property-b.html", "Property B", "Property B", "The rented building to keep",
                                 "A small multi-unit building in City B. Two units rented, one available to the family. Very low assessed value.", body)
 
@@ -736,7 +742,7 @@ st = [
  (["Transfer tax at death", "Exempt", "Applies to the transfer from the trust to the heir."], "V", S("rtc11930")),
 ]
 est = [([str(x["year"]), N(x["exclusion"]), N(x["exclusion_couple"]), N(x["homes_base"]), N(x["room_single_low"]), N(x["room_single_base"]), N(x["room_single_high"]),
-         N(x["room_couple_base"]), N(x["room_single_half"])], "C",
+         N(x["room_couple_base"]), N(x["room_single_half"]), N(x["room_if_b_included_base"])], "C",
         S("irs_estate", "irs_2027", "irs_rp2532", asm=True)) for x in M["estate"]]
 watch = [
  (["Federal estate exclusion", "Law. $15,000,000 for 2026, indexed after.", "A future Congress could lower it.", f"At half the scenario amount, room for other assets in 2045 falls from {usd(E45['room_single_base'])} to {usd(E45['room_single_half'])} for one person. The decision between selling, renting and moving in does not change."], "C", S("irs_whatsnew", "irs_rp2532", asm=True)),
@@ -757,10 +763,10 @@ body = f"""
 <p>There is one threshold that matters: the federal one. California has none and local governments may not create one.</p>
 {tbl("Federal estate tax filing threshold by year of death", ["Year", "One person", "Couple, if elected"], thr)}</section>
 <section><h2>How much room is left for cash and investments</h2>
-<p>The exclusion covers everything in the estate: both homes, cash, securities and earlier taxable gifts. The amount of cash was not supplied, so the table shows the room left after the two homes.
+<p>The exclusion covers everything in the estate: real property, cash, securities and earlier taxable gifts. The amount of cash was not supplied, so the table shows the room left after the real property.
 The 2026 and 2027 exclusions are the published amounts. From 2030 the exclusion is a scenario: $15,480,000 rising 2.5% a year. The last column cuts it in half to test a change of law. A negative number means estate tax would be due at 40% on that amount even with no other assets.</p>
-{tbl("Room under the federal exclusion after both homes", ["Year of death", "Exclusion, one person", "Exclusion, couple", "Both homes at 4%", "Room, one person, 3%", "Room, one person, 4%", "Room, one person, 5%", "Room, couple, 4%", "Room if the exclusion is halved"], est)}
-<p>The table assumes both homes are in the estate, the conservative reading. The owner states (11 November 2026) that Property B is already owned by the beneficiary, so it is not part of the decedent's taxable estate <a href="https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax" target="_blank" rel="noopener noreferrer">IRS &middot; Estate tax thresholds</a>. If the deed confirms the statement, one person's room in 2045 is {usd(ROOM_B_OWNED)} instead of {usd(E45['room_single_base'])}, larger by Property B's 2045 value of {usd(B_VALUE_2045)}. The statement is owner-supplied; no deed was seen (flag FL-01).</p>
+{tbl("Room under the federal exclusion: Property A only, with the both-homes reading beside it", ["Year of death", "Exclusion, one person", "Exclusion, couple", "Both homes at 4% (context)", "Room, Property A only, 3%", "Room, Property A only, 4%", "Room, Property A only, 5%", "Room, couple, 4%", "Room if the exclusion is halved", "Room if Property B is also in the estate"], est)}
+<p>The "room" columns follow the owner's statement of 11 November 2026: Property B is already owned by the beneficiary, so it is not part of the decedent's taxable estate <a href="https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax" target="_blank" rel="noopener noreferrer">IRS &middot; Estate tax thresholds</a>, and only Property A is real property the exclusion must cover. The final column is the conservative alternative: if the deed shows the parents still own Property B, its 2045 value of {usd(B_VALUE_2045)} consumes the exclusion too and the room falls by that amount. The statement is owner-supplied; no deed was seen (flag FL-01).</p>
 <p><strong>What happens above the threshold.</strong> Each dollar of taxable estate above the exclusion costs the estate 40 cents. An estate $5,000,000 over the room would owe about $2,000,000 before credits. The tax is levied on the estate, not on the person who receives the property, and it is due with Form 706 nine months after the death; California and its cities add nothing. Because the exclusion is indexed and the room depends on house prices and on the cash balance, the comparison that matters in the year of death is the published exclusion against the date-of-death values, not today's numbers.</p></section>
 <section><h2>Law changes under discussion</h2>{tbl("Law watch", ["Item", "Status on 10 November 2026", "What it would change", "Effect on this decision"], watch)}</section>{PRIV}"""
 PAGES["taxes.html"] = page("taxes.html", "Tax, thresholds, law watch", "Tax and law", "Rules, thresholds and what may change",
@@ -820,6 +826,11 @@ fl = [
  ("FL-20", "Pending bills on the basis reset", "None was verified. Treated as hypothetical.", "A search of current federal bills", "irs_basis"),
  ("FL-21", "County form names and the trust's tax filing", "The steps cite the statutes. Form numbers and the trust's income tax return were not verified.", "The assessor's forms page; a tax preparer", "rtc480"),
  ("FL-22", "Building share of value, bedrooms, condition", "Drive depreciation and maintenance. Assumed.", "The assessor's land and improvement split; an inspection", "irs_p527"),
+ ("FL-25", "The Proposition 19 amount used in the model", "Two published letters disagree. Letter 2025/009 gives about $1,044,590 for transfers from 16 February 2025 to 15 February 2027. Letter 2026/026 states about $1,100,730 from February 2027, but that letter is dated 3 August 2026, before an adjustment based on the prior calendar year's House Price Index can have been made. The model uses the 2025 figure. Using the 2026 figure instead changes Property A's 2045 tax by about $660 a year, and no ranking changes.", "A letter covering the 2027 adjustment, or the county's enrolled figures", "boe_lta26026"),
+ ("FL-26", "The owner's 2026 Property A tax bill", "The owner's table implies a 2026 bill of about $7,040, a 2% step on both the assessed value and the bill. At the 2025 implied rate, and with the fixed charges the model uses, the same assessed value gives about $7,340. A 2% step on the bill and on the assessed value at once is arithmetically inconsistent: the implied rate rises from about 1.34% to about 1.42% and then falls back to about 1.28%. The 2026 bill was not supplied, so the model keeps the verified county rate and its own fixed charges rather than the implied 2026 figure.", "The 2026-27 bill", "boe_lta26002"),
+ ("FL-27", "Federal deduction for state property tax", "Property tax on a home is deductible only up to the $10,000 state-and-local cap, which is not indexed. The model does not deduct property tax for income tax, so the rent and move-in results are slightly conservative. Not quantified.", "A tax preparer; the current Schedule A instructions", "irs_estate"),
+ ("FL-28", "Californians may deduct mortgage interest and property tax without itemising", "California allows homeowners a deduction for mortgage interest and property tax on a principal residence without itemising. The amounts and limits were not verified in this session, so nothing is claimed here. It would only help the move-in option.", "Franchise Tax Board instructions for the California resident return", "ftb_rates"),
+ ("FL-29", "Property tax relief when a crash lowers value", "During a housing crash a county may temporarily reduce assessed value on request (a decline-in-value review). The model does not simulate it, so the rent and move-in results in the crash stress cases are understated. The mechanism and its limits were not verified in this session.", "The county assessor's decline-in-value page", "rtc63_2"),
  ("FL-23", "Sources read as excerpts", "Twelve sources were read as excerpts served from the official domain, not as whole documents. They are marked in the source library.", "Open each link", "irs_i706"),
 ]
 rows = [([i, item, why, BLANK, fix], "U", S(src)) for i, item, why, fix, src in fl]
@@ -847,8 +858,11 @@ corr = [
  ("C-10", "Property B at the same death", "Assessed value rose 2% a year through and after the inheritance.", "Shown both ways. If the parents hold title, the building is reassessed except for one qualifying unit.", "boe_lta26026"),
  ("C-11", "Comparison period", "Every case ended in 2055, so an inheritance in 2050 was judged over five years.", "Ten years after each inheritance year.", "irs_basis"),
  ("C-12", "Roll values in public files", "Assessment histories were published to the nearest $10, and one bill to the dollar.", "Generalised to the nearest $10,000 and $100. Year-over-year changes are shown as percentages.", "boe_lta26002"),
+ ("C-13", "Estate-tax room under the owner's statement", "The pages said Property B is already the heir's but still subtracted both homes from the federal exclusion, so the room read about $3,790,000 too low.", f"Room is now the exclusion less Property A only: {usd(E45['room_single_base'])} in 2045. The both-homes reading, {usd(ROOM_IF_B_INCLUDED)}, is shown beside it as the contingency.", "irs_estate"),
+ ("C-14", "Attribution of the intergenerational amount", "The tax and summary pages credited the mechanism to Letter 2025/009, which is the adjustment letter; the rule that the excess becomes the new taxable value, and what happens if the child later moves out, sit in RTC 63.2 and Letter 2022/012.", "Letter 2025/009 supplies the amount; RTC 63.2 and Letter 2022/012 govern how it applies and what happens on a later move-out, and both are now cited.", "boe_lta22012"),
+ ("C-15", "California treatment of the home-sale exclusion", "A draft of this pass assumed California only partly conforms to IRC 121 and charged state tax on the gain between $250,000 and $500,000.", "Withdrawn before publication. The Franchise Tax Board states that California conforms and allows the same $250,000 single and $500,000 joint exclusion, so the published modelling stands and no figure changed.", "ftb_home"),
 ]
-CB = {"C-01": "V", "C-02": "V", "C-03": "C", "C-04": "C", "C-05": "V", "C-06": "C", "C-07": "V", "C-08": "A", "C-09": "V", "C-10": "V", "C-11": "C", "C-12": "C"}
+CB = {"C-01": "V", "C-02": "V", "C-03": "C", "C-04": "C", "C-05": "V", "C-06": "C", "C-07": "V", "C-08": "A", "C-09": "V", "C-10": "V", "C-11": "C", "C-12": "C", "C-13": "C", "C-14": "V", "C-15": "V"}
 rows = [([i, item, old, new], CB[i], S(src)) for i, item, old, new, src in corr]
 repo = [
  ("Published pages", "Thirteen pages are generated from one model and one source ledger. A stale page fails the build."),
@@ -870,7 +884,7 @@ The earlier edition's source work was sound: its quotations matched the official
 <section><h2>Second pass, 11 November 2026</h2>
 <p>A third session re-checked this edition on 11 November 2026 before publishing it. Thirteen ledger entries were re-opened on the publishers' own domains: the IRS estate page, the 2026 Form 706 instructions, the 2027 inflation release, the Proposition 19 page and Letter 2025/009, Revenue and Taxation Code sections 63.2 and 13301, the local secured-tax page, the local rent-increase page, the Department of Insurance premium-survey page, the Secretary of State's initiative memorandum and its unofficial election results, and the Treasury yield table. The figures already published matched in every case; no number changed.</p>
 <p>Three things were added or corrected. First, a gap: the state-tax treatment of Treasury interest had been left as an unverified assumption (FL-17). It is now read in 31 U.S.C. 3124 on the U.S. Government Publishing Office's own site, which exempts Treasury obligations and their interest from state and local tax but expressly not from an estate or inheritance tax; the flag is closed and the rule appears on the tax page. Second, the 40% estate-tax rate is now tied to the published 2026 credit of $5,945,800, which is exactly $345,800 plus 40% of the excess over $1,000,000; the rate table itself is still not opened, so FL-16 stays open. Third, a stale count on this page (58 sources) was replaced by a number the build computes.</p>
-<p>The arithmetic was re-checked independently of the renderer: all 35 projection years for each property were recomputed from the model's own formulas (tax = rate x assessed value plus fixed charges; running costs summed; assessed value capped at 2%), the estate-room rows were recomputed from the exclusion less both homes, and the 2045 reassessment was recomputed from the Proposition 19 formula. Every published figure agreed to the nearest $10. The page structure was also changed: the menu is now grouped into five sections, the two black-swan pages are labelled as parts 1 and 2 of one section instead of appearing twice under different names, and the overview states which of the three editions in this repository a reader is looking at.</p></section>
+<p>The arithmetic was re-checked independently of the renderer: all 35 projection years for each property were recomputed from the model's own formulas (tax = rate x assessed value plus fixed charges; running costs summed; assessed value capped at 2%), the estate-room rows were recomputed from the exclusion less the real property the statement leaves in the estate, and the 2045 reassessment was recomputed from the Proposition 19 formula. Every published figure agreed to the nearest $10. The page structure was also changed: the menu is now grouped into five sections, the two black-swan pages are labelled as parts 1 and 2 of one section instead of appearing twice under different names, and the overview states which of the three editions in this repository a reader is looking at.</p></section>
 <section><h2>Repository review</h2><p>Findings from reading the repository itself. These are observations, not sourced facts.</p>{rlist}</section>
 <section><h2>How this edition relates to the cross-check</h2>
 <p>A separate <a href="plan/index.html">cross-check edition</a> was built by another session with its own model and its own source ledger. It leaves unverifiable inputs blank and reports break-evens.
@@ -924,8 +938,10 @@ Inheritance in 2045, house prices rising 4% a year, measured ten years later aft
 - Federal estate tax: $15,000,000 per person in 2026 and $15,480,000 in 2027; California has none.
 - Above the exclusion the estate pays 40 cents for every dollar: an estate $5,000,000 over the room owes about $2,000,000 before credits. The tax is on the estate, not on the heir, and is due with Form 706 nine months after the death. California and its cities impose no death tax.
 - The owner states Property B is already owned by the heir, so under that statement it sits outside the decedent's estate; if it were in the same estate its tax would reset: ${BR45['tax_keep']:,} to ${BR45['tax_reset']:,} a year in 2045.
-- Under that same statement one person's estate-tax room in 2045 is ${ROOM_B_OWNED:,} instead of ${E45['room_single_base']:,}, larger by Property B's 2045 value of ${B_VALUE_2045:,}. The deed was not seen (FL-01).
-- Insurance premiums are unverified and left blank; tripling the owner's guess does not change the ranking.
+- Under that same statement one person's estate-tax room in 2045 is ${E45['room_single_base']:,}. If the deed shows the parents still own Property B, the room is ${ROOM_IF_B_INCLUDED:,}, smaller by Property B's 2045 value of ${B_VALUE_2045:,}. The deed was not seen (FL-01).
+- Insurance premiums are unverified and left blank. The state regulator publishes no county premium, only an interactive survey that it states is not a quote, so no figure is published here. Tripling the owner's guess does not change the ranking.
+- Own-home shelter is treated identically in every option (the household lives in Property B's currently unlet third unit), so no option gets a credit for rent it would otherwise pay; moving in is compared purely on tax, running cost and the gain tax on a later sale.
+- Property tax is not deducted for income tax, because of the unindexed state-and-local cap, and California's homeowner deduction is not modelled: both make rent and move-in slightly conservative (FL-27, FL-28).
 - Black swans, part 1 (black-swans.html): the baseline's official anchors, fifty years of state inflation data, and the fixed amounts whose real value erodes.
 - Black swans, part 2 (stress.html): stock returns at 4.0%, inflation at 4.0% or a flat decade for house prices - selling still finishes first, and a lost decade only moves the proceeds to Treasuries. Verified 1929, 1965-82, 2000-02, 2007-09 and 2020 episodes re-run against the 2045 inheritance: the sale decision holds in 5 of 7 analogues, and only the reinvestment vehicle changes with the regime.
 - Re-checked on 11 November 2026 by a third pass: 13 sources re-opened on the publishers' sites, every projection row recomputed from the model's formulas, one open flag closed (31 U.S.C. 3124, Treasury interest is free of state tax) and one stale count corrected. No figure changed.

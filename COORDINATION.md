@@ -705,3 +705,53 @@ Not touched: `scripts/*`, `assets/*`, `plan/**`, `analysis/**`, root `*.html`, w
 2. Insurance premiums and specific law-change dates remain unverified (blank in tables, flagged in `review.html` / `audit.html`).
 3. Privacy boundary: all $10-rounded figures and anonymized placeholders preserved across root, plan/, and analysis/ editions.
 
+
+---
+
+## Session `arena/30ee04a6-tino3` — independent line-by-line audit, ownership-statement correction, publication (2026-11-11)
+
+*Branch note:* Arena pins this session to `arena/30ee04a6-tino3`; the `session-<id>/<task>` naming cannot be used. All work is on that branch and merges to `main` via PR.
+
+Board read in full before claiming and every remote branch fetched at 12:57 UTC. While this work was in flight `main` moved twice (PRs #42 `arena/4ff01a4d-tino3` and #43 `arena/1b705871-tino3`: grouped navigation, one black-swan section in two parts, an estate-tax-above-threshold row, and 31 U.S.C. § 3124 closing FL-17). The first merge attempt was refused for a conflict. The resolution is a rebase onto `main` at `b09447f` in which **the other session's work is kept in full**: their navigation, page grouping, styling, new summary row and audit rows are untouched; this session's changes were re-applied on top of their `scripts/build.py` and `assets/sources.json` instead of replacing them. Their estate-room prose — which still subtracted both homes from the exclusion while stating that Property B is already the heir's — is the one thing overwritten, because correcting it is the purpose of this pass. Two older PRs (#34 `arena/0b455c89-tino3`, #40 `arena/d2fd135b-tino3`) remain open and untouched; either would re-render the root edition from an earlier state.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| A3-1 Re-verify the published figures the recommendation rests on, on the publisher's own domain, and correct what does not hold | **done** | `arena/30ee04a6-tino3` | `scripts/model.py`, `scripts/build.py`, regenerated root `*.html`, `assets/data/model.json`, `assets/sources.json` (append only) |
+| A3-2 Apply the owner's statement that Property B is already the heir's to the estate-tax arithmetic, the other way round from the published edition | **done** | `arena/30ee04a6-tino3` | `scripts/model.py` (estate rows), `scripts/build.py`, `index.html`, `executive-summary.html`, `taxes.html`, `property-b.html`, `EXECUTIVE_SUMMARY.md` |
+| A3-3 Publish the new irregularities on the Flagged for Review page rather than resolving them silently | **done** | `arena/30ee04a6-tino3` | `review.html`, `audit.html` (via `scripts/build.py`) |
+| A3-4 Checks, allow-list, PR, merge, Pages deploy confirmation, result recorded here | **done** | `arena/30ee04a6-tino3` | `COORDINATION.md` (this section only) |
+
+Not touched: `plan/**`, `analysis/**`, `decision-suite/**`, `pages/**`, `data/**`, `scripts/verify.py`, `scripts/package_site.py`, `scripts/privacy_boundary.py`, `.github/workflows/*`, every withdrawal notice, every other session's section of this board.
+
+### Sources opened by this session on the publisher's own domain (11 November 2026)
+
+| Source | What it settled | Link |
+|---|---|---|
+| BOE Letter to Assessors 2025/009 | The value cap for transfers from 16 Feb 2025 to 15 Feb 2027 is the factored base year value **plus** about $1,044,590 — mechanism and amount both; the intergenerational amount is not a deduction applied afterwards | https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf |
+| BOE Letter to Assessors 2022/012 | The home must become the child's principal residence within one year, with the homeowners' exemption claimed in that year; the exclusion continues only while it stays the principal residence; on loss of eligibility the value set at the transfer date is enrolled, factored | https://www.boe.ca.gov/proptaxes/pdf/lta22012.pdf |
+| FTB, *Income from the sale of your home* | California **conforms** to IRC 121: the same $250,000 single / $500,000 joint exclusion and the same 2-of-5-year test | https://www.ftb.ca.gov/file/personal/income-types/income-from-the-sale-of-your-home.html |
+| FTB, *Capital gains and losses*; 2025 Schedule D (540) instructions | No separate California capital-gains rate; inherited property takes fair market value at death as California basis | https://www.ftb.ca.gov/file/personal/income-types/capital-gains-and-losses.html · https://www.ftb.ca.gov/forms/2025/2025-540-d-instructions.html |
+| IRS, *What's new — Estate and gift tax* | Public Law 119-21 amends § 2010(c)(3) to set the basic exclusion at $15,000,000 for 2026 | https://www.irs.gov/businesses/small-businesses-self-employed/whats-new-estate-and-gift-tax |
+| IRS Topic 559 | 3.8% NIIT thresholds; NIIT does **not** apply to the excluded part of a principal-residence gain, and **does** apply to passive rents | https://www.irs.gov/taxtopics/tc559 |
+| California Department of Insurance, *Compare Insurance Premiums* | The regulator publishes only an interactive survey and states that its results are **not quotes**, so no county premium can be published from it | https://www.insurance.ca.gov/01-consumers/105-type/9-compare-prem/ |
+
+### What changed in the numbers
+
+1. **Estate-tax room, corrected in the owner's favour (C-13).** The edition said Property B is already the heir's but still subtracted both homes from the federal exclusion. Under that statement only Property A is real property in the decedent's gross estate, so one person's 2045 room is **$17,612,280**, not $13,819,960; the both-homes figure now sits beside it in its own column as the contingency if the deed says otherwise (FL-01). No ranking changes.
+2. **Mechanism of the intergenerational amount, re-attributed (C-14).** The amount is confirmed. The rule that the excess over (factored value + amount) becomes the new taxable value sits in RTC 63.2 and Letter 2022/012, and Letter 2022/012 also governs the *exit*: if the child moves out, the exclusion is removed and the transfer-date value is enrolled. That second half was not on the site and is now stated.
+3. **A draft error caught before publication (C-15).** This pass initially charged California income tax on the home-sale gain between $250,000 and $500,000, on an assumption that California conforms only partly to IRC 121. The FTB page contradicts it; the assumption was withdrawn and no published figure changed. It is on the audit page because the reasoning, not only the result, has to be checkable.
+4. **Move-in arithmetic disclosed in full.** Every option assumes the household lives rent-free in Property B's currently unlet third unit, so no option is credited with rent it would otherwise pay; the move-in branch is compared on tax, running cost and the gain tax on a later sale, over the same ten years and with the same 10% selling cost. Stated on `decision.html`; the result (selling ahead by $2,107,270 in 2045) is unchanged.
+5. **Not modelled, now flagged rather than silent:** the unindexed $10,000 state-and-local deduction cap (FL-27), California's homeowner deduction (FL-28) and decline-in-value relief in a crash (FL-29). All three would help the keep or move-in branches, so the recommendation is conservative against itself.
+
+### New flags
+
+`FL-25` the two BOE letters conflict on the 2027 intergenerational amount (Letter 2026/026 is dated 3 August 2026 yet reports an adjustment keyed to the prior calendar year's index); the model keeps the 2025 figure and quantifies the difference at about $660 a year in 2045. `FL-26` the owner's 2026 bill record is arithmetically inconsistent with a 2% step on both the bill and the assessed value; the verified county rate is used and the inconsistency is described. `FL-27`–`FL-29` as above. Insurance stays **blank** on both properties: no quote exists, and the regulator says its survey is not one.
+
+### Verification performed
+
+- `python3 scripts/verify.py` — **PASS** on the combined tree: 13 reproducible pages, 506 table rows all linking to an official publisher, 70 ledger sources, privacy scan and `$10` rounding clean.
+- `python3 plan/tools/verify.py` — **PASS**: 10 pages byte-identical, 360 cited rows.
+- `python3 analysis/tools/verify.py` — **PASS**: 12 reproducible pages, 380 official-domain-cited rows.
+- `python3 scripts/package_site.py` — **PASS**: 13 pages, 52 allowlisted assets, 49 withdrawal notices.
+- Independent link sweep of the packaged `_site`: **1001 local links checked, 0 broken.**
+- Privacy: the two new ledger entries are California state documents, no local source was added, and no personal or place identifier appears in any text this session wrote.

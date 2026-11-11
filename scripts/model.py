@@ -30,6 +30,8 @@ def r10(x: float) -> int:
 IN = {
     "a_value": 3_100_000,     # owner estimate, November 2026
     "a_av_2026": 550_000,     # assessed value, generalised to the nearest $10,000
+    "a_av_2026_exact": 550_537,   # published roll figure, used ONLY to test the owner's 2026 bill
+    "a_bill_2026_stated": 7_040,  # owner's table: +2% over the 2025 bill, generalised
     "a_av_2025": 540_000,
     "a_bill_2025": 7_200,     # tax bill, generalised to the nearest $100
     "a_water": 1_500,         # $100-$150 a month; midpoint
@@ -50,7 +52,9 @@ IN = {
 V = {
     "fed_excl_2026": 15_000_000,      # irs_estate
     "fed_excl_2027": 15_480_000,      # irs_2027
-    "prop19_amount": 1_044_586,       # boe_lta25009 (shown rounded to $10)
+    "prop19_amount": 1_044_586,       # boe_lta25009: value cap exceeds factored base year value on 16 Feb 2025 - 15 Feb 2027
+    "prop19_amount_new": 1_100_730,   # boe_lta26026 (LTA 2026/026). CONFLICT: that letter is dated 3 Aug 2026, before the
+                                      # February 2027 adjustment it reports. The model keeps 1_044_586 and files the conflict.
     "prop13_cap": 0.02,               # boe_lta26002
     "rate_b_2026": 0.0118162182,      # cityb_rate   (fiscal year 2026-27)
     "rate_b_2025": 0.0118268325,      # cityb_res447 (fiscal year 2025-26)
@@ -158,7 +162,8 @@ def stock_after_tax(p0, n, rs=None):
     rs = A["stock_return"] if rs is None else rs
     p = basis = p0
     for i in range(n):
-        r = rs[i] if isinstance(rs, (list, tuple)) else rs
+        # A return path shorter than the compounding period repeats its last year (stress cases only).
+        r = (rs[min(i, len(rs) - 1)] if rs else A["stock_return"]) if isinstance(rs, (list, tuple)) else rs
         div = p * A["stock_dividend"]
         tax = div * A["t_div"]
         p = p * (1 + r) - tax
@@ -219,9 +224,16 @@ def run(option, year, g, law="current", rs=None, rent_mo=None, ins_mult=1.0, n=N
         ins = IN["a_ins_guess"] * ins_mult * infl(y, rate=infl_rate)
         maint = A["maint_a"] * infl(y, rate=infl_rate)
         if option == "live":
+            # While the exclusion holds, the assessed value is the factored base year value plus the
+            # Proposition 19 amount, and that excess grows only at the 2% cap: RTC 63.2 / LTA 2022/012.
             ptax = tax_a(rz["live"] * (1 + V["prop13_cap"]) ** t, y, rate=infl_rate)
             unit3 = (A["unit3_rent_mo"] * 12 * (1 + A["rent_growth"]) ** (year - 2026)
                      * (1 + rent_ctrl) ** t * (1 - A["vacancy"]) * (1 - A["t_ord"]))
+            # No rent is charged or credited for the household's own housing: in every option it lives
+            # rent-free in the third unit of Property B, which is currently unlet. The only housing
+            # difference is that moving into A lets that third unit be let, which is the term below.
+            # Moving in is modelled as occupying for the comparison period and then selling, so the
+            # same 10% selling cost in every option applies and the only difference is the gain tax.
             cf = unit3 - (ptax + ins + maint + IN["a_water"] * infl(y, rate=infl_rate) + IN["a_electric"])
         else:
             ptax = tax_a(rz["rent"] * (1 + V["prop13_cap"]) ** t, y, rate=infl_rate)
@@ -236,6 +248,9 @@ def run(option, year, g, law="current", rs=None, rent_mo=None, ins_mult=1.0, n=N
     fv = sum(cf * (1 + r_eq) ** (n - 1 - t) for t, cf in enumerate(flows))
     net_sale = fmv * _terminal_growth(g, g_path, n) * (1 - SELL_COST)
     if option == "live":
+        # IRC 121 excludes $500,000 of gain on a joint return ($250,000 single) and is NOT indexed
+        # (irs_tc701). California conforms to the same exclusion (ftb_home), so the exclusion is applied
+        # once and the excess is taxed at the combined rate used for every other option.
         gain_tax = T_GAIN * max(0.0, net_sale - fmv - V["home_sale_exclusion_joint"])
     else:
         d = dep * n
@@ -471,11 +486,15 @@ def build():
         row = {"year": yy, "exclusion": r10(ex), "exclusion_couple": r10(2 * ex),
                "status": "Verified" if yy <= 2027 else "Scenario"}
         for tag, gg in (("low", 0.03), ("base", 0.04), ("high", 0.05)):
-            re_ = a_value(yy, gg) + b_value(yy, gg)
-            row[f"homes_{tag}"] = r10(re_)
-            row[f"room_single_{tag}"] = r10(ex - re_)
-            row[f"room_couple_{tag}"] = r10(2 * ex - re_)
-        row["room_single_half"] = r10(ex / 2 - a_value(yy, g) - b_value(yy, g))
+            # The owner states Property B is already owned by the heir, so it is not in the decedent's
+            # gross estate (IRC 2031: irs_estate). Property A is; the B-inclusive figure is kept as the
+            # conservative alternative so the difference is visible rather than assumed away.
+            pa_, pb_ = a_value(yy, gg), b_value(yy, gg)
+            row[f"homes_{tag}"] = r10(pa_ + pb_)
+            row[f"room_single_{tag}"] = r10(ex - pa_)              # owner's statement
+            row[f"room_couple_{tag}"] = r10(2 * ex - pa_)
+            row[f"room_if_b_included_{tag}"] = r10(ex - pa_ - pb_)
+        row["room_single_half"] = r10(ex / 2 - a_value(yy, g))
         d["estate"].append(row)
 
     # Black-swan stress tests (2045 inheritance; post-inheritance world swapped)
