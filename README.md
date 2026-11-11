@@ -8,7 +8,7 @@ federal estate tax.
 
 ## What this repository publishes
 
-Eleven static pages, one stylesheet, one source ledger and three CSV downloads, plus the separate cross-check edition under `plan/` — nothing else. The published
+Twelve static pages, one stylesheet, one source ledger and three CSV downloads, plus the separate cross-check edition under `plan/` — nothing else. The published
 artifact is an allowlist built by `scripts/package_site.py`; every path an earlier edition published is
 replaced by a content-free withdrawal notice, so a stale URL cannot return an old figure.
 
@@ -20,11 +20,12 @@ replaced by a content-free withdrawal notice, so a stale URL cannot return an ol
 | `property-b.html` | The rental: inputs, tax-bill breakdown, rent rules, reassessment exposure if it is in the same estate |
 | `taxes.html` | Federal, California and local rules, verified; pending law changes |
 | `projections.html` | Year-by-year value, assessed value, tax and running costs, 2026–2060, and the ten years after an inheritance |
+| `black-swans.html` | Black-swan conditions: baseline anchors, fifty years of official economic history, stress cases for the plan |
 | `decision.html` | Sell vs rent vs move in for 2040/2045/2050, break-evens, sensitivities, the assumption register |
 | `inheritance.html` | Statutory timeline after the death, with deadlines |
-| `review.html` | 23 flagged items (unverified values left blank, owner questions, record irregularities) and two privacy disclosures |
+| `review.html` | 24 flagged items (unverified values left blank, owner questions, record irregularities) and two privacy disclosures |
 | `audit.html` | Independent verification: twelve corrections to the first quantitative edition, repository review |
-| `sources.html` | 43 official sources, what each one supports and how each was checked |
+| `sources.html` | 58 official sources, what each one supports and how each was checked |
 
 ## Privacy rules enforced in code
 
@@ -38,7 +39,7 @@ replaced by a content-free withdrawal notice, so a stale URL cannot return an ol
 
 ## Verification standard
 
-Every rule on the site was retrieved from the publishing agency's own domain on 10 November 2026 and linked
+Every rule on the site was retrieved from the publishing agency's own domain on 10 or 11 November 2026 and linked
 from the row that uses it. `assets/sources.json` records what each document verifies. Anything that could not
 be verified is left blank or published on the Flagged for Review page — never inferred.
 
@@ -46,7 +47,7 @@ be verified is left blank or published on the Flagged for Review page — never 
 
 ```bash
 python3 scripts/model.py        # writes assets/data/model.json and the CSV downloads
-python3 scripts/build.py        # renders the eleven pages
+python3 scripts/build.py        # renders the twelve pages
 python3 scripts/verify.py       # reproducible-build, citation, link, privacy and rounding checks
 python3 scripts/package_site.py # writes the _site artifact (allowlist + withdrawal notices)
 ```
@@ -57,7 +58,7 @@ ledger entry that does not say how it was checked.
 
 ## Data
 
-`assets/sources.json` — source ledger (43 entries, each with the words relied on and how it was checked).
+`assets/sources.json` — source ledger (58 entries, each with the words relied on and how it was checked).
 `assets/data/model.json` — every figure on the site.
 `assets/data/property_a.csv`, `property_b.csv`, `decision.csv` — the same numbers for offline work.
 

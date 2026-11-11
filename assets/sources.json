@@ -1,7 +1,7 @@
 {
- "reviewed_on": "2026-11-10",
- "reviewer_session": "arena-c2f4be85 (second, independent pass over the edition published earlier the same day by arena/d76d5375-tino3)",
- "method": "Each entry records how it was checked. 'Opened' means the page or document was retrieved from the publisher's own domain and the quoted words were read there. 'Official-domain search excerpt' means the words were read in a search result served from the publisher's domain, without opening the whole document. Nothing is marked verified beyond what the quoted words support.",
+ "reviewed_on": "2026-11-10, re-checked and extended 2026-11-11",
+ "reviewer_session": "arena-c2f4be85 (second, independent pass over the edition published earlier the same day by arena/d76d5375-tino3); re-check and black-swan additions by arena/d2fd135b-tino3 on 2026-11-11",
+ "method": "Each entry records how it was checked. 'Opened' means the page or document was retrieved from the publisher's own domain and the quoted words were read there. 'Official-domain search excerpt' means the words were read in a search result served from the publisher's domain, without opening the whole document. Nothing is marked verified beyond what the quoted words support. On 11 November 2026 the session arena/d2fd135b-tino3 re-opened twenty of the entries below on the publisher's own domain, added the economic-history entries used by the black-swan page, and recorded each check in the entry's \"checked\" field.",
  "sources": {
   "irs_estate": {
    "publisher": "Internal Revenue Service",
@@ -13,7 +13,7 @@
     "A surviving spouse can receive the unused exemption only through an election on a timely filed estate tax return"
    ],
    "quote": "2026 | $15,000,000 ... This election is made on a timely filed estate tax return for the decedent with a surviving spouse.",
-   "checked": "opened on the publisher's site in this session"
+   "checked": "opened on the publisher's site in this session; re-checked on the publisher's site on 11 November 2026"
   },
   "irs_2027": {
    "publisher": "Internal Revenue Service",
@@ -24,7 +24,7 @@
     "Annual gift exclusion rises to $20,000 for 2027, from $19,000 for 2026"
    ],
    "quote": "Estates of decedents who die during 2027 have a basic exclusion amount of $15,480,000, up from a total of $15,000,000 for estates of decedents who died in 2026.",
-   "checked": "opened on the publisher's site in this session"
+   "checked": "opened on the publisher's site in this session; re-checked on the publisher's site on 11 November 2026"
   },
   "irs_rp2635": {
    "publisher": "Internal Revenue Service",
@@ -78,7 +78,7 @@
     "Selling for more than that basis is a taxable gain, reported on Schedule D and Form 8949"
    ],
    "quote": "The fair market value (FMV) of the property on the date of the decedent's death (whether or not the executor of the estate files an estate tax return ...). ... If you sell the property for more than your basis, you have a taxable gain.",
-   "checked": "opened on the publisher's site in this session"
+   "checked": "opened on the publisher's site in this session; re-checked on the publisher's site on 11 November 2026"
   },
   "irs_rr2023_2": {
    "publisher": "Internal Revenue Service",
@@ -181,7 +181,7 @@
     "For a trust, the date of death is the date of change in ownership"
    ],
    "quote": "No, Proposition 19 limits the parent-child transfer exclusion to a transfer of (1) a family home that is the principal residence of the transferor and becomes the principal residence of the transferee, or (2) a family farm. Thus, the transfer of a rental home between parents and children would not qualify for the exclusion.",
-   "checked": "opened on the publisher's site in this session"
+   "checked": "opened on the publisher's site in this session; re-checked on the publisher's site on 11 November 2026"
   },
   "boe_lta25009": {
    "publisher": "California State Board of Equalization",
@@ -193,7 +193,7 @@
     "Earlier amounts: $1,000,000 from 2021 and $1,022,600 from 2023"
    ],
    "quote": "every other February 16 thereafter, the State Board of Equalization shall adjust the one million dollar ($1,000,000) amount ... to reflect the percentage change in the House Price Index for California for the prior calendar year ... the annual percentage change in the House Price Index for California for 2024 was 2.15 percent. Accordingly, the $1 million amount is adjusted to $1,044,586.",
-   "checked": "opened on the publisher's site in this session"
+   "checked": "opened on the publisher's site in this session; re-checked on the publisher's site on 11 November 2026"
   },
   "boe_lta26026": {
    "publisher": "California State Board of Equalization",
@@ -221,7 +221,7 @@
     "Claim within three years, or within six months of a supplemental or escape assessment notice"
    ],
    "quote": "The transfer is required to be of a principal residence of the transferor, and become the principal residence of the transferee within one year of the transfer.",
-   "checked": "opened on the publisher's site in this session"
+   "checked": "opened on the publisher's site in this session; re-checked on the publisher's site on 11 November 2026"
   },
   "boe_lta26002": {
    "publisher": "California State Board of Equalization",
@@ -233,7 +233,7 @@
     "The 2026 factor was computed from August to August because no October 2025 index was published"
    ],
    "quote": "Due to the federal government shutdown in the fall of 2025 ... the inflation factor for the 2026 lien date was calculated using the percentage change from August 2024 to August 2025 ... please prepare your 2026 assessment roll using an inflation factor of 1.02.",
-   "checked": "opened on the publisher's site in this session"
+   "checked": "opened on the publisher's site in this session; re-checked on the publisher's site on 11 November 2026"
   },
   "rtc480": {
    "publisher": "California Legislative Information",
@@ -309,7 +309,7 @@
     "Late instalments carry a 10% penalty"
    ],
    "quote": "The secured property tax rate for Fiscal Year 2026-27 is 1.18162182%.",
-   "checked": "opened on the publisher's site in this session"
+   "checked": "opened on the publisher's site in this session; re-checked on the publisher's site on 11 November 2026"
   },
   "cityb_res447": {
    "publisher": "City B Board of Supervisors",
@@ -344,7 +344,7 @@
     "There is no limit on the first rent charged to a new tenant in a vacant covered unit"
    ],
    "quote": "Effective March 1, 2026, the allowed rent increase percentage is 1.6%. ... This amount is based on 60% of the increase in the Consumer Price Index for All Urban Consumers in the Bay Area. ... There is no limit on how much rent a landlord may first charge a tenant when renting an empty unit that is covered by rent control.",
-   "checked": "official-domain search excerpt read in this session (full document not opened)"
+   "checked": "official-domain search excerpt read in this session (full document not opened); re-checked on the publisher's site on 11 November 2026"
   },
   "cityb_rentfee": {
    "publisher": "City B Rent Board",
@@ -433,7 +433,7 @@
     "On 9 November 2026 the par yields were 4.38% (1 year), 4.67% (5 years), 4.88% (10 years) and 5.26% (30 years)"
    ],
    "quote": "11/09/2026 | ... | 4.38 | 4.56 | 4.58 | 4.67 | 4.76 | 4.88 | 5.29 | 5.26",
-   "checked": "opened on the publisher's site in this session"
+   "checked": "opened on the publisher's site in this session; re-checked on the publisher's site on 11 November 2026"
   },
   "tsp_returns": {
    "publisher": "Federal Retirement Thrift Investment Board",
@@ -473,10 +473,11 @@
    "title": "Fair Market Rents",
    "url": "https://www.huduser.gov/portal/datasets/fmr.html",
    "verifies": [
-    "Nothing is verified from this source: the official rent table for either area was not opened in this session"
+    "Fair Market Rents are defined as 40th-percentile gross rents for standard quality units (24 CFR 888.113); the FY2027 documentation system and the 1983-present history files exist",
+    "No area-specific rent value was retrieved or used in any figure"
    ],
    "quote": "",
-   "checked": "NOT verified: link supplied for manual review only"
+   "checked": "NOT verified for any figure: the dataset documentation was opened on the publisher's site on 11 November 2026; area-specific values were deliberately not retrieved, to protect location privacy."
   },
   "sos_memo": {
    "publisher": "California Secretary of State",
@@ -487,6 +488,159 @@
    ],
    "quote": "the total number of signatures for the hereinafter named initiative filed with all county elections officials is less than 100 percent of the number of qualified voters required to find the petition sufficient; therefore, the petition has failed.",
    "checked": "opened on the publisher's site in this session"
+  },
+  "fed_2goal": {
+   "publisher": "Board of Governors of the Federal Reserve System",
+   "title": "FAQ: Why does the Federal Reserve aim for inflation of 2 percent over the longer run?",
+   "url": "https://www.federalreserve.gov/faqs/economy_14400.htm",
+   "verifies": [
+    "The FOMC judges that inflation of 2 percent over the longer run, measured by the annual change in the PCE price index, is most consistent with the Federal Reserve's statutory mandate"
+   ],
+   "checked": "opened on the publisher's site on 11 November 2026"
+  },
+  "ssa_trustees": {
+   "publisher": "Social Security Administration",
+   "title": "2026 OASDI Trustees Report: Assumptions about the future (table II.C1)",
+   "url": "https://www.ssa.gov/oact/tr/2026/II_C_assump.html",
+   "verifies": [
+    "Ultimate annual CPI-W change of 2.4 percent (intermediate), 3.0 percent (low-cost) and 1.8 percent (high-cost)",
+    "Ultimate productivity growth of 1.63 percent and unemployment of 4.5 percent under the intermediate assumptions"
+   ],
+   "checked": "opened on the publisher's site on 11 November 2026"
+  },
+  "cbo_outlook": {
+   "publisher": "Congressional Budget Office",
+   "title": "The Budget and Economic Outlook: 2026 to 2036",
+   "url": "https://www.cbo.gov/publication/62105",
+   "verifies": [
+    "Debt held by the public rises from 101 percent of GDP in 2026 to 120 percent in 2036 and reaches 175 percent of GDP by 2056",
+    "The deficit is 5.8 percent of GDP in 2026 and 6.7 percent in 2036; net outlays for interest rise to 6.9 percent of GDP by 2056",
+    "CBO projects inflation consistent with the Federal Reserve's 2 percent goal from 2027 through 2055",
+    "CBO estimates a two-thirds chance that debt is between 101 and 118 percent of GDP in 2036 under current law"
+   ],
+   "checked": "opened on the publisher's site on 11 November 2026 (projections-at-a-glance and budget chapters read)"
+  },
+  "frh_oil": {
+   "publisher": "Federal Reserve History",
+   "title": "Oil Shock of 1973-74",
+   "url": "https://www.federalreservehistory.org/essays/oil-shock-of-1973-74",
+   "verifies": [
+    "Production cuts by Arab producers nearly quadrupled the price of oil between 1973 and January 1974",
+    "The shock complicated monetary policy and contributed to the inflation of the 1970s"
+   ],
+   "checked": "opened on the publisher's site on 11 November 2026"
+  },
+  "frh_1987": {
+   "publisher": "Federal Reserve History",
+   "title": "Stock Market Crash of 1987",
+   "url": "https://www.federalreservehistory.org/essays/stock-market-crash-of-1987",
+   "verifies": [
+    "The Dow Jones Industrial Average dropped 22.6 percent in a single trading session on 19 October 1987, the largest one-day percentage decline in history",
+    "The episode led to circuit-breaker rules that halt trading after large declines"
+   ],
+   "checked": "opened on the publisher's site on 11 November 2026"
+  },
+  "frh_recession": {
+   "publisher": "Federal Reserve History",
+   "title": "The Great Recession (December 2007-June 2009)",
+   "url": "https://www.federalreservehistory.org/essays/great-recession-of-200709",
+   "verifies": [
+    "Real GDP fell 4.3 percent from 2007Q4 to 2009Q2, the largest postwar decline",
+    "Unemployment rose from 5 percent in December 2007 to a peak of 10 percent in October 2009",
+    "The S&P 500 fell 57 percent from its October 2007 peak to its trough in March 2009",
+    "Home prices fell about 30 percent on average from mid-2006 to mid-2009",
+    "The federal funds rate was cut from 5.25 percent in September 2007 to a range of 0 to 0.25 percent in December 2008"
+   ],
+   "checked": "opened on the publisher's site on 11 November 2026"
+  },
+  "fed_mpr2001": {
+   "publisher": "Board of Governors of the Federal Reserve System",
+   "title": "Monetary Policy Report to the Congress, 13 February 2001, section 2",
+   "url": "https://www.federalreserve.gov/boarddocs/hh/2001/february/ReportSection2.htm",
+   "verifies": [
+    "In 2000 the tech-heavy Nasdaq was down nearly 40 percent for the year while the broadest stock indexes fell more than 10 percent",
+    "Real GDP rose about 3.5 percent in 2000"
+   ],
+   "checked": "opened on the publisher's site on 11 November 2026 (household, labour, price and financial-market sections read)"
+  },
+  "bls_cpi": {
+   "publisher": "Bureau of Labor Statistics",
+   "title": "Consumer Price Index summary, October 2026 (USDL-26-1685)",
+   "url": "https://www.bls.gov/news.release/cpi.nr0.htm",
+   "verifies": [
+    "CPI-U rose 0.4 percent seasonally adjusted in October 2026, after 0.6 percent in September and minus 0.4 percent in June 2026",
+    "BLS did not collect survey data for October 2025 because of a lapse in appropriations, so 12-month changes for October 2026 are not published for most series"
+   ],
+   "checked": "opened on the publisher's site on 11 November 2026"
+  },
+  "sos_results": {
+   "publisher": "California Secretary of State",
+   "title": "2026 general election: statewide ballot measures (unofficial results)",
+   "url": "https://electionresults.sos.ca.gov/returns/ballot-measures",
+   "verifies": [
+    "Unofficial results as of 10 November 2026: Proposition 42 ahead with 51.5 percent yes; Proposition 40 (one-time tax on certain taxpayers) rejected with 52.6 percent no",
+    "Results will be certified by 11 December 2026"
+   ],
+   "checked": "opened on the publisher's site on 11 November 2026"
+  },
+  "fred_fedfunds": {
+   "publisher": "Federal Reserve Bank of St. Louis (data: Board of Governors)",
+   "title": "Federal funds effective rate (monthly)",
+   "url": "https://fred.stlouisfed.org/series/FEDFUNDS",
+   "verifies": [
+    "Monthly average peaked at 19.10 percent in June 1981",
+    "Monthly average ran between 0.07 and 0.22 percent from 2009 through 2015",
+    "Monthly average was 3.88 percent in October 2026"
+   ],
+   "checked": "CSV opened on the publisher's site on 11 November 2026 (windows 1954-1995, 2007-2016 and 2025-2026 read)"
+  },
+  "fred_unrate": {
+   "publisher": "Federal Reserve Bank of St. Louis (data: Bureau of Labor Statistics)",
+   "title": "Unemployment rate (monthly)",
+   "url": "https://fred.stlouisfed.org/series/UNRATE",
+   "verifies": [
+    "10.8 percent in November and December 1982",
+    "14.8 percent in April 2020",
+    "10.0 percent in October 2009"
+   ],
+   "checked": "CSV opened on the publisher's site on 11 November 2026 (three dated windows read)"
+  },
+  "fred_mortgage": {
+   "publisher": "Federal Reserve Bank of St. Louis (data: Freddie Mac)",
+   "title": "30-year fixed mortgage average (weekly)",
+   "url": "https://fred.stlouisfed.org/series/MORTGAGE30US",
+   "verifies": [
+    "18.63 percent in the week of 9 October 1981",
+    "7.79 percent in the week of 26 October 2023"
+   ],
+   "checked": "CSV opened on the publisher's site on 11 November 2026 (two dated windows read)"
+  },
+  "fred_casthpi": {
+   "publisher": "Federal Reserve Bank of St. Louis (data: Federal Housing Finance Agency)",
+   "title": "All-transactions house price index for California",
+   "url": "https://fred.stlouisfed.org/series/CASTHPI",
+   "verifies": [
+    "Index peak of 646.07 in 2006Q3 and trough of 380.93 in 2012Q1, a decline of 41 percent (computed from the published series)"
+   ],
+   "checked": "full CSV opened on the publisher's site on 11 November 2026"
+  },
+  "fred_usthpi": {
+   "publisher": "Federal Reserve Bank of St. Louis (data: Federal Housing Finance Agency)",
+   "title": "All-transactions house price index for the United States",
+   "url": "https://fred.stlouisfed.org/series/USSTHPI",
+   "verifies": [
+    "Index peak of 380.31 in 2007Q1 and trough of 308.14 in 2012Q2, a decline of 19 percent (computed from the published series)"
+   ],
+   "checked": "full CSV opened on the publisher's site on 11 November 2026"
+  },
+  "fred_dgs10": {
+   "publisher": "Federal Reserve Bank of St. Louis (data: U.S. Treasury)",
+   "title": "10-year Treasury constant maturity rate (daily)",
+   "url": "https://fred.stlouisfed.org/series/DGS10",
+   "verifies": [
+    "0.52 percent on 4 August 2020"
+   ],
+   "checked": "CSV opened on the publisher's site on 11 November 2026 (dated window read)"
   }
  }
 }
