@@ -789,7 +789,7 @@ as "not touched" by `4ff01a4d` and `bd680fbc`. This session therefore takes `pla
 | P8-1 Line-by-line audit of the `plan/` edition: ledger sources re-opened on the publisher's domain, arithmetic re-derived, privacy scan | **done** | `arena/82853ea6-tino3` | `plan/tools/*`, `plan/data/*`, `plan/*.html` (generated) |
 | P8-2 Gap check of `plan/` against the owner's brief and repair inside `plan/` only | **done** | `arena/82853ea6-tino3` | `plan/**` |
 | P8-3 Cross-edition reconciliation (root vs `plan/` vs `analysis/`), published on `plan/flagged.html`; defects in other scopes logged as requests | **done** | `arena/82853ea6-tino3` | `plan/**`; this section |
-| P8-4 Verifiers, packaging, PR to `main`, merge, Pages deploy check, result recorded | **in progress** | `arena/82853ea6-tino3` | `COORDINATION.md` (this section only) |
+| P8-4 Verifiers, packaging, PR to `main`, merge, Pages deploy check, result recorded | **done** | `arena/82853ea6-tino3` | `COORDINATION.md` (this section only) |
 
 Not touched: `scripts/*`, `assets/*`, root `*.html`, `analysis/**`, `decision-suite/**`, `README.md`, `EXECUTIVE_SUMMARY.md`,
 workflows, withdrawal notices, other sessions' sections. No name, street address, postal code, city name, parcel number or
@@ -842,3 +842,10 @@ The other 32 ledger entries were **not** re-opened by this session; `plan/source
 | CR-P8-1 | root `scripts/model.py` (`4ff01a4d` / `ca7ad6a2`) | The root edition still reads the 10-year Treasury at 4.88% (9 Nov 2026); the Treasury page showed 4.98% for 10 Nov when opened in this session. Informational. |
 | CR-P8-2 | root and `analysis/` owners | Rent of $6,500 a month for A, maintenance of $9,300 / $10,800 a year, 5% selling cost and the 7% share return are assumptions, not verified values. They are labelled as such; under the owner's "never infer" rule they belong on the flag register of each edition as well. |
 | CR-P8-3 | `arena/a2416305-tino3` (claimed `plan/**` at 12:59:51, after this session's 12:57:25) | This session's `plan/` work is in the PR below. Please rebase onto it and add findings on top rather than regenerate from the older model. |
+
+### Publication result · `arena/82853ea6-tino3` · 2026-11-11
+
+- **PR [#47](https://github.com/wingbangboozle1-lang/Tino3/pull/47) — MERGED** (merge commit `0ff54a3`). Pre-merge check `Verify static site` passed (run `43026118068`); the PR was `MERGEABLE / CLEAN`.
+- **After the merge, on `main`:** `Verify static site` (run `43026190736`) success; `Deploy GitHub Pages` (run `43026190894`) success; branch-root `pages-build-deployment` (run `43026189759`) success.
+- **Live check by fetch:** `https://wingbangboozle1-lang.github.io/Tino3/plan/taxes.html` serves the corrected headroom table ("Room for money beside A" $11,900,000 for 2026; contingency column for Property B) and the "Checked 11 November 2026" line; `https://wingbangboozle1-lang.github.io/Tino3/` serves the main dashboard with its link to the cross-check intact.
+- One merge conflict met (append at the end of `COORDINATION.md` against PRs #41 to #45); resolved by keeping every other session's text and appending this section. Nothing discarded.
