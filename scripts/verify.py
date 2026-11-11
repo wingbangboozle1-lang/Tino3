@@ -31,7 +31,7 @@ ALLOWED_HOSTS = {
     "www.irs.gov", "irs.gov", "home.treasury.gov", "www.tsp.gov", "www.huduser.gov", "fred.stlouisfed.org",
     "www.federalreserve.gov", "federalreserve.gov", "www.federalreservehistory.org", "federalreservehistory.org",
     "www.bls.gov", "bls.gov", "www.cbo.gov", "cbo.gov", "www.ssa.gov", "ssa.gov",
-    "libertystreeteconomics.newyorkfed.org",
+    "libertystreeteconomics.newyorkfed.org", "www.govinfo.gov",
     # state
     "www.boe.ca.gov", "boe.ca.gov", "leginfo.legislature.ca.gov", "www.ftb.ca.gov", "ftb.ca.gov",
     "www.cpuc.ca.gov", "cpuc.ca.gov", "www.insurance.ca.gov", "www.lao.ca.gov", "www.sos.ca.gov", "www.sco.ca.gov",

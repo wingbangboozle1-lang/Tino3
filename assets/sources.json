@@ -1,7 +1,7 @@
 {
- "reviewed_on": "2026-11-10, re-checked and extended 2026-11-11",
- "reviewer_session": "arena-c2f4be85 (second independent pass, 2026-11-10); 2026-11-11: arena/bde5056d-tino3 appended the stress-test sources (bls_ted2022..fred_nasdaqcom, nyfed_covid) and arena/d2fd135b-tino3 re-opened twelve entries, added the economic-history sources (fed_2goal..sos_results) and recorded each check in the entry's \"checked\" field",
- "method": "Each entry records how it was checked. 'Opened' means the page or document was retrieved from the publisher's own domain and the quoted words were read there. 'Official-domain search excerpt' means the words were read in a search result served from the publisher's domain, without opening the whole document. Nothing is marked verified beyond what the quoted words support. On 11 November 2026 the session arena/d2fd135b-tino3 re-opened twenty of the entries below on the publisher's own domain, added the economic-history entries used by the black-swan page, and recorded each check in the entry's \"checked\" field.",
+ "reviewed_on": "2026-11-10, re-checked and extended 2026-11-11 (two independent passes on 11 November 2026)",
+ "reviewer_session": "arena-c2f4be85 (second independent pass, 2026-11-10); 2026-11-11: arena/bde5056d-tino3 appended the stress-test sources (bls_ted2022..fred_nasdaqcom, nyfed_covid) and arena/d2fd135b-tino3 re-opened twelve entries, added the economic-history sources (fed_2goal..sos_results) and recorded each check in the entry's \"checked\" field; 2026-11-11: arena/4ff01a4d-tino3 re-opened thirteen entries on the publishers' domains, ran an independent arithmetic audit of the published model, and added uscode3124 (31 U.S.C. 3124, U.S. Government Publishing Office), which settles the state-tax status of Treasury interest",
+ "method": "Each entry records how it was checked. 'Opened' means the page or document was retrieved from the publisher's own domain and the quoted words were read there. 'Official-domain search excerpt' means the words were read in a search result served from the publisher's domain, without opening the whole document. Nothing is marked verified beyond what the quoted words support. On 11 November 2026 the session arena/d2fd135b-tino3 re-opened twenty of the entries below on the publisher's own domain, added the economic-history entries used by the black-swan page, and recorded each check in the entry's \"checked\" field. On 11 November 2026 a third session, arena/4ff01a4d-tino3, re-opened thirteen entries on the publishers' own domains, checked every published projection row against the model's own formulas, and added one primary statute from the U.S. Government Publishing Office (31 U.S.C. 3124).",
  "sources": {
   "irs_estate": {
    "publisher": "Internal Revenue Service",
@@ -13,7 +13,7 @@
     "A surviving spouse can receive the unused exemption only through an election on a timely filed estate tax return"
    ],
    "quote": "2026 | $15,000,000 ... This election is made on a timely filed estate tax return for the decedent with a surviving spouse.",
-   "checked": "opened on the publisher's site in this session; re-checked on the publisher's site on 11 November 2026"
+   "checked": "opened on the publisher's site on 11 November 2026 (third pass): the filing-threshold table ends at 2026, $15,000,000"
   },
   "irs_2027": {
    "publisher": "Internal Revenue Service",
@@ -24,7 +24,7 @@
     "Annual gift exclusion rises to $20,000 for 2027, from $19,000 for 2026"
    ],
    "quote": "Estates of decedents who die during 2027 have a basic exclusion amount of $15,480,000, up from a total of $15,000,000 for estates of decedents who died in 2026.",
-   "checked": "opened on the publisher's site in this session; re-checked on the publisher's site on 11 November 2026"
+   "checked": "opened on the publisher's site on 11 November 2026 (third pass); the $15,480,000 basic exclusion for 2027 was also seen in a search excerpt of the same release"
   },
   "irs_rp2635": {
    "publisher": "Internal Revenue Service",
@@ -67,7 +67,7 @@
     "The credit on the $15,000,000 exclusion is $5,945,800, which corresponds to a 40% top rate"
    ],
    "quote": "You must file Form 706 to report estate and/or GST tax within 9 months after the date of the decedent's death ... Use Form 4768 ... to apply for an automatic 6-month extension of time to file. ... The basic credit amount is $5,945,800.",
-   "checked": "official-domain search excerpt read in this session (full document not opened)"
+   "checked": "opened on the publisher's site on 11 November 2026 (third pass): 2026 basic exclusion $15,000,000, 2026 basic credit $5,945,800, filing threshold and portability election"
   },
   "irs_basis": {
    "publisher": "Internal Revenue Service",
@@ -166,7 +166,7 @@
     "The section was enacted by initiative, Proposition 6 of June 1982"
    ],
    "quote": "Neither the state nor any political subdivision of the state shall impose any gift, inheritance, succession, legacy, income, or estate tax, or any other tax, on gifts or on the estate or inheritance of any person or on or by reason of any transfer occurring by reason of a death.",
-   "checked": "opened on the publisher's site in this session"
+   "checked": "opened on the publisher's site on 11 November 2026 (third pass): the state and every political subdivision are barred from gift, inheritance, estate or death-transfer taxes"
   },
   "boe_prop19": {
    "publisher": "California State Board of Equalization",
@@ -181,7 +181,7 @@
     "For a trust, the date of death is the date of change in ownership"
    ],
    "quote": "No, Proposition 19 limits the parent-child transfer exclusion to a transfer of (1) a family home that is the principal residence of the transferor and becomes the principal residence of the transferee, or (2) a family farm. Thus, the transfer of a rental home between parents and children would not qualify for the exclusion.",
-   "checked": "opened on the publisher's site in this session; re-checked on the publisher's site on 11 November 2026"
+   "checked": "opened on the publisher's site on 11 November 2026 (third pass): the comparison tables, the value limit and the one-year and three-year filing periods"
   },
   "boe_lta25009": {
    "publisher": "California State Board of Equalization",
@@ -193,7 +193,7 @@
     "Earlier amounts: $1,000,000 from 2021 and $1,022,600 from 2023"
    ],
    "quote": "every other February 16 thereafter, the State Board of Equalization shall adjust the one million dollar ($1,000,000) amount ... to reflect the percentage change in the House Price Index for California for the prior calendar year ... the annual percentage change in the House Price Index for California for 2024 was 2.15 percent. Accordingly, the $1 million amount is adjusted to $1,044,586.",
-   "checked": "opened on the publisher's site in this session; re-checked on the publisher's site on 11 November 2026"
+   "checked": "opened on the publisher's site on 11 November 2026 (third pass): the adjusted $1 million amount for transfers from 16 February 2025 to 15 February 2027, and the table of earlier amounts"
   },
   "boe_lta26026": {
    "publisher": "California State Board of Equalization",
@@ -221,7 +221,7 @@
     "Claim within three years, or within six months of a supplemental or escape assessment notice"
    ],
    "quote": "The transfer is required to be of a principal residence of the transferor, and become the principal residence of the transferee within one year of the transfer.",
-   "checked": "opened on the publisher's site in this session; re-checked on the publisher's site on 11 November 2026"
+   "checked": "opened on the publisher's site on 11 November 2026 (third pass): principal-residence condition, one-year move-in, homeowners' exemption and the new taxable value formula"
   },
   "boe_lta26002": {
    "publisher": "California State Board of Equalization",
@@ -309,7 +309,7 @@
     "Late instalments carry a 10% penalty"
    ],
    "quote": "The secured property tax rate for Fiscal Year 2026-27 is 1.18162182%.",
-   "checked": "opened on the publisher's site in this session; re-checked on the publisher's site on 11 November 2026"
+   "checked": "opened on the publisher's site on 11 November 2026 (third pass): fiscal year 2026-27 secured rate 1.18162182%, 10% penalties and supplemental assessments after a change in ownership"
   },
   "cityb_res447": {
    "publisher": "City B Board of Supervisors",
@@ -344,7 +344,7 @@
     "There is no limit on the first rent charged to a new tenant in a vacant covered unit"
    ],
    "quote": "Effective March 1, 2026, the allowed rent increase percentage is 1.6%. ... This amount is based on 60% of the increase in the Consumer Price Index for All Urban Consumers in the Bay Area. ... There is no limit on how much rent a landlord may first charge a tenant when renting an empty unit that is covered by rent control.",
-   "checked": "official-domain search excerpt read in this session (full document not opened); re-checked on the publisher's site on 11 November 2026"
+   "checked": "opened on the publisher's site on 11 November 2026 (third pass): 1.6% for 1 March 2026 to 28 February 2027, 60% of the regional CPI, and the notice of proposed File No. 261020 posted 9 November 2026"
   },
   "cityb_rentfee": {
    "publisher": "City B Rent Board",
@@ -423,7 +423,7 @@
     "The survey results are not premium quotes; the Department cannot provide quotes"
    ],
    "quote": "The results of these surveys are not premium quotes. ... The California Department of Insurance is a regulatory agency and not an insurance agent. As such, we cannot provide actual quotes.",
-   "checked": "opened on the publisher's site in this session"
+   "checked": "opened on the publisher's site on 11 November 2026 (third pass): the 2026 homeowners survey exists, the Department states it cannot provide quotes, and the results are not premium quotes"
   },
   "treasury_cmt": {
    "publisher": "U.S. Department of the Treasury",
@@ -487,7 +487,7 @@
     "The initiative titled 'Repeals voter-enacted changes to property tax rules for transfers between family members' failed: the signatures filed were below the number required"
    ],
    "quote": "the total number of signatures for the hereinafter named initiative filed with all county elections officials is less than 100 percent of the number of qualified voters required to find the petition sufficient; therefore, the petition has failed.",
-   "checked": "opened on the publisher's site in this session"
+   "checked": "opened on the publisher's site on 11 November 2026 (third pass): CC/ROV Memorandum 26138 of 18 May 2026 records that the petition FAILED for insufficient signatures"
   },
   "bls_ted2022": {
    "publisher": "U.S. Bureau of Labor Statistics",
@@ -696,7 +696,7 @@
     "Unofficial results as of 10 November 2026: Proposition 42 ahead with 51.5 percent yes; Proposition 40 (one-time tax on certain taxpayers) rejected with 52.6 percent no",
     "Results will be certified by 11 December 2026"
    ],
-   "checked": "opened on the publisher's site on 11 November 2026"
+   "checked": "opened on the publisher's site on 11 November 2026 (third pass): unofficial statewide results as of 10 November 2026, 5:31 p.m.; Proposition 40 52.6% no, Proposition 42 51.5% yes; certification by 11 December 2026"
   },
   "fred_fedfunds": {
    "publisher": "Federal Reserve Bank of St. Louis (data: Board of Governors)",
@@ -747,6 +747,18 @@
     "Index peak of 380.31 in 2007Q1 and trough of 308.14 in 2012Q2, a decline of 19 percent (computed from the published series)"
    ],
    "checked": "full CSV opened on the publisher's site on 11 November 2026"
+  },
+  "uscode3124": {
+   "publisher": "U.S. Government Publishing Office (GovInfo)",
+   "title": "31 U.S.C. 3124, Exemption from taxation (United States Code, 2023 edition)",
+   "url": "https://www.govinfo.gov/content/pkg/USCODE-2023-title31/html/USCODE-2023-title31-subtitleIII-chap31-subchapII-sec3124.htm",
+   "verifies": [
+    "Obligations of the United States Government, and the interest on them, are exempt from taxation by a State or political subdivision of a State",
+    "The exemption does not extend to an estate or inheritance tax, and it does not override the Internal Revenue Code for federal income tax",
+    "Gain or loss on disposing of Treasury obligations is decided under the Internal Revenue Code, not by the state-tax exemption"
+   ],
+   "quote": "(a) Stocks and obligations of the United States Government are exempt from taxation by a State or political subdivision of a State. ... (2) an estate or inheritance tax.",
+   "checked": "opened on the publisher's site on 11 November 2026: the full section text was read on govinfo.gov"
   }
  }
 }
