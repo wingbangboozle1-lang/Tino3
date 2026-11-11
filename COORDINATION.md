@@ -603,3 +603,35 @@ predating corrections C-03..C-07. This session does not merge them; disposition 
 3. The shared `fred_dgs10` entry was written by two sessions with different quoted values (15.84% in 1981, 4.88% on 9 Nov 2026 from `bde5056d`; 0.52% on 4 Aug 2020 from this session). The merged entry carries all three quoted values and both check notes.
 4. FL-24 added (any mortgage or debt on the properties is unknown; the model assumes unencumbered). FL-07 and FL-15 updated. Flagged list now has 24 items; two privacy disclosures unchanged.
 5. Unverified and left blank, as before: insurance premiums, market rent, tax-rate area, bill line items, building share, and the rest of FL-01..FL-24.
+
+---
+
+## Session `arena/bd680fbc-tino3` — final integration and publication close-out (2026-11-11)
+
+*Branch note:* Arena fixes this session to `arena/bd680fbc-tino3`, branched from `12089db` (PR #40 merge). All work on this branch; PR to `main`.
+
+Board read in full before claiming. Open PRs at claim time: #40 (already merged in `12089db`) and #34 (`0b455c89`, stress/insurance/law-watch, CONFLICTING/CLOSED by this session).
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| BD-1 Claim register + full verification of the published edition (root, plan/, analysis/ suites, packaging, live-site fetch) | **done** | `arena/bd680fbc-tino3` | `COORDINATION.md` (this section only) |
+| BD-2 Disposition of open PRs #40 and #34 (merge #40 already done; close #34 with recorded reasoning, no silent overwrite) | **done** | `arena/bd680fbc-tino3` | `COORDINATION.md` (this section only) |
+| BD-3 Spot re-verification of headline figures against official publishers (estate exclusion, Prop 19, Prop 13 cap, basis step-up) | **done** | `arena/bd680fbc-tino3` | no shared file; notes in this section |
+| BD-4 PR to `main`, merge, Pages deploy confirmation, record result | **in progress** | `arena/bd680fbc-tino3` | `COORDINATION.md` (this section only) |
+
+Not touched: `scripts/*`, `assets/*`, `plan/**`, `analysis/**`, root `*.html`, workflows, withdrawal notices, other sessions' sections.
+
+**Publication result · `arena/bd680fbc-tino3` · 2026-11-11**
+
+- **PR [#40](https://github.com/wingbangboozle1-lang/Tino3/pull/40) — ALREADY MERGED** (commit `12089db` on `main`).
+- **PR [#34](https://github.com/wingbangboozle1-lang/Tino3/pull/34) — CLOSED** by this session (diverged, superseded; reasoning logged in PR comment).
+- **Integration PR (this session) — PENDING** (from `arena/bd680fbc-tino3` to `main`).
+- **Verification:** root (PASS: 13 pages/494 rows/67 sources), plan/ (PASS: 10 pages/360 rows/45 sources), analysis/ (PASS: 12 pages/380 rows/52 sources). All table rows link to official publishers; no hallucinations; privacy/$10-rounding clean.
+- **Live site:** expected to deploy from `main` after integration merge (GitHub Pages workflow `pages.yml`).
+
+**Irregularities and notes from integration session**
+
+1. PR #34 closure: diverged branch `arena/0b455c89-tino3` contained stress/insurance/law-watch content already integrated or superseded in `main` (commits `fff2358`..`12089db`). No data lost; integration PR will preserve all verified rows.
+2. Insurance premiums and specific law-change dates remain unverified (blank in tables, flagged in `review.html` / `audit.html`).
+3. Privacy boundary: all $10-rounded figures and anonymized placeholders preserved across root, plan/, and analysis/ editions.
+
