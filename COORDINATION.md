@@ -603,3 +603,25 @@ predating corrections C-03..C-07. This session does not merge them; disposition 
 3. The shared `fred_dgs10` entry was written by two sessions with different quoted values (15.84% in 1981, 4.88% on 9 Nov 2026 from `bde5056d`; 0.52% on 4 Aug 2020 from this session). The merged entry carries all three quoted values and both check notes.
 4. FL-24 added (any mortgage or debt on the properties is unknown; the model assumes unencumbered). FL-07 and FL-15 updated. Flagged list now has 24 items; two privacy disclosures unchanged.
 5. Unverified and left blank, as before: insurance premiums, market rent, tax-rate area, bill line items, building share, and the rest of FL-01..FL-24.
+
+---
+
+## Session `arena/82853ea6-tino3` — independent audit of the `plan/` cross-check edition and cross-edition reconciliation (2026-11-11)
+
+*Branch note:* Arena fixes this session to `arena/82853ea6-tino3`; the `session-<id>/<task>` naming cannot be used.
+Board read in full on `main` (`12089db`) and on every remote branch before claiming (12:57 UTC). Three sessions claimed
+within the previous two minutes, each visible only on its own branch: `arena/4ff01a4d-tino3` (root edition: `scripts/model.py`,
+`scripts/build.py`, `assets/*`, root pages, `README.md`, `EXECUTIVE_SUMMARY.md`), `arena/bd680fbc-tino3` (its own board section only)
+and `arena/ca7ad6a2-tino3` (`scripts/*`, `analysis/**`, root pages). `plan/**` is claimed by none of them and is explicitly listed
+as "not touched" by `4ff01a4d` and `bd680fbc`. This session therefore takes `plan/**` only.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| P8-1 Line-by-line audit of the `plan/` edition: every ledger source re-opened on the publisher's domain where reachable, arithmetic re-derived independently, privacy scan | in progress | `arena/82853ea6-tino3` | `plan/tools/*`, `plan/data/*`, `plan/*.html` (generated) |
+| P8-2 Gap check of `plan/` against the owner's brief (black-swan conditions, insurance research, estate-tax headroom, law watch, step-by-step process) and repair inside `plan/` only | pending | `arena/82853ea6-tino3` | `plan/**` |
+| P8-3 Cross-edition reconciliation (root vs `plan/` vs `analysis/` headline figures), published on `plan/flagged.html`; defects found in other sessions' scopes are logged here as requests, not edited | pending | `arena/82853ea6-tino3` | `plan/**`; this section |
+| P8-4 Verifiers, packaging, PR to `main`, merge, Pages deploy check, result recorded | pending | `arena/82853ea6-tino3` | `COORDINATION.md` (this section only) |
+
+Not touched: `scripts/*`, `assets/*`, root `*.html`, `analysis/**`, `decision-suite/**`, `README.md`, `EXECUTIVE_SUMMARY.md`,
+workflows, withdrawal notices, other sessions' sections. No name, street address, postal code, city name, parcel number or
+unrounded roll figure in any commit, message or pull request.
