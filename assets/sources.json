@@ -1,6 +1,6 @@
 {
- "reviewed_on": "2026-11-10",
- "reviewer_session": "arena-c2f4be85 (second, independent pass over the edition published earlier the same day by arena/d76d5375-tino3)",
+ "reviewed_on": "2026-11-10, extended 2026-11-11",
+ "reviewer_session": "arena-c2f4be85 (second, independent pass over the edition published earlier the same day by arena/d76d5375-tino3) + arena-03f18c17 (black-swan sources and stress paths, 2026-11-11)",
  "method": "Each entry records how it was checked. 'Opened' means the page or document was retrieved from the publisher's own domain and the quoted words were read there. 'Official-domain search excerpt' means the words were read in a search result served from the publisher's domain, without opening the whole document. Nothing is marked verified beyond what the quoted words support.",
  "sources": {
   "irs_estate": {
@@ -487,6 +487,144 @@
    ],
    "quote": "the total number of signatures for the hereinafter named initiative filed with all county elections officials is less than 100 percent of the number of qualified voters required to find the petition sufficient; therefore, the petition has failed.",
    "checked": "opened on the publisher's site in this session"
+  },
+  "bls_cpi_hist": {
+   "url": "https://www.bls.gov/opub/btn/volume-11/exploring-price-increases-in-2021-and-previous-periods-of-inflation.htm",
+   "publisher": "U.S. Bureau of Labor Statistics",
+   "title": "Beyond the Numbers: Exploring price increases in 2021 and previous periods of inflation (October 2022)",
+   "quote": "1973-76 | 12.3 (Dec. 1974); 1977-82 | 14.8 (Mar. 1980); 2005-08 | 5.6 (Jul. 2008). ... the June 2022 value for the CPI all items index was 296.311. Compared to the index value in June 2021 of 271.696, consumer prices rose 9.1 percent over the period.",
+   "verifies": [
+    "CPI all-items 12-month change peaked at 12.3% in December 1974, 14.8% in March 1980 and 5.6% in July 2008",
+    "Consumer prices rose 9.1% over the 12 months ended June 2022"
+   ],
+   "checked": "opened on the publisher's site on 11 November 2026"
+  },
+  "cbo_outlook26": {
+   "url": "https://www.cbo.gov/system/files/2026-02/61882-Executive-Summary.pdf",
+   "publisher": "Congressional Budget Office",
+   "title": "The Budget and Economic Outlook: 2026 to 2036, Executive Summary (February 2026)",
+   "quote": "Real GDP grows by 2.2% in 2026 and by 1.8% in 2027. Inflation slows to 2.7% in 2026 and to 2.0% in 2030. Economic outlook table: real GDP 1.8 (2027-2036 average); consumer price index 2.8 (2026), 2.3 (2031-2036 average); 10-year Treasury notes 4.1 (2026), 4.4 (2031-2036 average); unemployment rate 4.6 (2026), 4.2 (2032); effective federal funds rate 3.5 (2026).",
+   "verifies": [
+    "Baseline real GDP growth of 2.2% in 2026 slowing to 1.8% a year from 2027",
+    "Baseline inflation returning to the Federal Reserve's 2% goal by 2030",
+    "Baseline 10-year Treasury yield of 4.1% in 2026 rising to 4.4% by 2031-2036",
+    "Baseline unemployment of 4.6% in 2026 falling to 4.2% by 2032",
+    "Federal debt held by the public rising from 101% of GDP in 2026 to 120% in 2036"
+   ],
+   "checked": "opened on the publisher's site on 11 November 2026"
+  },
+  "fed_2pct": {
+   "url": "https://www.federalreserve.gov/monetarypolicy/monetary-policy-strategies-of-major-central-banks.htm",
+   "publisher": "Federal Reserve Board",
+   "title": "Monetary Policy Strategies of Major Central Banks",
+   "quote": "the FOMC judges that inflation at the rate of 2 percent (as measured by the annual rate of change in the price index for personal consumption expenditures) is most consistent over the longer run with the Federal Reserve's statutory mandate.",
+   "verifies": [
+    "The Federal Reserve's longer-run inflation goal is 2% as measured by the PCE price index"
+   ],
+   "checked": "opened on the publisher's site on 11 November 2026"
+  },
+  "fred_cpi": {
+   "url": "https://fred.stlouisfed.org/series/CPIAUCSL",
+   "publisher": "Federal Reserve Bank of St. Louis (FRED)",
+   "title": "Consumer Price Index for All Urban Consumers: All Items (CPIAUCSL)",
+   "quote": "Annual averages from the publisher's CSV: 1973, 44.425; 1982, 96.533; 2006, 201.558; 2008, 215.254; 2009, 214.565; 2016, 240.005.",
+   "verifies": [
+    "Average inflation of 9.0% a year from 1973 to 1982, computed from the annual index levels",
+    "Average inflation of 1.8% a year from 2006 to 2016, computed from the annual index levels",
+    "Prices in 2009 were 0.3% below 2008: a year of deflation",
+    "The 2006-2016 annual levels form the inflation path used in the stress replay"
+   ],
+   "checked": "CSV extracts for 1973-2016 annual and 2008-2010 monthly opened from the publisher's domain on 11 November 2026"
+  },
+  "fred_unrate": {
+   "url": "https://fred.stlouisfed.org/series/UNRATE",
+   "publisher": "Federal Reserve Bank of St. Louis (FRED)",
+   "title": "Civilian Unemployment Rate (UNRATE)",
+   "quote": "Monthly values from the publisher's CSV: 1982-11, 10.8; 1982-12, 10.8; 2009-10, 10.0; 2020-03, 4.4; 2020-04, 14.8.",
+   "verifies": [
+    "Unemployment reached 10.8% in November and December 1982",
+    "Unemployment reached 10.0% in October 2009",
+    "Unemployment reached 14.8% in April 2020"
+   ],
+   "checked": "CSV extracts for 1982-83, 2009-10 and 2020 opened from the publisher's domain on 11 November 2026"
+  },
+  "fred_fedfunds": {
+   "url": "https://fred.stlouisfed.org/series/FEDFUNDS",
+   "publisher": "Federal Reserve Bank of St. Louis (FRED)",
+   "title": "Federal Funds Effective Rate (FEDFUNDS)",
+   "quote": "Monthly averages from the publisher's CSV: 1981-01, 19.08; 1981-06, 19.10; 1981-07, 19.04; 1982-12, 8.95.",
+   "verifies": [
+    "The monthly average federal funds rate reached 19.10% in June 1981"
+   ],
+   "checked": "CSV extract for 1979-1982 opened from the publisher's domain on 11 November 2026"
+  },
+  "fred_mortgage": {
+   "url": "https://fred.stlouisfed.org/series/MORTGAGE30US",
+   "publisher": "Federal Reserve Bank of St. Louis (FRED)",
+   "title": "30-Year Fixed Rate Mortgage Average in the United States (MORTGAGE30US)",
+   "quote": "Weekly values from the publisher's CSV: 1981-09-25, 18.36; 1981-10-09, 18.63; 1981-10-16, 18.53; 1981-12-31, 17.04.",
+   "verifies": [
+    "The 30-year mortgage rate reached 18.63% in the week of 9 October 1981, the high point of the series window read"
+   ],
+   "checked": "CSV extract for 1981 opened from the publisher's domain on 11 November 2026"
+  },
+  "fred_gs10": {
+   "url": "https://fred.stlouisfed.org/series/GS10",
+   "publisher": "Federal Reserve Bank of St. Louis (FRED)",
+   "title": "10-Year Treasury Constant Maturity Rate (GS10)",
+   "quote": "Annual averages from the publisher's CSV: 1979, 9.44; 1980, 11.46; 1981, 13.91; 1982, 13.00; 1984, 12.44; 1986, 7.68.",
+   "verifies": [
+    "The 10-year Treasury constant maturity yield averaged 13.91% in 1981"
+   ],
+   "checked": "CSV extract for 1979-1986 annual opened from the publisher's domain on 11 November 2026"
+  },
+  "fred_case_shiller": {
+   "url": "https://fred.stlouisfed.org/series/CSUSHPINSA",
+   "publisher": "Federal Reserve Bank of St. Louis (FRED)",
+   "title": "S&P CoreLogic Case-Shiller U.S. National Home Price Index (CSUSHPINSA)",
+   "quote": "Monthly values from the publisher's CSV: 2006-07, 184.608; 2009-03, 146.512; 2012-02, 133.987; 2012-06, 143.158.",
+   "verifies": [
+    "The national index peaked at 184.608 in July 2006 and bottomed at 133.987 in February 2012",
+    "Peak to trough the national index fell 27.4%, computed from those two readings"
+   ],
+   "checked": "CSV extract for 2006-2012 opened from the publisher's domain on 11 November 2026"
+  },
+  "fred_metro_hpi": {
+   "url": "https://fred.stlouisfed.org/series/SFXRSA",
+   "publisher": "Federal Reserve Bank of St. Louis (FRED)",
+   "title": "S&P/Case-Shiller metropolitan area home price index (series SFXRSA)",
+   "quote": "Monthly values from the publisher's CSV: 2006-03, 219.2946; 2009-05, 119.8665; 2010-03, 140.9318; 2011-03, 133.6951; 2012-03, 129.2451; 2013-03, 157.1941; 2016-03, 224.9858.",
+   "verifies": [
+    "The metro index peaked in March 2006 at 219.2946 and bottomed in May 2009 at 119.8665: a fall of 45.3%, computed from those two readings",
+    "In March 2016, ten years after the peak, the index was 224.9858: 2.6% above the peak, computed",
+    "The March-to-March levels form the housing path replayed in the stress test; the series stands in for a coastal California metro, not for either property"
+   ],
+   "checked": "CSV extracts for 2002-2018 opened from the publisher's domain on 11 November 2026"
+  },
+  "fred_nasdaq": {
+   "url": "https://fred.stlouisfed.org/series/NASDAQCOM",
+   "publisher": "Federal Reserve Bank of St. Louis (FRED)",
+   "title": "Nasdaq Composite Index (NASDAQCOM)",
+   "quote": "Values from the publisher's CSV: 2000-03, 4802.988; 2002-10, 1241.912; 2007-10, 2780.416; 2009-03, 1432.233; 2010-03, 2362.244; 2020-02-19, 9817.18; 2020-03-23, 6860.67.",
+   "verifies": [
+    "The index fell 74.1% from March 2000 to October 2002, computed from those readings",
+    "The index fell 48.5% from October 2007 to March 2009, computed",
+    "The index fell 30.1% from 19 February to 23 March 2020, computed",
+    "The index was 50.8% below its March 2000 level in March 2010, computed; price index only, dividends not included",
+    "The March-to-March levels form the equity path replayed in the stress test"
+   ],
+   "checked": "CSV extracts for 1999-2010 and 2020 opened from the publisher's domain on 11 November 2026"
+  },
+  "cdi_fair25": {
+   "url": "https://www.insurance.ca.gov/0400-news/0100-press-releases/2025/release044-2025.cfm/",
+   "publisher": "California Department of Insurance",
+   "title": "Press release 044-2025: FAIR Plan reform package (25 June 2025)",
+   "quote": "Decades of neglect have created a crisis of availability, said Commissioner Lara. Department of Insurance data shows the FAIR Plan - already at more than 140,000 policies in 2015 - grew in 2019, shortly after major wildfires. The FAIR Plan currently stands at approximately 4% of the state's residential market, per 2023 figures.",
+   "verifies": [
+    "The state regulator describes a crisis of insurance availability",
+    "The FAIR Plan had more than 140,000 policies in 2015 and about 4% of the residential market in 2023"
+   ],
+   "checked": "opened on the publisher's site on 11 November 2026"
   }
  }
 }

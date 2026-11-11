@@ -116,6 +116,77 @@ ASSUMPTIONS = [
 
 
 # ---------------------------------------------------------------------------------------------
+# Historical paths, read from official FRED series (assets/sources.json gives each series).
+# Levels only; the model derives annual changes. March of each year unless noted.
+# ---------------------------------------------------------------------------------------------
+HOUSE_IDX = [   # SFXRSA repeat-sales index, coastal metro proxy, Mar 2006 .. Mar 2016
+    219.2946388516, 215.3193469719, 172.5664971958, 121.0882082123, 140.9317747859,
+    133.6950846655, 129.2450510129, 157.1940784569, 189.5302794260, 208.2501219597,
+    224.9857937857,
+]
+STOCK_IDX = [   # NASDAQCOM price index, Mar 2000 .. Mar 2010 (price only, no dividends)
+    4802.988, 1986.663, 1863.046, 1349.500, 1979.614, 2030.434, 2300.256, 2401.491,
+    2254.818, 1432.233, 2362.244,
+]
+CPI_IDX = [     # CPIAUCSL annual averages, 2006 .. 2016
+    201.558, 207.344, 215.254, 214.565, 218.076, 224.923, 229.586, 232.952, 236.715,
+    237.002, 240.005,
+]
+
+
+def _rates(levels):
+    return [levels[i + 1] / levels[i] - 1.0 for i in range(len(levels) - 1)]
+
+
+# Stress scenarios. Every non-baseline parameter is anchored to an official series recorded in
+# assets/sources.json; the ids in "src" are shown with each row on the site.
+SCENARIOS = [
+    {"id": "baseline", "name": "Baseline",
+     "note": "The plan's own assumptions: house prices 4% a year, stocks 7.0% a year including "
+             "dividends, inflation 2.5%, and the 10-year Treasury at the verified 4.88% yield.",
+     "params": "House 4%, stocks 7%, inflation 2.5%, Treasury 4.88%",
+     "src": ["cbo_outlook26", "treasury_cmt"], "p": {}},
+    {"id": "house_path", "name": "Housing lost decade (real path)",
+     "note": "The actual year-by-year path of the coastal metro repeat-sales index from its "
+             "March 2006 peak: 45.3% lower by May 2009 and only 2.6% higher ten years after the "
+             "peak. Inflation at the actual 2006-16 average of 1.8% a year. Stocks at baseline.",
+     "params": "Real 2006 housing path, inflation 1.8%",
+     "src": ["fred_metro_hpi", "fred_cpi"], "p": {"g_path": _rates(HOUSE_IDX), "infl": 0.018}},
+    {"id": "stock_path", "name": "Equity lost decade (real path)",
+     "note": "The Nasdaq Composite price index replayed from its March 2000 peak: 50.8% lower "
+             "ten years later. Price index only, so dividends are not added. House prices and "
+             "inflation at baseline.",
+     "params": "Real 2000 equity path, house 4%, inflation 2.5%",
+     "src": ["fred_nasdaq"], "p": {"rs": _rates(STOCK_IDX)}},
+    {"id": "stagflation", "name": "Stagflation (1973-82 style)",
+     "note": "Inflation at the actual 1973-82 average of 9.0% a year, house prices 2% a year, "
+             "stocks 4%, new rents rising 6% a year, and the 10-year Treasury at its 1981 "
+             "average of 13.91%.",
+     "params": "Inflation 9%, house 2%, stocks 4%, Treasury 13.91%",
+     "src": ["fred_cpi", "fred_gs10"], "p": {"infl": 0.09, "g": 0.02, "rs": 0.04,
+                                             "tsy": 0.1391, "rent_growth": 0.06}},
+    {"id": "rate_shock", "name": "Rate shock (1981 style yields)",
+     "note": "Only the interest-rate regime changes: the 10-year Treasury at its 1981 average "
+             "of 13.91%, stocks 5%, inflation 4%, house prices 4%.",
+     "params": "Treasury 13.91%, stocks 5%, inflation 4%, house 4%",
+     "src": ["fred_gs10", "fred_mortgage"], "p": {"tsy": 0.1391, "rs": 0.05, "infl": 0.04,
+                                                  "rent_growth": 0.04}},
+    {"id": "insurance", "name": "Insurance shock",
+     "note": "Insurance at three times the owner's guess for ten years, the case already tested "
+             "on the decision page, against a regulator that describes a crisis of availability. "
+             "Everything else at baseline.",
+     "params": "Insurance 3x guess, otherwise baseline",
+     "src": ["cdi_fair25", "cdi_compare"], "p": {"ins_mult": 3.0}},
+    {"id": "combined", "name": "Combined stress (constructed)",
+     "note": "The housing path, the equity path, 9.0% inflation and 13.91% Treasuries at the "
+             "same time. Constructed: these shocks did not occur in the same decade.",
+     "params": "Both real paths, inflation 9%, Treasury 13.91%",
+     "src": ["fred_metro_hpi", "fred_nasdaq", "fred_cpi", "fred_gs10"],
+     "p": {"g_path": _rates(HOUSE_IDX), "rs": _rates(STOCK_IDX), "infl": 0.09,
+           "tsy": 0.1391, "rent_growth": 0.06}},
+]
+
+# ---------------------------------------------------------------------------------------------
 # Building blocks
 # ---------------------------------------------------------------------------------------------
 def infl(year, base=2026):
@@ -145,8 +216,10 @@ def prop19_amount(year, g):
     return V["prop19_amount"] * (1 + g) ** n
 
 
-def tax_a(assessed, year):
-    return assessed * A["rate_a"] + FIXED_A * infl(year)
+def tax_a(assessed, year, ir=None):
+    """Ad valorem tax plus fixed charges. ir overrides the scenario inflation rate."""
+    g = A["inflation"] if ir is None else ir
+    return assessed * A["rate_a"] + FIXED_A * (1 + g) ** (year - 2026)
 
 
 def tax_b(assessed, year):
@@ -154,18 +227,28 @@ def tax_b(assessed, year):
 
 
 def stock_after_tax(p0, n, rs=None):
-    rs = A["stock_return"] if rs is None else rs
+    """rs may be one annual rate or a sequence of n annual rates (a historical path).
+
+    On a path the returns are used as total returns: no separate dividend is modelled,
+    so the whole change is taxed once at the end.
+    """
+    seq = rs if isinstance(rs, (list, tuple)) else None
     p = basis = p0
-    for _ in range(n):
-        div = p * A["stock_dividend"]
-        tax = div * A["t_div"]
-        p = p * (1 + rs) - tax
-        basis += div - tax
+    for i in range(n):
+        r = A["stock_return"] if rs is None else (seq[i] if seq else rs)
+        if seq is not None:
+            p = p * (1 + r)
+        else:
+            div = p * A["stock_dividend"]
+            tax = div * A["t_div"]
+            p = p * (1 + r) - tax
+            basis += div - tax
     return p - max(0.0, p - basis) * T_GAIN
 
 
-def treasury_after_tax(p0, n):
-    return p0 * (1 + V["treasury_10y"] * (1 - A["t_treasury"])) ** n
+def treasury_after_tax(p0, n, tsy=None):
+    y = V["treasury_10y"] if tsy is None else tsy
+    return p0 * (1 + y * (1 - A["t_treasury"])) ** n
 
 
 def reassess(year, g, law="current"):
@@ -176,11 +259,24 @@ def reassess(year, g, law="current"):
     return {"fmv": fmv, "base": base, "amount": amt, "live": live, "rent": rent}
 
 
-def run(option, year, g, law="current", rs=None, rent_mo=None, ins_mult=1.0, n=None):
-    """Wealth from Property A and the third unit of Property B, n years after inheriting."""
+def run(option, year, g, law="current", rs=None, rent_mo=None, ins_mult=1.0, n=None,
+        infl=None, tsy=None, g_path=None, rent_growth=None):
+    """Wealth from Property A and the third unit of Property B, n years after inheriting.
+
+    Scenario overrides (all default to the base model): infl = annual inflation for costs and
+    the rent-control formula; tsy = Treasury yield; g_path = house-price change for each year
+    after the inheritance; rs = annual stock return or a path of them; rent_growth = annual
+    rent growth. With no overrides the result is identical to the base model.
+    """
     n = n or A["hold_years"]
-    rs = A["stock_return"] if rs is None else rs
+    ir = A["inflation"] if infl is None else infl
+    rc = V["rent_cap_share_of_cpi"] * ir
+    rg = A["rent_growth"] if rent_growth is None else rent_growth
     rent_mo = A["rent_a_mo"] if rent_mo is None else rent_mo
+
+    def IF(y):
+        return (1 + ir) ** (y - 2026)
+
     rz = reassess(year, g, law)
     fmv = rz["fmv"]
     start = fmv * (1 - SELL_COST)
@@ -190,22 +286,22 @@ def run(option, year, g, law="current", rs=None, rent_mo=None, ins_mult=1.0, n=N
     if option == "sell_stock":
         return {"wealth": stock_end, "first_cash": 0.0, "cash_total": 0.0, "asset": stock_end, "tax_first": 0.0, "r_eq": r_eq}
     if option == "sell_treasury":
-        w = treasury_after_tax(start, n)
+        w = treasury_after_tax(start, n, tsy)
         return {"wealth": w, "first_cash": 0.0, "cash_total": 0.0, "asset": w, "tax_first": 0.0, "r_eq": r_eq}
     dep = A["building_share_a"] * fmv / V["depreciation_years"]
     tax_first = rent_first = 0.0
     for t in range(n):
         y = year + t
-        ins = IN["a_ins_guess"] * ins_mult * infl(y)
-        maint = A["maint_a"] * infl(y)
+        ins = IN["a_ins_guess"] * ins_mult * IF(y)
+        maint = A["maint_a"] * IF(y)
         if option == "live":
-            ptax = tax_a(rz["live"] * (1 + V["prop13_cap"]) ** t, y)
-            unit3 = (A["unit3_rent_mo"] * 12 * (1 + A["rent_growth"]) ** (year - 2026)
-                     * (1 + RENT_CTRL) ** t * (1 - A["vacancy"]) * (1 - A["t_ord"]))
-            cf = unit3 - (ptax + ins + maint + IN["a_water"] * infl(y) + IN["a_electric"])
+            ptax = tax_a(rz["live"] * (1 + V["prop13_cap"]) ** t, y, ir)
+            unit3 = (A["unit3_rent_mo"] * 12 * (1 + rg) ** (year - 2026)
+                     * (1 + rc) ** t * (1 - A["vacancy"]) * (1 - A["t_ord"]))
+            cf = unit3 - (ptax + ins + maint + IN["a_water"] * IF(y) + IN["a_electric"])
         else:
-            ptax = tax_a(rz["rent"] * (1 + V["prop13_cap"]) ** t, y)
-            rent = rent_mo * 12 * (1 + A["rent_growth"]) ** (y - 2026) * (1 - A["vacancy"])
+            ptax = tax_a(rz["rent"] * (1 + V["prop13_cap"]) ** t, y, ir)
+            rent = rent_mo * 12 * (1 + rg) ** (y - 2026) * (1 - A["vacancy"])
             noi = rent - ptax - ins - maint
             cf = noi - A["t_ord"] * (noi - dep)
             if t == 0:
@@ -214,7 +310,13 @@ def run(option, year, g, law="current", rs=None, rent_mo=None, ins_mult=1.0, n=N
             tax_first = ptax
         flows.append(cf)
     fv = sum(cf * (1 + r_eq) ** (n - 1 - t) for t, cf in enumerate(flows))
-    net_sale = fmv * (1 + g) ** n * (1 - SELL_COST)
+    if g_path is None:
+        terminal = fmv * (1 + g) ** n
+    else:
+        terminal = fmv
+        for rate in list(g_path)[:n]:
+            terminal *= (1 + rate)
+    net_sale = terminal * (1 - SELL_COST)
     if option == "live":
         gain_tax = T_GAIN * max(0.0, net_sale - fmv - V["home_sale_exclusion_joint"])
     else:
@@ -336,6 +438,24 @@ def build():
     restored = reassess(y0, g, "restored")
     d["law"] = {"year": y0, "tax_live_current": r10(tax_a(rz["live"], y0)), "tax_rent_current": r10(tax_a(rz["rent"], y0)),
                 "tax_restored": r10(tax_a(restored["live"], y0))}
+
+    # Black swan stress scenarios: each anchored to official series, run through the same model
+    d["black_swan"] = []
+    for sc in SCENARIOS:
+        kw = {k: v for k, v in sc["p"].items() if k != "g"}
+        res = {k: run(k, 2045, sc["p"].get("g", A["g"]), **kw) for k, _ in OPTIONS}
+        best = max(v["wealth"] for v in res.values())
+        rows = []
+        for k, name in OPTIONS:
+            v = res[k]
+            rows.append({"option": k, "name": name, "wealth": r10(v["wealth"]),
+                         "gap": r10(v["wealth"] - best), "first_cash": r10(v["first_cash"]),
+                         "tax_first": r10(v["tax_first"])})
+        winner = max(res, key=lambda k: res[k]["wealth"])
+        d["black_swan"].append({"id": sc["id"], "name": sc["name"], "note": sc["note"],
+                                "params": sc["params"], "src": sc["src"],
+                                "winner_id": winner, "winner": dict(OPTIONS)[winner],
+                                "rows": rows})
 
     # Property B if it passes in the same estate
     d["b_reset"] = []

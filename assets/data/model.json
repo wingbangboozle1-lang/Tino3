@@ -2319,6 +2319,331 @@
   "tax_rent_current": 78400,
   "tax_restored": 10780
  },
+ "black_swan": [
+  {
+   "id": "baseline",
+   "name": "Baseline",
+   "note": "The plan's own assumptions: house prices 4% a year, stocks 7.0% a year including dividends, inflation 2.5%, and the 10-year Treasury at the verified 4.88% yield.",
+   "params": "House 4%, stocks 7%, inflation 2.5%, Treasury 4.88%",
+   "src": [
+    "cbo_outlook26",
+    "treasury_cmt"
+   ],
+   "winner_id": "sell_stock",
+   "winner": "Sell A, buy a stock index fund",
+   "rows": [
+    {
+     "option": "sell_stock",
+     "name": "Sell A, buy a stock index fund",
+     "wealth": 10052910,
+     "gap": 0,
+     "first_cash": 0,
+     "tax_first": 0
+    },
+    {
+     "option": "sell_treasury",
+     "name": "Sell A, buy Treasuries",
+     "wealth": 8761920,
+     "gap": -1291000,
+     "first_cash": 0,
+     "tax_first": 0
+    },
+    {
+     "option": "rent",
+     "name": "Keep A and rent it out",
+     "wealth": 8583650,
+     "gap": -1469260,
+     "first_cash": 46590,
+     "tax_first": 78400
+    },
+    {
+     "option": "live",
+     "name": "Move into A",
+     "wealth": 7945640,
+     "gap": -2107270,
+     "first_cash": -31900,
+     "tax_first": 60150
+    }
+   ]
+  },
+  {
+   "id": "house_path",
+   "name": "Housing lost decade (real path)",
+   "note": "The actual year-by-year path of the coastal metro repeat-sales index from its March 2006 peak: 45.3% lower by May 2009 and only 2.6% higher ten years after the peak. Inflation at the actual 2006-16 average of 1.8% a year. Stocks at baseline.",
+   "params": "Real 2006 housing path, inflation 1.8%",
+   "src": [
+    "fred_metro_hpi",
+    "fred_cpi"
+   ],
+   "winner_id": "sell_stock",
+   "winner": "Sell A, buy a stock index fund",
+   "rows": [
+    {
+     "option": "sell_stock",
+     "name": "Sell A, buy a stock index fund",
+     "wealth": 10052910,
+     "gap": 0,
+     "first_cash": 0,
+     "tax_first": 0
+    },
+    {
+     "option": "sell_treasury",
+     "name": "Sell A, buy Treasuries",
+     "wealth": 8761920,
+     "gap": -1291000,
+     "first_cash": 0,
+     "tax_first": 0
+    },
+    {
+     "option": "rent",
+     "name": "Keep A and rent it out",
+     "wealth": 6747610,
+     "gap": -3305310,
+     "first_cash": 48100,
+     "tax_first": 78230
+    },
+    {
+     "option": "live",
+     "name": "Move into A",
+     "wealth": 5935710,
+     "gap": -4117210,
+     "first_cash": -29340,
+     "tax_first": 59990
+    }
+   ]
+  },
+  {
+   "id": "stock_path",
+   "name": "Equity lost decade (real path)",
+   "note": "The Nasdaq Composite price index replayed from its March 2000 peak: 50.8% lower ten years later. Price index only, so dividends are not added. House prices and inflation at baseline.",
+   "params": "Real 2000 equity path, house 4%, inflation 2.5%",
+   "src": [
+    "fred_nasdaq"
+   ],
+   "winner_id": "sell_treasury",
+   "winner": "Sell A, buy Treasuries",
+   "rows": [
+    {
+     "option": "sell_stock",
+     "name": "Sell A, buy a stock index fund",
+     "wealth": 3048100,
+     "gap": -5713820,
+     "first_cash": 0,
+     "tax_first": 0
+    },
+    {
+     "option": "sell_treasury",
+     "name": "Sell A, buy Treasuries",
+     "wealth": 8761920,
+     "gap": 0,
+     "first_cash": 0,
+     "tax_first": 0
+    },
+    {
+     "option": "rent",
+     "name": "Keep A and rent it out",
+     "wealth": 8325800,
+     "gap": -436120,
+     "first_cash": 46590,
+     "tax_first": 78400
+    },
+    {
+     "option": "live",
+     "name": "Move into A",
+     "wealth": 8123670,
+     "gap": -638250,
+     "first_cash": -31900,
+     "tax_first": 60150
+    }
+   ]
+  },
+  {
+   "id": "stagflation",
+   "name": "Stagflation (1973-82 style)",
+   "note": "Inflation at the actual 1973-82 average of 9.0% a year, house prices 2% a year, stocks 4%, new rents rising 6% a year, and the 10-year Treasury at its 1981 average of 13.91%.",
+   "params": "Inflation 9%, house 2%, stocks 4%, Treasury 13.91%",
+   "src": [
+    "fred_cpi",
+    "fred_gs10"
+   ],
+   "winner_id": "sell_treasury",
+   "winner": "Sell A, buy Treasuries",
+   "rows": [
+    {
+     "option": "sell_stock",
+     "name": "Sell A, buy a stock index fund",
+     "wealth": 5635540,
+     "gap": -5523080,
+     "first_cash": 0,
+     "tax_first": 0
+    },
+    {
+     "option": "sell_treasury",
+     "name": "Sell A, buy Treasuries",
+     "wealth": 11158620,
+     "gap": 0,
+     "first_cash": 0,
+     "tax_first": 0
+    },
+    {
+     "option": "rent",
+     "name": "Keep A and rent it out",
+     "wealth": 6045260,
+     "gap": -5113360,
+     "first_cash": 90520,
+     "tax_first": 57560
+    },
+    {
+     "option": "live",
+     "name": "Move into A",
+     "wealth": 4719560,
+     "gap": -6439060,
+     "first_cash": -23230,
+     "tax_first": 42530
+    }
+   ]
+  },
+  {
+   "id": "rate_shock",
+   "name": "Rate shock (1981 style yields)",
+   "note": "Only the interest-rate regime changes: the 10-year Treasury at its 1981 average of 13.91%, stocks 5%, inflation 4%, house prices 4%.",
+   "params": "Treasury 13.91%, stocks 5%, inflation 4%, house 4%",
+   "src": [
+    "fred_gs10",
+    "fred_mortgage"
+   ],
+   "winner_id": "sell_treasury",
+   "winner": "Sell A, buy Treasuries",
+   "rows": [
+    {
+     "option": "sell_stock",
+     "name": "Sell A, buy a stock index fund",
+     "wealth": 8731300,
+     "gap": -7406360,
+     "first_cash": 0,
+     "tax_first": 0
+    },
+    {
+     "option": "sell_treasury",
+     "name": "Sell A, buy Treasuries",
+     "wealth": 16137660,
+     "gap": 0,
+     "first_cash": 0,
+     "tax_first": 0
+    },
+    {
+     "option": "rent",
+     "name": "Keep A and rent it out",
+     "wealth": 8771040,
+     "gap": -7366620,
+     "first_cash": 60110,
+     "tax_first": 78820
+    },
+    {
+     "option": "live",
+     "name": "Move into A",
+     "wealth": 8011260,
+     "gap": -8126400,
+     "first_cash": -28950,
+     "tax_first": 60570
+    }
+   ]
+  },
+  {
+   "id": "insurance",
+   "name": "Insurance shock",
+   "note": "Insurance at three times the owner's guess for ten years, the case already tested on the decision page, against a regulator that describes a crisis of availability. Everything else at baseline.",
+   "params": "Insurance 3x guess, otherwise baseline",
+   "src": [
+    "cdi_fair25",
+    "cdi_compare"
+   ],
+   "winner_id": "sell_stock",
+   "winner": "Sell A, buy a stock index fund",
+   "rows": [
+    {
+     "option": "sell_stock",
+     "name": "Sell A, buy a stock index fund",
+     "wealth": 10052910,
+     "gap": 0,
+     "first_cash": 0,
+     "tax_first": 0
+    },
+    {
+     "option": "sell_treasury",
+     "name": "Sell A, buy Treasuries",
+     "wealth": 8761920,
+     "gap": -1291000,
+     "first_cash": 0,
+     "tax_first": 0
+    },
+    {
+     "option": "rent",
+     "name": "Keep A and rent it out",
+     "wealth": 8539110,
+     "gap": -1513810,
+     "first_cash": 43390,
+     "tax_first": 78400
+    },
+    {
+     "option": "live",
+     "name": "Move into A",
+     "wealth": 7878860,
+     "gap": -2174050,
+     "first_cash": -36700,
+     "tax_first": 60150
+    }
+   ]
+  },
+  {
+   "id": "combined",
+   "name": "Combined stress (constructed)",
+   "note": "The housing path, the equity path, 9.0% inflation and 13.91% Treasuries at the same time. Constructed: these shocks did not occur in the same decade.",
+   "params": "Both real paths, inflation 9%, Treasury 13.91%",
+   "src": [
+    "fred_metro_hpi",
+    "fred_nasdaq",
+    "fred_cpi",
+    "fred_gs10"
+   ],
+   "winner_id": "sell_treasury",
+   "winner": "Sell A, buy Treasuries",
+   "rows": [
+    {
+     "option": "sell_stock",
+     "name": "Sell A, buy a stock index fund",
+     "wealth": 3048100,
+     "gap": -13089560,
+     "first_cash": 0,
+     "tax_first": 0
+    },
+    {
+     "option": "sell_treasury",
+     "name": "Sell A, buy Treasuries",
+     "wealth": 16137660,
+     "gap": 0,
+     "first_cash": 0,
+     "tax_first": 0
+    },
+    {
+     "option": "rent",
+     "name": "Keep A and rent it out",
+     "wealth": 6858860,
+     "gap": -9278800,
+     "first_cash": 81980,
+     "tax_first": 81340
+    },
+    {
+     "option": "live",
+     "name": "Move into A",
+     "wealth": 5884440,
+     "gap": -10253220,
+     "first_cash": -43790,
+     "tax_first": 63090
+    }
+   ]
+  }
+ ],
  "b_reset": [
   {
    "year": 2040,
