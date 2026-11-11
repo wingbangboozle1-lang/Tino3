@@ -583,8 +583,8 @@ Arena fixes the current branch name; no separate session branch may be created. 
 
 | Task | Status | Owner | Scope |
 |---|---|---|---|
-| CEB-1 Independently inspect the current public artifact and repository for disclosures and unsupported site claims; record reproducible findings without reproducing private data | in progress | `arena/ceb4a929-tino3` | `analysis/privacy-audit-ceb4.md`, this board section |
-| CEB-2 Run existing site verifiers and assess live deployment, document limitations and communicate any requested shared-file fixes | in progress | `arena/ceb4a929-tino3` | this board section |
+| CEB-1 Independently inspect the current public artifact and repository for disclosures and unsupported site claims; record reproducible findings without reproducing private data | needs review | `arena/ceb4a929-tino3` | `analysis/privacy-audit-ceb4.md`, this board section |
+| CEB-2 Run existing site verifiers and assess live deployment, document limitations and communicate any requested shared-file fixes | done | `arena/ceb4a929-tino3` | this board section |
 
 ### Escalation and additional limited claim
 
@@ -594,8 +594,16 @@ The completed C02 suite has an additional source-interpretation issue: matching 
 
 | Task | Status | Owner | Scope |
 |---|---|---|---|
-| CEB-3 Correct unsupported assurances and flag the above issues in the completed C02 edition (not the other editions) | in progress | `arena/ceb4a929-tino3` | `analysis/tools/build.py` and its generated `analysis/*.html`; no model changes |
+| CEB-3 Correct unsupported assurances and flag the above issues in the completed C02 edition (not the other editions) | done | `arena/ceb4a929-tino3` | `analysis/tools/build.py` and its generated `analysis/*.html`; no model changes |
 
 Note: `analysis/privacy-audit-ceb4.md` will not be added because the existing repository privacy-boundary verifier rejects unapproved tracked files; this section records the audit instead.
 
 CEB-3 addendum: to include the reviewed HHS primary source above, also claim `analysis/tools/verify.py` solely to add `www.hhs.gov` to the official-host allowlist. The previous C02 task is marked done. The first verifier run correctly rejected that new host before the allowlist change; no test was bypassed.
+
+
+### Results of independent review
+
+- Directly inspected the live `analysis/properties.html` and the checked-in generators for all three editions, plus the package allowlist. Owner-derived values, some barely rounded, and property characteristics appear in the public site and public Git repository. Direct identifiers being omitted is not proof of anonymity. HHS discusses linkage risks: https://www.hhs.gov/ohrp/sachrp-committee/recommendations/august-12-2020-attachment-a-nih-data-sharing-policy/index.html. Pages configuration is `legacy`, `main` root; deployment workflow runs also exist. The published URLs and public Git history require separate remediation. This is **not resolved by this session**.
+- The analysis-suite property page asserted that matching a published inflation factor proved exemption treatment and that an estimated bill difference proved specific levies. BOE inflation factors (https://www.boe.ca.gov/proptaxes/pdf/lta26002.pdf) and the exemption statute (https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=218) do not verify the private records or those conclusions. The suite now describes both as unverified and removes the unwarranted guaranteed-anonymity claim. Its inheritance-steps page no longer claims automatic basis treatment or an automatic doubling of the exclusion; see IRS Form 706 instructions https://www.irs.gov/instructions/i706 and https://www.irs.gov/faqs/interest-dividends-other-types-of-income/gifts-inheritances/gifts-inheritances. The Flagged for Review page now warns that unknowns can change decisions and explains the exposure.
+- Passed locally: `python3 scripts/verify.py`, `python3 plan/tools/verify.py`, `python3 analysis/tools/verify.py`, and `python3 scripts/package_site.py`. These test reproducibility, structural links, citation hosts, rounding and patterns; they do **not** prove the linked source supports every row, that external links are currently live, or that private information is protected. The latest observed main workflow deployment run `42966752820` reports success for commit `f6b2873`, but a successful deployment is not a privacy or accuracy certification.
+- This limited review is not a line-by-line source audit. Open PR #34 changes shared files and needs coordination; #40 records the preceding session's deployment. No other session's work has been overwritten. Shared root and `plan/` fixes are requested above. Because the existing published output still exposes household-derived information, final privacy-safe integration and publication cannot yet be certified.
