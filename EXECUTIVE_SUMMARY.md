@@ -1,6 +1,6 @@
 # Executive summary
 
-Reviewed 11 November 2026. Anonymised: Property A (single-family home, County A), Property B (small multi-unit building, City B).
+Reviewed 10-11 November 2026. Anonymised: Property A (single-family home, County A), Property B (small multi-unit building, City B).
 Dollar figures are rounded to the nearest $10. Planning analysis, not legal, tax or investment advice.
 
 **Best plan on these numbers: sell Property A soon after inheriting it, reinvest, and keep Property B.**
@@ -22,6 +22,7 @@ Inheritance in 2045, house prices rising 4% a year, measured ten years later aft
 - The owner states Property B is already owned by the heir, so under that statement it sits outside the decedent's estate; if it were in the same estate its tax would reset: $3,730 to $46,610 a year in 2045.
 - Under that same statement one person's estate-tax room in 2045 is $17,612,290 instead of $13,819,960, larger by Property B's 2045 value of $3,792,330. The deed was not seen (FL-01).
 - Insurance premiums are unverified and left blank; tripling the owner's guess does not change the ranking.
+- Black-swan stress tests (stocks at 4.0%, inflation at 4.0%, flat house prices): selling still finishes first; a lost decade only moves the proceeds to Treasuries. See black-swans.html.
 - Black swan stress tests (stress.html): verified 1929, 1965-82, 2000-02, 2007-09 and 2020 episodes re-run against the 2045 inheritance. The sale decision holds in 5 of 7 analogues; only the reinvestment vehicle changes with the regime.
 
-Site: index.html. Stress tests: stress.html. Open items: review.html. Sources: sources.html.
+Site: index.html. Stress tests: stress.html. Economic conditions: black-swans.html. Open items: review.html. Sources: sources.html.
