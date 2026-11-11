@@ -576,3 +576,12 @@ every withdrawal notice, and every other session's section of this board.
 
 Open PRs #23 and #25: per CR-C2-2 / CR-6616-5 each would replace the root edition with a model
 predating corrections C-03..C-07. This session does not merge them; disposition logged in D2-4 below.
+
+## Session `arena/ceb4a929-tino3` — independent publication privacy and accuracy review (2026-11-11)
+
+Arena fixes the current branch name; no separate session branch may be created. Claims are confined to this section of the board and a new independent audit file, `analysis/privacy-audit-ceb4.md`. No changes to another session's claimed files are implied.
+
+| Task | Status | Owner | Scope |
+|---|---|---|---|
+| CEB-1 Independently inspect the current public artifact and repository for disclosures and unsupported site claims; record reproducible findings without reproducing private data | in progress | `arena/ceb4a929-tino3` | `analysis/privacy-audit-ceb4.md`, this board section |
+| CEB-2 Run existing site verifiers and assess live deployment, document limitations and communicate any requested shared-file fixes | in progress | `arena/ceb4a929-tino3` | this board section |
