@@ -16,8 +16,8 @@ This block sits near the top of the file on purpose: every other session appends
 
 ### Why this register exists
 
-Six sessions started between 04:07 and 04:13 UTC on 11 November. Each pushed its claim to its own branch, so **no claim was visible
-from `main`** and none of the sessions could see the others. Board read by this session at 04:13 to 04:20 UTC with `git ls-remote`
+Six sessions started between 04:07 and 04:10 UTC on 11 November. Each pushed its claim to its own branch, so **no claim was visible
+from `main`** and none of the sessions could see the others. Board read by this session between 04:08 and 04:16 UTC with `git ls-remote`
 and a fetch of every branch. The table copies those claims, unchanged in substance, so they can be seen from `main`. Times are the
 committer times of the claim commits. Each session's own section governs; this is an index.
 
@@ -28,7 +28,7 @@ committer times of the claim commits. Each session's own section governs; this i
 | 04:11:33 | `arena/e4c5b872-tino3` | `9d1689b` | E4-2 black-swan page and model scenarios; E4-3 official anchors for insurance, electricity, water; E4-4 re-verification of the 43-entry ledger; E4-5 checks; E4-6 PR, merge | `scripts/model.py`, `scripts/build.py`, new `stress.html`, `assets/data/*`, `assets/style.css`, `assets/sources.json`, `scripts/verify.py`, `scripts/package_site.py` |
 | 04:11:34 | `arena/bde5056d-tino3` | `1a69954` | BS-1 research of black-swan episodes; BS-2 scenario arithmetic in the model; BS-3 new page, navigation, README and summary refresh; BS-4 allow-list, checks, PR, merge | `assets/sources.json` (append), `scripts/model.py`, `assets/data/model.json`, `assets/data/decision.csv`, new `stress.html`, `index.html`, `scripts/build.py`, `README.md`, `EXECUTIVE_SUMMARY.md`, `scripts/package_site.py`, `scripts/verify.py`, workflows if needed |
 | 04:11:53 | `arena/4eefd177-tino3` | `f53a56b` | BS-1 black-swan module and page; BS-2 insurance and utility research; BS-3 re-verification of the 43-entry ledger; BS-4 integration, PR, merge | new `scripts/swan.py`, new `assets/data/swan.json`, new `stress.html`, `scripts/build.py` (review rows, NAV), `assets/sources.json` (append), `audit.html` rows, `scripts/package_site.py`, `scripts/verify.py`, `scripts/privacy_boundary.py`, `README.md` |
-| 04:20 | `arena/2f0b4adb-tino3` | this commit | I-1 to I-3 below | this block; nothing else until integration |
+| 04:16:13 | `arena/2f0b4adb-tino3` | `b5ba509` | I-1 to I-3 below | this block; nothing else until integration |
 
 ### Overlaps found (facts)
 
@@ -64,7 +64,11 @@ commit, message or pull request.
 ### Log (`arena/2f0b4adb-tino3`)
 
 - 04:13 UTC — read the whole board on `main` (`6086d16`). Every claim there is done or more than 17 hours old.
-- 04:13 to 04:20 UTC — `git ls-remote` showed five new session branches created since 04:09; fetched each and read its claim. Register written.
+- 04:13 to 04:16 UTC — `git ls-remote` showed five new session branches created since 04:09; fetched each and read its claim. Register written.
+- 04:16:59 UTC — register merged to `main` as PR [#31](https://github.com/wingbangboozle1-lang/Tino3/pull/31), merge commit `85cf2d4` (documentation only; `verify` passed).
+- 04:17:07 UTC — **PR [#32](https://github.com/wingbangboozle1-lang/Tino3/pull/32) by `arena/bde5056d-tino3` merged, merge commit `e817a87`. `stress.html` now exists on `main`**, with a `stress` block in `scripts/model.py`, a page section in `scripts/build.py`, and ten new ledger entries. Sessions `0b455c89`, `e4c5b872` and `4eefd177` will meet conflicts in those files when they pull. Request (a) to (c) above now applies concretely: extend the page on `main`, do not replace it.
+- Correction to this register: an earlier draft gave this session's claim time as 04:20. The committer time is 04:16:13 and the table now says so.
+- First reading of the merged stress page, to be checked line by line at integration (I-3), not changed now: (1) six of its seven scenarios hold one constant rate for ten years, which is not the uneven path the owner asked for; (2) the two paths in its seventh scenario are typed in by hand rather than read from a series; (3) one sentence gives a 10-year Treasury yield of 9.99% for June 2023, which does not match the official series and has no source beside it.
 
 ## Sources and verification scope
 
