@@ -2468,6 +2468,283 @@
    "room_single_half": 1097900
   }
  ],
+ "stress": [
+  {
+   "id": "S0",
+   "name": "Baseline (reference)",
+   "inflation": 2.5,
+   "house": 4.0,
+   "stocks": 7.0,
+   "treasury": 4.88,
+   "note": "The assumption register: 2.5% inflation, 4% house growth, stocks 7%, 10-year Treasury 4.88%.",
+   "deflate": 1.2801,
+   "sell_stock": 10052910,
+   "sell_stock_today": 7853320,
+   "sell_stock_gap": 0,
+   "sell_treasury": 8761920,
+   "sell_treasury_today": 6844800,
+   "sell_treasury_gap": -1291000,
+   "rent": 8583650,
+   "rent_today": 6705540,
+   "rent_gap": -1469260,
+   "live": 7945640,
+   "live_today": 6207120,
+   "live_gap": -2107270,
+   "winner": "Sell A, buy a stock index fund",
+   "winner_key": "sell_stock"
+  },
+  {
+   "id": "S1",
+   "name": "High inflation, flat real house (1970s analogue)",
+   "inflation": 6.0,
+   "house": 6.0,
+   "stocks": 4.0,
+   "treasury": 8.0,
+   "note": "CPI 12-month peaked at 14.8% in March 1980; inflation ran above 12% with unemployment above 7% in 1974.",
+   "deflate": 1.7908,
+   "sell_stock": 11704250,
+   "sell_stock_today": 6535590,
+   "sell_stock_gap": -3900790,
+   "sell_treasury": 15605040,
+   "sell_treasury_today": 8713770,
+   "sell_treasury_gap": 0,
+   "rent": 13397150,
+   "rent_today": 7480900,
+   "rent_gap": -2207890,
+   "live": 12704260,
+   "live_today": 7093990,
+   "live_gap": -2900780,
+   "winner": "Sell A, buy Treasuries",
+   "winner_key": "sell_treasury"
+  },
+  {
+   "id": "S2",
+   "name": "Deflationary slump (1930s / Japan-adjacent)",
+   "inflation": 0.0,
+   "house": -1.0,
+   "stocks": 1.0,
+   "treasury": 1.0,
+   "note": "Japan's lost decades: falling prices and land values. DJIA fell 89% from 3 Sep 1929 to 8 Jul 1932.",
+   "deflate": 1.0,
+   "sell_stock": 2574560,
+   "sell_stock_today": 2574560,
+   "sell_stock_gap": -316390,
+   "sell_treasury": 2611530,
+   "sell_treasury_today": 2611530,
+   "sell_treasury_gap": -279420,
+   "rent": 2890950,
+   "rent_today": 2890950,
+   "rent_gap": 0,
+   "live": 2340730,
+   "live_today": 2340730,
+   "live_gap": -550220,
+   "winner": "Keep A and rent it out",
+   "winner_key": "rent"
+  },
+  {
+   "id": "S3",
+   "name": "Lost decade for equities",
+   "inflation": 2.5,
+   "house": 3.0,
+   "stocks": 0.0,
+   "treasury": 3.0,
+   "note": "Stocks flat for ten years. The S&P 500's 2000s decade managed about zero nominal total return.",
+   "deflate": 1.2801,
+   "sell_stock": 4944760,
+   "sell_stock_today": 3862840,
+   "sell_stock_gap": -1776670,
+   "sell_treasury": 6390770,
+   "sell_treasury_today": 4992460,
+   "sell_treasury_gap": -330660,
+   "rent": 6721430,
+   "rent_today": 5250770,
+   "rent_gap": 0,
+   "live": 6333250,
+   "live_today": 4947530,
+   "live_gap": -388180,
+   "winner": "Keep A and rent it out",
+   "winner_key": "rent"
+  },
+  {
+   "id": "S4",
+   "name": "Crash at the inheritance, then recovery (2008 analogue)",
+   "inflation": 2.0,
+   "house": "path",
+   "stocks": "path",
+   "treasury": 2.0,
+   "note": "Home prices fell about 30% from mid-2006 to mid-2009; the S&P 500 fell 57% from October 2007 to March 2009.",
+   "deflate": 1.219,
+   "sell_stock": 6833840,
+   "sell_stock_today": 5606130,
+   "sell_stock_gap": -319010,
+   "sell_treasury": 7152850,
+   "sell_treasury_today": 5867830,
+   "sell_treasury_gap": 0,
+   "rent": 6525940,
+   "rent_today": 5353550,
+   "rent_gap": -626910,
+   "live": 5888570,
+   "live_today": 4830680,
+   "live_gap": -1264280,
+   "winner": "Sell A, buy Treasuries",
+   "winner_key": "sell_treasury"
+  },
+  {
+   "id": "S5",
+   "name": "Rate shock (10-year Treasury near double today)",
+   "inflation": 5.5,
+   "house": 2.5,
+   "stocks": 5.0,
+   "treasury": 8.5,
+   "note": "The 10-year Treasury yielded 15.84% on 30 September 1981; 9.99% in June 2023; 4.88% in November 2026.",
+   "deflate": 1.7081,
+   "sell_stock": 6625200,
+   "sell_stock_today": 3878590,
+   "sell_stock_gap": -1905880,
+   "sell_treasury": 8531070,
+   "sell_treasury_today": 4994350,
+   "sell_treasury_gap": 0,
+   "rent": 5962730,
+   "rent_today": 3490760,
+   "rent_gap": -2568340,
+   "live": 5377740,
+   "live_today": 3148290,
+   "live_gap": -3153330,
+   "winner": "Sell A, buy Treasuries",
+   "winner_key": "sell_treasury"
+  },
+  {
+   "id": "S6",
+   "name": "Boom",
+   "inflation": 3.0,
+   "house": 6.0,
+   "stocks": 9.0,
+   "treasury": 5.5,
+   "note": "Houses and stocks both strong; inflation modestly above target.",
+   "deflate": 1.3439,
+   "sell_stock": 16680790,
+   "sell_stock_today": 12412070,
+   "sell_stock_gap": 0,
+   "sell_treasury": 13137590,
+   "sell_treasury_today": 9775600,
+   "sell_treasury_gap": -3543200,
+   "rent": 13643110,
+   "rent_today": 10151750,
+   "rent_gap": -3037680,
+   "live": 12800270,
+   "live_today": 9524600,
+   "live_gap": -3880520,
+   "winner": "Sell A, buy a stock index fund",
+   "winner_key": "sell_stock"
+  }
+ ],
+ "stress_extras": {
+  "exclusion_real": [
+   {
+    "year": 2040,
+    "inflation": "2.5%",
+    "home_sale_single": 176930,
+    "home_sale_joint": 353860
+   },
+   {
+    "year": 2040,
+    "inflation": "5.0%",
+    "home_sale_single": 126270,
+    "home_sale_joint": 252530
+   },
+   {
+    "year": 2040,
+    "inflation": "8.0%",
+    "home_sale_single": 85120,
+    "home_sale_joint": 170230
+   },
+   {
+    "year": 2045,
+    "inflation": "2.5%",
+    "home_sale_single": 156380,
+    "home_sale_joint": 312760
+   },
+   {
+    "year": 2045,
+    "inflation": "5.0%",
+    "home_sale_single": 98930,
+    "home_sale_joint": 197870
+   },
+   {
+    "year": 2045,
+    "inflation": "8.0%",
+    "home_sale_single": 57930,
+    "home_sale_joint": 115860
+   },
+   {
+    "year": 2050,
+    "inflation": "2.5%",
+    "home_sale_single": 138220,
+    "home_sale_joint": 276440
+   },
+   {
+    "year": 2050,
+    "inflation": "5.0%",
+    "home_sale_single": 77520,
+    "home_sale_joint": 155030
+   },
+   {
+    "year": 2050,
+    "inflation": "8.0%",
+    "home_sale_single": 39420,
+    "home_sale_joint": 78850
+   }
+  ],
+  "purchasing_power": [
+   {
+    "inflation": "2.5%",
+    "2030": 0.91,
+    "2040": 0.71,
+    "2050": 0.55,
+    "2060": 0.43
+   },
+   {
+    "inflation": "5.0%",
+    "2030": 0.82,
+    "2040": 0.51,
+    "2050": 0.31,
+    "2060": 0.19
+   },
+   {
+    "inflation": "8.0%",
+    "2030": 0.74,
+    "2040": 0.34,
+    "2050": 0.16,
+    "2060": 0.07
+   }
+  ]
+ },
+ "stress_meta": {
+  "gfc_house": [
+   -0.12,
+   -0.08,
+   -0.03,
+   0.02,
+   0.035,
+   0.04,
+   0.04,
+   0.04,
+   0.04,
+   0.04
+  ],
+  "gfc_stock": [
+   -0.45,
+   0.06,
+   0.09,
+   0.09,
+   0.09,
+   0.09,
+   0.09,
+   0.09,
+   0.09,
+   0.09
+  ]
+ },
  "now": {
   "a": {
    "year": 2026,
