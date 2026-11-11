@@ -43,7 +43,16 @@ ANALYSIS_SUITE = ["analysis/index.html", "analysis/executive-summary.html",
                   "analysis/data/decision_matrix.csv", "analysis/data/black_swan_regimes.csv",
                   "analysis/tools/sources.py", "analysis/tools/model.py",
                   "analysis/tools/build.py", "analysis/tools/verify.py"]
-ASSETS = ASSETS + CROSS_CHECK + ANALYSIS_SUITE
+# Independent requirements-traceability edition (session arena/f31530e0-tino3). The tool sources
+# are deliberately NOT in the published allowlist: they are generators, not site content.
+INTEGRATION_SUITE = ["integration/index.html", "integration/executive-summary.html",
+                     "integration/findings.html", "integration/flagged.html",
+                     "integration/data/categories.json", "integration/data/flags.json",
+                     "integration/data/findings.csv", "integration/data/flagged.csv",
+                     "integration/data/publication.json", "integration/data/requirements.csv",
+                     "integration/data/requirements.json", "integration/data/sources.json",
+                     "integration/data/summary.csv", "integration/data/summary.json"]
+ASSETS = ASSETS + CROSS_CHECK + ANALYSIS_SUITE + INTEGRATION_SUITE
 
 # Paths that earlier editions published. They are withdrawn even though the files no longer
 # exist in the repository, because the previous deployment still answers on those URLs.
