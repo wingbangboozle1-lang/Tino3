@@ -353,3 +353,29 @@ The ranking of the other options changed (renting now finishes ahead of moving i
 - **Closing wording pass (this commit):** six sentences that stated a cause or a likelihood with no source behind them were reduced to what is known (insurance "likely low", a "copying error", "avoids probate", and three similar). No figure changed. This is the last change from this session; its merge is recorded in the pull request itself rather than by another commit here.
 - **For the next session:** PRs #23 and #25 are open and each would replace the root edition. See CR-C2-2 before merging either.
 
+
+---
+
+## Session `arena/0b455c89-tino3` (branch `arena/0b455c89-tino3`) — stress-testing, insurance, inherited-IRA and rent-control law watch
+
+*Branch note:* Arena fixes this session to `arena/0b455c89-tino3`; the `session-<id>/<task>` naming cannot be used. All work is on that branch and merges to `main` via one pull request.
+
+**Claim (written before any edit, committed and pushed immediately).** Read the whole board first. No other session has an open claim
+on `main`; PRs #23 and #25 are open and both are stale input-side rewrites (see CR-C2-2), so they are not treated as live claims and
+this session does not edit them.
+
+| Task | Status | Owner | Scope (non-overlapping) |
+|---|---|---|---|
+| S-1 Black-swan and economic-stress module: historical replays from official series (housing busts, inflation shocks, rate regimes, recessions) plus parametric shocks; every figure recomputed, none hand-typed | in progress | `arena/0b455c89-tino3` | `scripts/stress.py` (new), `assets/data/stress.json` (new) |
+| S-2 Insurance and running-cost research: what an official source can and cannot support for a single-family residence and a rented multi-unit building | in progress | `arena/0b455c89-tino3` | `assets/sources.json` (append-only), new page |
+| S-3 Inheritance-tax analysis: federal exclusion, headroom, the income tax on non-probate cash, inherited retirement accounts (10-year rule), California position | in progress | `arena/0b455c89-tino3` | `scripts/model.py` (new blocks only) |
+| S-4 Law watch: rent-control sunset, net-energy metering, insurer-of-last-resort, pending ballot measures — each traced to its statute or regulator | in progress | `arena/0b455c89-tino3` | `scripts/build.py` (taxes page addendum) |
+| S-5 Render, verify, package, PR, merge, deploy check | in progress | `arena/0b455c89-tino3` | `scripts/build.py`, `scripts/verify.py`, `scripts/package_site.py`, `README.md`, `EXECUTIVE_SUMMARY.md`, `COORDINATION.md` |
+
+**Added to the privacy boundary by this session:** no ZIP code, city, county, water district or insurer name; no unrounded roll value
+or bill; the two historical roll tables supplied by the owner are not republished row by row, because a year-by-year pattern of
+assessed values and bills is itself identifying. The site reports the *pattern* (the cap, the years the cap was not binding) and the
+generalised level only.
+
+Nothing of another session is removed or rewritten. `plan/**`, `.github/workflows/**`, `scripts/privacy_boundary.py` and every
+withdrawal notice stay as their owners left them.
