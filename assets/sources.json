@@ -33,7 +33,7 @@
    "verifies": [
     "For calendar year 2027 the basic exclusion amount under section 2010(c)(3) is $15,480,000"
    ],
-   "quote": ".44 Basic Exclusion Amount for Estate Tax. For calendar year 2027, the basic exclusion amount under § 2010(c)(3) is $15,480,000.",
+   "quote": ".44 Basic Exclusion Amount for Estate Tax. For calendar year 2027, the basic exclusion amount under \u00a7 2010(c)(3) is $15,480,000.",
    "checked": "official-domain search excerpt read in this session (full document not opened)"
   },
   "irs_whatsnew": {
@@ -43,7 +43,7 @@
    "verifies": [
     "Public Law 119-21 (4 July 2025) raised the basic exclusion amount to $15,000,000 for 2026"
    ],
-   "quote": "WFTC amends § 2010(c)(3) by increasing the basic exclusion amount to $15,000,000 for calendar year 2026.",
+   "quote": "WFTC amends \u00a7 2010(c)(3) by increasing the basic exclusion amount to $15,000,000 for calendar year 2026.",
    "checked": "opened on the publisher's site in this session"
   },
   "irs_rp2532": {
@@ -88,7 +88,7 @@
     "Assets of an irrevocable grantor trust that are not included in the gross estate get no basis adjustment at death",
     "Property the decedent placed in a trust that stayed revocable is treated as acquired from the decedent (section 1014(b)(2) and (3))"
    ],
-   "quote": "the basis of Asset is not adjusted to its fair market value on the date of A's death under § 1014 because Asset was not acquired or passed from a decedent as defined in § 1014(b).",
+   "quote": "the basis of Asset is not adjusted to its fair market value on the date of A's death under \u00a7 1014 because Asset was not acquired or passed from a decedent as defined in \u00a7 1014(b).",
    "checked": "opened on the publisher's site in this session"
   },
   "irs_tc409": {
@@ -486,6 +486,180 @@
     "The initiative titled 'Repeals voter-enacted changes to property tax rules for transfers between family members' failed: the signatures filed were below the number required"
    ],
    "quote": "the total number of signatures for the hereinafter named initiative filed with all county elections officials is less than 100 percent of the number of qualified voters required to find the petition sufficient; therefore, the petition has failed.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "fred_cpi": {
+   "publisher": "Federal Reserve Bank of St. Louis (data: U.S. Bureau of Labor Statistics)",
+   "title": "Consumer price index for all urban consumers, all items, U.S. city average (CPIAUCSL), annual averages",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPIAUCSL&fq=Annual&fam=avg",
+   "verifies": [
+    "Annual averages 1969-2025 used for the inflation path of every historical replay",
+    "1974 average 49.317 against 1973 44.425, which is the 8.4% figure quoted on the stress page",
+    "1980 average 82.383 against 1979 72.583",
+    "October 2026 index 337.476 against 336.298 in September 2026"
+   ],
+   "quote": "1973-01-01,44.425 ... 1974-01-01,49.317 ... 1980-01-01,82.383",
+   "checked": "opened on the publisher's site in this session (CSV download)"
+  },
+  "fred_gs10": {
+   "publisher": "Federal Reserve Bank of St. Louis (data: Board of Governors of the Federal Reserve System)",
+   "title": "10-Year Treasury constant maturity rate (GS10), annual averages",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=GS10&fq=Annual&fam=avg",
+   "verifies": [
+    "Annual averages 1969-2025, used as the Treasury return in each replay year",
+    "13.91 for 1981, 1.80 for 2012, 0.89 for 2020, 4.29 for 2025"
+   ],
+   "quote": "1981-01-01,13.91 ... 2012-01-01,1.80 ... 2020-01-01,0.89",
+   "checked": "opened on the publisher's site in this session (CSV download)"
+  },
+  "fred_nasdaq": {
+   "publisher": "Federal Reserve Bank of St. Louis (data: Nasdaq OMX Group)",
+   "title": "Nasdaq Composite index (NASDAQCOM), annual averages of daily closes",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=NASDAQCOM&fq=Annual&fam=avg",
+   "verifies": [
+    "Annual average 3,783.673 in 2000, 1,539.731 in 2002 and 1,845.385 in 2009",
+    "Price index only: no dividends, used for the stock path from 1995 onward"
+   ],
+   "quote": "2000-01-01,3783.673 ... 2002-01-01,1539.731 ... 2009-01-01,1845.385",
+   "checked": "opened on the publisher's site in this session (CSV download)"
+  },
+  "fred_unrate": {
+   "publisher": "Federal Reserve Bank of St. Louis (data: U.S. Bureau of Labor Statistics)",
+   "title": "Unemployment rate (UNRATE), annual averages",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=UNRATE&fq=Annual&fam=avg",
+   "verifies": [
+    "9.6% in 2010 and 8.5% in 1975, quoted as context for the recessions replayed"
+   ],
+   "quote": "1975-01-01,8.5 ... 2010-01-01,9.6",
+   "checked": "opened on the publisher's site in this session (CSV download)"
+  },
+  "fred_hpi_a_annual": {
+   "publisher": "Federal Reserve Bank of St. Louis (data: Federal Housing Finance Agency)",
+   "title": "All-transactions house price index, Property A's metropolitan area, annual averages",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=ATNHPIUS41940Q&fq=Annual&fam=avg",
+   "verifies": [
+    "Year-by-year index 1976-2025 used for the house-price path of each replay",
+    "110.67 in 1990 falling to 100.16 in 1995",
+    "316.97 in 2006 falling to 235.92 in 2011",
+    "560.14 in 2025 against 556.29 in 2024"
+   ],
+   "quote": "1990-01-01,110.67 ... 1995-01-01,100.16 ... 2006-01-01,316.97 ... 2011-01-01,235.92",
+   "checked": "opened on the publisher's site in this session (CSV download)"
+  },
+  "fred_hpi_b_annual": {
+   "publisher": "Federal Reserve Bank of St. Louis (data: Federal Housing Finance Agency)",
+   "title": "All-transactions house price index, Property B's metropolitan area, annual averages",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=ATNHPIUS41884Q&fq=Annual&fam=avg",
+   "verifies": [
+    "Year-by-year index 1976-2025 for the second area",
+    "112.32 in 1990 falling to 100.14 in 1994",
+    "307.80 in 2006 falling to 240.84 in 2011"
+   ],
+   "quote": "1990-01-01,112.32 ... 1994-01-01,100.14 ... 2011-01-01,240.84",
+   "checked": "opened on the publisher's site in this session (CSV download)"
+  },
+  "fred_ca_hpi": {
+   "publisher": "Federal Reserve Bank of St. Louis (data: Federal Housing Finance Agency)",
+   "title": "All-transactions house price index for California (CASTHPI)",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CASTHPI",
+   "verifies": [
+    "Statewide index 41.65 in 1975, 100.00 in 1980, 638.13 in 2006, 380.93 in 2012 and 974.97 in the second quarter of 2026",
+    "The 2006 to 2012 fall is about 40% statewide"
+   ],
+   "quote": "2006-07-01,646.07 ... 2012-01-01,380.93 ... 2026-04-01,974.97",
+   "checked": "opened on the publisher's site in this session (CSV download)"
+  },
+  "bls_cpi": {
+   "publisher": "U.S. Bureau of Labor Statistics",
+   "title": "Consumer price index home page: 12-month percentage changes by category, September 2026",
+   "url": "https://www.bls.gov/cpi/",
+   "verifies": [
+    "All items 3.7%, electricity 4.4%, energy services 4.6%, shelter 3.2% for the 12 months to September 2026",
+    "Rent of primary residence 2.8% and owners' equivalent rent 3.3%",
+    "October 2026 all items rose 0.4% on the month"
+   ],
+   "quote": "| All items | 3.7% | ... | Electricity | 4.4% | ... | Shelter | 3.2% |",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "civ1947_12": {
+   "publisher": "California Legislative Information",
+   "title": "Civil Code 1947.12: statewide limitation on residential rent increases",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1947.12",
+   "verifies": [
+    "An owner may not raise rent more than 5% plus the change in the cost of living, or 10%, whichever is lower",
+    "A new tenancy with no remaining tenant may be set at any initial rate",
+    "The section remains in effect only until 1 January 2030 and is repealed as of that date"
+   ],
+   "quote": "This section shall remain in effect until January 1, 2030, and as of that date is repealed.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "civ1954_52": {
+   "publisher": "California Legislative Information",
+   "title": "Civil Code 1954.52: residential real property exempt from local rent control",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1954.52",
+   "verifies": [
+    "An owner may set the initial and all subsequent rents for a dwelling with a certificate of occupancy issued after 1 February 1995",
+    "The same applies to a dwelling alienable separate from the title to any other unit, with stated exceptions for condominiums"
+   ],
+   "quote": "(1) It has a certificate of occupancy issued after February 1, 1995.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "rtc51": {
+   "publisher": "California Legislative Information",
+   "title": "Revenue and Taxation Code 51: the 2% cap and the lesser-of rule",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=51",
+   "verifies": [
+    "Taxable value is the lesser of the factored base year value and full cash value",
+    "In no event may the inflation increase exceed 2% of the prior year's value",
+    "The inflation factor uses the California consumer price index from October to October"
+   ],
+   "quote": "In no event shall the percentage increase for any assessment year ... exceed 2 percent of the prior year's value.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "ab1157": {
+   "publisher": "California Legislative Information",
+   "title": "AB 1157 (2025-2026), tenancy: just cause termination and rent increases: bill status",
+   "url": "https://leginfo.legislature.ca.gov/faces/billStatusClient.xhtml?bill_id=202520260AB1157",
+   "verifies": [
+    "The bill died on 31 January 2026 under Article IV, Section 10(c) of the Constitution",
+    "Its topic was an amendment to Civil Code 1946.2, 1947.12 and 1947.13"
+   ],
+   "quote": "01/31/26 | Died pursuant to Art. IV, Sec. 10(c) of the Constitution.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "cdi_fair": {
+   "publisher": "California Department of Insurance",
+   "title": "California FAIR Plan",
+   "url": "https://www.insurance.ca.gov/01-consumers/200-wrr/California-FAIR-Plan.cfm",
+   "verifies": [
+    "The FAIR Plan is available to residents who cannot obtain insurance through a regular insurer",
+    "The residential coverage limit is $3,000,000 per location",
+    "It is a limited fire policy; a comprehensive residential option is described as in progress, and water damage, liability, theft and additional living expenses require a separate policy"
+   ],
+   "quote": "Higher coverage limits: $3 million for residential policyholders and $20 million for commercial policies per location.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "irs_rmd": {
+   "publisher": "Internal Revenue Service",
+   "title": "Retirement plan and IRA required minimum distributions: frequently asked questions",
+   "url": "https://www.irs.gov/retirement-plans/retirement-plan-and-ira-required-minimum-distributions-faqs",
+   "verifies": [
+    "For an owner who died after 31 December 2019 the entire balance must be distributed within ten years",
+    "There is an exception for a surviving spouse, a minor child, a disabled or chronically ill person, or a person not more than ten years younger",
+    "Withdrawals are included in taxable income except for basis or qualified Roth distributions"
+   ],
+   "quote": "the SECURE Act requires the entire balance of the participant's account be distributed within ten years.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "ftb_gift": {
+   "publisher": "California Franchise Tax Board",
+   "title": "Gifts and inheritance",
+   "url": "https://www.ftb.ca.gov/file/personal/income-types/gifts-and-inheritance.html",
+   "verifies": [
+    "A gift or inheritance is not included in income",
+    "Income the inherited property later produces, including gain on a sale and rent, is taxable"
+   ],
+   "quote": "If you received a gift or inheritance, do not include it in your income.",
    "checked": "opened on the publisher's site in this session"
   }
  }
