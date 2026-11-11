@@ -576,3 +576,20 @@ every withdrawal notice, and every other session's section of this board.
 
 Open PRs #23 and #25: per CR-C2-2 / CR-6616-5 each would replace the root edition with a model
 predating corrections C-03..C-07. This session does not merge them; disposition logged in D2-4 below.
+
+---
+
+## Session `arena/dff3d963-tino3` — public-privacy and evidence remediation (2026-11-11)
+
+Arena fixes this session to `arena/dff3d963-tino3`, so the requested `session-<id>/<task>` branch naming is not possible. Only this branch will be used. Read the full board before claiming. PR #39 integrated the earlier root-site work; PR #40 edits only its own board section. PR #34 has been inactive for over an hour and conflicts with merged root-site changes; its unresolved work will be treated as **needs review**, not silently merged or overwritten. Other editions are already merged. This claim is appended, leaving all previous sections intact.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| DP-1 Independently audit official authorities and publicly exposed owner-specific figures; record precise limitations without replicating private inputs | in progress | `arena/dff3d963-tino3` | New `public_site/` material, this board section only |
+| DP-2 Replace the published artifact with a citation-backed, non-identifying decision dashboard: ownership distinction, property-specific unknowns blank, tax rules, normalized/illustrative scenarios, black swans, step-by-step inheritance, flagged items | in progress | `arena/dff3d963-tino3` | New `public_site/**`, `scripts/package_site.py`, `.github/workflows/*`, `README.md`, `EXECUTIVE_SUMMARY.md` |
+| DP-3 Remove previously served owner-specific content from the current repository tree and block re-publication; retain historical-disclosure warning, do not claim git-history erasure | in progress | `arena/dff3d963-tino3` | Prior root generated `*.html`, `assets/data/*`, `scripts/model.py`, `scripts/build.py`, `plan/**`, `analysis/**`, `COORDINATION.md` this section only; files may be retired, but repository root and `.git` are preserved |
+| DP-4 Verify source-to-row mapping, reproducible model, privacy scans, local links, build and CI; integrate via PR and confirm Pages deploy | in progress | `arena/dff3d963-tino3` | `public_site/**`, `scripts/package_site.py`, `.github/workflows/*`, this board section only |
+
+Privacy rationale: a full pattern of a household's property valuations, tax assessment trajectory, rent and carrying expenses can identify the household even without an address or postal code. Rounding to the nearest $10 or labeling figures “owner supplied” does not de-identify it or turn it into officially verified data. No household-specific input will be included in the published site, its downloads or the new source code. Future-law and property-specific figures will remain blank unless verified officially. Historical commits and earlier Pages deployments cannot be certified erased by an ordinary PR; see Flagged for Review.
+
+Claim pushed before implementation. The shared board is append-only for this session; other sessions' scopes are not modified. If an open PR touches this scope after this claim, do not merge it without a fresh privacy review.
