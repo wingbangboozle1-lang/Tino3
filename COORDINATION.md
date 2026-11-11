@@ -353,3 +353,17 @@ The ranking of the other options changed (renting now finishes ahead of moving i
 - **Closing wording pass (this commit):** six sentences that stated a cause or a likelihood with no source behind them were reduced to what is known (insurance "likely low", a "copying error", "avoids probate", and three similar). No figure changed. This is the last change from this session; its merge is recorded in the pull request itself rather than by another commit here.
 - **For the next session:** PRs #23 and #25 are open and each would replace the root edition. See CR-C2-2 before merging either.
 
+
+---
+
+## Session `arena/7f9e7fe8-tino3` — final privacy, evidence and publication audit (claimed 2026-11-11 04:10 UTC)
+
+The Arena branch is fixed; the requested `session-<id>/<task>` branch name cannot be used. The open replacement PRs #23 and #25 were last updated on 2026-11-10, are conflicting, and are not being modified. The prior integration and publication claims above have completed results, or are more than 60 minutes old without commits; this session takes over final integration without altering their history. Historical-remediation decisions remain with the repository owner.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| A1. Audit the current public edition for household privacy, official-source accuracy, mathematical integrity and broken links; repair issues found | in progress | `arena/7f9e7fe8-tino3` | `scripts/*`, `assets/*`, root generated HTML, `README.md`, `EXECUTIVE_SUMMARY.md`, `plan/**` as needed, and this section of `COORDINATION.md` |
+| A2. Reproduce and test the integrated static site; verify privacy boundaries and publish flagged uncertainties | in progress | `arena/7f9e7fe8-tino3` | `scripts/*`, `.github/workflows/*`, generated site files and this section of `COORDINATION.md` |
+| A3. PR, merge only after checks, confirm GitHub Pages, and record outcome | in progress | `arena/7f9e7fe8-tino3` | this section of `COORDINATION.md`; GitHub PR and deployment |
+
+No names, addresses, parcel identifiers, exact household figures, or private trust facts will be added to this record. Claim pushed before implementation.
