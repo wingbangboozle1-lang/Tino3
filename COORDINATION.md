@@ -85,6 +85,57 @@ commit, message or pull request.
 - 04:13 UTC — read the whole board on `main` (`6086d16`). Every claim there is done or more than 17 hours old.
 - 04:13 to 04:20 UTC — `git ls-remote` showed five new session branches created since 04:09; fetched each and read its claim. Register written.
 
+## Round of 11 November 2026, 12:55 UTC onward — claim register, publication path and public exposure (`arena/1b705871-tino3`)
+
+*Branch note:* Arena fixes this session to `arena/1b705871-tino3`; the `session-<id>/<task>` naming cannot be used.
+This block is placed here on purpose: one session inserts at the top of the file and the others append at the end, so an edit
+at this position merges without conflict.
+
+### Why this register exists
+
+Eight sessions started between 12:55 and 13:01 UTC on 11 November. Seven pushed a claim to their own branch within four
+minutes of each other, so **most claims are not visible from `main`** (same fault as the 04:10 round). Board read by this
+session at 12:53 to 13:01 UTC: `main` in full, `git ls-remote`, and a fetch of all 43 branches. Times below are committer
+times of the claim commits. Each session's own section governs; this table is an index only.
+
+| Claimed (UTC) | Session branch | Claim commit | Tasks claimed | Files named in the claim |
+|---|---|---|---|---|
+| 12:55:48 | `arena/4ff01a4d-tino3` | `93b3f57` | A4-1 re-verification of the root edition; A4-2 one navigation, the two black-swan pages as one section, cross-check editions labelled; A4-3 executive summary and flag register; A4-4 disposition of PRs #40 and #34, PR, merge, deploy | `assets/sources.json`, `scripts/model.py`, `scripts/build.py`, `assets/style.css`, generated root pages, `README.md`, `EXECUTIVE_SUMMARY.md` |
+| 12:56:42 | `arena/ca7ad6a2-tino3` | `0e0aa98` | CA-1 audit of privacy, sources, legal framing and arithmetic in the root and `analysis/` editions; CA-2 corrections and executive guidance; CA-3 verifiers, PR, merge, deploy | `scripts/*`, `analysis/tools/*`, source ledgers, generated root pages, `analysis/*`, `README.md`, `EXECUTIVE_SUMMARY.md`; workflows only if a defect is found |
+| 12:56:57 | `arena/bd680fbc-tino3` | `b056cbf` | BD-1 verification of the published edition; BD-2 disposition of PRs #40 and #34; BD-3 spot re-verification; BD-4 PR, merge, deploy | its own board section only. **Merged as PR #41 at 12:58:33.** PR #40 merged 12:56:14; PR #34 closed unmerged |
+| 12:57:11 | `arena/f2039411-tino3` | `1045f9c` | F2-1 audit of the `analysis/` suite; F2-2 corrections; F2-3 verifiers, PR, merge, deploy | `analysis/**` |
+| 12:57:25 | `arena/82853ea6-tino3` | `ef1305e` | P8-1 audit of the `plan/` edition; P8-2 gaps against the brief inside `plan/`; P8-3 reconciliation of the three editions; P8-4 PR, merge, deploy | `plan/**` |
+| 12:58:12 | `arena/f31530e0-tino3` | `83c7a40` | F3-1 requirements-traceability matrix and verification log; F3-2 deferred final integration | new `integration/**`; at integration time only `index.html`, `scripts/package_site.py`, `scripts/verify.py` |
+| 12:59:51 | `arena/a2416305-tino3` | `887dfb7` | P-1 verification of the `plan/` edition; P-2 gaps against the brief inside `plan/`; P-3 PR, merge, deploy | `plan/**` |
+| 13:02 | `arena/1b705871-tino3` | this commit | PX-1 to PX-3 below | this block; the content-free withdrawal stubs; the repository's Pages setting |
+
+### Overlaps found (facts, in claim order)
+
+1. **Root edition** (`scripts/model.py`, `scripts/build.py`, generated root pages, `README.md`, `EXECUTIVE_SUMMARY.md`, the source ledger) is named by `4ff01a4d` (12:55:48) and by `ca7ad6a2` (12:56:42).
+2. **`analysis/**`** is named by `ca7ad6a2` (12:56:42) and by `f2039411` (12:57:11).
+3. **`plan/**`** is named by `82853ea6` (12:57:25) and by `a2416305` (12:59:51).
+4. **Final integration** is claimed, in different words, by `4ff01a4d`, `ca7ad6a2`, `bd680fbc` and `f31530e0`. `f31530e0` waits for `4ff01a4d` and `bd680fbc` only; four later claims were not visible to it.
+5. **Disposition of PRs #40 and #34** was claimed by `4ff01a4d` (A4-4) and by `bd680fbc` (BD-2); `bd680fbc` acted first.
+6. **Claimed by nobody:** the publication path. Two reviews this morning (`dd69530d`, `ceb4a929`, both unmerged, 07:50 UTC) reported as urgent and unresolved that Pages publishes the whole `main` root through the branch publisher beside the allow-listed artifact. No session of this round names the Pages setting, the retired-path notices, or what stays reachable outside the pages.
+
+By the board rule the earlier claim holds in items 1 to 3. This session cannot direct another session. **Request to the seven sessions (not an instruction):** pull `main` and read this table before merging; where your scope is second in claim order, fold your verified findings into the earlier claimant's result rather than replacing it, and record what you dropped.
+
+### This session's claim
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| PX-1 Register of this round on `main`, kept current as branches merge | **in progress** | `arena/1b705871-tino3` | `COORDINATION.md`, this block only |
+| PX-2 Publication path and public exposure outside the page content: (a) the Pages source setting (branch-root publisher beside the Actions artifact); (b) what is served outside the allow-list, by live fetch; (c) the content-free withdrawal stubs, some of whose file names and URL paths name a place; (d) an inventory, counts only and no values, of what remains reachable in branches, pull requests and history; (e) a short action list for the owner | **in progress** | `arena/1b705871-tino3` | the repository's Pages setting; the tracked withdrawal stubs only (legacy root `*.html` notices, `pages/**`, `data/**`, `decision-suite/**`, the stub `.js`/`.css`/`.py`/`.md` files that contain only the withdrawal marker); this block |
+| PX-3 Post-round served-site check, last: once every claim above is merged, withdrawn or 60 minutes without a commit, fetch what is live, check links and privacy patterns on the served output, re-check the headline figures against official pages opened in this session, and record the result here | **waiting** | `arena/1b705871-tino3` | this block; a shared file only if its claimants are done or stale, and only for a defect found by PX-2 or PX-3 |
+
+Rules this session holds itself to: no edit to `scripts/*`, `assets/*`, `plan/**`, `analysis/**`, `integration/**`, any page that carries content, README, the executive summary or a workflow while a claim on it is live; no further edition, model or black-swan page; no name, address, postal code, place name, parcel number or unrounded roll figure in any commit, message or pull request. Where PX-2 needs a change in a file another session holds, it is logged under "Requests" below, not made.
+
+### Log (`arena/1b705871-tino3`)
+
+- 12:53 UTC — board on `main` (`f6b2873`) read in full; all four verifiers and the packager run locally: PASS. Every claim then on the board was done or about five hours without a commit.
+- 12:56 to 13:01 UTC — `main` moved twice (PR #40, PR #41) and seven session branches appeared. Each claim read from its branch. Planned scope changed twice to stay clear of them: content editions, traceability and the deferred integration were all taken; the publication path was not.
+- 13:02 UTC — register and claim written; pushed before any other file was edited.
+
 ## Sources and verification scope
 
 The reviewed dashboard links to official authorities, including:
