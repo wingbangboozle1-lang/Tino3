@@ -874,3 +874,38 @@ The other 32 ledger entries were **not** re-opened by this session; `plan/source
 - **After the merge, on `main`:** `Verify static site` (run `43026190736`) success; `Deploy GitHub Pages` (run `43026190894`) success; branch-root `pages-build-deployment` (run `43026189759`) success.
 - **Live check by fetch:** `https://wingbangboozle1-lang.github.io/Tino3/plan/taxes.html` serves the corrected headroom table ("Room for money beside A" $11,900,000 for 2026; contingency column for Property B) and the "Checked 11 November 2026" line; `https://wingbangboozle1-lang.github.io/Tino3/` serves the main dashboard with its link to the cross-check intact.
 - One merge conflict met (append at the end of `COORDINATION.md` against PRs #41 to #45); resolved by keeping every other session's text and appending this section. Nothing discarded.
+
+---
+
+## Session `arena/f31530e0-tino3` — requirements traceability and final integration (2026-11-11)
+
+*Branch note:* Arena fixes this session to `arena/f31530e0-tino3`, branched from `f6b2873`; the
+`session-<id>/<task>` naming cannot be used. All work is on this branch, pushed to it only, and merged
+to `main` through a PR from this branch. The board was read in full before claiming; `origin/main`
+was fetched and the branch was rebased onto `12089db` (PR #40) before this claim was written.
+
+**Board state at claim time:** two sessions claimed work minutes earlier and are treated as active, not
+stale: `arena/4ff01a4d-tino3` (A4-1..A4-4: root-edition re-verification, site consolidation, executive
+summary, PR/merge) and `arena/bd680fbc-tino3` (BD-1..BD-4: verification, open-PR disposition, PR/merge,
+deploy check). PR #34 (`arena/0b455c89-tino3`) is open and conflicting; its claim is older than 60 minutes
+but this session does not take it over because its branch predates the merged corrections. PRs #23/#25
+are closed. No task claimed by those sessions is started here.
+
+| Task | Status | Owner | File scope (non-overlapping until F3-2 starts) |
+|---|---|---|---|
+| F3-1 Independent requirements-traceability audit: map every numbered item in the owner's brief to the published page that answers it, an official publisher URL, and a status; open the official pages in this session and record exactly what each supports. Publish the anonymized traceability matrix and the verification log as new files. | **in progress** | `arena/f31530e0-tino3` | new `integration/**` only; `COORDINATION.md` (this section only) |
+| F3-2 Final integration, starts only after A4-1..A4-4 and BD-1..BD-4 are done/merged or their claims are stale under the 60-minute rule: merge the completed branches, re-verify the combined data line by line, confirm the site builds with no broken links, add the traceability page to the published allowlist and navigation as an integration-only shared change, PR, merge, confirm Pages deploy, record result. | **waiting** | `arena/f31530e0-tino3` | `integration/**`, `COORDINATION.md` (this section only), and at integration time only: `index.html`, `scripts/package_site.py`, `scripts/verify.py` |
+
+Until F3-2 starts this session does **not** edit `scripts/model.py`, `scripts/build.py`, `assets/*`,
+`plan/**`, `analysis/**`, root `*.html`, `.github/workflows/*`, withdrawal notices, README, the executive
+summary, or any other session's board section. If a shared file needs a change while another claim is
+active, the request is logged here instead of being made. Privacy boundary: placeholders only, no name,
+street address, postal code, parcel number, city/neighborhood tied to a parcel, utility account number or
+unrounded roll figure; every published dollar figure is in $10 increments.
+
+### Conflict log (F3-1, 13:05 UTC)
+
+`git pull --rebase origin main` after PRs #42, #43 and #45 produced an end-of-file append conflict in
+`COORDINATION.md`. Resolved by taking `origin/main`'s board verbatim and appending only this session's
+section below it, so no other session's section was discarded. No shared site file was edited during
+the rebase. The rewritten claim commit was force-pushed with lease to this session's own branch only.
