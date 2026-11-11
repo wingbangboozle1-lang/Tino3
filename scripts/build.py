@@ -15,6 +15,7 @@ SRC = json.loads((ROOT / "assets" / "sources.json").read_text(encoding="utf-8"))
 
 NAV = [("index.html", "Overview"), ("executive-summary.html", "Executive summary"),
        ("decision.html", "Decision analysis"), ("projections.html", "Year-by-year projections"),
+       ("black-swans.html", "Black-swan conditions"),
        ("property-a.html", "Property A"), ("property-b.html", "Property B"),
        ("taxes.html", "Tax, thresholds, law watch"), ("inheritance.html", "Inheritance steps"),
        ("review.html", "Flagged for review"), ("audit.html", "Independent verification"),
@@ -26,7 +27,15 @@ SHORT = {"Internal Revenue Service": "IRS", "California State Board of Equalizat
          "California Legislative Analyst's Office": "LAO", "California Secretary of State": "CA SOS",
          "California State Controller": "CA Controller", "U.S. Department of the Treasury": "US Treasury",
          "Federal Retirement Thrift Investment Board": "TSP", "U.S. Department of Housing and Urban Development": "HUD",
-         "Federal Reserve Bank of St. Louis (data: Federal Housing Finance Agency)": "FHFA index"}
+         "Federal Reserve Bank of St. Louis (data: Federal Housing Finance Agency)": "FHFA index",
+         "Federal Reserve History": "Fed History",
+         "Board of Governors of the Federal Reserve System": "Federal Reserve",
+         "Bureau of Labor Statistics": "BLS", "Congressional Budget Office": "CBO",
+         "Social Security Administration": "SSA",
+         "Federal Reserve Bank of St. Louis (data: Board of Governors)": "FRED (Fed funds)",
+         "Federal Reserve Bank of St. Louis (data: Bureau of Labor Statistics)": "FRED (BLS)",
+         "Federal Reserve Bank of St. Louis (data: Freddie Mac)": "FRED (Freddie Mac)",
+         "Federal Reserve Bank of St. Louis (data: U.S. Treasury)": "FRED (Treasury)"}
 LABEL = {"irs_estate": "Estate tax thresholds", "irs_2027": "2027 amounts", "irs_rp2635": "Rev. Proc. 2026-35",
          "irs_whatsnew": "What's new", "irs_rp2532": "Rev. Proc. 2025-32", "irs_i706": "Form 706 instructions",
          "irs_basis": "Inherited basis", "irs_rr2023_2": "Rev. Rul. 2023-2", "irs_tc409": "Capital gains",
@@ -39,7 +48,12 @@ LABEL = {"irs_estate": "Estate tax thresholds", "irs_2027": "2027 amounts", "irs
          "cityb_rent": "Rent increases", "cityb_rentfee": "Rent Board fee", "lao_250017": "Initiative 25-0017",
          "sos_measures": "2026 measures", "sos_memo": "Initiative failed", "ftb_cg": "Capital gains", "ftb_rates": "Rate schedules", "cpuc_nem": "Net metering",
          "cdi_compare": "Premium survey", "treasury_cmt": "Yield curve", "tsp_returns": "Index fund returns",
-         "fred_hpi_a": "Area A", "fred_hpi_b": "Area B", "hud_fmr": "Fair Market Rents"}
+         "fred_hpi_a": "Area A", "fred_hpi_b": "Area B", "hud_fmr": "Fair Market Rents",
+         "fed_2goal": "2% inflation goal", "ssa_trustees": "Trustees' assumptions", "cbo_outlook": "Budget outlook",
+         "frh_oil": "Oil shock", "frh_1987": "Crash of 1987", "frh_recession": "Great Recession",
+         "fed_mpr2001": "MPR Feb 2001", "bls_cpi": "CPI Oct 2026", "sos_results": "Election results",
+         "fred_fedfunds": "Fed funds rate", "fred_unrate": "Unemployment rate", "fred_mortgage": "Mortgage rates",
+         "fred_casthpi": "House prices, state", "fred_usthpi": "House prices, US", "fred_dgs10": "10-year yield"}
 
 e = html.escape
 
@@ -76,7 +90,7 @@ BLANK = ("blank", "Not verified &ndash; left blank")
 BADGE = {"V": ("b-v", "Verified"), "O": ("b-o", "Owner-supplied"), "A": ("b-a", "Assumption"),
          "C": ("b-c", "Computed"), "U": ("b-u", "Unverified")}
 LEGEND = ('<p class="legend">' + "".join(f'<span class="b {c}">{t}</span>' for c, t in BADGE.values()) +
-          ' Verified = the figure was read in text from the official publisher\'s own domain on 10 November 2026; the source library says whether the whole page was opened or an excerpt was read. Owner-supplied = taken from the '
+          ' Verified = the figure was read in text from the official publisher\'s own domain on 10 or 11 November 2026; the source library says whether the whole page was opened or an excerpt was read. Owner-supplied = taken from the '
           'owner\'s records, not independently checked. Assumption = a scenario input. Computed = arithmetic on the '
           'rows above. Unverified = no official confirmation, so the value is blank. On owner-supplied, assumed and computed rows the link points to the official rule or data series the row rests on; it does not confirm the value.</p>')
 
@@ -106,8 +120,8 @@ def page(name, title, eyebrow, h1, lead, body):
 <a class="skip" href="#main">Skip to content</a>
 <aside><a class="brand" href="index.html">Inheritance decision dashboard<small>Property A and Property B</small></a>
 <div class="nav-label">PAGES</div><nav aria-label="Main navigation">{nav}</nav>
-<div class="aside-note">Anonymised. Dollar figures rounded to $10. Reviewed 10 November 2026.</div></aside>
-<main id="main"><div class="top"><span>{eyebrow}</span><span>Reviewed 10 Nov 2026</span></div>
+<div class="aside-note">Anonymised. Dollar figures rounded to $10. Reviewed 10-11 November 2026.</div></aside>
+<main id="main"><div class="top"><span>{eyebrow}</span><span>Reviewed 10-11 Nov 2026</span></div>
 <div class="hero"><div class="eyebrow">{eyebrow}</div><h1>{h1}</h1><p>{lead}</p></div>
 {body}
 <footer><span>Planning analysis, not legal, tax or investment advice. Confirm with an estate attorney and a tax preparer before acting.</span><span>No names, addresses, ZIP codes or parcel numbers are published.</span></footer></main></body></html>
@@ -168,6 +182,7 @@ Renting the home out ends with {usd(RENT['wealth'])} and moving in ends with {us
 <div class="card"><div class="k">Start here</div><p><a href="executive-summary.html">Executive summary</a>: every important number with its source.</p></div>
 <div class="card"><div class="k">The reasoning</div><p><a href="decision.html">Decision analysis</a>: results for 2040, 2045 and 2050, break-even points and all assumptions.</p></div>
 <div class="card"><div class="k">The numbers</div><p><a href="projections.html">Year-by-year projections</a> to 2060 for value, assessed value, tax and running costs.</p></div>
+<div class="card"><div class="k">When the baseline breaks</div><p><a href="black-swans.html">Black-swan conditions</a>: fifty years of official economic history and stress tests for the plan.</p></div>
 <div class="card"><div class="k">The rules</div><p><a href="taxes.html">Tax, thresholds and law watch</a>, and the <a href="inheritance.html">inheritance steps</a> with deadlines.</p></div>
 <div class="card"><div class="k">What is not settled</div><p><a href="review.html">Flagged for Review</a> and the <a href="audit.html">independent verification</a> of the earlier edition.</p></div>
 <div class="card"><div class="k">Second opinion</div><p><a href="plan/index.html">Independent cross-check</a>: a separate model by another session, built only from official figures and break-evens. It reaches the same default.</p></div>
@@ -194,6 +209,8 @@ rows = [
  (["California and local death taxes", "None", "No state estate or inheritance tax return since 2005. Cities and counties are barred from imposing one."], "V", S("sco_estate", "rtc13301")),
  (["Insurance", BLANK, "No official premium figure or insurer quote was confirmed for either property. The owner's guesses are used as placeholders; tripling them does not change the ranking."], "U", S("cdi_compare", flag=True)),
  (["Law under discussion", "The initiative to repeal the 2021 inheritance rules failed for lack of signatures", f"It would have restored the pre-2021 exclusion. If a later measure did so, Property A's 2045 tax would be {usd(LAW['tax_restored'])}. Selling would still come out ahead."], "V", S("sos_memo", "lao_250017", "sos_measures")),
+ (["State tax on financial assets", "The one-time state tax on certain taxpayers was rejected in the unofficial count", "Results on 10 November 2026: Proposition 40 rejected with 52.6% no; Proposition 42 ahead with 51.5% yes. Certification due 11 December 2026."], "V", S("sos_results")),
+ (["Black-swan stress tests", "Selling stays first in every stress case tested", "Stocks at 4.0% a year, inflation at 4.0% a year, or a flat decade for house prices: the ranking holds. A lost decade only moves the proceeds from the stock fund to Treasuries."], "C", S("frh_recession", "boe_lta26002", "fred_casthpi", asm=True)),
  (["Deadlines after a death", "60 days, 150 days, 9 months, 1 year, 3 years", "Trustee notice; change in ownership statement; Form 706; homeowners' exemption; exclusion claim."], "V", S("prob16061_7", "rtc480", "irs_i706", "boe_prop19")),
 ]
 body = f"""{tbl("Important details", ["Topic", "Finding", "What it means"], rows)}{LEGEND}
@@ -225,8 +242,22 @@ for y in (2040, 2045, 2050):
                       best["name"], N(b["live_cost_month_today"])], "C", S("fred_hpi_a", "treasury_cmt", asm=True)))
 matrix = [([P(x["g"], 0), P(x["rs"], 0), N(x["sell"]), N(x["rent"]), N(x["live"]), x["winner"]], "C", S("fred_hpi_a", "tsp_returns", asm=True),
            "" if x["winner"] == "Sell" else "best") for x in M["matrix"]]
+def sens_src(case):
+    if "25-0017" in case:
+        return ("lao_250017",)
+    if "Insurance" in case:
+        return ("cdi_compare",)
+    if "Stocks return" in case:
+        return ("tsp_returns", "treasury_cmt")
+    if "Inflation runs" in case:
+        return ("boe_lta26002", "fed_2goal")
+    if "House prices" in case:
+        return ("fred_hpi_a",)
+    return ("hud_fmr",)
+
+
 sens = [([x["case"], N(x["sell_stock"]), N(x["sell_treasury"]), N(x["rent"]), N(x["live"]), x["winner"]], "C",
-         S("lao_250017" if "25-0017" in x["case"] else ("cdi_compare" if "Insurance" in x["case"] else "hud_fmr"), asm=True)) for x in M["sens"]]
+         S(*sens_src(x["case"]), asm=True)) for x in M["sens"]]
 brk = [
  (["Stock return at which renting equals selling", P(BE["stock_return"] / 100), "Below this, renting the home wins. The assumption is 7.0%; the 10-year Treasury yields 4.88% today."], "C", S("treasury_cmt", "tsp_returns", asm=True)),
  (["House price growth at which renting equals selling", P(BE["house_growth"] / 100), "The home must appreciate about as fast as stocks return. The local index averaged 5.7% a year since 1995."], "C", S("fred_hpi_a", asm=True)),
@@ -292,6 +323,119 @@ Electricity is the owner's reported solar credit; the credit is not guaranteed b
 <p>Download: <a href="assets/data/property_a.csv">property_a.csv</a>, <a href="assets/data/property_b.csv">property_b.csv</a>.</p>{PRIV}"""
 PAGES["projections.html"] = page("projections.html", "Year-by-year projections", "Projections", "Value, assessed value, tax and costs by year",
                                  "From 2026 to 2060 while nothing changes, and for the ten years after an inheritance in 2040, 2045 or 2050.", body)
+
+# ------------------------------------------------------------------------------------------------ black-swan conditions
+bs = {x["case"]: x for x in M["sens"]}
+BS_STOCK = bs["Stocks return 4.0% a year instead of 7.0%"]
+BS_INFL = bs["Inflation runs 4.0% a year instead of 2.5%"]
+BS_FLAT = bs["House prices do not rise for ten years"]
+base_rows = [
+ (["Inflation used for costs", "2.5% a year", "Scenario. The Federal Reserve aims for 2% (PCE); the Social Security Trustees assume 2.4% CPI-W long-run with a 1.8% to 3.0% band; CBO projects inflation consistent with 2% from 2027."], "A",
+  S("fed_2goal", "ssa_trustees", "cbo_outlook", asm=True)),
+ (["House price growth", "3% / 4% / 5% a year", "Scenario band. The official local index averaged about 5.3% to 5.7% a year since 1995 but was flat to slightly down over its last four quarters."], "A",
+  S("fred_hpi_a", "fred_hpi_b", asm=True)),
+ (["Stock index fund return", "7.0% a year", "Scenario, not a forecast. One official 12-month figure is 12.09%. Below the 4.7% break-even, renting wins instead."], "A",
+  S("tsp_returns", "treasury_cmt", asm=True, flag=True)),
+ (["Treasury alternative", "4.88% a year", "The 10-year par yield on 9 November 2026, held constant in every case."], "V", S("treasury_cmt")),
+ (["Property tax cap", "2% a year at most", "State law. The factor was the full 2% for 2026-27 because the state index rose 3.307%."], "V", S("boe_lta26002")),
+ (["Rent growth, Property B sitting tenants", "1.5% a year", "The published formula: 60% of the regional price index. The allowed increase is 1.6% from 1 March 2026."], "V", S("cityb_rent")),
+ (["Federal estate exclusion after 2027", "2.5% a year", "Scenario. The amount is indexed by law; the future index is unknown. The 2026 and 2027 amounts are verified."], "A",
+  S("irs_rp2532", "irs_2027", asm=True)),
+]
+ccpi = [
+ (["1976-77", "6.250%", "1.02"], "V", S("boe_lta26002")),
+ (["1980-81", "17.316%", "1.02"], "V", S("boe_lta26002")),
+ (["1982-83", "11.137%", "1.02"], "V", S("boe_lta26002")),
+ (["1990-91", "4.758%", "1.02"], "V", S("boe_lta26002")),
+ (["1995-96", "1.194%", "1.0119"], "V", S("boe_lta26002")),
+ (["2000-01", "3.214%", "1.02"], "V", S("boe_lta26002")),
+ (["2010-11", "&minus;0.237%", "0.99763"], "V", S("boe_lta26002")),
+ (["2014-15", "0.454%", "1.00454"], "V", S("boe_lta26002")),
+ (["2021-22", "1.036%", "1.01036"], "V", S("boe_lta26002")),
+ (["2022-23", "5.561%", "1.02"], "V", S("boe_lta26002")),
+ (["2023-24", "7.274%", "1.02"], "V", S("boe_lta26002")),
+ (["2025-26", "2.514%", "1.02"], "V", S("boe_lta26002")),
+ (["2026-27", "3.307%", "1.02"], "V", S("boe_lta26002")),
+ (["1976-77 to 2026-27, assessment years above the cap", "40 of 51 years", "Cap usually binding"], "C", S("boe_lta26002")),
+]
+episodes = [
+ (["1973-75", "An embargo and production cuts nearly quadrupled the price of oil between 1973 and January 1974; the shock fed the inflation of the 1970s."], "V", S("frh_oil")),
+ (["1976-83", "The state price index rose more than 6% every assessment year, peaking at 17.316% in 1980-81, while assessed values were capped at 2% a year."], "V", S("boe_lta26002")),
+ (["1979-82", "The monthly federal funds average peaked at 19.10% in June 1981; unemployment peaked at 10.8% in November and December 1982."], "V", S("fred_fedfunds", "fred_unrate")),
+ (["1981", "The 30-year mortgage rate peaked at 18.63% in the week of 9 October 1981."], "V", S("fred_mortgage")),
+ (["1987", "The Dow fell 22.6% in a single session on 19 October 1987, the largest one-day percentage decline in history; circuit-breaker rules followed."], "V", S("frh_1987")),
+ (["2000", "The Nasdaq fell nearly 40% for the year while the broadest stock indexes fell more than 10%."], "V", S("fed_mpr2001")),
+ (["2007-09", "Real GDP fell 4.3%; unemployment peaked at 10.0% in October 2009; the S&amp;P 500 fell 57%; policy rates were cut to a range of 0 to 0.25%."], "V", S("frh_recession")),
+ (["2006-12 housing", "The state house price index fell 41% from 2006Q3 to 2012Q1; the national index fell 19% from 2007Q1 to 2012Q2 (computed from the published series)."], "C", S("fred_casthpi", "fred_usthpi")),
+ (["2020", "Unemployment reached 14.8% in April 2020; the 10-year Treasury yield fell to 0.52% on 4 August 2020."], "V", S("fred_unrate", "fred_dgs10")),
+ (["2021-23", "The state index rose 5.561% in 2022-23 and 7.274% in 2023-24; the 30-year mortgage rate reached 7.79% in October 2023."], "V", S("boe_lta26002", "fred_mortgage")),
+ (["2026", "Monthly consumer inflation swung from minus 0.4% in June to plus 0.6% in September and plus 0.4% in October 2026. October 2025 data do not exist: BLS did not collect them because of a lapse in appropriations."], "V", S("bls_cpi")),
+ (["2026-56", "Federal debt is projected to rise from 101% of GDP in 2026 to 175% by 2056; the deficit reaches 6.7% of GDP by 2036 and interest alone 6.9% of GDP by 2056."], "V", S("cbo_outlook")),
+]
+stress = [
+ (["Stocks return 4.0% a year instead of 7.0%", "Below the 4.7% break-even; the official precedents are the 2000 Nasdaq fall of nearly 40% and the 57% S&amp;P 500 fall of 2007-09.",
+   f"Best option: {BS_STOCK['winner']}. Ten years later: selling into Treasuries {usd(BS_STOCK['sell_treasury'])}, renting {usd(BS_STOCK['rent'])}, the stock fund {usd(BS_STOCK['sell_stock'])}."], "C",
+  S("fed_mpr2001", "frh_recession", "treasury_cmt", asm=True)),
+ (["Inflation runs 4.0% a year instead of 2.5%", "Costs, fixed charges and maintenance rise faster; the 2% assessment cap then binds every year; the rent cap stays at 60% of the index.",
+   f"Best option: {BS_INFL['winner']}. Renting falls to {usd(BS_INFL['rent'])} from {usd(RENT['wealth'])} in the base case; the sale is unchanged."], "C",
+  S("boe_lta26002", "fed_2goal", asm=True)),
+ (["House prices do not rise for ten years", "A flat decade; the state index also fell 41% in 2006-12, so flat is not the worst case tested by history.",
+   f"Best option: {BS_FLAT['winner']}. Selling ends at {usd(BS_FLAT['sell_stock'])} against {usd(BS_FLAT['rent'])} for renting and {usd(BS_FLAT['live'])} for moving in."], "C",
+  S("fred_casthpi", asm=True)),
+ (["A repeat of the 2006-12 housing bust", "The state index fell 41% peak to trough; the national index fell 19%.",
+   "A bust would cut the sale price and the rental value together. Selling soon after the inheritance fixes the date-of-death value before any decline; renting carries the reset tax through the whole fall."], "A",
+  S("fred_casthpi", "fred_usthpi", asm=True)),
+ (["Mortgage rates return toward their 1981 peak", "The 30-year rate reached 18.63% in 1981 and 7.79% in 2023; the policy rate ranged from 0.07% (2011) to 19.10% (1981).",
+   "Higher mortgage rates cool housing demand. Neither property is modelled with debt; any existing loan would have to be repaid from a sale and is flagged for the owner."], "V",
+  S("fred_mortgage", "fred_fedfunds", flag=True)),
+ (["The federal estate exclusion is halved", "A future Congress could lower it; the model also tests the pre-2021 rules being restored.",
+   f"Room for other assets in 2045 falls from {usd(E45['room_single_base'])} to {usd(E45['room_single_half'])} for one person. The sell, rent and move-in ranking does not change."], "C",
+  S("irs_estate", "irs_whatsnew", asm=True)),
+ (["The 2021 inheritance rules are repealed", "A failed initiative would have restored the pre-2021 exclusion; a similar measure can be filed again.",
+   f"Property A's 2045 tax would be {usd(LAW['tax_restored'])} instead of {usd(LAW['tax_live_current'])} if a child moved in. Selling still finishes first."], "C",
+  S("sos_memo", "lao_250017", asm=True)),
+ (["State tax on financial assets", "Unofficial results on 10 November 2026: Proposition 40, a one-time tax on certain taxpayers, was rejected with 52.6% no; Proposition 42 was ahead with 51.5% yes.",
+   "Certification is due 11 December 2026. As counted, the one-time state tax was rejected and a bar on new state personal-property taxes was ahead."], "V",
+  S("sos_results")),
+ (["A crash immediately after selling", "Black Monday: minus 22.6% in one session in 1987.",
+   f"The break-even stock return is {BE['stock_return']}% over ten years: below it, renting wins. Sequencing risk is the reason proceeds are spread, not left in one fund on one day."], "C",
+  S("frh_1987", "treasury_cmt", asm=True)),
+]
+body = f"""
+<section><h2>Why this page exists</h2>
+<p>The rest of this site projects one smooth path: house prices at 3%, 4% or 5% a year, costs at 2.5%, stocks at 7%.
+That is a baseline, not a forecast. Over any fifty-year period, growth and inflation are never smooth.
+This page records (1) what the baseline assumes and which official body agrees with it, (2) what actually happened over the last fifty years on official data, and (3) how the plan responds if it happens again.
+Nothing here changes the recommendation; the stress cases show how much would have to change before it moved.</p></section>
+<section><h2>What the baseline assumes</h2>
+{tbl("Baseline inputs and their official anchors", ["Item", "Value used on this site", "Why"], base_rows)}{LEGEND}</section>
+<section><h2>Fifty years of official inflation data</h2>
+<p>The state board publishes the consumer-price factor used to cap assessed-value increases. It is the longest official inflation series this site relies on, and it is not smooth:
+the index rose more than 6% a year from 1976-77 through 1982-83, peaked at 17.316% in 1980-81, fell to minus 0.237% in 2010-11, and ran at 7.274% as recently as 2023-24.
+The 2% cap on assessed values bound in 40 of the 51 assessment years from 1976-77 to 2026-27 (counted from the official factor table).
+Note also the gap in official statistics: because of the federal lapse in appropriations in autumn 2025, October 2025 prices were never collected, so the 2026-27 factor was calculated from August 2024 to August 2025 instead.</p>
+{tbl("Selected assessment years: state price index and assessed-value factor", ["Assessment year", "Index change", "Assessed-value factor"], ccpi)}{LEGEND}</section>
+<section><h2>What actually happened: the official record</h2>
+<p>Every figure below was read on the publisher's own site. Percent changes marked as computed are arithmetic on the published series.</p>
+{tbl("Fifty years of economic extremes, as official sources record them", ["Episode", "What the official record shows"], episodes)}{LEGEND}</section>
+<section><h2>Stress cases for this plan</h2>
+<p>Each case changes one input and leaves every other assumption exactly as the base case; the figures are model outputs for an inheritance in 2045 measured in 2055, after all taxes.
+These are stress tests, not forecasts.</p>
+{tbl("Black-swan stress cases and what they do to the decision", ["Stress case", "Built from", "Result in the model"], stress)}{LEGEND}
+<p>The pattern across the whole table: <strong>selling soon after the inheritance stays the first choice in every stress case tested.</strong>
+What changes is what you sell into. A lost decade for stocks (4.0% a year) moves the money from the stock fund to Treasuries, not back into the rental.
+The only thing that reverses the ranking is a set of conditions together, not any single shock: see the break-even points on the <a href="decision.html">decision page</a>.
+The independent <a href="plan/index.html">cross-check edition</a> reaches the same conclusion from official figures alone.</p></section>
+<section><h2>What is not modelled</h2><ul>
+<li><strong>Sequence risk inside the ten years.</strong> The model applies one average return a year. A crash in year one and a boom in year nine produce the same average but a different experience; Black Monday and 2008 show the size of single-year moves.</li>
+<li><strong>Insurance premiums.</strong> No official premium or quote could be confirmed; tripling the owner's guess does not change the ranking, and that test is on the decision page.</li>
+<li><strong>Disasters.</strong> No flood, fire or earthquake risk premium is modelled for either property; insurance is flagged until quotes exist.</li>
+<li><strong>Any debt on the properties.</strong> The model assumes both properties are unencumbered; the records supplied do not say. Flagged for the owner.</li>
+</ul></section>{PRIV}"""
+PAGES["black-swans.html"] = page("black-swans.html", "Black-swan conditions", "Black-swan conditions",
+                                 "Growth and inflation are never smooth",
+                                 "Fifty years of official data, the baseline it contradicts, and how the plan holds up when it happens again.",
+                                 body)
 
 # ------------------------------------------------------------------------------------------------ property A
 hist = [("2015", "1.998%", "1.998%"), ("2016", "1.525%", "1.525%"), ("2017 to 2020", "2.000% each year", "2.000% each year"),
@@ -404,7 +548,9 @@ est = [([str(x["year"]), N(x["exclusion"]), N(x["exclusion_couple"]), N(x["homes
 watch = [
  (["Federal estate exclusion", "Law. $15,000,000 for 2026, indexed after.", "A future Congress could lower it.", f"At half the scenario amount, room for other assets in 2045 falls from {usd(E45['room_single_base'])} to {usd(E45['room_single_half'])} for one person. The decision between selling, renting and moving in does not change."], "C", S("irs_whatsnew", "irs_rp2532", asm=True)),
  (["Initiative to repeal the 2021 inheritance rules (analysed as 25-0017)", "Failed. The Secretary of State recorded on 18 May 2026 that it lacked the signatures to qualify. It was not on the 3 November 2026 ballot.", "Would have restored the pre-2021 rule from 2027, including for transfers since 2021: inherited homes fully excluded, other property on the first $1 million of assessed value. A similar measure could be filed again.", f"If such a rule were enacted, Property A's 2045 tax would be {usd(LAW['tax_restored'])} instead of {usd(LAW['tax_live_current'])} or {usd(LAW['tax_rent_current'])}. Renting and moving in each gain about $600,000 to $700,000 over ten years. Selling still finishes first."], "C", S("sos_memo", "lao_250017", "sos_measures", asm=True)),
- (["Proposition 42, November 2026", "Voted on 3 November 2026. Result not certified.", "Would bar new state taxes on personal property, including financial assets, and certain retroactive taxes.", BLANK], "U", S("sos_measures", flag=True)),
+ (["Proposition 42, November 2026", "Voted on 3 November 2026. Unofficial count on 10 November 2026: 51.5% yes. Certification due 11 December 2026.", "Would bar new state taxes on personal property, including financial assets, and certain retroactive taxes.", "As counted, it would constrain future state taxes on financial assets; it does not change this decision."], "V", S("sos_results", "sos_measures")),
+ (["Proposition 40, November 2026: one-time tax on certain taxpayers", "Rejected in the unofficial count on 10 November 2026: 52.6% no. Certification due 11 December 2026.", "A one-time state tax on certain taxpayers, wide enough to reach investment income.", "None, as counted. A similar measure can be filed again."], "V", S("sos_results")),
+ (["City B rent legislation, File No. 261020", "Proposed 9 November 2026; not enacted.", "Would limit combined banked and capital-improvement rent increases on covered units to 10% a year.", "The model already grows sitting-tenant rent at 1.5% a year rather than banked stacks; no change to the ranking."], "V", S("cityb_rent")),
  (["Proposition 19 amount", "Law. Next adjustment February 2027.", "Rises by one year's house price change every second year, so it grows more slowly than house prices.", f"Modelled. The amount is {usd(A45['amount'])} in 2045 at 4% growth."], "C", S("boe_lta25009", asm=True)),
  (["Basis reset at death", "Law. No pending change was verified.", "If the reset were limited, a sale after inheriting would be taxed on the gain since the parents bought.", BLANK], "U", S("irs_basis", flag=True)),
  (["Solar tariff", "Law. 20 years from connection for older systems.", "After that the home moves to the current tariff and the bill credit shrinks.", BLANK], "U", S("cpuc_nem", flag=True)),
@@ -464,7 +610,7 @@ fl = [
  ("FL-04", "Cash, securities, earlier taxable gifts, marital status", "The owner says the cash may exceed the exclusion. No amount was supplied, so the room is shown without it.", "A list of assets and gift tax returns", "irs_estate"),
  ("FL-05", "Home insurance premium, Property A", "The owner's guess of $1,500 a year is unconfirmed. The state survey tool is interactive and gives samples, not quotes.", "Two written quotes at replacement cost", "cdi_compare"),
  ("FL-06", "Landlord insurance premium, Property B", "The owner's guess of $1,500 a year is unconfirmed.", "Two written landlord-policy quotes", "cdi_compare"),
- ("FL-07", "Market rent for Property A", "The $6,500 a month is an assumption. The federal rent table for the area was not opened.", "A written rental analysis; the federal table", "hud_fmr"),
+ ("FL-07", "Market rent for Property A", "The $6,500 a month is an assumption. The federal rent dataset documentation was opened on 11 November 2026, but area values were deliberately not retrieved (location privacy).", "A written rental analysis; a broker rent survey", "hud_fmr"),
  ("FL-08", "Tax rate area of Property A", "The rate is printed on the bill. Only the county-wide range was verified.", "The bill's tax rate area and rate", "cnty_a_rates"),
  ("FL-09", "Fixed charges on both tax bills", "Property B's bill is about 80% above rate times value. One year's bill rose about 18% and another fell about 6% with no matching change in value.", "The line items on each bill", "cityb_rate"),
  ("FL-10", "Duplicate tax amounts in Property A's record", "Two pairs of consecutive years carry the same tax amount although the assessed value rose 2%. The cause is not known.", "The bills for those years", "boe_lta26002"),
@@ -472,7 +618,8 @@ fl = [
  ("FL-12", "2026 figures", "No 2026 tax bill for Property A and no 2026 assessed value or bill for Property B were supplied.", "The 2026-27 bills", "boe_lta26002"),
  ("FL-13", "Solar connection date and tariff", "The 20-year period decides when the electricity credit ends.", "The utility's interconnection letter", "cpuc_nem"),
  ("FL-14", "Whether the rent ordinance covers Property B", "Depends on the date of first occupancy and the legal unit count. No parcel lookup was performed.", "Certificate of occupancy; Rent Board record", "cityb_rent"),
- ("FL-15", "Result of the 3 November 2026 measures", "Results are not certified. Proposition 42 bears on future state taxes on financial assets.", "The certified statement of vote", "sos_measures"),
+ ("FL-15", "Result of the 3 November 2026 measures", "Results are not certified; certification is due 11 December 2026. The unofficial count on 10 November 2026 had Proposition 42 ahead with 51.5% yes and Proposition 40 rejected with 52.6% no.", "The certified statement of vote", "sos_results"),
+ ("FL-24", "Any mortgage or debt on either property", "The model assumes both properties are unencumbered. A loan would have to be repaid from a sale, or would reduce the room under the federal exclusion.", "Loan statements or the trustee's schedule of assets", "irs_estate"),
  ("FL-16", "The 40% estate tax rate", "Derived from the published credit amount. The rate table was not opened.", "Table A in the Form 706 instructions", "irs_i706"),
  ("FL-17", "State tax on Treasury interest", "Assumed exempt. Not re-verified in this session.", "Franchise Tax Board guidance", "ftb_rates"),
  ("FL-18", "Long-run stock return", "7.0% is an assumption. Only a 12-month official figure was read.", "The fund's long-run return table", "tsp_returns"),
@@ -491,7 +638,7 @@ Each value is left blank rather than estimated. The list is ordered by how much 
 <li><strong>Jurisdictions.</strong> The pages name only County A and City B, but the official local links identify them to anyone who opens one. Dropping the local sources would remove that, at the cost of unsourced local rates.</li>
 </ul></section>{PRIV}"""
 PAGES["review.html"] = page("review.html", "Flagged for review", "Flagged for review", "Unverified, unknown or irregular",
-                            "Twenty-three open items with the official page that bears on each, and two privacy disclosures.", body)
+                            "Twenty-four open items with the official page that bears on each, and two privacy disclosures.", body)
 
 # ------------------------------------------------------------------------------------------------ audit
 corr = [
@@ -511,13 +658,13 @@ corr = [
 CB = {"C-01": "V", "C-02": "V", "C-03": "C", "C-04": "C", "C-05": "V", "C-06": "C", "C-07": "V", "C-08": "A", "C-09": "V", "C-10": "V", "C-11": "C", "C-12": "C"}
 rows = [([i, item, old, new], CB[i], S(src)) for i, item, old, new, src in corr]
 repo = [
- ("Published pages", "Eleven pages are generated from one model and one source ledger. A stale page fails the build."),
+ ("Published pages", "Twelve pages are generated from one model and one source ledger. A stale page fails the build."),
  ("Retired pages and data files", "Paths used by earlier editions hold withdrawal notices with no figures. The build fails if any other tracked file appears."),
  ("Source ledger", "Each source records how it was checked: opened, or read as an excerpt served from the official domain."),
  ("Checks", "Every table row must link to an official publisher. Dollar amounts must be multiples of $10. City names, ZIP codes, parcel numbers and e-mail addresses fail the build."),
  ("Publishing", "The site is served from the main branch. Both publishing paths carry the same sanitised files. Earlier sessions report that the setting itself could not be changed with the available permissions."),
  ("Repository history", "Earlier commits contain exact figures and location details. Not rewritten. Needs the owner's decision."),
- ("Open pull requests from other sessions", "Left untouched. They contain earlier editions and are not part of this site."),
+ ("Open pull requests from other sessions", "Two open pull requests (#23 and #25) that would have replaced this edition with a pre-correction model were closed without merging on 11 November 2026; their branches remain for reference."),
 ]
 rlist = "<ul>" + "".join(f"<li><strong>{area}.</strong> {finding}</li>" for area, finding in repo) + "</ul>"
 body = f"""
@@ -525,6 +672,8 @@ body = f"""
 <p>A second session re-checked the edition published earlier the same day, line by line, against the official sources. Twelve items were corrected. The largest effects came from C-04, C-05 and C-06.
 The earlier edition's source work was sound: its quotations matched the official pages wherever they were re-opened.</p>
 {tbl("Corrections to the earlier edition", ["No.", "Item", "Earlier edition", "This edition"], rows)}{LEGEND}</section>
+<section><h2>What the 11 November 2026 pass added</h2>
+<p>Twelve sources in the ledger were opened or re-opened on the publisher's own domain on 11 November 2026: the IRS estate page and the 2027 inflation release, the Proposition 19 page and Letters 2025/009 and 2026/002, Revenue and Taxation Code section 63.2, the local secured-tax page, the rent-increase page, the Treasury yield table, the inherited-basis FAQ, the HUD dataset documentation and the Federal Reserve inflation-goal FAQ. Every quoted figure matched what was already published; no number changed. Fifteen sources were added for the new <a href="black-swans.html">black-swan conditions</a> page (Federal Reserve, Federal Reserve History, BLS, CBO, SSA, the state election results service and six FRED series), the source library now holds 58 entries, and three stress cases were added to the model: stocks at 4.0% a year, inflation at 4.0% a year, and a flat decade for house prices. Selling still finishes first in all three. The law watch gained the unofficial 3 November 2026 ballot results and a pending local rent measure, and the flagged list gained one item: any debt on the properties.</p></section>
 <section><h2>Repository review</h2><p>Findings from reading the repository itself. These are observations, not sourced facts.</p>{rlist}</section>
 <section><h2>How this edition relates to the cross-check</h2>
 <p>A separate <a href="plan/index.html">cross-check edition</a> was built by another session with its own model and its own source ledger. It leaves unverifiable inputs blank and reports break-evens.
@@ -547,7 +696,7 @@ for sid, s in SRC.items():
     rows.append(([f"<code>{sid}</code>", e(s["publisher"]), e(s["title"]), "<br>".join(e(v) for v in s["verifies"]), e(how)], basis, a(sid)))
 body = f"""<p>{len(SRC)} official sources. The exact words relied on are stored with each source in <a href="assets/sources.json">sources.json</a>.
 Local sources name the jurisdiction in their web address; the pages refer to it as County A or City B.</p>
-{tbl("Source library", ["Id", "Publisher", "Document", "What it supports", "How it was checked on 10 November 2026"], rows)}{LEGEND}{PRIV}"""
+{tbl("Source library", ["Id", "Publisher", "Document", "What it supports", "How it was checked (10-11 November 2026)"], rows)}{LEGEND}{PRIV}"""
 PAGES["sources.html"] = page("sources.html", "Source library", "Source library", "Every source, and how it was checked",
                              "Open any link to check the figure yourself.", body)
 
@@ -557,7 +706,7 @@ for name, text in PAGES.items():
 # Plain-text executive summary kept in the repository
 (ROOT / "EXECUTIVE_SUMMARY.md").write_text(f"""# Executive summary
 
-Reviewed 10 November 2026. Anonymised: Property A (single-family home, County A), Property B (small multi-unit building, City B).
+Reviewed 10-11 November 2026. Anonymised: Property A (single-family home, County A), Property B (small multi-unit building, City B).
 Dollar figures are rounded to the nearest $10. Planning analysis, not legal, tax or investment advice.
 
 **Best plan on these numbers: sell Property A soon after inheriting it, reinvest, and keep Property B.**
@@ -578,6 +727,7 @@ Inheritance in 2045, house prices rising 4% a year, measured ten years later aft
 - Federal estate tax: $15,000,000 per person in 2026 and $15,480,000 in 2027; California has none.
 - If Property B is in the same estate its tax resets too: ${BR45['tax_keep']:,} to ${BR45['tax_reset']:,} a year in 2045.
 - Insurance premiums are unverified and left blank; tripling the owner's guess does not change the ranking.
+- Black-swan stress tests (stocks at 4.0%, inflation at 4.0%, flat house prices): selling still finishes first; a lost decade only moves the proceeds to Treasuries. See black-swans.html.
 
 Site: index.html. Open items: review.html. Sources: sources.html.
 """, encoding="utf-8")

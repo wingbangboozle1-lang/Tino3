@@ -2304,6 +2304,36 @@
    "rent_change": 614980,
    "live_change": 673200,
    "winner": "Sell A, buy a stock index fund"
+  },
+  {
+   "case": "Stocks return 4.0% a year instead of 7.0%",
+   "sell_stock": 8150150,
+   "sell_treasury": 8761920,
+   "rent": 8523460,
+   "live": 7987180,
+   "rent_change": -60200,
+   "live_change": 41540,
+   "winner": "Sell A, buy Treasuries"
+  },
+  {
+   "case": "Inflation runs 4.0% a year instead of 2.5%",
+   "sell_stock": 10052910,
+   "sell_treasury": 8761920,
+   "rent": 8513860,
+   "live": 7851940,
+   "rent_change": -69790,
+   "live_change": -93700,
+   "winner": "Sell A, buy a stock index fund"
+  },
+  {
+   "case": "House prices do not rise for ten years",
+   "sell_stock": 4771540,
+   "sell_treasury": 4158780,
+   "rent": 3671060,
+   "live": 2958300,
+   "rent_change": -4912590,
+   "live_change": -4987350,
+   "winner": "Sell A, buy a stock index fund"
   }
  ],
  "breakeven": {

@@ -1,6 +1,6 @@
 # Executive summary
 
-Reviewed 10 November 2026. Anonymised: Property A (single-family home, County A), Property B (small multi-unit building, City B).
+Reviewed 10-11 November 2026. Anonymised: Property A (single-family home, County A), Property B (small multi-unit building, City B).
 Dollar figures are rounded to the nearest $10. Planning analysis, not legal, tax or investment advice.
 
 **Best plan on these numbers: sell Property A soon after inheriting it, reinvest, and keep Property B.**
@@ -21,5 +21,6 @@ Inheritance in 2045, house prices rising 4% a year, measured ten years later aft
 - Federal estate tax: $15,000,000 per person in 2026 and $15,480,000 in 2027; California has none.
 - If Property B is in the same estate its tax resets too: $3,730 to $46,610 a year in 2045.
 - Insurance premiums are unverified and left blank; tripling the owner's guess does not change the ranking.
+- Black-swan stress tests (stocks at 4.0%, inflation at 4.0%, flat house prices): selling still finishes first; a lost decade only moves the proceeds to Treasuries. See black-swans.html.
 
 Site: index.html. Open items: review.html. Sources: sources.html.
