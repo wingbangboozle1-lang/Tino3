@@ -1,0 +1,1842 @@
+{
+ "generated_by": "scripts/stress.py",
+ "method": "Historical replays use published annual series transcribed from the publisher's own file. Where a window has no official series for an input, the base-case assumption is used for that input and the row says so. The stock series is a price index plus a 1.5% dividend add-on, so it understates a total return and overstates a crash's severity measured by averaging.",
+ "dividend_addon": 0.015,
+ "episodes": [
+  {
+   "label": "Inflation shock and the Volcker tightening, 1973-1982",
+   "kind": "episode",
+   "note": "Consumer prices rose 8.4% in 1974 and 9.1% in 1975; the 10-year Treasury averaged 13.9% in 1981. Housing still rose: the local index tripled over the ten years.",
+   "sources": [
+    "fred_cpi",
+    "fred_cpi",
+    "fred_gs10"
+   ],
+   "stock_note": "stock path: held at the base-case 7% (no official long-run index return was read)",
+   "rows": [
+    {
+     "option": "rent",
+     "name": "Keep and rent it out",
+     "wealth": 13539250,
+     "real": 6040000,
+     "gap": 0,
+     "tax_first": 79530,
+     "rent_first": 129930
+    },
+    {
+     "option": "live",
+     "name": "Move in",
+     "wealth": 12920120,
+     "real": 5763800,
+     "gap": -619120,
+     "tax_first": 60920,
+     "rent_first": 0
+    },
+    {
+     "option": "sell_treasury",
+     "name": "Sell and buy Treasuries",
+     "wealth": 11906040,
+     "real": 5311410,
+     "gap": -1633210,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "sell_stock",
+     "name": "Sell and buy an index fund",
+     "wealth": 10742540,
+     "real": 4792360,
+     "gap": -2796710,
+     "tax_first": 0,
+     "rent_first": 0
+    }
+   ],
+   "winner": "rent",
+   "winner_name": "Keep and rent it out",
+   "gap_rent": 2796710,
+   "gap_live": 2177590,
+   "avg_cpi": 8.4,
+   "id": "h1973",
+   "start": 1973,
+   "house_cagr": 10.5,
+   "cpi_cagr": 8.4,
+   "ty_avg": 9.4,
+   "rs_cagr": 7.0
+  },
+  {
+   "label": "The early-1990s California housing recession, 1989-1998",
+   "kind": "episode",
+   "note": "The local index fell for five years from 1990 (110.67) to 1995 (100.16) and was still below its 1990 level in 1999. A house bought near the 1989 peak lost ground for a decade.",
+   "sources": [
+    "fred_hpi_a",
+    "fred_cpi",
+    "fred_gs10"
+   ],
+   "stock_note": "stock path: held at the base-case 7% (no official long-run index return was read)",
+   "rows": [
+    {
+     "option": "sell_stock",
+     "name": "Sell and buy an index fund",
+     "wealth": 21795750,
+     "real": 16216590,
+     "gap": 0,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "sell_treasury",
+     "name": "Sell and buy Treasuries",
+     "wealth": 10109750,
+     "real": 7521910,
+     "gap": -11686000,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "rent",
+     "name": "Keep and rent it out",
+     "wealth": 9051690,
+     "real": 6734690,
+     "gap": -12744060,
+     "tax_first": 79480,
+     "rent_first": 129930
+    },
+    {
+     "option": "live",
+     "name": "Move in",
+     "wealth": 7290350,
+     "real": 5424200,
+     "gap": -14505410,
+     "tax_first": 60870,
+     "rent_first": 0
+    }
+   ],
+   "winner": "sell_stock",
+   "winner_name": "Sell and buy an index fund",
+   "gap_rent": -12744060,
+   "gap_live": -14505410,
+   "avg_cpi": 3.0,
+   "id": "h1989",
+   "start": 1989,
+   "house_cagr": 3.3,
+   "cpi_cagr": 3.0,
+   "ty_avg": 7.0,
+   "rs_cagr": 16.6
+  },
+  {
+   "label": "The dot-com collapse, 1999-2008",
+   "kind": "episode",
+   "note": "The Nasdaq index average fell from 3,783.67 in 2000 to 1,539.73 in 2002, then to 1,845.39 in 2009. Local house prices kept rising through it.",
+   "sources": [
+    "fred_nasdaq",
+    "fred_cpi",
+    "fred_gs10"
+   ],
+   "stock_note": "stock path: Nasdaq index (1995 onward)",
+   "rows": [
+    {
+     "option": "rent",
+     "name": "Keep and rent it out",
+     "wealth": 9012490,
+     "real": 6997080,
+     "gap": 0,
+     "tax_first": 79470,
+     "rent_first": 129930
+    },
+    {
+     "option": "live",
+     "name": "Move in",
+     "wealth": 8769080,
+     "real": 6808100,
+     "gap": -243410,
+     "tax_first": 60860,
+     "rent_first": 0
+    },
+    {
+     "option": "sell_treasury",
+     "name": "Sell and buy Treasuries",
+     "wealth": 8649750,
+     "real": 6715450,
+     "gap": -362740,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "sell_stock",
+     "name": "Sell and buy an index fund",
+     "wealth": 5225390,
+     "real": 4056860,
+     "gap": -3787100,
+     "tax_first": 0,
+     "rent_first": 0
+    }
+   ],
+   "winner": "rent",
+   "winner_name": "Keep and rent it out",
+   "gap_rent": 3787100,
+   "gap_live": 3543690,
+   "avg_cpi": 2.6,
+   "id": "h1999",
+   "start": 1999,
+   "house_cagr": 5.0,
+   "cpi_cagr": 2.6,
+   "ty_avg": 4.7,
+   "rs_cagr": -2.3
+  },
+  {
+   "label": "The global financial crisis, 2005-2014",
+   "kind": "episode",
+   "note": "The local index fell from 316.97 in 2006 to 235.92 in 2011, a 26% decline, and did not regain the 2006 level until 2014. Unemployment reached 9.6%.",
+   "sources": [
+    "fred_hpi_a",
+    "fred_cpi",
+    "fred_gs10"
+   ],
+   "stock_note": "stock path: Nasdaq index (1995 onward)",
+   "rows": [
+    {
+     "option": "sell_stock",
+     "name": "Sell and buy an index fund",
+     "wealth": 14018800,
+     "real": 11550150,
+     "gap": 0,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "rent",
+     "name": "Keep and rent it out",
+     "wealth": 7868210,
+     "real": 6482650,
+     "gap": -6150590,
+     "tax_first": 79470,
+     "rent_first": 129930
+    },
+    {
+     "option": "sell_treasury",
+     "name": "Sell and buy Treasuries",
+     "wealth": 7859400,
+     "real": 6475400,
+     "gap": -6159400,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "live",
+     "name": "Move in",
+     "wealth": 6771970,
+     "real": 5579460,
+     "gap": -7246830,
+     "tax_first": 60860,
+     "rent_first": 0
+    }
+   ],
+   "winner": "sell_stock",
+   "winner_name": "Sell and buy an index fund",
+   "gap_rent": -6150590,
+   "gap_live": -7246830,
+   "avg_cpi": 2.0,
+   "id": "h2005",
+   "start": 2005,
+   "house_cagr": 1.6,
+   "cpi_cagr": 2.0,
+   "ty_avg": 3.3,
+   "rs_cagr": 10.5
+  },
+  {
+   "label": "A decade of zero rates after the crisis, 2009-2018",
+   "kind": "episode",
+   "note": "The 10-year Treasury averaged 1.8% in 2012 and 0.89% in 2020. Cash and bonds paid almost nothing for a decade while house prices recovered.",
+   "sources": [
+    "fred_gs10",
+    "fred_cpi",
+    "fred_gs10"
+   ],
+   "stock_note": "stock path: Nasdaq index (1995 onward)",
+   "rows": [
+    {
+     "option": "sell_stock",
+     "name": "Sell and buy an index fund",
+     "wealth": 22664190,
+     "real": 19021650,
+     "gap": 0,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "rent",
+     "name": "Keep and rent it out",
+     "wealth": 10095530,
+     "real": 8473000,
+     "gap": -12568650,
+     "tax_first": 77930,
+     "rent_first": 129930
+    },
+    {
+     "option": "live",
+     "name": "Move in",
+     "wealth": 8886580,
+     "real": 7458340,
+     "gap": -13777610,
+     "tax_first": 60630,
+     "rent_first": 0
+    },
+    {
+     "option": "sell_treasury",
+     "name": "Sell and buy Treasuries",
+     "wealth": 7419990,
+     "real": 6227470,
+     "gap": -15244190,
+     "tax_first": 0,
+     "rent_first": 0
+    }
+   ],
+   "winner": "sell_stock",
+   "winner_name": "Sell and buy an index fund",
+   "gap_rent": -12568650,
+   "gap_live": -13777610,
+   "avg_cpi": 1.8,
+   "id": "h2009",
+   "start": 2009,
+   "house_cagr": 5.7,
+   "cpi_cagr": 1.8,
+   "ty_avg": 2.5,
+   "rs_cagr": 17.2
+  },
+  {
+   "label": "The 2021-2023 inflation shock and the rate rise, 2016-2025",
+   "kind": "episode",
+   "note": "Consumer prices rose 8.0% in 2022 and the 10-year Treasury went from 1.44% (2021) to 4.29% (2025). The local index, after a 31% rise in 2021-2022, was flat to slightly down by 2025.",
+   "sources": [
+    "fred_cpi",
+    "fred_cpi",
+    "fred_gs10"
+   ],
+   "stock_note": "stock path: Nasdaq index (1995 onward)",
+   "rows": [
+    {
+     "option": "sell_stock",
+     "name": "Sell and buy an index fund",
+     "wealth": 25790320,
+     "real": 18756360,
+     "gap": 0,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "rent",
+     "name": "Keep and rent it out",
+     "wealth": 9540000,
+     "real": 6938090,
+     "gap": -16250320,
+     "tax_first": 79460,
+     "rent_first": 129930
+    },
+    {
+     "option": "live",
+     "name": "Move in",
+     "wealth": 8162000,
+     "real": 5935920,
+     "gap": -17628320,
+     "tax_first": 60850,
+     "rent_first": 0
+    },
+    {
+     "option": "sell_treasury",
+     "name": "Sell and buy Treasuries",
+     "wealth": 7512810,
+     "real": 5463790,
+     "gap": -18277500,
+     "tax_first": 0,
+     "rent_first": 0
+    }
+   ],
+   "winner": "sell_stock",
+   "winner_name": "Sell and buy an index fund",
+   "gap_rent": -16250320,
+   "gap_live": -17628320,
+   "avg_cpi": 3.2,
+   "id": "h2016",
+   "start": 2016,
+   "house_cagr": 4.7,
+   "cpi_cagr": 3.2,
+   "ty_avg": 2.7,
+   "rs_cagr": 19.0
+  }
+ ],
+ "shocks": [
+  {
+   "label": "House prices fall 15% in the first year, then 2% a year",
+   "kind": "shock",
+   "note": "Scenario, not a forecast.",
+   "sources": [
+    "fred_hpi_a",
+    "fred_cpi"
+   ],
+   "stock_note": "",
+   "rows": [
+    {
+     "option": "sell_stock",
+     "name": "Sell and buy an index fund",
+     "wealth": 10912340,
+     "real": 8524700,
+     "gap": 0,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "sell_treasury",
+     "name": "Sell and buy Treasuries",
+     "wealth": 8761920,
+     "real": 6844800,
+     "gap": -2150420,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "rent",
+     "name": "Keep and rent it out",
+     "wealth": 6862170,
+     "real": 5360720,
+     "gap": -4050170,
+     "tax_first": 66360,
+     "rent_first": 129930
+    },
+    {
+     "option": "live",
+     "name": "Move in",
+     "wealth": 5974040,
+     "real": 4666910,
+     "gap": -4938300,
+     "tax_first": 60850,
+     "rent_first": 0
+    }
+   ],
+   "winner": "sell_stock",
+   "winner_name": "Sell and buy an index fund",
+   "gap_rent": -4050170,
+   "gap_live": -4938300,
+   "avg_cpi": 2.5,
+   "id": "s_house_minus15"
+  },
+  {
+   "label": "House prices do not move for ten years",
+   "kind": "shock",
+   "note": "Scenario, not a forecast.",
+   "sources": [
+    "fred_hpi_a",
+    "fred_cpi"
+   ],
+   "stock_note": "",
+   "rows": [
+    {
+     "option": "sell_stock",
+     "name": "Sell and buy an index fund",
+     "wealth": 10860730,
+     "real": 8484380,
+     "gap": 0,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "sell_treasury",
+     "name": "Sell and buy Treasuries",
+     "wealth": 8761920,
+     "real": 6844800,
+     "gap": -2098810,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "rent",
+     "name": "Keep and rent it out",
+     "wealth": 6712460,
+     "real": 5243770,
+     "gap": -4148260,
+     "tax_first": 77920,
+     "rent_first": 129930
+    },
+    {
+     "option": "live",
+     "name": "Move in",
+     "wealth": 5875940,
+     "real": 4590270,
+     "gap": -4984790,
+     "tax_first": 60850,
+     "rent_first": 0
+    }
+   ],
+   "winner": "sell_stock",
+   "winner_name": "Sell and buy an index fund",
+   "gap_rent": -4148260,
+   "gap_live": -4984790,
+   "avg_cpi": 2.5,
+   "id": "s_house_flat"
+  },
+  {
+   "label": "House prices rise 8% a year",
+   "kind": "shock",
+   "note": "Scenario, not a forecast.",
+   "sources": [
+    "fred_hpi_a",
+    "fred_cpi"
+   ],
+   "stock_note": "",
+   "rows": [
+    {
+     "option": "rent",
+     "name": "Keep and rent it out",
+     "wealth": 11349800,
+     "real": 8866440,
+     "gap": 0,
+     "tax_first": 79460,
+     "rent_first": 129930
+    },
+    {
+     "option": "sell_stock",
+     "name": "Sell and buy an index fund",
+     "wealth": 10788010,
+     "real": 8427580,
+     "gap": -561790,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "live",
+     "name": "Move in",
+     "wealth": 10766490,
+     "real": 8410760,
+     "gap": -583310,
+     "tax_first": 60850,
+     "rent_first": 0
+    },
+    {
+     "option": "sell_treasury",
+     "name": "Sell and buy Treasuries",
+     "wealth": 8761920,
+     "real": 6844800,
+     "gap": -2587880,
+     "tax_first": 0,
+     "rent_first": 0
+    }
+   ],
+   "winner": "rent",
+   "winner_name": "Keep and rent it out",
+   "gap_rent": 561790,
+   "gap_live": -21520,
+   "avg_cpi": 2.5,
+   "id": "s_house_boom"
+  },
+  {
+   "label": "Inflation runs at 6% a year and house prices keep up",
+   "kind": "shock",
+   "note": "Scenario, not a forecast.",
+   "sources": [
+    "fred_cpi"
+   ],
+   "stock_note": "",
+   "rows": [
+    {
+     "option": "sell_stock",
+     "name": "Sell and buy an index fund",
+     "wealth": 10764860,
+     "real": 6011040,
+     "gap": 0,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "rent",
+     "name": "Keep and rent it out",
+     "wealth": 9868990,
+     "real": 5510790,
+     "gap": -895870,
+     "tax_first": 79490,
+     "rent_first": 129930
+    },
+    {
+     "option": "live",
+     "name": "Move in",
+     "wealth": 9267410,
+     "real": 5174870,
+     "gap": -1497450,
+     "tax_first": 60880,
+     "rent_first": 0
+    },
+    {
+     "option": "sell_treasury",
+     "name": "Sell and buy Treasuries",
+     "wealth": 8761920,
+     "real": 4892610,
+     "gap": -2002940,
+     "tax_first": 0,
+     "rent_first": 0
+    }
+   ],
+   "winner": "sell_stock",
+   "winner_name": "Sell and buy an index fund",
+   "gap_rent": -895870,
+   "gap_live": -1497450,
+   "avg_cpi": 6.0,
+   "id": "s_infl6"
+  },
+  {
+   "label": "Stagflation: 6% inflation, no house price growth, 2% on cash",
+   "kind": "shock",
+   "note": "Scenario, not a forecast.",
+   "sources": [
+    "fred_cpi"
+   ],
+   "stock_note": "",
+   "rows": [
+    {
+     "option": "sell_stock",
+     "name": "Sell and buy an index fund",
+     "wealth": 8852320,
+     "real": 4943090,
+     "gap": 0,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "sell_treasury",
+     "name": "Sell and buy Treasuries",
+     "wealth": 7152850,
+     "real": 3994120,
+     "gap": -1699470,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "rent",
+     "name": "Keep and rent it out",
+     "wealth": 6606820,
+     "real": 3689210,
+     "gap": -2245500,
+     "tax_first": 77950,
+     "rent_first": 129930
+    },
+    {
+     "option": "live",
+     "name": "Move in",
+     "wealth": 5891560,
+     "real": 3289810,
+     "gap": -2960760,
+     "tax_first": 60880,
+     "rent_first": 0
+    }
+   ],
+   "winner": "sell_stock",
+   "winner_name": "Sell and buy an index fund",
+   "gap_rent": -2245500,
+   "gap_live": -2960760,
+   "avg_cpi": 6.0,
+   "id": "s_stag"
+  },
+  {
+   "label": "Zero-rate decade: Treasury at 2%, stocks at 4%",
+   "kind": "shock",
+   "note": "Scenario, not a forecast.",
+   "sources": [
+    "fred_gs10",
+    "fred_cpi"
+   ],
+   "stock_note": "",
+   "rows": [
+    {
+     "option": "sell_stock",
+     "name": "Sell and buy an index fund",
+     "wealth": 8806770,
+     "real": 6879830,
+     "gap": 0,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "rent",
+     "name": "Keep and rent it out",
+     "wealth": 8583610,
+     "real": 6705500,
+     "gap": -223160,
+     "tax_first": 79460,
+     "rent_first": 129930
+    },
+    {
+     "option": "live",
+     "name": "Move in",
+     "wealth": 8131300,
+     "real": 6352160,
+     "gap": -675470,
+     "tax_first": 60850,
+     "rent_first": 0
+    },
+    {
+     "option": "sell_treasury",
+     "name": "Sell and buy Treasuries",
+     "wealth": 7152850,
+     "real": 5587800,
+     "gap": -1653920,
+     "tax_first": 0,
+     "rent_first": 0
+    }
+   ],
+   "winner": "sell_stock",
+   "winner_name": "Sell and buy an index fund",
+   "gap_rent": -223160,
+   "gap_live": -675470,
+   "avg_cpi": 2.5,
+   "id": "s_zirp"
+  },
+  {
+   "label": "A 35% stock crash in the first year, then 8% a year",
+   "kind": "shock",
+   "note": "Scenario, not a forecast.",
+   "sources": [
+    "fred_nasdaq",
+    "fred_cpi"
+   ],
+   "stock_note": "",
+   "rows": [
+    {
+     "option": "sell_treasury",
+     "name": "Sell and buy Treasuries",
+     "wealth": 8761920,
+     "real": 6844800,
+     "gap": 0,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "rent",
+     "name": "Keep and rent it out",
+     "wealth": 8663890,
+     "real": 6768220,
+     "gap": -98030,
+     "tax_first": 79460,
+     "rent_first": 129930
+    },
+    {
+     "option": "sell_stock",
+     "name": "Sell and buy an index fund",
+     "wealth": 8125040,
+     "real": 6347270,
+     "gap": -636880,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "live",
+     "name": "Move in",
+     "wealth": 8080200,
+     "real": 6312240,
+     "gap": -681720,
+     "tax_first": 60850,
+     "rent_first": 0
+    }
+   ],
+   "winner": "sell_treasury",
+   "winner_name": "Sell and buy Treasuries",
+   "gap_rent": 538850,
+   "gap_live": -44850,
+   "avg_cpi": 2.5,
+   "id": "s_crash"
+  },
+  {
+   "label": "Rent falls 10% and cannot keep up: 4% inflation, 0% rent growth, 12% vacancy",
+   "kind": "shock",
+   "note": "Scenario, not a forecast.",
+   "sources": [
+    "civ1947_12",
+    "fred_cpi"
+   ],
+   "stock_note": "",
+   "rows": [
+    {
+     "option": "sell_stock",
+     "name": "Sell and buy an index fund",
+     "wealth": 9958480,
+     "real": 6727590,
+     "gap": 0,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "sell_treasury",
+     "name": "Sell and buy Treasuries",
+     "wealth": 8761920,
+     "real": 5919240,
+     "gap": -1196560,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "rent",
+     "name": "Keep and rent it out",
+     "wealth": 7782340,
+     "real": 5257470,
+     "gap": -2176130,
+     "tax_first": 79470,
+     "rent_first": 56710
+    },
+    {
+     "option": "live",
+     "name": "Move in",
+     "wealth": 7457550,
+     "real": 5038060,
+     "gap": -2500930,
+     "tax_first": 60860,
+     "rent_first": 0
+    }
+   ],
+   "winner": "sell_stock",
+   "winner_name": "Sell and buy an index fund",
+   "gap_rent": -2176130,
+   "gap_live": -2500930,
+   "avg_cpi": 4.0,
+   "id": "s_rent_squeeze"
+  },
+  {
+   "label": "Insurance costs five times the owner's placeholder",
+   "kind": "shock",
+   "note": "Scenario, not a forecast.",
+   "sources": [
+    "cdi_compare",
+    "fred_cpi"
+   ],
+   "stock_note": "",
+   "rows": [
+    {
+     "option": "sell_stock",
+     "name": "Sell and buy an index fund",
+     "wealth": 10728420,
+     "real": 8381020,
+     "gap": 0,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "sell_treasury",
+     "name": "Sell and buy Treasuries",
+     "wealth": 8761920,
+     "real": 6844800,
+     "gap": -1966500,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "rent",
+     "name": "Keep and rent it out",
+     "wealth": 8602500,
+     "real": 6720260,
+     "gap": -2125920,
+     "tax_first": 79460,
+     "rent_first": 129930
+    },
+    {
+     "option": "live",
+     "name": "Move in",
+     "wealth": 7980600,
+     "real": 6234430,
+     "gap": -2747820,
+     "tax_first": 60850,
+     "rent_first": 0
+    }
+   ],
+   "winner": "sell_stock",
+   "winner_name": "Sell and buy an index fund",
+   "gap_rent": -2125920,
+   "gap_live": -2747820,
+   "avg_cpi": 2.5,
+   "id": "s_ins5"
+  },
+  {
+   "label": "The solar credit ends and electricity becomes a cost of $1,500 a year",
+   "kind": "shock",
+   "note": "Scenario, not a forecast.",
+   "sources": [
+    "cpuc_nem",
+    "fred_cpi"
+   ],
+   "stock_note": "",
+   "rows": [
+    {
+     "option": "sell_stock",
+     "name": "Sell and buy an index fund",
+     "wealth": 10788010,
+     "real": 8427580,
+     "gap": 0,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "sell_treasury",
+     "name": "Sell and buy Treasuries",
+     "wealth": 8761920,
+     "real": 6844800,
+     "gap": -2026090,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "rent",
+     "name": "Keep and rent it out",
+     "wealth": 8662090,
+     "real": 6766810,
+     "gap": -2125920,
+     "tax_first": 79460,
+     "rent_first": 129930
+    },
+    {
+     "option": "live",
+     "name": "Move in",
+     "wealth": 8051290,
+     "real": 6289650,
+     "gap": -2736720,
+     "tax_first": 60850,
+     "rent_first": 0
+    }
+   ],
+   "winner": "sell_stock",
+   "winner_name": "Sell and buy an index fund",
+   "gap_rent": -2125920,
+   "gap_live": -2736720,
+   "avg_cpi": 2.5,
+   "id": "s_solar_end"
+  },
+  {
+   "label": "House prices fall 25% and stocks fall 20% in the first year",
+   "kind": "shock",
+   "note": "Scenario, not a forecast.",
+   "sources": [
+    "fred_hpi_a",
+    "fred_cpi"
+   ],
+   "stock_note": "",
+   "rows": [
+    {
+     "option": "sell_stock",
+     "name": "Sell and buy an index fund",
+     "wealth": 8991270,
+     "real": 7023960,
+     "gap": 0,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "sell_treasury",
+     "name": "Sell and buy Treasuries",
+     "wealth": 8761920,
+     "real": 6844800,
+     "gap": -229350,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "rent",
+     "name": "Keep and rent it out",
+     "wealth": 6684110,
+     "real": 5221610,
+     "gap": -2307160,
+     "tax_first": 58650,
+     "rent_first": 129930
+    },
+    {
+     "option": "live",
+     "name": "Move in",
+     "wealth": 5788750,
+     "real": 4522160,
+     "gap": -3202520,
+     "tax_first": 58650,
+     "rent_first": 0
+    }
+   ],
+   "winner": "sell_stock",
+   "winner_name": "Sell and buy an index fund",
+   "gap_rent": -2307160,
+   "gap_live": -3202520,
+   "avg_cpi": 2.5,
+   "id": "s_both"
+  },
+  {
+   "label": "Deflation: prices fall 1% a year and house prices fall 2% a year",
+   "kind": "shock",
+   "note": "Scenario, not a forecast.",
+   "sources": [
+    "fred_cpi"
+   ],
+   "stock_note": "",
+   "rows": [
+    {
+     "option": "sell_stock",
+     "name": "Sell and buy an index fund",
+     "wealth": 10944560,
+     "real": 12101700,
+     "gap": 0,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "sell_treasury",
+     "name": "Sell and buy Treasuries",
+     "wealth": 8761920,
+     "real": 9688290,
+     "gap": -2182640,
+     "tax_first": 0,
+     "rent_first": 0
+    },
+    {
+     "option": "rent",
+     "name": "Keep and rent it out",
+     "wealth": 5662610,
+     "real": 6261300,
+     "gap": -5281950,
+     "tax_first": 76350,
+     "rent_first": 129930
+    },
+    {
+     "option": "live",
+     "name": "Move in",
+     "wealth": 4906840,
+     "real": 5425630,
+     "gap": -6037720,
+     "tax_first": 59060,
+     "rent_first": 0
+    }
+   ],
+   "winner": "sell_stock",
+   "winner_name": "Sell and buy an index fund",
+   "gap_rent": -5281950,
+   "gap_live": -6037720,
+   "avg_cpi": -1.0,
+   "id": "s_def"
+  }
+ ],
+ "windows": [
+  {
+   "start": 1976,
+   "house": 11.5,
+   "cpi": 6.8,
+   "ty": 10.5,
+   "rs": 7.0,
+   "sell": 10749100,
+   "treasury": 12892670,
+   "rent": 14503230,
+   "live": 13888890,
+   "winner": "Rent out"
+  },
+  {
+   "start": 1977,
+   "house": 9.7,
+   "cpi": 6.5,
+   "ty": 10.5,
+   "rs": 7.0,
+   "sell": 10749290,
+   "treasury": 12898840,
+   "rent": 12725760,
+   "live": 12111210,
+   "winner": "Sell, Treasuries"
+  },
+  {
+   "start": 1978,
+   "house": 10.0,
+   "cpi": 6.1,
+   "ty": 10.6,
+   "rs": 7.0,
+   "sell": 10751600,
+   "treasury": 12983700,
+   "rent": 13049370,
+   "live": 12436390,
+   "winner": "Rent out"
+  },
+  {
+   "start": 1979,
+   "house": 11.1,
+   "cpi": 5.5,
+   "ty": 10.7,
+   "rs": 7.0,
+   "sell": 10759540,
+   "treasury": 13022590,
+   "rent": 14144380,
+   "live": 13537710,
+   "winner": "Rent out"
+  },
+  {
+   "start": 1980,
+   "house": 9.3,
+   "cpi": 4.7,
+   "ty": 10.6,
+   "rs": 7.0,
+   "sell": 10770720,
+   "treasury": 12939850,
+   "rent": 12442750,
+   "live": 11845270,
+   "winner": "Sell, Treasuries"
+  },
+  {
+   "start": 1981,
+   "house": 7.7,
+   "cpi": 4.1,
+   "ty": 10.3,
+   "rs": 7.0,
+   "sell": 10829980,
+   "treasury": 12688750,
+   "rent": 11134980,
+   "live": 10492110,
+   "winner": "Sell, Treasuries"
+  },
+  {
+   "start": 1982,
+   "house": 8.1,
+   "cpi": 3.8,
+   "ty": 9.7,
+   "rs": 7.0,
+   "sell": 10781130,
+   "treasury": 12185080,
+   "rent": 11419510,
+   "live": 10830680,
+   "winner": "Sell, Treasuries"
+  },
+  {
+   "start": 1983,
+   "house": 7.0,
+   "cpi": 3.8,
+   "ty": 9.1,
+   "rs": 7.0,
+   "sell": 10780420,
+   "treasury": 11703320,
+   "rent": 10585480,
+   "live": 9996040,
+   "winner": "Sell, Treasuries"
+  },
+  {
+   "start": 1984,
+   "house": 6.2,
+   "cpi": 3.6,
+   "ty": 8.6,
+   "rs": 7.0,
+   "sell": 10781360,
+   "treasury": 11293430,
+   "rent": 10006570,
+   "live": 9417880,
+   "winner": "Sell, Treasuries"
+  },
+  {
+   "start": 1985,
+   "house": 5.5,
+   "cpi": 3.5,
+   "ty": 8.0,
+   "rs": 7.0,
+   "sell": 10781390,
+   "treasury": 10892400,
+   "rent": 9566760,
+   "live": 8978040,
+   "winner": "Sell, Treasuries"
+  },
+  {
+   "start": 1986,
+   "house": 5.2,
+   "cpi": 3.6,
+   "ty": 7.6,
+   "rs": 8.9,
+   "sell": 12311000,
+   "treasury": 10597310,
+   "rent": 9455270,
+   "live": 8702310,
+   "winner": "Sell, index fund"
+  },
+  {
+   "start": 1987,
+   "house": 5.4,
+   "cpi": 3.5,
+   "ty": 7.5,
+   "rs": 10.8,
+   "sell": 14155780,
+   "treasury": 10507420,
+   "rent": 9689590,
+   "live": 8754870,
+   "winner": "Sell, index fund"
+  },
+  {
+   "start": 1988,
+   "house": 4.9,
+   "cpi": 3.3,
+   "ty": 7.3,
+   "rs": 12.4,
+   "sell": 15929690,
+   "treasury": 10362200,
+   "rent": 9498380,
+   "live": 8409750,
+   "winner": "Sell, index fund"
+  },
+  {
+   "start": 1989,
+   "house": 3.3,
+   "cpi": 3.0,
+   "ty": 7.0,
+   "rs": 16.6,
+   "sell": 21795750,
+   "treasury": 10109750,
+   "rent": 9051690,
+   "live": 7290350,
+   "winner": "Sell, index fund"
+  },
+  {
+   "start": 1990,
+   "house": 5.5,
+   "cpi": 2.8,
+   "ty": 6.7,
+   "rs": 19.8,
+   "sell": 27713980,
+   "treasury": 9913060,
+   "rent": 10655610,
+   "live": 8364930,
+   "winner": "Sell, index fund"
+  },
+  {
+   "start": 1991,
+   "house": 7.1,
+   "cpi": 2.7,
+   "ty": 6.4,
+   "rs": 12.1,
+   "sell": 15681340,
+   "treasury": 9743180,
+   "rent": 10902330,
+   "live": 9947810,
+   "winner": "Sell, index fund"
+  },
+  {
+   "start": 1992,
+   "house": 7.3,
+   "cpi": 2.5,
+   "ty": 6.1,
+   "rs": 8.5,
+   "sell": 12108620,
+   "treasury": 9554130,
+   "rent": 10801990,
+   "live": 10230820,
+   "winner": "Sell, index fund"
+  },
+  {
+   "start": 1993,
+   "house": 7.8,
+   "cpi": 2.4,
+   "ty": 5.9,
+   "rs": 8.6,
+   "sell": 12187710,
+   "treasury": 9396550,
+   "rent": 11194310,
+   "live": 10664010,
+   "winner": "Sell, index fund"
+  },
+  {
+   "start": 1994,
+   "house": 9.1,
+   "cpi": 2.5,
+   "ty": 5.7,
+   "rs": 10.1,
+   "sell": 13441910,
+   "treasury": 9276150,
+   "rent": 12297560,
+   "live": 11717900,
+   "winner": "Sell, index fund"
+  },
+  {
+   "start": 1995,
+   "house": 11.1,
+   "cpi": 2.5,
+   "ty": 5.4,
+   "rs": 10.1,
+   "sell": 13435180,
+   "treasury": 9097100,
+   "rent": 14115360,
+   "live": 13581060,
+   "winner": "Rent out"
+  },
+  {
+   "start": 1996,
+   "house": 11.6,
+   "cpi": 2.5,
+   "ty": 5.2,
+   "rs": 8.4,
+   "sell": 11919780,
+   "treasury": 8953510,
+   "rent": 14663100,
+   "live": 14156570,
+   "winner": "Rent out"
+  },
+  {
+   "start": 1997,
+   "house": 10.2,
+   "cpi": 2.6,
+   "ty": 5.0,
+   "rs": 7.4,
+   "sell": 11051950,
+   "treasury": 8851590,
+   "rent": 13272260,
+   "live": 12729650,
+   "winner": "Rent out"
+  },
+  {
+   "start": 1998,
+   "house": 7.5,
+   "cpi": 2.8,
+   "ty": 4.9,
+   "rs": 3.4,
+   "sell": 8491090,
+   "treasury": 8746480,
+   "rent": 10860180,
+   "live": 10483370,
+   "winner": "Rent out"
+  },
+  {
+   "start": 1999,
+   "house": 5.0,
+   "cpi": 2.6,
+   "ty": 4.7,
+   "rs": -2.3,
+   "sell": 5225390,
+   "treasury": 8649750,
+   "rent": 9012490,
+   "live": 8769080,
+   "winner": "Rent out"
+  },
+  {
+   "start": 2000,
+   "house": 2.5,
+   "cpi": 2.4,
+   "ty": 4.5,
+   "rs": -3.1,
+   "sell": 5011100,
+   "treasury": 8506930,
+   "rent": 7790640,
+   "live": 7350150,
+   "winner": "Sell, Treasuries"
+  },
+  {
+   "start": 2001,
+   "house": 1.1,
+   "cpi": 2.4,
+   "ty": 4.2,
+   "rs": 4.3,
+   "sell": 9032010,
+   "treasury": 8340950,
+   "rent": 7250920,
+   "live": 6645140,
+   "winner": "Sell, index fund"
+  },
+  {
+   "start": 2002,
+   "house": 1.4,
+   "cpi": 2.5,
+   "ty": 4.0,
+   "rs": 8.3,
+   "sell": 11807270,
+   "treasury": 8211360,
+   "rent": 7387750,
+   "live": 6748030,
+   "winner": "Sell, index fund"
+  },
+  {
+   "start": 2003,
+   "house": 2.5,
+   "cpi": 2.4,
+   "ty": 3.7,
+   "rs": 9.5,
+   "sell": 12852700,
+   "treasury": 8050130,
+   "rent": 7967070,
+   "live": 7219380,
+   "winner": "Sell, index fund"
+  },
+  {
+   "start": 2004,
+   "house": 2.6,
+   "cpi": 2.3,
+   "ty": 3.5,
+   "rs": 9.7,
+   "sell": 13183340,
+   "treasury": 7955800,
+   "rent": 8166850,
+   "live": 7231110,
+   "winner": "Sell, index fund"
+  },
+  {
+   "start": 2005,
+   "house": 1.6,
+   "cpi": 2.0,
+   "ty": 3.3,
+   "rs": 10.5,
+   "sell": 14018800,
+   "treasury": 7859400,
+   "rent": 7868210,
+   "live": 6771970,
+   "winner": "Sell, index fund"
+  },
+  {
+   "start": 2006,
+   "house": 1.5,
+   "cpi": 1.8,
+   "ty": 3.1,
+   "rs": 9.7,
+   "sell": 13388830,
+   "treasury": 7741070,
+   "rent": 7836770,
+   "live": 6810540,
+   "winner": "Sell, index fund"
+  },
+  {
+   "start": 2007,
+   "house": 2.2,
+   "cpi": 1.7,
+   "ty": 2.8,
+   "rs": 10.7,
+   "sell": 14456620,
+   "treasury": 7581700,
+   "rent": 8301660,
+   "live": 7041020,
+   "winner": "Sell, index fund"
+  },
+  {
+   "start": 2008,
+   "house": 4.4,
+   "cpi": 1.6,
+   "ty": 2.6,
+   "rs": 14.6,
+   "sell": 18969350,
+   "treasury": 7459870,
+   "rent": 9498170,
+   "live": 8128420,
+   "winner": "Sell, index fund"
+  },
+  {
+   "start": 2009,
+   "house": 5.7,
+   "cpi": 1.8,
+   "ty": 2.5,
+   "rs": 17.2,
+   "sell": 22664190,
+   "treasury": 7419990,
+   "rent": 10095530,
+   "live": 8886580,
+   "winner": "Sell, index fund"
+  },
+  {
+   "start": 2010,
+   "house": 5.6,
+   "cpi": 1.7,
+   "ty": 2.4,
+   "rs": 17.3,
+   "sell": 22855660,
+   "treasury": 7361370,
+   "rent": 10159240,
+   "live": 8819470,
+   "winner": "Sell, index fund"
+  },
+  {
+   "start": 2011,
+   "house": 6.5,
+   "cpi": 1.9,
+   "ty": 2.2,
+   "rs": 19.8,
+   "sell": 27458830,
+   "treasury": 7240860,
+   "rent": 10913810,
+   "live": 9289780,
+   "winner": "Sell, index fund"
+  },
+  {
+   "start": 2012,
+   "house": 7.7,
+   "cpi": 2.5,
+   "ty": 2.0,
+   "rs": 16.7,
+   "sell": 21857990,
+   "treasury": 7171680,
+   "rent": 11487800,
+   "live": 10362740,
+   "winner": "Sell, index fund"
+  },
+  {
+   "start": 2013,
+   "house": 6.7,
+   "cpi": 2.7,
+   "ty": 2.2,
+   "rs": 15.4,
+   "sell": 19763200,
+   "treasury": 7230460,
+   "rent": 10645040,
+   "live": 9638100,
+   "winner": "Sell, index fund"
+  },
+  {
+   "start": 2014,
+   "house": 6.0,
+   "cpi": 2.9,
+   "ty": 2.3,
+   "rs": 16.2,
+   "sell": 21044230,
+   "treasury": 7313110,
+   "rent": 10321230,
+   "live": 9121230,
+   "winner": "Sell, index fund"
+  },
+  {
+   "start": 2015,
+   "house": 5.1,
+   "cpi": 3.1,
+   "ty": 2.5,
+   "rs": 16.8,
+   "sell": 21942950,
+   "treasury": 7399700,
+   "rent": 9730060,
+   "live": 8456660,
+   "winner": "Sell, index fund"
+  }
+ ],
+ "insurance": [
+  {
+   "item": "What is published",
+   "finding": "A 2026 homeowners premium comparison survey for California, by line of coverage",
+   "detail": "The Department of Insurance surveys insurers and publishes the results as a comparison. The survey is not a quote and does not price a specific dwelling.",
+   "src": [
+    "cdi_compare"
+   ]
+  },
+  {
+   "item": "Why no premium is shown",
+   "finding": "No official premium exists for either property",
+   "detail": "Nothing published by an official body prices Property A or Property B. The figures in the model are the owner's placeholders, carried at $1,500 for each property.",
+   "src": [
+    "cdi_compare"
+   ]
+  },
+  {
+   "item": "If an insurer will not write the home",
+   "finding": "The FAIR Plan is the residual market, with a residential limit of $3,000,000 per location",
+   "detail": "Property A's estimated value is above that limit, so a FAIR Plan-only policy would not cover the whole house; the difference in conditions policy is bought separately. Property B's value is inside the limit.",
+   "src": [
+    "cdi_fair"
+   ]
+  },
+  {
+   "item": "What the FAIR Plan covers",
+   "finding": "A limited fire policy, not a comprehensive homeowners policy",
+   "detail": "A comprehensive residential option is described by the Department as in progress. Until it exists, water damage, liability, theft and additional living expenses need a separate policy.",
+   "src": [
+    "cdi_fair"
+   ]
+  },
+  {
+   "item": "Effect on the ranking",
+   "finding": "None of the shocks tested changes which option is ahead",
+   "detail": "At five times the placeholder, insurance is still small against the property tax reset and the lost investment return. The ranking is on the stress page.",
+   "src": [
+    "cdi_compare"
+   ]
+  }
+ ],
+ "inheritance_tax": {
+  "note": "An inheritance is not income to the recipient. The federal tax falls on the estate, above the exclusion; California has neither an estate tax nor an inheritance tax. What can still be taxed is the income the inherited assets produce, and - for retirement accounts - the forced withdrawals.",
+  "ira": [
+   {
+    "principal": 500000,
+    "years": 10,
+    "withdrawal": 50000,
+    "tax": 21300,
+    "net": 28700,
+    "tax_total": 213000
+   },
+   {
+    "principal": 1000000,
+    "years": 10,
+    "withdrawal": 100000,
+    "tax": 42600,
+    "net": 57400,
+    "tax_total": 426000
+   },
+   {
+    "principal": 2000000,
+    "years": 10,
+    "withdrawal": 200000,
+    "tax": 85200,
+    "net": 114800,
+    "tax_total": 852000
+   }
+  ],
+  "cash": [
+   {
+    "amount": 1000000,
+    "note": "Not taxed on receipt; the income it produces is taxed as it arises."
+   },
+   {
+    "amount": 5000000,
+    "note": "Not taxed on receipt; the income it produces is taxed as it arises."
+   },
+   {
+    "amount": 10000000,
+    "note": "Not taxed on receipt; the income it produces is taxed as it arises."
+   }
+  ],
+  "headroom": [
+   {
+    "year": 2026,
+    "exclusion": 15000000,
+    "homes": 4900000,
+    "room": 10100000,
+    "status": "Verified"
+   },
+   {
+    "year": 2030,
+    "exclusion": 16670270,
+    "homes": 5732310,
+    "room": 10937960,
+    "status": "Scenario"
+   },
+   {
+    "year": 2040,
+    "exclusion": 21339350,
+    "homes": 8485210,
+    "room": 12854140,
+    "status": "Scenario"
+   },
+   {
+    "year": 2045,
+    "exclusion": 24143520,
+    "homes": 10323560,
+    "room": 13819960,
+    "status": "Scenario"
+   },
+   {
+    "year": 2050,
+    "exclusion": 27316170,
+    "homes": 12560190,
+    "room": 14755980,
+    "status": "Scenario"
+   }
+  ],
+  "hypo": [
+   {
+    "level": 7000000,
+    "label": "Half the 2026 amount",
+    "year": 2045,
+    "homes": 10323560,
+    "taxable": 3323560,
+    "tax": 1329420
+   },
+   {
+    "level": 3500000,
+    "label": "A quarter of the 2026 amount",
+    "year": 2045,
+    "homes": 10323560,
+    "taxable": 6823560,
+    "tax": 2729420
+   }
+  ]
+ },
+ "law_watch": [
+  {
+   "topic": "Statewide rent cap",
+   "status": "In force until 1 January 2030, then repealed by its own terms",
+   "detail": "Civil Code 1947.12 limits increases to 5% plus the change in the cost of living, or 10%, whichever is lower.",
+   "effect": "If it lapses, rent on a new tenancy is unconstrained; if it is extended, the 10-year horizon is covered.",
+   "src": [
+    "civ1947_12"
+   ]
+  },
+  {
+   "topic": "Local rent cap in City B",
+   "status": "1.6% for the year from 1 March 2026",
+   "detail": "Set annually at 60% of the change in the regional consumer price index.",
+   "effect": "Small.",
+   "src": [
+    "cityb_rent"
+   ]
+  },
+  {
+   "topic": "Proposed local limit on banked increases",
+   "status": "Not enacted",
+   "detail": "The Board of Supervisors is considering File 261020, which would cap combined banked and capital-improvement increases at 10% a year. The city states it has not been enacted and may change.",
+   "effect": "Would reduce the rent the building can recover after a period of no increases.",
+   "src": [
+    "cityb_rent"
+   ]
+  },
+  {
+   "topic": "Statewide tenancy bill",
+   "status": "Failed",
+   "detail": "AB 1157 (2025-2026) would have amended the rent and just-cause statutes. It died on 31 January 2026.",
+   "effect": "None.",
+   "src": [
+    "ab1157"
+   ]
+  },
+  {
+   "topic": "Local rent-control scope",
+   "status": "Unchanged since 1995",
+   "detail": "Civil Code 1954.52 keeps local rent control off single-family homes and separately alienable units, and off housing first occupied after 1 February 1995. That is why a single-family home can be re-let at market rent while the older building cannot.",
+   "effect": "Decides whether the rent option can ever reset to market.",
+   "src": [
+    "civ1954_52"
+   ]
+  },
+  {
+   "topic": "Solar compensation",
+   "status": "The current tariff pays export credits below the retail rate",
+   "detail": "For systems interconnected from 15 April 2023 the net billing tariff applies, with a nine-year legacy period and export compensation that is usually below retail. Net surplus compensation at the annual true-up is about 2 to 3 cents a kilowatt-hour.",
+   "effect": "The owner's reported credit is a retail-rate offset; it is worth less if the account changes tariff.",
+   "src": [
+    "cpuc_nem"
+   ]
+  },
+  {
+   "topic": "Property tax cap",
+   "status": "2% a year, and never more than market value",
+   "detail": "The inflation factor cannot exceed 2%, and the taxable value is the lesser of the factored base year value and full cash value.",
+   "effect": "In a falling market the assessed value must follow the market down.",
+   "src": [
+    "rtc51",
+    "boe_lta26002"
+   ]
+  },
+  {
+   "topic": "Federal exclusion",
+   "status": "No scheduled cut",
+   "detail": "The 2027 amount is $15,480,000; the 2026 amount is $15,000,000. The IRS release describes the underlying law as made permanent.",
+   "effect": "Removes the 2026 sunset that earlier editions had to model as a risk.",
+   "src": [
+    "irs_2027",
+    "irs_estate"
+   ]
+  },
+  {
+   "topic": "Statewide ballot, 3 November 2026",
+   "status": "Sixteen measures were on the ballot; outcomes are not reviewed here",
+   "detail": "Among them, one measure would impose a one-time tax on certain taxpayers. Its text and its result are outside this review; see the Flagged for Review page.",
+   "effect": "Unverified. Flagged.",
+   "src": [
+    "sos_measures"
+   ]
+  }
+ ],
+ "cost_growth": [
+  {
+   "item": "All items, 12 months to September 2026",
+   "value": "3.7%",
+   "detail": "Consumer price index, not seasonally adjusted",
+   "src": [
+    "bls_cpi"
+   ]
+  },
+  {
+   "item": "Electricity, 12 months to September 2026",
+   "value": "4.4%",
+   "detail": "Consumer price index, electricity",
+   "src": [
+    "bls_cpi"
+   ]
+  },
+  {
+   "item": "Energy services, 12 months to September 2026",
+   "value": "4.6%",
+   "detail": "Consumer price index, energy services",
+   "src": [
+    "bls_cpi"
+   ]
+  },
+  {
+   "item": "Shelter, 12 months to September 2026",
+   "value": "3.2%",
+   "detail": "Consumer price index, shelter",
+   "src": [
+    "bls_cpi"
+   ]
+  },
+  {
+   "item": "Rent of primary residence, 12 months to September 2026",
+   "value": "2.8%",
+   "detail": "Consumer price index, rent of primary residence",
+   "src": [
+    "bls_cpi"
+   ]
+  },
+  {
+   "item": "Owners' equivalent rent, 12 months to September 2026",
+   "value": "3.3%",
+   "detail": "Consumer price index, owners' equivalent rent",
+   "src": [
+    "bls_cpi"
+   ]
+  }
+ ],
+ "window_count": 40,
+ "window_wins": {
+  "sell_stock": 24,
+  "sell_treasury": 8,
+  "rent": 8,
+  "live": 0
+ },
+ "windows_sell": 32,
+ "shock_sell_wins": 10,
+ "extremes": {
+  "house_worst": {
+   "start": 2001,
+   "house": 1.1,
+   "cpi": 2.4,
+   "ty": 4.2,
+   "rs": 4.3,
+   "sell": 9032010,
+   "treasury": 8340950,
+   "rent": 7250920,
+   "live": 6645140,
+   "winner": "Sell, index fund"
+  },
+  "house_best": {
+   "start": 1996,
+   "house": 11.6,
+   "cpi": 2.5,
+   "ty": 5.2,
+   "rs": 8.4,
+   "sell": 11919780,
+   "treasury": 8953510,
+   "rent": 14663100,
+   "live": 14156570,
+   "winner": "Rent out"
+  },
+  "cpi_worst": {
+   "start": 1976,
+   "house": 11.5,
+   "cpi": 6.8,
+   "ty": 10.5,
+   "rs": 7.0,
+   "sell": 10749100,
+   "treasury": 12892670,
+   "rent": 14503230,
+   "live": 13888890,
+   "winner": "Rent out"
+  },
+  "ty_worst": {
+   "start": 1979,
+   "house": 11.1,
+   "cpi": 5.5,
+   "ty": 10.7,
+   "rs": 7.0,
+   "sell": 10759540,
+   "treasury": 13022590,
+   "rent": 14144380,
+   "live": 13537710,
+   "winner": "Rent out"
+  },
+  "rs_worst": {
+   "start": 2000,
+   "house": 2.5,
+   "cpi": 2.4,
+   "ty": 4.5,
+   "rs": -3.1,
+   "sell": 5011100,
+   "treasury": 8506930,
+   "rent": 7790640,
+   "live": 7350150,
+   "winner": "Sell, Treasuries"
+  }
+ }
+}

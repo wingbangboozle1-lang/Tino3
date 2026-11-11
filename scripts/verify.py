@@ -21,13 +21,16 @@ from urllib.parse import urlparse, unquote
 
 ROOT = Path(__file__).resolve().parents[1]
 PAGES = ["index.html", "executive-summary.html", "property-a.html", "property-b.html", "taxes.html",
-         "projections.html", "decision.html", "inheritance.html", "review.html", "audit.html", "sources.html"]
+         "projections.html", "decision.html", "stress.html", "inheritance.html", "review.html", "audit.html",
+         "sources.html"]
 ASSETS = ["assets/style.css", "assets/sources.json", "assets/data/model.json",
-          "assets/data/property_a.csv", "assets/data/property_b.csv", "assets/data/decision.csv"]
+          "assets/data/property_a.csv", "assets/data/property_b.csv", "assets/data/decision.csv",
+          "assets/data/stress.json", "assets/data/stress_windows.csv"]
 
 ALLOWED_HOSTS = {
     # federal
     "www.irs.gov", "irs.gov", "home.treasury.gov", "www.tsp.gov", "www.huduser.gov", "fred.stlouisfed.org",
+    "www.bls.gov",
     # state
     "www.boe.ca.gov", "boe.ca.gov", "leginfo.legislature.ca.gov", "www.ftb.ca.gov", "ftb.ca.gov",
     "www.cpuc.ca.gov", "cpuc.ca.gov", "www.insurance.ca.gov", "www.lao.ca.gov", "www.sos.ca.gov", "www.sco.ca.gov",
@@ -135,6 +138,7 @@ def main() -> int:
     # 1. reproducible build
     before = {p: (ROOT / p).read_bytes() for p in PAGES + ASSETS}
     subprocess.run([sys.executable, "scripts/model.py"], cwd=ROOT, check=True, capture_output=True)
+    subprocess.run([sys.executable, "scripts/stress.py"], cwd=ROOT, check=True, capture_output=True)
     subprocess.run([sys.executable, "scripts/build.py"], cwd=ROOT, check=True, capture_output=True)
     after = {p: (ROOT / p).read_bytes() for p in PAGES + ASSETS}
     stale = [p for p in PAGES + ASSETS if before[p] != after[p]]

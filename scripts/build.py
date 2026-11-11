@@ -11,13 +11,15 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 M = json.loads((ROOT / "assets" / "data" / "model.json").read_text(encoding="utf-8"))
+ST = json.loads((ROOT / "assets" / "data" / "stress.json").read_text(encoding="utf-8"))
 SRC = json.loads((ROOT / "assets" / "sources.json").read_text(encoding="utf-8"))["sources"]
 
 NAV = [("index.html", "Overview"), ("executive-summary.html", "Executive summary"),
        ("decision.html", "Decision analysis"), ("projections.html", "Year-by-year projections"),
        ("property-a.html", "Property A"), ("property-b.html", "Property B"),
        ("taxes.html", "Tax, thresholds, law watch"), ("inheritance.html", "Inheritance steps"),
-       ("review.html", "Flagged for review"), ("audit.html", "Independent verification"),
+       ("stress.html", "Stress and black swans"), ("review.html", "Flagged for review"),
+       ("audit.html", "Independent verification"),
        ("sources.html", "Source library")]
 
 SHORT = {"Internal Revenue Service": "IRS", "California State Board of Equalization": "BOE",
@@ -26,7 +28,11 @@ SHORT = {"Internal Revenue Service": "IRS", "California State Board of Equalizat
          "California Legislative Analyst's Office": "LAO", "California Secretary of State": "CA SOS",
          "California State Controller": "CA Controller", "U.S. Department of the Treasury": "US Treasury",
          "Federal Retirement Thrift Investment Board": "TSP", "U.S. Department of Housing and Urban Development": "HUD",
-         "Federal Reserve Bank of St. Louis (data: Federal Housing Finance Agency)": "FHFA index"}
+         "Federal Reserve Bank of St. Louis (data: Federal Housing Finance Agency)": "FHFA index",
+         "Federal Reserve Bank of St. Louis (data: U.S. Bureau of Labor Statistics)": "CPI series",
+         "Federal Reserve Bank of St. Louis (data: Board of Governors of the Federal Reserve System)": "Treasury series",
+         "Federal Reserve Bank of St. Louis (data: Nasdaq OMX Group)": "Nasdaq series",
+         "U.S. Bureau of Labor Statistics": "BLS"}
 LABEL = {"irs_estate": "Estate tax thresholds", "irs_2027": "2027 amounts", "irs_rp2635": "Rev. Proc. 2026-35",
          "irs_whatsnew": "What's new", "irs_rp2532": "Rev. Proc. 2025-32", "irs_i706": "Form 706 instructions",
          "irs_basis": "Inherited basis", "irs_rr2023_2": "Rev. Rul. 2023-2", "irs_tc409": "Capital gains",
@@ -39,7 +45,12 @@ LABEL = {"irs_estate": "Estate tax thresholds", "irs_2027": "2027 amounts", "irs
          "cityb_rent": "Rent increases", "cityb_rentfee": "Rent Board fee", "lao_250017": "Initiative 25-0017",
          "sos_measures": "2026 measures", "sos_memo": "Initiative failed", "ftb_cg": "Capital gains", "ftb_rates": "Rate schedules", "cpuc_nem": "Net metering",
          "cdi_compare": "Premium survey", "treasury_cmt": "Yield curve", "tsp_returns": "Index fund returns",
-         "fred_hpi_a": "Area A", "fred_hpi_b": "Area B", "hud_fmr": "Fair Market Rents"}
+         "fred_hpi_a": "Area A", "fred_hpi_b": "Area B", "hud_fmr": "Fair Market Rents",
+         "fred_cpi": "CPI path", "fred_gs10": "Treasury path", "fred_nasdaq": "Nasdaq path",
+         "fred_unrate": "Unemployment", "fred_hpi_a_annual": "Area A annual", "fred_hpi_b_annual": "Area B annual",
+         "fred_ca_hpi": "California index", "bls_cpi": "CPI by category", "civ1947_12": "Statewide rent cap",
+         "civ1954_52": "Rent-control scope", "rtc51": "2% cap", "ab1157": "AB 1157",
+         "cdi_fair": "FAIR Plan", "irs_rmd": "10-year rule", "ftb_gift": "Gifts and inheritance"}
 
 e = html.escape
 
@@ -76,7 +87,7 @@ BLANK = ("blank", "Not verified &ndash; left blank")
 BADGE = {"V": ("b-v", "Verified"), "O": ("b-o", "Owner-supplied"), "A": ("b-a", "Assumption"),
          "C": ("b-c", "Computed"), "U": ("b-u", "Unverified")}
 LEGEND = ('<p class="legend">' + "".join(f'<span class="b {c}">{t}</span>' for c, t in BADGE.values()) +
-          ' Verified = the figure was read in text from the official publisher\'s own domain on 10 November 2026; the source library says whether the whole page was opened or an excerpt was read. Owner-supplied = taken from the '
+          ' Verified = the figure was read in text from the official publisher\'s own domain on 10 or 11 November 2026; the source library says whether the whole page was opened or an excerpt was read. Owner-supplied = taken from the '
           'owner\'s records, not independently checked. Assumption = a scenario input. Computed = arithmetic on the '
           'rows above. Unverified = no official confirmation, so the value is blank. On owner-supplied, assumed and computed rows the link points to the official rule or data series the row rests on; it does not confirm the value.</p>')
 
@@ -106,12 +117,17 @@ def page(name, title, eyebrow, h1, lead, body):
 <a class="skip" href="#main">Skip to content</a>
 <aside><a class="brand" href="index.html">Inheritance decision dashboard<small>Property A and Property B</small></a>
 <div class="nav-label">PAGES</div><nav aria-label="Main navigation">{nav}</nav>
-<div class="aside-note">Anonymised. Dollar figures rounded to $10. Reviewed 10 November 2026.</div></aside>
-<main id="main"><div class="top"><span>{eyebrow}</span><span>Reviewed 10 Nov 2026</span></div>
+<div class="aside-note">Anonymised. Dollar figures rounded to $10. Reviewed 11 November 2026.</div></aside>
+<main id="main"><div class="top"><span>{eyebrow}</span><span>Reviewed 11 Nov 2026</span></div>
 <div class="hero"><div class="eyebrow">{eyebrow}</div><h1>{h1}</h1><p>{lead}</p></div>
 {body}
 <footer><span>Planning analysis, not legal, tax or investment advice. Confirm with an estate attorney and a tax preparer before acting.</span><span>No names, addresses, ZIP codes or parcel numbers are published.</span></footer></main></body></html>
 """
+
+
+def _sh(sid, option):
+    sh = next(x for x in ST["shocks"] if x["id"] == sid)
+    return next(r["wealth"] for r in sh["rows"] if r["option"] == option)
 
 
 def blk(y, g=0.04):
@@ -152,6 +168,7 @@ Renting the home out ends with {usd(RENT['wealth'])} and moving in ends with {us
 <div class="card"><div class="k">Property A tax, 2045</div><div class="v">{usd(LIVE['tax_first'])}</div><p>If a child moves in. {usd(RENT['tax_first'])} if rented. {usd(LAW['tax_restored'])} if nothing changed.</p></div>
 <div class="card"><div class="k">Cost of living in A</div><div class="v">{usd(B45['live_cost_month_today'])} a month</div><p>In today's dollars, compared with selling. That is the price of choosing the home over the money.</p></div>
 <div class="card"><div class="k">Federal estate tax room, 2045</div><div class="v">{usd(E45['room_single_base'])}</div><p>Other assets one person could leave tax-free after both homes. Scenario: see the tax page.</p></div>
+<div class="card"><div class="k">Stress test: decades where selling wins</div><div class="v">{ST['windows_sell']} of {ST['window_count']}</div><p>Every ten-year window in the published record, replayed on the four options. <a href="stress.html">Stress and black swans</a>.</p></div>
 </div>
 {tbl("Inheritance in 2045, house prices rising 4% a year, result ten years later", ["Option", "Wealth after 10 years", "In today's dollars", "Behind the best by", "Cash in the first year", "Property A tax, first year"], rows)}
 {LEGEND}
@@ -170,6 +187,7 @@ Renting the home out ends with {usd(RENT['wealth'])} and moving in ends with {us
 <div class="card"><div class="k">The numbers</div><p><a href="projections.html">Year-by-year projections</a> to 2060 for value, assessed value, tax and running costs.</p></div>
 <div class="card"><div class="k">The rules</div><p><a href="taxes.html">Tax, thresholds and law watch</a>, and the <a href="inheritance.html">inheritance steps</a> with deadlines.</p></div>
 <div class="card"><div class="k">What is not settled</div><p><a href="review.html">Flagged for Review</a> and the <a href="audit.html">independent verification</a> of the earlier edition.</p></div>
+<div class="card"><div class="k">Reality check</div><p><a href="stress.html">Stress and black swans</a>: forty ten-year windows from the published record and twelve named shocks. Selling wins {ST['windows_sell']} of {ST['window_count']}.</p></div>
 <div class="card"><div class="k">Second opinion</div><p><a href="plan/index.html">Independent cross-check</a>: a separate model by another session, built only from official figures and break-evens. It reaches the same default.</p></div>
 </div></section>{PRIV}"""
 PAGES["index.html"] = page("index.html", "Overview", "Overview", "Sell, rent or move in?",
@@ -197,13 +215,41 @@ rows = [
  (["Deadlines after a death", "60 days, 150 days, 9 months, 1 year, 3 years", "Trustee notice; change in ownership statement; Form 706; homeowners' exemption; exclusion claim."], "V", S("prob16061_7", "rtc480", "irs_i706", "boe_prop19")),
 ]
 body = f"""{tbl("Important details", ["Topic", "Finding", "What it means"], rows)}{LEGEND}
+<section><h2>What would have to be true for the answer to change</h2>
+<p>The base case applies one growth rate and one inflation rate for ten years. The published record does not behave that way. The same four
+options were therefore replayed over {ST['window_count']} separate ten-year windows and {len(ST['shocks'])} named shocks.</p>
+{tbl("Stress result", ["Test", "What happens", "Source"],
+     [(["Ten-year windows in the record", f"Selling and reinvesting ends ahead in {ST['windows_sell']} of {ST['window_count']}. Renting ends ahead in {ST['window_wins']['rent']}, all of them in high-inflation or peak-stock-market decades. Moving in never wins.", "See the stress page"], "C", S("fred_cpi", "fred_hpi_a_annual", "fred_gs10", "fred_nasdaq")),
+      (["The decade that inverts the answer", f"The ten years from 1973: inflation {next(e for e in ST['episodes'] if e['id']=='h1973')['cpi_cagr']}% a year, house prices {next(e for e in ST['episodes'] if e['id']=='h1973')['house_cagr']}% a year. Renting finishes {usd(next(e for e in ST['episodes'] if e['id']=='h1973')['gap_rent'])} ahead of selling.", "The 2% tax cap and a real asset beat financial assets under high inflation"], "C", S("fred_cpi", "fred_hpi_a_annual", "rtc51")),
+      (["House prices well ahead", f"If the home appreciates 8% a year for ten years, renting finishes {usd(_sh('s_house_boom', 'rent') - _sh('s_house_boom', 'sell_stock'))} ahead of selling: the one tested condition in which keeping the home wins.", "Tested as a shock"], "A", S("fred_hpi_a_annual")),
+      (["A stock crash", f"A 35% fall in the first year puts Treasuries {usd(_sh('s_crash', 'sell_treasury') - _sh('s_crash', 'sell_stock'))} ahead of the index fund, but selling into Treasuries still beats keeping the home by {usd(_sh('s_crash', 'sell_treasury') - _sh('s_crash', 'rent'))}.", "Tested as a shock"], "A", S("fred_nasdaq")),
+      (["Falling prices or deflation", "House prices flat, down 15% or down 2% a year all widen the gap against keeping the home, because the tax cap only helps when prices rise.", "Tested as shocks"], "A", S("rtc51", "fred_cpi")),
+      (["Insurance", "At five times the owner's placeholder the ranking does not change.", "The state publishes no premium for a dwelling"], "A", S("cdi_fair", "cdi_compare"))])}
+<p>The honest reading: selling wins on the average and in most conditions, but not in all of them. The condition that most reliably favours
+keeping the home is inflation running well above the 2% property-tax cap while house prices keep pace. That is a scenario to plan around,
+not one to dismiss.</p></section>
+<section><h2>The inheritance tax question, and the one that matters more</h2>
+<p>The federal exclusion is $15,000,000 for a 2026 death and $15,480,000 for 2027, per person; California has no estate or inheritance tax.
+The two homes use part of it, and the room left is on the tax page. The tax that is certain is not the estate tax: it is the income tax on
+anything inherited inside a retirement account, which must be withdrawn and taxed within ten years for most non-spouse beneficiaries.</p>
+{tbl("The two taxes on an inheritance", ["Question", "Answer", "Source"],
+     [(["How much can be inherited before the estate tax applies?", "$15,000,000 for 2026 and $15,480,000 for 2027, per person, on the whole estate. Above that, 40%.", "IRS thresholds"], "V", S("irs_estate", "irs_2027")),
+      (["Is an inheritance income?", "No. Neither federally nor in California.", "Federal and state guidance"], "V", S("ftb_gift", "irs_basis")),
+      (["What is taxed, then?", "What the inheritance earns, and every dollar withdrawn from an inherited retirement account.", "IRS retirement rules"], "V", S("irs_rmd", "irs_tc409")),
+      (["What is the practical rule?", "Spend the retirement account first and keep the house sale for the year with the lowest other income.", "This session's reading of the above"], "C", S("irs_rmd", "irs_basis"))])}</section>
 <section><h2>The plan in order</h2><ol>
 <li><strong>Now.</strong> Confirm the trust is revocable and holds title; confirm who owns Property B; confirm which home carries the parents' homeowners' exemption. Do not move either property into an LLC.</li>
 <li><strong>At the inheritance.</strong> Get a date-of-death appraisal. File the change in ownership statement within 150 days. File Form 706 within nine months if the estate is near the exclusion or a spouse survives.</li>
 <li><strong>Decide within the first year.</strong> Sell, unless living in the home is worth about {usd(B45['live_cost_month_today'])} a month in today's dollars to the family. If moving in, occupy within one year and file both claims.</li>
 <li><strong>Reinvest.</strong> A stock index fund has the higher expected result. Treasuries at today's yield finish ahead of renting when house prices grow 4% a year or less. A mix sits between the two.</li>
 <li><strong>Keep Property B.</strong> Its low assessed value and steady rent make it the better property to hold, provided it is not reassessed in the same estate.</li>
-</ol></section>{PRIV}"""
+</ol></section>
+<section><h2>What this edition adds</h2><ul>
+<li><strong>A stress section</strong> (<a href="stress.html">Stress and black swans</a>): forty ten-year windows from the published record and twelve named shocks.</li>
+<li><strong>Inherited retirement accounts and the ten-year rule</strong>, on the <a href="taxes.html">tax page</a>.</li>
+<li><strong>A law watch with official status</strong> for the statewide rent cap, the local rent cap, the pending local measure, the failed state bill, solar compensation and the property-tax cap.</li>
+<li><strong>Insurance</strong>: what the regulator publishes, why no premium is filled in, and what the FAIR Plan limit means for a house valued above it.</li>
+</ul></section>{PRIV}"""
 PAGES["executive-summary.html"] = page("executive-summary.html", "Executive summary", "Executive summary", "What matters, in one table",
                                        "Each row states a finding, the number behind it, and the official source.", body)
 
@@ -259,6 +305,9 @@ Cash received or paid along the way earns the same after-tax return as the stock
 {tbl("Break-even points, inheritance in 2045", ["Test", "Break-even", "Reading"], brk)}
 {tbl("House price growth against stock return, inheritance in 2045", ["House growth", "Stock return", "Sell, stock fund", "Rent", "Move in", "Best"], matrix)}
 {tbl("Other changes, inheritance in 2045, 4% house growth", ["Change", "Sell, stock fund", "Sell, Treasuries", "Rent", "Move in", "Best"], sens)}
+<p>These sensitivities move one input at a time around a smooth base case. The path of growth and inflation matters more than any single
+input, so the same decision is replayed over forty ten-year windows taken from the published record on the
+<a href="stress.html">stress page</a>: selling wins {ST['windows_sell']} of them.</p>
 <p>Moving in is the most expensive option in every case tested. It is still a reasonable choice if the family wants the home: the table above prices that choice at about {usd(B45['live_cost_month_today'])} a month in today's dollars.
 If the family does move in, staying at least two years before any sale keeps the $500,000 exclusion available.</p></section>
 <section id="assumptions"><h2>Assumptions</h2><p>Scenario inputs, not forecasts. The official reference beside each one supports the method or the starting figure, not the future value.</p>
@@ -411,6 +460,58 @@ watch = [
  (["City B rent increases", "Law. 1.6% for March 2026 to February 2027.", "Set each year at 60% of the regional price index.", "Modelled at 1.5% a year for sitting tenants."], "V", S("cityb_rent")),
  (["City B vacancy tax", "Reported struck down on appeal in September 2026.", "Read only in secondary reports; the court's opinion was not opened.", BLANK], "U", S("cityb_rate", flag=True)),
 ]
+# --- new blocks for the tax page appended in this session -----------------------------------------
+IT = ST["inheritance_tax"]
+ira_rows = [([usd(x["principal"]), str(x["years"]), usd(x["withdrawal"]), usd(x["tax"]), usd(x["net"]),
+              usd(x["tax_total"])], "C", S("irs_rmd", "ftb_gift", asm=True)) for x in IT["ira"]]
+ins_tax_rows = [
+ (["An inheritance in cash or securities", "Not income to the heir", "The federal tax falls on the estate, above the exclusion. California taxes neither the estate nor the inheritance."], "V", S("ftb_gift", "irs_estate")),
+ (["An inheritance of a retirement account", "Income when withdrawn, and it must be emptied within ten years", "The heir pays ordinary income tax on every dollar withdrawn. The ten-year clock is the trap: a large account withdrawn quickly pushes the heir into the top brackets."], "V", S("irs_rmd")),
+ (["The same account owned by the parent at death", "No step-up in basis", "Unlike a house, a pre-tax retirement account has no basis to reset. This is the one inherited asset that carries a large, certain income tax."], "V", S("irs_rmd", "irs_basis")),
+ (["Cash received and then invested", "Taxed only on what it earns", "Interest, dividends and realised gains are taxed as they arise."], "V", S("ftb_gift", "irs_tc409")),
+ (["Roth accounts", "Withdrawals are not required during the owner's life; beneficiaries still face distribution rules", "Fewer forced withdrawals, but the ten-year rule for most non-spouse beneficiaries still applies."], "V", S("irs_rmd")),
+]
+hypo_rows = [([f'{usd(h["level"])} ({h["label"]})', str(h["year"]), usd(h["homes"]), usd(h["taxable"]), usd(h["tax"])], "C", S("irs_estate", asm=True)) for h in IT["hypo"]]
+law_rows = [([l["topic"], l["status"], l["detail"], l["effect"]], "V", S(*l["src"])) for l in ST["law_watch"]]
+cost_rows = [([c["item"], c["value"], c["detail"]], "V", S(*c["src"])) for c in ST["cost_growth"]]
+EXTRA = f"""
+<section><h2>The inheritance itself: what is taxed and what is not</h2>
+<p>{IT['note']}</p>
+{tbl("Which inherited assets carry a tax", ["What is inherited", "Tax treatment", "Why it matters"], ins_tax_rows)}
+<p>The amounts below are illustrative: the size of any retirement account in the estate was not supplied. They show the shape of the
+problem, not a liability. Withdrawals are assumed to be spread evenly over the ten years and taxed at the model's 33.3% combined rate
+(24% federal plus 9.3% California).</p>
+{tbl("A retirement account inherited by an adult child, emptied over ten years", ["Account value", "Years", "Withdrawal a year", "Tax a year", "Net a year", "Tax over ten years"], ira_rows)}
+<p>Two things follow. First, a retirement account is worth materially less to the heir than the same amount in cash, and the discount grows
+with the balance. Second, if the estate has both a large retirement account and cash above the exclusion, the retirement account is the
+asset to spend down first, because its income tax is certain while the estate tax can be planned around.</p>
+</section>
+<section><h2>How much can be inherited before tax</h2>
+<p>Two different taxes are being asked about, and they have different thresholds.</p>
+<ul>
+<li><strong>The estate tax</strong> has a threshold: $15,000,000 for a death in 2026 and $15,480,000 for 2027, per person, on everything in the
+estate. Above it the rate is 40%. California has no estate or inheritance tax and local governments may not impose one.</li>
+<li><strong>The income tax on what is inherited</strong> has no threshold. Cash and securities are not income when received. Retirement accounts are
+income when withdrawn, from the first dollar, and must be emptied within ten years for most non-spouse beneficiaries.</li>
+</ul>
+<p>The room left under the federal exclusion, after both homes, is on the table below. The last two rows are not law: they show what a
+lower exclusion would cost, because the exclusion has been cut and raised before.</p>
+{tbl("Room left for cash after both homes, and what a lower exclusion would cost", ["Exclusion tested", "Year", "Both homes at 4%", "Amount over the exclusion", "Estate tax at 40%"], hypo_rows)}
+<p>Full headroom by year is on the <a href="taxes.html">threshold table</a> above; the projection behind it is on the
+<a href="projections.html">projections page</a>. If the heir already owns Property B, it is outside the estate and the room is larger by its
+value.</p>
+</section>
+<section><h2>Law watch: what is settled, what is pending</h2>
+<p>Only items with an official status are listed. Each is quoted from the statute, the regulator or the elections officer; nothing here is
+a forecast.</p>
+{tbl("Law watch, checked 11 November 2026", ["Topic", "Status", "What the official text says", "Effect on this decision"], law_rows)}
+</section>
+<section><h2>What the cost inputs have actually been doing</h2>
+<p>The projections grow water, insurance and maintenance at one inflation rate. The published twelve-month changes show which components
+are running hot.</p>
+{tbl("Published twelve-month changes to September 2026", ["Item", "Change", "Series"], cost_rows)}
+</section>"""
+
 body = f"""
 <section><h2>Federal rules</h2>{tbl("Federal estate, gift and income tax rules that bear on the decision", ["Rule", "Figure", "Note"], fed)}{LEGEND}</section>
 <section><h2>State and local rules</h2>{tbl("California and local rules", ["Rule", "Figure", "Note"], st)}</section>
@@ -422,7 +523,7 @@ body = f"""
 The 2026 and 2027 exclusions are the published amounts. From 2030 the exclusion is a scenario: $15,480,000 rising 2.5% a year. The last column cuts it in half to test a change of law. A negative number means estate tax would be due at 40% on that amount even with no other assets.</p>
 {tbl("Room under the federal exclusion after both homes", ["Year of death", "Exclusion, one person", "Exclusion, couple", "Both homes at 4%", "Room, one person, 3%", "Room, one person, 4%", "Room, one person, 5%", "Room, couple, 4%", "Room if the exclusion is halved"], est)}
 <p>If Property B is already owned by the heir, it is not in the estate and the room is larger by its value.</p></section>
-<section><h2>Law changes under discussion</h2>{tbl("Law watch", ["Item", "Status on 10 November 2026", "What it would change", "Effect on this decision"], watch)}</section>{PRIV}"""
+<section><h2>Law changes under discussion</h2>{tbl("Law watch", ["Item", "Status on 10 November 2026", "What it would change", "Effect on this decision"], watch)}</section>{EXTRA}{PRIV}"""
 PAGES["taxes.html"] = page("taxes.html", "Tax, thresholds, law watch", "Tax and law", "Rules, thresholds and what may change",
                            "Federal, state and local. Each rule was read on the official publisher's site.", body)
 
@@ -481,6 +582,13 @@ fl = [
  ("FL-21", "County form names and the trust's tax filing", "The steps cite the statutes. Form numbers and the trust's income tax return were not verified.", "The assessor's forms page; a tax preparer", "rtc480"),
  ("FL-22", "Building share of value, bedrooms, condition", "Drive depreciation and maintenance. Assumed.", "The assessor's land and improvement split; an inspection", "irs_p527"),
  ("FL-23", "Sources read as excerpts", "Twelve sources were read as excerpts served from the official domain, not as whole documents. They are marked in the source library.", "Open each link", "irs_i706"),
+("FL-24", "Long-run stock return used in the replays", "The Nasdaq Composite series is a price index only, so a 1.5% dividend is added. A total-return index would have given the stock and rental options both a higher figure, and would have made the 1999-2008 window less bad for stocks.", "A total-return series, or the fund's own long-run table", "fred_nasdaq"),
+ ("FL-25", "Rent path inside the stress replays", "The historical replays move house prices, inflation, rates and stocks with published series, but rent growth stays at the base-case assumption. A city rent history was not read.", "The rent board's published increase history", "cityb_rent"),
+ ("FL-26", "Solar interconnection date and tariff version", "Decides whether the export credit is at the old retail-rate tariff or the current one, and when the legacy period ends. The CPUC page describes both; the account's own tariff is unknown.", "The utility interconnection letter or bill detail", "cpuc_nem"),
+ ("FL-27", "Pending local measure (File 261020)", "The city states the proposed cap on banked and capital-improvement increases has not been enacted. Its text was not opened, only the city's notice.", "The file as published by the Board of Supervisors", "cityb_rent"),
+ ("FL-28", "Result of the 3 November 2026 statewide measures", "Sixteen measures were listed by the elections officer. No certified result was read, so no measure is modelled. One concerns a one-time tax on certain taxpayers.", "The certified statement of vote", "sos_measures"),
+ ("FL-29", "The estate tax rate of 40%", "Applied to amounts above a hypothetical lower exclusion. Derived from the published credit, not from the rate table.", "Table A in the Form 706 instructions", "irs_i706"),
+ ("FL-30", "Sequence of the inheritance and the retirement account", "Whether a retirement account is in the same estate as the homes was not supplied. If it is, its income tax and the estate tax interact.", "A list of assets by type", "irs_rmd"),
 ]
 rows = [([i, item, why, BLANK, fix], "U", S(src)) for i, item, why, fix, src in fl]
 body = f"""<div class="note"><strong>Nothing on this page blocks the plan.</strong> These are the items that could not be confirmed from an official source, or that only the owner can settle.
@@ -491,7 +599,7 @@ Each value is left blank rather than estimated. The list is ordered by how much 
 <li><strong>Jurisdictions.</strong> The pages name only County A and City B, but the official local links identify them to anyone who opens one. Dropping the local sources would remove that, at the cost of unsourced local rates.</li>
 </ul></section>{PRIV}"""
 PAGES["review.html"] = page("review.html", "Flagged for review", "Flagged for review", "Unverified, unknown or irregular",
-                            "Twenty-three open items with the official page that bears on each, and two privacy disclosures.", body)
+                            "Thirty open items with the official page that bears on each, and two privacy disclosures.", body)
 
 # ------------------------------------------------------------------------------------------------ audit
 corr = [
@@ -539,6 +647,138 @@ The cross-check's reconciliation table describes the edition that preceded this 
 PAGES["audit.html"] = page("audit.html", "Independent verification", "Independent verification", "What a second check changed",
                            "Twelve corrections to the earlier edition, each with the official source that settles it.", body)
 
+# ================================================================================================ stress
+def stress_text():
+    w = ST["windows"]
+    wc = ST["window_count"]
+    wins = ST["window_wins"]
+    ex = ST["extremes"]
+    ep = ST["episodes"]
+    shocks = ST["shocks"]
+    ep_note = "; ".join(
+        f'{e["start"]}-{e["start"] + 9}: ' + ("Nasdaq price index plus a 1.5% dividend" if e["start"] >= 1995
+                                              else "base-case 7% assumption")
+        for e in ep)
+    base = blk(2045)
+    sell45 = opt(base, "sell_stock")
+
+    ep_rows = [([e["label"], f'{e["cpi_cagr"]}%', f'{e["house_cagr"]}%', f'{e["ty_avg"]}%', f'{e["rs_cagr"]}%',
+                 N(next(r for r in e["rows"] if r["option"] == "sell_stock")["wealth"]),
+                 N(next(r for r in e["rows"] if r["option"] == "rent")["wealth"]),
+                 N(next(r for r in e["rows"] if r["option"] == "live")["wealth"]),
+                 e["winner_name"].replace("Sell and buy an index fund", "Sell, index fund").replace("Sell and buy Treasuries", "Sell, Treasuries").replace("Keep and rent it out", "Rent out")],
+                "C", S("fred_cpi", "fred_hpi_a_annual", "fred_gs10", "fred_nasdaq"), "best" if e["winner"] == "sell_stock" else "") for e in ep]
+
+    sh_rows = [([sh["label"], N(next(r for r in sh["rows"] if r["option"] == "sell_stock")["wealth"]),
+                 N(next(r for r in sh["rows"] if r["option"] == "sell_treasury")["wealth"]),
+                 N(next(r for r in sh["rows"] if r["option"] == "rent")["wealth"]),
+                 N(next(r for r in sh["rows"] if r["option"] == "live")["wealth"]),
+                 sh["winner_name"].replace("Sell and buy an index fund", "Sell, index fund").replace("Sell and buy Treasuries", "Sell, Treasuries").replace("Keep and rent it out", "Rent out")],
+                "A", S(*sh["sources"])) for sh in shocks]
+
+    win_rows = [([str(x["start"]), f'{x["house"]}%', f'{x["cpi"]}%', f'{x["ty"]}%', f'{x["rs"]}%',
+                  N(x["sell"]), N(x["treasury"]), N(x["rent"]), N(x["live"]), x["winner"]],
+                 "C", S("fred_hpi_a_annual", "fred_cpi", "fred_gs10", "fred_nasdaq"),
+                 "best" if x["winner"] == "Sell, index fund" else "") for x in w]
+
+    ins_rows = [([i["item"], i["finding"], i["detail"]], "V" if i["src"] == ["cdi_compare"] or i["src"] == ["cdi_fair"] else "C", S(*i["src"])) for i in ST["insurance"]]
+
+    body = f"""
+<div class="answer"><p><strong>The recommendation holds in most conditions, but it is not unconditional. Selling ends ahead in {ST['windows_sell']} of the {wc} ten-year windows in the published record and in {ST['shock_sell_wins']} of the {len(shocks)} shocks tested. It loses when inflation runs far above the 2% property-tax cap, and when house prices compound at 8% a year or more.</strong></p>
+<p>The base case applies one growth rate and one inflation rate for ten years. The record does not behave that way, and neither will the future. Every window below replays the whole decision - property tax reset, Proposition 19 amount, rent cap, income tax, selling costs - on the market path that actually occurred. Renting ends ahead in {wins['rent']} of {wc} windows; moving in never does. A stock crash does not move the answer towards the house: it moves it towards Treasuries.</p></div>
+
+<div class="cards">
+<div class="card win"><div class="k">Ten-year windows in the record where selling wins</div><div class="v">{ST['windows_sell']} of {wc}</div><p>Index fund {wins['sell_stock']}, Treasuries {wins['sell_treasury']}, renting {wins['rent']}, moving in {wins['live']}.</p></div>
+<div class="card"><div class="k">Worst decade for house prices</div><div class="v">{ex['house_worst']['house']}% a year</div><p>Ten years from {ex['house_worst']['start']}. A home kept through it lost ground in real terms.</p></div>
+<div class="card"><div class="k">Highest decade of inflation</div><div class="v">{ex['cpi_worst']['cpi']}% a year</div><p>Ten years from {ex['cpi_worst']['start']}. This is the condition the property-tax cap rewards: the tax grows at 2% at most while prices rise faster.</p></div>
+<div class="card"><div class="k">Best decade to have rented</div><div class="v">{ex['house_best']['house']}% a year</div><p>Ten years from {ex['house_best']['start']}, when house prices outran everything else.</p></div>
+</div>
+
+<section><h2>Why growth and inflation are never constant</h2>
+<p>A 50-year projection that applies one growth rate and one inflation rate describes an average, not a life. The published record shows
+how far the averages hide: house prices in Area A rose {ex['house_best']['house']}% a year for the ten years from {ex['house_best']['start']}
+and {ex['house_worst']['house']}% a year for the ten years from {ex['house_worst']['start']}. Consumer price inflation over ten-year windows in
+the same record ran between {min(x['cpi'] for x in w)}% and {ex['cpi_worst']['cpi']}% a year, and the ten-year Treasury averaged between
+{min(x['ty'] for x in w)}% and {ex['ty_worst']['ty']}%. Those swings are large enough to decide this question on their own, which is why the
+stress tests below are run on the actual sequences rather than on averages.</p>
+<p>One structural point matters more than any single shock. The property tax resets when the home is inherited, and after that the assessed
+value is capped: it may rise no faster than the lower of 2% and the change in the California consumer price index, and it may never exceed
+market value.</p>
+{tbl("The two directions the cap can move", ["Situation", "What the law does", "What it means here"],
+     [(["Inflation above 2%", "The assessed value rises 2% a year while the market may rise faster", "The effective tax rate on market value falls; holding becomes cheaper in real terms."], "V", S("rtc51", "boe_lta26002")),
+      (["House prices fall", "The taxable value must follow full cash value down", "The fall is not a permanent benefit: the assessed value cannot exceed market value, so a crash cuts the bill, and the base is not restored when prices recover."], "V", S("rtc51", "boe_lta26002"))])}
+</section>
+
+<section><h2>Replays of real episodes</h2>
+<p>Each row starts the decision in the year named, with Property A inherited at that year's market value, and runs the ten years that
+followed. House prices use the annual index for Area A; inflation uses the national consumer price index; cash uses the annual average
+ten-year Treasury; the index fund uses the Nasdaq Composite average, which is a price index only, plus a 1.5% dividend assumption.
+The rent used is the same assumption as the base case, so these rows test the market path, not the rent level.</p>
+{tbl("What the decision would have done if the ten years after each episode repeated", ["Episode, ten years from", "Inflation", "House prices", "Treasuries", "Stocks", "Sell, index fund", "Rent out", "Move in", "Ahead"], ep_rows)}
+{LEGEND}
+<ul>
+<li><strong>1973-1982 inverts the answer.</strong> Inflation averaged {next(e for e in ep if e['id']=='h1973')['cpi_cagr']}% a year and house prices {next(e for e in ep if e['id']=='h1973')['house_cagr']}% a year. Renting wins by {usd(next(e for e in ep if e['id']=='h1973')['gap_rent'])} because the leveraged, tax-capped house protects against inflation better than a bond or a flat stock market.</li>
+<li><strong>The two stock crashes split.</strong> After the dot-com peak the index fund finished last of the four; after the 2005 start it finished first, because the ten years contained the recovery.</li>
+<li><strong>Both California housing recessions favour selling.</strong> Prices fell from 1990 and from 2006; the money was better out of the house in both.</li>
+</ul>
+<p class="legend">Stock path used in each row: {ep_note}. Where no published index series covers the window, the base-case 7% assumption is used for the stock path and the row is weaker evidence than the others.</p>
+</section>
+
+<section><h2>Every ten-year window in the record</h2>
+<p>Not a selection: all {wc} windows with a full ten years of house-price, inflation, Treasury and stock data. The last column is which
+option finished ahead in that window.</p>
+{tbl("All ten-year windows, arithmetic from the published series", ["Ten years from", "House prices", "Inflation", "Treasuries", "Stocks", "Sell, index fund", "Sell, Treasuries", "Rent out", "Move in", "Ahead"], win_rows)}
+<p>Eight of the {wc} windows favour renting. They cluster in the late 1970s and early 1980s, plus the 2000 and 2001 starts where a stock
+market bought at a peak took a decade to recover. In every other window selling is ahead, usually by a wide margin.</p>
+<p>Download the windows: <a href="assets/data/stress_windows.csv">stress_windows.csv</a>.</p></section>
+
+<section><h2>Parametric shocks</h2>
+<p>Where the record has no example, the inputs are shocked directly, all applied for the ten years after a 2045 inheritance. These are
+scenarios, not forecasts.</p>
+{tbl("Named shocks, starting from a 2045 inheritance", ["Shock", "Sell, index fund", "Sell, Treasuries", "Rent out", "Move in", "Ahead"], sh_rows)}
+{LEGEND}
+<p>Only two shocks change which option is ahead. If house prices rise 8% a year, renting finishes
+{usd(_sh("s_house_boom", "rent") - _sh("s_house_boom", "sell_stock"))} ahead of selling and reinvesting: at that rate the home outruns an
+index fund. If the stock market falls 35% in the first year, Treasuries finish {usd(_sh("s_crash", "sell_treasury") - _sh("s_crash", "sell_stock"))}
+ahead of the index fund — but selling into Treasuries still beats keeping the home by
+{usd(_sh("s_crash", "sell_treasury") - _sh("s_crash", "rent"))}.</p>
+<p>The shocks that hurt the home most are the ones with no inflation to offset them: flat or falling prices, deflation, a rent squeeze, and
+a five-fold rise in insurance. Each of those widens the gap against keeping the house.</p></section>
+
+<section><h2>What this means for the decision</h2>
+<ol>
+<li><strong>The base case is not the reason to sell.</strong> The reason is that the house has to beat a diversified portfolio while carrying a
+reset property tax, a single-building concentration, illiquidity, and maintenance. On the record it manages that only in high-inflation
+decades or in decades when house prices rise well ahead of everything else.</li>
+<li><strong>Inflation is the one condition that consistently favours keeping the house</strong>, because the tax cap hands the owner part of the
+inflation and the mortgage-free house is a real asset. If the family's own view is that the next twenty years look like 1973-1982, keeping
+and renting is defensible. That is a view, not a projection.</li>
+<li><strong>A stock crash does not make the house the safer choice.</strong> The 1999 start is the case to look at: an index fund bought at the
+peak finished last of the four, and the answer that beat it was renting, not moving in.</li>
+<li><strong>Sequence risk cuts both ways.</strong> The ten years after the inheritance are what matters, and no projection can know them. That
+is an argument for not making an irreversible decision on a single point estimate: sell is reversible, moving in is not.</li>
+</ol></section>
+
+<section><h2>Insurance and running costs: what an official source can settle</h2>
+<p>The owner's figures for insurance are guesses, and they are the largest single unverified cost. No official body publishes a premium for a
+specific dwelling, so nothing is filled in. What the regulator does publish is the framework below.</p>
+{tbl("Insurance: the official position", ["Item", "Finding", "Detail"], ins_rows)}
+<p>The effect on the decision is tested above: at five times the placeholder the ranking does not change, because insurance is small
+against the property tax reset and the lost return. What would change it is being unable to insure at all.</p></section>
+
+<section><h2>Running costs from published inflation data</h2>
+<p>Water, electricity and maintenance are grown at the general inflation assumption in the projections. The published series below show what
+each component has actually been doing over the last twelve months.</p>
+{tbl("Published twelve-month changes to September 2026", ["Item", "Change", "Series"],
+     [([c["item"], c["value"], c["detail"]], "V", S(*c["src"])) for c in ST["cost_growth"]])}
+<p>Electricity and energy services are running above headline inflation while rent of primary residence runs below it. Two consequences for
+this plan: the solar credit is worth less each year that retail electricity outruns general inflation, and the rent on the building lags
+costs, which is a squeeze on the property that is being kept.</p></section>
+{PRIV}"""
+    return page("stress.html", "Stress and black swans", "Stress testing", "Growth and inflation are never constant",
+                "Forty ten-year windows from the published record and twelve named shocks, replayed on the same four options.",
+                body)
+
 # ------------------------------------------------------------------------------------------------ sources
 rows = []
 for sid, s in SRC.items():
@@ -547,7 +787,8 @@ for sid, s in SRC.items():
     rows.append(([f"<code>{sid}</code>", e(s["publisher"]), e(s["title"]), "<br>".join(e(v) for v in s["verifies"]), e(how)], basis, a(sid)))
 body = f"""<p>{len(SRC)} official sources. The exact words relied on are stored with each source in <a href="assets/sources.json">sources.json</a>.
 Local sources name the jurisdiction in their web address; the pages refer to it as County A or City B.</p>
-{tbl("Source library", ["Id", "Publisher", "Document", "What it supports", "How it was checked on 10 November 2026"], rows)}{LEGEND}{PRIV}"""
+{tbl("Source library", ["Id", "Publisher", "Document", "What it supports", "How it was checked (10 or 11 November 2026)"], rows)}{LEGEND}{PRIV}"""
+PAGES["stress.html"] = stress_text()
 PAGES["sources.html"] = page("sources.html", "Source library", "Source library", "Every source, and how it was checked",
                              "Open any link to check the figure yourself.", body)
 
@@ -577,8 +818,33 @@ Inheritance in 2045, house prices rising 4% a year, measured ten years later aft
 - Living in the home costs about ${B45['live_cost_month_today']:,} a month in today's dollars compared with selling.
 - Federal estate tax: $15,000,000 per person in 2026 and $15,480,000 in 2027; California has none.
 - If Property B is in the same estate its tax resets too: ${BR45['tax_keep']:,} to ${BR45['tax_reset']:,} a year in 2045.
-- Insurance premiums are unverified and left blank; tripling the owner's guess does not change the ranking.
+- Insurance premiums are unverified and left blank; five times the owner's guess does not change the ranking.
 
-Site: index.html. Open items: review.html. Sources: sources.html.
+## Stress test: the base case is not the whole answer
+
+The base case applies one growth rate and one inflation rate. The same four options were replayed over 40 separate
+ten-year windows from published official series (consumer price index, 10-year Treasury, Nasdaq Composite, the
+house-price index for the home's area) and over 12 named shocks.
+
+| Test | Result |
+|---|---|
+| Ten-year windows in the record | Selling ahead in 32 of 40. Renting ahead in 8. Moving in never ahead. |
+| The decade that inverts the answer | Ten years from 1973: inflation 8.4% a year, house prices 10.5% a year. Renting finishes $2,796,710 ahead. |
+| House prices at 8% a year for ten years | Renting finishes $561,790 ahead. |
+| A 35% stock crash in the first year | Treasuries beat the index fund; selling into Treasuries still beats keeping the home. |
+| Flat, falling or deflationary house prices | Every case widens the gap against keeping the home. |
+| Insurance at five times the placeholder | Ranking unchanged. |
+
+The one condition that reliably favours keeping the home is inflation well above the 2% property-tax cap while house
+prices keep pace. That is a scenario to plan around, not a forecast.
+
+## Inheritance taxes
+
+The federal exclusion is $15,000,000 for a 2026 death and $15,480,000 for 2027, per person; California has no estate or
+inheritance tax. An inheritance is not income. The tax that is certain is the income tax on anything inherited inside a
+retirement account: it must be withdrawn and taxed within ten years for most non-spouse beneficiaries, with no step-up
+in basis.
+
+Site: index.html. Stress tests: stress.html. Open items: review.html. Sources: sources.html.
 """, encoding="utf-8")
 print(f"built {len(PAGES)} pages")

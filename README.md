@@ -8,7 +8,7 @@ federal estate tax.
 
 ## What this repository publishes
 
-Eleven static pages, one stylesheet, one source ledger and three CSV downloads, plus the separate cross-check edition under `plan/` — nothing else. The published
+Twelve static pages, one stylesheet, one source ledger and four CSV downloads, plus the separate cross-check edition under `plan/` — nothing else. The published
 artifact is an allowlist built by `scripts/package_site.py`; every path an earlier edition published is
 replaced by a content-free withdrawal notice, so a stale URL cannot return an old figure.
 
@@ -21,10 +21,11 @@ replaced by a content-free withdrawal notice, so a stale URL cannot return an ol
 | `taxes.html` | Federal, California and local rules, verified; pending law changes |
 | `projections.html` | Year-by-year value, assessed value, tax and running costs, 2026–2060, and the ten years after an inheritance |
 | `decision.html` | Sell vs rent vs move in for 2040/2045/2050, break-evens, sensitivities, the assumption register |
+| `stress.html` | **Economic stress and black swans**: forty ten-year windows replayed from published official series, twelve named shocks, insurance, running-cost inflation |
 | `inheritance.html` | Statutory timeline after the death, with deadlines |
-| `review.html` | 23 flagged items (unverified values left blank, owner questions, record irregularities) and two privacy disclosures |
+| `review.html` | 30 flagged items (unverified values left blank, owner questions, record irregularities) and two privacy disclosures |
 | `audit.html` | Independent verification: twelve corrections to the first quantitative edition, repository review |
-| `sources.html` | 43 official sources, what each one supports and how each was checked |
+| `sources.html` | 58 official sources, what each one supports and how each was checked |
 
 ## Privacy rules enforced in code
 
@@ -46,7 +47,8 @@ be verified is left blank or published on the Flagged for Review page — never 
 
 ```bash
 python3 scripts/model.py        # writes assets/data/model.json and the CSV downloads
-python3 scripts/build.py        # renders the eleven pages
+python3 scripts/stress.py       # writes assets/data/stress.json and stress_windows.csv
+python3 scripts/build.py        # renders the twelve pages
 python3 scripts/verify.py       # reproducible-build, citation, link, privacy and rounding checks
 python3 scripts/package_site.py # writes the _site artifact (allowlist + withdrawal notices)
 ```
@@ -59,6 +61,9 @@ ledger entry that does not say how it was checked.
 
 `assets/sources.json` — source ledger (43 entries, each with the words relied on and how it was checked).
 `assets/data/model.json` — every figure on the site.
+`assets/data/stress.json`, `assets/data/stress_windows.csv` — the historical replays and shocks, recomputed from the transcribed official series.
+`assets/sources.json` records what each document verifies; the stress series (consumer price index, 10-year Treasury, Nasdaq Composite, two
+house-price indexes, California index, unemployment) were read from the publisher's own CSV downloads on 11 November 2026.
 `assets/data/property_a.csv`, `property_b.csv`, `decision.csv` — the same numbers for offline work.
 
 ## Limits
