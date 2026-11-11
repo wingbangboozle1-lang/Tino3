@@ -202,6 +202,12 @@ def main() -> int:
     if b.returncode != 0:
         failures.append("privacy boundary: " + (b.stdout + b.stderr).strip().splitlines()[-1] if (b.stdout + b.stderr).strip() else "privacy boundary failed")
 
+    # 8. the independent requirements-traceability edition has its own fail-closed verifier
+    i = subprocess.run([sys.executable, "integration/tools/verify.py"], cwd=ROOT, capture_output=True, text=True)
+    if i.returncode != 0:
+        output = (i.stdout + i.stderr).strip()
+        failures.append("integration verifier: " + (output.splitlines()[-1] if output else "failed"))
+
     if failures:
         print("FAIL")
         for f in dict.fromkeys(failures):

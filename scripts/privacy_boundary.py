@@ -14,6 +14,7 @@ APPROVED = set(PAGES + ASSETS + (
     '.github/workflows/pages.yml','.github/workflows/verify.yml',
     'scripts/build.py','scripts/package_site.py','scripts/verify.py','scripts/privacy_boundary.py',
     'scripts/model.py',
+    'integration/README.md','integration/tools/build.py','integration/tools/verify.py',
 ))
 MARKER = 'PUBLICATION_WITHDRAWN'
 

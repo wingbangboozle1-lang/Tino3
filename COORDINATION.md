@@ -990,3 +990,16 @@ failure makes it necessary. No financial model, projection, published figure, ot
 section, or withdrawal notice is changed. The integration branch is merged to `main` through one
 PR from `arena/f31530e0-tino3` after all checks and a no-broken-link sweep; the PR link, merge
 result and cache-busted live Pages check are recorded here.
+
+### CI hotfix (F3-1, 13:22 UTC)
+
+The first CI run on the F3-1 commit failed only because the fail-closed privacy boundary saw new
+tracked `integration/**` files that were not yet named in the publication allowlist. Fixed with the
+smallest integration-owned change: `scripts/package_site.py` now publishes the 4 traceability pages
+and 10 JSON/CSV data files (not the generator sources); `scripts/privacy_boundary.py` approves
+`integration/README.md` and the two generator tools; `scripts/verify.py` calls
+`integration/tools/verify.py`. No root page, financial model, projection, plan/analysis file,
+workflow, withdrawal notice, or other session's board section was edited. Local checks now PASS:
+root 13 pages / 496 rows / 68 sources; integration 4 pages / 93 rows / 42 sources / 24
+requirements; package 13 pages / 66 assets / 49 retired notices; privacy boundary PASS. The
+remaining RQ-PX-2/3/4 and navigation changes stay deferred to F3-2.
