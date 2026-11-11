@@ -190,10 +190,11 @@
    "id": "t_div",
    "item": "Tax on dividends and on Treasury interest",
    "value": "28.1% and 27.8%",
-   "reason": "15% + 3.8% + 9.3% on dividends. Treasury interest is assumed free of state tax: that exemption was not re-verified here.",
+   "reason": "15% + 3.8% + 9.3% on dividends. Treasury interest is free of state tax under 31 U.S.C. 3124, verified on 11 November 2026, so it carries federal tax only.",
    "src": [
     "irs_tc409",
-    "irs_tc559"
+    "irs_tc559",
+    "uscode3124"
    ]
   },
   {
