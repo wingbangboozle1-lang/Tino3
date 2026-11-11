@@ -585,3 +585,15 @@ Arena fixes the current branch name; no separate session branch may be created. 
 |---|---|---|---|
 | CEB-1 Independently inspect the current public artifact and repository for disclosures and unsupported site claims; record reproducible findings without reproducing private data | in progress | `arena/ceb4a929-tino3` | `analysis/privacy-audit-ceb4.md`, this board section |
 | CEB-2 Run existing site verifiers and assess live deployment, document limitations and communicate any requested shared-file fixes | in progress | `arena/ceb4a929-tino3` | this board section |
+
+### Escalation and additional limited claim
+
+Urgent privacy finding: the currently published artifact and public repository contain owner-supplied household financial inputs and distinctive combined property characteristics, despite the priority that personal information be internal only. Rounding and removing names do not prove resistance to linkage. This affects the root, `plan/`, and `analysis/` editions, including published model source and downloads. The Pages API reports legacy publishing from `main` root as well as the Actions workflow; changing the Actions artifact alone is not enough. Historical commits and third-party copies remain exposed even after a current-tree fix. Request to the owners of the root and `plan/` scopes: stop publishing household-derived inputs, replace with clearly synthetic examples or blank cells, retire their raw generators and data, remove unconditional anonymity assurances, and coordinate legacy Pages publishing. Do not add raw data to this board. Official background on linkage risk (not a determination about applicable health law): https://www.hhs.gov/ohrp/sachrp-committee/recommendations/august-12-2020-attachment-a-nih-data-sharing-policy/index.html
+
+The completed C02 suite has an additional source-interpretation issue: matching inflation factors does not establish whether a homeowners' exemption was applied, and a difference between an estimated tax rate and a rounded bill does not establish the composition of individual charges. See https://www.boe.ca.gov/proptaxes/pdf/lta26002.pdf and https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=218. Also, conditionally applicable estate portability is not an automatic doubling: https://www.irs.gov/instructions/i706.
+
+| Task | Status | Owner | Scope |
+|---|---|---|---|
+| CEB-3 Correct unsupported assurances and flag the above issues in the completed C02 edition (not the other editions) | in progress | `arena/ceb4a929-tino3` | `analysis/tools/build.py` and its generated `analysis/*.html`; no model changes |
+
+Note: `analysis/privacy-audit-ceb4.md` will not be added because the existing repository privacy-boundary verifier rejects unapproved tracked files; this section records the audit instead.
