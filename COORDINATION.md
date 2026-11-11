@@ -353,3 +353,32 @@ The ranking of the other options changed (renting now finishes ahead of moving i
 - **Closing wording pass (this commit):** six sentences that stated a cause or a likelihood with no source behind them were reduced to what is known (insurance "likely low", a "copying error", "avoids probate", and three similar). No figure changed. This is the last change from this session; its merge is recorded in the pull request itself rather than by another commit here.
 - **For the next session:** PRs #23 and #25 are open and each would replace the root edition. See CR-C2-2 before merging either.
 
+
+---
+
+## Session `arena/4eefd177-tino3` — black-swan module, insurance/utility research, verification pass (2026-11-11)
+
+*Branch note:* Arena pins this session to `arena/4eefd177-tino3`; the board's `session-<id>/<task>` naming cannot be used.
+Claim read from `main` at `6086d16`. Remote inspection on 2026-11-11 04:12 UTC found **only** `origin/main`; two other
+sessions (`arena/0b455c89-tino3`, `arena/7f9e7fe8-tino3`) pushed Verify runs within three minutes of this session starting but
+have **not** pushed a branch or opened a PR, so their file scope is not observable. To avoid collision this session takes only
+files that no prior session owns and that no open PR (#23, #25) touches:
+
+| Task | Status | Owner | Scope (non-overlapping claim) |
+|---|---|---|---|
+| BS-1 Black-swan / stress-scenario module (real-world inflation-and-growth regimes over 50 years, not a constant rate): deterministic model, page, assumption register, per-row official anchors | **in progress** | `arena/4eefd177-tino3` | `scripts/swan.py`, `assets/data/swan.json`, root `stress.html` |
+| BS-2 Insurance and utility research: attempt official premium/consumption anchors; publish only what an official publisher states, leave the rest blank and flagged | **in progress** | `arena/4eefd177-tino3` | rows added to `review.html` via `scripts/build.py` (FL-24+) |
+| BS-3 Line-by-line re-verification of the 43-entry ledger; corrections logged, broken links flagged | **in progress** | `arena/4eefd177-tino3` | `assets/sources.json` (append-only), `audit.html` rows |
+| BS-4 Integration: nav entry, publish allowlist, verifier rules for the new page, PR to `main`, merge, Pages deploy check | **in progress** | `arena/4eefd177-tino3` | `scripts/build.py` (NAV only), `scripts/package_site.py`, `scripts/verify.py`, `scripts/privacy_boundary.py`, `README.md`, this section |
+
+**Not touched by this session:** `plan/**` (owned by `arena-6616d6b2`), every existing page's substance, and the two open PRs.
+
+**No manual input from the owner:** the brief asks for the work to be finished without questions, so no `ask_user` prompt is used.
+Where a needed figure cannot be verified it is left blank and flagged, never inferred.
+
+**Privacy boundary retained unchanged:** `[PROPERTY_A]` / `[PROPERTY_B]`, "County A" / "City B", no ZIP, no street address, no APN,
+no unrounded roll figure. This session adds no new identifier and removes none of the existing guards.
+
+**Owner brief items that this session must not be silent about:** the brief supplies ZIP codes, city names, street-level location
+detail and exact roll figures in the request itself. Those are **not** republished; the existing generalisation (assessed values to
+$10,000, bills to $100, other figures to $10) is kept, and the reasoning for going coarser than $10 on roll values is stated on the site.
