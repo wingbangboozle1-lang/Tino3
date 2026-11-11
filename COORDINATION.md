@@ -576,3 +576,30 @@ every withdrawal notice, and every other session's section of this board.
 
 Open PRs #23 and #25: per CR-C2-2 / CR-6616-5 each would replace the root edition with a model
 predating corrections C-03..C-07. This session does not merge them; disposition logged in D2-4 below.
+
+### Results · `arena/d2fd135b-tino3` · 2026-11-11
+
+| Task | Status | Evidence |
+|---|---|---|
+| D2-1 Line-by-line re-verification | **done** | Twelve ledger entries opened or re-opened on the publisher's own domain on 11 Nov 2026 (IRS estate + IR-2026-133; BOE Prop 19, LTA 2025/009, LTA 2026/002; RTC 63.2; local secured-tax page; rent-increase page; Treasury yield table; IRS basis FAQ; HUD FMR documentation; Fed 2% FAQ). Every quoted figure matched the published edition; no number changed. Fifteen sources added → 67 total after the concurrent-session union. |
+| D2-2 Black-swan conditions section | **done** | New root page `black-swans.html`: baseline anchors (Fed/SSA/CBO), the 51-year official state CPI-factor table (peak 17.316% in 1980-81; −0.237% in 2010-11; cap bound in 40 of 51 years), twelve official episodes (Federal Reserve History, Fed MPR, BLS, FRED/FHFA, CBO), and nine single-input stress rows. Three model stress cases added (`scripts/model.py`): stocks 4.0%, inflation 4.0%, flat house prices — selling finishes first in all three; a lost decade only moves the proceeds to Treasuries. |
+| D2-3 Executive summary refresh | **done** | Two new rows (state tax on financial assets; black-swan stress tests), Property B statement rows retained from PR #35, template bullets for both black-swan pages, dates unified to 10-11 November 2026. |
+| D2-4 Checks, PR, merge, deploy | **done** | See publication result below. |
+
+**Parallel-session merge (logged per the board's conflict rule).** While this session worked, `main` advanced through PRs #31–#33 (session `bde5056d`: `stress.html` + model stress machinery), #35 (`e07bc3a2`: Property B ownership statement), #36 and #37/#38 (`c02d5ccf`: `analysis/**` suite). PR #39 first failed to merge cleanly; `origin/main` was merged into the branch and all 19 conflicts were resolved **without discarding either side**: `scripts/model.py` keeps both extensions (`g_path`/`rs_path` crash paths and `SCENARIOS`/`stress()` from `bde5056d`, plus `infl_rate` threading and the three single-input cases from this session); `scripts/build.py` keeps both pages, both NAV entries, both index cards, both sets of executive-summary rows and law-watch/flag updates, with page chrome unified to "10-11 November 2026"; `assets/sources.json` was unioned key-by-key (67 entries; the shared `fred_dgs10` entry carries both sessions' quoted values); `scripts/verify.py` and `scripts/package_site.py` carry the union of pages (13) and official hosts; `COORDINATION.md` keeps the full board plus this section; generated pages were regenerated from the merged model. All four check suites pass after the merge: root (13 pages, 494 cited rows, 67 sources), `plan/` (byte-identical), `analysis/` (12 pages), packaging (13 pages, 49 withdrawal notices).
+
+**Publication result · `arena/d2fd135b-tino3` · 2026-11-11**
+
+- **PR [#39](https://github.com/wingbangboozle1-lang/Tino3/pull/39) — MERGED** 2026-11-11T05:35:23Z, merge commit `f6b28738c99253ebfa362a4379c267acfbe6c3cb`. CI `verify` passed on the PR before merge (run `42966687758`, all three suites).
+- **After the merge, on `main`:** `Verify static site` run `42966752762` success; `Deploy GitHub Pages` run `42966752820` success; legacy `pages build and deployment` run `42966752144` success.
+- **Live check by HTTP fetch (cache-busted):** `/black-swans.html` serves the new page (baseline table, 51-year factor table, episode record, stress rows, all rows source-linked); `/index.html` serves the merged edition (recommendation $10,052,910, both black-swan cards, the Property B statement and both estate-room figures, the `analysis/` card); `/cupertino.html` still serves the withdrawal notice.
+- **PRs #23 and #25** (pre-correction replacements, CR-C2-2) were closed without merging during this session, with explanatory comments; their branches remain for reference.
+- **Still open:** PR [#34](https://github.com/wingbangboozle1-lang/Tino3/pull/34) (`0b455c89`, insurance/law-watch/stress claims) was opened before this merge and will need a rebase onto the merged `main`; it was not touched here. The final-integration claim I-3 stays with `2f0b4adb` for anything after this PR.
+
+**Irregularities and notes from this session**
+
+1. Two black-swan sections now sit side by side by design: `stress.html` (scenario replay, `bde5056d`) and `black-swans.html` (official history, baseline anchors and single-input cases, this session). They cross-reference through the overview cards; consolidating them is a presentation decision left to the owner or a later integration (needs review).
+2. Harmless ledger redundancy: the same FRED series and the same Federal Reserve History essay are each stored under two ids (`fred_usthpi`/`fred_ussthpi`, `frh_recession`/`fedhist_greatrecession`) because two sessions added them independently. Both ids are checked and cited; cleanup would touch other sessions' rows.
+3. The shared `fred_dgs10` entry was written by two sessions with different quoted values (15.84% in 1981, 4.88% on 9 Nov 2026 from `bde5056d`; 0.52% on 4 Aug 2020 from this session). The merged entry carries all three quoted values and both check notes.
+4. FL-24 added (any mortgage or debt on the properties is unknown; the model assumes unencumbered). FL-07 and FL-15 updated. Flagged list now has 24 items; two privacy disclosures unchanged.
+5. Unverified and left blank, as before: insurance premiums, market rent, tax-rate area, bill line items, building share, and the rest of FL-01..FL-24.
