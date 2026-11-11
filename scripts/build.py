@@ -857,7 +857,7 @@ repo = [
  ("Checks", "Every table row must link to an official publisher. Dollar amounts must be multiples of $10. City names, ZIP codes, parcel numbers and e-mail addresses fail the build."),
  ("Publishing", "The site is served from the main branch. Both publishing paths carry the same sanitised files. Earlier sessions report that the setting itself could not be changed with the available permissions."),
  ("Repository history", "Earlier commits contain exact figures and location details. Not rewritten. Needs the owner's decision."),
- ("Open pull requests from other sessions", "Two open pull requests (#23 and #25) that would have replaced this edition with a pre-correction model were closed without merging on 11 November 2026; their branches remain for reference."),
+ ("Pull requests from other sessions", "Three pull requests (#23, #25 and #34) would each have replaced this edition with a model that predates the corrections listed above. They were closed without merging on 11 November 2026; their branches remain for reference. The substantive additions in #34 - a 40-window historical replay and an insurance framework - are covered by the two black-swan pages and by the sensitivity cases on the decision page, including insurance at three times the owner's guess."),
 ]
 rlist = "<ul>" + "".join(f"<li><strong>{area}.</strong> {finding}</li>" for area, finding in repo) + "</ul>"
 body = f"""
