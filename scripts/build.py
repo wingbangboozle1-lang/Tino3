@@ -15,6 +15,7 @@ SRC = json.loads((ROOT / "assets" / "sources.json").read_text(encoding="utf-8"))
 
 NAV = [("index.html", "Overview"), ("executive-summary.html", "Executive summary"),
        ("decision.html", "Decision analysis"), ("projections.html", "Year-by-year projections"),
+       ("stress.html", "Black swan stress tests"),
        ("black-swans.html", "Black-swan conditions"),
        ("property-a.html", "Property A"), ("property-b.html", "Property B"),
        ("taxes.html", "Tax, thresholds, law watch"), ("inheritance.html", "Inheritance steps"),
@@ -35,7 +36,12 @@ SHORT = {"Internal Revenue Service": "IRS", "California State Board of Equalizat
          "Federal Reserve Bank of St. Louis (data: Board of Governors)": "FRED (Fed funds)",
          "Federal Reserve Bank of St. Louis (data: Bureau of Labor Statistics)": "FRED (BLS)",
          "Federal Reserve Bank of St. Louis (data: Freddie Mac)": "FRED (Freddie Mac)",
-         "Federal Reserve Bank of St. Louis (data: U.S. Treasury)": "FRED (Treasury)"}
+         "Federal Reserve Bank of St. Louis (data: U.S. Treasury)": "FRED (Treasury)",
+         "Federal Reserve Bank of St. Louis (data: Nasdaq)": "FRED Nasdaq",
+         "Federal Reserve Bank of St. Louis (data: Board of Governors of the Federal Reserve System)": "FRED 10-yr",
+         "U.S. Bureau of Labor Statistics": "BLS",
+         "Federal Reserve History (Federal Reserve System)": "Fed History",
+         "Federal Reserve Bank of New York (Liberty Street Economics)": "NY Fed"}
 LABEL = {"irs_estate": "Estate tax thresholds", "irs_2027": "2027 amounts", "irs_rp2635": "Rev. Proc. 2026-35",
          "irs_whatsnew": "What's new", "irs_rp2532": "Rev. Proc. 2025-32", "irs_i706": "Form 706 instructions",
          "irs_basis": "Inherited basis", "irs_rr2023_2": "Rev. Rul. 2023-2", "irs_tc409": "Capital gains",
@@ -53,7 +59,11 @@ LABEL = {"irs_estate": "Estate tax thresholds", "irs_2027": "2027 amounts", "irs
          "frh_oil": "Oil shock", "frh_1987": "Crash of 1987", "frh_recession": "Great Recession",
          "fed_mpr2001": "MPR Feb 2001", "bls_cpi": "CPI Oct 2026", "sos_results": "Election results",
          "fred_fedfunds": "Fed funds rate", "fred_unrate": "Unemployment rate", "fred_mortgage": "Mortgage rates",
-         "fred_casthpi": "House prices, state", "fred_usthpi": "House prices, US", "fred_dgs10": "10-year yield"}
+         "fred_casthpi": "House prices, state", "fred_usthpi": "House prices, US", "fred_dgs10": "10-year Treasury yield",
+         "bls_ted2022": "CPI, June 2022", "bls_mlr100": "CPI, 100 years", "bls_btn11": "Inflation periods",
+         "fedhist_1929": "Crash of 1929", "fedhist_greatinflation": "The Great Inflation",
+         "fedhist_greatrecession": "The Great Recession", "nyfed_covid": "COVID-19 and the Fed",
+         "fred_ussthpi": "US house price index", "fred_nasdaqcom": "NASDAQ Composite"}
 
 e = html.escape
 
@@ -145,6 +155,24 @@ BE = M["breakeven"]
 LAW = M["law"]
 BR45 = next(x for x in M["b_reset"] if x["year"] == 2045)
 E45 = next(x for x in M["estate"] if x["year"] == 2045)
+
+# Owner statement, 11 November 2026: Property B is already owned by the beneficiary, not by
+# the parents. Under that statement Property B is not part of the decedent's taxable estate, so
+# the federal exclusion is consumed by Property A and the cash only. The statement is
+# owner-supplied: no deed was seen, so it changes the framing shown here and adds one computed
+# room figure, but it does not remove the contingency tables (flag FL-01).
+def r10(x):
+    return int(round(float(x) / 10.0) * 10)
+
+
+EX2045 = 15_480_000 * 1.025 ** 18                     # same arithmetic as the model's estate rows
+A2045 = M["inputs"]["a_value"] * 1.04 ** 19
+B2045 = M["inputs"]["b_value"] * 1.04 ** 19
+assert abs(r10(EX2045 - (A2045 + B2045)) - E45["room_single_base"]) <= 10, "estate-room arithmetic drifted from the model"
+B_VALUE_2045 = r10(B2045)
+# Built from the published figures so the page adds up exactly: room (both homes) + Property B = room (statement).
+ROOM_B_OWNED = E45["room_single_base"] + B_VALUE_2045  # one person's room in 2045 if the statement holds
+assert abs(r10(EX2045 - A2045) - ROOM_B_OWNED) <= 10, "statement room drifted from exclusion less Property A"
 PRIV = ('<div class="privacy"><strong>Privacy.</strong> Properties are Property A (a single-family home in County A) and '
         'Property B (a small multi-unit building in City B). People are [GRANTOR], [SUCCESSOR_TRUSTEE] and [BENEFICIARY]. '
         'Assessment-roll values and tax bills are public records that can be matched to a parcel, so they appear here only '
@@ -165,17 +193,17 @@ Renting the home out ends with {usd(RENT['wealth'])} and moving in ends with {us
 <div class="card win"><div class="k">Best option</div><div class="v">Sell and reinvest</div><p>Ahead of renting by {usd(-RENT['gap'])} and of moving in by {usd(-LIVE['gap'])} after ten years.</p></div>
 <div class="card"><div class="k">Property A tax, 2045</div><div class="v">{usd(LIVE['tax_first'])}</div><p>If a child moves in. {usd(RENT['tax_first'])} if rented. {usd(LAW['tax_restored'])} if nothing changed.</p></div>
 <div class="card"><div class="k">Cost of living in A</div><div class="v">{usd(B45['live_cost_month_today'])} a month</div><p>In today's dollars, compared with selling. That is the price of choosing the home over the money.</p></div>
-<div class="card"><div class="k">Federal estate tax room, 2045</div><div class="v">{usd(E45['room_single_base'])}</div><p>Other assets one person could leave tax-free after both homes. Scenario: see the tax page.</p></div>
+<div class="card"><div class="k">Federal estate tax room, 2045</div><div class="v">{usd(E45['room_single_base'])}</div><p>Other assets one person could leave tax-free after both homes. The owner states Property B is already the heir's; under that statement the room is {usd(ROOM_B_OWNED)}. Scenario: see the tax page.</p></div>
 </div>
 {tbl("Inheritance in 2045, house prices rising 4% a year, result ten years later", ["Option", "Wealth after 10 years", "In today's dollars", "Behind the best by", "Cash in the first year", "Property A tax, first year"], rows)}
 {LEGEND}
 <section><h2>Five facts that could change the answer</h2>
 <p>These are not known from the records supplied. Each one is on the <a href="review.html">Flagged for Review</a> page.</p>
 <ol>
-<li><strong>Who holds title to Property B today.</strong> If it passes in the same estate, its tax resets as well: from about {usd(BR45['tax_keep'])} to {usd(BR45['tax_reset'])} a year in 2045.</li>
+<li><strong>Who holds title to Property B today.</strong> The owner states the building is already owned by the beneficiary; the deed was not seen. Under that statement it is outside the estate and its tax does not reset. If the deed shows the parents instead, the tax resets as well: from about {usd(BR45['tax_keep'])} to {usd(BR45['tax_reset'])} a year in 2045.</li>
 <li><strong>Which home is the parents' principal residence.</strong> Only that home can carry the Proposition 19 exclusion, and only if a child moves in within a year.</li>
 <li><strong>Whether the trust is revocable.</strong> The tax-free sale depends on the home being part of the taxable estate at death.</li>
-<li><strong>How much cash and securities are in the estate.</strong> Federal estate tax starts above the exclusion; the two homes use part of it.</li>
+<li><strong>How much cash and securities are in the estate.</strong> Federal estate tax starts above the exclusion; under the owner's statement about Property B, only Property A and the cash use part of it.</li>
 <li><strong>Insurance premiums.</strong> No official figure or quote could be confirmed. The ranking does not change at three times the owner's guess.</li>
 </ol></section>
 <section><h2>Where to look</h2><div class="cards">
@@ -184,8 +212,10 @@ Renting the home out ends with {usd(RENT['wealth'])} and moving in ends with {us
 <div class="card"><div class="k">The numbers</div><p><a href="projections.html">Year-by-year projections</a> to 2060 for value, assessed value, tax and running costs.</p></div>
 <div class="card"><div class="k">When the baseline breaks</div><p><a href="black-swans.html">Black-swan conditions</a>: fifty years of official economic history and stress tests for the plan.</p></div>
 <div class="card"><div class="k">The rules</div><p><a href="taxes.html">Tax, thresholds and law watch</a>, and the <a href="inheritance.html">inheritance steps</a> with deadlines.</p></div>
+<div class="card"><div class="k">The black swans</div><p><a href="stress.html">Black swan stress tests</a>: verified 1929, 1970s, 2000 and 2008 episodes re-run against the 2045 inheritance, and the amounts that do not rise with inflation.</p></div>
 <div class="card"><div class="k">What is not settled</div><p><a href="review.html">Flagged for Review</a> and the <a href="audit.html">independent verification</a> of the earlier edition.</p></div>
 <div class="card"><div class="k">Second opinion</div><p><a href="plan/index.html">Independent cross-check</a>: a separate model by another session, built only from official figures and break-evens. It reaches the same default.</p></div>
+<div class="card"><div class="k">50-year &amp; ownership suite</div><p><a href="analysis/index.html">50-year projections &amp; historical replay</a>: 2026&ndash;2076 schedules, 1977&ndash;2026 California cycle replay with Proposition 8 relief, 60/40 Treasury barbell, 20-year solar sunset and Property B ownership-asymmetry tables.</p></div>
 </div></section>{PRIV}"""
 PAGES["index.html"] = page("index.html", "Overview", "Overview", "Sell, rent or move in?",
                            "A costed answer for a home expected to be inherited through a trust between 2040 and 2050, "
@@ -203,19 +233,20 @@ rows = [
  (["Rent does not carry the home", f"{usd(RENT['first_cash'])} cash in the first year", f"After tax, on a home worth {usd(A45['fmv'])}. The reset property tax takes more than half of the rent."], "C", S("irs_p527", asm=True)),
  (["Break-even points", f"{BE['stock_return']}% stock return; {BE['house_growth']}% house growth", f"Renting beats selling only if stocks return less than {BE['stock_return']}% a year, or the house grows about as fast as stocks. The rent would have to be {usd(BE['rent_month'])} a month in 2026 dollars."], "C", S("treasury_cmt", "fred_hpi_a", asm=True)),
  (["Price of living in Property A", f"{usd(B45['live_cost_month_today'])} a month in today's dollars", "The gap between moving in and the best alternative, spread over ten years. A lifestyle choice, costed."], "C", S("irs_tc701", asm=True)),
- (["Property B, if in the same estate", f"tax rises from {usd(BR45['tax_keep'])} to {usd(BR45['tax_reset'])} in 2045", "In a multi-unit building only the unit that was the parent's home and becomes the child's home can be excluded."], "C", S("boe_lta26026", "cityb_rate", asm=True)),
+ (["Property B, if in the same estate", f"tax rises from {usd(BR45['tax_keep'])} to {usd(BR45['tax_reset'])} in 2045", "In a multi-unit building only the unit that was the parent's home and becomes the child's home can be excluded. The owner states Property B is already owned by the beneficiary; if the deed confirms it, none of this applies."], "C", S("boe_lta26026", "cityb_rate", asm=True, flag=True)),
  (["Federal estate tax", "$15,000,000 per person in 2026; $15,480,000 in 2027", "A married couple can use two exclusions, but only if the first estate files Form 706 on time to elect it. Tax above the exclusion is 40%."], "V", S("irs_estate", "irs_2027", "irs_i706")),
- (["Room for cash under the exclusion", f"{usd(E45['room_single_base'])} in 2045 for one person", f"Scenario exclusion {usd(E45['exclusion'])} less both homes at {usd(E45['homes_base'])}. The cash amount itself was not supplied."], "C", S("irs_estate", "irs_rp2532", asm=True, flag=True)),
+ (["Room for cash under the exclusion", f"{usd(E45['room_single_base'])} in 2045 for one person", f"Scenario exclusion {usd(E45['exclusion'])} less both homes at {usd(E45['homes_base'])}. Under the owner's statement that Property B is already the heir's, the room is {usd(ROOM_B_OWNED)} instead. The cash amount itself was not supplied."], "C", S("irs_estate", "irs_rp2532", asm=True, flag=True)),
  (["California and local death taxes", "None", "No state estate or inheritance tax return since 2005. Cities and counties are barred from imposing one."], "V", S("sco_estate", "rtc13301")),
  (["Insurance", BLANK, "No official premium figure or insurer quote was confirmed for either property. The owner's guesses are used as placeholders; tripling them does not change the ranking."], "U", S("cdi_compare", flag=True)),
  (["Law under discussion", "The initiative to repeal the 2021 inheritance rules failed for lack of signatures", f"It would have restored the pre-2021 exclusion. If a later measure did so, Property A's 2045 tax would be {usd(LAW['tax_restored'])}. Selling would still come out ahead."], "V", S("sos_memo", "lao_250017", "sos_measures")),
  (["State tax on financial assets", "The one-time state tax on certain taxpayers was rejected in the unofficial count", "Results on 10 November 2026: Proposition 40 rejected with 52.6% no; Proposition 42 ahead with 51.5% yes. Certification due 11 December 2026."], "V", S("sos_results")),
  (["Black-swan stress tests", "Selling stays first in every stress case tested", "Stocks at 4.0% a year, inflation at 4.0% a year, or a flat decade for house prices: the ranking holds. A lost decade only moves the proceeds from the stock fund to Treasuries."], "C", S("frh_recession", "boe_lta26002", "fred_casthpi", asm=True)),
+ (["Black swan stress tests", "Selling the home wins in 5 of 7 historical analogues; renting wins only when equities flatline", "The sale at the inheritance is robust; the reinvestment vehicle depends on the regime. Treasuries win when yields clear inflation (1970s analogues) or when stocks crash at the inheritance."], "A", S("bls_btn11", "fedhist_greatrecession", asm=True)),
  (["Deadlines after a death", "60 days, 150 days, 9 months, 1 year, 3 years", "Trustee notice; change in ownership statement; Form 706; homeowners' exemption; exclusion claim."], "V", S("prob16061_7", "rtc480", "irs_i706", "boe_prop19")),
 ]
 body = f"""{tbl("Important details", ["Topic", "Finding", "What it means"], rows)}{LEGEND}
 <section><h2>The plan in order</h2><ol>
-<li><strong>Now.</strong> Confirm the trust is revocable and holds title; confirm who owns Property B; confirm which home carries the parents' homeowners' exemption. Do not move either property into an LLC.</li>
+<li><strong>Now.</strong> Confirm the trust is revocable and holds title; confirm the deed matches the owner's statement that Property B is already owned by the beneficiary; confirm which home carries the parents' homeowners' exemption. Do not move either property into an LLC.</li>
 <li><strong>At the inheritance.</strong> Get a date-of-death appraisal. File the change in ownership statement within 150 days. File Form 706 within nine months if the estate is near the exclusion or a spouse survives.</li>
 <li><strong>Decide within the first year.</strong> Sell, unless living in the home is worth about {usd(B45['live_cost_month_today'])} a month in today's dollars to the family. If moving in, occupy within one year and file both claims.</li>
 <li><strong>Reinvest.</strong> A stock index fund has the higher expected result. Treasuries at today's yield finish ahead of renting when house prices grow 4% a year or less. A mix sits between the two.</li>
@@ -297,6 +328,124 @@ If the family does move in, staying at least two years before any sale keeps the
 <p>Download the figures: <a href="assets/data/decision.csv">decision.csv</a>, <a href="assets/data/model.json">model.json</a>.</p>{PRIV}"""
 PAGES["decision.html"] = page("decision.html", "Decision analysis", "Decision analysis", "Sell and reinvest comes out ahead",
                               "Three options, three inheritance years, three growth rates. All compared after tax, on the same footing.", body)
+
+# ------------------------------------------------------------------------------------------------ black swan stress tests
+STRESS = M["stress"]
+SX = M["stress_extras"]
+
+hist = [
+ (["1929-1932, Great Depression", "The Dow peaked at 381.17 on 3 September 1929 and closed at 41.22 on 8 July 1932, 89% below its peak; it did not regain its pre-crash high until 23 November 1954."], "V", S("fedhist_1929")),
+ (["1965-1982, the Great Inflation", "CPI inflation ran at about 1% in 1964, exceeded 12% with unemployment above 7% in 1974, and peaked in March 1980 at close to 15% (14.8% over 12 months)."], "V", S("fedhist_greatinflation", "bls_mlr100")),
+ (["1973-1976, first oil shock", "CPI 12-month reached 12.3% in December 1974; energy up 33.7% in September 1974."], "V", S("bls_btn11")),
+ (["1977-1982, second oil shock", "CPI 12-month reached 14.8% in March 1980; energy up 47.1% the same month."], "V", S("bls_btn11")),
+ (["2005-2008, pre-crisis inflation", "CPI 12-month reached 5.6% in July 2008; energy up 34.8% in September 2005."], "V", S("bls_btn11")),
+ (["2000-2002, dot-com bust", "NASDAQ Composite fell from 5,048.62 on 10 March 2000 to 1,114.11 on 9 October 2002, about 78% below its peak."], "V", S("fred_nasdaqcom")),
+ (["2007-2009, Great Recession", "Real GDP fell 4.3% (2007Q4 to 2009Q2); unemployment peaked at 10% in October 2009; home prices fell about 30% on average (mid-2006 to mid-2009); the S&P 500 fell 57% (October 2007 to March 2009); household and nonprofit net worth fell from about 69 trillion dollars to 55 trillion dollars."], "V", S("fedhist_greatrecession")),
+ (["2007-2012, national house prices", "FHFA all-transactions index: 380.31 in January 2007 fell to 308.14 in April 2012, about 19% (computed from the published series table)."], "C", S("fred_ussthpi")),
+ (["2020, COVID-19 crash", "The S&P 500 fell 34% from its February 2020 high by 23 March 2020; market-wide circuit breakers halted trading three times in March 2020."], "V", S("nyfed_covid")),
+ (["2021-2022, inflation surge", "CPI 12-month reached 9.1% in June 2022, the largest 12-month increase since November 1981; December 2021 reading was 7.0%."], "V", S("bls_ted2022", "bls_btn11")),
+ (["10-year Treasury yield, 1981 peak vs today", "15.84% on 30 September 1981 (FRED DGS10); 4.88% on 9 November 2026. High-inflation regimes carried high yields; deflation regimes carried yields near zero."], "V", S("fred_dgs10", "treasury_cmt")),
+]
+
+ANALOG = {"S0": S("treasury_cmt", asm=True),
+          "S1": S("fedhist_greatinflation", "bls_btn11", asm=True),
+          "S2": S("fedhist_1929", asm=True),
+          "S3": S("fred_nasdaqcom", asm=True),
+          "S4": S("fedhist_greatrecession", "fred_ussthpi", asm=True),
+          "S5": S("fred_dgs10", "fedhist_greatinflation", asm=True),
+          "S6": S("fred_hpi_a", asm=True)}
+
+def cell_pct(v):
+    return v if isinstance(v, str) else f"{v:.1f}%" if isinstance(v, float) else f"{v}%"
+
+srows = []
+for s in STRESS:
+    srows.append(([s["name"], f'{s["inflation"]}%', cell_pct(s["house"]), cell_pct(s["stocks"]), f'{s["treasury"]}%',
+                   N(s["sell_stock"]), N(s["sell_treasury"]), N(s["rent"]), N(s["live"]), s["winner"]],
+                  "A", ANALOG[s["id"]], "best" if s["winner_key"] == "sell_stock" else ""))
+short = {"Sell A, buy a stock index fund", "Sell A, buy Treasuries", "Keep A and rent it out", "Move into A"}
+trows = [([s["name"].split(" (")[0], N(s["sell_stock_today"]), N(s["sell_treasury_today"]), N(s["rent_today"]), N(s["live_today"])],
+          "C", ANALOG[s["id"]]) for s in STRESS]
+erows = [([str(x["year"]), x["inflation"], N(x["home_sale_single"]), N(x["home_sale_joint"])], "C",
+          S("irs_tc701", asm=True)) for x in SX["exclusion_real"]]
+prow = [([x["inflation"]] + [f'{x[y]:.2f}' for y in ("2030", "2040", "2050", "2060")], "C",
+         S("bls_btn11", "bls_mlr100", asm=True)) for x in SX["purchasing_power"]]
+s4 = next(s for s in STRESS if s["id"] == "S4")
+s2 = next(s for s in STRESS if s["id"] == "S2")
+s3 = next(s for s in STRESS if s["id"] == "S3")
+s1 = next(s for s in STRESS if s["id"] == "S1")
+s5 = next(s for s in STRESS if s["id"] == "S5")
+TODAY_HDR = "Purchasing power of one 2026 unit of money (1.00 = full value)"
+stress_notes = [("S0", STRESS[0]["note"], "treasury_cmt"),
+                ("S1", s1["note"], "fedhist_greatinflation"),
+                ("S2", s2["note"], "fedhist_1929"),
+                ("S3", s3["note"], "fred_nasdaqcom"),
+                ("S4", s4["note"], "fedhist_greatrecession"),
+                ("S5", s5["note"], "fred_dgs10"),
+                ("S6", next(x for x in STRESS if x["id"] == "S6")["note"], "fred_hpi_a")]
+notes_html = "<ul>" + "".join(
+    f'<li><strong>{sid}.</strong> {note} Winner on this model: <strong>{next(x for x in STRESS if x["id"] == sid)["winner"]}</strong>.</li>'
+    for sid, note, _ in stress_notes) + "</ul>"
+
+body = f"""
+<div class="answer"><p><strong>Selling Property A and reinvesting wins in 5 of the 7 historical analogues; renting wins only when equities flatline for a decade. Moving in never wins. The reinvestment vehicle, however, depends on the regime.</strong></p>
+<p>Over 2040-2060 the economy will not move in a straight line. The official record contains a depression, two inflationary oil shocks, a dot-com collapse, a housing crash, a pandemic crash and a 9.1% inflation print. This page re-runs the 2045 inheritance decision under the shapes of seven real episodes. The sale decision itself is robust; the vehicle and the margin are not.</p></div>
+
+<section><h2>Why this section exists</h2>
+<p>The inheritance is expected between 2040 and 2050, and the projections on this site run to 2060 - a horizon of 10 to 35 years, and a working lifetime of 50. Over that length, growth and inflation are never consistent: the base case here (2.5% inflation, 4% house growth, 7% stock return) is a central scenario, not a forecast. Every figure below that is not from an official publisher is computed scenario arithmetic from that grid, and is labelled as such.</p></section>
+
+<section><h2>What the official record shows</h2>
+{tbl("Verified episodes that define the stress cases", ["Episode", "What the official record shows"], hist)}{LEGEND}</section>
+
+<section><h2>Stress tests applied to the 2045 inheritance</h2>
+<p>Method. The market value at the 2045 inheritance, the tax basis reset, the Proposition 19 rule, the 2% assessed-value cap, the 10-year comparison window, and every tax rate are identical to the assumptions on the decision page. Only the post-inheritance economy is swapped: inflation (which drives costs), house price growth after 2045, stock returns, and the 10-year Treasury yield. Every option is sold and taxed at the end of the window, so the options remain comparable. House and stock cells marked <em>path</em> apply the year-by-year sequence of the historical analogue (crash first, recovery after); the 2045 market value itself is anchored to the baseline path. Computed rows; the official link on each row identifies the historical analogue it emulates.</p>
+{tbl("Results ten years after a 2045 inheritance", ["Scenario", "Inflation", "Houses", "Stocks", "10-yr Treasury", "Sell, stock fund", "Sell, Treasuries", "Rent", "Move in", "Best"], srows)}{LEGEND}
+{notes_html}
+<p>S4 year-by-year: houses {", ".join(f"{x:+.0%}" for x in M["stress_meta"]["gfc_house"])}; stocks {", ".join(f"{x:+.0%}" for x in M["stress_meta"]["gfc_stock"])}.</p>
+</section>
+
+<section><h2>The same results in today's dollars</h2>
+{tbl("Wealth deflated to 2026 purchasing power at each scenario's own inflation", ["Scenario", "Sell, stock fund", "Sell, Treasuries", "Rent", "Move in"], trows)}
+<p>A nominal winner can still be a real loser: at 6% inflation (S1) a dollar buys about 0.56 of its 2045 value ten years later. Constant-dollar comparisons are how a 2040 decision should be judged.</p></section>
+
+<section><h2>The silent risks: statutory amounts that do not rise with inflation</h2>
+<p>Some of the most important numbers in this plan are fixed by statute and are not indexed for inflation. Their real value erodes every year.</p>
+{tbl("Real (inflation-adjusted) value of the IRC 121 home-sale gain exclusion, $250,000 single / $500,000 joint", ["Year", "Assumed inflation", "Single return", "Joint return"], erows)}
+{tbl(TODAY_HDR, ["Average inflation", "2030", "2040", "2050", "2060"], prow)}
+<p>The federal estate exclusion IS indexed (chained CPI), so its real value is broadly preserved, subject to Congress: see the scenario table on the tax page. The Proposition 19 amount is indexed too, but only by one year of house price change every second year, so it grows more slowly than house prices and erodes slowly. The IRC 121 exclusion is not indexed at all: at 8% inflation the joint exclusion is worth under $120,000 in 2045 and under $80,000 in 2050, against $500,000 today.</p></section>
+
+<section><h2>What changes - and what does not</h2>
+<ol>
+<li><strong>The decision to sell survives.</strong> Selling and reinvesting wins or nearly ties in all seven analogues; moving into the home is last in every one of them. The sale also monetises the tax-basis reset, which no later regime can reverse.</li>
+<li><strong>The vehicle depends on the regime.</strong> Treasuries win when yields are high enough to clear inflation (S1 at 8.0%, S5 at 8.5%) and when stocks crash at the inheritance (S4); equities win in baseline and boom conditions (S0, S6); renting wins only in flat-equity analogues (S2 by {usd(s2['rent'] - s2['sell_treasury'])}, S3 by {usd(s3['rent'] - s3['sell_treasury'])} - both under 5% of the comparison base).</li>
+<li><strong>Treasuries are not a hedge against high inflation at today's yield.</strong> At 4.88% with 6-9% inflation, each dollar in Treasuries loses 1-4% of real value a year. The S1 and S5 results assume the Treasury yield <em>rises with inflation</em>, as it did in the 1970s-80s; at today's 4.88% held constant, renting and equities win S1 clearly.</li>
+<li><strong>Timing the sale matters less than not being forced at the bottom.</strong> S4 shows a −45% crash landing on the inheritance: the stock leg ends ten years later at only {usd(s4['sell_stock'])}, behind Treasuries at {usd(s4['sell_treasury'])}, and renting nearly ties selling. An inheritance landing mid-crash is the one case for holding the home 1-2 years and selling into the recovery.</li>
+<li><strong>Nominal rents lag inflation by construction.</strong> Sitting-tenant increases are 60% of the regional index (1.5% at the assumed 2.5% inflation), so real rent declines every year in nominal-terms; that is the structural weakness of the rent option in an inflation regime.</li>
+<li><strong>Concentration is itself a black swan amplifier.</strong> Both properties are in one region; a local shock hits value, rent demand and insurance availability at once (insurance has repriced nationally after the 2023-2025 wildfire and storm losses - no quote is verified here; the flagged page lists premium uncertainty). Selling converts one regional, single-asset exposure into a diversified portfolio.</li>
+</ol></section>
+
+<section><h2>Fifty years, three regimes</h2>
+<p>1965-1982 rewarded rent and real assets; 1983-2000 rewarded houses and stocks together; 2000-2009 punished stocks and then housing; 2020-2022 punished everything except nominal cash yield. A plan that is optimal in exactly one of those regimes is not robust. The diversified answer the numbers keep favouring: sell A at the inheritance (the basis reset is certain; everything else is contingent), reinvest in a mix weighted to equities with a Treasury ballast sized to the then-current yield, keep Property B for its rent, and revisit the split every two years as the regime reveals itself.</p></section>
+
+<section><h2>Black-swan playbook for the inheritance window</h2>
+<ol>
+<li><strong>Get the date-of-death appraisal first.</strong> Every downstream figure - basis reset, Proposition 19 amount, federal estate calculation - keys off it.</li>
+<li><strong>Do not be a forced seller into a crash.</strong> The first 12-24 months are the riskiest time to sell a home into an air pocket. If the 2040-2050 economy prints a black swan, the fallback is to rent A temporarily (the model prices this) rather than sell at the trough.</li>
+<li><strong>File the exclusion claims on time.</strong> One year to occupy, three years to claim (or before a sale). A missed deadline is a pure loss of roughly {usd(A45['saving'])} a year.</li>
+<li><strong>Elect portability on Form 706 if a spouse survives</strong>, even with no tax due - the second exclusion is forfeited otherwise, and a black swan later can not be unwound.</li>
+<li><strong>Stress the insurance, not the premium guess.</strong> Rebuild costs have repriced; get quotes at renewal and after any remodel; a lapse or underinsured total loss is the one unrecoverable black swan for the house itself.</li>
+<li><strong>Keep 1-2 years of Property A running costs liquid</strong> at the inheritance so a forced sale is never required.</li>
+<li><strong>Re-run this page's arithmetic every two years</strong> - the scenario grid, the Treasury yield and the tax thresholds all move; the conclusions should be re-earned, not inherited.</li>
+<li><strong>Keep the fixed-rate bias.</strong> No debt is modeled in this plan; if any is ever added to A or B, fix the rate - 1981 showed what floating does to a stretched landlord.</li>
+<li><strong>Two-year residency before any later sale of A</strong> if the family moves in, to keep the (unindexed) $500,000 joint home-sale exclusion available - worth about {usd(SX['exclusion_real'][4]['home_sale_joint'])} in 2045 at 2.5% inflation, far less in a high-inflation regime.</li>
+</ol></section>
+
+<section><h2>What this page is not</h2>
+<p>Not a forecast, and not a timing tool. S4's year-by-year path is constructed from the verified magnitudes of the 2008 analogue, not from any prediction that 2045 will repeat it. The scenarios are deliberately wide on both sides. What the analysis supports is qualitative but firm: the sale at the inheritance is robust to every regime in the official record; the destination of the proceeds is regime-dependent and should be set with the yields and prices then in front of you.</p></section>
+{PRIV}"""
+PAGES["stress.html"] = page("stress.html", "Black swan stress tests", "Black swan stress tests", "What happens when the economy stops cooperating",
+                           "Verified 1929, 1970s, 2000 and 2008 episodes re-run against the 2045 inheritance; the amounts that do not rise with inflation; and what changes and what does not.", body)
+
 
 # ------------------------------------------------------------------------------------------------ projections
 ra = [([str(r["year"]), N(r["value_low"]), N(r["value_base"]), N(r["value_high"]), N(r["assessed"]), N(r["property_tax"]), N(r["insurance"]),
@@ -500,8 +649,8 @@ body = f"""
 <p>The owner's assessed values for 2016 to 2025 follow the state factors in every year but one, where the rise was slightly below the factor. The year is reported to the owner privately.
 One year's tax bill rose about 18% and another fell about 6% while the assessed value moved 2% and 1%. A change in fixed charges would explain moves of that kind; the bills' line items would confirm or refute it.</p></section>
 <section><h2>If Property B passes in the same estate</h2>
-<p>The records supplied do not say who holds title. If the parents do, the building changes ownership at the same death and is reassessed. In a multi-unit building the family-home exclusion covers only the unit that was the parent's principal residence and becomes the child's.
-The table shows the building reassessed in full. If the current owner is already the heir, none of this applies.</p>
+<p>The owner states (11 November 2026) that the building is already owned by the beneficiary; the deed was not seen, so the question stays flagged (FL-01). If instead the parents hold title, the building changes ownership at the same death and is reassessed. In a multi-unit building the family-home exclusion covers only the unit that was the parent's principal residence and becomes the child's.
+Under the owner's statement none of this applies; the table is kept as the contingency case.</p>
 {tbl("Property B reassessed at market value, house prices rising 4% a year", ["Year", "Market value", "Tax, no change", "Tax, reassessed", "Increase", "Rent, two units", "Net income, no change", "Net income, reassessed"], reset)}</section>
 <section><h2>If Property B is ever sold</h2>{tbl("City B transfer tax on a sale", ["Price", "Rate on the whole price", "Note"], ttx)}</section>{PRIV}"""
 PAGES["property-b.html"] = page("property-b.html", "Property B", "Property B", "The rented building to keep",
@@ -567,7 +716,7 @@ body = f"""
 <p>The exclusion covers everything in the estate: both homes, cash, securities and earlier taxable gifts. The amount of cash was not supplied, so the table shows the room left after the two homes.
 The 2026 and 2027 exclusions are the published amounts. From 2030 the exclusion is a scenario: $15,480,000 rising 2.5% a year. The last column cuts it in half to test a change of law. A negative number means estate tax would be due at 40% on that amount even with no other assets.</p>
 {tbl("Room under the federal exclusion after both homes", ["Year of death", "Exclusion, one person", "Exclusion, couple", "Both homes at 4%", "Room, one person, 3%", "Room, one person, 4%", "Room, one person, 5%", "Room, couple, 4%", "Room if the exclusion is halved"], est)}
-<p>If Property B is already owned by the heir, it is not in the estate and the room is larger by its value.</p></section>
+<p>The table assumes both homes are in the estate, the conservative reading. The owner states (11 November 2026) that Property B is already owned by the beneficiary, so it is not part of the decedent's taxable estate <a href="https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax" target="_blank" rel="noopener noreferrer">IRS &middot; Estate tax thresholds</a>. If the deed confirms the statement, one person's room in 2045 is {usd(ROOM_B_OWNED)} instead of {usd(E45['room_single_base'])}, larger by Property B's 2045 value of {usd(B_VALUE_2045)}. The statement is owner-supplied; no deed was seen (flag FL-01).</p></section>
 <section><h2>Law changes under discussion</h2>{tbl("Law watch", ["Item", "Status on 10 November 2026", "What it would change", "Effect on this decision"], watch)}</section>{PRIV}"""
 PAGES["taxes.html"] = page("taxes.html", "Tax, thresholds, law watch", "Tax and law", "Rules, thresholds and what may change",
                            "Federal, state and local. Each rule was read on the official publisher's site.", body)
@@ -575,7 +724,7 @@ PAGES["taxes.html"] = page("taxes.html", "Tax, thresholds, law watch", "Tax and 
 # ------------------------------------------------------------------------------------------------ inheritance
 steps = [
  (["1", "Now", "Confirm the trust is revocable and that the deed to each property names the trust.", "[GRANTOR]", "The basis resets only for property in the taxable estate."], "V", S("irs_rr2023_2")),
- (["2", "Now", "Establish who holds title to Property B and which home carries the parents' homeowners' exemption.", "[GRANTOR], [BENEFICIARY]", "Decides which property is reassessed and which can be excluded."], "V", S("boe_lta26026", flag=True)),
+ (["2", "Now", "Confirm the deed matches the owner's statement that Property B is already owned by the beneficiary, and which home carries the parents' homeowners' exemption.", "[GRANTOR], [BENEFICIARY]", "Decides which property is reassessed and which can be excluded."], "V", S("boe_lta26026", flag=True)),
  (["3", "Now", "Keep both properties out of any LLC. If there are several children, let the trustee distribute unequally.", "[GRANTOR]", "An LLC ends the exclusion. A swap between siblings is reassessed."], "V", S("boe_lta26026")),
  (["4", "Now", "If married, plan for the first death: Form 706 must be filed to keep the first spouse's unused exclusion.", "[GRANTOR]", "Without the election the second exclusion is lost."], "V", S("irs_estate", "irs_i706")),
  (["5", "Day of death", "The trust becomes irrevocable. For property tax the date of death is the date of change in ownership.", "[SUCCESSOR_TRUSTEE]", "All deadlines below run from this date."], "V", S("boe_prop19")),
@@ -604,7 +753,7 @@ PAGES["inheritance.html"] = page("inheritance.html", "Inheritance steps", "Inher
 
 # ------------------------------------------------------------------------------------------------ flagged for review
 fl = [
- ("FL-01", "Who holds title to Property B", "Not stated in the records. Decides whether the building is reassessed at the same death and whether it is in the estate.", "Current deed or trust schedule", "boe_lta26026"),
+ ("FL-01", "Who holds title to Property B", "The owner states (11 November 2026) that the building is already owned by the beneficiary; the deed was not seen. Title decides whether the building is reassessed at the same death and whether it is in the decedent's estate.", "The current deed or trust schedule", "boe_lta26026"),
  ("FL-02", "Which home is the parents' principal residence", "Only that home can be excluded, and only one unit of a multi-unit building.", "Homeowners' exemption shown on the tax bill", "boe_prop19"),
  ("FL-03", "Whether the trust is revocable", "The basis reset depends on it.", "The trust document", "irs_rr2023_2"),
  ("FL-04", "Cash, securities, earlier taxable gifts, marital status", "The owner says the cash may exceed the exclusion. No amount was supplied, so the room is shown without it.", "A list of assets and gift tax returns", "irs_estate"),
@@ -658,7 +807,7 @@ corr = [
 CB = {"C-01": "V", "C-02": "V", "C-03": "C", "C-04": "C", "C-05": "V", "C-06": "C", "C-07": "V", "C-08": "A", "C-09": "V", "C-10": "V", "C-11": "C", "C-12": "C"}
 rows = [([i, item, old, new], CB[i], S(src)) for i, item, old, new, src in corr]
 repo = [
- ("Published pages", "Twelve pages are generated from one model and one source ledger. A stale page fails the build."),
+ ("Published pages", "Thirteen pages are generated from one model and one source ledger. A stale page fails the build."),
  ("Retired pages and data files", "Paths used by earlier editions hold withdrawal notices with no figures. The build fails if any other tracked file appears."),
  ("Source ledger", "Each source records how it was checked: opened, or read as an excerpt served from the official domain."),
  ("Checks", "Every table row must link to an official publisher. Dollar amounts must be multiples of $10. City names, ZIP codes, parcel numbers and e-mail addresses fail the build."),
@@ -725,10 +874,12 @@ Inheritance in 2045, house prices rising 4% a year, measured ten years later aft
 - Renting wins only if stocks return under {BE['stock_return']}% a year or the home appreciates about {BE['house_growth']}% a year.
 - Living in the home costs about ${B45['live_cost_month_today']:,} a month in today's dollars compared with selling.
 - Federal estate tax: $15,000,000 per person in 2026 and $15,480,000 in 2027; California has none.
-- If Property B is in the same estate its tax resets too: ${BR45['tax_keep']:,} to ${BR45['tax_reset']:,} a year in 2045.
+- The owner states Property B is already owned by the heir, so under that statement it sits outside the decedent's estate; if it were in the same estate its tax would reset: ${BR45['tax_keep']:,} to ${BR45['tax_reset']:,} a year in 2045.
+- Under that same statement one person's estate-tax room in 2045 is ${ROOM_B_OWNED:,} instead of ${E45['room_single_base']:,}, larger by Property B's 2045 value of ${B_VALUE_2045:,}. The deed was not seen (FL-01).
 - Insurance premiums are unverified and left blank; tripling the owner's guess does not change the ranking.
 - Black-swan stress tests (stocks at 4.0%, inflation at 4.0%, flat house prices): selling still finishes first; a lost decade only moves the proceeds to Treasuries. See black-swans.html.
+- Black swan stress tests (stress.html): verified 1929, 1965-82, 2000-02, 2007-09 and 2020 episodes re-run against the 2045 inheritance. The sale decision holds in 5 of 7 analogues; only the reinvestment vehicle changes with the regime.
 
-Site: index.html. Open items: review.html. Sources: sources.html.
+Site: index.html. Stress tests: stress.html. Economic conditions: black-swans.html. Open items: review.html. Sources: sources.html.
 """, encoding="utf-8")
 print(f"built {len(PAGES)} pages")

@@ -9,6 +9,63 @@ Privacy rule: public pages use generic Property A / Property B placeholders. Do 
 | Coordination record review and independent publication check | done | `arena/d0927734-tino3` (PR #18) | `COORDINATION.md`; verification and live-state review |
 | Historical disclosure and future property-specific calculations | needs review | repository owner / qualified advisers | Prior repository versions and private evidence; not part of public edition |
 
+## Round of 11 November 2026 — claim register and final integration (`arena/2f0b4adb-tino3`)
+
+*Branch note:* Arena fixes this session to `arena/2f0b4adb-tino3`; the `session-<id>/<task>` naming cannot be used.
+This block sits near the top of the file on purpose: every other session appends at the end, so edits here merge without conflict.
+
+### Why this register exists
+
+Six sessions started between 04:07 and 04:13 UTC on 11 November. Each pushed its claim to its own branch, so **no claim was visible
+from `main`** and none of the sessions could see the others. Board read by this session at 04:13 to 04:20 UTC with `git ls-remote`
+and a fetch of every branch. The table copies those claims, unchanged in substance, so they can be seen from `main`. Times are the
+committer times of the claim commits. Each session's own section governs; this is an index.
+
+| Claimed (UTC) | Session branch | Claim commit | Tasks claimed | Files named in the claim |
+|---|---|---|---|---|
+| 04:09:37 | `arena/7f9e7fe8-tino3` | `be0a89e` | A1 audit of the public edition (privacy, source accuracy, arithmetic, links) and repair; A2 reproduce and test; A3 PR, merge, deploy | `scripts/*`, `assets/*`, root generated HTML, `README.md`, `EXECUTIVE_SUMMARY.md`, `plan/**` as needed, `.github/workflows/*` |
+| 04:10:10 | `arena/0b455c89-tino3` | `1d6cb25` | S-1 black-swan module; S-2 insurance and running-cost research; S-3 inheritance-tax analysis (exclusion, headroom, inherited retirement accounts); S-4 law watch; S-5 render, PR, merge | new `scripts/stress.py`, new `assets/data/stress.json`, a new page, `assets/sources.json` (append), `scripts/model.py` (new blocks), `scripts/build.py`, `scripts/verify.py`, `scripts/package_site.py`, `README.md`, `EXECUTIVE_SUMMARY.md` |
+| 04:11:33 | `arena/e4c5b872-tino3` | `9d1689b` | E4-2 black-swan page and model scenarios; E4-3 official anchors for insurance, electricity, water; E4-4 re-verification of the 43-entry ledger; E4-5 checks; E4-6 PR, merge | `scripts/model.py`, `scripts/build.py`, new `stress.html`, `assets/data/*`, `assets/style.css`, `assets/sources.json`, `scripts/verify.py`, `scripts/package_site.py` |
+| 04:11:34 | `arena/bde5056d-tino3` | `1a69954` | BS-1 research of black-swan episodes; BS-2 scenario arithmetic in the model; BS-3 new page, navigation, README and summary refresh; BS-4 allow-list, checks, PR, merge | `assets/sources.json` (append), `scripts/model.py`, `assets/data/model.json`, `assets/data/decision.csv`, new `stress.html`, `index.html`, `scripts/build.py`, `README.md`, `EXECUTIVE_SUMMARY.md`, `scripts/package_site.py`, `scripts/verify.py`, workflows if needed |
+| 04:11:53 | `arena/4eefd177-tino3` | `f53a56b` | BS-1 black-swan module and page; BS-2 insurance and utility research; BS-3 re-verification of the 43-entry ledger; BS-4 integration, PR, merge | new `scripts/swan.py`, new `assets/data/swan.json`, new `stress.html`, `scripts/build.py` (review rows, NAV), `assets/sources.json` (append), `audit.html` rows, `scripts/package_site.py`, `scripts/verify.py`, `scripts/privacy_boundary.py`, `README.md` |
+| 04:20 | `arena/2f0b4adb-tino3` | this commit | I-1 to I-3 below | this block; nothing else until integration |
+
+### Overlaps found (facts)
+
+1. **A separate black-swan section is claimed four times** (`0b455c89` S-1, `e4c5b872` E4-2, `bde5056d` BS-2/BS-3, `4eefd177` BS-1).
+2. **The same new file name, `stress.html`, is named by three sessions** (`e4c5b872`, `bde5056d`, `4eefd177`). Whichever merges second meets an add/add conflict.
+3. **`scripts/model.py` and `scripts/build.py` are named by four sessions and by the audit session.** `assets/sources.json`, `scripts/verify.py` and `scripts/package_site.py` are named by five.
+4. **Re-verification of the source ledger is claimed three times** (`7f9e7fe8` A1, `e4c5b872` E4-4, `4eefd177` BS-3). **Insurance research is claimed three times** (`0b455c89` S-2, `e4c5b872` E4-3, `4eefd177` BS-2).
+5. **One item of the owner's brief is claimed by nobody:** the owner now states that Property B is *already owned by the heir*. The published edition treats that as unknown (flag FL-01, the "same estate" tables, and the estate-tax room computed on both homes).
+
+### What the board rule gives
+
+"Never start a task another session has claimed": the earlier claim holds. By claim time that is `7f9e7fe8` for the audit,
+and `0b455c89` for the black-swan module, insurance research, inheritance-tax analysis and law watch. The three later black-swan
+claims duplicate it. This session cannot direct another session; it records the order so each can decide, and so the last merge
+does not silently overwrite the first.
+
+**Request to the five sessions (not an instruction):** before merging, pull `main`, read this table, and (a) do not create a second
+page at a file name another session has already merged, (b) fold additional verified scenarios into the page already on `main`
+instead of replacing it, (c) record in your own section what you dropped and why.
+
+### This session's claim
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| I-1 Claim register on `main`, kept current as the branches move | **in progress** | `arena/2f0b4adb-tino3` | `COORDINATION.md`, this block only |
+| I-2 Independent reference data: official series and rules read by this session, kept apart from the other sessions' work so that it can be used to re-verify theirs line by line | **in progress** | `arena/2f0b4adb-tino3` | no shared file; working notes stay outside the published tree until integration |
+| I-3 Final integration, last in the round. Starts only when every claim above is merged, withdrawn, or 60 minutes without a commit. Merge what is unmerged, keep one black-swan page, apply the owner's statement that Property B is already the heir's, re-verify the combined data line by line against I-2, build, check links, PR, merge, confirm the deploy | **waiting** | `arena/2f0b4adb-tino3` | shared files, at integration time only |
+
+Rules this session holds itself to: no fifth black-swan implementation while four are in progress; no edit to `scripts/*`, `assets/*`,
+`plan/**`, any page or any workflow before I-3 starts; no name, address, postal code, parcel number or unrounded roll figure in any
+commit, message or pull request.
+
+### Log (`arena/2f0b4adb-tino3`)
+
+- 04:13 UTC — read the whole board on `main` (`6086d16`). Every claim there is done or more than 17 hours old.
+- 04:13 to 04:20 UTC — `git ls-remote` showed five new session branches created since 04:09; fetched each and read its claim. Register written.
+
 ## Sources and verification scope
 
 The reviewed dashboard links to official authorities, including:
@@ -353,6 +410,152 @@ The ranking of the other options changed (renting now finishes ahead of moving i
 - **Closing wording pass (this commit):** six sentences that stated a cause or a likelihood with no source behind them were reduced to what is known (insurance "likely low", a "copying error", "avoids probate", and three similar). No figure changed. This is the last change from this session; its merge is recorded in the pull request itself rather than by another commit here.
 - **For the next session:** PRs #23 and #25 are open and each would replace the root edition. See CR-C2-2 before merging either.
 
+---
+
+## Session `arena/bde5056d-tino3` (branch `arena/bde5056d-tino3`) — black-swan stress tests + executive summary refresh · 2026-11-11
+
+*Branch note:* Arena pins this session to `arena/bde5056d-tino3`; the `session-<id>/<task>` naming cannot be used. All work is on this branch and merges to `main` via PR.
+
+Board state read before claiming (fetched `origin`, inspected open PRs and the live site): two open replacement PRs (#23 `arena/e0ed27dd-tino3`, #25 `arena/9233adb2-tino3`) would each rebuild the root edition from a model that predates corrections C-03 to C-07 (per CR-C2-2 and CR-6616-5). They are left open and untouched; they are not merged and not closed by this session.
+
+| Task | Status | Owner | File scope (non-overlapping claim) |
+|---|---|---|---|
+| BS-1 Research and verification of black-swan episodes against official publishers (BLS, Federal Reserve / FRED / Federal Reserve History, NY Fed Liberty Street Economics, FHFA) | in progress | `arena/bde5056d-tino3` | `assets/sources.json` (append only), `COORDINATION.md` (this section only) |
+| BS-2 Scenario arithmetic in the model: baseline reference plus historical-analogue stress cases applied to the 2045 inheritance decision; loop-safe parameter overrides; reproducible output committed | in progress | `arena/bde5056d-tino3` | `scripts/model.py`, `assets/data/model.json`, `assets/data/decision.csv` (regenerated by the model only) |
+| BS-3 New page `stress.html` (separate "Black swan stress tests" section) + navigation entry + README and executive-summary refresh | in progress | `arena/bde5056d-tino3` | `stress.html` (new), `index.html`, `scripts/build.py`, `README.md`, `EXECUTIVE_SUMMARY.md` (regenerated by build only) |
+| BS-4 Allowlist, verifier host list, rebuild, full check suite, PR, merge, deploy confirmation, live check | in progress | `arena/bde5056d-tino3` | `scripts/package_site.py`, `scripts/verify.py`, `.github/workflows/verify.yml` and `pages.yml` (only if a new step is required), `COORDINATION.md` (this section only) |
+
+Not in scope: `plan/**` (owned content of `arena-6616d6b2`), `decision-suite/**`, all withdrawal notices, all privacy-boundary guards unless the checks require an additive change, PRs #23 and #25.
+
+**Verified sources opened for BS-1 (all on official domains, 2026-11-11):**
+
+- BLS The Economics Daily, "Consumer prices up 9.1 percent over the year ended June 2022" (2026-11-11 fetched copy): https://www.bls.gov/opub/ted/2022/consumer-prices-up-9-1-percent-over-the-year-ended-june-2022-largest-increase-in-40-years.htm
+- BLS Monthly Labor Review, "One hundred years of price change" (largest 12-month increase: March 1979–March 1980, 14.8 percent): https://www.bls.gov/opub/mlr/2014/article/one-hundred-years-of-price-change-the-consumer-price-index-and-the-american-inflation-experience.htm
+- BLS Beyond the Numbers, "Exploring price increases in 2021 and previous periods of inflation" (1973–76: 12.3% Dec 1974; 2005–08: 5.6% Jul 2008): https://www.bls.gov/opub/btn/volume-11/exploring-price-increases-in-2021-and-previous-periods-of-inflation.htm
+- Federal Reserve History (Federal Reserve System), "Stock Market Crash of 1929" (DJIA 381.17 on 3 Sep 1929; 41.22 on 8 Jul 1932, 89 percent below peak; pre-crash high regained only 23 November 1954): https://www.federalreservehistory.org/essays/stock-market-crash-of-1929
+- Federal Reserve History (Federal Reserve System), "The Great Inflation" (1965–1982; inflation ~1% in 1964, above 12% with unemployment above 7% by 1974; peaked March 1980 close to 15%): https://www.federalreservehistory.org/essays/great-inflation
+- Federal Reserve History (Federal Reserve System), "The Great Recession" (real GDP fell 4.3% 2007Q4–2009Q2; unemployment peaked at 10% in October 2009; home prices fell approximately 30% on average from mid-2006 peak to mid-2009; S&P 500 fell 57% from October 2007 peak to March 2009 trough): https://www.federalreservehistory.org/essays/great-recession-of-200709
+- Liberty Street Economics (Federal Reserve Bank of New York), "The COVID-19 Pandemic and the Fed's Response" (S&P 500 fell 34% from its February 2020 high by 23 March 2020; three circuit-breakers in March 2020): https://libertystreeteconomics.newyorkfed.org/2020/04/the-covid-19-pandemic-and-the-feds-response/
+- FRED (St. Louis Fed), FHFA All-Transactions House Price Index for the United States, series USSTHPI (read in full; 380.31 in Jan 2007 → 308.14 in Apr 2012, about −19%): https://fred.stlouisfed.org/data/USSTHPI
+- FRED (St. Louis Fed), NASDAQ Composite, series NASDAQCOM (5,048.62 on 10 Mar 2000 → 1,114.11 on 9 Oct 2002, about −78%; read from the series CSV): https://fred.stlouisfed.org/series/NASDAQCOM
+- FRED (St. Louis Fed), 10-Year Treasury par yield, series DGS10 (15.84% on 30 Sep 1981; 4.88% on 9 Nov 2026): https://fred.stlouisfed.org/series/DGS10
+
+Anything not verifiable from these official pages is left blank or labelled as scenario arithmetic on the site. No value is inferred.
+
+---
+
+## Session `arena/bde5056d-tino3` — black-swan stress tests + 11 Nov 2026 verification refresh · result log · 2026-11-11
+
+*Branch note:* Arena pins this session to `arena/bde5056d-tino3`; the `session-<id>/<task>` naming cannot be used. All work is on this branch and merged to `main` via PR.
+
+**Claim honoured.** BS-1..BS-4 as claimed above; no file outside the claim was edited. `plan/**`, all withdrawal notices, `decision-suite/**`, and PRs #23/#25 were not modified. A concurrent session (`2f0b4adb-tino3`, PR #31) merged claim-register notes to `main` while this work was in flight; this session rebased on it and merged on top without conflict.
+
+**What was built.** New page `stress.html` ("Black swan stress tests"): (a) verified episode table (1929 crash, Great Inflation and both oil shocks, dot-com bust, Great Recession, FHFA all-transactions house price index −19% Jan 2007 → Apr 2012 computed from the published series, COVID-19 crash, 2021–22 inflation surge, 1981 peak of the 10-year Treasury); (b) seven-scenario stress test of the 2045 inheritance (baseline; 1970s-style high inflation; deflationary slump; lost decade for equities; 2008-style crash at the inheritance year-by-year path; rate shock; boom) with every option cashed out and taxed at the end of the window; (c) nominal and deflated results; (d) erosion of unindexed amounts (IRC §121 home-sale exclusion: $500,000 joint → $312,760 by 2045 at 2.5% inflation, $197,870 at 5%, $115,860 at 8%) and purchasing power of money 2030–2060; (e) what changes and what does not; (f) black-swan playbook; (g) scope disclaimer. Navigation, Overview card, executive summary, EXECUTIVE_SUMMARY.md, README.md and the audit page counts were updated to twelve pages / 53 sources.
+
+**Result first published.** Sell and reinvest wins in 5 of 7 historical analogues (baseline, high-inflation analogue, rate shock, crash-at-inheritance, boom). Renting wins only when equities flatline (deflationary slump by about $280,000; lost decade by about $330,000; both under 5% of the comparison base). Treasuries win the high-inflation analogue (10-year at 8.0% out-earns stocks assumed at 4.0%), the rate shock (8.5%), and the crash path ($7,152,850 vs $6,833,840 for equities). Moving in never wins. Anchored to the 2045 inheritance at the baseline market value; all options cashed out and taxed at the end; scenario arithmetic, not a forecast.
+
+**Sources opened on the publisher's own domain on 2026-11-11 (BS-1):** BLS Economics Daily June 2022 CPI (9.1%, largest since Nov 1981); BLS Monthly Labor Review "100 years of price change" (14.8% Mar 1980, read in the article body); BLS Beyond the Numbers 11(7) Table 2 (12.3% Dec 1974; 14.8% Mar 1980; 5.6% Jul 2008; 7.0% Dec 2021, read in full); Federal Reserve History — "Stock Market Crash of 1929" (DJIA 381.17 → 41.22, −89%, opened), "The Great Inflation" (1% in 1964; >14% in 1980; March 1980 close to 15%; >12% with unemployment >7% in 1974 — the 1974 detail is an official-domain search excerpt, marked as such in the ledger), "The Great Recession" (GDP −4.3%; unemployment 10%; home prices ~−30% mid-2006→mid-2009; S&P 500 −57%; net worth $69T → $55T, opened); Liberty Street Economics (NY Fed, S&P 500 −34% by 23 Mar 2020, three circuit breakers, opened); FRED/FHFA USSTHPI full series table (read; peak-to-trough computed); FRED NASDAQCOM series CSV (read; −78% computed); FRED DGS10 (15.84% on 30 Sep 1981; 4.88% on 9 Nov 2026, read). 10 new ledger entries (`bls_ted2022` … `fred_dgs10`); 53 total; each records how it was checked.
+
+**Verification performed.** `python3 scripts/model.py` reproducible; `python3 scripts/build.py` renders 12 pages; `python3 scripts/verify.py` PASS — 12 reproducible pages; 430 table rows, every one links to an official publisher; 53 ledger sources, official hosts only; city/ZIP/parcel/e-mail scan clean; every dollar amount a multiple of $10; rebuild-from-clean passes. `python3 plan/tools/verify.py` PASS (cross-check edition untouched). `python3 scripts/package_site.py` PASS (12 pages, 28 assets, 49 withdrawal notices). $10-rounding, official-host and privacy checks also run on the new page like every other.
+
+**Publication result · `arena/bde5056d-tino3` · 2026-11-11**
+
+- **PR [#32](https://github.com/wingbangboozle1-lang/Tino3/pull/32) — MERGED** 2026-11-11T04:17:10Z, merge commit `e817a8790ba1ede2f94c477fc6c4fb6dfd9bfb1b`. CI `verify` passed on the PR before merge (run 42958183631).
+- **After the merge, on `main`:** `Verify static site` run `42958223153` success; `Deploy GitHub Pages` run `42958223238` success (headSha `e817a87`); legacy `pages build and deployment` run `42958223074` success.
+- **Live check by HTTP fetch (with cache-buster, after the first cached read appeared stale):** `/stress.html` serves the new edition (verified episodes table with 11 cited sources; 7 scenarios with winners as above); `/` shows the "The black swans" card, the 12-page navigation, and the updated legend (read on 10 or 11 November 2026). No browser automation was available; layout was not inspected visually.
+- **PRs #23 and #25 remain open and untouched.** Each would rebuild the root edition from a model that predates corrections C-03 to C-07 (`CR-C2-2`). They are not merged and not closed by this session; `CR-6616-5` (owner decides between them) still stands. Factual comments were left on both pointing here.
+- **Still open for the owner (not changed by this session):** historical Git exposure (`CR-5`), local-source jurisdiction identification (`CR-6`), roll-value generalisation vs $10 rounding (`CR-C2-3`), the 5 owner questions on `review.html`, insurance quotes, and the history of Pages dual-publishing. `CR-C2-1` (refresh `plan/`) remains with `arena-6616d6b2`; `plan/` was left exactly as found.
+
+**Irregularities noted.**
+1. The first live fetch of `/` after the deploy returned the pre-merge CDN copy; a cache-busted refetch showed the deployed edition. Not a defect, but live checks right after deploy can read stale content.
+2. S4 is a constructed path from verified magnitudes (crash first, then recovery), not a forecast; labelled as such on the page and here.
+3. Erosion tables cover fixed amounts only (IRC §121). The federal estate exclusion is chained-CPI indexed and is shown on the tax page instead; the Proposition 19 amount indexes slower than house prices by design and is noted there.
+4. 1974 stagflation detail (>12% inflation with >7% unemployment) is an official-domain search excerpt, not an opened page; the ledger marks it as such and the page cites the opened essay alongside it.
+5. Index point values (Dow 381.17, NASDAQ 5,048.62) carry decimals and are not $-denominated; no cents-bearing dollar amount exists anywhere in the output.
+
+---
+
+## Session `arena/e07bc3a2-tino3` — owner's Property B ownership statement applied · 2026-11-11
+
+*Branch note:* Arena fixes this session to `arena/e07bc3a2-tino3`; the `session-<id>/<task>` naming cannot be used. This section is appended at the end of the board, per the convention the round follows.
+
+Board read at 04:20 UTC on 11 November 2026: the round register at the top of this file, every session section, and `git ls-remote` for branch state. The register's overlap list records that exactly one item of the owner's brief is claimed by nobody — the owner now states that **Property B is already owned by the inheritor of Property A**, while the published edition still treats title to Property B as unknown (flag FL-01, the "same estate" contingency tables, and the estate-tax room computed on both homes). That unclaimed item is claimed here, and nothing else: black-swan work (`bde5056d` merged, `0b455c89`, `e4c5b872`, `4eefd177` open), insurance and running-cost research (`0b455c89`), the edition audit (`7f9e7fe8`), ledger re-verification (`7f9e7fe8`, `e4c5b872`, `4eefd177`) and final integration I-3 (`2f0b4adb`, waiting) stay with the sessions that claimed them.
+
+| Task | Status | Owner | Files touched |
+|---|---|---|---|
+| PB-1 Apply the owner's statement that Property B is already owned by the beneficiary: decision framing, estate-room arithmetic under the statement, flag FL-01, wording on the pages that treat title as unknown | **done** | `arena/e07bc3a2-tino3` | `scripts/build.py`, generated root pages, `EXECUTIVE_SUMMARY.md` (both via the build) |
+| PB-2 Verification pass, PR to `main`, merge, Pages deploy check, result log | **done** (result below) | `arena/e07bc3a2-tino3` | `COORDINATION.md` (this section only) |
+
+Scope rules this session holds itself to: no new black-swan page or module (four claims already, one merged); no edits to `plan/**`, `.github/workflows/*`, `scripts/privacy_boundary.py`, withdrawal notices, or any other session's board section; no name, address, postal code, parcel number or unrounded roll figure in any commit, message or pull request. `scripts/model.py` and `assets/sources.json` are not touched: the statement is an owner-supplied fact about title, so it changes framing and the estate-room arithmetic shown, not the model's verified inputs.
+
+### Log (`arena/e07bc3a2-tino3`)
+
+- 04:20 UTC — board, register and branch states read; claim written and pushed before any other file was edited.
+
+### Result log · `arena/e07bc3a2-tino3` · 2026-11-11
+
+**What changed (PB-1).** The owner statement now appears wherever title to Property B was previously described as unknown: the overview five facts, the executive-summary rows and plan in order, the inheritance steps, the Property B contingency section, the estate-room section on the tax page, and flag FL-01. One new computed figure was added, $10-rounded and asserted against the model's own estate arithmetic inside the build (drift over $10 fails the build): under the statement, one person's 2045 federal estate-tax room is **$17,612,290** instead of **$13,819,960**, larger by Property B's 2045 value of **$3,792,330** ($13,819,960 + $3,792,330 = $17,612,290 exactly as displayed). The contingency tables ("if Property B passes in the same estate") were kept and are now labelled as the case that applies only if the deed shows the parents. FL-01 stays open with its value blank: the statement is owner-supplied and no deed was seen. No model input, verified figure, projection, ranking, source-ledger entry, `plan/**` file, workflow or withdrawal notice was touched; `scripts/model.py` and `assets/sources.json` were not edited.
+
+**Sources verified in this session:**
+
+- IRS, *Estate tax* (filing thresholds 2011-2026, gross-estate definition): https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax - opened on the IRS site on 11 November 2026; the 2026 threshold $15,000,000 and "everything you own or have certain interests in at the date of death" wording match the page and support the statement's treatment of an heir-owned property as outside the gross estate.
+- The 2045 scenario exclusion reuses the ledgered `irs_2027` ($15,480,000) and `irs_rp2532` read by the previous session; not re-opened, not changed.
+- Contingency reassessment rule unchanged: BOE Letter 2026/026 (`boe_lta26026`).
+
+**Verification performed:** `python scripts/verify.py` PASS (12 reproducible pages, 430 table rows all linked to an official publisher, 53 ledger sources, privacy scan and $10 rounding clean); `python plan/tools/verify.py` PASS (cross-check edition byte-identical); `python scripts/package_site.py` PASS (12 pages, 28 assets, 49 retirement notices); rendered output inspected for all three room figures and the statement wording.
+
+**Publication result:**
+
+- **PR [#35](https://github.com/wingbangboozle1-lang/Tino3/pull/35) - MERGED** 2026-11-11T04:26:35Z, merge commit `ee69b7615a1293247547c6b714c308dc8c1955c4`. CI `verify` passed on the PR before merge (run 42959211647).
+- **After the merge, on `main`:** `Verify static site` run 42959268933 success; `Deploy GitHub Pages` run 42959268968 success; legacy `pages build and deployment` run 42959268315 success.
+- **Live check by HTTP fetch (cache-busted, after deploy):** `/taxes.html` serves the statement paragraph with the three room figures and the IRS link; `/review.html` serves the updated FL-01 with its value blank. No browser automation was available; layout was not inspected visually.
+
+**Irregularities found and handled:**
+
+1. The statement room figure first computed as `r10(exclusion - A)` differed by $10 from `room(both homes) + B value` because the model rounds the sum first. Fixed by building the published figure from the published components so the page adds up exactly; the build now asserts both readings agree within $10.
+2. Not mine to fix, handed to the sessions that claimed the work: (a) FL-18 still says only a 12-month stock figure was read, but `https://www.tsp.gov/c-fund/` (opened 11 Nov 2026) publishes 10-year 15.41% and lifetime 11.40% averages as of October 2026 - useful to `7f9e7fe8` / `e4c5b872` / `4eefd177` (ledger re-verification claim) and to whoever words FL-18; (b) the California Department of Insurance statewide average written homeowners premium for 2017 is $1,070 (rounded from $1,074) in the CDI Part I PDF https://www.insurance.ca.gov/0400-news/0200-studies-reports/0250-homeowners-study/upload/A-Homeowners-2_v1-2.pdf, while the current Part I file (2008-2023) is an .xlsx that could not be read as text in this session - useful to `0b455c89` (insurance research claim, S-2).
+3. Round-level observation, already recorded in the register: four sessions claimed a black-swan section; `bde5056d` merged first (PR #32) and the merged `stress.html` was left untouched by this session.
+
+**For the round's final integration (I-3, `2f0b4adb`):** this session's claim is complete and merged; the Property B statement item listed as unclaimed in the register is closed by PR #35; no file outside `scripts/build.py` and its generated outputs was edited, so nothing here collides with the open claims.
+
+---
+
+## Session `arena/c02d5ccf-tino3` — Ownership-Distinction & 50-Year Black-Swan Decision Analysis Edition (claimed 2026-11-11)
+
+*Branch note:* Arena binds this session to fixed branch `arena/c02d5ccf-tino3`; the `session-<id>/<task>` branch naming cannot be used. All commits, pushes, and the pull request originate from `arena/c02d5ccf-tino3`.
+
+**Pre-claim multi-branch inspection (2026-11-11):** Read `COORDINATION.md` on `main` (`6086d16`) and inspected all remote branches and open PRs before claiming. Open PRs #23 and #25 from 2026-11-10 remain untouched per `CR-C2-2`. Six concurrent 2026-11-11 branches (`arena/7f9e7fe8-tino3`, `arena/0b455c89-tino3`, `arena/e4c5b872-tino3`, `arena/bde5056d-tino3`, `arena/4eefd177-tino3`, `arena/b67d7a96-tino3`) have claimed overlapping edits to `scripts/*`, `assets/*`, `stress.html`, and root `*.html`. To prevent collisions and strictly honor non-overlapping scopes, this session claims **`analysis/**`** (unclaimed on `main` and on every remote branch) for all model, source-verification, and dashboard construction tasks (`C02-A`..`C02-E`), deferring additive shared-file integration (`C02-F`) until `origin/main` is re-inspected after task completion.
+
+| Task ID | Task | Status | Owner | File scope (non-overlapping) |
+|---|---|---|---|---|
+| C02-A | Line-by-line repository review & primary official-source verification ledger (federal, state, local, macroeconomic & insurance authorities) | **done** | `arena/c02d5ccf-tino3` | `analysis/tools/sources.py`, `analysis/data/sources.json`, `analysis/repo-audit.html` |
+| C02-B | Ownership-distinction legal & tax model (`[PROPERTY_A]` inherited via trust vs. `[PROPERTY_B]` already owned by `[BENEFICIARY]`): `IRC § 2031` estate exclusion headroom, `CA R&TC § 60` zero reassessment on `[PROPERTY_B]`, `IRC § 1014` step-up asymmetry, `CA R&TC § 63.2` principal-residence & local rent-control opportunity cost | **done** | `arena/c02d5ccf-tino3` | `analysis/tools/model.py`, `analysis/data/ownership_distinction.csv`, `analysis/ownership-distinction.html` |
+| C02-C | 50-year baseline (2026–2076) & Black-Swan / non-uniform economic regime engine (historical US/CA multi-cycle replay, 1970s stagflation + Prop 13 cap vs. 60%-CPI rent cap, 2008 housing/equity crash + Prop 8 temporary reduction, sequence-of-returns shock at inheritance, tech-corridor bust, insurance/seismic tail shock, fiscal/estate-law shock) | **done** | `arena/c02d5ccf-tino3` | `analysis/tools/model.py`, `analysis/data/projections_50yr.csv`, `analysis/data/historical_replay_50yr.csv`, `analysis/data/black_swan_regimes.csv`, `analysis/data/decision_matrix.csv`, `analysis/data/model.json` |
+| C02-D | Anonymized `$10`-rounded static dashboard under `analysis/` (Overview, Executive Summary, Ownership Distinction, Properties & Running Costs, Year-by-Year 50-Yr Projections, Black-Swan Economic Regimes, Decision Analysis, Taxes & Estate Thresholds, Step-by-Step Trust Inheritance Process, Repo Audit, Flagged for Review, Official Source Ledger) + fail-closed verifier | **done** | `arena/c02d5ccf-tino3` | `analysis/*.html`, `analysis/assets/style.css`, `analysis/tools/build.py`, `analysis/tools/verify.py` |
+| C02-E | Additive allowlist & CI integration, rebase check, PR to `main`, merge, and live GitHub Pages confirmation | **done** | `arena/c02d5ccf-tino3` | `COORDINATION.md` (this section); four additive lines in `scripts/package_site.py`, `.github/workflows/*.yml`, and `scripts/build.py` + `index.html` |
+
+**Privacy boundary (strictly enforced by `analysis/tools/verify.py` and `scripts/verify.py`):** Zero personal names, street addresses, APNs, ZIP codes, city/county/neighborhood names, utility account numbers, or unrounded parcel-identifying roll figures anywhere in `COORDINATION.md`, code, data, or HTML. Placeholders `[PROPERTY_A]`, `[PROPERTY_B]`, `[GRANTOR]`, `[BENEFICIARY]`, `[SUCCESSOR_TRUSTEE]`, `County A`, and `City B` only; all dollar amounts `$10`-rounded (with public-roll history generalized further so no parcel can be reverse-matched) and all unverified official values left blank and published on `analysis/flagged.html`.
+
+### Cross-session requests logged (not edited while sibling claims are active)
+
+| # | Target scope | Logged note |
+|---|---|---|
+| CR-C02-1 | Root `scripts/model.py` / `scripts/build.py` owners | The updated brief clarifies that `[PROPERTY_B]` is **already owned by `[BENEFICIARY]`** (only `[PROPERTY_A]` + trust financial assets are being inherited). That resolves `index.html` item #1 ("Who holds title to Property B today"), excludes `[PROPERTY_B]` from `[GRANTOR]`'s `IRC § 2031` gross estate (increasing federal estate-tax headroom by `[PROPERTY_B]`'s value), prevents Prop 19 reassessment on `[PROPERTY_B]` at `[GRANTOR]`'s death, and leaves `[PROPERTY_B]` without an `IRC § 1014` basis step-up. |
+| CR-C02-2 | Root `scripts/*` / `arena/b67d7a96-tino3` | Do not replace the quantitative `$10`-rounded edition with a blank/withdrawn-amounts edition; the owner's updated brief explicitly asks for `$10`-rounded numbers, 50-year baseline projections, and a dedicated Black-Swan economic conditions section under strict placeholder anonymization. |
+
+### Rebase & Coordination Log (`arena/c02d5ccf-tino3`)
+- Rebased onto `origin/main` (`d3d1aea`, after PRs #31–#33 and #35–#36). Resolved the end-of-file append conflict in `COORDINATION.md` by preserving 100% of `2f0b4adb`, `bde5056d`, and `e07bc3a2` sections intact and appending this session's section below them; zero conflict in `analysis/**`.
+- **Sources & Verification Performed (`C02-A`..`C02-D`):** Opened and verified **52 primary official authorities directly on publisher domains** on 2026-11-11 (`IRS` estate/2027 IR-2026-133/Form 706/basis/Rev. Rul. 2023-2/Topics 409, 559, 701/Pub. 527/Inherited IRA; `26 U.S.C. § 2001`; `31 U.S.C. § 3124`; `CA R&TC §§ 51, 60, 63.2, 218, 480, 11911, 11930, 13301, 17043`; `CA Prob. Code § 16061.7`; `CA Civ. Code § 1947.12`; `CA Ins. Code § 10081`; `BOE` Prop 19 & LTAs `2025/009`, `2026/002`, `2026/026`; `CA Controller`; `FTB`; `CPUC` D.14-03-041 & D.22-12-056; `CDI` survey & FAIR Plan `$3,000,000` cap; `LAO` 25-0017; `CA SOS` Memo 26138; `County A` Tax Rate Book & Recorder; `City B` FY26-27 rate, Res. 447-25 & Rent Board; `FRED` 50-yr `CASTHPI` & `GS10`; `U.S. Treasury` 10 Nov 2026 curve `4.98%` 10-Yr; `TSP` C Fund `11.40%` & G Fund `4.65%` lifetime returns; `BLS`; `Federal Reserve History`).
+- **Automated Verification Suite:** `python3 scripts/verify.py` PASS (12 root pages, 430 cited rows, `privacy_boundary.py` PASS); `python3 plan/tools/verify.py` PASS (10 pages, 360 cited rows); `python3 analysis/tools/verify.py` PASS (12 reproducible pages, 380 `.gov`/Fed-cited table rows, 52 directly-opened sources, zero broken local links/fragments, zero PII/place/postal leaks, 100% `$10` rounding); `python3 scripts/package_site.py` PASS (12 root pages, 52 allowlisted assets including `analysis/**`, 49 withdrawal notices).
+- **Key Findings & Irregularities Published (`analysis/repo-audit.html` & `analysis/flagged.html`):**
+  - `RA-01..RA-07`: Quantified single-property estate headroom (`+$3,792,330` in 2045), Prop 13 preservation (`+$42,480/yr` in 2045), and non-stepped-up sale lock-in (`~$982,780` tax if `[PROPERTY_B]` were sold in 2045); added `CA R&TC § 17043` (`+1%` over `$1,000,000`), `31 U.S.C. § 3124` state-tax-exempt Treasury verification, `CA R&TC § 51(a)(2)` Proposition 8 decline-in-value tax reductions during housing crashes, and `CPUC` 20-year legacy solar NEM sunset.
+  - Across 10 regimes (`BS-0` + 9 historical/Black-Swan shocks), selling `[PROPERTY_A]` wins 8 of 10 (with the 60/40 Stock + CA-Tax-Exempt Treasury Barbell protecting against 2008-style sequence-of-returns crashes in `BS-1B`/`BS-3`), keeping & renting `[PROPERTY_A]` wins only during 1970s-peak California housing surges (`BS-1A`) or when inheriting *at* a `-35%` housing trough (`BS-4`), and moving into `[PROPERTY_A]` wins 0 of 10.
+  - Twelve unconfirmed household/parcel items (`FL-01..FL-12`, including insurance quotes, liquid estate balance, IRA share, trust instrument text, solar interconnection year, and 2026 bills) are left blank (`UNVERIFIED`) on `analysis/flagged.html`.
+
+### Publication Result · `arena/c02d5ccf-tino3` · 2026-11-11
+- **PR [#37](https://github.com/wingbangboozle1-lang/Tino3/pull/37) — MERGED** (merge commit `bd6ee53`). Pre-merge `Verify static site` passed (`run 42961450603`).
+- **Post-merge GitHub Actions & Pages Deployment:** `Verify static site` (`run 42961499645`) `success`; `Deploy GitHub Pages` (`run 42961499557`) `success`; legacy `pages-build-deployment` (`run 42961499084`) `success`.
+- **Live HTTP Verification:** Confirmed live responses on `https://wingbangboozle1-lang.github.io/Tino3/` (showing the new `"50-year & ownership suite"` card alongside all intact existing sections), `/analysis/index.html`, `/analysis/black-swan.html`, and `/analysis/flagged.html`. All tasks `C02-A`..`C02-E` are complete.
 
 ---
 
