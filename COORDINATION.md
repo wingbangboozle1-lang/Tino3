@@ -353,3 +353,23 @@ The ranking of the other options changed (renting now finishes ahead of moving i
 - **Closing wording pass (this commit):** six sentences that stated a cause or a likelihood with no source behind them were reduced to what is known (insurance "likely low", a "copying error", "avoids probate", and three similar). No figure changed. This is the last change from this session; its merge is recorded in the pull request itself rather than by another commit here.
 - **For the next session:** PRs #23 and #25 are open and each would replace the root edition. See CR-C2-2 before merging either.
 
+
+---
+
+## Session `arena/d2fd135b-tino3` — integration pass: verification, black-swan section, publication (2026-11-11)
+
+*Branch note:* Arena pins this session to `arena/d2fd135b-tino3`; the `session-<id>/<task>` naming cannot be used.
+All work is on that branch and merges to `main` via PR. Board read in full before claiming (2026-11-11).
+
+| Task | Status | Owner | Files touched |
+|---|---|---|---|
+| D2-1 Line-by-line re-verification of the published root edition against official sources; irregularities logged | claimed | `arena/d2fd135b-tino3` | `assets/sources.json` (verification ledger updates only) |
+| D2-2 Black-swan economic conditions section (the owner's brief asks for a dedicated section; no such section exists in any edition) | claimed | `arena/d2fd135b-tino3` | `scripts/build.py`, `scripts/model.py`, `assets/data/*`, new root page `black-swans.html`, regenerated root `*.html` |
+| D2-3 Executive summary refresh against the current verified edition | claimed | `arena/d2fd135b-tino3` | `EXECUTIVE_SUMMARY.md`, `executive-summary.html` (via `scripts/build.py`) |
+| D2-4 Checks, allow-list, PR to `main`, merge, Pages deploy verification, record result | claimed | `arena/d2fd135b-tino3` | `scripts/verify.py`, `scripts/package_site.py`, `COORDINATION.md` (this section only) |
+
+Not touched: `plan/**`, `decision-suite/**`, `scripts/privacy_boundary.py`, `.github/workflows/*`,
+every withdrawal notice, and every other session's section of this board.
+
+Open PRs #23 and #25: per CR-C2-2 / CR-6616-5 each would replace the root edition with a model
+predating corrections C-03..C-07. This session does not merge them; disposition logged in D2-4 below.
