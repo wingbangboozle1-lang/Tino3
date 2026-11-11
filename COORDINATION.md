@@ -654,3 +654,64 @@ Not touched: `scripts/*`, `assets/*`, `plan/**`, `analysis/**`, root `*.html`, w
 2. Insurance premiums and specific law-change dates remain unverified (blank in tables, flagged in `review.html` / `audit.html`).
 3. Privacy boundary: all $10-rounded figures and anonymized placeholders preserved across root, plan/, and analysis/ editions.
 
+
+---
+
+## Session `arena/4ff01a4d-tino3` — second integration pass · result log · 2026-11-11
+
+*Branch note:* Arena pins this session to `arena/4ff01a4d-tino3`, branched from `f6b2873` (merge of PR #39). Claim
+written and pushed as `93b3f57` before any other file was edited. Nothing outside the scope in the claim block at the top
+of this file was touched. `plan/**`, `analysis/**`, `decision-suite/**`, `.github/workflows/*`,
+`scripts/privacy_boundary.py`, the withdrawal notices and the other sessions' sections of this board are unchanged.
+
+### Tasks
+
+| Task | Status | Evidence |
+|---|---|---|
+| A4-1 Independent line-by-line re-verification of the published figures | **done** | 13 ledger entries re-opened on the publishers' own domains; every published figure matched; one flag closed, one sharpened |
+| A4-2 Site consolidation for a clean dashboard | **done** | Grouped navigation (five sections); the two black-swan pages labelled as parts 1 and 2 of one section; the overview now states which of the three editions a reader is looking at |
+| A4-3 Executive-summary refresh and flag register | **done** | New row and note: estate tax above the exclusion is 40 cents per dollar, paid by the estate, due with Form 706; FL-17 closed; flagged list 24 -> 23 items |
+| A4-4 PR, merge, deploy verification, record | **done** | Result below |
+
+### Sources opened in this session (publisher's own domain, 11 November 2026)
+
+- IRS, Estate tax (filing-threshold table, 2026 = $15,000,000): https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax
+- IRS, Instructions for Form 706 (Rev. July 2026): 2026 basic exclusion $15,000,000, **basic credit $5,945,800**, filing threshold and portability election. The credit equals $345,800 plus 40% of the excess over $1,000,000, which is where the 40% rate used on the site comes from. The rate table itself was **not** opened: FL-16 stays open. https://www.irs.gov/pub/irs-pdf/i706.pdf
+- IRS, Rev. Rul. 2023-2 (no basis adjustment for assets outside the gross estate): https://www.irs.gov/pub/irs-drop/rr-23-02.pdf
+- BOE, Proposition 19 comparison tables: https://www.boe.ca.gov/prop19/
+- BOE, Letter to Assessors 2025/009: the $1 million amount is **$1,044,586** for transfers from 16 February 2025 to 15 February 2027 (shown on the site rounded to $1,044,590). https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf
+- Revenue and Taxation Code §63.2 (principal-residence condition, one-year move-in, new taxable value): https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=63.2
+- Revenue and Taxation Code §13301 (state and every political subdivision barred from gift, inheritance, estate and death-transfer taxes): https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=13301
+- Revenue and Taxation Code §17043 (1% on taxable income above $1,000,000): https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=17043
+- Civil Code §1947.12 (5% + CPI or 10%, repealed 1 January 2030):
+  https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1947.12
+- **New:** 31 U.S.C. §3124, U.S. Government Publishing Office (GovInfo), United States Code 2023 edition: Treasury obligations and their interest are exempt from state and local tax; the exemption does **not** extend to an estate or inheritance tax; gain on disposal is decided under the Internal Revenue Code. This closes FL-17.
+  https://www.govinfo.gov/content/pkg/USCODE-2023-title31/html/USCODE-2023-title31-subtitleIII-chap31-subchapII-sec3124.htm
+- California Secretary of State, CC/ROV Memorandum 26138 (18 May 2026): the initiative to repeal the 2021 inheritance rules **failed** for insufficient signatures: https://elections.cdn.sos.ca.gov/ccrov/2026/may/26138jh.pdf
+- California Secretary of State, unofficial statewide results as of 10 November 2026, 5:31 p.m.: Proposition 40 rejected 52.6% no; Proposition 42 51.5% yes; certification by 11 December 2026: https://electionresults.sos.ca.gov/returns/ballot-measures
+- Local secured-tax page: fiscal year 2026-27 rate 1.18162182%, 10% penalties, supplemental bills after a change in ownership. Local rent-increase page: 1.6% from 1 March 2026 to 28 February 2027, and the notice of proposed File No. 261020 posted 9 November 2026.
+- California Department of Insurance premium-survey page: the 2026 homeowners survey exists, the Department states it cannot provide quotes, and the results are not premium quotes. **No premium figure is published anywhere on the site.**
+- U.S. Treasury daily par yield curve, November 2026 (10-year 4.88% on 9 November 2026).
+
+### Verification performed
+
+- `python3 scripts/verify.py` **PASS** — 13 reproducible pages, 496 table rows all linked to an official publisher, 68 ledger sources, local links, official hosts, privacy scan and $10 rounding clean.
+- `python3 plan/tools/verify.py` **PASS** — 10 pages rebuilt byte-identically, 360 rows. `python3 analysis/tools/verify.py` **PASS** — 12 pages, 380 rows. `python3 scripts/package_site.py` **PASS** — 13 pages, 52 assets, 49 withdrawal notices. `python3 scripts/privacy_boundary.py` **PASS**.
+- Arithmetic audited **independently of the renderer**: all 35 projection years for each property recomputed from the model's own formulas (tax = rate x assessed value + fixed charges; running costs summed; assessed value capped at 2%), the estate-room rows from exclusion less both homes, and the 2045 reassessment from the Revenue and Taxation Code §63.2 formula. Every published figure agreed to the nearest $10. No arithmetic error was found.
+
+### Irregularities found and dispositions
+
+1. `audit.html` carried a stale source count (58) while the ledger held 67. The page now computes the number from the ledger (68 after this session's addition).
+2. FL-17 (state tax on Treasury interest) was an assumption without a source. Closed with 31 U.S.C. §3124; the rule is now a verified row on the tax page.
+3. FL-16 (40% estate-tax rate) remains open: the 2026 credit corroborates the rate arithmetically, but the rate table was not opened. The row now says exactly that.
+4. The two black-swan pages were functionally one section but appeared as two unrelated menu entries. They are now labelled part 1 and part 2 and link to each other; no content was removed.
+5. Two parallel sessions moved the board while this work was in flight: `d2fd135b` merged PR #40 (record only) and `bd680fbc` merged PR #41 (record only), closing PR #34 as conflicting. No file conflict occurred. Nothing of either session's work was discarded.
+6. PRs #23, #25 and #34 — each of which would have replaced this edition with a model predating corrections C-03 to C-07 — are closed and not merged. The repository review on `audit.html` now records all three.
+7. Nothing verified in this session contradicted a published figure, so no number on the site changed.
+
+### Publication result · `arena/4ff01a4d-tino3` · 2026-11-11
+
+- **PR [#42](https://github.com/wingbangboozle1-lang/Tino3/pull/42) — MERGED** 2026-11-11T13:01:08Z, merge commit `28a31d7ecaceded758b17ef668c4b0e2c17d4675`. CI `verify` passed on the pull request before merge (run 43025257387).
+- **After the merge, on `main`:** `Verify static site` run **43025346910** success; `Deploy GitHub Pages` run **43025346690** success; legacy `pages build and deployment` run **43025345307** success.
+- **Live check by HTTP fetch with a cache-buster after the deploy:** `/index.html` serves the grouped navigation, the two-part black-swan section and the "three editions" disclosure; `/audit.html` serves the "Second pass, 11 November 2026" section and the recomputed source count. No browser automation was available, so layout was not inspected visually; the pages are plain HTML and CSS with no scripts.
+- **Still open for the owner:** the flags on `review.html` (23 items), the history-rewrite decision (`CR-5`), the local-source jurisdiction question (`CR-6`), insurance quotes, and the certification of the 3 November 2026 results on 11 December 2026.
