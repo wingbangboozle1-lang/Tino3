@@ -14,19 +14,31 @@ replaced by a content-free withdrawal notice, so a stale URL cannot return an ol
 
 | Page | Contents |
 |---|---|
-| `index.html` | Dashboard, recommendation, decision snapshot |
+| `index.html` | Dashboard: recommendation, decision snapshot, and a grouped index of the site |
 | `executive-summary.html` | The decision, five numbers, what would change it |
 | `property-a.html` | The residence to inherit: inputs, assessment-factor check, what the inheritance does to the assessed value |
 | `property-b.html` | The rental: inputs, tax-bill breakdown, rent rules, reassessment exposure if it is in the same estate |
 | `taxes.html` | Federal, California and local rules, verified; pending law changes |
 | `projections.html` | Year-by-year value, assessed value, tax and running costs, 2026–2060, and the ten years after an inheritance |
 | `decision.html` | Sell vs rent vs move in for 2040/2045/2050, break-evens, sensitivities, the assumption register |
-| `stress.html` | Black swan stress tests: verified 1929, Great Inflation, oil-shock, dot-com, Great Recession and COVID episodes re-run against the 2045 inheritance; fixed-amount erosion; the black-swan playbook |
-| `black-swans.html` | Black-swan conditions: baseline anchors (Fed, SSA, CBO), fifty years of official inflation data, the episode record, and the single-input stress cases for the plan |
+| `stress.html` | Black swans, part 2: verified 1929, Great Inflation, oil-shock, dot-com, Great Recession and COVID episodes re-run against the 2045 inheritance; the playbook |
+| `black-swans.html` | Black swans, part 1: baseline anchors (Fed, SSA, CBO), fifty years of official state inflation data, fixed-amount erosion, and the single-input stress cases |
 | `inheritance.html` | Statutory timeline after the death, with deadlines |
-| `review.html` | 24 flagged items (unverified values left blank, owner questions, record irregularities) and two privacy disclosures |
+| `review.html` | 23 flagged items (unverified values left blank, owner questions, record irregularities) and two privacy disclosures |
 | `audit.html` | Independent verification: twelve corrections to the first quantitative edition, repository review |
-| `sources.html` | 67 official sources, what each one supports and how each was checked |
+| `sources.html` | 68 official sources, what each one supports and how each was checked |
+
+## How the site is organised
+
+The menu is grouped into five sections: **The decision** (overview, summary, decision analysis, projections),
+**Black swans** (conditions and history, stress tests — one section in two parts), **The properties**
+(A, B), **Tax and process** (tax and law watch, inheritance steps) and **Evidence** (flagged items,
+independent verification, source library).
+
+Three editions of the same analysis sit in this repository. They use separate models, so their figures
+differ and must not be mixed: the thirteen pages in the menu (the edition to act on), the independent
+cross-check at `/plan/`, and the 50-year and ownership suite at `/analysis/`. The overview page says
+which one a reader is looking at.
 
 ## Privacy rules enforced in code
 
@@ -41,7 +53,9 @@ replaced by a content-free withdrawal notice, so a stale URL cannot return an ol
 ## Verification standard
 
 Every rule on the site was retrieved from the publishing agency's own domain on 10 or 11 November 2026 (see the source library for the session that opened each document) and linked
-from the row that uses it. `assets/sources.json` records what each document verifies. Anything that could not
+from the row that uses it. Two independent passes re-checked the edition on 11 November 2026; the third pass re-opened thirteen ledger entries on the publishers' sites, recomputed
+every projection row from the model's own formulas (all agreed to the nearest $10), closed one open flag with 31 U.S.C. 3124 (Treasury interest is exempt from state tax) and corrected a
+stale source count. It found no wrong figure. What it did not do is listed on `audit.html`. `assets/sources.json` records what each document verifies. Anything that could not
 be verified is left blank or published on the Flagged for Review page — never inferred.
 
 ## Build
