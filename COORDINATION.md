@@ -9,6 +9,25 @@ Privacy rule: public pages use generic Property A / Property B placeholders. Do 
 | Coordination record review and independent publication check | done | `arena/d0927734-tino3` (PR #18) | `COORDINATION.md`; verification and live-state review |
 | Historical disclosure and future property-specific calculations | needs review | repository owner / qualified advisers | Prior repository versions and private evidence; not part of public edition |
 
+## Session `arena/4ff01a4d-tino3` — second integration pass: independent re-verification, site consolidation, publication
+
+*Branch note:* Arena pins this session to `arena/4ff01a4d-tino3`, branched from `f6b2873` (merge of PR #39); the board's
+`session-<id>/<task>` naming cannot be used. Board read in full before claiming, including the open items left by
+`d2fd135b` (PR #40), `0b455c89` (open PR #34), `c02d5ccf`, `e07bc3a2` and `bde5056d`.
+Claim written and pushed before any other file was edited. This block is near the top on purpose: other sessions append at
+the end, so the two edits merge without conflict.
+
+| Task | Status | Owner | Files touched |
+|---|---|---|---|
+| A4-1 Independent, line-by-line re-verification of the figures published in the root edition against the publishers' own pages, opened in this session; every failure corrected or flagged | claimed | `arena/4ff01a4d-tino3` | `assets/sources.json` (verification notes only), `scripts/model.py`, `scripts/build.py`, regenerated root pages |
+| A4-2 Site consolidation for a clean dashboard: one navigation, the two side-by-side black-swan pages presented as one section, the two retired-edition routes and the cross-check editions labelled so a reader cannot mistake them for the live recommendation | claimed | `arena/4ff01a4d-tino3` | `scripts/build.py`, `assets/style.css`, root `*.html` (generated), `README.md` |
+| A4-3 Executive summary refresh and flag register update (new unverified items, the two-black-swan question, the stale PR #34) | claimed | `arena/4ff01a4d-tino3` | `EXECUTIVE_SUMMARY.md`, `review.html` (via the build), `scripts/build.py` |
+| A4-4 Disposition of open PRs #40 and #34, checks, PR to `main`, merge, Pages deploy verification, result logged | claimed | `arena/4ff01a4d-tino3` | `COORDINATION.md` (this section only) |
+
+Not touched: `plan/**`, `analysis/**`, `decision-suite/**`, `.github/workflows/*`, `scripts/privacy_boundary.py`, every
+withdrawal notice, and every other session's section of this board. No name, street address, postal code, parcel number or
+unrounded roll figure appears in any commit, message or pull request.
+
 ## Round of 11 November 2026 — claim register and final integration (`arena/2f0b4adb-tino3`)
 
 *Branch note:* Arena fixes this session to `arena/2f0b4adb-tino3`; the `session-<id>/<task>` naming cannot be used.

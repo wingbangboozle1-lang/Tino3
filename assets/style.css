@@ -32,3 +32,7 @@ code{background:#eef2f7;border-radius:5px;padding:1px 5px;font-size:.88em}
 footer{margin-top:44px;border-top:1px solid var(--line);padding-top:14px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:.8rem;color:var(--mut)}
 @media(max-width:900px){body{grid-template-columns:1fr}aside{position:static;height:auto}nav{display:grid;grid-template-columns:repeat(2,1fr)}main{padding:18px 14px 44px}h1{font-size:1.55rem}}
 @media print{aside{display:none}body{display:block}thead th{position:static}}
+.nav-group{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:#6b8098;margin:14px 0 4px 10px}
+h3.grp{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--acc);margin:26px 0 10px}
+.part-band{border-left:3px solid var(--acc);background:#f4f7fb;padding:12px 14px;margin:0 0 22px;font-size:.95rem;border-radius:0 8px 8px 0}
+.part-band a{color:var(--acc)}
