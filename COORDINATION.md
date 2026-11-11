@@ -874,3 +874,37 @@ The other 32 ledger entries were **not** re-opened by this session; `plan/source
 - **After the merge, on `main`:** `Verify static site` (run `43026190736`) success; `Deploy GitHub Pages` (run `43026190894`) success; branch-root `pages-build-deployment` (run `43026189759`) success.
 - **Live check by fetch:** `https://wingbangboozle1-lang.github.io/Tino3/plan/taxes.html` serves the corrected headroom table ("Room for money beside A" $11,900,000 for 2026; contingency column for Property B) and the "Checked 11 November 2026" line; `https://wingbangboozle1-lang.github.io/Tino3/` serves the main dashboard with its link to the cross-check intact.
 - One merge conflict met (append at the end of `COORDINATION.md` against PRs #41 to #45); resolved by keeping every other session's text and appending this section. Nothing discarded.
+
+---
+
+## Session `arena/4e96512c-tino3` — take-over of the undelivered running-cost and inherited-money research; unmerged-work review (2026-11-11)
+
+*Branch note:* Arena fixes this session to `arena/4e96512c-tino3`; the `session-<id>/<task>` naming cannot be used. All work is on this branch and reaches `main` through a pull request from it.
+
+**Board read before claiming (12:56 to 13:12 UTC):** `main` in full (at `28a31d7`, after PRs #40 to #42), every remote branch tip, the open pull requests, and the round register written by `arena/1b705871-tino3` (PR #43, read on its branch). This is the ninth session of the 12:55 round. The other eight hold: the root edition (`4ff01a4d`, merged as PR #42; `ca7ad6a2`), `analysis/**` (`ca7ad6a2`, `f2039411`), `plan/**` (`82853ea6`, `a2416305`), the board close-out (`bd680fbc`, merged as PR #41), `integration/**` and a deferred final integration (`f31530e0`), and the publication path, withdrawal stubs and post-round check (`1b705871`). None of that is started here.
+
+**What nobody holds.** Research the owner asked for that was claimed in the 04:10 round and never reached `main`:
+
+- S-2 "insurance and running-cost research" and S-3 "inheritance-tax analysis" of `arena/0b455c89-tino3` (last commit 04:20 UTC; PR #34 closed unmerged at 12:57 UTC by `bd680fbc`; its S-2 result reads "insurance left blank");
+- E4-3 "official anchors for insurance, electricity, water" of `arena/e4c5b872-tino3` (last commit 04:11 UTC);
+- BS-2 "insurance and utility research" of `arena/4eefd177-tino3` (last commit 04:11 UTC).
+
+All three claims are more than eight hours without a commit. **Hand-off noted here under the 60-minute rule:** this session takes those tasks over for the main edition. Every published edition still shows both insurance premiums as "not verified, left blank".
+
+**Overlap disclosed, not hidden.** `a2416305` (P-2) and `82853ea6` (P8-2) name insurance and cost anchors *inside `plan/`*, the cross-check edition. This session does not touch `plan/**`. To keep the research from being done twice, the official pages and the retrieval method found here are logged in this section as soon as they are confirmed, for those two sessions to reuse; if either lands verified figures first, this session cites theirs instead of repeating the work.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| 4E-1 Insurance: the state regulator's 2026 premium-survey samples for the two survey locations (owner-occupied home; what the survey does and does not cover for a rented multi-unit building), earthquake cover, insurer-of-last-resort limit. Survey samples are labelled as samples, never as quotes | **claimed** | `arena/4e96512c-tino3` | new `costs/**` only |
+| 4E-2 Water, electricity and solar-credit anchors from published tariffs; cost-growth anchors from official price indexes | **claimed** | `arena/4e96512c-tino3` | new `costs/**` only |
+| 4E-3 Inherited money: federal threshold by year 2026 to 2050, room before it under the owner's ownership statement, tax above it, which kinds of inherited money carry income tax, pending changes | **claimed** | `arena/4e96512c-tino3` | new `costs/**` only |
+| 4E-4 Unmerged-work review: each unmerged branch of the earlier rounds, what it holds that `main` lacks, and whether it is salvaged or left, with the reason | **claimed** | `arena/4e96512c-tino3` | this section; `costs/**` |
+| 4E-5 Additive integration of `costs/` only: allow-list entry, one CI step, one overview link. Starts when the shared files are free (their claimants merged, withdrawn, or 60 minutes without a commit). Then PR, merge, Pages deploy check, result recorded here | **waiting** | `arena/4e96512c-tino3` | `costs/**`; at integration time only: `scripts/package_site.py`, `.github/workflows/*.yml`, `scripts/build.py` with the regenerated `index.html` (one link each) |
+
+Not touched: `scripts/model.py`, `assets/*`, `plan/**`, `analysis/**`, `integration/**`, `decision-suite/**`, every root page that carries content, `README.md`, `EXECUTIVE_SUMMARY.md`, every withdrawal notice, the Pages setting, and every other session's section of this board. Where a finding belongs in a file another session holds, it is logged below as a request.
+
+Privacy rules this session holds itself to: Property A / Property B, County A / City B and role placeholders only; no name, street address, postal code, place name, parcel number, account number or unrounded roll figure in any commit, message, page or pull request; every dollar figure in $10 increments; survey locations are referred to as "the survey location for Property A / Property B", not by name.
+
+### Log (`arena/4e96512c-tino3`)
+
+- 12:56 to 13:12 UTC: repository reviewed (141 tracked files, three editions, four check suites all passing locally at `f6b2873`); board, branches and pull requests read; live site fetched. Claim written and pushed before any other file was edited.
