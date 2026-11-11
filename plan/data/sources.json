@@ -4,314 +4,375 @@
   "title": "Estate tax (filing thresholds, gross estate, portability)",
   "url": "https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax",
   "status": "read",
-  "supports": "Filing threshold by year of death, 2011-2026 ($15,000,000 for 2026). Gross estate includes cash, securities, real estate, insurance and trusts. Portability must be elected on a timely filed Form 706."
+  "supports": "Filing threshold by year of death, 2011-2026 ($15,000,000 for 2026). Gross estate includes cash, securities, real estate, insurance and trusts. Portability must be elected on a timely filed Form 706.",
+  "reopened_11_nov_2026": true
  },
  "irs_2027": {
   "publisher": "IRS",
   "title": "News release IR-2026-133: inflation adjustments for tax year 2027",
   "url": "https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts",
   "status": "read",
-  "supports": "2027 basic exclusion $15,480,000; annual gift exclusion $20,000 (2027) and $19,000 (2026); top income-tax rate 37%."
+  "supports": "2027 basic exclusion $15,480,000; annual gift exclusion $20,000 (2027) and $19,000 (2026); top income-tax rate 37%.",
+  "reopened_11_nov_2026": true
  },
  "usc_2001": {
   "publisher": "U.S. Code (govinfo.gov)",
   "title": "26 U.S.C. 2001 - estate tax rate schedule",
   "url": "https://www.govinfo.gov/link/uscode/26/2001",
   "status": "read",
-  "supports": "Taxable amounts over $1,000,000: $345,800 plus 40% of the excess."
+  "supports": "Taxable amounts over $1,000,000: $345,800 plus 40% of the excess.",
+  "reopened_11_nov_2026": false
  },
  "irs_basis": {
   "publisher": "IRS",
   "title": "FAQ: gifts and inheritances (basis of inherited property)",
   "url": "https://www.irs.gov/faqs/interest-dividends-other-types-of-income/gifts-inheritances/gifts-inheritances",
   "status": "read",
-  "supports": "Basis of inherited property is generally its fair market value at the date of death (or the alternate valuation date if elected)."
+  "supports": "Basis of inherited property is generally its fair market value at the date of death (or the alternate valuation date if elected).",
+  "reopened_11_nov_2026": false
  },
  "irs_409": {
   "publisher": "IRS",
   "title": "Topic no. 409, Capital gains and losses",
   "url": "https://www.irs.gov/taxtopics/tc409",
   "status": "read",
-  "supports": "Long-term rates 0%, 15%, 20%; unrecaptured section 1250 gain up to 25%; inherited property is treated as held long term."
+  "supports": "Long-term rates 0%, 15%, 20%; unrecaptured section 1250 gain up to 25%; inherited property is treated as held long term.",
+  "reopened_11_nov_2026": false
  },
  "irs_559": {
   "publisher": "IRS",
   "title": "Topic no. 559, Net investment income tax",
   "url": "https://www.irs.gov/taxtopics/tc559",
   "status": "read",
-  "supports": "3.8% on the lesser of net investment income or income above $200,000 (single) / $250,000 (joint); rents and real-estate gains count."
+  "supports": "3.8% on the lesser of net investment income or income above $200,000 (single) / $250,000 (joint); rents and real-estate gains count.",
+  "reopened_11_nov_2026": false
  },
  "irs_701": {
   "publisher": "IRS",
   "title": "Topic no. 701, Sale of your home",
   "url": "https://www.irs.gov/taxtopics/tc701",
   "status": "read",
-  "supports": "Exclude up to $250,000 ($500,000 joint) of gain if owned and used as main home for 24 months of the 5 years before sale."
+  "supports": "Exclude up to $250,000 ($500,000 joint) of gain if owned and used as main home for 24 months of the 5 years before sale.",
+  "reopened_11_nov_2026": false
  },
  "irs_414": {
   "publisher": "IRS",
   "title": "Topic no. 414, Rental income and expenses",
   "url": "https://www.irs.gov/taxtopics/tc414",
   "status": "read",
-  "supports": "Rent is taxable income; expenses and depreciation are deductible; rental profit may be subject to the net investment income tax."
+  "supports": "Rent is taxable income; expenses and depreciation are deductible; rental profit may be subject to the net investment income tax.",
+  "reopened_11_nov_2026": false
  },
  "irs_ira": {
   "publisher": "IRS",
   "title": "Retirement topics - Beneficiary",
   "url": "https://www.irs.gov/retirement-plans/plan-participant-employee/retirement-topics-beneficiary",
   "status": "read",
-  "supports": "A designated beneficiary who is not an eligible designated beneficiary must empty an inherited account by the end of the 10th year after the owner's death."
+  "supports": "A designated beneficiary who is not an eligible designated beneficiary must empty an inherited account by the end of the 10th year after the owner's death.",
+  "reopened_11_nov_2026": false
  },
  "irs_1041": {
   "publisher": "IRS",
   "title": "File an estate tax income tax return (Form 1041)",
   "url": "https://www.irs.gov/individuals/file-an-estate-tax-income-tax-return",
   "status": "read",
-  "supports": "Form 1041 is required if the estate generates more than $600 of annual gross income; an EIN is needed; due April 15 for calendar-year filers."
+  "supports": "Form 1041 is required if the estate generates more than $600 of annual gross income; an EIN is needed; due April 15 for calendar-year filers.",
+  "reopened_11_nov_2026": false
  },
  "irs_i706": {
   "publisher": "IRS",
   "title": "Instructions for Form 706",
   "url": "https://www.irs.gov/instructions/i706",
   "status": "excerpt",
-  "supports": "Form 706 is due within 9 months after the date of death; automatic 6-month extension by Form 4768."
+  "supports": "Form 706 is due within 9 months after the date of death; automatic 6-month extension by Form 4768.",
+  "reopened_11_nov_2026": false
  },
  "irs_p527": {
   "publisher": "IRS",
   "title": "Publication 527, Residential Rental Property",
   "url": "https://www.irs.gov/publications/p527",
   "status": "excerpt",
-  "supports": "Residential rental buildings are depreciated straight-line over 27.5 years."
+  "supports": "Residential rental buildings are depreciated straight-line over 27.5 years.",
+  "reopened_11_nov_2026": false
  },
  "irs_rr2023": {
   "publisher": "IRS",
   "title": "Revenue Ruling 2023-2",
   "url": "https://www.irs.gov/pub/irs-drop/rr-23-02.pdf",
   "status": "excerpt",
-  "supports": "No basis adjustment at death for assets of an irrevocable grantor trust that are not included in the gross estate."
+  "supports": "No basis adjustment at death for assets of an irrevocable grantor trust that are not included in the gross estate.",
+  "reopened_11_nov_2026": false
  },
  "sco": {
   "publisher": "California State Controller",
   "title": "Estate tax",
   "url": "https://www.sco.ca.gov/ardtax_estate_tax.html",
   "status": "read",
-  "supports": "No California estate tax return is required for deaths on or after 1 January 2005; inheritance tax applies only to deaths before 8 June 1982."
+  "supports": "No California estate tax return is required for deaths on or after 1 January 2005; inheritance tax applies only to deaths before 8 June 1982.",
+  "reopened_11_nov_2026": false
  },
  "ftb_inh": {
   "publisher": "California Franchise Tax Board",
   "title": "Gifts and inheritance",
   "url": "https://www.ftb.ca.gov/file/personal/income-types/gifts-and-inheritance.html",
   "status": "read",
-  "supports": "An inheritance is not income; later income from it (rent, interest, gain on sale) is taxable."
+  "supports": "An inheritance is not income; later income from it (rent, interest, gain on sale) is taxable.",
+  "reopened_11_nov_2026": false
  },
  "ftb_cg": {
   "publisher": "California Franchise Tax Board",
   "title": "Capital gains and losses",
   "url": "https://www.ftb.ca.gov/file/personal/income-types/capital-gains-and-losses.html",
   "status": "read",
-  "supports": "California has no lower rate for capital gains; all capital gains are taxed as ordinary income."
+  "supports": "California has no lower rate for capital gains; all capital gains are taxed as ordinary income.",
+  "reopened_11_nov_2026": false
  },
  "ftb_rates": {
   "publisher": "California Franchise Tax Board",
   "title": "Tax News, October 2025 - 2025 tax rate schedules",
   "url": "https://www.ftb.ca.gov/about-ftb/newsroom/tax-news/2025/10.html",
   "status": "read",
-  "supports": "2025 California brackets: 9.3% starts at $72,724 (single) / $145,448 (joint); top listed rate 12.3%."
+  "supports": "2025 California brackets: 9.3% starts at $72,724 (single) / $145,448 (joint); top listed rate 12.3%.",
+  "reopened_11_nov_2026": false
  },
  "rtc_13301": {
   "publisher": "California Legislative Information",
   "title": "Revenue and Taxation Code 13301",
   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=13301.&lawCode=RTC",
   "status": "read",
-  "supports": "Neither the state nor any political subdivision may impose a gift, inheritance, succession, legacy, income or estate tax by reason of a death (added by initiative, 8 June 1982)."
+  "supports": "Neither the state nor any political subdivision may impose a gift, inheritance, succession, legacy, income or estate tax by reason of a death (added by initiative, 8 June 1982).",
+  "reopened_11_nov_2026": false
  },
  "rtc_480": {
   "publisher": "California Legislative Information",
   "title": "Revenue and Taxation Code 480",
   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=480.&lawCode=RTC",
   "status": "read",
-  "supports": "For a transfer at death through a trust, the trustee or transferee files a change in ownership statement within 150 days after the date of death; penalty of $100 or 10% of the tax if not filed within 90 days of the assessor's written request."
+  "supports": "For a transfer at death through a trust, the trustee or transferee files a change in ownership statement within 150 days after the date of death; penalty of $100 or 10% of the tax if not filed within 90 days of the assessor's written request.",
+  "reopened_11_nov_2026": false
  },
  "rtc_11911": {
   "publisher": "California Legislative Information",
   "title": "Revenue and Taxation Code 11911",
   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=11911.&lawCode=RTC",
   "status": "read",
-  "supports": "County documentary transfer tax of 55 cents per $500 of value on a sale; a city may levy half that rate, credited against the county tax."
+  "supports": "County documentary transfer tax of 55 cents per $500 of value on a sale; a city may levy half that rate, credited against the county tax.",
+  "reopened_11_nov_2026": true
  },
  "prob_16061": {
   "publisher": "California Legislative Information",
   "title": "Probate Code 16061.7",
   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=16061.7.&lawCode=PROB",
   "status": "read",
-  "supports": "When a revocable trust becomes irrevocable at a settlor's death, the trustee must serve a notification on beneficiaries and heirs within 60 days."
+  "supports": "When a revocable trust becomes irrevocable at a settlor's death, the trustee must serve a notification on beneficiaries and heirs within 60 days.",
+  "reopened_11_nov_2026": false
  },
  "boe_p19": {
   "publisher": "California State Board of Equalization",
   "title": "Proposition 19",
   "url": "https://www.boe.ca.gov/prop19/",
   "status": "read",
-  "supports": "Parent-child exclusion applies only to a family home that was the parent's principal residence and becomes the child's; excluded amount is taxable value plus $1 million (adjusted every two years); homeowners' exemption within 1 year; claim within 3 years or before a sale to a third party."
+  "supports": "Parent-child exclusion applies only to a family home that was the parent's principal residence and becomes the child's; excluded amount is taxable value plus $1 million (adjusted every two years); homeowners' exemption within 1 year; claim within 3 years or before a sale to a third party.",
+  "reopened_11_nov_2026": true
  },
  "boe_cap": {
   "publisher": "California State Board of Equalization",
   "title": "Letter to Assessors 2025/009 - Proposition 19 adjusted amount",
   "url": "https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf",
   "status": "read",
-  "supports": "$1,044,586 for 16 February 2025 through 15 February 2027; next adjustment in February 2027 by the FHFA California house price index."
+  "supports": "$1,044,586 for 16 February 2025 through 15 February 2027; next adjustment in February 2027 by the FHFA California house price index.",
+  "reopened_11_nov_2026": true
  },
  "boe_guid": {
   "publisher": "California State Board of Equalization",
   "title": "Letter to Assessors 2026/026 - Proposition 19 questions and answers",
   "url": "https://www.boe.ca.gov/proptaxes/pdf/lta26026.pdf",
   "status": "read",
-  "supports": "Value above factored base year value plus the cap is added to the taxable value; in a multi-unit building only the parent's own unit qualifies; the child must move in within one year; moving out removes the exclusion."
+  "supports": "Value above factored base year value plus the cap is added to the taxable value; in a multi-unit building only the parent's own unit qualifies; the child must move in within one year; moving out removes the exclusion.",
+  "reopened_11_nov_2026": false
  },
  "boe_infl": {
   "publisher": "California State Board of Equalization",
   "title": "Letter to Assessors 2024/053 - inflation factors 1976-2025",
   "url": "https://boe.ca.gov/proptaxes/pdf/lta24053.pdf",
   "status": "read",
-  "supports": "Annual base-year-value factor is the California CPI change, capped at 2% (factor 1.02 in most years; lower in 2010-11, 2011-12, 2014-15, 2015-16, 2016-17 and 2021-22)."
+  "supports": "Annual base-year-value factor is the California CPI change, capped at 2% (factor 1.02 in most years; lower in 2010-11, 2011-12, 2014-15, 2015-16, 2016-17 and 2021-22).",
+  "reopened_11_nov_2026": false
  },
  "boe_infl26": {
   "publisher": "California State Board of Equalization",
   "title": "Letter to Assessors 2026/002 - 2026-27 inflation factor",
   "url": "https://boe.ca.gov/proptaxes/pdf/lta26002.pdf",
   "status": "excerpt",
-  "supports": "Assessors to prepare the 2026 roll using an inflation factor of 1.02."
+  "supports": "Assessors to prepare the 2026 roll using an inflation factor of 1.02.",
+  "reopened_11_nov_2026": false
  },
  "boe_hoe": {
   "publisher": "California State Board of Equalization",
   "title": "Homeowners' exemption",
   "url": "https://www.boe.ca.gov/proptaxes/homeowners_exemption.htm",
   "status": "read",
-  "supports": "$7,000 reduction in taxable value for an owner-occupied principal residence; one-time claim on form BOE-266; file by 15 February for the full exemption."
+  "supports": "$7,000 reduction in taxable value for an owner-occupied principal residence; one-time claim on form BOE-266; file by 15 February for the full exemption.",
+  "reopened_11_nov_2026": true
  },
  "boe_forms": {
   "publisher": "California State Board of Equalization",
   "title": "Letter to Assessors 2021/007 - Proposition 19 claim forms",
   "url": "https://www.boe.ca.gov/proptaxes/pdf/lta21007.pdf",
   "status": "excerpt",
-  "supports": "Form BOE-19-P is the claim for the parent-child exclusion for transfers on or after 16 February 2021."
+  "supports": "Form BOE-19-P is the claim for the parent-child exclusion for transfers on or after 16 February 2021.",
+  "reopened_11_nov_2026": false
  },
  "coa_rates": {
   "publisher": "County A (property-tax authority for Property A)",
   "title": "Compilation of tax rates and information, fiscal year 2025-26",
   "url": "https://files.santaclaracounty.gov/exjcpb1531/2025-11/tax-rate-book-2025-2026.pdf",
   "status": "read",
-  "supports": "Rate per $100 of value for each levy; rates differ by tax rate area; value rises by California CPI up to 2% a year; installments delinquent after 10 December and 10 April (10% penalty); supplemental bills follow a change in ownership."
+  "supports": "Rate per $100 of value for each levy; rates differ by tax rate area; value rises by California CPI up to 2% a year; installments delinquent after 10 December and 10 April (10% penalty); supplemental bills follow a change in ownership.",
+  "reopened_11_nov_2026": false
  },
  "cityb_tax": {
   "publisher": "City B Treasurer and Tax Collector (authority for Property B)",
   "title": "Secured property taxes",
   "url": "https://sftreasurer.org/property/secured-property-taxes",
   "status": "read",
-  "supports": "Secured rate for fiscal year 2026-27 is 1.18162182%; bill = net assessed value x rate + direct charges and special assessments; delinquent after 10 December and 10 April; supplemental assessment after a change in ownership."
+  "supports": "Secured rate for fiscal year 2026-27 is 1.18162182%; bill = net assessed value x rate + direct charges and special assessments; delinquent after 10 December and 10 April; supplemental assessment after a change in ownership.",
+  "reopened_11_nov_2026": true
  },
  "cityb_rent": {
   "publisher": "City B Rent Board",
   "title": "Annual allowable rent increase, 1 March 2026 to 28 February 2027",
   "url": "https://www.sf.gov/news--annual-rent-increase-3126-22827-announced",
   "status": "read",
-  "supports": "1.6% for rent-controlled units (1.4% the year before)."
+  "supports": "1.6% for rent-controlled units (1.4% the year before).",
+  "reopened_11_nov_2026": true
  },
  "cityb_rentlearn": {
   "publisher": "City B Rent Board",
   "title": "Rent increases (rules, formula and pending legislation)",
   "url": "https://www.sf.gov/learn-about-rent-increases-san-francisco",
   "status": "read",
-  "supports": "One increase every 12 months; amount is 60% of the regional CPI-U increase; no limit on the first rent for a vacant unit; a rent increase licence is required; pending Board of Supervisors File No. 261020 (not enacted) would cap combined banked and capital-improvement increases at 10% a year."
+  "supports": "One increase every 12 months; amount is 60% of the regional CPI-U increase; no limit on the first rent for a vacant unit; a rent increase licence is required; pending Board of Supervisors File No. 261020 (not enacted) would cap combined banked and capital-improvement increases at 10% a year.",
+  "reopened_11_nov_2026": false
  },
  "cityb_laws": {
   "publisher": "City B Rent Board",
   "title": "Which units have rent control and eviction protection",
   "url": "https://www.sf.gov/learn-about-san-francisco-rental-laws/",
   "status": "read",
-  "supports": "Many units built on or before 13 June 1979 have rent control and eviction protection; an owner move-in is a just cause for eviction."
+  "supports": "Many units built on or before 13 June 1979 have rent control and eviction protection; an owner move-in is a just cause for eviction.",
+  "reopened_11_nov_2026": false
  },
  "cdi_tool": {
   "publisher": "California Department of Insurance",
   "title": "Homeowners insurance comparison tool (2026)",
   "url": "https://interactive.web.insurance.ca.gov/apex_extprd/f?p=111:20",
   "status": "read",
-  "supports": "Annual premium survey for hypothetical homes by location; not quotes; wildfire surcharges of 15% to over 300% are not reflected."
+  "supports": "Annual premium survey for hypothetical homes by location; not quotes; wildfire surcharges of 15% to over 300% are not reflected.",
+  "reopened_11_nov_2026": true
  },
  "cdi_guide": {
   "publisher": "California Department of Insurance",
   "title": "Residential insurance guide: homeowners and renters",
   "url": "https://www.insurance.ca.gov/01-consumers/105-type/95-guides/03-res/res-ins-guide.cfm",
   "status": "read",
-  "supports": "What a homeowners policy covers (dwelling, other structures, personal property, loss of use, liability); advice to compare price, coverage and conditions."
+  "supports": "What a homeowners policy covers (dwelling, other structures, personal property, loss of use, liability); advice to compare price, coverage and conditions.",
+  "reopened_11_nov_2026": false
  },
  "cpuc_nem": {
   "publisher": "California Public Utilities Commission",
   "title": "Net energy metering and net billing",
   "url": "https://www.cpuc.ca.gov/industries-and-topics/electrical-energy/demand-side-management/customer-generation/net-energy-metering-and-net-billing",
   "status": "read",
-  "supports": "NEM tariffs are closed to new enrolment; applicants since 15 April 2023 are on the net billing tariff, whose export credits are usually below the retail rate. (The 20-year legacy period for existing NEM customers was seen only in a search excerpt of this page.)"
+  "supports": "NEM tariffs are closed to new enrolment; applicants since 15 April 2023 are on the net billing tariff, whose export credits are usually below the retail rate. (The 20-year legacy period for existing NEM customers was seen only in a search excerpt of this page.)",
+  "reopened_11_nov_2026": false
  },
  "cpuc_water": {
   "publisher": "California Public Utilities Commission",
   "title": "Water (regulated water utilities)",
   "url": "https://www.cpuc.ca.gov/industries-and-topics/water",
   "status": "lookup",
-  "supports": "Regulator of investor-owned water utilities and their rate changes; no rate was taken from this page."
+  "supports": "Regulator of investor-owned water utilities and their rate changes; no rate was taken from this page.",
+  "reopened_11_nov_2026": false
  },
  "sos_memo": {
   "publisher": "California Secretary of State",
   "title": "County Clerk/Registrar of Voters Memorandum 26138 (18 May 2026)",
   "url": "https://elections.cdn.sos.ca.gov/ccrov/2026/may/26138jh.pdf",
   "status": "read",
-  "supports": "Initiative 1994, 'Repeals voter-enacted changes to property tax rules for transfers between family members', failed: signatures filed were below the number required."
+  "supports": "Initiative 1994, 'Repeals voter-enacted changes to property tax rules for transfers between family members', failed: signatures filed were below the number required.",
+  "reopened_11_nov_2026": true
  },
  "congress_s587": {
   "publisher": "Congress.gov",
   "title": "S.587 - Death Tax Repeal Act of 2025",
   "url": "https://www.congress.gov/bill/119th-congress/senate-bill/587",
   "status": "read",
-  "supports": "Introduced 13 February 2025; read twice and referred to the Committee on Finance; status: introduced."
+  "supports": "Introduced 13 February 2025; read twice and referred to the Committee on Finance; status: introduced.",
+  "reopened_11_nov_2026": true
  },
  "congress_hr1301": {
   "publisher": "Congress.gov",
   "title": "H.R.1301 - Death Tax Repeal Act",
   "url": "https://www.congress.gov/bill/119th-congress/house-bill/1301",
   "status": "excerpt",
-  "supports": "Introduced 13 February 2025; referred to the Committee on Ways and Means."
+  "supports": "Introduced 13 February 2025; referred to the Committee on Ways and Means.",
+  "reopened_11_nov_2026": false
  },
  "fomc": {
   "publisher": "Federal Reserve",
   "title": "Statement on longer-run goals and monetary policy strategy (reaffirmed 27 January 2026)",
   "url": "https://www.federalreserve.gov/monetarypolicy/files/FOMC_LongerRunGoals.pdf",
   "status": "read",
-  "supports": "Longer-run inflation goal of 2 percent (personal consumption expenditures price index)."
+  "supports": "Longer-run inflation goal of 2 percent (personal consumption expenditures price index).",
+  "reopened_11_nov_2026": false
  },
  "fred_hpi": {
   "publisher": "Federal Reserve Bank of St. Louis (FRED), data from the Federal Housing Finance Agency",
   "title": "All-Transactions House Price Index for California",
   "url": "https://fred.stlouisfed.org/data/CASTHPI.txt",
   "status": "read",
-  "supports": "Quarterly index (1980 Q1 = 100): 41.65 in 1975 Q1; 200.89 in 1996 Q2; 643.96 in 2006 Q2; 553.43 in 2016 Q2; 966.27 in 2025 Q2; 974.97 in 2026 Q2."
+  "supports": "Quarterly index (1980 Q1 = 100): 41.65 in 1975 Q1; 200.89 in 1996 Q2; 643.96 in 2006 Q2; 553.43 in 2016 Q2; 966.27 in 2025 Q2; 974.97 in 2026 Q2. Peaks and low points: 229.96 in 1990 Q3, 199.59 in 1995 Q1, 646.07 in 2006 Q3, 380.93 in 2012 Q1. Every second-quarter value from 1975 to 2026 is used in the uneven-economy test.",
+  "reopened_11_nov_2026": true
  },
  "treasury": {
   "publisher": "U.S. Department of the Treasury",
   "title": "Daily Treasury par yield curve rates, November 2026",
   "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value_month=202611",
   "status": "read",
-  "supports": "9 November 2026: 1-year 4.38%, 5-year 4.67%, 10-year 4.88%, 20-year 5.29%, 30-year 5.26%."
+  "supports": "10 November 2026: 1-year 4.56%, 5-year 4.81%, 10-year 4.98%, 20-year 5.39%, 30-year 5.35%. (9 November 2026: 4.38%, 4.67%, 4.88%, 5.29%, 5.26%.)",
+  "reopened_11_nov_2026": true
+ },
+ "fred_gs10": {
+  "publisher": "Federal Reserve Bank of St. Louis (FRED), data from the Board of Governors of the Federal Reserve System",
+  "title": "Market yield on U.S. Treasury securities at 10-year constant maturity, monthly (H.15 release)",
+  "url": "https://fred.stlouisfed.org/data/GS10.txt",
+  "status": "read",
+  "supports": "Monthly averages from April 1953 to October 2026. June readings used for 1975 to 2025: highest 14.30% (1982), lowest 0.73% (2020); 7.86% in 1975, 5.11% in 2006, 1.62% in 2012, 4.38% in 2025.",
+  "reopened_11_nov_2026": true
+ },
+ "fred_cpi": {
+  "publisher": "Federal Reserve Bank of St. Louis (FRED), data from the U.S. Bureau of Labor Statistics",
+  "title": "Consumer Price Index for All Urban Consumers, all items, U.S. city average, annual averages",
+  "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPIAUCNS&cosd=1974-01-01&coed=2026-12-31&fq=Annual&fam=avg",
+  "status": "read",
+  "supports": "Annual average index (1982-84 = 100): 53.817 in 1975; 82.408 in 1980; 130.658 in 1990; 172.200 in 2000; 218.056 in 2010; 258.811 in 2020; 321.943 in 2025. The 2026 annual average is not yet published.",
+  "reopened_11_nov_2026": true
  },
  "hud_fmr": {
   "publisher": "U.S. Department of Housing and Urban Development",
   "title": "Fair Market Rents dataset",
   "url": "https://www.huduser.gov/portal/datasets/fmr.html",
   "status": "lookup",
-  "supports": "Official place to look up benchmark rents by area and bedroom count; the page could not be opened in this review, so no rent was taken from it."
+  "supports": "Official place to look up benchmark rents by area and bedroom count; the page could not be opened in this review, so no rent was taken from it.",
+  "reopened_11_nov_2026": false
  },
  "gh_prs": {
   "publisher": "GitHub (this repository)",
   "title": "Pull requests",
   "url": "https://github.com/wingbangboozle1-lang/Tino3/pulls?q=is%3Apr",
   "status": "repo",
-  "supports": "Merge history and open pull requests of the parallel sessions."
+  "supports": "Merge history and open pull requests of the parallel sessions.",
+  "reopened_11_nov_2026": false
  }
 }

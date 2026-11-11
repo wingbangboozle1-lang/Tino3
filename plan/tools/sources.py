@@ -1,7 +1,7 @@
 """Source ledger for the cross-check edition.
 
 status:
-  read    - the official page was opened and read during this review (10 Nov 2026)
+  read    - the official page was opened and read during this review (10 or 11 Nov 2026; see REOPENED)
   excerpt - official text was seen only as a search-result excerpt of the official page;
             every statement resting on it is flagged
   lookup  - official place to look a value up; no value was taken from it
@@ -91,11 +91,19 @@ SOURCES = {
  "fomc": ("Federal Reserve", "Statement on longer-run goals and monetary policy strategy (reaffirmed 27 January 2026)", "https://www.federalreserve.gov/monetarypolicy/files/FOMC_LongerRunGoals.pdf", "read",
    "Longer-run inflation goal of 2 percent (personal consumption expenditures price index)."),
  "fred_hpi": ("Federal Reserve Bank of St. Louis (FRED), data from the Federal Housing Finance Agency", "All-Transactions House Price Index for California", "https://fred.stlouisfed.org/data/CASTHPI.txt", "read",
-   "Quarterly index (1980 Q1 = 100): 41.65 in 1975 Q1; 200.89 in 1996 Q2; 643.96 in 2006 Q2; 553.43 in 2016 Q2; 966.27 in 2025 Q2; 974.97 in 2026 Q2."),
+   "Quarterly index (1980 Q1 = 100): 41.65 in 1975 Q1; 200.89 in 1996 Q2; 643.96 in 2006 Q2; 553.43 in 2016 Q2; 966.27 in 2025 Q2; 974.97 in 2026 Q2. Peaks and low points: 229.96 in 1990 Q3, 199.59 in 1995 Q1, 646.07 in 2006 Q3, 380.93 in 2012 Q1. Every second-quarter value from 1975 to 2026 is used in the uneven-economy test."),
  "treasury": ("U.S. Department of the Treasury", "Daily Treasury par yield curve rates, November 2026", "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value_month=202611", "read",
-   "9 November 2026: 1-year 4.38%, 5-year 4.67%, 10-year 4.88%, 20-year 5.29%, 30-year 5.26%."),
+   "10 November 2026: 1-year 4.56%, 5-year 4.81%, 10-year 4.98%, 20-year 5.39%, 30-year 5.35%. (9 November 2026: 4.38%, 4.67%, 4.88%, 5.29%, 5.26%.)"),
+ "fred_gs10": ("Federal Reserve Bank of St. Louis (FRED), data from the Board of Governors of the Federal Reserve System", "Market yield on U.S. Treasury securities at 10-year constant maturity, monthly (H.15 release)", "https://fred.stlouisfed.org/data/GS10.txt", "read",
+   "Monthly averages from April 1953 to October 2026. June readings used for 1975 to 2025: highest 14.30% (1982), lowest 0.73% (2020); 7.86% in 1975, 5.11% in 2006, 1.62% in 2012, 4.38% in 2025."),
+ "fred_cpi": ("Federal Reserve Bank of St. Louis (FRED), data from the U.S. Bureau of Labor Statistics", "Consumer Price Index for All Urban Consumers, all items, U.S. city average, annual averages", "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPIAUCNS&cosd=1974-01-01&coed=2026-12-31&fq=Annual&fam=avg", "read",
+   "Annual average index (1982-84 = 100): 53.817 in 1975; 82.408 in 1980; 130.658 in 1990; 172.200 in 2000; 218.056 in 2010; 258.811 in 2020; 321.943 in 2025. The 2026 annual average is not yet published."),
  "hud_fmr": ("U.S. Department of Housing and Urban Development", "Fair Market Rents dataset", "https://www.huduser.gov/portal/datasets/fmr.html", "lookup",
    "Official place to look up benchmark rents by area and bedroom count; the page could not be opened in this review, so no rent was taken from it."),
  "gh_prs": ("GitHub (this repository)", "Pull requests", "https://github.com/wingbangboozle1-lang/Tino3/pulls?q=is%3Apr", "repo",
    "Merge history and open pull requests of the parallel sessions."),
 }
+
+# Opened again on 11 November 2026 (session arena/82853ea6) and compared with the figures used.
+REOPENED = {"irs_estate", "irs_2027", "boe_p19", "boe_cap", "boe_hoe", "rtc_11911", "cityb_tax", "cityb_rent",
+            "cdi_tool", "sos_memo", "congress_s587", "fred_hpi", "treasury", "fred_gs10", "fred_cpi"}
