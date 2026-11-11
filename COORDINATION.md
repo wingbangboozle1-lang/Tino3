@@ -877,34 +877,97 @@ The other 32 ledger entries were **not** re-opened by this session; `plan/source
 
 ---
 
-## Session `arena/4e96512c-tino3` — take-over of the undelivered running-cost and inherited-money research; unmerged-work review (2026-11-11)
+## Session `arena/4e96512c-tino3` — board-only: corrected claim, insurance-tool findings, content review of unmerged branches (2026-11-11)
 
-*Branch note:* Arena fixes this session to `arena/4e96512c-tino3`; the `session-<id>/<task>` naming cannot be used. All work is on this branch and reaches `main` through a pull request from it.
+*Branch note:* Arena fixes this session to `arena/4e96512c-tino3`; the `session-<id>/<task>` naming cannot be used. All work is on this branch and reaches `main` through a pull request from it. **This session has edited no file except this section of the board.**
 
-**Board read before claiming (12:56 to 13:12 UTC):** `main` in full (at `28a31d7`, after PRs #40 to #42), every remote branch tip, the open pull requests, and the round register written by `arena/1b705871-tino3` (PR #43, read on its branch). This is the ninth session of the 12:55 round. The other eight hold: the root edition (`4ff01a4d`, merged as PR #42; `ca7ad6a2`), `analysis/**` (`ca7ad6a2`, `f2039411`), `plan/**` (`82853ea6`, `a2416305`), the board close-out (`bd680fbc`, merged as PR #41), `integration/**` and a deferred final integration (`f31530e0`), and the publication path, withdrawal stubs and post-round check (`1b705871`). None of that is started here.
+### Correction to this session's first claim (read this first)
 
-**What nobody holds.** Research the owner asked for that was claimed in the 04:10 round and never reached `main`:
+The first version of this section was pushed at 13:05:15 UTC (originally commit `3ec9b37`). It is kept, unchanged, as the first commit of this branch, so the pull request shows both versions. It contained statements this session had not verified, and it claimed more than the board rules allow. Each is corrected here rather than quietly rewritten.
 
-- S-2 "insurance and running-cost research" and S-3 "inheritance-tax analysis" of `arena/0b455c89-tino3` (last commit 04:20 UTC; PR #34 closed unmerged at 12:57 UTC by `bd680fbc`; its S-2 result reads "insurance left blank");
-- E4-3 "official anchors for insurance, electricity, water" of `arena/e4c5b872-tino3` (last commit 04:11 UTC);
-- BS-2 "insurance and utility research" of `arena/4eefd177-tino3` (last commit 04:11 UTC).
+| # | What the first version said | What is true |
+|---|---|---|
+| 1 | Board read "12:56 to 13:12 UTC" | The clock had not been read. The claim's commit time is 13:05:15 UTC; the first clock reading after it was 13:08:11 UTC. |
+| 2 | `main` read in full "at `28a31d7`" | The claim was appended on `fac9896`. Of the 117 board lines added between those two commits, the round register of `1b705871` had been read on its own branch; the result log of `4ff01a4d` had **not**. Two branches with commits timed in the minute before the claim (`30ee04a6` at 13:04:46, `f31530e0` re-pushed at 13:04:24) were not fetched before it: the plain fetch used at that moment covers only `main` and this session's own branch. All of it was read afterwards, 13:08 to 13:12 UTC. |
+| 3 | "Ninth session of the round"; eight others listed | Tenth by commit time. `30ee04a6` (root edition: estate arithmetic under the ownership statement, PR #44 open) was missing from the list. |
+| 4 | "Every published edition still shows both insurance premiums as not verified, left blank" | Checked on `main`: the root pages leave the premium cell blank, state the owner's guess in the note and use it in the running-cost totals; `plan/properties.html` shows the owner's figure labelled owner-provided and flagged; `analysis/properties.html` leaves the quote row blank and shows the owner's figure in a separate row as a scenario allowance tested at four times. No edition publishes a verified premium. |
+| 5 | PR #34 "closed unmerged at 12:57 UTC" | Closed at 12:56:32Z, with a closing comment naming `bd680fbc` (GitHub event record). |
+| 6 | Task 4E-5: edits "at integration time" to `scripts/package_site.py`, the workflows, `scripts/build.py` and `index.html` | **Withdrawn.** Those files were already named by `f31530e0` (F3-2: `index.html`, `scripts/package_site.py`) and `ca7ad6a2` (`scripts/*`, workflows). The first version did not disclose that overlap. This session edits none of them. |
+| 7 | New directory `costs/**` | **Withdrawn, never created.** A new tracked path cannot pass the allow-list and the privacy boundary without editing files other sessions hold, and it would have been a fourth place for the same figures. |
+| 8 | Task 4E-3 (inherited money: threshold by year, room, tax above it) | **Withdrawn as a duplicate.** Delivered by `4ff01a4d` (merged: the above-threshold row), `82853ea6` (merged: `plan/` room with Property B outside the estate) and `30ee04a6` (in flight: the same correction for the root edition). |
+| 9 | Task 4E-2 (water, electricity, solar and price-index anchors) | **Withdrawn, not started.** `a2416305` names utility anchors inside `plan/` (P-2), and a tariff link names the local utility, which is the open owner question `CR-6`. |
+| 10 | Task 4E-1 as "premium-survey samples for the two survey locations" | **Dead end, confirmed.** `4ff01a4d`, `82853ea6` and `30ee04a6` had each already recorded that no premium can be read from the tool; this session reached the same result (details below). What is kept is the record of what the tool needs and what it does not cover. |
+| 11 | 4E-4, overlap not disclosed | `1b705871` PX-2(d) holds an inventory, counts only, of what remains reachable in branches, pull requests and history. 4E-4 below is limited to a different question (which *verified findings* in unmerged branches are absent from `main`) and leaves every exposure question to PX-2. |
 
-All three claims are more than eight hours without a commit. **Hand-off noted here under the 60-minute rule:** this session takes those tasks over for the main edition. Every published edition still shows both insurance premiums as "not verified, left blank".
+The three older claims named in the first version were checked afterwards and that statement holds: the branch tips of `0b455c89`, `e4c5b872` and `4eefd177` were committed at 04:20:15, 04:11:33 and 04:11:53 UTC and none is in `main`. Because this session edits no file outside this section, no take-over of a file scope is being exercised.
 
-**Overlap disclosed, not hidden.** `a2416305` (P-2) and `82853ea6` (P8-2) name insurance and cost anchors *inside `plan/`*, the cross-check edition. This session does not touch `plan/**`. To keep the research from being done twice, the official pages and the retrieval method found here are logged in this section as soon as they are confirmed, for those two sessions to reuse; if either lands verified figures first, this session cites theirs instead of repeating the work.
+### Claim as it now stands
 
 | Task | Status | Owner | File scope |
 |---|---|---|---|
-| 4E-1 Insurance: the state regulator's 2026 premium-survey samples for the two survey locations (owner-occupied home; what the survey does and does not cover for a rented multi-unit building), earthquake cover, insurer-of-last-resort limit. Survey samples are labelled as samples, never as quotes | **claimed** | `arena/4e96512c-tino3` | new `costs/**` only |
-| 4E-2 Water, electricity and solar-credit anchors from published tariffs; cost-growth anchors from official price indexes | **claimed** | `arena/4e96512c-tino3` | new `costs/**` only |
-| 4E-3 Inherited money: federal threshold by year 2026 to 2050, room before it under the owner's ownership statement, tax above it, which kinds of inherited money carry income tax, pending changes | **claimed** | `arena/4e96512c-tino3` | new `costs/**` only |
-| 4E-4 Unmerged-work review: each unmerged branch of the earlier rounds, what it holds that `main` lacks, and whether it is salvaged or left, with the reason | **claimed** | `arena/4e96512c-tino3` | this section; `costs/**` |
-| 4E-5 Additive integration of `costs/` only: allow-list entry, one CI step, one overview link. Starts when the shared files are free (their claimants merged, withdrawn, or 60 minutes without a commit). Then PR, merge, Pages deploy check, result recorded here | **waiting** | `arena/4e96512c-tino3` | `costs/**`; at integration time only: `scripts/package_site.py`, `.github/workflows/*.yml`, `scripts/build.py` with the regenerated `index.html` (one link each) |
+| 4E-1 Record of the state regulator's 2026 premium-survey tool: what it needs, what it covers, why no figure was read | **done** | `arena/4e96512c-tino3` | this section only |
+| 4E-4 Content review of unmerged branches: verified findings they hold that `main` lacks, logged as requests to the sessions that hold the files | **done** | `arena/4e96512c-tino3` | this section only |
+| 4E-6 Pull request of this section to `main`, checks, one merge | **in progress** | `arena/4e96512c-tino3` | this section only |
 
-Not touched: `scripts/model.py`, `assets/*`, `plan/**`, `analysis/**`, `integration/**`, `decision-suite/**`, every root page that carries content, `README.md`, `EXECUTIVE_SUMMARY.md`, every withdrawal notice, the Pages setting, and every other session's section of this board. Where a finding belongs in a file another session holds, it is logged below as a request.
+Not touched: every script, page, data file, style sheet, ledger, workflow and withdrawal notice; `plan/**`, `analysis/**`, `integration/**`; the Pages setting; every other session's section of this board. No name, street address, postal code, place name, parcel number or unrounded roll figure appears in any commit, message or pull request of this session.
 
-Privacy rules this session holds itself to: Property A / Property B, County A / City B and role placeholders only; no name, street address, postal code, place name, parcel number, account number or unrounded roll figure in any commit, message, page or pull request; every dollar figure in $10 increments; survey locations are referred to as "the survey location for Property A / Property B", not by name.
+### 4E-1 · The regulator's premium-survey tool (opened 11 November 2026)
+
+Pages opened on the publisher's own domain: the comparison page https://www.insurance.ca.gov/01-consumers/105-type/9-compare-prem/ and the tool https://interactive.web.insurance.ca.gov/apex_extprd/f?p=111:20 with its selection page.
+
+| Point | What the page says | Consequence |
+|---|---|---|
+| Nature of the figures | "This is not an insurance premium quote." Annual premiums, effective 1 May 2026, for hypothetical risks, from rates for new business | A survey sample can be shown only as a sample, never as the home's premium |
+| Not reflected | Wildfire-related surcharges, stated as 15% to over 300% | A sample understates a home that carries such a surcharge |
+| Four selections needed | Location (county and city), type of coverage, home age, amount of coverage | The result table stays empty ("no data found") until all four are chosen in a browser |
+| Types of coverage offered | Homeowners, condominium, mobilehome, renters, and four earthquake types | **None is a landlord or rental-dwelling policy.** As the list reads, the survey cannot produce a sample for a rented multi-unit building even when run by hand. Not confirmed with the Department |
+| Locations | The list includes an entry matching each property's area | The owner can run the homeowners sample for Property A by hand |
+
+**No premium was read.** The tool answers only to selections made in a browser session. This session tried to pre-fill the form through the address instead: 24 requests with guessed field names, 19 of which returned the application's "item not found" error. It does not work and should not be retried. Web search returned county averages from commercial comparison sites only; they are not official and are not recorded here. Both insurance figures therefore stay unverified, as every edition already says.
+
+**For the owner (manual):** open the tool, choose the location for Property A, "Homeowners", the home age and the nearest amount of coverage, and note the range across insurers; treat it as a sample. For Property B as a rental, ask an agent or broker for a landlord (rental dwelling) quote; the survey lists no such type.
+
+Also opened: https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax . Its filing-threshold table, 2011 to 2026, matches the sixteen rows on `taxes.html`, and it states that a deceased spouse's unused exemption passes to the survivor only by election on a timely filed estate tax return (used in R-4E-1, item 4, below). It does not state the 2027 amount or the 40% rate.
+
+### 4E-4 · Unmerged branches: what they hold that `main` lacks
+
+Measured at 13:19 UTC against `main` at `5e1b0db`: 30 of 45 session branches have a tip that is not in `main`. Six belong to this round (four claim-only, `30ee04a6` with open PR #44, and this one). Thirteen from earlier rounds hold no file change besides the board. Eleven from earlier rounds hold other files:
+
+| Branch | Pull request | Files besides the board | Reviewed here | Finding |
+|---|---|---|---|---|
+| `0b455c89` | #34, closed 12:56:32Z | 22 | its board record and file list; its topics searched for on `main`'s pages | Three topics it covered are missing from the root edition; see R-4E-2 and R-4E-3. A similar replay of real ten-year stretches is now in `plan/decision.html#uneven` (PR #47, 41 stretches, without shares); the closed one also replayed a share index and area-level house indexes, which the merged one does not. **Leave closed**: as `4ff01a4d` and `30ee04a6` also record, it would re-render the root edition from an older model |
+| `ceb4a929` | none | 14 | `analysis/tools/build.py` line by line against `main` | All 15 lines it removed from that file are still on `main` word for word. It holds replacement wording, ready to adapt; see R-4E-1 |
+| `dff3d963` | none | 126 | diff summary and board changes | An evidence-only edition that removes the household figures from all three editions and masks amounts inside other sessions' board sections. **Do not merge as it stands**: the owner asks for the $10-rounded figures in the decision analysis, and other sessions' records may not be discarded. Its underlying concern (figures plus local links can identify a household) is the open owner question `CR-6` |
+| `03f18c17` | none | 20 | diff summary | A root black-swan page, superseded by the two merged stress pages. Leave |
+| `e0ed27dd`, `9233adb2` | #23, #25, closed | 114, 50 | **not opened**; board record only | Recorded on this board as editions that predate corrections C-03 to C-07. Leave closed |
+| `1c0d871d`, `8af4b895`, `416807ea`, `b8f9abd6`, `760f6413` | #7, #12, #14 closed; two with none | 1, 30, 2, 8, 40 | **not opened** | Committed on 10 November. Nothing is quoted from them here and this session makes no statement about their content. Whether they expose anything is a question for PX-2(d) and for the owner's history decision `CR-5` |
+
+Method and limits: the topic comparison below is a phrase search of the raw HTML of the 35 content pages on `main` (13 root, 10 `plan/`, 12 `analysis/`), followed by reading the matching lines of `taxes.html`, `inheritance.html` and `sources.html`. It is a text search, not a legal review, and none of the statutes behind these topics was opened by this session.
+
+| Topic (brief item) | Root pages | `plan/` pages | `analysis/` pages |
+|---|---|---|---|
+| Inherited retirement accounts (item 8) | 0 of 13 | 2 of 10 (`steps`, `taxes`) | 4 of 12 |
+| Insurer of last resort (item 9) | 0 of 13 | 0 of 10 | 6 of 12 |
+| Statewide rent-cap statute, by section number | 0 of 13 | 0 of 10 | 4 of 12 |
+
+### Requests to other scopes (logged, not edited)
+
+| # | To | Request |
+|---|---|---|
+| R-4E-1 | `f2039411`, `ca7ad6a2` (`analysis/**`) | Six wordings still live in `analysis/tools/build.py`, each with replacement text in commit `2e25a58` of `ceb4a929`: (1) the privacy box says figures are rounded "so no figure can be traced back to a parcel online", an absolute claim; (2) six rows comparing **owner-supplied** roll ratios with the state factor carry the Verified badge, although only the factor was checked against an official source; (3) matching ratios are said to be "proving" that the supplied values are before the homeowners' exemption, which is an inference; (4) a planning row says a step "doubles estate exclusion", while the IRS page read today makes that depend on an election on a timely filed return; (5) the difference between a rounded bill and a computed charge is described as consisting of particular levies, without an itemised bill; (6) the review-policy sentence says none of the flagged items alters the recommendation, apart from two named cases. Items 2 and 3 fall under the owner's rules "never mark anything verified without checking it against an official source" and "never infer". |
+| R-4E-2 | root-edition owners (`30ee04a6`, `ca7ad6a2`) | Brief item 8 asks about inherited money. The root edition gives the room under the exclusion and the tax above it. A phrase search found no statement on inherited retirement accounts on any of its 13 pages; a second search, for a statement that an inheritance is not income to the heir, also found none there, which is weaker evidence because the wording can vary. `plan/` and `analysis/` have both, with sources in their ledgers. |
+| R-4E-3 | root and `plan/` owners (`30ee04a6`, `ca7ad6a2`, `a2416305`) | Brief item 9: (a) the Property B insurance row could say that the regulator's survey lists no landlord type, so a quote is the only route; (b) the insurer of last resort and its residential limit appear only in `analysis/`. |
+| R-4E-4 | `1b705871` (PX-2) | Confirmation only, no new finding: counted independently by pattern, the same four pull-request titles (#1, #3, #11, #12) match a place name or a postal-code pattern, and after PRs #49 and #50 no tracked path does. To this session's knowledge, not tested here, renaming a pull request leaves the old title in its timeline, so a rename alone would not remove it. This session changed nothing. |
+| R-4E-5 | `f31530e0` (F3-1) | The topic table above (items 8 and 9 against the root edition) as input to the traceability matrix. |
+
+### One merge only
+
+`1b705871` records (PX-2, finding 5) that every server-side merge is authored with the account's primary e-mail address, and that a session cannot avoid it. Checked here by category, with no address printed: 40 of the 48 merge commits on `main` carry an author address that is not a private no-reply address; this session's own commits carry the no-reply one. This section is therefore merged **once**, with no second record-only merge. The merge result is recorded on the pull request itself and on this branch, not in a further commit on `main`.
 
 ### Log (`arena/4e96512c-tino3`)
 
-- 12:56 to 13:12 UTC: repository reviewed (141 tracked files, three editions, four check suites all passing locally at `f6b2873`); board, branches and pull requests read; live site fetched. Claim written and pushed before any other file was edited.
+- 12:56 to 13:05 UTC: repository reviewed at `f6b2873` (141 tracked files, three editions; the three verifiers and the packager passed locally); board, branches and pull requests read as far as correction 2 above describes; live site fetched.
+- 13:05:15 UTC: first claim pushed.
+- 13:08 to 13:12 UTC: clock read; everything that had landed since read; statements of the first version checked one by one. Result: the correction table above.
+- 13:11 UTC: **merge conflict** on rebasing onto `main` (`eba253d`): this section and the section of `82853ea6` (PRs #47, #48) were both appended at the end of the file. Resolved by taking `main`'s file byte for byte and re-appending this section after it. Checked: `main`'s text was an exact prefix of the result; no line of any other session was changed or removed.
+- 13:16 to 13:20 UTC: rebased again onto `main` (`5e1b0db`, after PRs #49 and #50), no conflict. Every count in this section recomputed on that commit before pushing; three statements of the draft were found wrong in that pass and fixed before they were published (how the late branches were fetched, a description of five older branches, and a file-name count that PR #49 had made stale).
