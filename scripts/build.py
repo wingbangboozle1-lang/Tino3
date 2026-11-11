@@ -200,6 +200,7 @@ Renting the home out ends with {usd(RENT['wealth'])} and moving in ends with {us
 <div class="card"><div class="k">The black swans</div><p><a href="stress.html">Black swan stress tests</a>: verified 1929, 1970s, 2000 and 2008 episodes re-run against the 2045 inheritance, and the amounts that do not rise with inflation.</p></div>
 <div class="card"><div class="k">What is not settled</div><p><a href="review.html">Flagged for Review</a> and the <a href="audit.html">independent verification</a> of the earlier edition.</p></div>
 <div class="card"><div class="k">Second opinion</div><p><a href="plan/index.html">Independent cross-check</a>: a separate model by another session, built only from official figures and break-evens. It reaches the same default.</p></div>
+<div class="card"><div class="k">50-year &amp; ownership suite</div><p><a href="analysis/index.html">50-year projections &amp; historical replay</a>: 2026&ndash;2076 schedules, 1977&ndash;2026 California cycle replay with Proposition 8 relief, 60/40 Treasury barbell, 20-year solar sunset and Property B ownership-asymmetry tables.</p></div>
 </div></section>{PRIV}"""
 PAGES["index.html"] = page("index.html", "Overview", "Overview", "Sell, rent or move in?",
                            "A costed answer for a home expected to be inherited through a trust between 2040 and 2050, "

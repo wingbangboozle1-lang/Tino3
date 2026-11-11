@@ -20,6 +20,7 @@ jobs:
           python-version: '3.12'
       - run: python scripts/verify.py
       - run: python plan/tools/verify.py
+      - run: python analysis/tools/verify.py
       - run: python scripts/package_site.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
