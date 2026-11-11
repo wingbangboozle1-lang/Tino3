@@ -57,7 +57,8 @@ EXCL_HISTORY = [(2011, 5_000_000), (2012, 5_120_000), (2013, 5_250_000), (2014, 
                 (2027, 15_480_000)]
 ESTATE_RATE = 0.40
 TRANSFER_TAX = 0.55 / 500
-TREASURY = {"1y": 0.0438, "5y": 0.0467, "10y": 0.0488, "20y": 0.0529, "30y": 0.0526}
+TREASURY = {"1y": 0.0456, "5y": 0.0481, "10y": 0.0498, "20y": 0.0539, "30y": 0.0535}   # 10 November 2026
+TREASURY_DATE = "10 November 2026"
 TOP_FED_RATE = 0.37
 RENT_CPI_SHARE = 0.60
 RENT_CAP_NOW = 0.016
@@ -267,7 +268,10 @@ def headroom():
         ex = exclusion(y)
         a, b = market(A, y, G_BASE), market(B, y, G_BASE)
         ah, bh = market(A, y, G_HIGH), market(B, y, G_HIGH)
+        # The owner states Property B already belongs to the heir, so the estate holds Property A
+        # and the money. The "with B" column is kept only as a contingency: the deed was not seen.
         out.append(dict(year=y, exclusion=r10(ex), a=r10(a), b=r10(b), room_a=r10(ex - a),
+                        room_a_high=r10(ex - ah), room_a_two=r10(2 * ex - a),
                         room_ab=r10(ex - a - b), room_ab_high=r10(ex - ah - bh),
                         room_ab_two=r10(2 * ex - a - b)))
     return out
@@ -276,12 +280,162 @@ def headroom():
 def cash_cases():
     out = []
     for cash in (2_000_000, 5_000_000, 10_000_000, 15_000_000, 20_000_000):
-        gross = A["market_2026"] + B["market_2026"] + cash
+        gross = A["market_2026"] + cash                      # Property B is the heir's own (owner's statement)
         over = max(0, gross - EXCL[2026])
         over2 = max(0, gross - 2 * EXCL[2026])
+        over_b = max(0, gross + B["market_2026"] - EXCL[2026])
         out.append(dict(cash=cash, gross=gross, over=over, tax=r10(over * ESTATE_RATE),
-                        tax_two=r10(over2 * ESTATE_RATE)))
+                        tax_two=r10(over2 * ESTATE_RATE), tax_if_b_in_estate=r10(over_b * ESTATE_RATE)))
     return out
+
+
+# ---------------------------------------------------------------------------------------
+# Uneven-path test ("black swan" check). No scenario is invented: the ten years after the
+# inheritance are replayed along every ten-year stretch the official record contains.
+#   HPI_Q2  - FHFA all-transactions house price index for California, second quarter
+#   GS10_JUN - 10-year Treasury constant-maturity yield, June monthly average, percent
+#   CPI_AVG - CPI-U, U.S. city average, all items, annual average
+# All three were read on the publisher's site on 11 November 2026 (see sources.py).
+# ---------------------------------------------------------------------------------------
+HPI_Q2 = {1975: 42.79, 1976: 50.31, 1977: 63.02, 1978: 76.01, 1979: 88.68, 1980: 102.79, 1981: 112.83,
+          1982: 107.26, 1983: 117.43, 1984: 120.06, 1985: 126.23, 1986: 134.74, 1987: 148.21, 1988: 169.63,
+          1989: 205.79, 1990: 228.07, 1991: 226.97, 1992: 225.08, 1993: 217.24, 1994: 206.87, 1995: 201.49,
+          1996: 200.89, 1997: 204.53, 1998: 221.56, 1999: 239.29, 2000: 267.83, 2001: 305.47, 2002: 335.73,
+          2003: 373.71, 2004: 450.89, 2005: 569.94, 2006: 643.96, 2007: 622.92, 2008: 498.03, 2009: 420.20,
+          2010: 407.91, 2011: 384.83, 2012: 381.57, 2013: 425.87, 2014: 484.00, 2015: 516.28, 2016: 553.43,
+          2017: 590.29, 2018: 632.98, 2019: 651.64, 2020: 676.76, 2021: 761.06, 2022: 919.32, 2023: 905.46,
+          2024: 945.84, 2025: 966.27, 2026: 974.97}
+GS10_JUN = {1975: 7.86, 1976: 7.86, 1977: 7.28, 1978: 8.46, 1979: 8.91, 1980: 9.78, 1981: 13.47, 1982: 14.30,
+            1983: 10.85, 1984: 13.56, 1985: 10.16, 1986: 7.80, 1987: 8.40, 1988: 8.92, 1989: 8.28, 1990: 8.48,
+            1991: 8.28, 1992: 7.26, 1993: 5.96, 1994: 7.10, 1995: 6.17, 1996: 6.91, 1997: 6.49, 1998: 5.50,
+            1999: 5.90, 2000: 6.10, 2001: 5.28, 2002: 4.93, 2003: 3.33, 2004: 4.73, 2005: 4.00, 2006: 5.11,
+            2007: 5.10, 2008: 4.10, 2009: 3.72, 2010: 3.20, 2011: 3.00, 2012: 1.62, 2013: 2.30, 2014: 2.60,
+            2015: 2.36, 2016: 1.64, 2017: 2.19, 2018: 2.91, 2019: 2.07, 2020: 0.73, 2021: 1.52, 2022: 3.14,
+            2023: 3.75, 2024: 4.31, 2025: 4.38}
+CPI_AVG = {1975: 53.817, 1976: 56.908, 1977: 60.608, 1978: 65.233, 1979: 72.575, 1980: 82.408, 1981: 90.925,
+           1982: 96.500, 1983: 99.600, 1984: 103.883, 1985: 107.567, 1986: 109.608, 1987: 113.625,
+           1988: 118.258, 1989: 123.967, 1990: 130.658, 1991: 136.192, 1992: 140.317, 1993: 144.458,
+           1994: 148.225, 1995: 152.383, 1996: 156.850, 1997: 160.517, 1998: 163.008, 1999: 166.575,
+           2000: 172.200, 2001: 177.067, 2002: 179.875, 2003: 183.958, 2004: 188.883, 2005: 195.292,
+           2006: 201.592, 2007: 207.342, 2008: 215.303, 2009: 214.537, 2010: 218.056, 2011: 224.939,
+           2012: 229.594, 2013: 232.957, 2014: 236.736, 2015: 237.017, 2016: 240.007, 2017: 245.120,
+           2018: 251.107, 2019: 255.657, 2020: 258.811, 2021: 270.970, 2022: 292.655, 2023: 304.702,
+           2024: 313.689, 2025: 321.943}
+# Peaks and troughs of the quarterly index (same series), for the drawdown table.
+HPI_DRAWDOWNS = [
+    dict(peak="1990 Q3", peak_v=229.96, trough="1995 Q1", trough_v=199.59, regained="1998 Q4", years_down=4.5, years_to_regain=8.25),
+    dict(peak="2006 Q3", peak_v=646.07, trough="2012 Q1", trough_v=380.93, regained="2019 Q2", years_down=5.5, years_to_regain=12.75),
+]
+REPLAY_T = 2045
+WINDOWS = list(range(1975, 2016))          # 41 start years; the last window ends in 2025
+
+
+def replay(s, T=REPLAY_T):
+    """Ten years after an inheritance in year T, shaped like the ten years that began in year s."""
+    v = market(A, T, G_BASE)
+    y = GS10_JUN[s] / 100
+    c = [CPI_AVG[s + k] / CPI_AVG[s] for k in range(HORIZON + 1)]            # price level, year k
+    rentf = [1.0]
+    for k in range(1, HORIZON + 1):
+        rentf.append(rentf[-1] * (1 + RENT_CPI_SHARE * max(0.0, CPI_AVG[s + k] / CPI_AVG[s + k - 1] - 1)))
+    house_end = v * HPI_Q2[s + HORIZON] / HPI_Q2[s]
+    tl0 = prop19_taxable(T, G_BASE)
+    cost0 = a_costs(T)
+    live_flow, rent_cost = [], []
+    for k in range(HORIZON):
+        other = (fixed_a(T) + sum(cost0.values())) * c[k]
+        live_cost = RATE_A * (tl0 * PROP13 ** k - HOE) + other              # assessed value capped at +2% a year
+        unit3 = infl(UNIT3_2026 * 12, T) * rentf[k]
+        live_flow.append(unit3 - live_cost)
+        rent_cost.append(RATE_A * v * PROP13 ** k + (fixed_a(T) + cost0["insurance"]) * c[k])
+
+    def sell_at(r):
+        return v * (1 - TRANSFER_TAX) * (1 + r) ** HORIZON
+
+    def live_at(r):
+        return house_end + fv(live_flow, r)
+
+    sell, live = sell_at(y), live_at(y)
+    r_star = bisect(lambda r: live_at(r) - sell_at(r), -0.20, 0.40)
+    ann = fv([12 * c[k] for k in range(HORIZON)], y)
+    be_rent = (sell - (house_end - fv(rent_cost, y))) / ann                  # monthly rent, first-year dollars
+    return dict(start=s, end=s + HORIZON,
+                house_pct=round(cagr(HPI_Q2[s], HPI_Q2[s + HORIZON], HORIZON) * 100, 2),
+                yield_pct=GS10_JUN[s], cpi_pct=round(cagr(CPI_AVG[s], CPI_AVG[s + HORIZON], HORIZON) * 100, 2),
+                house_end=r10(house_end), sell=r10(sell), live=r10(live), diff=r10(live - sell),
+                winner="Keep" if live > sell else "Sell",
+                r_star=None if r_star is None else round(r_star * 100, 2),
+                be_rent_yield=round(be_rent * 12 / v * 100, 2),
+                sell_real_pct=round((sell / c[HORIZON] / v - 1) * 100, 1),
+                live_real_pct=round((live / c[HORIZON] / v - 1) * 100, 1))
+
+
+def history():
+    rows = [replay(s) for s in WINDOWS]
+    keep = [r for r in rows if r["winner"] == "Keep"]
+    sell = [r for r in rows if r["winner"] == "Sell"]
+    rs = sorted(r["r_star"] for r in rows)
+    be = sorted(r["be_rent_yield"] for r in rows)
+    eras = []
+    for a, b, label in ((1975, 1981, ""),
+                        (1982, 1989, ""),
+                        (1990, 1996, ""),
+                        (1997, 2002, ""),
+                        (2003, 2008, ""),
+                        (2009, 2015, "")):
+        part = [r for r in rows if a <= r["start"] <= b]
+        eras.append(dict(first=a, last=b, label=label, n=len(part),
+                         keep=sum(1 for r in part if r["winner"] == "Keep"),
+                         sell=sum(1 for r in part if r["winner"] == "Sell"),
+                         house_lo=min(r["house_pct"] for r in part), house_hi=max(r["house_pct"] for r in part),
+                         yield_lo=min(r["yield_pct"] for r in part), yield_hi=max(r["yield_pct"] for r in part),
+                         cpi_lo=min(r["cpi_pct"] for r in part), cpi_hi=max(r["cpi_pct"] for r in part),
+                         diff_lo=min(r["diff"] for r in part), diff_hi=max(r["diff"] for r in part)))
+    bands = []
+    for lo, hi in ((0, 4), (4, 6), (6, 8), (8, 20)):
+        part = [r for r in rows if lo <= r["yield_pct"] < hi]
+        bands.append(dict(lo=lo, hi=hi, n=len(part), sell=sum(1 for r in part if r["winner"] == "Sell"),
+                          keep=sum(1 for r in part if r["winner"] == "Keep"),
+                          diff_lo=min(r["diff"] for r in part), diff_hi=max(r["diff"] for r in part)))
+    runup = []                                  # house-index change over the five years BEFORE the start year
+    prior = {r["start"]: (HPI_Q2[r["start"]] / HPI_Q2[r["start"] - 5]) ** 0.2 - 1 for r in rows if r["start"] - 5 in HPI_Q2}
+    for lo, hi in ((-1.0, 0.0), (0.0, 0.05), (0.05, 0.10), (0.10, 1.0)):
+        part = [r for r in rows if r["start"] in prior and lo <= prior[r["start"]] < hi]
+        runup.append(dict(lo=round(lo * 100), hi=round(hi * 100), n=len(part),
+                          sell=sum(1 for r in part if r["winner"] == "Sell"),
+                          keep=sum(1 for r in part if r["winner"] == "Keep"),
+                          diff_lo=min(r["diff"] for r in part) if part else 0,
+                          diff_hi=max(r["diff"] for r in part) if part else 0))
+    decades = []
+    for a in (1975, 1985, 1995, 2005, 2015):
+        ys = [GS10_JUN[y] for y in range(a, a + 10)]
+        decades.append(dict(first=a, last=a + 10, house_pct=round(cagr(HPI_Q2[a], HPI_Q2[a + 10], 10) * 100, 2),
+                            cpi_pct=round(cagr(CPI_AVG[a], CPI_AVG[a + 10], 10) * 100, 2),
+                            yield_avg=round(sum(ys) / 10, 2), yield_lo=min(ys), yield_hi=max(ys)))
+    hp_changes = {y: HPI_Q2[y] / HPI_Q2[y - 1] - 1 for y in range(1976, 2027)}
+    cpi_changes = {y: CPI_AVG[y] / CPI_AVG[y - 1] - 1 for y in range(1976, 2026)}
+    worst_h, best_h = min(hp_changes, key=hp_changes.get), max(hp_changes, key=hp_changes.get)
+    worst_c, best_c = min(cpi_changes, key=cpi_changes.get), max(cpi_changes, key=cpi_changes.get)
+    dd = [dict(d, fall_pct=round((d["trough_v"] / d["peak_v"] - 1) * 100, 1),
+               a_fall=r10(market(A, REPLAY_T, G_BASE) * (1 - d["trough_v"] / d["peak_v"]))) for d in HPI_DRAWDOWNS]
+    now = dict(year=2026, runup_pct=round(((HPI_Q2[2026] / HPI_Q2[2021]) ** 0.2 - 1) * 100, 2), yield_pct=round(R10Y * 100, 2))
+    return dict(
+        T=REPLAY_T, value=r10(market(A, REPLAY_T, G_BASE)), now=now, rows=rows, n=len(rows), n_keep=len(keep), n_sell=len(sell),
+        r_star_min=rs[0], r_star_median=rs[len(rs) // 2], r_star_max=rs[-1],
+        be_min=be[0], be_median=be[len(be) // 2], be_max=be[-1],
+        best_keep=max(rows, key=lambda r: r["diff"]), best_sell=min(rows, key=lambda r: r["diff"]),
+        worst_sell_real=min(rows, key=lambda r: r["sell_real_pct"]), worst_live_real=min(rows, key=lambda r: r["live_real_pct"]),
+        n_sell_real_loss=sum(1 for r in rows if r["sell_real_pct"] < 0),
+        n_live_real_loss=sum(1 for r in rows if r["live_real_pct"] < 0),
+        eras=eras, bands=bands, runup=runup, decades=decades, drawdowns=dd,
+        extremes=dict(house_worst_year=worst_h, house_worst=round(hp_changes[worst_h] * 100, 1),
+                      house_best_year=best_h, house_best=round(hp_changes[best_h] * 100, 1),
+                      house_down_years=sum(1 for v in hp_changes.values() if v < 0), house_years=len(hp_changes),
+                      cpi_worst_year=worst_c, cpi_worst=round(cpi_changes[worst_c] * 100, 1),
+                      cpi_best_year=best_c, cpi_best=round(cpi_changes[best_c] * 100, 1),
+                      cpi_over4_years=sum(1 for v in cpi_changes.values() if v > 0.04), cpi_years=len(cpi_changes),
+                      yield_hi=max(GS10_JUN.values()), yield_hi_year=max(GS10_JUN, key=GS10_JUN.get),
+                      yield_lo=min(GS10_JUN.values()), yield_lo_year=min(GS10_JUN, key=GS10_JUN.get)))
 
 
 def main():
@@ -304,6 +458,7 @@ def main():
         b_treasury_income=r10(B["market_2026"] * (1 - TRANSFER_TAX) * R10Y),
         unit3=r10(UNIT3_2026), unit3_year=r10(UNIT3_2026 * 12),
         room_a=EXCL[2026] - A["market_2026"], room_ab=EXCL[2026] - A["market_2026"] - B["market_2026"])
+    hist = history()
     out = dict(
         generated_by="plan/tools/model.py",
         inputs=dict(A=A, B=B),
@@ -313,14 +468,14 @@ def main():
                    b_implied_pct=round(B["bill"] / B["assessed_2025"] * 100, 2),
                    b_advalorem=r10(RATE_B * B["assessed_2025"])),
         assumptions=dict(g_low=G_LOW, g_base=G_BASE, g_high=G_HIGH, infl=INFL, r10y=R10Y,
-                         top_fed=TOP_FED_RATE, rent_growth=round(RENT_CPI_SHARE * INFL, 4),
+                         top_fed=TOP_FED_RATE, rent_growth=round(RENT_CPI_SHARE * INFL, 4), treasury_date=TREASURY_DATE,
                          horizon=HORIZON, transfer_tax=TRANSFER_TAX, treasury=TREASURY),
         hpi=dict(index=HPI, since_1975=round(cagr(HPI["1975Q1"], HPI["2026Q2"], 51.25) * 100, 2),
                  y30=round(G_HIGH * 100, 2), y20=round(G_LOW * 100, 2),
                  y10=round(cagr(HPI["2016Q2"], HPI["2026Q2"], 10) * 100, 2),
                  y1=round(cagr(HPI["2025Q2"], HPI["2026Q2"], 1) * 100, 2)),
         exclusion_history=EXCL_HISTORY, today=today, projection_a=projection_a(),
-        projection_b=projection_b(), decisions=dec, headroom=headroom(), cash_cases=cash_cases())
+        projection_b=projection_b(), decisions=dec, headroom=headroom(), cash_cases=cash_cases(), history=hist)
     DATA.mkdir(exist_ok=True)
     (DATA / "model.json").write_text(json.dumps(out, indent=1) + "\n")
     for name in ("projection_a", "projection_b", "decisions", "headroom", "cash_cases"):
