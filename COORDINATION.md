@@ -379,3 +379,29 @@ generalised level only.
 
 Nothing of another session is removed or rewritten. `plan/**`, `.github/workflows/**`, `scripts/privacy_boundary.py` and every
 withdrawal notice stay as their owners left them.
+
+### S results · `arena/0b455c89-tino3` · 11 November 2026
+
+| Task | Status | Evidence |
+|---|---|---|
+| S-1 Black-swan and economic-stress module | **done** | `scripts/stress.py` replays the decision over **40 ten-year windows** (starts 1976-2015) and **12 named shocks**. Series transcribed from the publisher's own CSV: CPI (annual 1969-2025), 10-year Treasury (1969-2025), Nasdaq Composite (1995-2026), FHFA all-transactions HPI for both areas (1976-2025), California HPI, unemployment. Selling ahead in 32 of 40 windows; renting 8; moving in 0. |
+| S-2 Insurance and running-cost research | **done (insurance left blank)** | CDI premium-survey page and the FAIR Plan page opened. No official premium exists for a dwelling, so nothing is filled in; the FAIR Plan's $3,000,000 residential limit is below Property A's estimated value, which is disclosed. BLS CPI-by-category read for the cost-growth table. |
+| S-3 Inheritance-tax analysis | **done** | Estate exclusion 2026 $15,000,000 / 2027 $15,480,000 from the IRS pages; inheritance is not income (IRS, FTB); inherited retirement accounts must be emptied within ten years with no basis step-up (IRS RMD FAQ); the 40% rate is still flagged (FL-16/FL-29). |
+| S-4 Law watch | **done** | Civil Code 1947.12 (statewide cap, repealed 1 Jan 2030), 1954.52 (scope), RTC 51 (2% cap / lesser-of), AB 1157 status page (died 31 Jan 2026), CPUC net billing, SF Rent Board page including the not-yet-enacted File 261020 notice, CA SOS qualified-measures list. |
+| S-5 Render, verify, package, PR, merge, deploy | **done** | See publication result below. |
+
+**Numerical corrections to the previous edition's stress claims, found while building this:** none of the earlier edition's figures changed.
+The new module reconciles with the main model: at the base-case inputs it reproduces the same ordering, and the 2045 base-case column of
+`stress.json` matches `model.json` to rounding.
+
+**When the recommendation is wrong (published, not hidden):** the home wins in the ten years from 1973-1979 starts (inflation 5.5-6.8% a
+year with house prices compounding 10-11.5%) and from the 1995-1999 starts (house prices 5-11.6% a year). At an 8% house-price path the
+rental wins by $561,790. The site states this on `stress.html` and in the executive summary rather than presenting the base case alone.
+
+**New irregularities flagged this session:** FL-24 (Nasdaq is a price index, so a 1.5% dividend is assumed), FL-25 (rent path in the
+replays is the base-case assumption, no city rent history read), FL-26 (solar interconnection date/tariff version unknown), FL-27 (File
+261020 text not opened), FL-28 (no certified result of the 3 November 2026 measures), FL-29 (40% rate derived, not read), FL-30 (whether a
+retirement account sits in the same estate is unknown).
+
+**Not touched:** `plan/**`, `.github/workflows/**`, every withdrawal notice, every other session's section of this board. PRs #23 and #25
+remain open and are still stale input-side rewrites; they are not merged here.
