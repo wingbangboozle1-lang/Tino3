@@ -1,0 +1,153 @@
+{
+  "summary": [
+    {
+      "topic": "Best plan",
+      "finding": "Sell Property A soon after inheriting, reinvest, and keep Property B.",
+      "value": "Sell and reinvest",
+      "basis": "Computed",
+      "sources": [
+        "irs_basis",
+        "boe_prop19",
+        "irs_estate"
+      ],
+      "note": "Same default in the root edition and the independent cross-check."
+    },
+    {
+      "topic": "Ten-year ending wealth, 2045 inheritance",
+      "finding": "Sell into a stock index fund compared with renting and moving in.",
+      "value": "$10,052,910 / $8,583,650 / $7,945,640",
+      "basis": "Computed",
+      "sources": [
+        "irs_basis",
+        "boe_prop19",
+        "tsp_cfund",
+        "treasury_cmt"
+      ],
+      "note": "After all taxes and selling costs; 2045 inheritance measured in 2055."
+    },
+    {
+      "topic": "Why the sale is cheap",
+      "finding": "Tax basis resets to the value at death.",
+      "value": "Date-of-death basis",
+      "basis": "Verified",
+      "sources": [
+        "irs_basis",
+        "irs_rr2023_2"
+      ],
+      "note": "Only if the home is in the taxable estate; an irrevocable trust outside the estate receives no reset."
+    },
+    {
+      "topic": "Property A tax reset, 2045",
+      "finding": "Current bill is about $7,320; after inheritance it rises with the market value.",
+      "value": "$60,150 / $78,400",
+      "basis": "Computed",
+      "sources": [
+        "boe_prop19",
+        "rtc63_2",
+        "boe_lta25009",
+        "boe_lta26002"
+      ],
+      "note": "First figure if a child moves in and files on time; second if the home is rented."
+    },
+    {
+      "topic": "Federal estate exclusion",
+      "finding": "Filing threshold for 2026 and basic exclusion for 2027.",
+      "value": "$15,000,000 / $15,480,000",
+      "basis": "Verified",
+      "sources": [
+        "irs_estate",
+        "irs_2027",
+        "irs_whatsnew",
+        "irs_i706"
+      ],
+      "note": "2027 amount is law; 2040-2050 exclusions are scenarios, not forecasts."
+    },
+    {
+      "topic": "State and local death tax",
+      "finding": "No California estate-tax return and no state or local inheritance tax.",
+      "value": "None",
+      "basis": "Verified",
+      "sources": [
+        "sco_estate",
+        "rtc13301",
+        "ftb_gifts"
+      ],
+      "note": "Received inheritance is not California income; later income from it is."
+    },
+    {
+      "topic": "Estate-tax room, 2045 scenario",
+      "finding": "Room after both homes versus room under the owner's ownership statement.",
+      "value": "$13,819,960 / $17,612,290",
+      "basis": "Computed",
+      "sources": [
+        "irs_estate",
+        "irs_2027",
+        "boe_lta26026"
+      ],
+      "note": "Both are scenarios; cash, gifts, marital status and portability are unverified and left blank."
+    },
+    {
+      "topic": "Black swans",
+      "finding": "Selling stays first in the tested non-uniform regimes.",
+      "value": "5 of 7 / 8 of 10",
+      "basis": "Computed",
+      "sources": [
+        "bls_ted2022",
+        "fedhist_recession",
+        "ssa_trustees",
+        "cbo_outlook",
+        "fred_casthpi"
+      ],
+      "note": "Root stress page: 5 of 7 analogues; 50-year suite: 8 of 10 regimes; the reinvestment vehicle changes with the regime."
+    },
+    {
+      "topic": "Economic baseline is not constant",
+      "finding": "Official anchors span a 2% goal, a 2.4% long-range CPI assumption, a 2.7% near-term path and a 9.1% shock.",
+      "value": "2% / 2.4% / 2.7% / 9.1%",
+      "basis": "Verified",
+      "sources": [
+        "fed_2goal",
+        "ssa_trustees",
+        "cbo_outlook",
+        "bls_ted2022"
+      ],
+      "note": "These are different official measures and horizons, not one forecast."
+    },
+    {
+      "topic": "Insurance premiums",
+      "finding": "No official property-specific premium or quote could be confirmed.",
+      "value": "Blank",
+      "basis": "Unverified",
+      "sources": [
+        "cdi_compare",
+        "cdi_note"
+      ],
+      "note": "Left blank on the site; the ranking is tested at three times the owner's guess."
+    },
+    {
+      "topic": "Privacy and rounding",
+      "finding": "Placeholders, $10 rounding, and further generalization of public-roll values.",
+      "value": "$10 / $10,000 / $100",
+      "basis": "Computed",
+      "sources": [
+        "github_pages",
+        "boe_lta26002",
+        "cityb_rate"
+      ],
+      "note": "Roll generalization exceeds the brief's $10 rule; flagged for the owner."
+    },
+    {
+      "topic": "Open items",
+      "finding": "Unverified values are left blank and published on Flagged for Review pages.",
+      "value": "23 root flags",
+      "basis": "Unverified",
+      "sources": [
+        "github_pages",
+        "cdi_compare",
+        "hud_fmr",
+        "irs_i706"
+      ],
+      "note": "Flagged items do not block the plan or the merge."
+    }
+  ]
+}

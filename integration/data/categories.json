@@ -1,0 +1,24 @@
+{
+  "categories": [
+    {
+      "label": "Requirements matrix",
+      "page": "index.html",
+      "description": "Every numbered brief item mapped to an answer page, a status and an official source."
+    },
+    {
+      "label": "Executive summary",
+      "page": "executive-summary.html",
+      "description": "The decision and the important numbers, each labelled by basis."
+    },
+    {
+      "label": "Official-source findings",
+      "page": "findings.html",
+      "description": "The exact words relied on and how each official document was checked."
+    },
+    {
+      "label": "Flagged for review",
+      "page": "flagged.html",
+      "description": "Unverified values left blank, irregularities and owner decisions, with source links."
+    }
+  ]
+}
