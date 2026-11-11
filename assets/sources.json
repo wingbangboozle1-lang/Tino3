@@ -33,7 +33,7 @@
    "verifies": [
     "For calendar year 2027 the basic exclusion amount under section 2010(c)(3) is $15,480,000"
    ],
-   "quote": ".44 Basic Exclusion Amount for Estate Tax. For calendar year 2027, the basic exclusion amount under § 2010(c)(3) is $15,480,000.",
+   "quote": ".44 Basic Exclusion Amount for Estate Tax. For calendar year 2027, the basic exclusion amount under \u00a7 2010(c)(3) is $15,480,000.",
    "checked": "official-domain search excerpt read in this session (full document not opened)"
   },
   "irs_whatsnew": {
@@ -43,7 +43,7 @@
    "verifies": [
     "Public Law 119-21 (4 July 2025) raised the basic exclusion amount to $15,000,000 for 2026"
    ],
-   "quote": "WFTC amends § 2010(c)(3) by increasing the basic exclusion amount to $15,000,000 for calendar year 2026.",
+   "quote": "WFTC amends \u00a7 2010(c)(3) by increasing the basic exclusion amount to $15,000,000 for calendar year 2026.",
    "checked": "opened on the publisher's site in this session"
   },
   "irs_rp2532": {
@@ -88,7 +88,7 @@
     "Assets of an irrevocable grantor trust that are not included in the gross estate get no basis adjustment at death",
     "Property the decedent placed in a trust that stayed revocable is treated as acquired from the decedent (section 1014(b)(2) and (3))"
    ],
-   "quote": "the basis of Asset is not adjusted to its fair market value on the date of A's death under § 1014 because Asset was not acquired or passed from a decedent as defined in § 1014(b).",
+   "quote": "the basis of Asset is not adjusted to its fair market value on the date of A's death under \u00a7 1014 because Asset was not acquired or passed from a decedent as defined in \u00a7 1014(b).",
    "checked": "opened on the publisher's site in this session"
   },
   "irs_tc409": {
@@ -759,6 +759,31 @@
    ],
    "quote": "(a) Stocks and obligations of the United States Government are exempt from taxation by a State or political subdivision of a State. ... (2) an estate or inheritance tax.",
    "checked": "opened on the publisher's site on 11 November 2026: the full section text was read on govinfo.gov"
+  },
+  "ftb_home": {
+   "publisher": "California Franchise Tax Board",
+   "title": "Income from the sale of your home",
+   "url": "https://www.ftb.ca.gov/file/personal/income-types/income-from-the-sale-of-your-home.html",
+   "verifies": [
+    "California conforms to the federal exclusion on the sale of a principal residence",
+    "A single filer may exclude up to $250,000 and a joint return up to $500,000",
+    "The 2-out-of-5-year ownership and use test applies"
+   ],
+   "quote": "We conform to the IRS rules and allow you to exclude, up to a certain amount, the gain you make on the sale of your home. ... Married/RDP couples can exclude up to $500,000 ...",
+   "checked": "opened on the publisher's site on 11 November 2026 (page last updated 01/07/2026)"
+  },
+  "boe_lta22012": {
+   "publisher": "California State Board of Equalization",
+   "title": "Letter to Assessors 2022/012: implementation of the Proposition 19 intergenerational transfer exclusion",
+   "url": "https://www.boe.ca.gov/proptaxes/pdf/lta22012.pdf",
+   "verifies": [
+    "The family home must become the transferee's principal residence within one year, and the homeowners' or disabled veterans' exemption must be filed within that year",
+    "The exclusion continues only while the home remains the transferee's principal residence; on loss of eligibility the full cash value at the transfer date is enrolled, factored to the following lien date",
+    "A transfer through a living or testamentary trust is included",
+    "The new taxable value is the prior taxable value plus the part of market value above it and above the adjusted $1 million amount"
+   ],
+   "quote": "Another requirement is that a family home must be continually used as a family home by an eligible transferee ... If the family home becomes ineligible for the homeowners' or disabled veterans' exemption, the exclusion will be removed",
+   "checked": "opened on the publisher's site on 11 November 2026"
   }
  }
 }
