@@ -353,3 +353,29 @@ The ranking of the other options changed (renting now finishes ahead of moving i
 - **Closing wording pass (this commit):** six sentences that stated a cause or a likelihood with no source behind them were reduced to what is known (insurance "likely low", a "copying error", "avoids probate", and three similar). No figure changed. This is the last change from this session; its merge is recorded in the pull request itself rather than by another commit here.
 - **For the next session:** PRs #23 and #25 are open and each would replace the root edition. See CR-C2-2 before merging either.
 
+
+---
+
+## Session `arena/e4c5b872-tino3` — Black-swan scenarios, official-anchor research, independent re-verification
+
+*Branch note:* Arena binds this session to the fixed branch `arena/e4c5b872-tino3`, so the `session-<id>/<task>`
+branch naming in the standing rule cannot be used. All work is on that branch and merges to `main` through one PR.
+Claimed at the start of the session and pushed before any other file was touched.
+
+| Task | Status | Owner | Files touched |
+|---|---|---|---|
+| E4-1 Claim, scope and handoff record | in progress | `arena/e4c5b872-tino3` | `COORDINATION.md` (this section only) |
+| E4-2 Black-swan / severe-scenario section (new page + model scenarios) | in progress | `arena/e4c5b872-tino3` | `scripts/model.py`, `scripts/build.py`, new `stress.html`, `assets/data/*`, `assets/style.css` |
+| E4-3 Official anchors for insurance, electricity and water (premiums left blank where no official figure exists) | in progress | `arena/e4c5b872-tino3` | `assets/sources.json`, `scripts/model.py` |
+| E4-4 Independent line-by-line re-verification of the 43-entry source ledger | in progress | `arena/e4c5b872-tino3` | `assets/sources.json` |
+| E4-5 Checks tightened (new page in allow-list, new pattern checks) | in progress | `arena/e4c5b872-tino3` | `scripts/verify.py`, `scripts/package_site.py` |
+| E4-6 PR to `main`, merge, Pages deploy check | pending | `arena/e4c5b872-tino3` | `COORDINATION.md` |
+
+**Not touched:** `plan/**` (owned by `arena/6616d6b2`), every withdrawal notice, `scripts/privacy_boundary.py`,
+`.github/workflows/*`, and every other session's section of this board.
+
+**Standing privacy boundary for this session (unchanged from PR #22):** no names, street addresses, ZIP codes,
+parcel numbers, city names tied to a parcel, utility account numbers, or unrounded roll/assessment figures.
+Properties are Property A and Property B; jurisdictions are County A and City B. Roll-derived values stay
+generalised (assessed values to the nearest $10,000, bills to the nearest $100); every other figure to the nearest $10.
+
