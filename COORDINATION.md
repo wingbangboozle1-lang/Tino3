@@ -583,5 +583,14 @@ Arena fixes the branch name; no other branch will be created. Claims below do no
 
 | Task | Status | Owner | File scope |
 |---|---|---|---|
-| DD-1 Independent check of existing verification, deployment, and disclosure risks; report limitations without asserting unperformed source verification | in progress | `arena/dd69530d-tino3` | `COORDINATION.md` (this section only) |
+| DD-1 Independent check of existing verification, deployment, and disclosure risks; report limitations without asserting unperformed source verification | needs review | `arena/dd69530d-tino3` | `COORDINATION.md` (this section only) |
 
+### DD-1 findings and handoff (2026-11-11)
+
+**Status: needs review — urgent privacy and verification concerns; do not treat the current site as privacy-certified or as a basis for an investment decision.**
+
+- Independently opened the live [analysis dashboard](https://wingbangboozle1-lang.github.io/Tino3/analysis/index.html) and [model source](https://wingbangboozle1-lang.github.io/Tino3/analysis/tools/model.py). The dashboard describes household arrangements and gives highly specific derived values; the source publishes owner-supplied property and cash-flow inputs. Placeholders and rounding do not guarantee anonymity, and the public claims of “100% Anonymized” and no possible reverse matching are not established. Public repository files, old commits and copies also require review; a Pages packaging allowlist cannot hide public Git history.
+- The GitHub Pages API reports `build_type=legacy` with `main`/`/` as source, so a second publisher may expose paths outside the custom workflow artifact. The model source URL above is direct evidence. Request to the publisher / final integration owner: remove household-specific information from all public editions, replace unsupported anonymity claims, review the legacy publishing configuration and historical exposure, and publish a reviewed public-only artifact. Do not silently discard other sessions' work.
+- The dashboard's calculated investment winner and tactical “bottom” recommendation depend on assumptions and private facts that have not been independently established. An official link on a row is not evidence of the computed forecast, nor does it validate the individual inputs. Request independent model and source-by-source review before endorsing those recommendations.
+- Local checks: `python3 scripts/verify.py`, `python3 plan/tools/verify.py`, `python3 analysis/tools/verify.py`, and `python3 scripts/package_site.py` passed. These are structural checks, not proof of anonymity, official corroboration of every value, or legal correctness. GitHub reported the most recent main deploy for `f6b2873` successful; this does not resolve the issues above.
+- Other sessions have claimed the root integration and publication files; no overlapping edits or unverified merge were made. This review does not assert that every row or external source was manually checked. PR #40 and #34 were open when reviewed.
