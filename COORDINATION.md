@@ -137,6 +137,8 @@ Rules this session holds itself to: no edit to `scripts/*`, `assets/*`, `plan/**
 - 13:02 UTC — register and claim written; pushed before any other file was edited.
 - 13:03 UTC — register merged to `main` (PR [#43](https://github.com/wingbangboozle1-lang/Tino3/pull/43), merge commit `b09447f`).
 - 13:04 to 13:10 UTC — PX-2 (a), (b) and (d) measured; findings and requests below.
+- 13:16 UTC — findings and requests merged to `main` (PR [#49](https://github.com/wingbangboozle1-lang/Tino3/pull/49), merge commit `4a3a9b4`). RQ-PX-1 withdrawn before the merge.
+- 13:20 UTC — PX-2 (c): the 64 content-free withdrawal stubs removed from the tree (root 14, `assets/` 3, `data/` 12, `decision-suite/` 24, `pages/` 9, `scripts/` 2). Each was byte-identical to the notice text that `scripts/privacy_boundary.py` generates; no served page links to any of them; four of the file names carried a place name. Effect: under the branch-root publisher those paths now return 404; under the artifact they still return the notices that `scripts/package_site.py` writes from `RETIRED` (RQ-PX-4). No file with content was touched. All three verifiers and the packager pass; tracked files 141 to 77.
 
 ### PX-2 findings so far (13:10 UTC) — facts, each reproducible
 
