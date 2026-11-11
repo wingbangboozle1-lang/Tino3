@@ -1,6 +1,6 @@
 {
  "reviewed_on": "2026-11-10, re-checked and extended 2026-11-11",
- "reviewer_session": "arena-c2f4be85 (second, independent pass over the edition published earlier the same day by arena/d76d5375-tino3); re-check and black-swan additions by arena/d2fd135b-tino3 on 2026-11-11",
+ "reviewer_session": "arena-c2f4be85 (second independent pass, 2026-11-10); 2026-11-11: arena/bde5056d-tino3 appended the stress-test sources (bls_ted2022..fred_nasdaqcom, nyfed_covid) and arena/d2fd135b-tino3 re-opened twelve entries, added the economic-history sources (fed_2goal..sos_results) and recorded each check in the entry's \"checked\" field",
  "method": "Each entry records how it was checked. 'Opened' means the page or document was retrieved from the publisher's own domain and the quoted words were read there. 'Official-domain search excerpt' means the words were read in a search result served from the publisher's domain, without opening the whole document. Nothing is marked verified beyond what the quoted words support. On 11 November 2026 the session arena/d2fd135b-tino3 re-opened twenty of the entries below on the publisher's own domain, added the economic-history entries used by the black-swan page, and recorded each check in the entry's \"checked\" field.",
  "sources": {
   "irs_estate": {
@@ -489,6 +489,121 @@
    "quote": "the total number of signatures for the hereinafter named initiative filed with all county elections officials is less than 100 percent of the number of qualified voters required to find the petition sufficient; therefore, the petition has failed.",
    "checked": "opened on the publisher's site in this session"
   },
+  "bls_ted2022": {
+   "publisher": "U.S. Bureau of Labor Statistics",
+   "title": "The Economics Daily: consumer prices up 9.1 percent over the year ended June 2022 (July 2022)",
+   "url": "https://www.bls.gov/opub/ted/2022/consumer-prices-up-9-1-percent-over-the-year-ended-june-2022-largest-increase-in-40-years.htm",
+   "verifies": [
+    "CPI-U rose 9.1 percent over the 12 months ended June 2022, the largest 12-month increase since November 1981",
+    "June 2022 all-items index was 296.311 versus 271.696 in June 2021"
+   ],
+   "quote": "Over the 12 months ended June 2022, the Consumer Price Index for All Urban Consumers increased 9.1 percent. ... the largest 12-month increase since the 12-month period ending November 1981.",
+   "checked": "opened on the publisher's site in this session; 9.1 percent also read in the June 2022 CPI news release archive"
+  },
+  "bls_mlr100": {
+   "publisher": "U.S. Bureau of Labor Statistics",
+   "title": "Monthly Labor Review (Apr 2014): one hundred years of price change",
+   "url": "https://www.bls.gov/opub/mlr/2014/article/one-hundred-years-of-price-change-the-consumer-price-index-and-the-american-inflation-experience.htm",
+   "verifies": [
+    "Largest 12-month CPI increase in the 1968-1983 period: March 1979-March 1980, 14.8 percent",
+    "1913-1929 largest 12-month increase: June 1919-June 1920, 23.7 percent"
+   ],
+   "quote": "Largest 12-month increase: March 1979-March 1980, 14.8 percent",
+   "checked": "opened on the publisher's site in this session (full article; the 1968-83 summary appears in the article body)"
+  },
+  "bls_btn11": {
+   "publisher": "U.S. Bureau of Labor Statistics",
+   "title": "Beyond the Numbers 11(7) (Oct 2022): exploring price increases in 2021 and previous periods of inflation",
+   "url": "https://www.bls.gov/opub/btn/volume-11/exploring-price-increases-in-2021-and-previous-periods-of-inflation.htm",
+   "verifies": [
+    "High-inflation periods table (CPI 12-month peaks): 1973-76 at 12.3% (Dec 1974); 1977-82 at 14.8% (Mar 1980); 2005-08 at 5.6% (Jul 2008); 2021 at 7.0% (Dec 2021)"
+   ],
+   "quote": "1973-76 | 12.3 (Dec. 1974) ... 1977-82 | 14.8 (Mar. 1980) ... 2005-08 | 5.6 (Jul. 2008) ... 2021 | 7.0 (Dec. 2021)",
+   "checked": "opened on the publisher's site in this session (Table 2 read in full)"
+  },
+  "fedhist_1929": {
+   "publisher": "Federal Reserve History (Federal Reserve System)",
+   "title": "Essays: Stock Market Crash of 1929",
+   "url": "https://www.federalreservehistory.org/essays/stock-market-crash-of-1929",
+   "verifies": [
+    "DJIA peaked 381.17 on 3 September 1929; closed at 41.22 on 8 July 1932, 89 percent below its peak",
+    "The index did not regain its September 1929 high until 23 November 1954",
+    "Black Monday 28 Oct 1929 fell nearly 13 percent; Black Tuesday 29 Oct 1929 fell nearly 12 percent"
+   ],
+   "quote": "the index peaked on September 3, 1929, closing at 381.17. The index declined until July 8, 1932, when it closed at 41.22 ... The index did not reach the 1929 high again until November 23, 1954.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "fedhist_greatinflation": {
+   "publisher": "Federal Reserve History (Federal Reserve System)",
+   "title": "Essays: The Great Inflation (1965-1982)",
+   "url": "https://www.federalreservehistory.org/essays/great-inflation",
+   "verifies": [
+    "Inflation measured a little more than 1 percent per year in 1964; reached more than 14 percent in 1980",
+    "Inflation peaked in March 1980 at close to 15 percent (CPI, 12-month change)",
+    "1974: inflation over 12 percent with unemployment above 7 percent",
+    "1983: 12-month inflation settled back to 0 to 5 percent"
+   ],
+   "quote": "In 1964, inflation measured a little more than 1 percent per year. ... Inflation began ratcheting upward in the mid-1960s and reached more than 14 percent in 1980.",
+   "checked": "opened on the publisher's site in this session (the 1974 stagflation detail is from the same essay, read as an official-domain search excerpt)"
+  },
+  "fedhist_greatrecession": {
+   "publisher": "Federal Reserve History (Federal Reserve System)",
+   "title": "Essays: The Great Recession (December 2007 - June 2009)",
+   "url": "https://www.federalreservehistory.org/essays/great-recession-of-200709",
+   "verifies": [
+    "Real GDP fell 4.3 percent from its 2007Q4 peak to its 2009Q2 trough",
+    "Unemployment peaked at 10 percent in October 2009 (5 percent in December 2007)",
+    "Home prices fell approximately 30 percent on average from their mid-2006 peak to mid-2009",
+    "The S&P 500 fell 57 percent from its October 2007 peak to its March 2009 trough",
+    "Household and nonprofit net worth fell from approximately $69 trillion in 2007 to $55 trillion in 2009"
+   ],
+   "quote": "Real gross domestic product (GDP) fell 4.3 percent from its peak in 2007Q4 to its trough in 2009Q2 ... the S&P 500 index fell 57 percent from its October 2007 peak to its trough in March 2009.",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "nyfed_covid": {
+   "publisher": "Federal Reserve Bank of New York (Liberty Street Economics)",
+   "title": "The COVID-19 Pandemic and the Fed's Response (15 April 2020)",
+   "url": "https://libertystreeteconomics.newyorkfed.org/2020/04/the-covid-19-pandemic-and-the-feds-response/",
+   "verifies": [
+    "S&P 500 fell 34 percent from its February 2020 high by 23 March 2020",
+    "Market-wide circuit breakers halted trading three times in March 2020",
+    "FOMC cut the target range to the zero lower bound (50bp on 3 March, a further 100bp on 15 March)"
+   ],
+   "quote": "The S&P 500 index declined steeply, triggering market-wide circuit-breakers that halted trading three times in March. By March 23, the stock market had fallen 34 percent from its February 2020 high",
+   "checked": "opened on the publisher's site in this session"
+  },
+  "fred_ussthpi": {
+   "publisher": "Federal Reserve Bank of St. Louis (data: Federal Housing Finance Agency)",
+   "title": "All-Transactions House Price Index for the United States (USSTHPI), quarterly",
+   "url": "https://fred.stlouisfed.org/data/USSTHPI",
+   "verifies": [
+    "National house price index (1980Q1=100): 380.31 in Jan 2007 fell to 308.14 in Apr 2012, about -19 percent (computed from the series table)",
+    "Q2 2026 value 719.87; Q1 2026 712.20; Q4 2025 707.22"
+   ],
+   "quote": "Q2 2026: 719.87 | All-Transactions House Price Index for the United States ... Source: U.S. Federal Housing Finance Agency via FRED",
+   "checked": "opened on the publisher's site in this session; the peak-to-trough change is computed from the full series table read there"
+  },
+  "fred_nasdaqcom": {
+   "publisher": "Federal Reserve Bank of St. Louis (data: Nasdaq)",
+   "title": "NASDAQ Composite Index (NASDAQCOM), daily",
+   "url": "https://fred.stlouisfed.org/series/NASDAQCOM",
+   "verifies": [
+    "NASDAQ Composite closed at 5,048.62 on 10 March 2000 (the dot-com peak) and 1,114.11 on 9 October 2002, about -78 percent (read from the series CSV)"
+   ],
+   "quote": "2000-03-10,5048.620 ... 2002-10-09,1114.110",
+   "checked": "opened in this session; values read from the series CSV served by FRED (2000-03-10 and 2002-09-25 to 2002-10-15 windows)"
+  },
+  "fred_dgs10": {
+   "publisher": "Federal Reserve Bank of St. Louis (data: Board of Governors of the Federal Reserve System)",
+   "title": "Market yield on US Treasury securities at 10-year constant maturity (DGS10), daily",
+   "url": "https://fred.stlouisfed.org/series/DGS10",
+   "verifies": [
+    "10-year Treasury par yield reached 15.84 percent on 30 September 1981",
+    "10-year Treasury par yield was 4.88 percent on 9 November 2026",
+    "0.52 percent on 4 August 2020"
+   ],
+   "checked": "opened in this session; values read from the series CSV and the series page The same series window was also read on 11 November 2026 for the 0.52 percent low of 4 August 2020 (CSV opened on the publisher's site on 11 November 2026 (dated window read))"
+  },
   "fed_2goal": {
    "publisher": "Board of Governors of the Federal Reserve System",
    "title": "FAQ: Why does the Federal Reserve aim for inflation of 2 percent over the longer run?",
@@ -632,15 +747,6 @@
     "Index peak of 380.31 in 2007Q1 and trough of 308.14 in 2012Q2, a decline of 19 percent (computed from the published series)"
    ],
    "checked": "full CSV opened on the publisher's site on 11 November 2026"
-  },
-  "fred_dgs10": {
-   "publisher": "Federal Reserve Bank of St. Louis (data: U.S. Treasury)",
-   "title": "10-year Treasury constant maturity rate (daily)",
-   "url": "https://fred.stlouisfed.org/series/DGS10",
-   "verifies": [
-    "0.52 percent on 4 August 2020"
-   ],
-   "checked": "CSV opened on the publisher's site on 11 November 2026 (dated window read)"
   }
  }
 }

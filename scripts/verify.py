@@ -21,8 +21,8 @@ from urllib.parse import urlparse, unquote
 
 ROOT = Path(__file__).resolve().parents[1]
 PAGES = ["index.html", "executive-summary.html", "property-a.html", "property-b.html", "taxes.html",
-         "projections.html", "black-swans.html", "decision.html", "inheritance.html", "review.html",
-         "audit.html", "sources.html"]
+         "projections.html", "decision.html", "stress.html", "black-swans.html", "inheritance.html",
+         "review.html", "audit.html", "sources.html"]
 ASSETS = ["assets/style.css", "assets/sources.json", "assets/data/model.json",
           "assets/data/property_a.csv", "assets/data/property_b.csv", "assets/data/decision.csv"]
 
@@ -31,6 +31,7 @@ ALLOWED_HOSTS = {
     "www.irs.gov", "irs.gov", "home.treasury.gov", "www.tsp.gov", "www.huduser.gov", "fred.stlouisfed.org",
     "www.federalreserve.gov", "federalreserve.gov", "www.federalreservehistory.org", "federalreservehistory.org",
     "www.bls.gov", "bls.gov", "www.cbo.gov", "cbo.gov", "www.ssa.gov", "ssa.gov",
+    "libertystreeteconomics.newyorkfed.org",
     # state
     "www.boe.ca.gov", "boe.ca.gov", "leginfo.legislature.ca.gov", "www.ftb.ca.gov", "ftb.ca.gov",
     "www.cpuc.ca.gov", "cpuc.ca.gov", "www.insurance.ca.gov", "www.lao.ca.gov", "www.sos.ca.gov", "www.sco.ca.gov",

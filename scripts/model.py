@@ -157,10 +157,11 @@ def tax_b(assessed, year, rate=None):
 def stock_after_tax(p0, n, rs=None):
     rs = A["stock_return"] if rs is None else rs
     p = basis = p0
-    for _ in range(n):
+    for i in range(n):
+        r = rs[i] if isinstance(rs, (list, tuple)) else rs
         div = p * A["stock_dividend"]
         tax = div * A["t_div"]
-        p = p * (1 + rs) - tax
+        p = p * (1 + r) - tax
         basis += div - tax
     return p - max(0.0, p - basis) * T_GAIN
 
@@ -177,10 +178,27 @@ def reassess(year, g, law="current"):
     return {"fmv": fmv, "base": base, "amount": amt, "live": live, "rent": rent}
 
 
-def run(option, year, g, law="current", rs=None, rent_mo=None, ins_mult=1.0, n=None, infl_rate=None):
-    """Wealth from Property A and the third unit of Property B, n years after inheriting."""
+def _terminal_growth(g, g_path, n):
+    if g_path is not None:
+        mult = 1.0
+        for x in g_path:
+            mult *= 1 + x
+        return mult
+    return (1 + g) ** n
+
+
+def run(option, year, g, law="current", rs=None, rent_mo=None, ins_mult=1.0, n=None,
+        infl_rate=None, g_path=None, rs_path=None):
+    """Wealth from Property A and the third unit of Property B, n years after inheriting.
+
+    g is the house price growth used to anchor market value at the inheritance year. g_path, when given,
+    is a list of n annual growth rates applied after the inheritance instead of g (used for crash
+    analogues). rs_path, when given, is a list of n annual stock total returns instead of rs.
+    infl_rate, when given, overrides the inflation rate for costs, fixed charges and the rent cap
+    (used by the black-swan inflation stress case).
+    """
     n = n or A["hold_years"]
-    rs = A["stock_return"] if rs is None else rs
+    rs = rs_path if rs_path is not None else (A["stock_return"] if rs is None else rs)
     rent_mo = A["rent_a_mo"] if rent_mo is None else rent_mo
     rent_ctrl = V["rent_cap_share_of_cpi"] * (A["inflation"] if infl_rate is None else infl_rate)
     rz = reassess(year, g, law)
@@ -216,7 +234,7 @@ def run(option, year, g, law="current", rs=None, rent_mo=None, ins_mult=1.0, n=N
             tax_first = ptax
         flows.append(cf)
     fv = sum(cf * (1 + r_eq) ** (n - 1 - t) for t, cf in enumerate(flows))
-    net_sale = fmv * (1 + g) ** n * (1 - SELL_COST)
+    net_sale = fmv * _terminal_growth(g, g_path, n) * (1 - SELL_COST)
     if option == "live":
         gain_tax = T_GAIN * max(0.0, net_sale - fmv - V["home_sale_exclusion_joint"])
     else:
@@ -239,6 +257,97 @@ def bisect(f, lo, hi):
 
 OPTIONS = [("sell_stock", "Sell A, buy a stock index fund"), ("sell_treasury", "Sell A, buy Treasuries"),
            ("rent", "Keep A and rent it out"), ("live", "Move into A")]
+
+# ---------------------------------------------------------------------------------------------
+# Black-swan stress tests (2026-11-11). Anchored to an inheritance in 2045 at the baseline price
+# path; each scenario swaps the post-inheritance world. All are scenario arithmetic, not forecasts.
+# Verified historical analogues (see assets/sources.json: bls_cpi_2022, bls_mlr100, bls_btn2021,
+# fedhist_1929, fedhist_greatinflation, fedhist_greatrecession, nyfed_covid, fred_ussthpi,
+# fred_nasdaqcom, fred_dgs10): Great Depression (DJIA -89% 1929-1932), Great Inflation (CPI +14.8%
+# 12-month to March 1980), 1973-76 (12.3% Dec 1974), 2000-2002 dot-com (NASDAQ -78%), Great
+# Recession (S&P 500 -57%, home prices ~-30%), COVID-19 (S&P 500 -34% Feb-Mar 2020).
+# ---------------------------------------------------------------------------------------------
+GFC_HOUSE_PATH = [-0.12, -0.08, -0.03, 0.02, 0.035, 0.040, 0.040, 0.040, 0.040, 0.040]   # cumulative about flat, trough -19%
+GFC_STOCK_PATH = [-0.45, 0.06, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09]             # crash then recovery
+
+SCENARIOS = [
+    ("S0", "Baseline (reference)", 0.025, 0.040, 0.070, 0.0488, None, None,
+     "The assumption register: 2.5% inflation, 4% house growth, stocks 7%, 10-year Treasury 4.88%."),
+    ("S1", "High inflation, flat real house (1970s analogue)", 0.060, 0.060, 0.040, 0.080, None, None,
+     "CPI 12-month peaked at 14.8% in March 1980; inflation ran above 12% with unemployment above 7% in 1974."),
+    ("S2", "Deflationary slump (1930s / Japan-adjacent)", 0.000, -0.010, 0.010, 0.010, None, None,
+     "Japan's lost decades: falling prices and land values. DJIA fell 89% from 3 Sep 1929 to 8 Jul 1932."),
+    ("S3", "Lost decade for equities", 0.025, 0.030, 0.000, 0.030, None, None,
+     "Stocks flat for ten years. The S&P 500's 2000s decade managed about zero nominal total return."),
+    ("S4", "Crash at the inheritance, then recovery (2008 analogue)", 0.020, 0.040, 0.070, 0.020, GFC_HOUSE_PATH, GFC_STOCK_PATH,
+     "Home prices fell about 30% from mid-2006 to mid-2009; the S&P 500 fell 57% from October 2007 to March 2009."),
+    ("S5", "Rate shock (10-year Treasury near double today)", 0.055, 0.025, 0.050, 0.085, None, None,
+     "The 10-year Treasury yielded 15.84% on 30 September 1981; 9.99% in June 2023; 4.88% in November 2026."),
+    ("S6", "Boom", 0.030, 0.060, 0.090, 0.055, None, None,
+     "Houses and stocks both strong; inflation modestly above target."),
+]
+
+
+def _stress_begin(inflation, treasury):
+    global RENT_CTRL
+    saved = (A["inflation"], V["treasury_10y"], RENT_CTRL)
+    A["inflation"], V["treasury_10y"] = inflation, treasury
+    RENT_CTRL = V["rent_cap_share_of_cpi"] * inflation
+    return saved
+
+
+def _stress_end(saved):
+    global RENT_CTRL
+    A["inflation"], V["treasury_10y"], RENT_CTRL = saved
+
+
+def stress(year=2045):
+    n = A["hold_years"]
+    out = []
+    for sid, name, inflation, g, rs, treasury, g_path, rs_path, note in SCENARIOS:
+        saved = _stress_begin(inflation, treasury)
+        try:
+            kw = {"g_path": g_path, "rs_path": rs_path}
+            res = {k: run(k, year, g, rs=None if rs_path else rs, **kw) for k, _ in OPTIONS}
+            best = max(res[k]["wealth"] for k in res)
+            deflate = (1 + inflation) ** n
+            row = {"id": sid, "name": name, "inflation": P_pct(inflation), "house": (P_pct(g) if g_path is None else "path"),
+                   "stocks": (P_pct(rs) if rs_path is None else "path"),
+                   "treasury": P_pct(treasury), "note": note, "deflate": round(deflate, 4)}
+            for k, _ in OPTIONS:
+                row[k] = r10(res[k]["wealth"])
+                row[k + "_today"] = r10(res[k]["wealth"] / deflate)
+                row[k + "_gap"] = r10(res[k]["wealth"] - best)
+            row["winner"] = dict(OPTIONS)[max(res, key=lambda k: res[k]["wealth"])]
+            row["winner_key"] = max(res, key=lambda k: res[k]["wealth"])
+            out.append(row)
+        finally:
+            _stress_end(saved)
+    return out
+
+
+def P_pct(x):
+    return round(x * 100, 2)
+
+
+BASE_YEAR = 2026
+
+
+def stress_extras():
+    """Fixed nominal amounts that do not rise with inflation, and purchasing power of $1."""
+    out = {"exclusion_real": [], "purchasing_power": []}
+    for yy in (2040, 2045, 2050):
+        for tag, i in (("2.5%", 0.025), ("5.0%", 0.05), ("8.0%", 0.08)):
+            out["exclusion_real"].append({"year": yy, "inflation": tag,
+                                          "home_sale_single": r10(250_000 / (1 + i) ** (yy - BASE_YEAR)),
+                                          "home_sale_joint": r10(500_000 / (1 + i) ** (yy - BASE_YEAR))})
+    for i in (0.025, 0.05, 0.08):
+        row = {"inflation": f"{i * 100:.1f}%"}
+        for yy in (2030, 2040, 2050, 2060):
+            row[str(yy)] = round(1 / (1 + i) ** (yy - BASE_YEAR), 2)
+        out["purchasing_power"].append(row)
+    return out
+
 
 
 def build():
@@ -368,6 +477,11 @@ def build():
             row[f"room_couple_{tag}"] = r10(2 * ex - re_)
         row["room_single_half"] = r10(ex / 2 - a_value(yy, g) - b_value(yy, g))
         d["estate"].append(row)
+
+    # Black-swan stress tests (2045 inheritance; post-inheritance world swapped)
+    d["stress"] = stress(2045)
+    d["stress_extras"] = stress_extras()
+    d["stress_meta"] = {"gfc_house": GFC_HOUSE_PATH, "gfc_stock": GFC_STOCK_PATH}
 
     # Current-year costs, side by side
     pa, pb = d["proj_a"][0], d["proj_b"][0]
