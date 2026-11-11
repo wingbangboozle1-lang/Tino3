@@ -673,6 +673,11 @@ of this file was touched. `plan/**`, `analysis/**`, `decision-suite/**`, `.githu
 | A4-3 Executive-summary refresh and flag register | **done** | New row and note: estate tax above the exclusion is 40 cents per dollar, paid by the estate, due with Form 706; FL-17 closed; flagged list 24 -> 23 items |
 | A4-4 PR, merge, deploy verification, record | **done** | Result below |
 
+**Files actually touched** (disclosed against the claim, which named one file more narrowly): `scripts/build.py`,
+`scripts/model.py`, `scripts/verify.py` (one allowlist entry for the GovInfo host), `assets/sources.json`,
+`assets/data/model.json` and the CSVs (regenerated), `assets/style.css`, `README.md`, `EXECUTIVE_SUMMARY.md` and the
+thirteen root `*.html` files (regenerated), plus this board. No data file outside the root edition was edited.
+
 ### Sources opened in this session (publisher's own domain, 11 November 2026)
 
 - IRS, Estate tax (filing-threshold table, 2026 = $15,000,000): https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax
