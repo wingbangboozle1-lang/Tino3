@@ -79,7 +79,7 @@ SOURCES = {
  "cdi_guide": ("California Department of Insurance", "Residential insurance guide: homeowners and renters", "https://www.insurance.ca.gov/01-consumers/105-type/95-guides/03-res/res-ins-guide.cfm", "read",
    "What a homeowners policy covers (dwelling, other structures, personal property, loss of use, liability); advice to compare price, coverage and conditions."),
  "cpuc_nem": ("California Public Utilities Commission", "Net energy metering and net billing", "https://www.cpuc.ca.gov/industries-and-topics/electrical-energy/demand-side-management/customer-generation/net-energy-metering-and-net-billing", "read",
-   "NEM tariffs are closed to new enrolment; applicants since 15 April 2023 are on the net billing tariff, whose export credits are usually below the retail rate. (The 20-year legacy period for existing NEM customers was seen only in a search excerpt of this page.)"),
+   "NEM tariffs are closed to new enrolment; applicants since 15 April 2023 take the net billing tariff, whose export credits are usually below the retail rate. Two distinct legacy periods are confirmed on the page: NEM 2.0 customers may remain on that tariff for 20 years from interconnection (D.14-03-041), while the NBT legacy period is nine years for the original interconnecting customer."),
  "cpuc_water": ("California Public Utilities Commission", "Water (regulated water utilities)", "https://www.cpuc.ca.gov/industries-and-topics/water", "lookup",
    "Regulator of investor-owned water utilities and their rate changes; no rate was taken from this page."),
  "sos_memo": ("California Secretary of State", "County Clerk/Registrar of Voters Memorandum 26138 (18 May 2026)", "https://elections.cdn.sos.ca.gov/ccrov/2026/may/26138jh.pdf", "read",
@@ -102,8 +102,41 @@ SOURCES = {
    "Official place to look up benchmark rents by area and bedroom count; the page could not be opened in this review, so no rent was taken from it."),
  "gh_prs": ("GitHub (this repository)", "Pull requests", "https://github.com/wingbangboozle1-lang/Tino3/pulls?q=is%3Apr", "repo",
    "Merge history and open pull requests of the parallel sessions."),
+ # ---- added by arena/a2416305-tino3 on 11 November 2026 -------------------------------
+ "irs_rp2635": ("IRS", "Revenue Procedure 2026-35, section 3.44 (2027 inflation-adjusted items)", "https://www.irs.gov/pub/irs-drop/rp-26-35.pdf", "read",
+   "Section 3.44: for calendar year 2027 the basic exclusion amount under IRC 2010(c)(3) is $15,480,000; section 3.46(1) sets the 2027 annual gift exclusion at $20,000."),
+ "irs_rp2532": ("IRS", "Revenue Procedure 2025-32 (2026 inflation-adjusted items)", "https://www.irs.gov/pub/irs-drop/rp-25-32.pdf", "excerpt",
+   "The 2025 reconciliation act set the basic exclusion amount at $15,000,000 for calendar year 2026 and indexes it for inflation from 2027. Official text seen as a search excerpt only."),
+ "irs_706": ("IRS", "Instructions for Form 706 (rev. July 2026)", "https://www.irs.gov/pub/irs-pdf/i706.pdf", "excerpt",
+   "For decedents dying in 2026 the basic exclusion amount is $15,000,000 and the applicable credit amount is $5,945,800. Official text seen as a search excerpt only."),
+ "boe_pub29": ("California State Board of Equalization", "California Property Tax: An Overview (Publication 29, March 2025)", "https://www.boe.ca.gov/proptaxes/pdf/pub29.pdf", "read",
+   "Proposition 13 limits the rate to 1 percent plus voter-approved bonded indebtedness, caps annual increases in base year value at 2 percent, and reassesses to market value only on a change of ownership or new construction."),
+ "boe_p19_fact": ("California State Board of Equalization", "Proposition 19 fact sheet: intergenerational transfer exclusion", "https://www.boe.ca.gov/pdf/pub801.pdf", "excerpt",
+   "The transferee must live in the family home as a principal residence and file for the homeowners' exemption within one year; the value limit is the factored base year value plus $1,000,000 adjusted every other year; form BOE-19-P is the claim. Official text seen as a search excerpt only."),
+ "cdi_report": ("California Department of Insurance", "Residential Property Insurance Report, Part I 2008-2023 and Part II ZIP-level 2018-2023", "https://www.insurance.ca.gov/0400-news/0200-studies-reports/0250-homeowners-study/", "read",
+   "Part I publishes written premiums, exposures and average written premiums by policy form; Part II publishes ZIP-code level earned premiums and coverage amounts. The department's comparison tool publishes survey premiums for hypothetical homes, not quotes. ZIP-level figures are not reproduced here."),
+ "cdi_avg2017": ("California Department of Insurance", "Homeowners Multi-Peril Data 2001-2017 (archived Part I table)", "https://www.insurance.ca.gov/0400-news/0200-studies-reports/0250-homeowners-study/upload/A-Homeowners-2_v1-2.pdf", "read",
+   "Statewide average written premium for owner-occupied homeowners multiple-peril policies: $620 in 2001 and $1,074 in 2017. A statewide average, not a quote for either property."),
+ "bls_100": ("U.S. Bureau of Labor Statistics", "One hundred years of price change: the CPI and the American inflation experience", "https://www.bls.gov/opub/mlr/2014/article/one-hundred-years-of-price-change-the-consumer-price-index-and-the-american-inflation-experience.htm", "read",
+   "All-items CPI rose 3.5 percent a year in 1913-1929, fell at an annualized 8.3 percent from December 1929 to June 1933, rose 186.4 percent (7.3 percent a year) in 1968-1983 and 133.9 percent (2.9 percent a year) in the later long boom."),
+ "bls_2022": ("U.S. Bureau of Labor Statistics", "Consumer prices up 9.1 percent over the year ended June 2022", "https://www.bls.gov/opub/ted/2022/consumer-prices-up-9-1-percent-over-the-year-ended-june-2022-largest-increase-in-40-years.htm", "read",
+   "CPI-U rose 9.1 percent in the 12 months to June 2022, the largest rise since November 1981; electricity rose 13.7 percent in the same period."),
+ "frh_inflation": ("Federal Reserve History", "The Great Inflation (1965-1982)", "https://www.federalreservehistory.org/essays/great-inflation", "read",
+   "Inflation was a little over 1 percent in 1964 and reached more than 14 percent in 1980, then averaged 3.5 percent in the latter half of the 1980s; the episode included four recessions and two severe energy shortages."),
+ "cbo_2026": ("Congressional Budget Office", "The Budget and Economic Outlook: 2026 to 2036 (February 2026)", "https://www.cbo.gov/publication/62105", "read",
+   "PCE inflation slows from 2.8 percent in 2025 to 2.7 percent in 2026 and returns to roughly the Federal Reserve's 2 percent goal in 2030; the 10-year Treasury rate rises gradually through 2027."),
+ "ssa_2026": ("Social Security Administration", "2026 OASDI Trustees Report: assumptions about the future", "https://www.ssa.gov/oact/tr/2026/II_C_assump.html", "read",
+   "For the last 65 projection years the annual CPI-W change is 2.4 percent (intermediate), 3.0 percent (low-cost) and 1.8 percent (high-cost); the ultimate real interest rate is 2.3 percent for 2044 and later."),
+ "tsp_returns": ("Thrift Savings Plan", "Rates of return (official fund performance)", "https://www.tsp.gov/rates-return/", "read",
+   "For the year 1 November 2025 to 31 October 2026: C Fund (S&P 500 index) 12.09 percent, G Fund 4.61 percent. Historical returns, not a forecast."),
+ "sos_2026": ("California Secretary of State", "State ballot measures, 3 November 2026 general election (unofficial results)", "https://electionresults.sos.ca.gov/returns/ballot-measures", "read",
+   "Unofficial statewide results posted 10 November 2026, certification due 11 December 2026. No measure repealing the family-transfer property tax rules appears; Proposition 42 passed with 51.5 percent; Proposition 40 failed with 47.4 percent."),
+
 }
 
 # Opened again on 11 November 2026 (session arena/82853ea6) and compared with the figures used.
 REOPENED = {"irs_estate", "irs_2027", "boe_p19", "boe_cap", "boe_hoe", "rtc_11911", "cityb_tax", "cityb_rent",
-            "cdi_tool", "sos_memo", "congress_s587", "fred_hpi", "treasury", "fred_gs10", "fred_cpi"}
+            "cdi_tool", "sos_memo", "congress_s587", "fred_hpi", "treasury", "fred_gs10", "fred_cpi",
+            # opened again on 11 November 2026 by arena/a2416305-tino3
+            "irs_rp2635", "boe_pub29", "cdi_report", "cdi_avg2017", "bls_100", "bls_2022", "frh_inflation",
+            "cbo_2026", "ssa_2026", "tsp_returns", "sos_2026", "cpuc_nem"}
