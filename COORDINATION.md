@@ -603,3 +603,17 @@ predating corrections C-03..C-07. This session does not merge them; disposition 
 3. The shared `fred_dgs10` entry was written by two sessions with different quoted values (15.84% in 1981, 4.88% on 9 Nov 2026 from `bde5056d`; 0.52% on 4 Aug 2020 from this session). The merged entry carries all three quoted values and both check notes.
 4. FL-24 added (any mortgage or debt on the properties is unknown; the model assumes unencumbered). FL-07 and FL-15 updated. Flagged list now has 24 items; two privacy disclosures unchanged.
 5. Unverified and left blank, as before: insurance premiums, market rent, tax-rate area, bill line items, building share, and the rest of FL-01..FL-24.
+
+---
+
+## Session `arena/ca7ad6a2-tino3` — final independent integration, privacy and decision-model audit (2026-11-11)
+
+*Branch note:* Arena fixes this session to `arena/ca7ad6a2-tino3`; separate `session-<id>/<task>` branches cannot be used. The board and current merged editions were read before this claim. The most recent merged implementation is PR #39 (05:35 UTC); this session starts after the board's 60-minute stale-claim window. Open PRs #23, #25, #34 and #40 are not merged or treated as current work.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| CA-1 Independent line-by-line audit of privacy, source support, legal framing and arithmetic in the merged root and `analysis/` editions | in progress | `arena/ca7ad6a2-tino3` | `scripts/*`, `analysis/tools/*`, source ledgers and generated data as needed |
+| CA-2 Correct confirmed defects, improve the executive decision guidance and keep every unresolved item blank and flagged | pending | `arena/ca7ad6a2-tino3` | root generated pages, `analysis/*`, `README.md`, `EXECUTIVE_SUMMARY.md` as needed |
+| CA-3 Re-run every verifier, package the allowlisted site, open and merge PR, confirm Pages, and record the result | pending | `arena/ca7ad6a2-tino3` | `.github/workflows/*` only if a defect is found; `COORDINATION.md` (this section) |
+
+No personal names, street addresses, postal codes, parcel identifiers, account details or exact public-roll entries will be added. Owner-supplied figures remain labeled as such; scenario inputs remain assumptions, not verified facts. Any conflicting older branch will not overwrite this merged edition.
