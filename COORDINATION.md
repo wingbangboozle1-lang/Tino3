@@ -1712,3 +1712,20 @@ Privacy: no name, street address, postal code, parcel number or unrounded figure
 ### Disclosure
 
 The published precision for assessment-roll values is tier 1 (nearest $10), chosen by the owner on 12 November 2026 (`assets/privacy.json`). This session did not change and does not re-litigate that setting; the parcel-matching caveat and the owner's choice (SG-14) are disclosed on `review.html`. Earlier commits and pull-request diffs in this public repository may contain finer figures; only a history rewrite or going private can address that, and it remains an owner decision (SG-10; CR-5 on the earlier board).
+
+## Session `arena/e45a26be-tino3` — final public-edition audit and decision-framework refinement · 2026-11-12
+
+*Branch note:* Arena pins this session to `arena/e45a26be-tino3`, based at `b23f405`. The board was read before work began.
+No other active claim was visible. This session is the final integration/audit pass for the current privacy-safe root edition; it does not revive retired editions or publish owner-derived property data.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| E45-1 Re-verify the current public edition, privacy boundary, generated output and official-source links | in progress | `arena/e45a26be-tino3` | `scripts/*`, `assets/*`, root public pages, this section |
+| E45-2 Improve decision guidance so the inherited Property A / already-owned Property B distinction, local-law gaps, private cost ledger, projections, black-swan cases, questions, suggestions and flagged items are explicit without publishing personal information | in progress | `arena/e45a26be-tino3` | root public pages via `scripts/build.py`, `assets/style.css` as needed |
+| E45-3 Build, run all checks, open and merge PR, verify GitHub Pages deployment and record result | waiting | `arena/e45a26be-tino3` | workflow/publication record; this section |
+
+**Privacy boundary for this pass.** Do not publish names, street addresses, postal codes, parcel numbers, owner-derived assessments, values, rent, utility use, insurance estimates, trust particulars, household details or individualized projections. Rounded figures are not treated as anonymization. General statutory thresholds and historical aggregate facts may remain when linked to official publishers and clearly labelled as non-property-specific. Every factual table row must retain an official source link; unsupported property-specific fields stay blank and flagged.
+
+### Log
+
+- 2026-11-12 — Read the full coordination board, checked the clean base at `b23f405`, and confirmed the existing local verifier passes before making content changes.
