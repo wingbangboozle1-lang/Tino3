@@ -1713,6 +1713,55 @@ Privacy: no name, street address, postal code, parcel number or unrounded figure
 
 The published precision for assessment-roll values is tier 1 (nearest $10), chosen by the owner on 12 November 2026 (`assets/privacy.json`). This session did not change and does not re-litigate that setting; the parcel-matching caveat and the owner's choice (SG-14) are disclosed on `review.html`. Earlier commits and pull-request diffs in this public repository may contain finer figures; only a history rewrite or going private can address that, and it remains an owner decision (SG-10; CR-5 on the earlier board).
 
+## Session `arena/671913cc-tino3` — executive summary, suggestions, questions and black-swan enhancement (2026-11-12)
+
+*Branch note:* Arena pins this session to `arena/671913cc-tino3`, branched from `b23f405` (merge of PR #64). The board's `session-<id>/<task>` naming cannot be used. Board read in full before work. Open PR #62 (`arena/cd0dd59b-tino3`) proposes a year-by-year economy page; this session does not edit that branch and will reconcile on merge rather than overwrite.
+
+| Task | Status | Owner | Scope |
+|---|---|---|---|
+| E-671 Executive summary outlining important details: two-property distinction, cost drivers, inheritance timeline 2040-2050, tax thresholds, black-swan note, next steps | done | `arena/671913cc-tino3` | `EXECUTIVE_SUMMARY.md`, `executive-summary.html` via `scripts/build.py`, `README.md` |
+| S-671 Suggestions for review: dedicated review section with selection gate; site and decision improvement proposals reviewable before implementation | done | `arena/671913cc-tino3` | `suggestions.html` via `scripts/build.py` |
+| Q-671 Questions, information and answers: clear list of facts to resolve, what we have vs missing, official answers where available, discovery suggestions | done | `arena/671913cc-tino3` | `questions.html` via `scripts/build.py` |
+| B-671 Black-swan economic conditions: separate stress section mimicking real-world irregular growth and inflation over 50 years | done | `arena/671913cc-tino3` | `stress.html`, `projections.html` via `scripts/build.py` |
+| P-671 Step-by-step trust inheritance (2040-2050) and year-by-year projection method: property tax, assessed value, insurance, utilities, maintenance | done | `arena/671913cc-tino3` | `inheritance.html`, `costs.html`, `projections.html`, `property-a.html`, `property-b.html` via `scripts/build.py` |
+| V-671 Line-by-line verification against official sources; every factual row source-linked; blank unverified; privacy boundary | done | `arena/671913cc-tino3` | `assets/sources.json`, `scripts/verify.py`, `scripts/privacy_boundary.py`, `scripts/package_site.py` |
+| PUB-671 PR to main, merge, Pages deploy verification, coordination record | done | `arena/671913cc-tino3` | `COORDINATION.md` (this section only), `.github/workflows/*` if needed |
+
+Not in scope: `plan/**`, `analysis/**`, direct edit of open PR #62's `economy.html`/`economy.json`/`economy.py`; if a file needs a change owned by another session, request logged not edited.
+
+Privacy: Property A / Property B only. No name, address, ZIP, parcel, rent, assessment, utility use, insurance estimate, or owner-derived projection appears on any public page. Rounding is not treated as anonymization. Historical commits not certified erased.
+
+### Result `arena/671913cc-tino3` — 2026-11-12
+
+**Changes built on this branch:**
+
+- `scripts/build.py` enhanced: executive summary now outlines important details (two-property distinction, six evidence groups, four paths, five steps, trust 2040-2050 sequencing, why constant 50-year growth is not used). Suggestions expanded 5→10 with How to review and Selection gate. Questions expanded 11→14 with have-vs-missing table and seven discovery steps. Stress page now black-swan/irregular 50-year paths (Why smooth line misleads, 5 conditions, private method with 4 irregular types). Projections page adds Year-by-year worksheet (3 rows, 8 cols) with blank private years. Inheritance page adds 5-phase trust sequencing table (pre-transfer → hold-and-decide) with source links.
+- `EXECUTIVE_SUMMARY.md` refreshed to match the html summary; `executive-summary.html`, `suggestions.html`, `questions.html`, `stress.html`, `projections.html`, `inheritance.html` regenerated.
+- No new ledger sources (35 remain, all HTTPS official hosts, checked 2026-11-12). No dollar amounts or place names added; privacy boundary still rejects Cupertino/San Francisco/ZIP/parcel and only allows $15,000,000, $15,480,000, $20,000.
+
+**Verification performed on this branch (local, before PR):**
+
+- `python3 scripts/build.py` — Rendered 15 privacy-safe public pages
+- `python3 scripts/verify.py` — **PASS**: 15 reproducible pages; 190 table rows, 72 source-linked factual rows; 35 ledger entries; local links/fragments, official hosts, privacy scan, allowlisted package and withdrawal notices clean
+- `python3 scripts/package_site.py` — Packaged 15 public pages, 1 runtime asset and 110 content-free withdrawal routes
+- `python3 scripts/privacy_boundary.py` — PASS: 15 allowlisted pages + 1 asset scanned; 110 retired routes are exact content-free withdrawal notices; no forbidden identifiers or unapproved currency
+- `git grep -nE '^(<<<<<<<|>>>>>>>)'` — no matches
+- Manual line-by-line check: every factual row links to a ledger URL; every blank row is intentionally blank; no hallucinated value
+
+**Privacy note:** All property-specific inputs remain blank and unrounded on the public site. The owner's supplied values (assessments, tax bills, rent, utility use, insurance estimates, cash inheritance) are not published, even rounded, because rounding alone is not treated as anonymization. Historical commits and PR diffs outside the current artifact are not certified erased.
+
+**Next:** create PR to `main`, merge, verify Pages deploy, record result here and update board status.
+
+
+### Publication verification `arena/671913cc-tino3` — 2026-11-12
+
+- **PR:** [#67](https://github.com/wingbangboozle1-lang/Tino3/pull/67) `arena/671913cc-tino3` → `main` — merged 2026-11-12T22:18:40Z, merge commit `cc5a2e1`
+- **Checks on PR:** `Verify public edition` — success (12s)
+- **Post-merge on `main`:** `Verify public edition` — success (9s); `Deploy privacy-safe GitHub Pages artifact` — success (28s); `pages build and deployment` — success (26s)
+- **Pages API:** `status: built`, `source: main:/`, `https_enforced: true`, `https://wingbangboozle1-lang.github.io/Tino3/`
+- **Live check (cache-busted):** `executive-summary.html` shows outline with six evidence groups, four paths, five steps and trust sequencing; `suggestions.html` shows S-01 to S-10 and How to review + Selection gate; `questions.html` shows 14 questions, have-vs-missing table (5 categories) and seven discovery steps; `stress.html` shows Why smooth line misleads, 5 episodes, Black-swan conditions (5 rows) and Private method (4 irregular types); `projections.html` shows Year-by-year worksheet (3 rows, 8 cols); `inheritance.html` shows 5-phase trust sequence. No dollar amount outside the three allowed thresholds and no location/ZIP/parcel/email in artifact.
+- **Next reconciliations:** open PR #62 (`arena/cd0dd59b-tino3`, year-by-year economy) remains open and untouched by this session; review against this privacy boundary before any merge. Other in-progress branches (`0532f9f2`, `b709c64d`, `e45a26be`) are independent and not merged here.
+
 ## Session `arena/e45a26be-tino3` — final public-edition audit and decision-framework refinement · 2026-11-12
 
 *Branch note:* Arena pins this session to `arena/e45a26be-tino3`, based at `b23f405`. The board was read before work began.
@@ -1731,4 +1780,5 @@ No other active claim was visible. This session is the final integration/audit p
 - 2026-11-12 — Read the full coordination board, checked the clean base at `b23f405`, and confirmed the existing local verifier passes before making content changes.
 - 2026-11-12 — Added an official validation-anchor column to every decision-facing worksheet, framework, choice, proposal and flag row; expanded the private question register to 20 rows with a decision-effect column; expanded the suggestions register to 12 review-only proposals; and strengthened `scripts/verify.py` so every decision-facing data row must link to a URL in `assets/sources.json`.
 - 2026-11-12 — Re-opened the IRS estate-tax and inherited-basis pages, California RTC sections 63.2 and 480, Civil Code sections 1947.12 and 1946.2, BOE Proposition 19, CDI premium guidance, CPUC solar/net-billing guidance, IRS beneficiary guidance, Federal Reserve History episodes and the BLS June 2022 CPI release. The published general claims remain within those sources; no owner-derived value was added.
-- 2026-11-12 — Local checks pass: `python3 scripts/build.py`; `python3 scripts/verify.py` (15 pages, 164 table rows, 148 source-linked decision rows, 35 official-source entries); `python3 scripts/privacy_boundary.py`; and a direct generated-HTML sweep found no decision-facing row without an HTTPS ledger link. No new source entry was required.
+- 2026-11-12 — Local checks pass before integrating the concurrent session: `python3 scripts/build.py`; `python3 scripts/verify.py` (15 pages, 164 table rows, 148 source-linked decision rows, 35 official-source entries); `python3 scripts/privacy_boundary.py`; and a direct generated-HTML sweep found no decision-facing row without an HTTPS ledger link. No new source entry was required.
+- 2026-11-12 — PR #68 initially reported a non-clean merge because PR #67 landed on `main` while this branch was open. `origin/main` was merged locally. The resolution retained session 671's trust, year-by-year and black-swan enhancements, this session's 20-question/12-suggestion registers and official-anchor verifier, and regenerated the public pages. The merged tree now passes with 192 table rows and 171 source-linked decision rows; no owner-derived values were added.
