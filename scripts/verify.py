@@ -22,7 +22,7 @@ from urllib.parse import urlparse, unquote
 ROOT = Path(__file__).resolve().parents[1]
 PAGES = ["index.html", "executive-summary.html", "property-a.html", "property-b.html", "taxes.html",
          "projections.html", "decision.html", "stress.html", "black-swans.html", "inheritance.html",
-         "review.html", "audit.html", "sources.html"]
+         "review.html", "audit.html", "sources.html", "suggestions.html", "questions.html"]
 ASSETS = ["assets/style.css", "assets/sources.json", "assets/data/model.json",
           "assets/data/property_a.csv", "assets/data/property_b.csv", "assets/data/decision.csv"]
 

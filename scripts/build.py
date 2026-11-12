@@ -18,13 +18,14 @@ NAV = [("index.html", "Overview"), ("executive-summary.html", "Executive summary
        ("black-swans.html", "Conditions and history"), ("stress.html", "Stress tests"),
        ("property-a.html", "Property A"), ("property-b.html", "Property B"),
        ("taxes.html", "Tax, thresholds, law watch"), ("inheritance.html", "Inheritance steps"),
+       ("suggestions.html", "Suggestions for review"), ("questions.html", "Questions before deciding"),
        ("review.html", "Flagged for review"), ("audit.html", "Independent verification"),
        ("sources.html", "Source library")]
 
 # Navigation is grouped so a reader sees the shape of the site: one decision, one black-swan
 # section in two parts, two properties, the rules and the evidence.
 NAV_GROUPS = [("The decision", 0, 4), ("Black swans", 4, 6), ("The properties", 6, 8),
-              ("Tax and process", 8, 10), ("Evidence", 10, 13)]
+              ("Tax and process", 8, 10), ("Decide next", 10, 12), ("Evidence", 12, 15)]
 
 SHORT = {"Internal Revenue Service": "IRS", "California State Board of Equalization": "BOE",
          "California Legislative Information": "CA code", "California Franchise Tax Board": "FTB",
@@ -140,8 +141,8 @@ def page(name, title, eyebrow, h1, lead, body):
 <a class="skip" href="#main">Skip to content</a>
 <aside><a class="brand" href="index.html">Inheritance decision dashboard<small>Property A and Property B</small></a>
 <nav aria-label="Main navigation">{nav}</nav>
-<div class="aside-note">Anonymised. Dollar figures rounded to $10. Reviewed 10-11 November 2026.</div></aside>
-<main id="main"><div class="top"><span>{eyebrow}</span><span>Reviewed 10-11 Nov 2026</span></div>
+<div class="aside-note">Anonymised. Dollar figures rounded to $10. Reviewed 10-12 November 2026.</div></aside>
+<main id="main"><div class="top"><span>{eyebrow}</span><span>Reviewed 10-12 Nov 2026</span></div>
 <div class="hero"><div class="eyebrow">{eyebrow}</div><h1>{h1}</h1><p>{lead}</p></div>
 {body}
 <footer><span>Planning analysis, not legal, tax or investment advice. Confirm with an estate attorney and a tax preparer before acting.</span><span>No names, addresses, ZIP codes or parcel numbers are published.</span></footer></main></body></html>
@@ -255,7 +256,7 @@ Renting the home out ends with {usd(RENT['wealth'])} and moving in ends with {us
 <section><h2>Three editions in one repository</h2>
 <p>This dashboard is one of three editions kept side by side. They answer the same question with separate models, so their figures differ; each page states which model it comes from. Do not mix a number from one edition with a table in another.</p>
 <div class="cards">
-<div class="card win"><div class="k">This edition &middot; 13 pages</div><p>The pages in the menu. One model, one source ledger of 68 entries, re-checked line by line on 11 November 2026. Act on these numbers.</p></div>
+<div class="card win"><div class="k">This edition &middot; 15 pages</div><p>The pages in the menu. One model, one source ledger of 68 entries, re-checked line by line on 11 November 2026. Act on these numbers.</p></div>
 <div class="card"><div class="k">Cross-check &middot; 10 pages</div><p><a href="plan/index.html">A second model</a> built from official figures only, leaving unverifiable inputs blank and reporting break-evens instead. It reaches the same default: sell and keep Property B.</p></div>
 <div class="card"><div class="k">50-year suite &middot; 12 pages</div><p><a href="analysis/index.html">2026&ndash;2076 schedules</a>, a 1977&ndash;2026 state cycle replay with decline-in-value relief, a 60/40 Treasury barbell and the ownership-asymmetry tables.</p></div>
 </div></section>{PRIV}"""
@@ -796,6 +797,60 @@ body = f"""{tbl("From today to the years after the inheritance", ["Step", "When"
 PAGES["inheritance.html"] = page("inheritance.html", "Inheritance steps", "Inheritance by trust", "Step by step, with deadlines",
                                  "What to do now, at the death, and in the three years that follow.", body)
 
+
+# ------------------------------------------------------------------------------------------------ suggestions (proposed only — nothing decided)
+sug = [
+ ("SG-01", "Obtain two written insurance quotes for each property before locking the plan", "Premiums are the largest unverified running cost; the ranking was tested at three times the guess and held, but a real quote removes the guess entirely.", "Owner accepts quotes as the planning premium, or keeps the placeholder and the flag.", "C", "cdi_compare"),
+ ("SG-02", "Confirm who holds title to Property B from the deed, and record the answer", "Title decides whether Property B is in the decedent's estate and whether its tax resets at the same death (FL-01) — the single largest open swing in the estate room.", "Owner confirms title in writing to the file; contingency tables stay until then.", "O", "boe_lta26026"),
+ ("SG-03", "Confirm the trust is revocable and which home is the principal residence", "The basis reset depends on revocability, and the parent-child exclusion only covers the principal residence (FL-02, FL-03).", "Attorney confirms both in writing; if either fails, the decision page must be re-run.", "O", "irs_rr2023_2"),
+ ("SG-04", "Commission a written rental analysis for Property A before rejecting the rent option", "Market rent is an assumption (FL-07); renting only wins under conditions stated on the decision page, and a real rent figure tests them.", "Owner accepts the surveyed rent, or keeps the assumption labelled.", "U", "hud_fmr"),
+ ("SG-05", "Retrieve the solar interconnection date and tariff end date", "The electricity credit ends with the tariff period; after it, a monthly cost replaces a small credit (FL-13).", "Owner files the interconnection letter; projections gain an end date for the credit.", "O", "cpuc_nem"),
+ ("SG-06", "File the itemised tax bills and the tax-rate area for both properties", "Fixed charges and the exact rate area explain bills the percentage rate cannot (FL-08, FL-09).", "Owner supplies the bills; computed rows become verified rows.", "O", "cnty_a_rates"),
+ ("SG-07", "Build a full estate inventory: cash, securities, debts, retirement accounts, earlier taxable gifts", "The owner states cash may exceed the exclusion, but no amount was supplied, so tax above the room cannot be sized (FL-04, FL-24).", "Owner supplies the inventory privately (never published); only the $10-rounded room is shown.", "O", "irs_estate"),
+ ("SG-08", "Re-check the law watch once a year and after each election", "Thresholds, ballot measures and pending bills move the answer; the failed repeal initiative is the standing example.", "Owner adopts an annual review date, or accepts the law as at the review date.", "V", "sos_measures"),
+ ("SG-09", "Adopt the black-swan playbook now: proceeds default, and the condition that switches it", "In the historical analogues the sale held but the reinvestment vehicle changed with the regime; deciding the switch in advance removes panic decisions.", "Owner pre-commits the playbook, or decides at the time with the stress page open.", "C", "fedhist_greatrecession"),
+ ("SG-10", "Decide the repository-history question separately from the analysis", "Earlier public commits contain exact figures this edition cannot remove; only the owner can choose rewriting history or going private.", "Owner records a choice; nothing on the site changes either way.", "U", "irs_estate"),
+ ("SG-11", "At the death, obtain a dated appraisal of Property A promptly", "The reset basis is the value at death; a contemporaneous appraisal is the evidence for it and for the estate return.", "Trustee commissions the appraisal within the administration window.", "V", "irs_basis"),
+ ("SG-12", "Keep this root edition as the only edition to act on", "Three editions with separate models sit in the repository and must not be mixed; the cross-checks are for reconciliation only.", "Owner confirms the root edition is canonical; other editions stay labelled as cross-checks.", "C", "irs_estate"),
+]
+srows = [([i, s, why, dec], b, S(src, flag=True)) for i, s, why, dec, b, src in sug]
+body = f"""<div class="note"><strong>Nothing on this page is decided or implemented.</strong> Each suggestion is <strong>Proposed — not decided</strong>. Review, choose the best path, and only then implement. Adopting or rejecting a suggestion changes nothing on the other pages until the build is re-run.</div>
+{tbl("Suggestions for review — proposed only", ["No.", "Suggestion", "Why it improves the decision", "Decision needed before implementing"], srows)}{LEGEND}
+<section><h2>How to use this page</h2><ol>
+<li>Mark each row Adopt, Reject, or Defer — outside the site; the site takes no input and stores nothing.</li>
+<li>Adopted items that supply missing evidence (SG-01 to SG-07) close the matching flag on the <a href="review.html">Flagged for Review</a> page and re-run the model.</li>
+<li>Process items (SG-08 to SG-12) change no figure; they change how safely the existing figures are used.</li>
+</ol></section>{PRIV}"""
+PAGES["suggestions.html"] = page("suggestions.html", "Suggestions for review", "Suggestions", "Proposed improvements — none decided yet",
+                                 "A dedicated register to review, choose from, and only then implement. Every row is proposed, not adopted.", body)
+
+# ------------------------------------------------------------------------------------------------ questions before deciding
+qst = [
+ ("Q-01", "Gating — any decision", "Who holds title to Property B?", "Unknown (deed not seen)", "Owner states the beneficiary already owns it; if true it sits outside the decedent's estate and its low tax survives.", "The current deed or trust schedule (FL-01).", "boe_lta26026"),
+ ("Q-02", "Gating — any decision", "Is the trust revocable, and who are trustee and beneficiaries?", "Unknown (document not seen)", "Revocability drives the basis reset at death.", "The trust document, reviewed by an estate attorney (FL-03).", "irs_rr2023_2"),
+ ("Q-03", "Gating — any decision", "Which home is the grantor's principal residence?", "Unknown", "Only that home can use the parent-child exclusion, and only if the heir lives in it.", "Homeowners' exemption on the tax bill (FL-02).", "boe_prop19"),
+ ("Q-04", "Gating — sell", "What will Property A actually sell for, net of costs?", "Partially known", "Current value is owner-supplied; selling costs and taxes at sale are modelled from official rules.", "A dated appraisal at the death; a broker opinion before listing (FL-07 context).", "irs_basis"),
+ ("Q-05", "Gating — rent or live", "What rent would Property A really achieve?", "Assumption only", "The rent figure is assumed, not surveyed; renting wins only under the break-evens on the decision page.", "A written rental analysis (FL-07).", "hud_fmr"),
+ ("Q-06", "Gating — rent or live", "What are the real insurance premiums for both properties?", "Unverified — left blank", "Owner guesses are placeholders; tripling them does not change the ranking, but no quote exists.", "Two written quotes per property (FL-05, FL-06).", "cdi_compare"),
+ ("Q-07", "Gating — estate tax", "How large is the cash and securities inheritance, after debts and earlier gifts?", "Unknown (no amount supplied)", "The owner states it may exceed the exclusion; the room is computed, the exposure is not.", "A private estate inventory — never published (FL-04, FL-24).", "irs_estate"),
+ ("Q-08", "Gating — estate tax", "Does the estate include retirement accounts, and who inherits them?", "Unknown", "Retirement accounts follow their own distribution rules and are not covered by the room arithmetic.", "Account list and beneficiary designations, reviewed privately.", "irs_estate"),
+ ("Q-09", "Before choosing", "When does the solar tariff end, turning a credit into a cost?", "Unknown", "Electricity is currently a small monthly credit; the tariff period is finite.", "The utility interconnection letter (FL-13).", "cpuc_nem"),
+ ("Q-10", "Before choosing", "What do the itemised tax bills and tax-rate area show?", "Partially known", "County-wide rate ranges are verified; the exact area and fixed charges are not.", "The line items on each bill (FL-08, FL-09).", "cnty_a_rates"),
+ ("Q-11", "Before choosing", "Is Property B covered by the local rent ordinance, and at what lawful rent path?", "Partially known", "Rent growth is capped in the model; coverage depends on facts not looked up, for privacy.", "Certificate of occupancy and Rent Board record (FL-14).", "cityb_rent"),
+ ("Q-12", "Before choosing", "Which reinvestment vehicle if markets are stressed at the inheritance?", "Answered by scenario", "Historical analogues: the sale held in 5 of 7; Treasuries won when yields cleared inflation or stocks crashed.", "No new evidence needed — pre-commit via SG-09, or decide with the stress page.", "fedhist_greatrecession"),
+ ("Q-13", "Standing", "Has any relevant law changed since the review date?", "Checked to 12 Nov 2026", "Federal exclusion is $15,000,000 for 2026 and $15,480,000 for 2027; the state repeal initiative failed; ballot results await certification.", "Annual law-watch re-check (SG-08); certified election results (FL-15).", "sos_measures"),
+]
+qrows = [([i, gate, q, st, have, lack], "O" if st.startswith("Unknown") else ("C" if st.startswith("Answered") else "A"), S(src, flag=True)) for i, gate, q, st, have, lack, src in qst]
+body = f"""<div class="note"><strong>No decision should be taken until the gating questions are answered.</strong> This page separates what is known, what is assumed, and what is missing — and how to discover each missing piece. Detail and flags: <a href="review.html">Flagged for Review</a>.</div>
+{tbl("Questions, information and answers needed before deciding", ["No.", "Gate", "Question", "Status", "What we have", "What we lack / how to discover it"], qrows)}{LEGEND}
+<section><h2>The short version</h2><ul>
+<li><strong>Answered:</strong> the governing tax rules, the reassessment mechanics, the deadlines after a death, and which option wins on current numbers — sell Property A, reinvest, keep Property B.</li>
+<li><strong>Assumed:</strong> growth, inflation, returns, market rent and premiums, each labelled and stress-tested on the decision and black-swan pages.</li>
+<li><strong>Missing:</strong> title, trust terms, the estate inventory, real quotes and the solar end date (Q-01 to Q-11). Each has a named document that settles it; none requires publishing anything private.</li>
+</ul></section>{PRIV}"""
+PAGES["questions.html"] = page("questions.html", "Questions before deciding", "Questions", "What must be answered first",
+                               "A clear have / do-not-have list, so uncertainty is removed before — not after — the decision.", body)
+
 # ------------------------------------------------------------------------------------------------ flagged for review
 fl = [
  ("FL-01", "Who holds title to Property B", "The owner states (11 November 2026) that the building is already owned by the beneficiary; the deed was not seen. Title decides whether the building is reassessed at the same death and whether it is in the decedent's estate.", "The current deed or trust schedule", "boe_lta26026"),
@@ -903,7 +958,7 @@ for name, text in PAGES.items():
 # Plain-text executive summary kept in the repository
 (ROOT / "EXECUTIVE_SUMMARY.md").write_text(f"""# Executive summary
 
-Reviewed 10-11 November 2026. Anonymised: Property A (single-family home, County A), Property B (small multi-unit building, City B).
+Reviewed 10-12 November 2026. Anonymised: Property A (single-family home, County A), Property B (small multi-unit building, City B).
 Dollar figures are rounded to the nearest $10. Planning analysis, not legal, tax or investment advice.
 
 **Best plan on these numbers: sell Property A soon after inheriting it, reinvest, and keep Property B.**
@@ -930,6 +985,6 @@ Inheritance in 2045, house prices rising 4% a year, measured ten years later aft
 - Black swans, part 2 (stress.html): stock returns at 4.0%, inflation at 4.0% or a flat decade for house prices - selling still finishes first, and a lost decade only moves the proceeds to Treasuries. Verified 1929, 1965-82, 2000-02, 2007-09 and 2020 episodes re-run against the 2045 inheritance: the sale decision holds in 5 of 7 analogues, and only the reinvestment vehicle changes with the regime.
 - Re-checked on 11 November 2026 by a third pass: 13 sources re-opened on the publishers' sites, every projection row recomputed from the model's formulas, one open flag closed (31 U.S.C. 3124, Treasury interest is free of state tax) and one stale count corrected. No figure changed.
 
-Site: index.html. Open items: review.html. How it was checked: audit.html. Sources: sources.html.
+Site: index.html. Suggestions (none decided): suggestions.html. Questions first: questions.html. Open items: review.html. How it was checked: audit.html. Sources: sources.html.
 """, encoding="utf-8")
 print(f"built {len(PAGES)} pages")
