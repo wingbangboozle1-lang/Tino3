@@ -42,7 +42,9 @@ ALLOWED_HOSTS = {
     # local government (jurisdiction A and jurisdiction B)
     "REDACTED.archive.REDACTED", "REDACTED.org", "www.REDACTED",
     "clerkrecorder.REDACTEDcounty.gov", "files.REDACTEDcounty.gov",
-    "electionresults.sos.ca.gov",
+    "electionresults.sos.ca.gov", "REDACTED.legistar.com",
+    # publication tooling (GitHub Pages documentation for the publishing-source rule)
+    "docs.github.com",
 }
 
 # Identifier patterns that must never appear in the published edition.

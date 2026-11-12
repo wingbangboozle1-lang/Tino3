@@ -77,6 +77,7 @@ LABEL = {"irs_estate": "Estate tax thresholds", "irs_2027": "2027 amounts", "irs
          "fred_ussthpi": "US house price index", "fred_nasdaqcom": "NASDAQ Composite",
          "uscode3124": "31 USC 3124", "uscode102": "26 USC 102", "irs_rmd": "RMD FAQ", "rtc17043": "RTC 17043",
          "civ1947_12": "CIV 1947.12", "civ1946_2": "CIV 1946.2",
+         "cityb_261020": "File 261020", "gh_pages_docs": "Pages source",
          "bls_cpi_annual": "CPI, annual 1977-2025",
          "hpi_a_annual": "Area A house prices, annual", "hpi_b_annual": "Area B house prices, annual",
          "gs10_annual": "10-year yield, annual", "nasdaq_annual": "NASDAQ, annual", "rtc51": "RTC 51",
@@ -153,7 +154,7 @@ def page(name, title, eyebrow, h1, lead, body):
 <a class="skip" href="#main">Skip to content</a>
 <aside><a class="brand" href="index.html">Inheritance decision dashboard<small>Property A and Property B</small></a>
 <nav aria-label="Main navigation">{nav}</nav>
-<div class="aside-note">Anonymised. Dollar figures rounded to $10. Reviewed 10 to 12 November 2026.</div></aside>
+<div class="aside-note">Anonymised (County A / City B). Dollar figures rounded to $10; local official links identify the jurisdictions. Reviewed 10 to 12 November 2026.</div></aside>
 <main id="main"><div class="top"><span>{eyebrow}</span><span>Reviewed 10 to 12 Nov 2026</span></div>
 <div class="hero"><div class="eyebrow">{eyebrow}</div><h1>{h1}</h1><p>{lead}</p></div>
 {body}
@@ -1249,7 +1250,7 @@ Under the owner's statement none of this applies; the table is kept as the conti
 {tbl("Property B reassessed at market value, house prices rising 4% a year", ["Year", "Market value", "Tax, no change", "Tax, reassessed", "Increase", "Rent, two units", "Net income, no change", "Net income, reassessed"], reset)}</section>
 <section><h2>Which rent cap actually binds</h2>
 <p>Every projection on this site grows Property B's sitting-tenant rent at {M["rates"]["rent_ctrl"] * 100:.1f}% a year, the local formula.
-That is right only if the local ordinance covers the building, and coverage was not looked up (FL-14, FL-32). If it does not cover it, the
+That is right only if the local ordinance covers the building, and coverage was not looked up (FL-14, FL-33). If it does not cover it, the
 statewide cap in Civil Code 1947.12 applies instead: 5% plus the change in the cost of living, or {M["verified"]["state_rent_max"] * 100:.0f}%,
 whichever is lower &mdash; {M["b_rentcap"]["state_rate"]:.1f}% a year at the modelled 2.5% inflation. Section 1947.12(d)(3) is what makes the two
 mutually exclusive: the state cap does not apply where a local ordinance already restricts increases to less than the state formula. The local
@@ -1311,7 +1312,7 @@ watch = [
  (["Initiative to repeal the 2021 inheritance rules (analysed as 25-0017)", "Failed. The Secretary of State recorded on 18 May 2026 that it lacked the signatures to qualify. It was not on the 3 November 2026 ballot.", "Would have restored the pre-2021 rule from 2027, including for transfers since 2021: inherited homes fully excluded, other property on the first $1 million of assessed value. A similar measure could be filed again.", f"If such a rule were enacted, Property A's 2045 tax would be {usd(LAW['tax_restored'])} instead of {usd(LAW['tax_live_current'])} or {usd(LAW['tax_rent_current'])}. Renting and moving in each gain about $600,000 to $700,000 over ten years. Selling still finishes first."], "C", S("sos_memo", "lao_250017", "sos_measures", asm=True)),
  (["Proposition 42, November 2026", "Voted on 3 November 2026. Unofficial count on 10 November 2026: 51.5% yes. Certification due 11 December 2026.", "Would bar new state taxes on personal property, including financial assets, and certain retroactive taxes.", "As counted, it would constrain future state taxes on financial assets; it does not change this decision."], "V", S("sos_results", "sos_measures")),
  (["Proposition 40, November 2026: one-time tax on certain taxpayers", "Rejected in the unofficial count on 10 November 2026: 52.6% no. Certification due 11 December 2026.", "A one-time state tax on certain taxpayers, wide enough to reach investment income.", "None, as counted. A similar measure can be filed again."], "V", S("sos_results")),
- (["City B rent legislation, File No. 261020", "Proposed 9 November 2026; not enacted.", "Would limit combined banked and capital-improvement rent increases on covered units to 10% a year.", "The model already grows sitting-tenant rent at 1.5% a year rather than banked stacks; no change to the ranking."], "V", S("cityb_rent")),
+ (["City B rent legislation, File No. 261020", "Introduced 15 September 2026; pending in the Land Use and Transportation Committee as of 12 November 2026; not enacted.", "Would cap combined banked and capital-improvement rent increases on rent-controlled units at 10% a year for three years.", "The model already grows sitting-tenant rent at 1.5% a year rather than banked stacks; if it applied, its ceiling would bind only in years a banked stack was imposed. No change to the ranking."], "V", S("cityb_rent", "cityb_261020")),
  (["Proposition 19 amount", "Law. Next adjustment February 2027.", "Rises by one year's house price change every second year, so it grows more slowly than house prices.", f"Modelled. The amount is {usd(A45['amount'])} in 2045 at 4% growth."], "C", S("boe_lta25009", asm=True)),
  (["Basis reset at death", "Law. No pending change was verified.", "If the reset were limited, a sale after inheriting would be taxed on the gain since the parents bought.", BLANK], "U", S("irs_basis", flag=True)),
  (["Solar tariff", "Law. 20 years from connection for older systems.", "After that the home moves to the current tariff and the bill credit shrinks.", BLANK], "U", S("cpuc_nem", flag=True)),
@@ -1326,7 +1327,7 @@ heir = [
  (["Withdrawals from an inherited traditional account", "Taxable to the heir", "Taxed as income when withdrawn, except any part that was already taxed as basis, or a qualified distribution from a designated Roth account."], "V", S("irs_rmd")),
  (["Estate tax above the exclusion", "Paid by the estate, before distribution", "Due with Form 706 nine months after the death. It reduces what the heirs receive but is not the heirs' tax. California and its cities add nothing."], "V", S("irs_estate", "irs_i706", "rtc13301")),
 ]
-body = f"""
+taxes_body = f"""
 <section><h2>Federal rules</h2>{tbl("Federal estate, gift and income tax rules that bear on the decision", ["Rule", "Figure", "Note"], fed)}{LEGEND}</section>
 <section><h2>State and local rules</h2>{tbl("California and local rules", ["Rule", "Figure", "Note"], st)}</section>
 <section><h2>Federal estate tax: threshold history</h2>
@@ -1474,7 +1475,7 @@ PAGES["economy.html"] = page("economy.html", "Year-by-year economy", "Year-by-ye
                              "The official annual record from 1977 to 2025, replayed and resampled over fifty years, so the plan rests on real sequences rather than one constant rate.", body)
 
 PAGES["taxes.html"] = page("taxes.html", "Tax, thresholds, law watch", "Tax and law", "Rules, thresholds and what may change",
-                           "Federal, state and local. Each rule was read on the official publisher's site.", body)
+                           "Federal, state and local. Each rule was read on the official publisher's site.", taxes_body)
 
 # ------------------------------------------------------------------------------------------------ inheritance
 steps = [
@@ -1523,8 +1524,8 @@ fl = [
  ("FL-11", "One year of Property B's assessed value", "It rose slightly less than the state factor. The year is reported to the owner privately.", "The assessor's roll history", "boe_lta26002"),
  ("FL-12", "2026 figures", "No 2026 tax bill for Property A and no 2026 assessed value or bill for Property B were supplied.", "The 2026-27 bills", "boe_lta26002"),
  ("FL-13", "Solar connection date and tariff", "The 20-year period decides when the electricity credit ends.", "The utility's interconnection letter", "cpuc_nem"),
- ("FL-14", "Whether the rent ordinance covers Property B", "Depends on the date of first occupancy and the legal unit count. No parcel lookup was performed. Every projection assumes it does: rent grows 1.5% a year. If it does not, the statewide cap governs at 7.5%; the Property B page now shows both paths (FL-32).", "Certificate of occupancy; Rent Board record", "cityb_rent"),
- ("FL-32", "Which rent cap binds on Property B, and why", "FL-14 asks whether the local ordinance covers the building. This is the second half: Civil Code 1947.12(d) also exempts housing with a certificate of occupancy issued within the previous 15 years, separately alienable units and corporate owners. Which exemption applies decides whether the 1.5% or the 7.5% path is the lawful one, and by 2045 the ten-year difference is $3,398,970.", "Certificate of occupancy; title; Rent Board record", "civ1947_12"),
+ ("FL-14", "Whether the rent ordinance covers Property B", "Depends on the date of first occupancy and the legal unit count. No parcel lookup was performed. Every projection assumes it does: rent grows 1.5% a year. If it does not, the statewide cap governs at 7.5%; the Property B page now shows both paths (FL-33).", "Certificate of occupancy; Rent Board record", "cityb_rent"),
+ ("FL-33", "Which rent cap binds on Property B, and why", "FL-14 asks whether the local ordinance covers the building. This is the second half: Civil Code 1947.12(d) also exempts housing with a certificate of occupancy issued within the previous 15 years, separately alienable units and corporate owners. Which exemption applies decides whether the 1.5% or the 7.5% path is the lawful one, and by 2045 the ten-year difference is $3,398,970.", "Certificate of occupancy; title; Rent Board record", "civ1947_12"),
  ("FL-15", "Result of the 3 November 2026 measures", "Results are not certified; certification is due 11 December 2026. The unofficial count on 10 November 2026 had Proposition 42 ahead with 51.5% yes and Proposition 40 rejected with 52.6% no.", "The certified statement of vote", "sos_results"),
  ("FL-24", "Any mortgage or debt on either property", "The model assumes both properties are unencumbered. A loan would have to be repaid from a sale, or would reduce the room under the federal exclusion.", "Loan statements or the trustee's schedule of assets", "irs_estate"),
  ("FL-25", "Privacy precision of the roll tables", "At the owner's instruction of 12 November 2026 the roll values and bills are published to the nearest $10. That is close enough to the county record that a reader who knows the record could match it; the tier can be raised to $1,000 or $10,000 with one command.", "The owner's choice of tier", "boe_lta26002"),
@@ -1542,6 +1543,8 @@ fl = [
  ("FL-23", "Sources read as excerpts", "Twelve sources were read as excerpts served from the official domain, not as whole documents. They are marked in the source library.", "Open each link", "irs_i706"),
  ("FL-32", "The lesser-of rule in a crash, and decline-in-value relief", "The model applies the 2% assessment cap and does not apply RTC 51(a)(2), which assesses at the lesser of the factored base year value and full cash value. Before a death the rule needs a fall of about 82% to bite; after a death, when the taxable value is reset to market value, any fall counts. The economy page measures it: three of sixteen years in a replayed crash, about $3,500 in total in that case. The county's own decline-in-value review, which a owner may request, was not read.", "The county assessor's decline-in-value page, and a decision on modelling it", "rtc51"),
  ("FL-31", "California's 1% additional tax above $1,000,000", "The one-time-gain rate is 20% federal, 3.8% net investment income tax and 12.3% California. RTC 17043 adds 1% on taxable income above $1,000,000, which the 12.3% bracket rate does not include. Applied to the gain alone it lowers the 2045 stock result by $36,170 and the ranking holds (C-14); other income would make it larger.", "Adopt the surcharge in the model, or keep it as the published sensitivity", "rtc17043"),
+ ("FL-34", "The publishing source for this site", "GitHub Pages reports build_type=legacy, source main /. Every API attempt to set the source to the Actions artifact returned HTTP 403 (resource not accessible by integration). The live site currently serves the intended artifact (retired routes return content-free notices; checked 12 November 2026), but no technical guarantee holds if a legacy build re-deploys.", "The owner sets Settings → Pages → Source to GitHub Actions, or grants the integration permission once", "gh_pages_docs"),
+ ("FL-35", "The Treasury anchor in the model", "The model holds the 10-year yield constant at 4.88%, the 9 November 2026 print. The daily curve published on 12 November 2026 reads 5.10% (10 November: 4.98%). Re-run at 5.10%, the 2045 sell-and-buy-Treasuries result moves from $8,761,920 to $8,897,290, still second to stocks by about $1,156,000; the ranking does not change.", "Adopt 5.10% (or the decision date's print) as the anchor, or keep 4.88% as a dated scenario; the owner decides", "treasury_cmt"),
 ]
 rows = [([i, item, why, BLANK, fix], "U", S(src)) for i, item, why, fix, src in fl]
 body = f"""<div class="note"><strong>Nothing on this page blocks the plan.</strong> These are the items that could not be confirmed from an official source, or that only the owner can settle.

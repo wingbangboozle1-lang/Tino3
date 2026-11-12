@@ -25,11 +25,11 @@ replaced by a content-free withdrawal notice, so a stale URL cannot return an ol
 | `stress.html` | Black swans, part 2: verified 1929, Great Inflation, oil-shock, dot-com, Great Recession and COVID episodes re-run against the 2045 inheritance; the playbook |
 | `black-swans.html` | Black swans, part 1: baseline anchors (Fed, SSA, CBO), fifty years of official state inflation data, fixed-amount erosion, and the single-input stress cases |
 | `inheritance.html` | Statutory timeline after the death, with deadlines |
-| `review.html` | 31 flagged items (unverified values left blank, owner questions, record irregularities) and four privacy disclosures |
+| `review.html` | 34 flagged items (unverified values left blank, owner questions, record irregularities, the publishing-source finding, the Treasury anchor) and four privacy disclosures |
 | `audit.html` | Independent verification: twelve corrections to the first quantitative edition, repository review |
 | `suggestions.html` | Four paths and 23 suggestions with effort, privacy cost and status; four decision gates; the privacy-precision choice |
 | `questions.html` | 39 questions with status: what is settled and linked to its publisher, what is missing, the step that closes it, and what changes if the answer differs |
-| `sources.html` | 75 official sources, what each one supports and how each was checked |
+| `sources.html` | 83 official sources, what each one supports and how each was checked |
 
 ## How the site is organised
 
@@ -69,6 +69,8 @@ every projection row from the model's own formulas (all agreed to the nearest $1
 stale source count. It found no wrong figure. What it did not do is listed on `audit.html`. `assets/sources.json` records what each document verifies. A fourth pass on 12 November 2026 added the two rules the brief asks about that the edition had never covered (an inheritance is not income to the heir; what happens to an inherited retirement account) and removed two source badges that pointed at an unrelated IRS page. A further pass the same day re-opened fifteen publisher pages, confirmed every published figure, and added one finding: the 1% California tax above $1,000,000 of taxable income (RTC 17043) is not in the 12.3% rate used in the model, so it is published as a sensitivity (the 2045 stock result falls by $36,170 and the ranking holds). Anything that could not
 be verified is left blank or published on the Flagged for Review page — never inferred.
 
+The integrating pass on 12 November 2026 (this repository's current state) did the following, in addition to re-running all gates: (i) merged the open year-by-year economy pull request (PR #62), which had been built on the same base; (ii) found and repaired a defect in that pull request's renderer that built `taxes.html` from the economy page's body, leaving the published tax page a duplicate of the economy page — the tax page now renders its own content, and the rebuilt page differs from what the pull request would have published; (iii) re-opened the key federal and state publisher pages in this session (IRS estate tax and the 2027 release IR-2026-133, the inherited-basis FAQ, 26 U.S.C. 102, the Proposition 19 page and Letters 2025/009 and 2026/002, RTC 63.2, RTC 480, RTC 13301, RTC 17043, Civil Code 1947.12, the State Controller, the LAO analysis and SOS Memorandum 26138, the CDI FAIR Plan release, the Treasury daily yield curve, both local government pages) and confirmed the published figures; (iv) recorded two new findings as flags: FL-34 (GitHub Pages serves this site from the `main` branch root — `build_type=legacy` — and the integration token cannot switch it to the Actions artifact, HTTP 403; owner action required) and FL-35 (the model's 4.88% Treasury anchor is the 9 November print; the curve read on 12 November 2026 is 5.10%, moving the Treasuries outcome by about $135,000 with no change in the ranking); (v) renumbered the rent-cap flag FL-32 to FL-33 to close a duplicate identifier. The economy page's five official series and the 2,000-path bootstrap were produced by the economy session itself from the publishers' exports on 12 November 2026 and were spot-checked, not independently recomputed, by this pass.
+
 ## Build
 
 ```bash
@@ -88,7 +90,7 @@ was checked.
 
 ## Data
 
-`assets/sources.json` — source ledger (81 entries, each with the words relied on and how it was checked).
+`assets/sources.json` — source ledger (83 entries, each with the words relied on and how it was checked).
 `assets/privacy.json` — the published precision for assessment-roll values and tax bills.
 `assets/data/model.json` — every figure on the site.
 `assets/data/property_a.csv`, `property_b.csv`, `decision.csv` — the same numbers for offline work.
@@ -102,8 +104,15 @@ sources today and are flagged as unverified.
 ## Coordination
 
 `COORDINATION.md` is the shared task board for parallel sessions, including the handoff log, the privacy
-remediation record and the deployment result. The session of 12 November 2026 claimed the questions and
-suggestions pages, the roll tables and the privacy setting there before editing anything.
+remediation record and the deployment result. The integrating session of 12 November 2026 claimed the
+restoration of the quantitative dashboard, the merge of PR #62 and the publication there before editing
+anything. Two facts worth stating plainly: (1) on 12 November 2026 PR #64 replaced this site with a
+general-only framework that published no property figures at all; the owner's brief for the integrating
+session re-states the instruction to publish the rounded analysis, so the quantitative edition is what you
+see now. The general-framework text lives in this repository's history (and the general rules remain on every
+page); (2) GitHub Pages still reports the site as built from the `main` branch root (FL-34), so the served
+site today is the artifact built by `.github/workflows/pages.yml`, verified by fetching retired routes after
+the deploy — but that arrangement rests on the current deployment, not on the Pages setting.
 
 ## Independent cross-check (`plan/`)
 
