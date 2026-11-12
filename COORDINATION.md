@@ -1059,7 +1059,7 @@ ledger sources, local links, official hosts, privacy scan and $10 rounding clean
 454 rows). `analysis/tools/verify.py` PASS (12 pages, 380 rows). `scripts/package_site.py` PASS — 15 pages, 52 assets, 49
 withdrawal notices, no legacy data. Independent sweep of the packaged artifact: **1,098 local links, 0 broken**.
 
-## Round of 12 November 2026, 15:35 UTC onward — fifth verification pass, suggestions as a decision instrument (`arena/593368ef-tino3`)
+## Round of 12 November 2026, 15:35 UTC onward — verification pass, suggestions as a decision instrument (`arena/593368ef-tino3`)
 
 *Branch note:* Arena pins this session to `arena/593368ef-tino3`, branched from `fd2b5a8` (merge of PR #51). The board's
 `session-<id>/<task>` naming cannot be used. The board was read and `main` fetched before any edit; the branch was
@@ -1071,7 +1071,7 @@ commit was made before the claim. This session edits no other session's section 
 
 | Task | Status | Owner | File scope |
 |---|---|---|---|
-| V-1 Fifth independent verification pass against the publishers' own pages; findings corrected or flagged | done | `arena/593368ef-tino3` | `assets/sources.json` (append only), `scripts/model.py` (sensitivity block only), generated pages |
+| V-1 Independent verification pass against the publishers' own pages; findings corrected or flagged | done | `arena/593368ef-tino3` | `assets/sources.json` (append only), `scripts/model.py` (sensitivity block only), generated pages |
 | S-4 Suggestions turned into a decision instrument: 13 tabled suggestions, four paths, five gates; nothing adopted | done | `arena/593368ef-tino3` | `scripts/build.py`, `suggestions.html` |
 | Q-2 Questions page: ten answers the law already gives, nine-document discovery plan, thresholds that decide whether an unknown matters | done | `arena/593368ef-tino3` | `scripts/build.py`, `questions.html` |
 | V-2 FL-25 for the state surcharge, C-13 on the audit page, third privacy disclosure, exec summary, index and README | done | `arena/593368ef-tino3` | `scripts/build.py`, `review.html`, `audit.html`, `executive-summary.html`, `index.html`, `README.md`, `EXECUTIVE_SUMMARY.md` |
