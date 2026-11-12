@@ -1719,13 +1719,13 @@ The published precision for assessment-roll values is tier 1 (nearest $10), chos
 
 | Task | Status | Owner | Scope |
 |---|---|---|---|
-| E-671 Executive summary outlining important details: two-property distinction, cost drivers, inheritance timeline 2040-2050, tax thresholds, black-swan note, next steps | claimed | `arena/671913cc-tino3` | `EXECUTIVE_SUMMARY.md`, `executive-summary.html` via `scripts/build.py`, `README.md` |
-| S-671 Suggestions for review: dedicated review section with selection gate; site and decision improvement proposals reviewable before implementation | claimed | `arena/671913cc-tino3` | `suggestions.html` via `scripts/build.py` |
-| Q-671 Questions, information and answers: clear list of facts to resolve, what we have vs missing, official answers where available, discovery suggestions | claimed | `arena/671913cc-tino3` | `questions.html` via `scripts/build.py` |
-| B-671 Black-swan economic conditions: separate stress section mimicking real-world irregular growth and inflation over 50 years | claimed | `arena/671913cc-tino3` | `stress.html`, `projections.html` via `scripts/build.py` |
-| P-671 Step-by-step trust inheritance (2040-2050) and year-by-year projection method: property tax, assessed value, insurance, utilities, maintenance | claimed | `arena/671913cc-tino3` | `inheritance.html`, `costs.html`, `projections.html`, `property-a.html`, `property-b.html` via `scripts/build.py` |
-| V-671 Line-by-line verification against official sources; every factual row source-linked; blank unverified; privacy boundary | claimed | `arena/671913cc-tino3` | `assets/sources.json`, `scripts/verify.py`, `scripts/privacy_boundary.py`, `scripts/package_site.py` |
-| PUB-671 PR to main, merge, Pages deploy verification, coordination record | claimed | `arena/671913cc-tino3` | `COORDINATION.md` (this section only), `.github/workflows/*` if needed |
+| E-671 Executive summary outlining important details: two-property distinction, cost drivers, inheritance timeline 2040-2050, tax thresholds, black-swan note, next steps | done | `arena/671913cc-tino3` | `EXECUTIVE_SUMMARY.md`, `executive-summary.html` via `scripts/build.py`, `README.md` |
+| S-671 Suggestions for review: dedicated review section with selection gate; site and decision improvement proposals reviewable before implementation | done | `arena/671913cc-tino3` | `suggestions.html` via `scripts/build.py` |
+| Q-671 Questions, information and answers: clear list of facts to resolve, what we have vs missing, official answers where available, discovery suggestions | done | `arena/671913cc-tino3` | `questions.html` via `scripts/build.py` |
+| B-671 Black-swan economic conditions: separate stress section mimicking real-world irregular growth and inflation over 50 years | done | `arena/671913cc-tino3` | `stress.html`, `projections.html` via `scripts/build.py` |
+| P-671 Step-by-step trust inheritance (2040-2050) and year-by-year projection method: property tax, assessed value, insurance, utilities, maintenance | done | `arena/671913cc-tino3` | `inheritance.html`, `costs.html`, `projections.html`, `property-a.html`, `property-b.html` via `scripts/build.py` |
+| V-671 Line-by-line verification against official sources; every factual row source-linked; blank unverified; privacy boundary | done | `arena/671913cc-tino3` | `assets/sources.json`, `scripts/verify.py`, `scripts/privacy_boundary.py`, `scripts/package_site.py` |
+| PUB-671 PR to main, merge, Pages deploy verification, coordination record | done | `arena/671913cc-tino3` | `COORDINATION.md` (this section only), `.github/workflows/*` if needed |
 
 Not in scope: `plan/**`, `analysis/**`, direct edit of open PR #62's `economy.html`/`economy.json`/`economy.py`; if a file needs a change owned by another session, request logged not edited.
 
@@ -1752,3 +1752,12 @@ Privacy: Property A / Property B only. No name, address, ZIP, parcel, rent, asse
 
 **Next:** create PR to `main`, merge, verify Pages deploy, record result here and update board status.
 
+
+### Publication verification `arena/671913cc-tino3` — 2026-11-12
+
+- **PR:** [#67](https://github.com/wingbangboozle1-lang/Tino3/pull/67) `arena/671913cc-tino3` → `main` — merged 2026-11-12T22:18:40Z, merge commit `cc5a2e1`
+- **Checks on PR:** `Verify public edition` — success (12s)
+- **Post-merge on `main`:** `Verify public edition` — success (9s); `Deploy privacy-safe GitHub Pages artifact` — success (28s); `pages build and deployment` — success (26s)
+- **Pages API:** `status: built`, `source: main:/`, `https_enforced: true`, `https://wingbangboozle1-lang.github.io/Tino3/`
+- **Live check (cache-busted):** `executive-summary.html` shows outline with six evidence groups, four paths, five steps and trust sequencing; `suggestions.html` shows S-01 to S-10 and How to review + Selection gate; `questions.html` shows 14 questions, have-vs-missing table (5 categories) and seven discovery steps; `stress.html` shows Why smooth line misleads, 5 episodes, Black-swan conditions (5 rows) and Private method (4 irregular types); `projections.html` shows Year-by-year worksheet (3 rows, 8 cols); `inheritance.html` shows 5-phase trust sequence. No dollar amount outside the three allowed thresholds and no location/ZIP/parcel/email in artifact.
+- **Next reconciliations:** open PR #62 (`arena/cd0dd59b-tino3`, year-by-year economy) remains open and untouched by this session; review against this privacy boundary before any merge. Other in-progress branches (`0532f9f2`, `b709c64d`, `e45a26be`) are independent and not merged here.
