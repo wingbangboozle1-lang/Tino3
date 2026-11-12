@@ -1,6 +1,7 @@
 # Safety boundary for GitHub Pages when its source is the repository root.
 # The Actions artifact uses a separate allowlist; this excludes all other tracked material
 # from the legacy Jekyll publisher until the repository setting can be changed.
+theme: null
 exclude:
   - analysis
   - plan

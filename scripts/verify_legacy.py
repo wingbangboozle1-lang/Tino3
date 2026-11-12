@@ -26,6 +26,7 @@ CONFIG = (
     "# Safety boundary for GitHub Pages when its source is the repository root.\n"
     "# The Actions artifact uses a separate allowlist; this excludes all other tracked material\n"
     "# from the legacy Jekyll publisher until the repository setting can be changed.\n"
+    "theme: null\n"
     "exclude:\n" + "".join(f"  - {entry}\n" for entry in EXCLUDED)
 )
 PUBLIC_FILES = set(PAGES + ASSETS)
