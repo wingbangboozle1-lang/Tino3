@@ -4,9 +4,11 @@
 What this file guarantees
   * Every dollar figure written out is rounded to the nearest $10.
   * No name, address, ZIP code, parcel number or city name appears here.
-  * Assessment-roll values and tax bills are public records that can be matched back to a parcel,
-    so they enter this public model GENERALISED: assessed values to the nearest $10,000 and tax
-    bills to the nearest $100. Nothing below can be matched to a roll entry.
+  * Assessment-roll values and tax bills are public records. They are published at the precision
+    chosen by the owner in assets/privacy.json. Tier 1 is the owner's instruction of
+    12 November 2026: every roll value and bill to the nearest $10. Tier 2 rounds them to the
+    nearest $1,000 and tier 3 to the nearest $10,000. The tier is part of the data, so the build
+    is reproducible at whatever tier the owner has chosen, and the site states the tier in use.
   * Every assumption has an id, a value, a reason and an official reference (see ASSUMPTIONS).
 
 Output: assets/data/model.json and three CSV files, consumed by scripts/build.py.
@@ -18,31 +20,65 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "assets" / "data"
+CONFIG = ROOT / "assets" / "privacy.json"
+
+TIER_NAME = {1: "roll values to the nearest $10", 2: "roll values to the nearest $1,000",
+             3: "roll values to the nearest $10,000"}
+TIER_ROUND = {1: 10, 2: 1_000, 3: 10_000}
+_cfg = json.loads(CONFIG.read_text(encoding="utf-8"))
+TIER = int(_cfg["tier"])
+if TIER not in TIER_ROUND:
+    raise SystemExit(f"assets/privacy.json: tier must be 1, 2 or 3, not {TIER!r}")
+ROLL_ROUND = TIER_ROUND[TIER]
 
 
 def r10(x: float) -> int:
     return int(round(float(x) / 10.0) * 10)
 
 
+def roll(x: float) -> int:
+    """A roll value at the owner's chosen precision. Never finer than $10."""
+    return int(round(float(x) / ROLL_ROUND) * ROLL_ROUND)
+
+
 # ---------------------------------------------------------------------------------------------
-# Owner-supplied inputs (not independently verified). Roll-derived values are generalised.
+# Owner-supplied records (not independently verified), entered at the owner's chosen precision.
+# Percentage changes are computed from these figures, so they stay the same at every tier.
 # ---------------------------------------------------------------------------------------------
+ROLL_A = {                                   # (tax bill, tax assessment) by year, owner's records
+    2014: (5_970, 440_310), 2015: (6_130, 449_100), 2016: (6_410, 455_950), 2017: (6_380, 465_070),
+    2018: (6_380, 474_370), 2019: (6_570, 483_850), 2020: (6_570, 493_530), 2021: (6_660, 498_640),
+    2022: (6_760, 508_610), 2023: (6_920, 518_790), 2024: (7_000, 529_160), 2025: (7_210, 539_740),
+    2026: (None, 550_540),                   # the 2026 bill was not supplied
+}
+ROLL_B = {
+    2016: (1_680, 96_560), 2017: (1_740, 98_490), 2018: (2_060, 100_460), 2019: (2_130, 102_470),
+    2020: (2_200, 104_510), 2021: (2_070, 105_600), 2022: (2_110, 107_660), 2023: (2_180, 109_810),
+    2024: (2_320, 112_010), 2025: (2_440, 114_250),
+}
 IN = {
     "a_value": 3_100_000,     # owner estimate, November 2026
-    "a_av_2026": 550_000,     # assessed value, generalised to the nearest $10,000
-    "a_av_2025": 540_000,
-    "a_bill_2025": 7_200,     # tax bill, generalised to the nearest $100
+    "a_av_2026": roll(ROLL_A[2026][1]),
+    "a_av_2025": roll(ROLL_A[2025][1]),
+    "a_bill_2025": roll(ROLL_A[2025][0]),
     "a_water": 1_500,         # $100-$150 a month; midpoint
     "a_electric": -180,       # solar: owner reports a $10-$20 monthly credit; midpoint
     "a_ins_guess": 1_500,     # owner's guess, no quote
     "b_value": 1_800_000,     # owner estimate, November 2026
-    "b_av_2025": 110_000,     # assessed value, generalised to the nearest $10,000
-    "b_bill_2025": 2_400,     # tax bill, generalised to the nearest $100
+    "b_av_2025": roll(ROLL_B[2025][1]),
+    "b_bill_2025": roll(ROLL_B[2025][0]),
     "b_rent_mo": 7_150,       # two rented units, combined
     "b_water": 4_380,         # $330-$400 a month for the building; midpoint
     "b_electric": 600,        # $30-$70 a month; midpoint
     "b_ins_guess": 1_500,     # owner's guess, no quote
 }
+
+# The annual inflation factor the Board of Equalization published for each year, used to check the
+# owner's record against the 2% cap. None means the factor was not read for that year.
+STATE_FACTOR_A = {2015: 1.998, 2016: 1.525, 2017: 2.0, 2018: 2.0, 2019: 2.0, 2020: 2.0,
+                  2021: 1.036, 2022: 2.0, 2023: 2.0, 2024: 2.0, 2025: 2.0, 2026: 2.0}
+STATE_FACTOR_B = {2017: 2.0, 2018: 2.0, 2019: 2.0, 2020: 2.0, 2021: 1.0, 2022: 2.0, 2023: 2.0,
+                  2024: 2.0, 2025: 2.0}
 
 # ---------------------------------------------------------------------------------------------
 # Verified figures (source ids refer to assets/sources.json)
@@ -486,6 +522,31 @@ def build():
     # Current-year costs, side by side
     pa, pb = d["proj_a"][0], d["proj_b"][0]
     d["now"] = {"a": pa, "b": pb}
+
+    # ------------------------------------------------------------------------------------------
+    # Roll history at the owner's chosen precision. Year-over-year changes are computed from the
+    # owner's figures before rounding, so they stay exact at every tier; the dollar columns are
+    # rounded. "factor" is the state inflation factor for the year and "match" says whether the
+    # owner's record follows it within one basis point.
+    # ------------------------------------------------------------------------------------------
+    def history(hist, factors):
+        rows, prev = [], None
+        for y in sorted(hist):
+            bill, av = hist[y]
+            bill_pct = None if (bill is None or prev is None or not prev[0]) else 100.0 * (bill / prev[0] - 1)
+            av_pct = None if prev is None else 100.0 * (av / prev[1] - 1)
+            factor = factors.get(y)
+            rows.append({"year": y, "bill": (roll(bill) if bill is not None else None),
+                         "assessed": roll(av), "bill_pct": None if bill_pct is None else round(bill_pct, 2),
+                         "assessed_pct": None if av_pct is None else round(av_pct, 2),
+                         "factor": factor,
+                         "match": None if (factor is None or av_pct is None) else abs(av_pct - factor) <= 0.01})
+            prev = (bill, av)
+        return rows
+
+    d["roll_a"] = history(ROLL_A, STATE_FACTOR_A)
+    d["roll_b"] = history(ROLL_B, STATE_FACTOR_B)
+    d["privacy"] = {"tier": TIER, "roll_round": ROLL_ROUND, "description": TIER_NAME[TIER]}
 
     OUT.mkdir(parents=True, exist_ok=True)
 
