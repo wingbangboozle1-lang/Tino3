@@ -18,7 +18,7 @@ replaced by a content-free withdrawal notice, so a stale URL cannot return an ol
 | `executive-summary.html` | The decision, five numbers, what would change it |
 | `property-a.html` | The residence to inherit: inputs, assessment-factor check, what the inheritance does to the assessed value |
 | `property-b.html` | The rental: inputs, tax-bill breakdown, rent rules, reassessment exposure if it is in the same estate |
-| `taxes.html` | Federal, California and local rules, verified; pending law changes |
+| `taxes.html` | Federal, California and local rules, verified; what the heir receives and what is still taxed; pending law changes |
 | `projections.html` | Year-by-year value, assessed value, tax and running costs, 2026–2060, and the ten years after an inheritance |
 | `decision.html` | Sell vs rent vs move in for 2040/2045/2050, break-evens, sensitivities, the assumption register |
 | `stress.html` | Black swans, part 2: verified 1929, Great Inflation, oil-shock, dot-com, Great Recession and COVID episodes re-run against the 2045 inheritance; the playbook |
@@ -28,7 +28,7 @@ replaced by a content-free withdrawal notice, so a stale URL cannot return an ol
 | `audit.html` | Independent verification: twelve corrections to the first quantitative edition, repository review |
 | `suggestions.html` | Proposed improvements — none decided; review and choose before implementing anything |
 | `questions.html` | Questions, information and answers needed before any decision: have / lack / how to discover |
-| `sources.html` | 68 official sources, what each one supports and how each was checked |
+| `sources.html` | 70 official sources, what each one supports and how each was checked |
 
 ## How the site is organised
 
@@ -54,10 +54,10 @@ which one a reader is looking at.
 
 ## Verification standard
 
-Every rule on the site was retrieved from the publishing agency's own domain on 10 or 11 November 2026 (see the source library for the session that opened each document) and linked
+Every rule on the site was retrieved from the publishing agency's own domain between 10 and 12 November 2026 (see the source library for the session that opened each document) and linked
 from the row that uses it. Two independent passes re-checked the edition on 11 November 2026; the third pass re-opened thirteen ledger entries on the publishers' sites, recomputed
 every projection row from the model's own formulas (all agreed to the nearest $10), closed one open flag with 31 U.S.C. 3124 (Treasury interest is exempt from state tax) and corrected a
-stale source count. It found no wrong figure. What it did not do is listed on `audit.html`. `assets/sources.json` records what each document verifies. Anything that could not
+stale source count. It found no wrong figure. A fourth pass on 12 November 2026 added the two rules the brief asks about that the edition had never covered (an inheritance is not income to the heir; what happens to an inherited retirement account) and removed two source badges that pointed at an unrelated IRS page. What it did not do is listed on `audit.html`. `assets/sources.json` records what each document verifies. Anything that could not
 be verified is left blank or published on the Flagged for Review page — never inferred.
 
 ## Build
@@ -75,7 +75,7 @@ ledger entry that does not say how it was checked.
 
 ## Data
 
-`assets/sources.json` — source ledger (67 entries, each with the words relied on and how it was checked).
+`assets/sources.json` — source ledger (70 entries, each with the words relied on and how it was checked).
 `assets/data/model.json` — every figure on the site.
 `assets/data/property_a.csv`, `property_b.csv`, `decision.csv` — the same numbers for offline work.
 
