@@ -23,7 +23,9 @@
   "rate_b_2025": 0.0118268325,
   "rate_a_low": 0.011258,
   "rate_a_high": 0.012409,
-  "treasury_10y": 0.0488
+  "treasury_10y": 0.0488,
+  "state_rent_base": 0.05,
+  "state_rent_max": 0.1
  },
  "fixed": {
   "a": 840,
@@ -135,6 +137,15 @@
    "reason": "60% of the assumed 2.5% inflation, which is the published formula. The current allowed increase is 1.6%.",
    "src": [
     "cityb_rent"
+   ]
+  },
+  {
+   "id": "state_rent",
+   "item": "Rent growth if the local ordinance does NOT cover Property B",
+   "value": "7.5% a year, to a 10% ceiling",
+   "reason": "The statewide cap is 5% plus the change in the cost of living, or 10%, whichever is lower. With 2.5% inflation that is 7.5%. It applies only where the local ordinance does not; the coverage question is open.",
+   "src": [
+    "civ1947_12"
    ]
   },
   {
@@ -2385,6 +2396,40 @@
    "net_reset": 28720
   }
  ],
+ "b_rentcap": {
+  "state_rate": 7.5,
+  "local_rate": 1.5,
+  "state_ceiling": 10.0,
+  "rows": [
+   {
+    "year": 2040,
+    "rent_local": 105680,
+    "rent_state": 236160,
+    "diff_first_year": 130480,
+    "ten_year_local": 1074560,
+    "ten_year_state": 3173920,
+    "ten_year_diff": 2099370
+   },
+   {
+    "year": 2045,
+    "rent_local": 113850,
+    "rent_state": 339040,
+    "diff_first_year": 225190,
+    "ten_year_local": 1157600,
+    "ten_year_state": 4556580,
+    "ten_year_diff": 3398970
+   },
+   {
+    "year": 2050,
+    "rent_local": 122650,
+    "rent_state": 486730,
+    "diff_first_year": 364080,
+    "ten_year_local": 1247070,
+    "ten_year_state": 6541560,
+    "ten_year_diff": 5294490
+   }
+  ]
+ },
  "estate": [
   {
    "year": 2026,
