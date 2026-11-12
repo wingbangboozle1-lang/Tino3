@@ -1513,3 +1513,54 @@ The live-site checks prove reachability and content, not visual layout; no brows
 - **After the merge, on `main`:** `Verify static site` run 43252651594 — success; `Deploy GitHub Pages` run 43252651605 — success; legacy `pages build and deployment` run 43252650735 — success.
 - `main` moved again under this session before this record was written (PR #60, `arena/542472a5-tino3`, the #58 merge record); this section was rebased onto it. No line of any other session's section was changed.
 - **Close-out:** 5C-1, 5C-3, 5C-4 are done; 5C-2 is recorded as superseded by PR #58 and publishes nothing from this branch. Nothing else is claimed by this session. PR **#57** (root edition — the last brief item set, inheritance-not-income and insurer of last resort) remains open at the time of writing and belongs to its owner session, not to this one.
+
+## Session `arena/1143f682-tino3` — parallel-session collision: work already merged; README conflict markers found and fixed; one rebase error self-corrected (12 November 2026)
+
+*Branch note:* Arena pins this session to `arena/1143f682-tino3`; `session-<id>/<task>` naming cannot be used.
+This session claimed S-1/S-2/S-3/S-4 at 15:38 UTC against `fd2b5a8`, then against `aa4a3f7` at 15:50 UTC. While that work was
+in progress, PRs #52, #53, #54 and #55 merged to `main` and covered the same ground. This section records what happened,
+what was verified, and what was dropped. Nothing in this section re-publishes another session's work. The published site
+never carried any of the defects repaired here (`COORDINATION.md` and `README.md` are not in the package allowlist).
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| S-1 Baseline re-run and review of PR #52's pages | done | `arena/1143f682-tino3` | none (read-only) |
+| S-2 Root-edition gaps logged by `4e96512c` (R-4E-2, R-4E-3) | closed as duplicate — merged by other sessions first; see log | `arena/1143f682-tino3` | none (duplicates dropped) |
+| S-3 Review of the merged edition against the brief; findings | done — findings below, two fixed, two logged | `arena/1143f682-tino3` | `README.md` (conflict markers, stale rows); this section |
+| S-4 Checks, pull request to `main`, merge, Pages deploy verification, result logged | see the merge record on PR #57 and the branch tip | `arena/1143f682-tino3` | `COORDINATION.md` (this section only) |
+
+Not touched: `plan/**`, `analysis/**`, `.github/workflows/*`, `scripts/*`, `assets/*` (this branch's differences from `main` are `README.md` and this section only), every other session's section of this board.
+Privacy: no name, street address, postal code, parcel number or unrounded figure appears in anything this session writes; nothing private from the brief was copied into the board.
+
+### Log (`arena/1143f682-tino3`)
+
+- 15:38 UTC — board read in full; claim committed and pushed before any other file was edited. While pushing, `main` had moved to `aa4a3f7` (PR #52, `arena/16e602da-tino3`): a Suggestions-for-review page and a Questions-before-deciding page already existed, so this session's planned suggestions page was dropped as a duplicate.
+- 15:50 UTC — claim revised; rebase onto `aa4a3f7` hit a `COORDINATION.md` conflict, resolved by keeping `main`'s text byte for byte and appending the revised claim. Baseline re-run: `scripts/verify.py` PASS (15 pages, 521 rows), `plan/` 10 pages PASS, `analysis/` 12 pages PASS, packager PASS.
+- 15:55–16:10 UTC — four documents opened on the publishers' own domains for the R-4E-2/R-4E-3 patch (26 U.S.C. §102 at GovInfo; FTB gifts and inheritance, page dated 09/24/2025; IRS "Retirement topics — Beneficiary"; CDI "Top Ten Tips for Finding Residential Insurance", read in full) and a patch prepared: two rows for the federal table, a FAIR Plan note for the Property B landlord-insurance row, a matching FL-06 rewrite, four ledger entries.
+- 16:20 UTC — `main` moved to `60144a8` (merge of PR #55 with PRs #53 and #54 inside it). Line-by-line comparison of this session's patch against the new `main` showed **every item already merged**: the heir-receipt rules ("Receiving the inheritance — Not income to the heir", citing `uscode102`, checked on the publisher's domain 12 November 2026 by `f7e49cdb-tino3`), the inherited-retirement-account rows ("Ten years to empty", `irs_rmd`), the FAIR Plan as insurer of last resort with the $3,000,000 residential cap (FL-27 and `cdi_fairplan`/`cdi_tips`, opened 12 November 2026 by the same session), the survey-lists-no-landlord-type note (`questions.html`, `suggestions.html`), and the RTC 17043 finding. This session's duplicate sources and rows (`usc102`, `irs_retire`, `cdi_fairplan`-as-news-release) were therefore **dropped**; the PR #53/#54/#55 coverage is equivalent or stronger.
+- 16:25 UTC — rebase onto `60144a8`. While rebasing, a defect on `main` was found and confirmed with `git show origin/main:README.md`: **`README.md` on `main` contained literal committed merge-conflict markers in three hunks** (intro line, menu-groups paragraph, data-section ledger count), plus two stale duplicate page-table rows (questions 35→39, suggestions sixteen→20), a stale count (29→30 flagged items), and a menu description describing a "Start here" grouping that does not exist in `scripts/build.py`. Repaired on this branch: markers removed, menu text matched to `NAV_GROUPS`, duplicate rows deleted, counts corrected.
+- 16:40 UTC — first resolution of this board section was itself faulty: the intermediate file kept one `<<<<<<< HEAD` line that belonged to the superseded conflict hunk, and committed it (`da933e8`, amended to `3a00804`). It was caught and removed during the rebase onto `b608a1b` (PRs #56, #58, #59, #60, #61 merged in between; `analysis/` R-4E-1 wordings withdrawn, board sections appended). The current section is written onto a byte-for-byte copy of `origin/main`'s file; this error is disclosed rather than quietly amended away.
+- 16:45 UTC — content commit rebuilt from `origin/main`; branch now carries `README.md` (the `main` repair) and this section only. All figures above were re-verified on the rebuilt tree; results below.
+
+### Requests to other scopes (logged, not edited)
+
+| # | To | Request |
+|---|---|---|
+| R-1143-1 | root-edition owners (last: `593368ef`, `f7e49cdb`) | Add the FTB "Gifts and inheritance" page (https://www.ftb.ca.gov/file/personal/income-types/gifts-and-inheritance.html — "If you received a gift or inheritance, do not include it in your income. However, if the gift or inheritance later produces income, you will need to pay tax on that income.", page dated 09/24/2025) as a one-line California mirror of the heir-receipt row. The root edition covers federal §102 and the bar on state death taxes, but not this page. |
+| R-1143-2 | merge process (any session merging to `main`) | Before every merge to `main`, run `git grep -nE '^(<<<<<<<|>>>>>>>)'` on the merge result; non-empty output means stop and repair. Two instances are on record: `README.md` on `main` at `60144a8`, and this session's intermediate board commit. `scripts/verify.py` does not cover `COORDINATION.md` or `README.md`. |
+| R-1143-3 | repository owner / integration session | The `README.md` page table listed `questions.html`/`suggestions.html` twice with pre-PR-#54 counts until this branch corrected it. No automated check covers `README.md`; consider adding one to `scripts/verify.py`. |
+
+### Verification performed (12 November 2026, on the rebuilt tree at `b608a1b`)
+
+- `git grep -nE '^(<<<<<<<|>>>>>>>|=======$)'` across the tracked tree: **no matches** (run and checked this session).
+- Conflict markers: none remain in any tracked file; the two historical instances above are both resolved.
+- `scripts/model.py`, `scripts/build.py`, `scripts/verify.py`: **PASS** — 15 reproducible pages, 608 table rows
+  (581 factual rows, all linked to official publishers; 27 decision rows, all linked to their reasoning), 73 ledger sources,
+  official hosts, privacy scan and $10 rounding clean.
+- `plan/tools/verify.py`: **PASS** — 10 pages rebuilt byte-identically, 454 rows. `analysis/tools/verify.py`: **PASS** — 12 reproducible pages, 380 rows.
+- `scripts/package_site.py`: **PASS** — 15 pages, 54 assets, 49 withdrawal notices at retired paths.
+- The four publisher pages opened by this session on 12 November 2026 were consistent with the merged edition's rows; nothing found contradicts a published figure.
+
+### Disclosure
+
+The published precision for assessment-roll values is tier 1 (nearest $10), chosen by the owner on 12 November 2026 (`assets/privacy.json`). This session did not change and does not re-litigate that setting; the parcel-matching caveat and the owner's choice (SG-14) are disclosed on `review.html`. Earlier commits and pull-request diffs in this public repository may contain finer figures; only a history rewrite or going private can address that, and it remains an owner decision (SG-10; CR-5 on the earlier board).
