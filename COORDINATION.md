@@ -1049,8 +1049,10 @@ why. No suggestion was dropped and no decision was taken.
 (`cupertino.html`, `data/*`, `decision-suite/*` …) and regenerated `plan/` and `analysis/` pages from an older model. Its
 two substantive corrections (the estate room under the owner's statement, the RTC 63.2 attribution) are already on `main`
 from other sessions. Its five flags FL-25 to FL-29 were read and **not** ported: each is unverified in its own text, and
-FL-27 states that the state-and-local tax deduction is capped at $10,000 and **not indexed**, which the 2025 federal law
-changed. That branch is left in place for the owner.
+FL-27 states that the state-and-local tax deduction is capped at $10,000 and **not indexed**; comparison sites read this
+session (not an official page, so nothing is claimed for the site) report that the July 2025 federal act raised the cap to
+$40,000 for 2025 and $40,400 for 2026 through 2029, which would make that row out of date. That branch is left in place
+for the owner, with these five flags unported and unverified.
 
 **Checks.** `scripts/verify.py` PASS — 15 reproducible pages, 527 table rows all linked to an official publisher, 70
 ledger sources, local links, official hosts, privacy scan and $10 rounding clean. `plan/tools/verify.py` PASS (10 pages,
