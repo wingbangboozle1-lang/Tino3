@@ -567,7 +567,7 @@ QSRC = {
 def qrows(rows):
     out = []
     for r in rows:
-        out.append((r, "S" if r[2].startswith("<em>Answered") else "X", S(*QSRC[r[0]])))
+        out.append((r, "S", S(*QSRC[r[0]])))
     return out
 
 
