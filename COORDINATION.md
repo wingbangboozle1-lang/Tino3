@@ -3,6 +3,61 @@
 Privacy rule: public pages use generic Property A / Property B placeholders. Do not publish private property values, addresses, ZIP codes, rent, assessments, utility use, trust details or household information. Current website numbers are limited to general legal rules supported by official sources; unknown property-specific amounts remain blank. Historical repository commits, pull-request diffs and external copies are not certified erased.
 
 
+
+## Session `arena/ac412a08-tino3` — anonymised quantitative edition on a jurisdiction-neutral source base · 2026-11-12 22:40 UTC
+
+*Branch note:* Arena fixes this session to `arena/ac412a08-tino3`, branched from `b23f405`. The owner's brief
+re-states the quantitative publication rule in detail — property numbers to the nearest $10, an executive
+summary, a live dashboard with tables, a separate black-swan section, a suggestions register, and explicit
+assessment history — while keeping names, addresses, postal codes, parcel numbers, accounts and trust
+particulars unpublished. This session additionally holds one rule the other quantitative attempt does not:
+**no link may identify the jurisdiction either.** This block is written from the rebased branch, not from a
+merge of anyone else's PR.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| AC-1 Rebuild the costed edition on today's `main` (16 pages, one model, one ledger), every figure at $10 | done, verified locally | `arena/ac412a08-tino3` | `scripts/build.py`, `scripts/model.py`, root pages, `assets/style.css` |
+| AC-2 Replace every jurisdiction-identifying link with a neutral official source; keep the rule enforced in code | done, verified locally | `arena/ac412a08-tino3` | `assets/sources.json`, `scripts/privacy_boundary.py`, `scripts/verify.py` |
+| AC-3 Add the fifty-year uneven-economy module from published series only | done, verified locally | `arena/ac412a08-tino3` | `scripts/economy.py`, `assets/data/economy.json`, `economy.html` |
+| AC-4 Documentation, board note, PR | done locally, PR not yet opened | `arena/ac412a08-tino3` | `README.md`, `EXECUTIVE_SUMMARY.md`, this block |
+
+**What changed on the source base.** Twenty-five substitutions replace every local identifying link with a
+neutral official one. The property-tax and rent rules now cite article XIII A of the California Constitution,
+Revenue and Taxation Code sections 51, 11911 and 11930, and Civil Code sections 1947.12 and 1946.2 in place of
+a county rate book, a secured-rate resolution and a city rent board. The house-price history uses the statewide
+FHFA index (FRED `CASTHPI`) instead of a metro series, and the consumer-price history uses FRED `CPIAUCSL`
+instead of a local table. `scripts/privacy_boundary.py` now fails the build on any URL whose host or path names a
+local agency or a metro-level series, so the rule survives the next edit instead of living in a review note.
+
+**Two judgement calls the owner should see.** First, `block_paths()` in `scripts/economy.py` moves a house at
+0.65 times the statewide index each year, because a single home is not the state. That choice is why the 95th
+percentile ($39,045,920 by 2076) sits above the constant-rate baseline ($10,052,910 by 2045) — the two are
+different questions, not a contradiction, and `economy.html` says so on its own page. Second, the two
+officially published insurance averages ($1,571 and $1,512) are the only amounts exempt from the $10 rule; they
+are quoted verbatim, listed in `ALLOWED_VERBATIM`, and are state and national figures rather than property
+figures.
+
+**Verification, 12 November 2026 (local).** `scripts/verify.py` reports: `PASS: legacy root publisher guarded;
+11 exclusions present and no .nojekyll.` / `PASS: 16 published pages and 8 runtime assets scanned for
+identifiers; 107 retired routes are exact content-free notices; 69 external links and 78 ledger entries are on
+official publishers with no local marker.` / `PASS: 16 reproducible pages; 747 table rows, 667 of them citing an
+official ledger URL; 78 ledger sources; links, fragments, official hosts, identifier scan and $10 rounding all
+clean.` A deliberately broken `_config.yml` fails the same check, so the guard is tested rather than assumed.
+
+**Concurrent work, and what this session did not do.** PR #70 (`arena/b709c64d-tino3`) implements the same
+owner brief from a restored `6eb3eb0` tree and is currently conflicting with `main`. This branch is a superset of
+it: the same reconstruction plus the jurisdiction-neutral link rule and the economy module. PR #62 already
+proposed an economy page; this session's version reads the published series directly and keeps the derivation in
+`scripts/economy.py`. PRs #65 and #66 are board-only notes. This session did not edit any other branch, did not
+merge anyone's PR, and has not changed the Pages setting.
+
+**Not done, and not claimed.** The repository is still public and its history, pull-request diffs, caches and
+forks remain a separate exposure surface; nothing here erases them. The Pages source is still reported by the API
+as legacy `main:/` rather than the Actions artifact, so the live site is not certified to match this tree. No
+claim is made that the deployed site matches, that the analysis is a complete legal review, or that rounded
+figures are unidentifiable to a reader who already holds the county record. **This session does not describe the
+live site as privacy-safe or privacy-reviewed.**
+
 ## Session `arena/0532f9f2-tino3` — privacy-first final integration and independent verification · 2026-11-12 22:15 UTC
 
 *Branch note:* Arena fixes this session to `arena/0532f9f2-tino3`; creating a `session-<id>/<task>` branch is not permitted. The board was scanned before the claim. PR #64 merged at 16:24 UTC; its P3 publication gate remained marked pending with no later commits reported, so this session takes over that gate after more than 60 minutes and will preserve its work. The only open PR, #62, last changed at 16:09 UTC and conflicts with the later privacy edition; it is not being merged without a privacy review.
