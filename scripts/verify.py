@@ -179,6 +179,33 @@ def audit_page(path: Path, ledger_urls: set[str]) -> tuple[list[str], PageAudit]
             errors.append(f"amount not rounded to $10: ${raw}")
     return errors, parser
 
+# ------------------------------------------------------------------ legacy Jekyll publisher guard
+# The Pages setting still offers "main / (root)". If it is ever used, GitHub would run Jekyll over the
+# tracked tree. Two things must therefore stay true, and both are checked here:
+#   1. `.nojekyll` must not exist, because it switches the exclusions off.
+#   2. `_config.yml` must exclude every tracked path the artifact allowlist does not publish, so no
+#      page, script, data file or working document can be served by the legacy path.
+LEGACY_EXCLUSIONS = [
+    "analysis", "plan", "scripts", "assets/data", "assets/privacy.json", "assets/sources.json",
+    "_config.yml", "COORDINATION.md", "EXECUTIVE_SUMMARY.md", "README.md", "requirements.txt",
+]
+
+
+def check_legacy_publisher() -> None:
+    if (ROOT / ".nojekyll").exists():
+        raise SystemExit("FAIL: `.nojekyll` exists; it disables the Jekyll exclusions and would expose every tracked path")
+    config = ROOT / "_config.yml"
+    if not config.exists():
+        raise SystemExit("FAIL: _config.yml is missing; the legacy root publisher would expose working files")
+    text = config.read_text(encoding="utf-8")
+    missing = [name for name in LEGACY_EXCLUSIONS if f"  - {name}\n" not in text]
+    if missing:
+        raise SystemExit(f"FAIL: _config.yml no longer excludes {missing}")
+    if "theme: null" not in text:
+        raise SystemExit("FAIL: _config.yml must keep `theme: null`")
+    print(f"PASS: legacy root publisher guarded; {len(LEGACY_EXCLUSIONS)} exclusions present and no .nojekyll.")
+
+
 
 def main() -> int:
     if len(PAGE_LIST) != EXPECTED_PAGE_COUNT:
@@ -193,6 +220,7 @@ def main() -> int:
     if stale:
         raise SystemExit(f"generated output was stale; rebuild and review: {stale}")
 
+    check_legacy_publisher()
     sources, ledger_urls = read_ledger()
     run([sys.executable, "scripts/package_site.py"])
     if verify_privacy() != 0:
