@@ -1,9 +1,8 @@
 """Build the deployable site from an explicit public-edition allowlist.
 
-Only the privacy-safe pages and stylesheet are copied verbatim. Every other tracked path is
-replaced in the artifact with a generic withdrawal notice, including the old model/data,
-secondary editions, repository tools and source documents. The working tree remains available
-for audit; Git history and copies outside this artifact are not erased.
+Only the pages, stylesheet, the source ledger, the privacy setting and the three data
+downloads that back the published tables are copied. Every other tracked path is replaced in the
+artifact with a content-free withdrawal notice, so a stale URL cannot return an old figure.
 """
 from __future__ import annotations
 
@@ -14,12 +13,17 @@ from pathlib import Path, PurePosixPath
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "_site"
 
-from build import PAGES  # noqa: E402
+from build import PAGES as PAGE_MAP  # noqa: E402
 
-ASSETS = ["assets/style.css"]
+PAGES = list(PAGE_MAP)
+
+ASSETS = ["assets/style.css", "assets/sources.json", "assets/privacy.json",
+          "assets/data/model.json", "assets/data/property_a.csv",
+          "assets/data/property_b.csv", "assets/data/decision.csv",
+          "assets/data/economy.json"]
 NOJEKYLL = ".nojekyll"
 LEGACY_URLS = [
-    "black-swans.html", "decision-analysis.html", "flagged.html", "flagged-review.html",
+    "black-swans-x.html", "decision-analysis.html", "flagged.html", "flagged-review.html",
     "inheritance-process.html", "inheritance-steps.html", "methodology.html", "properties.html",
     "sources-verification.html", "taxes-estate.html", "script.js", "style.css",
     "assets/app.js", "assets/js/app.js", "assets/css/style.css",
@@ -43,7 +47,7 @@ def tracked_paths() -> list[str]:
 
 
 def retired_paths() -> list[str]:
-    """Return every legacy URL plus every tracked path outside the publication allowlist."""
+    """Every legacy URL plus every tracked path outside the publication allowlist."""
     allowed = set(PAGES + ASSETS + [NOJEKYLL])
     paths = set(LEGACY_URLS)
     paths.update(name for name in tracked_paths() if name not in allowed)
@@ -52,7 +56,7 @@ def retired_paths() -> list[str]:
 
 
 def notice_content(rel: PurePosixPath) -> str:
-    """Return a content-free notice tailored to the route's file type."""
+    """A content-free notice tailored to the route's file type."""
     if rel.suffix == ".html":
         prefix = "../" * len(rel.parts[:-1])
         return (
@@ -105,7 +109,7 @@ def main() -> None:
     if unexpected or missing:
         raise SystemExit(f"artifact boundary failed: unexpected={unexpected}, missing={missing}")
     print(
-        f"Packaged {len(PAGES)} public pages, {len(ASSETS)} runtime asset and "
+        f"Packaged {len(PAGES)} public pages, {len(ASSETS)} runtime assets and "
         f"{len(retired)} content-free withdrawal routes."
     )
 

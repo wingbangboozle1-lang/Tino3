@@ -61,7 +61,7 @@
    "id": "rate_a",
    "item": "Ad valorem tax rate, Property A",
    "value": "1.18%",
-   "reason": "The owner's bill does not show the tax rate area, so the rate cannot be read off the county table. 1.18% sits inside the verified county range of 1.126% to 1.241%.",
+   "reason": "Scenario. The bill does not show the tax rate area, so the rate cannot be read off a published table without identifying the parcel. 1.18% is a mid-range scenario for a California county; the row is flagged unverified.",
    "src": [
     "cnty_a_rates"
    ]
@@ -170,7 +170,7 @@
    "id": "sale_cost",
    "item": "Cost of selling Property A",
    "value": "5.11% of the price",
-   "reason": "5.0% scenario allowance for agents, escrow, title and preparation, plus the verified 0.11% county transfer tax.",
+   "reason": "5.0% scenario allowance for agents, escrow, title and preparation, plus the 0.11% county documentary transfer tax that Revenue and Taxation Code 11911 permits.",
    "src": [
     "rtc11911",
     "cnty_a_recorder"
