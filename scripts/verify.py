@@ -12,6 +12,7 @@ Checks
  6. Rounding: every dollar amount displayed is a multiple of $10.
 """
 from __future__ import annotations
+import os
 import re
 import subprocess
 import sys
@@ -219,6 +220,10 @@ def main() -> int:
         print("FAIL")
         for f in dict.fromkeys(failures):
             print("  -", f)
+            # Also surface each failure where a CI system can read it: the job log is not always
+            # downloadable, and a silent red cross is worse than no check at all.
+            if os.environ.get("GITHUB_ACTIONS"):
+                print(f"::error title=verify.py::{f}")
         return 1
 
     print(f"PASS: {len(PAGES)} reproducible pages; {total_rows} table rows "
