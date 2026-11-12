@@ -903,6 +903,18 @@
    "quote": "1977-01-01,9.80223 ... 1999-01-01,51.99372 ... 2001-01-01,-46.21639 ... 2002-01-01,-24.33737 ... 2025-01-01,18.86735. Series page: 2026-11-11 close 25,466.190, Index Feb 5, 1971=100.",
    "checked": "series page and its CSV export opened on the publisher's domain on 12 November 2026; the export is an annual average of daily closes, so an intra-year peak or trough is averaged away",
    "status": "read"
+  },
+  "rtc51": {
+   "publisher": "California Legislative Information",
+   "title": "Revenue and Taxation Code section 51 - taxable value of real property (the lesser-of rule)",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=51",
+   "verifies": [
+    "The taxable value of real property each lien date is the LESSER of (1) the base year value compounded by the inflation factor, capped at 2% a year, and (2) its full cash value on the lien date, taking account of reductions for a decline in value",
+    "The inflation factor is the change in the California Consumer Price Index, and in no event more than 2% of the prior year's value"
+   ],
+   "quote": "(a) ... the taxable value of real property shall ... be the lesser of: (1) Its base year value, compounded annually since the base year by an inflation factor ... (D) In no event shall the percentage increase for any assessment year ... exceed 2 percent of the prior year's value. (2) Its full cash value, as defined in Section 110, as of the lien date, taking into account reductions in value due to damage, destruction, depreciation, obsolescence, removal of property, or other factors causing a decline in value.",
+   "checked": "section opened on the publisher's site on 12 November 2026; the two subdivisions and the 2% cap read in the section text",
+   "status": "read"
   }
  },
  "reviewer_session": "; 2026-11-12: arena/593368ef-tino3 re-opened fifteen publisher pages, confirmed every published figure and added rtc17043 (the 1% California tax above $1,000,000, published as a sensitivity); 2026-11-12: arena/de474f38-tino3 opened Civil Code sections 1947.12 and 1946.2 on leginfo.legislature.ca.gov and added them; 2026-11-12: arena/cd0dd59b-tino3 opened the annual consumer price index, the annual house price index for each property's area, the 10-year Treasury annual average and the NASDAQ Composite, and re-read RTC 51 for the lesser-of rule (five entries appended)"
