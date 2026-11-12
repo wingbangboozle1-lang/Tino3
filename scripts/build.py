@@ -22,8 +22,8 @@ NAV = [("index.html", "Overview"), ("executive-summary.html", "Executive summary
        ("review.html", "Flagged for review"), ("audit.html", "Independent verification"),
        ("sources.html", "Source library")]
 
-# Navigation is grouped so a reader sees the shape of the site: one decision, one black-swan
-# section in two parts, two properties, the rules and the evidence.
+# Navigation is grouped so a reader sees the shape of the site: start here (what is settled and what
+# is not), one decision, one black-swan section in two parts, two properties, the rules, the evidence.
 NAV_GROUPS = [("The decision", 0, 4), ("Black swans", 4, 6), ("The properties", 6, 8),
               ("Tax and process", 8, 10), ("Decide next", 10, 12), ("Evidence", 12, 15)]
 
@@ -70,8 +70,8 @@ LABEL = {"irs_estate": "Estate tax thresholds", "irs_2027": "2027 amounts", "irs
          "fedhist_1929": "Crash of 1929", "fedhist_greatinflation": "The Great Inflation",
          "fedhist_greatrecession": "The Great Recession", "nyfed_covid": "COVID-19 and the Fed",
          "fred_ussthpi": "US house price index", "fred_nasdaqcom": "NASDAQ Composite",
-         "uscode3124": "31 USC 3124", "uscode102": "26 USC 102", "irs_rmd": "Inherited accounts",
-         "rtc17043": "RTC 17043"}
+         "uscode3124": "31 USC 3124", "uscode102": "26 USC 102", "irs_rmd": "RMD FAQ",
+         "cdi_tips": "Finding insurance", "cdi_fairplan": "FAIR Plan"}
 
 e = html.escape
 
@@ -106,9 +106,10 @@ def P(x, d=1):
 
 BLANK = ("blank", "Not verified &ndash; left blank")
 BADGE = {"V": ("b-v", "Verified"), "O": ("b-o", "Owner-supplied"), "A": ("b-a", "Assumption"),
-         "C": ("b-c", "Computed"), "U": ("b-u", "Unverified")}
+         "C": ("b-c", "Computed"), "U": ("b-u", "Unverified"), "X": ("b-x", "Your choice"),
+         "S": ("b-c", "Status")}
 LEGEND = ('<p class="legend">' + "".join(f'<span class="b {c}">{t}</span>' for c, t in BADGE.values()) +
-          ' Verified = the figure was read in text from the official publisher\'s own domain on 10 to 12 November 2026; the source library says whether the whole page was opened or an excerpt was read. Owner-supplied = taken from the '
+          ' Verified = the figure was read in text from the official publisher\'s own domain between 10 and 12 November 2026; the source library says whether the whole page was opened or an excerpt was read. Owner-supplied = taken from the '
           'owner\'s records, not independently checked. Assumption = a scenario input. Computed = arithmetic on the '
           'rows above. Unverified = no official confirmation, so the value is blank. On owner-supplied, assumed and computed rows the link points to the official rule or data series the row rests on; it does not confirm the value.</p>')
 
@@ -121,7 +122,8 @@ def tbl(caption, headers, rows, cls=""):
         rc = row[3] if len(row) > 3 else ""
         tds = "".join(f'<td class="{c[0]}">{c[1]}</td>' if isinstance(c, tuple) else f"<td>{c}</td>" for c in cells)
         bc, bt = BADGE[basis]
-        body.append(f'<tr class="{rc}">{tds}<td><span class="b {bc}">{bt}</span></td><td>{src}</td></tr>')
+        attr = ' data-basis="choice"' if basis == "X" else ""
+        body.append(f'<tr class="{rc}"{attr}>{tds}<td><span class="b {bc}">{bt}</span></td><td>{src}</td></tr>')
     return (f'<div class="table-wrap"><table class="{cls}"><caption>{caption}</caption><thead><tr>{hd}</tr></thead>'
             f'<tbody>{"".join(body)}</tbody></table></div>')
 
@@ -142,8 +144,8 @@ def page(name, title, eyebrow, h1, lead, body):
 <a class="skip" href="#main">Skip to content</a>
 <aside><a class="brand" href="index.html">Inheritance decision dashboard<small>Property A and Property B</small></a>
 <nav aria-label="Main navigation">{nav}</nav>
-<div class="aside-note">Anonymised. Dollar figures rounded to $10. Reviewed 10-12 November 2026.</div></aside>
-<main id="main"><div class="top"><span>{eyebrow}</span><span>Reviewed 10-12 Nov 2026</span></div>
+<div class="aside-note">Anonymised. Dollar figures rounded to $10. Reviewed 10 to 12 November 2026.</div></aside>
+<main id="main"><div class="top"><span>{eyebrow}</span><span>Reviewed 10 to 12 Nov 2026</span></div>
 <div class="hero"><div class="eyebrow">{eyebrow}</div><h1>{h1}</h1><p>{lead}</p></div>
 {body}
 <footer><span>Planning analysis, not legal, tax or investment advice. Confirm with an estate attorney and a tax preparer before acting.</span><span>No names, addresses, ZIP codes or parcel numbers are published.</span></footer></main></body></html>
@@ -188,8 +190,11 @@ ROOM_B_OWNED = E45["room_single_base"] + B_VALUE_2045  # one person's room in 20
 assert abs(r10(EX2045 - A2045) - ROOM_B_OWNED) <= 10, "statement room drifted from exclusion less Property A"
 PRIV = ('<div class="privacy"><strong>Privacy.</strong> Properties are Property A (a single-family home in County A) and '
         'Property B (a small multi-unit building in City B). People are [GRANTOR], [SUCCESSOR_TRUSTEE] and [BENEFICIARY]. '
-        'Assessment-roll values and tax bills are public records that can be matched to a parcel, so they appear here only '
-        'in generalised form: assessed values to the nearest $10,000 and bills to the nearest $100. '
+        f'Assessment-roll values and tax bills are published at the precision the owner chose: {M["privacy"]["description"]}. '
+        'That is the owner\'s instruction of 12 November 2026. Rounding to $10 protects against a search for an exact figure, '
+        'but a roll value that close to the assessed roll, together with a 2% growth chain going back to 2014, can still be '
+        'matched to a parcel by someone who is looking. The stronger protection is tier 2 (nearest $1,000) or tier 3 '
+        '(nearest $10,000); <a href="suggestions.html#privacy">the privacy choice</a> sets out the trade-off and how to change it. '
         'Every other figure is rounded to the nearest $10.</div>')
 PART1 = ('<div class="part-band"><strong>Black swans, part 1 of 2 &mdash; conditions and history.</strong> '
          'What the baseline assumes, fifty years of official inflation data, and the amounts that do not rise with '
@@ -227,9 +232,14 @@ Renting the home out ends with {usd(RENT['wealth'])} and moving in ends with {us
 <li><strong>Insurance premiums.</strong> No official figure or quote could be confirmed. The ranking does not change at three times the owner's guess.</li>
 </ol></section>
 <section><h2>Where to look</h2>
-<h3 class="grp">The decision</h3>
+<h3 class="grp">Start here</h3>
 <div class="cards">
 <div class="card"><div class="k">The answer</div><p><a href="executive-summary.html">Executive summary</a>: the decision, every important number with its source, and what would change it.</p></div>
+<div class="card"><div class="k">What is not settled</div><p><a href="questions.html">Questions before deciding</a>: 39 questions, each with what is known, what is missing and the step that closes it.</p></div>
+<div class="card"><div class="k">What to change</div><p><a href="suggestions.html">Suggestions for review</a>: four paths and 20 suggestions, with effort and privacy cost, to choose before anything changes.</p></div>
+</div>
+<h3 class="grp">The decision</h3>
+<div class="cards">
 <div class="card"><div class="k">The reasoning</div><p><a href="decision.html">Decision analysis</a>: results for 2040, 2045 and 2050, break-even points and every assumption.</p></div>
 <div class="card"><div class="k">The numbers</div><p><a href="projections.html">Year-by-year projections</a> to 2060: market value, assessed value, property tax and running costs.</p></div>
 <div class="card"><div class="k">Choose the path</div><p><a href="suggestions.html">Suggestions for review</a>: 13 tabled suggestions, two process notes, four paths to choose from, and five gates that must pass before anything changes. Nothing adopted yet.</p></div>
@@ -248,11 +258,11 @@ Renting the home out ends with {usd(RENT['wealth'])} and moving in ends with {us
 <h3 class="grp">Rules and process</h3>
 <div class="cards">
 <div class="card"><div class="k">The rules</div><p><a href="taxes.html">Tax, thresholds and law watch</a>: federal, California and local, with the estate-tax room year by year.</p></div>
-<div class="card"><div class="k">The process</div><p><a href="inheritance.html">Inheritance steps</a>: seventeen steps from today to the years after the death, with every deadline.</p></div>
+<div class="card"><div class="k">The process</div><p><a href="inheritance.html">Inheritance steps</a>: nineteen steps from today to the years after the death, with every deadline.</p></div>
 </div>
 <h3 class="grp">Evidence and open items</h3>
 <div class="cards">
-<div class="card"><div class="k">What is not settled</div><p><a href="review.html">Flagged for Review</a>: values left blank because no official source confirms them.</p></div>
+<div class="card"><div class="k">What is not settled</div><p><a href="review.html">Flagged for Review</a>: values left blank because no official source confirms them, plus the privacy disclosures.</p></div>
 <div class="card"><div class="k">How it was checked</div><p><a href="audit.html">Independent verification</a>: what an independent pass corrected, and how the arithmetic was re-checked.</p></div>
 <div class="card"><div class="k">Every source</div><p><a href="sources.html">Source library</a>: each document, the words relied on, and how it was checked.</p></div>
 </div>
@@ -260,7 +270,7 @@ Renting the home out ends with {usd(RENT['wealth'])} and moving in ends with {us
 <section><h2>Three editions in one repository</h2>
 <p>This dashboard is one of three editions kept side by side. They answer the same question with separate models, so their figures differ; each page states which model it comes from. Do not mix a number from one edition with a table in another.</p>
 <div class="cards">
-<div class="card win"><div class="k">This edition &middot; 15 pages</div><p>The pages in the menu. One model, one source ledger of {len(SRC)} entries, re-checked line by line on 10 to 12 November 2026. Act on these numbers.</p></div>
+<div class="card win"><div class="k">This edition &middot; 15 pages</div><p>The pages in the menu. One model, one source ledger of {len(SRC)} entries, re-checked line by line on 11 and 12 November 2026. Act on these numbers.</p></div>
 <div class="card"><div class="k">Cross-check &middot; 10 pages</div><p><a href="plan/index.html">A second model</a> built from official figures only, leaving unverifiable inputs blank and reporting break-evens instead. It reaches the same default: sell and keep Property B.</p></div>
 <div class="card"><div class="k">50-year suite &middot; 12 pages</div><p><a href="analysis/index.html">2026&ndash;2076 schedules</a>, a 1977&ndash;2026 state cycle replay with decline-in-value relief, a 60/40 Treasury barbell and the ownership-asymmetry tables.</p></div>
 </div></section>{PRIV}"""
@@ -285,6 +295,11 @@ rows = [
  (["Room for cash under the exclusion", f"{usd(E45['room_single_base'])} in 2045 for one person", f"Scenario exclusion {usd(E45['exclusion'])} less both homes at {usd(E45['homes_base'])}. Under the owner's statement that Property B is already the heir's, the room is {usd(ROOM_B_OWNED)} instead. The cash amount itself was not supplied."], "C", S("irs_estate", "irs_rp2532", asm=True, flag=True)),
  (["Estate tax above the threshold", "40 cents of every dollar over the room", "An estate $5,000,000 above the room would owe about $2,000,000 before credits. The tax falls on the estate, not on the heir, and is due with Form 706 nine months after the death. California and its cities impose none."], "C", S("irs_estate", "irs_i706", "rtc13301")),
  (["California and local death taxes", "None", "No state estate or inheritance tax return since 2005. Cities and counties are barred from imposing one."], "V", S("sco_estate", "rtc13301")),
+ (["Is the inheritance itself income?", "No", "Property acquired by inheritance is not gross income. Income the property produces afterwards is taxable, and a later sale is a capital gain measured from the value at the date of death."], "V", S("uscode102")),
+ (["Inherited retirement accounts, if any", "Ten years to empty", "For an owner who died after 2019 a non-spouse beneficiary must generally distribute the whole account within ten years; each withdrawal is ordinary income. Whether any account exists was not supplied (Q-06)."], "V", S("irs_rmd", flag=True)),
+ (["What the transfer itself costs", "No death tax and no transfer tax", "A transfer by reason of death is exempt from documentary transfer tax, outright or in trust. What remains is the professional work: appraisal, trustee and attorney fees, recording. Those fees were not quoted."], "V", S("rtc11930", "rtc480")),
+ (["Insurance: what is available", "The FAIR Plan, capped at $3,000,000", "The state's insurer of last resort is open to every homeowner, but its maximum for all coverages combined is below Property A's current estimated value, and it covers fire, lightning, explosion and smoke only. No premium is verified for either property."], "V", S("cdi_tips", "cdi_fairplan", flag=True)),
+ (["Property tax and assessment history", f"Published to the nearest $10, 2014 to 2026", "The full table is on the Property A page, with the published state factor beside each year. Percentage changes are computed before rounding, so they are exact at any privacy setting."], "O", S("boe_lta26002")),
  (["Insurance", BLANK, "No official premium figure or insurer quote was confirmed for either property. The owner's guesses are used as placeholders; tripling them does not change the ranking."], "U", S("cdi_compare", flag=True)),
  (["State tax on a large gain", "The 12.3% rate does not include the 1% above $1,000,000", f"Revenue and Taxation Code section 17043 adds 1% on taxable income above $1,000,000. Applied to the gain alone, the 2045 stock result falls by {usd(TS['delta'])} to {usd(TS['with_surcharge'])}; the sale stays first. Not folded into the model."], "C", S("rtc17043", "irs_tc409", flag=True)),
  (["Law under discussion", "The initiative to repeal the 2021 inheritance rules failed for lack of signatures", f"It would have restored the pre-2021 exclusion. If a later measure did so, Property A's 2045 tax would be {usd(LAW['tax_restored'])}. Selling would still come out ahead."], "V", S("sos_memo", "lao_250017", "sos_measures")),
@@ -309,6 +324,474 @@ body = f"""{tbl("Important details", ["Topic", "Finding", "What it means"], rows
 </ol></section>{PRIV}"""
 PAGES["executive-summary.html"] = page("executive-summary.html", "Executive summary", "Executive summary", "What matters, in one table",
                                        "Each row states a finding, the number behind it, and the official source.", body)
+
+# ------------------------------------------------------------------------------------------------ questions
+# The information register. Every row states what is settled, what is not, and the concrete step that
+# would settle it. Values that no official source confirms are never filled in.
+OFF = '<em>Answered &middot; official source</em>'
+OWN = '<em>Answered &middot; your records</em>'
+PART = '<em>Partly answered</em>'
+OPEN_R = '<em>Open &middot; your records</em>'
+OPEN_P = '<em>Open &middot; needs a professional</em>'
+OPEN_T = '<em>Open &middot; only at the death</em>'
+OPEN_L = '<em>Open &middot; depends on future law</em>'
+
+_mtx = {(r["g"], r["rs"]): r for r in M["matrix"]}
+_gap7 = {g: _mtx[(g, 0.07)]["sell"] - _mtx[(g, 0.07)]["rent"] for g in (0.03, 0.04, 0.05)}
+_gap5pc = _mtx[(0.04, 0.05)]["sell"] - _mtx[(0.04, 0.05)]["rent"]
+_ann = r10(1000 * sum((1 + B45["r_eq"] / 100) ** (9 - t) for t in range(10)))
+_avdiff_today = r10(M["inputs"]["a_av_2026"] * 0.00115)
+_avdiff_2045 = r10(A45["fmv"] * 0.00115)
+
+q_money = [
+ ("Q-01", "How much can be inherited before a federal tax applies?",
+  OFF + "<br>Not a limit on what you may receive",
+  f"$15,000,000 per person for a death in 2026, $15,480,000 in 2027, indexed after. Tax above it is 40 cents on the dollar and is charged to the estate, not to the heir. One person's room in 2045 is {usd(E45['room_single_base'])} if both homes are in the estate, or {usd(ROOM_B_OWNED)} under your statement that Property B is already yours.",
+  f"Nothing, for 2026 and 2027. For later years the index is a scenario: the tax page shows {usd(E45['room_single_base'])} (both homes in the estate) and {usd(ROOM_B_OWNED)} (Property B already yours) as the 2045 range, not a forecast.",
+  "Every $100,000 of estate above the room costs the estate $40,000."),
+ ("Q-02", "Is the inheritance itself income to me?",
+  OFF,
+  "No. Gross income does not include property acquired by inheritance. Income the property produces afterwards is taxable, and a later sale is a capital gain measured from the value at the date of death.",
+  "Nothing. The one exception to check is retirement accounts (Q-06), where the money is taxed as it is withdrawn.",
+  "If any part were income, the effective amount received would be lower by the income tax on it."),
+ ("Q-03", "Is there a California inheritance or estate tax?",
+  OFF,
+  "No. No California estate tax return has been required for deaths since 1 January 2005, and state law bars cities and counties from imposing a death tax.",
+  "Nothing. Watch the law-watch table for any bill that would create one.",
+  "A 5% state tax on a $5,000,000 inheritance would be $250,000; none is now levied."),
+ ("Q-04", "What does the transfer itself cost?",
+  PART,
+  "No county documentary transfer tax is due on a transfer by reason of death, outright or in trust. There is no inheritance tax. What remains is the cost of the work: appraisal, trustee and attorney fees, recording fees, and any probate if the trust does not cover the property.",
+  "The fees themselves. Ask the trustee's attorney for a fee schedule and the county for the current recording fee, and record the answer here. Nothing in the plan depends on the estimate, but the first-year cash figure does.",
+  "A probate for a $3,100,000 home, if the trust failed to cover it, would be slow and expensive; the trust is the protection."),
+ ("Q-05", "How much cash and securities are in the estate?",
+  OPEN_R,
+  "Not supplied. Under your statement the federal room in 2045 is large enough for the cash only if the estate is worth less than the room shown.",
+  "Read the trustee's schedule of assets, or the latest statement from each account. Write the total in one line; it converts the room figure into a tax figure. This is the single most valuable missing number.",
+  "Room of $1,000,000 used up costs $400,000 of estate tax; room of $1,000,000 spare costs nothing."),
+ ("Q-06", "Are there retirement accounts, and how are they taxed?",
+  OPEN_R,
+  "Not known whether any exist. If they do, a non-spouse beneficiary of an account whose owner died after 2019 must generally empty it within ten years, and each withdrawal is ordinary income. The account is also part of the estate for the federal threshold.",
+  "Ask the trustee for the beneficiary designations. If accounts exist, the ten-year window matters more than the tax rate: it can push a beneficiary into a higher bracket.",
+  "Spreading withdrawals over ten years rather than one is often the whole difference; a tax preparer should model it."),
+ ("Q-07", "Is the trust revocable?",
+  OPEN_P,
+  "Not supplied, and it decides the tax basis. A revocable trust's assets are in the taxable estate, so the basis resets to the value at death and a sale just after the death produces almost no gain. An irrevocable trust outside the estate carries the old, low basis.",
+  "Read the trust instrument with the attorney who drafted it. Ask one question: are the assets included in the grantor's gross estate? Record the answer and the date.",
+  "Without the reset, the gain since the parents bought could be taxed at about 36%. That alone can erase the margin between selling and renting."),
+ ("Q-08", "Who holds title to Property B today?",
+  OPEN_R,
+  "You state it is already owned by the heir. No deed was seen. If that is right, the building is outside the estate: its tax does not reset and it does not use the federal room. If the parents still hold it, its tax resets at the death.",
+  "Order a copy of the deed or a trustee's certification of title from the county recorder. Ten minutes and a small fee; it settles the largest single contingency in this analysis.",
+  f"If the parents hold it, its tax rises from about {usd(BR45['tax_keep'])} to {usd(BR45['tax_reset'])} a year in 2045, and the federal room shrinks by its value of {usd(B_VALUE_2045)}."),
+ ("Q-09", "Which home is the parents' principal residence?",
+  OPEN_R,
+  "Not stated. Only a home that was the parent's principal residence can carry the parent-child exclusion, and only if a child then lives in it. The homeowners' exemption record shows which home has been claimed.",
+  "Look for the homeowners' exemption on each property tax bill, or ask the assessor which property carries it. One line in a letter settles it.",
+  "If the home to inherit was a second home, the exclusion is unavailable and moving in costs the same tax as renting."),
+ ("Q-10", "Have there been large gifts in recent years?",
+  OPEN_R,
+  "Not supplied. Taxable gifts use the same lifetime exclusion as the estate, so they reduce the room available at death.",
+  "Ask whether any Form 709 gift tax return was filed, and for the total of gifts above the annual exclusion. The annual exclusion is $19,000 per recipient for 2026 and $20,000 for 2027.",
+  "Gifts of $1,000,000 in total reduce the room by $1,000,000, which can cost $400,000 in estate tax."),
+ ("Q-11", "Will a spouse survive, and will portability be elected?",
+  OPEN_T,
+  "Not knowable now. If a spouse survives, the first estate must file Form 706 on time to pass its unused exclusion to the survivor, even when no tax is due. Otherwise the second exclusion is lost.",
+  "Put the election in the estate plan now and in the trustee's checklist. It is a filing decision, not a property decision, but it doubles the room.",
+  "Losing one exclusion can cost 40% of everything above a single exclusion."),
+ ("Q-12", "Is there a mortgage or other debt on either property?",
+  OPEN_R,
+  "The model assumes neither is encumbered. A mortgage would reduce the estate for tax but has to be paid, or the property sold to pay it.",
+  "Ask for the latest loan statements and any liens. Record the balance and the rate. A fixed low rate is an asset; a floating rate is the risk the 1981 record warns about.",
+  "A $500,000 balance at 6% costs $30,000 a year in interest and reduces the estate by $500,000."),
+]
+
+q_a = [
+ ("Q-13", "What will Property A be worth at the death?",
+  OPEN_T,
+  f"Not knowable. The projections run 3%, 4% and 5% a year. At 4% the home is worth {usd(A45['fmv'])} in 2045. The local index rose 5.3% a year since 1995 but was flat over the last four quarters.",
+  "Nothing until the date of death, when an appraisal sets both the basis and the reassessment. Keep the appraisal instruction in the trustee's file.",
+  f"Each $1,000,000 of value changes the property tax after reassessment by about {usd(11800)} a year and the federal room one for one."),
+ ("Q-14", "Will the parent-child exclusion apply?",
+  PART,
+  "The rule is settled: the home must have been the parent's principal residence, it must become the child's principal residence within one year, the child must claim the homeowners' exemption within one year, and the exclusion must be claimed within three years or before a sale. Whether it will apply to this family depends on Q-09 and Q-16.",
+  "Confirm the two facts (Q-09 and Q-16) and put both deadlines in the trustee's checklist. The claim form is not published by us; ask the assessor for it.",
+  f"Without it, the first-year tax after the death is {usd(RENT['tax_first'])} instead of {usd(LIVE['tax_first'])}."),
+ ("Q-15", "How large is the exclusion amount at the death?",
+  OFF + " &middot; growth modelled",
+  "For transfers up to 15 February 2027 the amount is " + usd(M["verified"]["prop19_amount"]) + ", the published figure rounded to the nearest $10. It is adjusted every second year by one year's change in the house price index. At 4% growth the model uses " + usd(A45['amount']) + " in 2045.",
+  "The 2027 adjustment will be published by the Board of Equalization; keep the source bookmarked and re-read it every two years. The rule is verified; only the future amount is a scenario.",
+  "If the amount grows more slowly than house prices, the taxable remainder grows: the exclusion loses value against the home every year."),
+ ("Q-16", "Does someone have to move in?",
+  PART,
+  "Yes, for the exclusion: a child must occupy the home as a principal residence within one year of the transfer. This is a decision only the family can make, and it is worth " + usd(A45['saving']) + " a year in 2045.",
+  "Decide before the death which child, if any, would move in, and write it into the trust's distribution plan. If nobody would, plan on the rental or sale path and stop counting the exclusion.",
+  f"Choosing not to occupy costs {usd(A45['saving'])} a year in property tax; the decision page prices the whole lifestyle choice at {usd(B45['live_cost_month_today'])} a month."),
+ ("Q-17", "What are the deadlines to claim?",
+  OFF,
+  "Homeowners' exemption: file within one year of the transfer. Exclusion claim: file within three years, or before the property is sold or transferred to a third party. A late claim works only from the year it is filed.",
+  "Nothing; the dates are fixed. Put them in the trustee's calendar the day the death certificate is issued.",
+  "A missed claim is a pure loss: roughly the annual saving above, repeated until the property changes hands."),
+ ("Q-18", "What will home insurance cost?",
+  OPEN_P,
+  "Unverified for both properties, and left blank rather than guessed. The state's premium survey publishes sample premiums for new business, not quotes, and lists no landlord policy type; the insurer of last resort, the FAIR Plan, is available to every homeowner but its maximum for all coverages combined is $3,000,000, below Property A's current estimated value.",
+  "Get three quotes: one for Property A as a principal residence with wildfire cover, and one for Property B as a rental (a landlord policy). Record the premiums, the deductibles and any wildfire surcharge here. This is the second most valuable missing number.",
+  "Tripling your guess does not change the ranking, but a real quote changes the running-cost totals and could change the rent-versus-sell margin at the low end."),
+ ("Q-19", "What are the fixed charges on each tax bill?",
+  PART,
+  "Derived, not read: $840 a year on Property A and $1,090 on Property B, being the part of each bill that the rate times the assessed value does not explain. The line items were not supplied.",
+  "Take the current bill for each property and copy the charges other than the general levy: debt service, special assessments, fees. They matter because they do not shrink when the assessed value resets.",
+  "If the fixed charges are larger, the post-inheritance tax is larger by the same amount every year."),
+ ("Q-20", "When does the solar credit end?",
+  OPEN_R,
+  "Your record shows a credit of $10 to $20 a month. The older net-metering tariffs run 20 years from the date of connection; the connection date was not supplied.",
+  "Find the interconnection date on the utility bill or the net-metering agreement. Add 20 years. After that date the electricity line moves from a credit to a cost.",
+  "The projections carry the credit to 2060. If it ends and the home then pays $100 a month, the running-cost line worsens by about $1,380 a year from that year."),
+ ("Q-21", "What does water cost?",
+  OWN + " &middot; rate not verified",
+  "Your figure: $100 to $150 a month for Property A, and $330 to $400 a month for the whole of Property B. Published tariffs for the serving districts were not read in this edition.",
+  "Read the current tariff sheet from each water supplier and multiply by the metered use on a bill. The supplier's own schedule is the official source; add it to the source library when you have it.",
+  "Each extra $10 a month is $120 a year: small against the property tax, large over thirty years."),
+ ("Q-22", "Which tax rate area applies to Property A?",
+  PART,
+  "Not known: the bill does not show it. The county's published rates for 2025-26 run from 1.126% to 1.241%. The model uses 1.18%, inside that range.",
+  "The rate area is printed on the bill or available from the assessor by parcel. Once known, replace the 1.18% assumption and re-run the model.",
+  f"The difference between 1.126% and 1.241% is {usd(_avdiff_today)} a year today and about {usd(_avdiff_2045)} a year after reassessment in 2045."),
+ ("Q-23", "Will the tax really rise only 2% a year until the death?",
+  OFF + " &middot; with one check",
+  "Yes while ownership does not change: the assessed value may rise by the lower of 2% or the published inflation factor, and 2% has been the binding figure every year since 2022. Your own record matches the published factors in every year to within one basis point.",
+  "Nothing. The one thing that would break it is new construction, a change of ownership, or a decline-in-value reduction, none of which appears in the record.",
+  "If the property were reassessed early, today's tax would rise into the range shown on the property page."),
+ ("Q-24", "What does owning Property A cost after the inheritance?",
+  PART,
+  "Computed: property tax after reassessment, insurance (your guess, unverified), water, the solar credit and maintenance, year by year to 2060 on the projections page. First-year total after an inheritance in 2045 is in the executive summary.",
+  "Three real inputs would replace the estimates: an insurance quote, the water tariff, and a contractor's view of deferred maintenance. The rest is arithmetic.",
+  f"Every $1,000 a year of cost is about {usd(_ann)} over ten years at the model's after-tax return of {B45['r_eq']}%."),
+]
+
+q_b = [
+ ("Q-25", "Does the rent ordinance cover Property B?",
+  OPEN_R,
+  "Not known: it depends on when the building was first occupied for residential use. Covered units have capped annual increases and restrictions on eviction; a new tenancy may start at any rent. The 2026-27 allowed increase is 1.6%.",
+  "Ask the Rent Board, in writing, whether the building is covered, quoting the date of first occupancy from the building record. Keep the answer with the deed.",
+  "If covered, rent growth is capped; the plan already assumes 1.5% a year, so the ranking does not change."),
+ ("Q-26", "Is the third unit legal and rentable?",
+  OPEN_R,
+  "Not supplied. The plan values it at $3,580 a month if the family moves out, equal to the average of the two rented units, and treats it as free housing while occupied.",
+  "Check the building permit history for the third unit and any accessory-dwelling rules. A unit that cannot legally be rented changes the income line, not the property-tax line.",
+  "About $42,960 a year of gross rent, before vacancy, costs and income tax."),
+ ("Q-27", "Is the building insured as a rental?",
+  OPEN_P,
+  "Unverified. A landlord policy differs from a homeowners policy: it covers the structure and loss of rent, not the tenant's belongings. The state's survey lists no landlord type, so only a broker can price it.",
+  "Ask the current insurer for the declarations page. If the building is insured as an owner-occupied home, the cover may be wrong for rented units.",
+  "A gap in cover is the one cost that cannot be recovered after the event."),
+ ("Q-28", "What rent increase is allowed this year?",
+  OFF,
+  "1.6% for 1 March 2026 to 28 February 2027 for sitting tenants in covered units: 60% of the regional price index. The model uses 1.5% a year because that is the same formula at 2.5% inflation.",
+  "Nothing. Re-read the Rent Board page each year; the rate is republished annually.",
+  "Rent growth of 1% a year instead of 1.5% reduces Property B's net income by about 6% over ten years."),
+ ("Q-29", "What does the Rent Board charge?",
+  OFF,
+  "About $60 a unit a year, charged on owner-occupied units too unless an exemption is filed.",
+  "Ask whether the exemption has been filed for the unit the family occupies. It is a small amount, but it is annual.",
+  "About $180 a year for three units."),
+ ("Q-30", "Is a vacancy tax in force?",
+  PART + " &middot; unverified",
+  "Reported struck down on appeal in September 2026, but only in secondary reports; the opinion was not read. No official confirmation is recorded, so nothing is modelled.",
+  "Read the appellate opinion on the court's own site, or the city attorney's summary. If a tax exists, add it as a cost on the vacant or family-occupied unit.",
+  "A tax of $1,000 a unit a year would cost about $1,000 to $2,000 depending on occupancy."),
+]
+
+q_d = [
+ ("Q-31", "What return should the money be assumed to earn?",
+  PART + " &middot; assumption",
+  "7.0% a year for a stock index fund is a scenario, not a forecast; no long-run official average was read. The 10-year Treasury yielded 4.88% on 9 November 2026, verified. Renting beats selling only if stocks return under 4.7%.",
+  "Decide the assumption you are willing to plan on, and write it down. The sensitivity table shows the answer at 5%, 6%, 7% and 8%.",
+  f"At 5% instead of 7%, selling still leads, but the margin narrows from {usd(_gap7[0.04])} to {usd(_gap5pc)}."),
+ ("Q-32", "What is living in the home worth to the family?",
+  OPEN_R,
+  f"A decision, not a fact. The model prices it at {usd(B45['live_cost_month_today'])} a month in today's dollars compared with the best alternative, and it is the most expensive option in every case tested.",
+  "Decide before the death, while there is no pressure. Record the decision and the reason on this page's companion, the suggestions page.",
+  "Choosing to live there is rational if the family values it above that monthly figure; the arithmetic does not make the choice, it prices it."),
+ ("Q-33", "What if house prices grow more slowly, or faster?",
+  OFF + " &middot; scenario grid",
+  "Selling leads in all nine combinations of inheritance year (2040, 2045, 2050) and growth (3%, 4%, 5%). Renting overtakes only at about 7.0% growth a year, or if stocks return under 4.7%.",
+  "Nothing further. Re-run the grid when the Treasury yield moves by more than a percentage point.",
+  f"The ranking, not the margin, is what the grid tests. The sell-versus-rent margin runs from {usd(_gap7[0.03])} at 3% growth to {usd(_gap7[0.05])} at 5%, and closes at about 7%."),
+ ("Q-34", "What would change the recommendation?",
+  OFF + " &middot; computed break-evens",
+  "Four things: a stock return below 4.7%, house growth above 7.0%, a market rent above $14,250 a month, or a law that restored the pre-2021 exclusion. Insurance at three times the guess does not change it.",
+  "Watch those four numbers. Each is printed with the page that computes it.",
+  "Any one of them flips the ranking; none is close today except the Treasury comparison, which is thin."),
+ ("Q-36", "What would Property A sell for, net of costs?",
+  OPEN_T,
+  "Not knowable: it needs an appraisal at the date of death and a broker's view before listing. The model uses a 5.11% cost of sale and a basis equal to the date-of-death value, so the taxable gain starts at about zero.",
+  "At the death: commission a written appraisal promptly (step 7 on the inheritance page) and ask two brokers for a listing opinion. Both figures then replace the assumptions.",
+  "A 5% difference in the sale price moves the proceeds by about $325,000 at today's value, and much more in 2045; it does not change the ranking."),
+ ("Q-37", "What rent would Property A really achieve?",
+  OPEN_R,
+  "Assumed at $6,500 a month, not surveyed. Renting only wins if the rent reaches $14,250 a month in 2026 dollars or stocks return under 4.7%.",
+  "Ask two local letting agents for a written rental analysis. The break-even is published so the conclusion does not rest on the guess.",
+  "A rent of $8,000 instead of $6,500 raises the renting result but leaves it behind selling at a 7% stock return."),
+ ("Q-38", "Which reinvestment vehicle if markets are stressed at the inheritance?",
+  PART + " &middot; answered by scenario",
+  "In the seven verified historical analogues the sale held, but the vehicle changed: Treasuries won when yields cleared inflation or when stocks crashed at the inheritance; equities won in the baseline and the boom.",
+  "Pre-commit the switch in writing now, using the playbook on the stress page, so the decision is not taken under pressure.",
+  "Landing in a crash and selling into equities immediately is the case the playbook is written for; holding 12 to 24 months instead is priced on the stress page."),
+ ("Q-39", "Has any relevant law changed since the review date?",
+  PART + " &middot; checked to 12 November 2026",
+  "Checked to 12 November 2026: the federal exclusion is $15,000,000 for 2026 and $15,480,000 for 2027; the state repeal initiative failed for lack of signatures; the November 2026 ballot results are unofficial until certification.",
+  "Re-read three items twice a year: the federal exclusion, the parent-child exclusion and the basis reset. Add the certified election results when the Secretary of State certifies them.",
+  "Only a change to the basis reset or to the parent-child exclusion could move the ranking; a change to the exclusion alters the estate tax, not the choice."),
+ ("Q-35", "What if the law changes before 2045?",
+  OPEN_L,
+  "The initiative to repeal the 2021 rules failed for lack of signatures and was not on the 3 November 2026 ballot. If a later measure restored the old rule, Property A's 2045 tax would be lower and renting and moving in would each gain several hundred thousand dollars over ten years. Selling would still finish first.",
+  "Re-read the law-watch table twice a year, and at each election. Three items matter: the parent-child exclusion, the basis reset and the federal exclusion.",
+  "A change to the basis reset is the one that could reverse the ranking; none is verified as pending."),
+]
+
+def qtable(rows, caption):
+    return tbl(caption, ["No.", "Question", "Status", "Answer today", "Missing, and how to find it", "If the answer is different"], rows)
+
+
+# Each question carries the official page that bears on it, so a reader can check the rule even when
+# the household-specific answer is still missing.
+QSRC = {
+ "Q-01": ("irs_estate", "irs_2027"), "Q-02": ("uscode102",), "Q-03": ("sco_estate", "rtc13301"),
+ "Q-04": ("rtc11930", "rtc480"), "Q-05": ("irs_estate",), "Q-06": ("irs_rmd",),
+ "Q-07": ("irs_rr2023_2", "irs_basis"), "Q-08": ("boe_lta26026", "cityb_rate"), "Q-09": ("boe_prop19",),
+ "Q-10": ("irs_estate", "irs_2027"), "Q-11": ("irs_i706",), "Q-12": ("irs_estate",),
+ "Q-13": ("fred_hpi_a",), "Q-14": ("rtc63_2", "boe_prop19"), "Q-15": ("boe_lta25009",),
+ "Q-16": ("rtc63_2",), "Q-17": ("rtc63_2", "boe_prop19"), "Q-18": ("cdi_tips", "cdi_compare"),
+ "Q-19": ("cnty_a_rates", "cityb_rate"), "Q-20": ("cpuc_nem",), "Q-21": ("irs_p527",),
+ "Q-22": ("cnty_a_rates",), "Q-23": ("boe_lta26002",), "Q-24": ("irs_p527", "boe_lta26002"),
+ "Q-25": ("cityb_rent",), "Q-26": ("cityb_rent",), "Q-27": ("cdi_compare",), "Q-28": ("cityb_rent",),
+ "Q-29": ("cityb_rentfee",), "Q-30": ("cityb_rate",), "Q-31": ("treasury_cmt", "tsp_returns"),
+ "Q-32": ("irs_tc701",), "Q-33": ("fred_hpi_a",), "Q-34": ("treasury_cmt", "irs_p925"),
+ "Q-35": ("sos_memo", "lao_250017"), "Q-36": ("irs_basis", "cnty_a_recorder"),
+ "Q-37": ("hud_fmr",), "Q-38": ("fedhist_greatrecession", "fedhist_greatinflation"),
+ "Q-39": ("sos_results", "irs_estate"),
+}
+
+
+def qrows(rows):
+    out = []
+    for r in rows:
+        out.append((r, "S" if r[2].startswith("<em>Answered") else "X", S(*QSRC[r[0]])))
+    return out
+
+
+counts = {"official": 0, "open": 0}
+for r in q_money + q_a + q_b + q_d:
+    if "Open" in r[2]:
+        counts["open"] += 1
+counts["official"] = len(q_money + q_a + q_b + q_d) - counts["open"]
+
+body = f"""
+<div class="note"><strong>What this page is.</strong> {len(q_money + q_a + q_b + q_d)} questions, in the order they have to be answered.
+Each one states what is settled today and links the official page that settles it, what is still missing, the concrete step that would
+find it, and what changes if the answer comes back differently. Nothing here is inferred: where a household fact is unknown, the answer
+says so and the figure stays blank. Questions marked <span class="b b-x">Your choice</span> need a decision rather than research.</div>
+<div class="cards">
+<div class="card"><div class="k">Answered from an official source</div><div class="v">{counts['official']}</div><p>Rules, thresholds and deadlines that are settled law, each linked to its publisher.</p></div>
+<div class="card"><div class="k">Still open</div><div class="v">{counts['open']}</div><p>Household facts, professional opinions or future events. Each has a named step that would close it.</p></div>
+<div class="card"><div class="k">Blocking today</div><div class="v">2</div><p>Q-07 (is the trust revocable) and Q-08 (who holds title to Property B). Both are answered by one document each.</p></div>
+</div>
+
+<section><h2>If you do only three things</h2>
+<ol>
+<li><strong>Read the trust and the deed (Q-07, Q-08).</strong> These two documents decide whether the sale is nearly tax-free and whether the rental building is reassessed. One afternoon with a scanner.</li>
+<li><strong>Get three insurance quotes (Q-18).</strong> Homeowners with wildfire cover for Property A, landlord cover for Property B. Then the running-cost tables stop relying on a guess.</li>
+<li><strong>Write down the cash total (Q-05).</strong> One number converts the federal room on the tax page into a tax bill or a zero.</li>
+</ol></section>
+
+<section><h2>Money, tax and title at the death</h2>
+{qtable(qrows(q_money), "Questions about the estate, the tax and the title")}</section>
+
+<section><h2>Property A: the home to inherit</h2>
+{qtable(qrows(q_a), "Questions about the home, its tax and the exclusion")}</section>
+
+<section><h2>Property B: the rented building</h2>
+{qtable(qrows(q_b), "Questions about the building already owned")}</section>
+
+<section><h2>The decision itself</h2>
+{qtable(qrows(q_d), "Questions about the choice between selling, renting and moving in")}</section>
+
+<section><h2>What cannot be known now</h2>
+<p>Some of the most important inputs do not exist yet, and no amount of research will produce them early: the value of the home on the
+date of death, the exclusion amount in that year, the law in that year, the stock and house market of the following decade, and the
+family's circumstances. The plan handles them the only way that is honest: it shows a range, states the break-even point at which the
+answer changes, and re-runs itself each year. Anything else would be a forecast dressed up as a fact.</p>
+<p>The next page turns these open questions into a short list of suggestions, with the effort and the privacy cost of each, so a path can
+be chosen before anything is changed: <a href="suggestions.html">suggestions and paths</a>.</p></section>{PRIV}"""
+PAGES["questions.html"] = page("questions.html", "Questions before deciding", "Questions",
+                               "What we know, what we do not, and how to find out",
+                               "Every question that has to be answered before the decision can be made, with its status, the official rule behind it, and the step that closes it.", body)
+
+
+# ------------------------------------------------------------------------------------------------ suggestions
+DONE = '<span class="pill now">Done in this edition</span>'
+CALL = '<span class="pill you">Your call</span>'
+REC = '<span class="pill you">Needs records you hold</span>'
+PRO = '<span class="pill pro">Needs a professional</span>'
+LATER = '<span class="pill later">Later / optional</span>'
+
+paths = [
+ (["P-1", "Act on today's numbers", "Read the summary and the decision page; treat the unverified items as blanks and decide at the death.",
+   "None", "Nothing new", "Leaves the trust, the deed, the insurance premium and the cash total unknown until the year they matter most.",
+   "Acceptable only because the ranking does not depend on them; the margin does."], "X", '<a href="executive-summary.html">Executive summary</a>'),
+ (["P-2", "Close the three gaps first", "Read the trust and the deed (Q-07, Q-08), get three insurance quotes (Q-18), and write down the cash total (Q-05). Then re-read the decision page.",
+   "Two to four weeks, mostly waiting", "The two documents and a broker", "Basis step-up, Property B's ownership, the real premium, the estate-tax figure.",
+   "Future law, future prices, the family's choice about living there.",
+   "<strong>Recommended.</strong> Each of the three is one document or one phone call, and each moves a number that is currently a blank."], "X", '<a href="questions.html">Questions and answers</a>'),
+ (["P-3", "Publish at maximum privacy", "Set the privacy tier to 3: roll values to the nearest $10,000, everything else unchanged.",
+   "One command, one rebuild", "The roll tables lose their last digits", "The strongest available protection against matching a parcel; the analysis does not change at all.",
+   "The property and tax tables no longer show the year-by-year bill with precision.",
+   "Choose this if the $10 figures feel too close to the record. <a href=\"#privacy\">See the trade-off.</a>"], "X", '<a href="review.html">Privacy disclosures</a>'),
+ (["P-4", "Professional review before the window", "Estate attorney to confirm the trust and portability; a tax preparer to model the inherited accounts and the 2045 rate; an appraiser for a baseline.",
+   "Fees quoted by each; ask for them", "Three professionals", "The legal questions the model cannot answer, and the fee numbers that are blank today.",
+   "Everything that depends on the law of the 2040s.",
+   "Do this by 2035, not at the death. It is the only path that closes Q-06, Q-11 and Q-12."], "X", '<a href="inheritance.html">Inheritance steps</a>'),
+]
+prow = [(p[0], p[1], p[2]) for p in paths]
+
+sug = [
+ ("S-01", "Read the trust instrument and the deed; record two facts: is the trust revocable, and who holds title to Property B.",
+  "Two of the largest numbers in the analysis turn on them: the basis step-up and the reassessment of the rental.", "One afternoon",
+  "None: the documents stay private.", REC),
+ ("S-02", "Get three real insurance quotes: homeowners with wildfire cover for Property A, landlord cover for Property B.",
+  "The only running cost that is entirely unverified. The state publishes samples, not quotes, and lists no landlord product.", "Two or three calls",
+  "None; quotes are not published, only the rounded premium is.", PRO),
+ ("S-03", "Write the value of the cash and securities in the estate on one line, and keep it with the trust.",
+  "Converts the federal room from an abstract figure into either a tax bill or a zero.", "Ten minutes",
+  "Publish only the rounded total, or nothing.", REC),
+ ("S-04", "Choose the precision of the roll tables, and change it whenever you want.",
+  "The brief asks for $10 figures; that is the least protective setting. The setting is now a switch, not a rewrite.", "One command",
+  "Tier 1 (now) leaves a close fingerprint; tier 3 removes it.", DONE),
+ ("S-05", "Replace the derived fixed charges ($840 and $1,090) with the line items on the two current bills.",
+  "Fixed charges do not shrink when an assessed value resets, so they stay in every projection.", "One hour",
+  "None; only totals are published.", REC),
+ ("S-06", "Decide, now and in writing, whether any family member would move into Property A.",
+  "It decides whether the parent-child exclusion is worth planning for, and it changes how the trust should distribute the home.", "A family conversation",
+  "None.", CALL),
+ ("S-07", "Model the inherited retirement accounts, if any, across the ten-year distribution window.",
+  "A non-spouse beneficiary must generally empty an inherited account within ten years; the tax rate on that can exceed the property tax question.", "An hour with a preparer",
+  "Publish only percentages and rounded amounts.", PRO),
+ ("S-08", "Add a liquidity plan for any federal estate tax: which asset pays it, and how, within the nine months.",
+  "The tax is due with Form 706 nine months after the death, and the estate may be almost entirely land.", "A paragraph in the estate plan",
+  "None.", PRO),
+ ("S-09", "Keep a dated law watch, re-read twice a year (February and November), on three items only.",
+  "The exclusion amount, the parent-child exclusion and the basis reset are the only rules that can move the ranking.", "Twenty minutes twice a year",
+  "None.", LATER),
+ ("S-10", "Re-run the model once a year with the current Treasury yield and the published factors.",
+  "The Treasury yield is the thinnest margin in the analysis: renting and Treasuries finish close together.", "One command, five minutes",
+  "None.", DONE),
+ ("S-11", "Retire the two cross-check editions, or label every figure with its edition on every page.",
+  "Three editions with three models invite mixing numbers that were never meant to be compared.", "A decision, then an hour",
+  "None.", CALL),
+ ("S-12", "Deal with the repository history: rewrite it, or make the repository private.",
+  "Earlier commits contain finer figures and location detail. No setting on the website can remove them.", "An hour with git, or a repository setting",
+  "This is the only measure that removes the historical figures.", CALL),
+ ("S-13", "Add the water and electricity tariffs to the source library, from the serving utilities' published schedules.",
+  "Water and electricity are the last running costs resting only on your estimate.", "An hour",
+  "The utility's schedule names no household.", LATER),
+ ("S-14", "Add a printable one-page brief for the trustee and the attorney.",
+  "The people who will act in the twelve-month window need one page, not fifteen.", "An hour",
+  "Uses the same rounded figures.", LATER),
+ ("S-15", "Model a middle path: sell Property A and buy a smaller home in the same region with part of the proceeds.",
+  "The current comparison is all-or-nothing: the whole value in one house, or none in housing.", "Half a day of model work",
+  "None.", LATER),
+ ("S-17", "Commission a written rental analysis for Property A before rejecting the rent option.",
+  "Market rent is an assumption; renting only wins above a published break-even, and a real rent figure tests it.", "One agent, one letter",
+  "None; only the rent range is published.", REC),
+ ("S-18", "Retrieve the solar interconnection letter and the tariff end date.",
+  "The electricity credit ends with the tariff period; after that a cost replaces a credit in every projection.", "One call to the installer or utility",
+  "None.", REC),
+ ("S-19", "Pre-commit the black-swan playbook in writing.",
+  "In the verified analogues the sale held but the reinvestment vehicle changed with the regime; deciding the switch in advance avoids a panic decision.", "One page, written now",
+  "None.", CALL),
+ ("S-20", "Put the date-of-death appraisal in the trustee's instructions.",
+  "The appraisal is the evidence for the basis and for the estate return, and it has to be contemporaneous to be useful.", "A paragraph in the instructions",
+  "None.", PRO),
+ ("S-16", "Put every document in one folder now: trust, deed, both tax bills, both policies, the solar agreement.",
+  "The twelve-month window after a death should not be spent looking for paperwork.", "An afternoon",
+  "Keep the folder private; publish nothing from it.", REC),
+]
+srow = [([s[0], s[1], s[2], s[3], s[4], s[5]], "X", '<a href="questions.html">Questions and answers</a>') for s in sug]
+
+tiers = [
+ (["Tier 1 &middot; now", "Nearest $10", "A search for an exact roll value does not match. That is all it protects: a value within a few dollars of the record, with a 2% chain back to 2014, is still a close fingerprint for anyone who knows what to look for.",
+   "The full table as the brief asks for it.", "Set in <code>assets/privacy.json</code>."], "X", '<a href="review.html">Privacy disclosures</a>'),
+ (["Tier 2", "Nearest $1,000", "A roll value among roughly 100 in the same range; the growth chain still narrows it.", "Year-by-year detail, to the nearest thousand.", "<code>python3 scripts/privacy_tier.py 2</code>"], "X", '<a href="review.html">Privacy disclosures</a>'),
+ (["Tier 3", "Nearest $10,000", "A roll value among roughly 1,000 in the same range. The previous edition published at this level.", "The analysis, unchanged; the last digits of the tables.", "<code>python3 scripts/privacy_tier.py 3</code>"], "X", '<a href="review.html">Privacy disclosures</a>'),
+]
+trow = [(t[0], t[1], t[2]) for t in tiers]
+
+body = f"""
+<div class="note"><strong>How this page works.</strong> These are suggestions, not changes. Each one states what it fixes, what it costs
+in time, and what it does to privacy. Nothing on the site changes unless you choose it, apart from the two items marked
+<span class="pill now">Done in this edition</span>, which are described at the foot of the page. Read the paths first, pick one, then work
+down the list.</div>
+
+<section><h2>Choose a path before changing anything</h2>
+<p>There are four sensible paths. They differ in how much is settled before the decision is made, not in what is recommended: every path
+ends in the same default, sell Property A and keep Property B, because the ranking does not depend on the missing numbers. What the
+missing numbers change is the size of the margin and the tax bill.</p>
+{tbl("The four paths", ["No.", "Path", "What you do", "Time and cost", "Who is involved", "What it settles", "What it leaves open", "Verdict"], prow)}
+<p class="small">If no path is chosen, the site stays as it is: the last row of the decision page remains the recommendation, and the
+flagged page remains the list of what is not known. That is a legitimate choice, and P-1 is exactly that.</p></section>
+
+<section><h2>Suggestion register</h2>
+<p>{len(sug)} suggestions, ordered by what they are worth. The first three are the same three gaps as above, in the order I would close them.</p>
+{tbl("Suggestions, with effort, privacy effect and status", ["No.", "Suggestion", "Problem it solves", "Effort", "Effect on privacy", "Status"], srow)}</section>
+
+<section id="privacy"><h2>The privacy choice</h2>
+<p>The brief asks for property tax and assessment tables at $10 precision, so that figures cannot be traced back to the source. That is the
+setting in force now. It is worth being exact about what it does: rounding to $10 removes the exact match, and nothing more. A roll value
+within a few dollars of the record, published with a 2% growth chain, is a strong identifier to anyone who can search the county roll.
+The stronger protection is rounding to $1,000 or $10,000, which costs the last digits of a table but none of the analysis.</p>
+{tbl("Precision settings", ["Setting", "Roll values shown", "What it protects", "What it costs", "How to switch"], trow)}
+<p>The setting lives in <code>assets/privacy.json</code>, is committed with the site, and is read by the model, so the pages and the
+checks always reproduce the same figures. It does not reach into repository history: earlier commits and pull-request diffs may still
+contain finer figures, which no setting on the website can change (S-12).</p></section>
+
+<section><h2>Decision gates</h2>
+<div class="gate"><h3>Gate 1 &middot; now, no spending</h3>
+<p>Read the trust and the deed; confirm which home carries the homeowners' exemption; decide whether anyone would move in; put the
+documents in one folder. All of it is free, and it closes the two questions that block the analysis.</p></div>
+<div class="gate"><h3>Gate 2 &middot; before 2035</h3>
+<p>Professional review of the trust, the portability election and any inherited accounts; three insurance quotes at that year's prices,
+renewed every three years; a baseline appraisal so the eventual date-of-death value has a reference point.</p></div>
+<div class="gate"><h3>Gate 3 &middot; the twelve months after the death</h3>
+<p>Appraisal, change in ownership statement within 150 days, homeowners' exemption within one year, exclusion claim within three years or
+before a sale, Form 706 within nine months if the estate is near the threshold or a spouse survives. Then the decision, with real
+numbers instead of scenarios.</p></div>
+<div class="gate"><h3>Gate 4 &middot; every year</h3>
+<p>Re-read three law-watch items, update the Treasury yield, re-run the model, and re-read the break-even table. If any of the four
+break-evens is crossed, the ranking changes and this page should be read again.</p></div></section>
+
+<section><h2>What was done in this edition</h2>
+<ul>
+<li><strong>Two new sections:</strong> this page, and <a href="questions.html">questions and answers</a> with {len(q_money + q_a + q_b + q_d)} items.</li>
+<li><strong>Roll tables published:</strong> the full property tax and assessment history for both properties, at the precision you asked for,
+with percentage changes computed before rounding so they are exact at any setting.</li>
+<li><strong>The privacy tier became a switch</strong> rather than a rewrite, with the trade-off stated on every page.</li>
+<li><strong>Four sources added</strong> and re-read on 12 November 2026: 26 U.S.C. 102 (an inheritance is not income), the IRS required-minimum-distribution
+FAQ (the ten-year rule), and two Department of Insurance pages (the FAIR Plan's $3,000,000 maximum for all coverages combined, and the
+premium comparison tools).</li>
+<li><strong>Two gaps in the earlier edition closed:</strong> the treatment of inherited retirement accounts and the treatment of the inheritance itself as income.</li>
+</ul></section>
+
+<section><h2>What I would do first</h2>
+<ol>
+<li><strong>This week:</strong> S-01 and S-03. Two documents and one number.</li>
+<li><strong>This month:</strong> S-02. Three insurance quotes, written down.</li>
+<li><strong>This year:</strong> S-06 and S-16. The family decision and the folder.</li>
+<li><strong>Before 2035:</strong> P-4. The professional review, with the fees asked for in writing.</li>
+</ol></section>{PRIV}"""
+PAGES["suggestions.html"] = page("suggestions.html", "Suggestions for review", "Suggestions", "What to change, and in what order",
+                                 f"Four paths, {len(sug)} suggestions, and the privacy trade-off, so a route can be chosen before anything is implemented.", body)
+
 
 # ------------------------------------------------------------------------------------------------ decision
 sec = []
@@ -642,12 +1125,32 @@ PAGES["black-swans.html"] = page("black-swans.html", "Black-swan conditions", "B
                                  body)
 
 # ------------------------------------------------------------------------------------------------ property A
-hist = [("2015", "1.998%", "1.998%"), ("2016", "1.525%", "1.525%"), ("2017 to 2020", "2.000% each year", "2.000% each year"),
-        ("2021", "1.036%", "1.036%"), ("2022 to 2026", "2.000% each year", "2.000% each year")]
+
+# Roll history at the owner's chosen precision. Percentages are computed from the owner's own
+# figures, so they do not change when the privacy tier changes.
+def money(x):
+    return ("blank", "Not supplied") if x is None else N(x)
+
+
+def pct_cell(x):
+    return ("n", "&mdash;") if x is None else ("n", f"{x:+.2f}%")
+
+
+def roll_rows(hist, note):
+    out = []
+    for r in hist:
+        check = "Not read" if r["factor"] is None and r["assessed_pct"] is None else (
+            "Matches" if r["match"] is True else ("Differs" if r["match"] is False else "Not checked"))
+        out.append(([str(r["year"]), money(r["bill"]), N(r["assessed"]), pct_cell(r["bill_pct"]),
+                     pct_cell(r["assessed_pct"]), ("n", "&mdash;") if r["factor"] is None else ("n", f'{r["factor"]:.3f}%'),
+                     check], "O", S("boe_lta26002", flag=(r["match"] is False)), "irregular" if r["match"] is False else ""))
+    return out
+
+
 rows = [
  (["Market value, November 2026", N(M["inputs"]["a_value"]), "Owner's estimate. An appraisal at the date of death sets the tax basis."], "O", S("irs_basis")),
- (["Assessed value, 2026", "about " + usd(M["inputs"]["a_av_2026"]), "Generalised to the nearest $10,000 for privacy."], "O", S("boe_lta26002")),
- (["Tax bill, 2025", "about " + usd(M["inputs"]["a_bill_2025"]), "Generalised to the nearest $100. The 2026 bill was not supplied."], "O", S("cnty_a_rates", flag=True)),
+ (["Assessed value, 2026", N(M["inputs"]["a_av_2026"]), f'Owner\'s record, at the owner\'s chosen precision ({M["privacy"]["description"]}).'], "O", S("boe_lta26002")),
+ (["Tax bill, 2025", N(M["inputs"]["a_bill_2025"]), "Owner's record, same precision. The 2026 bill was not supplied."], "O", S("cnty_a_rates", flag=True)),
  (["Tax rate for the property's tax rate area", BLANK, "County A's rates run from 1.126% to 1.241%. The bill's tax rate area is needed. The model uses 1.18%."], "U", S("cnty_a_rates", flag=True)),
  (["Water", "$1,500 a year", "Midpoint of the owner's $100 to $150 a month."], "O", S("irs_p527")),
  (["Electricity", "&minus;$180 a year", "Solar. The owner reports a credit of $10 to $20 a month. The older solar tariffs last 20 years from connection; the connection date was not supplied."], "O", S("cpuc_nem", flag=True)),
@@ -655,16 +1158,25 @@ rows = [
  (["Maintenance", N(NOW_A["maintenance"]), "1.0% of an assumed building value. The owner says this home costs less to maintain than Property B."], "A", S("irs_p527", asm=True)),
  (["Total running cost, 2026", N(NOW_A["total_cost"]), "Property tax, the insurance guess, water, electricity credit and maintenance."], "C", S("boe_lta26002", asm=True)),
 ]
-hrows = [([y, ("n", f), ("n", o), "Matches"], "V", S("boe_lta26002")) for y, f, o in hist]
+hrows = roll_rows(M["roll_a"], "A")
 p19 = [([str(y), N(AFTER[y]["fmv"]), N(AFTER[y]["base"]), N(AFTER[y]["amount"]), N(AFTER[y]["live"]), N(AFTER[y]["rent"]), N(AFTER[y]["saving"])], "C",
         S("rtc63_2", "boe_lta25009", asm=True)) for y in (2040, 2045, 2050)]
 body = f"""
 <section><h2>What is known</h2>{tbl("Property A: inputs and current running cost", ["Item", "Value", "Note"], rows)}{LEGEND}</section>
-<section><h2>Assessment history checked against the state factors</h2>
-<p>The owner's assessed values for 2014 to 2026 were compared, year by year, with the inflation factors the Board of Equalization publishes. Every year matches to within one dollar.
-That means no new construction and no reassessment is hidden in the record. Dollar values are not shown here because roll values identify a parcel.</p>
-{tbl("Year-over-year change in assessed value", ["Year", "State factor", "Owner's record", "Result"], hrows)}
-<p>Two irregularities in the owner's tax-bill record are on the Flagged for Review page: in two places the same tax amount is entered for consecutive years although the assessed value rose 2%.</p></section>
+<section><h2>Tax and assessment history, 2014 to 2026</h2>
+<p>The owner's record, year by year. The bill and the assessment are published at the owner's chosen precision
+({M["privacy"]["description"]}); the percentage changes are computed from the owner's record once, so they do not move when the
+precision setting changes. The state factor column is the inflation factor the Board of Equalization published for that year, which
+caps the rise at 2% unless there is a change in ownership or new construction.</p>
+{tbl("Property A: property tax and tax assessment by year", ["Year", "Property tax", "Tax assessment", "Change in bill", "Change in assessment", "State factor", "Check"], hrows)}
+<p>Every year's assessment change matches the published state factor to within one basis point. That means no new construction
+and no reassessment is hidden in the record. Two irregularities in the bill column are on the
+<a href="review.html">Flagged for Review</a> page: in two places the same tax amount is entered for consecutive years although the
+assessed value rose 2%. Both are marked <em>Differs</em> above, and neither affects any projection, which is built from the
+assessment and the rate rather than from the bills.</p>
+<p class="small">Reading the table: 2017 is the one year the bill fell while the assessment rose. 2018 repeats 2017's bill.
+2019 and 2020 repeat each other in the same way. A change in the fixed charges on the bill, or a bill entered twice, would
+explain both; the line items would settle it (question Q-19).</p></section>
 <section><h2>What the inheritance does to the assessed value</h2>
 <p>If a child moves in, the new assessed value is the old one plus whatever market value exceeds the old value and the Proposition 19 amount together. With this home that is simply market value less the amount.
 If the home is rented, it is assessed at full market value. The amount grows by one year's house price change every second year.</p>
@@ -676,8 +1188,8 @@ PAGES["property-a.html"] = page("property-a.html", "Property A", "Property A", "
 # ------------------------------------------------------------------------------------------------ property B
 rows = [
  (["Market value, November 2026", N(M["inputs"]["b_value"]), "Owner's estimate."], "O", S("irs_basis")),
- (["Assessed value, 2025", "about " + usd(M["inputs"]["b_av_2025"]), "Generalised to the nearest $10,000. The 2026 value was not supplied."], "O", S("boe_lta26002", flag=True)),
- (["Tax bill, 2025", "about " + usd(M["inputs"]["b_bill_2025"]), "Generalised to the nearest $100."], "O", S("cityb_rate")),
+ (["Assessed value, 2025", N(M["inputs"]["b_av_2025"]), f'Owner\'s record, at the owner\'s chosen precision ({M["privacy"]["description"]}). The 2026 value was not supplied.'], "O", S("boe_lta26002", flag=True)),
+ (["Tax bill, 2025", N(M["inputs"]["b_bill_2025"]), "Owner's record, same precision."], "O", S("cityb_rate")),
  (["City B tax rate, fiscal year 2025-26", P(M["verified"]["rate_b_2025"], 5), "Applied to assessed value."], "V", S("cityb_res447")),
  (["City B tax rate, fiscal year 2026-27", P(M["verified"]["rate_b_2026"], 5), "Current year. Used for every projection."], "V", S("cityb_rate")),
  (["Fixed charges on the bill", "about " + usd(M["fixed"]["b"]), "The bill is about 80% more than rate times assessed value. The difference is fixed charges; the line items were not supplied."], "C", S("cityb_rate", flag=True)),
@@ -699,10 +1211,14 @@ ttx = [
  (["$5,000,000 to under $10,000,000", ("n", "2.25%"), "The rate applies to the whole price. At 4% growth the value crosses this line around 2053; the tax on a sale triples."], "V", S("cityb_transfer")),
  (["Transfer at death", "Exempt", "No documentary transfer tax on a transfer by reason of death, outright or in trust."], "V", S("rtc11930")),
 ]
+brows = roll_rows(M["roll_b"], "B")
 body = f"""
-<section><h2>What is known</h2>{tbl("Property B: inputs and current income", ["Item", "Value", "Note"], rows)}{LEGEND}
-<p>The owner's assessed values for 2016 to 2025 follow the state factors in every year but one, where the rise was slightly below the factor. The year is reported to the owner privately.
-One year's tax bill rose about 18% and another fell about 6% while the assessed value moved 2% and 1%. A change in fixed charges would explain moves of that kind; the bills' line items would confirm or refute it.</p></section>
+<section><h2>What is known</h2>{tbl("Property B: inputs and current income", ["Item", "Value", "Note"], rows)}{LEGEND}</section>
+<section><h2>Tax and assessment history, 2016 to 2025</h2>
+<p>Same presentation as Property A. Percentages are computed from the owner's record once, so they are the same at any privacy tier.
+Every assessment change with a published state factor beside it matches that factor; 2016 cannot be checked because the record begins
+that year. One bill fell about 6% and one rose about 18% while the assessment moved less, which a change in fixed charges would explain.</p>
+{tbl("Property B: property tax and tax assessment by year", ["Year", "Property tax", "Tax assessment", "Change in bill", "Change in assessment", "State factor", "Check"], brows)}</section>
 <section><h2>If Property B passes in the same estate</h2>
 <p>The owner states (11 November 2026) that the building is already owned by the beneficiary; the deed was not seen, so the question stays flagged (FL-01). If instead the parents hold title, the building changes ownership at the same death and is reassessed. In a multi-unit building the family-home exclusion covers only the unit that was the parent's principal residence and becomes the child's.
 Under the owner's statement none of this applies; the table is kept as the contingency case.</p>
@@ -783,8 +1299,11 @@ The 2026 and 2027 exclusions are the published amounts. From 2030 the exclusion 
 <p>The table assumes both homes are in the estate, the conservative reading. The owner states (11 November 2026) that Property B is already owned by the beneficiary, so it is not part of the decedent's taxable estate <a href="https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax" target="_blank" rel="noopener noreferrer">IRS &middot; Estate tax thresholds</a>. If the deed confirms the statement, one person's room in 2045 is {usd(ROOM_B_OWNED)} instead of {usd(E45['room_single_base'])}, larger by Property B's 2045 value of {usd(B_VALUE_2045)}. The statement is owner-supplied; no deed was seen (flag FL-01).</p>
 <p><strong>What happens above the threshold.</strong> Each dollar of taxable estate above the exclusion costs the estate 40 cents. An estate $5,000,000 over the room would owe about $2,000,000 before credits. The tax is levied on the estate, not on the person who receives the property, and it is due with Form 706 nine months after the death; California and its cities add nothing. Because the exclusion is indexed and the room depends on house prices and on the cash balance, the comparison that matters in the year of death is the published exclusion against the date-of-death values, not today's numbers.</p></section>
 <section id="heir"><h2>What the heir receives, and what is still taxed</h2>
-<p>How much can be inherited before a tax applies? On the receipt itself there is no threshold and no tax: federal gross income excludes property acquired by inheritance, and California imposes no inheritance or estate tax of its own. The threshold that does exist is on the <em>estate</em>, and the tables above give it year by year. What is still taxed is everything the inherited assets do afterwards: the income they produce, the withdrawals taken from an inherited retirement account, and the gain on anything sold above its date-of-death value.</p>
-{tbl("Receipt, income and later withdrawals", ["Item", "Rule", "What it means"], heir)}{LEGEND}</section>
+<p>How much can be inherited before a tax applies? On the receipt itself there is no threshold and no tax: federal gross income excludes
+property acquired by inheritance, and California imposes no inheritance or estate tax of its own. The threshold that does exist is on the
+<em>estate</em>, and the estate pays it before anything is distributed. What the heir does pay tax on is the income the property earns
+afterwards, and the gain on a later sale measured from the value at the date of death.</p>
+{tbl("What the heir receives", ["Item", "Tax treatment", "Detail"], heir)}</section>
 <section><h2>Law changes under discussion</h2>{tbl("Law watch", ["Item", "Status on 10 November 2026", "What it would change", "Effect on this decision"], watch)}</section>{PRIV}"""
 PAGES["taxes.html"] = page("taxes.html", "Tax, thresholds, law watch", "Tax and law", "Rules, thresholds and what may change",
                            "Federal, state and local. Each rule was read on the official publisher's site.", body)
@@ -798,17 +1317,19 @@ steps = [
  (["5", "Day of death", "The trust becomes irrevocable. For property tax the date of death is the date of change in ownership.", "[SUCCESSOR_TRUSTEE]", "All deadlines below run from this date."], "V", S("boe_prop19")),
  (["6", "Within 60 days", "Send the trustee's notification to every beneficiary and heir.", "[SUCCESSOR_TRUSTEE]", "Required when a revocable trust becomes irrevocable."], "V", S("prob16061_7")),
  (["7", "Promptly", "Order a written appraisal of each property as of the date of death.", "[SUCCESSOR_TRUSTEE]", "Sets the tax basis and the value used for reassessment."], "V", S("irs_basis")),
- (["8", "Within 150 days", "File the change in ownership statement with the assessor of each county.", "[SUCCESSOR_TRUSTEE]", "A penalty follows if a written request goes unanswered for 90 days."], "V", S("rtc480")),
+ (["8", "Immediately", "Tell both insurers. Confirm the policy still covers the home while the trust or the estate holds it, and that Property B is insured as a rental, not as an owner-occupied home.", "[SUCCESSOR_TRUSTEE]", "A lapse or the wrong policy form is the one loss no later step can undo."], "U", S("cdi_tips", flag=True)),
+ (["9", "Within 150 days", "File the change in ownership statement with the assessor of each county.", "[SUCCESSOR_TRUSTEE]", "A penalty follows if a written request goes unanswered for 90 days."], "V", S("rtc480")),
  (["9", "Within 9 months", "File Form 706 if the estate exceeds the exclusion, or to elect the unused exclusion for a surviving spouse. Pay any tax.", "[SUCCESSOR_TRUSTEE]", "Form 4768 extends the filing date by six months."], "V", S("irs_i706")),
- (["10", "Decide early", "Choose: sell, rent or move in. A sale close to the date of death has almost no gain.", "[BENEFICIARY]", "Growth after the death is taxable when sold."], "V", S("irs_basis")),
- (["11", "If moving in: within 1 year", "Occupy the home as the principal residence and file the homeowners' exemption claim.", "[BENEFICIARY]", "Miss it and the exclusion applies only from the year of filing."], "V", S("boe_prop19", "rtc63_2")),
- (["12", "If moving in: within 3 years", "File the parent-child exclusion claim, and in any case before a sale to a third party.", "[BENEFICIARY]", "Or within six months of a supplemental assessment notice."], "V", S("boe_prop19", "rtc63_2")),
- (["13", "After the assessor acts", "Expect a supplemental tax bill for the reassessed value. Late instalments carry a 10% penalty.", "[BENEFICIARY]", "Budget for it: the first bills arrive months later."], "V", S("cityb_rate", "cnty_a_rates")),
- (["14", "On distribution", "Record the deed from the trust to the heir. No transfer tax is due on a transfer by reason of death.", "[SUCCESSOR_TRUSTEE]", "State the exemption on the deed."], "V", S("rtc11930")),
- (["15", "If selling", "Sell, pay the 0.11% county transfer tax, and report the sale with the date-of-death value as basis.", "[BENEFICIARY]", "Reported on Schedule D and Form 8949."], "V", S("rtc11911", "irs_basis")),
- (["16", "If renting", "Start depreciation from the date-of-death value of the building. Keep the land value separate.", "[BENEFICIARY]", "27.5 years; taxed back at up to 25% on sale."], "V", S("irs_p527", "irs_tc409")),
- (["17", "If living there, later", "Stay two years before any sale to keep the home-sale exclusion. Tell the assessor on moving out.", "[BENEFICIARY]", "Moving out ends the property tax exclusion."], "V", S("irs_tc701", "boe_prop19")),
-]
+ (["10", "Within 10 years of the death", "Empty any inherited retirement account within ten years, and spread the withdrawals. Each withdrawal is ordinary income.", "[BENEFICIARY]", "A non-spouse beneficiary may generally not stretch the account over a lifetime. Ask a preparer to model the brackets."], "V", S("irs_rmd")),
+ (["11", "Decide early", "Choose: sell, rent or move in. A sale close to the date of death has almost no gain.", "[BENEFICIARY]", "Growth after the death is taxable when sold."], "V", S("irs_basis")),
+ (["12", "If moving in: within 1 year", "Occupy the home as the principal residence and file the homeowners' exemption claim.", "[BENEFICIARY]", "Miss it and the exclusion applies only from the year of filing."], "V", S("boe_prop19", "rtc63_2")),
+ (["13", "If moving in: within 3 years", "File the parent-child exclusion claim, and in any case before a sale to a third party.", "[BENEFICIARY]", "Or within six months of a supplemental assessment notice."], "V", S("boe_prop19", "rtc63_2")),
+ (["14", "After the assessor acts", "Expect a supplemental tax bill for the reassessed value. Late instalments carry a 10% penalty.", "[BENEFICIARY]", "Budget for it: the first bills arrive months later."], "V", S("cityb_rate", "cnty_a_rates")),
+ (["15", "On distribution", "Record the deed from the trust to the heir. No transfer tax is due on a transfer by reason of death.", "[SUCCESSOR_TRUSTEE]", "State the exemption on the deed."], "V", S("rtc11930")),
+ (["16", "If selling", "Sell, pay the 0.11% county transfer tax, and report the sale with the date-of-death value as basis.", "[BENEFICIARY]", "Reported on Schedule D and Form 8949."], "V", S("rtc11911", "irs_basis")),
+ (["17", "If renting", "Start depreciation from the date-of-death value of the building. Keep the land value separate.", "[BENEFICIARY]", "27.5 years; taxed back at up to 25% on sale."], "V", S("irs_p527", "irs_tc409")),
+ (["18", "If living there, later", "Stay two years before any sale to keep the home-sale exclusion. Tell the assessor on moving out.", "[BENEFICIARY]", "Moving out ends the property tax exclusion."], "V", S("irs_tc701", "boe_prop19")),]
+steps = [([str(i)] + list(r[0][1:]), r[1], r[2]) for i, r in enumerate(steps, 1)]
 body = f"""{tbl("From today to the years after the inheritance", ["Step", "When", "What to do", "Who", "Why it matters"], steps)}{LEGEND}
 <section><h2>What a trust does and does not do</h2><ul>
 <li>A revocable trust keeps the property in the taxable estate, which is what resets the basis.</li>
@@ -818,145 +1339,6 @@ body = f"""{tbl("From today to the years after the inheritance", ["Step", "When"
 <p>The official names and numbers of the county forms, and the trust's own income tax filing during administration, were not verified in this session; they are on the Flagged for Review page.</p></section>{PRIV}"""
 PAGES["inheritance.html"] = page("inheritance.html", "Inheritance steps", "Inheritance by trust", "Step by step, with deadlines",
                                  "What to do now, at the death, and in the three years that follow.", body)
-
-
-# ------------------------------------------------------------------------------------------------ suggestions (proposed only — nothing decided)
-sug = [
- ("SG-01", "A", "Obtain two written insurance quotes for each property before locking the plan", "Premiums are the largest unverified running cost; the ranking was tested at three times the guess and held, but a real quote removes the guess entirely. The state survey lists homeowners, condominium, mobilehome, renters and earthquake types, and no landlord type, so a rental-dwelling quote has to come from an agent.", "Owner accepts quotes as the planning premium, or keeps the placeholder and the flag.", "C", "cdi_compare"),
- ("SG-02", "A", "Confirm who holds title to Property B from the deed, and record the answer", "Title decides whether Property B is in the decedent's estate and whether its tax resets at the same death (FL-01) — the single largest open swing in the estate room.", "Owner confirms title in writing to the file; contingency tables stay until then.", "O", "boe_lta26026"),
- ("SG-03", "A", "Confirm the trust is revocable and which home is the principal residence", "The basis reset depends on revocability, and the parent-child exclusion only covers the principal residence (FL-02, FL-03).", "Attorney confirms both in writing; if either fails, the decision page must be re-run.", "O", "irs_rr2023_2"),
- ("SG-04", "B", "Commission a written rental analysis for Property A before rejecting the rent option", "Market rent is an assumption (FL-07); renting only wins under conditions stated on the decision page, and a real rent figure tests them.", "Owner accepts the surveyed rent, or keeps the assumption labelled.", "U", "hud_fmr"),
- ("SG-05", "B", "Retrieve the solar interconnection date and tariff end date", "The electricity credit ends with the tariff period; after it, a monthly cost replaces a small credit (FL-13).", "Owner files the interconnection letter; projections gain an end date for the credit.", "O", "cpuc_nem"),
- ("SG-06", "A", "File the itemised tax bills and the tax-rate area for both properties", "Fixed charges and the exact rate area explain bills the percentage rate cannot (FL-08, FL-09).", "Owner supplies the bills; computed rows become verified rows.", "O", "cnty_a_rates"),
- ("SG-07", "A", "Build a full estate inventory: cash, securities, debts, retirement accounts, earlier taxable gifts", "The owner states cash may exceed the exclusion, but no amount was supplied, so tax above the room cannot be sized (FL-04, FL-24).", "Owner supplies the inventory privately (never published); only the $10-rounded room is shown.", "O", "irs_estate"),
- ("SG-08", "C", "Re-check the law watch once a year and after each election", "Thresholds, ballot measures and pending bills move the answer; the failed repeal initiative is the standing example.", "Owner adopts an annual review date, or accepts the law as at the review date.", "V", "sos_measures"),
- ("SG-09", "B", "Adopt the black-swan playbook now: proceeds default, and the condition that switches it", "In the historical analogues the sale held but the reinvestment vehicle changed with the regime; deciding the switch in advance removes panic decisions.", "Owner pre-commits the playbook, or decides at the time with the stress page open.", "C", "fedhist_greatrecession"),
- ("SG-11", "C", "At the death, obtain a dated appraisal of Property A promptly", "The reset basis is the value at death; a contemporaneous appraisal is the evidence for it and for the estate return.", "Trustee commissions the appraisal within the administration window.", "V", "irs_basis"),
- ("SG-13", "B", f"Re-run the model with California's 1% additional tax above $1,000,000 (RTC 17043)", f"Not in the 12.3% rate assumption (FL-25). Applied to the taxable gain alone it lowers the 2045 stock result from {usd(TS['base'])} to {usd(TS['with_surcharge'])}, a change of {usd(TS['delta'])}; the ranking does not move. Adopting it in the model would put the number in every table.", "Owner accepts the surcharge basis; the model, not just this page, is re-run.", "C", "rtc17043"),
- ("SG-14", "A", "Decide what to publish for values that are already multiples of $10", "Rounding to $10 does not disguise a figure that is already a multiple of $10, so the published values and rent remain as supplied (third privacy disclosure). Choosing value bands or a rent rounded to $100 would remove more of that residual risk, at the cost of precision.", "Owner chooses between exact rounded values, bands, or withdrawing the property-specific figures.", "U", "boe_lta26002"),
- ("SG-15", "B", "Ask a broker for a landlord (rental-dwelling) quote for Property B", "The Department's survey covers homeowners, condominium, mobilehome, renters and earthquake cover, and no landlord type; a rental-dwelling policy can only be quoted by an agent.", "Owner obtains the quote privately; only the resulting rounded premium is published.", "C", "cdi_compare"),
-]
-srows = [([i, pr, s, why, dec], b, S(src, flag=True)) for i, pr, s, why, dec, b, src in sug]
-
-paths = [
- (["P1 &middot; Sell A, reinvest, keep B", "Recommended on these numbers", "Sells Property A in the year after the death, reinvests the net proceeds, keeps Property B and its rent", "Confirm trust, title and principal residence (SG-02, SG-03)", "Yes, until the sale; the trust can still change its mind", "Market entry timing, and the stock return over ten years", N(SELL["wealth"]), f"Stocks below {BE['stock_return']}% a year, or house prices at {BE['house_growth']}% a year"], "irs_basis", "rtc63_2"),
- (["P2 &middot; Keep A, rent it out", "Alternative", "Keeps both homes; pays the reset tax of about $78,400 a year in 2045 and becomes a landlord", "Obtain a rental analysis and a landlord insurance quote (SG-04, SG-15)", "Yes, until a tenant signs", "Reset property tax, tenant law, vacancy, repairs", N(RENT["wealth"]), f"Rent at or above {usd(BE['rent_month'])} a month in today's dollars, with costs as modelled"], "boe_prop19", "irs_p527"),
- (["P3 &middot; Move in", "Alternative", "Uses the parent-child exclusion, which needs occupation within one year and two claims filed on time", "Confirm which home carries the parents' homeowners' exemption (SG-03)", "No, once the claims are filed and the year passes", f"About {usd(B45['live_cost_month_today'])} a month in today's dollars compared with the best alternative; a lifestyle choice", N(LIVE["wealth"]), "A decision that the home is worth that monthly difference"], "rtc63_2", "boe_lta25009"),
- (["P4 &middot; Defer the choice", "Not modelled", "Commits to nothing today beyond an annual law re-check", "Record the review date and the triggers below (SG-08, SG-09)", "Yes, by definition", "Law changes and market moves before 2040 are missed", BLANK, "Any change to the exclusion, Proposition 19, or the two local tax rules"], "sos_measures", "lao_250017"),
-]
-prows = [([*cells], ("C" if i < 3 else "U"), S(s1, s2, asm=(i < 3))) for i, (cells, s1, s2) in enumerate(paths)]
-
-gates = [
- (["G1 &middot; Evidence", "Every new number must be readable on the publisher's own page", "A ledger entry with the words relied on and how it was checked", "Enforced by the build; a row without an official link fails"], "V", "irs_estate"),
- (["G2 &middot; Privacy", "No name, street address, postal code, parcel number, or already-round figure that could identify the household", "The privacy scan passes, and the owner has seen the residual-risk disclosure", "Owner"], "V", "boe_lta26002"),
- (["G3 &middot; Arithmetic", "Every figure recomputes from the model's own formulas", "Re-running the model and the renderer changes no byte", "Enforced by the build"], "C", "irs_basis"),
- (["G4 &middot; Choice", "A path is chosen deliberately, with a date, before any change is implemented", "The owner's written choice, kept outside the site", "Owner"], "U", "sos_measures"),
- (["G5 &middot; Publication", "Only reviewed files reach the site; retired paths return a notice", "The packaging check lists every published file", "Enforced by the build"], "V", "irs_estate"),
-]
-grows = [([*cells], bb, S(src)) for cells, bb, src in gates]
-
-body = f"""<div class="note"><strong>Nothing on this page is decided or implemented.</strong> Each suggestion is <strong>Proposed — not decided</strong>. Review the register, choose a path in the second table, then implement. The site takes no input and stores nothing; the choice is recorded by the owner outside the site.</div>
-{tbl("Suggestions for review — proposed only", ["No.", "Priority", "Suggestion", "Why it improves the decision", "Decision needed before implementing"], srows)}{LEGEND}
-<section><h2>Two process suggestions that no official source supports</h2>
-<p>SG-10 and SG-12 are about this repository and about which edition to act on. No statute, agency or data series bears on them, so they are listed here without a badge: a link in that column would imply support that does not exist. They are the owner's decision alone and change no figure.</p>
-<ul>
-<li><strong>SG-10 — Decide the repository-history question separately from the analysis.</strong> Earlier public commits contain exact figures this edition cannot remove; only the owner can choose rewriting history or taking the repository private. Nothing on the site changes either way.</li>
-<li><strong>SG-12 — Keep this root edition as the only edition to act on.</strong> Three editions with separate models sit in the repository and must not be mixed; the cross-checks are for reconciliation only. The overview page says which edition a reader is looking at.</li>
-</ul></section>
-<section><h2>Choose one path before implementing anything</h2>
-<p>Priority A means the item should be settled before any path is chosen, B before choosing rent or moving in, C later. The four paths below are the only ones the model supports; each states what would have to be true for it to win. Results are for a 2045 inheritance at 4% house growth, ten years later, after tax and selling costs.</p>
-{tbl("Paths to choose from", ["Path", "Status", "What it commits to", "First action now", "Reversible?", "Main risk", "Result after 10 years", "Evidence that would change it"], prows)}{LEGEND}</section>
-<section><h2>Gates before any change is implemented</h2>
-<p>The order is fixed: evidence, then arithmetic, then the owner's choice, then publication. A later gate cannot be used to skip an earlier one. Flags on the review page are not gates; they are recorded uncertainty.</p>
-{tbl("Change-control gates", ["Gate", "Test", "Evidence required", "Sign-off"], grows)}{LEGEND}</section>
-<section><h2>How to use this page</h2><ol>
-<li>Read the register. Mark each row Adopt, Reject, or Defer outside the site; the site stores nothing.</li>
-<li>Priority A rows (SG-01, SG-02, SG-03, SG-06, SG-07, SG-14) decide how much of the analysis is evidence rather than assumption. Adopting one supplies a document and closes the matching flag. SG-10 and SG-12, listed below the table, carry no badge because no official page supports them.</li>
-<li>Choose a path. P1 is the recommendation on the numbers; P2, P3 and P4 stay open, and each names the evidence that would move it ahead.</li>
-<li>Implement only after the choice is recorded. A change means editing the model, re-running it, passing the three checks and republishing; no figure on the site is typed by hand.</li>
-<li>If a later fact differs from the register (a quote, the deed, a law change), record it, re-run, and compare the new result with the old one before publishing.</li>
-</ol></section>{PRIV}"""
-PAGES["suggestions.html"] = page("suggestions.html", "Suggestions for review", "Suggestions", "Proposed improvements — none decided yet",
-                                 "A dedicated register to review, choose from, and only then implement. Every row is proposed, not adopted.", body)
-
-# ------------------------------------------------------------------------------------------------ questions before deciding
-qst = [
- ("Q-01", "Gating — any decision", "Who holds title to Property B?", "Unknown (deed not seen)", "Owner states the beneficiary already owns it; if true it sits outside the decedent's estate and its low tax survives.", "The current deed or trust schedule (FL-01).", "boe_lta26026"),
- ("Q-02", "Gating — any decision", "Is the trust revocable, and who are trustee and beneficiaries?", "Unknown (document not seen)", "Revocability drives the basis reset at death.", "The trust document, reviewed by an estate attorney (FL-03).", "irs_rr2023_2"),
- ("Q-03", "Gating — any decision", "Which home is the grantor's principal residence?", "Unknown", "Only that home can use the parent-child exclusion, and only if the heir lives in it.", "Homeowners' exemption on the tax bill (FL-02).", "boe_prop19"),
- ("Q-04", "Gating — sell", "What will Property A actually sell for, net of costs?", "Partially known", "Current value is owner-supplied; selling costs and taxes at sale are modelled from official rules.", "A dated appraisal at the death; a broker opinion before listing (FL-07 context).", "irs_basis"),
- ("Q-05", "Gating — rent or live", "What rent would Property A really achieve?", "Assumption only", "The rent figure is assumed, not surveyed; renting wins only under the break-evens on the decision page.", "A written rental analysis (FL-07).", "hud_fmr"),
- ("Q-06", "Gating — rent or live", "What are the real insurance premiums for both properties?", "Unverified — left blank", "Owner guesses are placeholders; tripling them does not change the ranking, but no quote exists.", "Two written quotes per property (FL-05, FL-06).", "cdi_compare"),
- ("Q-07", "Gating — estate tax", "How large is the cash and securities inheritance, after debts and earlier gifts?", "Unknown (no amount supplied)", "The owner states it may exceed the exclusion; the room is computed, the exposure is not.", "A private estate inventory — never published (FL-04, FL-24).", "irs_estate"),
- ("Q-08", "Gating — estate tax", "Does the estate include retirement accounts, and who inherits them?", "Unknown", "No account or balance was supplied, so none is in the room arithmetic. The federal rule is known: for a death after 2019 the balance generally has to be distributed within ten years, with named exceptions, and withdrawals are taxable income to the heir (taxes.html).", "An account list and beneficiary designations, reviewed privately; the balance decides the estate-tax share.", "irs_rmd"),
- ("Q-09", "Before choosing", "When does the solar tariff end, turning a credit into a cost?", "Unknown", "Electricity is currently a small monthly credit; the tariff period is finite.", "The utility interconnection letter (FL-13).", "cpuc_nem"),
- ("Q-10", "Before choosing", "What do the itemised tax bills and tax-rate area show?", "Partially known", "County-wide rate ranges are verified; the exact area and fixed charges are not.", "The line items on each bill (FL-08, FL-09).", "cnty_a_rates"),
- ("Q-11", "Before choosing", "Is Property B covered by the local rent ordinance, and at what lawful rent path?", "Partially known", "Rent growth is capped in the model; coverage depends on facts not looked up, for privacy.", "Certificate of occupancy and Rent Board record (FL-14).", "cityb_rent"),
- ("Q-12", "Before choosing", "Which reinvestment vehicle if markets are stressed at the inheritance?", "Answered by scenario", "Historical analogues: the sale held in 5 of 7; Treasuries won when yields cleared inflation or stocks crashed.", "No new evidence needed — pre-commit via SG-09, or decide with the stress page.", "fedhist_greatrecession"),
- ("Q-13", "Standing", "Has any relevant law changed since the review date?", "Checked to 12 Nov 2026", "Federal exclusion is $15,000,000 for 2026 and $15,480,000 for 2027; the state repeal initiative failed; ballot results await certification.", "Annual law-watch re-check (SG-08); certified election results (FL-15).", "sos_measures"),
-]
-qrows = [([i, gate, q, st, have, lack], "O" if st.startswith("Unknown") else ("C" if st.startswith("Answered") else "A"), S(src, flag=True)) for i, gate, q, st, have, lack, src in qst]
-answered = [
- ("QA-01", "Who pays the federal estate tax?", "The estate, on the whole taxable estate, not the beneficiary on what he or she receives.", "irs_i706"),
- ("QA-02", "Is there a California estate or inheritance tax?", "No. The state may not impose one, and none has been filed for deaths since 1 January 2005.", "rtc13301"),
- ("QA-03", "Who is the taxpayer when the estate tax is charged?", "The estate: the tax is levied on the entire taxable estate, not on the share received by a particular beneficiary.", "irs_i706"),
- ("QA-04", "What is the tax basis of the inherited home?", "Fair market value at the date of death, so a prompt sale produces almost no taxable gain.", "irs_basis"),
- ("QA-05", "When is Form 706 due?", "Nine months after the death; a six-month extension can be requested on Form 4768, and a portability election depends on filing on time.", "irs_i706"),
- ("QA-06", "How much can pass free of federal estate tax?", "$15,000,000 for a death in 2026 and $15,480,000 for a death in 2027. Later years are indexed and unknown.", "irs_2027"),
- ("QA-07", "How is the inherited home reassessed?", "At market value, reduced by the parent-child exclusion only if it was the parent's home, becomes the heir's home within one year, and both claims are filed on time.", "rtc63_2"),
- ("QA-08", "How much can the assessed value rise in a year?", "By the change in the state price index, capped at 2%. The cap has bound in every year since 2022.", "boe_lta26002"),
- ("QA-09", "Is Treasury interest taxed by the state?", "No. Treasury obligations and their interest are exempt from state and local tax, but not from estate or inheritance tax.", "uscode3124"),
- ("QA-10", "How much can rent rise for a sitting tenant?", "1.6% from 1 March 2026 to 28 February 2027, once every 12 months, with a rent-increase licence; a new tenancy has no limit.", "cityb_rent"),
-]
-arows = [([i, q, a_], "V", S(src)) for i, q, a_, src in answered]
-
-plan = [
- ("D-01", "Current deed and trust schedule", "County recorder; the trustee", "Settles title to Property B and whether it is in the estate (FL-01)", "Before any path", "Copy fee, set by the recorder", "boe_lta26026"),
- ("D-02", "Trust document, including the revocation clause", "The grantor's attorney; the trustee", "Settles the basis reset and who may decide (FL-03)", "Before any path", "No fee if a copy is held", "irs_rr2023_2"),
- ("D-03", "Current tax bills for both properties, itemised", "County tax collector; the owner's file", "Settles the rate area, fixed charges and the homeowners' exemption (FL-02, FL-08, FL-09)", "Before any path", "No fee for a copy", "cnty_a_rates"),
- ("D-04", "Two written insurance quotes per property", "Licensed brokers", "Replaces the owner's guess; the survey cannot quote a landlord policy (FL-05, FL-06)", "Before any path", "No charge for a quote", "cdi_compare"),
- ("D-05", "Private estate inventory: cash, securities, debts, retirement accounts, gifts", "The grantor's records; the trustee", "Sizes any tax above the exclusion (FL-04, FL-24); never published", "Before any path", "No fee", "irs_estate"),
- ("D-06", "Utility interconnection letter for the solar system", "The utility; the owner's file", "Dates the end of the electricity credit (FL-13)", "Before choosing rent or move-in", "No fee", "cpuc_nem"),
- ("D-07", "Written rental analysis for Property A", "A local broker", "Replaces the assumed rent (FL-07)", "Before choosing rent or move-in", "Fee set by the broker", "hud_fmr"),
- ("D-08", "Certificate of occupancy and Rent Board record for Property B", "City building department; Rent Board", "Settles whether the rent ordinance covers the units (FL-14)", "Before choosing a rent path", "No fee or a copy fee", "cityb_rent"),
- ("D-09", "Dated appraisal of Property A", "A licensed appraiser", "Evidence of the basis at death (SG-11)", "At the death", "Fee set by the appraiser", "irs_basis"),
-]
-drows = [([i, doc, who, why, when, cost], "U", S(src)) for i, doc, who, why, when, cost, src in plan]
-for r in drows:
-    pass
-
-flip = [
- (["Stock return falls below the break-even", f"{BE['stock_return']}% a year", "Renting overtakes selling", "The stock return is the single input that decides P1 against P2"], "tsp_returns", "treasury_cmt"),
- (["House prices grow faster than assumed", f"{BE['house_growth']}% a year", "Renting overtakes selling", "The gap is the ownership return, not the rent"], "fred_hpi_a", "boe_lta26002"),
- (["Rent for Property A is much higher than assumed", f"{usd(BE['rent_month'])} a month in 2026 dollars", "Renting overtakes selling", "The assumed rent is $6,500 a month; the break-even is more than double it"], "hud_fmr", "cityb_rent"),
- (["Insurance is three times the owner's guess", "Ranking unchanged", "No path changes", "The premium is small against the tax reset"], "cdi_compare", "irs_p527"),
- (["The 1% state surcharge applies to the gain", usd(TS["delta"]) + " on the stock result", "No path changes (P1 still first)", "It moves the total, not the order"], "rtc17043", "irs_tc409"),
- (["The pre-2021 inheritance rules return", "Property A tax would be " + usd(LAW["tax_restored"]), "No path changes", "The tax reset is smaller, but the sale's tax position is unchanged"], "lao_250017", "sos_memo"),
-]
-frows = [([*cells], "C", S(s1, s2, asm=True)) for cells, s1, s2 in flip]
-
-body = f"""<div class="note"><strong>No decision should be taken until the gating questions are answered.</strong> This page separates what the law already answers, what the owner must supply, and what is assumed — and names the document, office or person that settles each open item. Detail and flags: <a href="review.html">Flagged for Review</a>.</div>
-{tbl("Questions, information and answers needed before deciding", ["No.", "Gate", "Question", "Status", "What we have", "What we lack / how to discover it"], qrows)}{LEGEND}
-<section><h2>Answered by the law — no further input needed</h2>
-<p>These questions are settled on the publishers' own pages and do not need the owner to supply anything. Each answer is read, not inferred; the source library holds the words relied on.</p>
-{tbl("Questions the law already answers", ["No.", "Question", "Answer"], arows)}{LEGEND}</section>
-<section><h2>Discovery plan — how each missing fact is found</h2>
-<p>One document per open question. Fees and turnaround are not verified and are left to the provider; the site publishes no figure for them.</p>
-{tbl("Plan to discover the missing information", ["No.", "What to obtain", "From whom", "Why it matters", "When", "Cost"], drows)}{LEGEND}</section>
-<section><h2>Which unknowns can change the answer, and which cannot</h2>
-<p>An unknown only matters if it crosses a threshold. The model reports the threshold for each input, so the owner can skip the ones far from it. Rows are computed on the 2045 case unless stated.</p>
-{tbl("Thresholds", ["Unknown", "Threshold or effect", "What it changes", "Why"], frows)}{LEGEND}</section>
-<section><h2>The short version</h2><ul>
-<li><strong>Answered by law:</strong> who pays the estate tax, that California has none, the basis reset, the Form 706 deadline, the exclusion amounts, the reassessment rules, the 2% cap, the Treasury exemption and the rent cap. See QA-01 to QA-10.</li>
-<li><strong>Answered by arithmetic:</strong> title aside, the ranking survives a stock return down to {BE['stock_return']}%, house growth up to {BE['house_growth']}%, insurance at three times the guess, a 1% state surcharge, and a return to the pre-2021 inheritance rules.</li>
-<li><strong>Needs a document:</strong> title, trust terms, itemised bills, quotes, the estate inventory, the solar tariff and the rent survey (Q-01 to Q-11; D-01 to D-09).</li>
-<li><strong>Cannot be known now:</strong> future tax law, future prices and future rates. Each is stress-tested on the two black-swan pages, and the choice of path is made reversible where possible.</li>
-</ul></section>{PRIV}"""
-PAGES["questions.html"] = page("questions.html", "Questions before deciding", "Questions", "What must be answered first",
-                               "A clear have / do-not-have list: what the law answers, what the owner must supply, and what is assumed.", body)
-
-PAGES["questions.html"] = page("questions.html", "Questions before deciding", "Questions", "What must be answered first",
-                               "A clear have / do-not-have list, so uncertainty is removed before — not after — the decision.", body)
 
 # ------------------------------------------------------------------------------------------------ flagged for review
 fl = [
@@ -976,6 +1358,12 @@ fl = [
  ("FL-14", "Whether the rent ordinance covers Property B", "Depends on the date of first occupancy and the legal unit count. No parcel lookup was performed.", "Certificate of occupancy; Rent Board record", "cityb_rent"),
  ("FL-15", "Result of the 3 November 2026 measures", "Results are not certified; certification is due 11 December 2026. The unofficial count on 10 November 2026 had Proposition 42 ahead with 51.5% yes and Proposition 40 rejected with 52.6% no.", "The certified statement of vote", "sos_results"),
  ("FL-24", "Any mortgage or debt on either property", "The model assumes both properties are unencumbered. A loan would have to be repaid from a sale, or would reduce the room under the federal exclusion.", "Loan statements or the trustee's schedule of assets", "irs_estate"),
+ ("FL-25", "Privacy precision of the roll tables", "At the owner's instruction of 12 November 2026 the roll values and bills are published to the nearest $10. That is close enough to the county record that a reader who knows the record could match it; the tier can be raised to $1,000 or $10,000 with one command.", "The owner's choice of tier", "boe_lta26002"),
+ ("FL-26", "Whether any retirement account is in the estate", "Not supplied. If one exists the ten-year distribution rule applies and the withdrawals are ordinary income; nothing is modelled for it.", "The beneficiary designations", "irs_rmd"),
+ ("FL-27", "Insurance cover above $3,000,000", "The FAIR Plan, the insurer of last resort, caps a residential risk at $3,000,000 for all coverages combined, which is below Property A's current estimated value. Whether the admitted market will write the full value is not known.", "A broker's placement note and a Difference in Conditions quote", "cdi_tips"),
+ ("FL-28", "Water, electricity and solar dates", "Both properties' water and electricity figures are the owner's estimates; no tariff was read, and the solar interconnection date that sets the 20-year credit period was not supplied.", "Two utility bills, the net-metering agreement and the suppliers' tariff sheets", "cpuc_nem"),
+ ("FL-29", "The value of the inherited cash", "The brief says the inheritance includes a considerable amount of money that may exceed the federal threshold. No figure was given, so the tax tables show the room and not the tax.", "One total, kept private; only the rounded total need be published", "irs_estate"),
+ ("FL-30", "Professional fees at the death", "Appraisal, trustee, attorney and recording costs are described but not quoted. They are the only transfer costs that remain once the death taxes are ruled out.", "Written fee schedules from the trustee's attorney and an appraiser", "irs_estate"),
  ("FL-16", "The 40% estate tax rate", "Derived from the published credit amount. The rate table was not opened.", "Table A in the Form 706 instructions", "irs_i706"),
  ("FL-18", "Long-run stock return", "7.0% is an assumption. Only a 12-month official figure was read.", "The fund's long-run return table", "tsp_returns"),
  ("FL-19", "City B vacancy tax", "Reported struck down on appeal in September 2026 by secondary sources only.", "The Court of Appeal opinion", "cityb_rate"),
@@ -989,13 +1377,14 @@ rows = [([i, item, why, BLANK, fix], "U", S(src)) for i, item, why, fix, src in 
 body = f"""<div class="note"><strong>Nothing on this page blocks the plan.</strong> These are the items that could not be confirmed from an official source, or that only the owner can settle.
 Each value is left blank rather than estimated. The number is a stable identifier, not a ranking: the first fifteen are the ownership and record facts, the next group is assumptions and law, and FL-25 was added on 12 November 2026.</div>
 {tbl("Flagged for Review", ["No.", "Item", "Why it is flagged", "Value", "What settles it"], rows)}{LEGEND}
-<section><h2>Three privacy disclosures</h2><ul>
-<li><strong>Repository history.</strong> Earlier commits in this public repository contain exact figures and location details. This edition cannot remove them. Rewriting the history or making the repository private is the owner's decision.</li>
+<section><h2>Four privacy disclosures</h2><ul>
+<li><strong>Repository history.</strong> Earlier commits in this public repository contain exact figures and location details, and earlier pull-request titles named jurisdictions. This edition cannot remove them. Rewriting the history or making the repository private is the owner's decision (suggestion S-12).</li>
 <li><strong>Jurisdictions.</strong> The pages name only County A and City B, but the official local links identify them to anyone who opens one. Dropping the local sources would remove that, at the cost of unsourced local rates.</li>
-<li><strong>Already-round figures.</strong> The two market values and the monthly rent supplied by the owner are already multiples of $10, so rounding to $10 does not disguise them. They are published because the owner asked for clear numbers. Together with the rent, the unit count and the local official links they narrow the set of buildings that could match. Bands, a rent rounded to $100, or withdrawing the figures would reduce that risk; the choice is SG-14.</li>
+<li><strong>Roll values at $10.</strong> The property tax and assessment tables now publish the county record rounded to the nearest $10, as instructed on 12 November 2026. The honest reading of that setting: it defeats a search for an exact number, and it does not defeat a search by someone who has the record. The growth chain from 2014 is itself a fingerprint. Tier 2 ($1,000) or tier 3 ($10,000) is materially stronger; the setting is a committed file, and the switch is one command (suggestions page, "the privacy choice").</li>
+<li><strong>What is deliberately not published.</strong> No name, street address, postal code, parcel number, utility account, employer, or the amount of the cash inheritance. People appear as [GRANTOR], [SUCCESSOR_TRUSTEE] and [BENEFICIARY]. The site has no forms, no scripts, no analytics and no remote assets, so nothing on it can collect anything from a reader.</li>
 </ul></section>{PRIV}"""
 PAGES["review.html"] = page("review.html", "Flagged for review", "Flagged for review", "Unverified, unknown or irregular",
-                            f"{len(fl)} open items with the official page that bears on each, and three privacy disclosures.", body)
+                            f"{len(fl)} open items with the official page that bears on each, and four privacy disclosures.", body)
 
 # ------------------------------------------------------------------------------------------------ audit
 corr = [
@@ -1010,8 +1399,8 @@ corr = [
  ("C-09", "Rent growth in Property B", "2.5% a year; the cap was not checked.", "1.5% a year for sitting tenants: 60% of 2.5% inflation, per the published formula.", "cityb_rent"),
  ("C-10", "Property B at the same death", "Assessed value rose 2% a year through and after the inheritance.", "Shown both ways. If the parents hold title, the building is reassessed except for one qualifying unit.", "boe_lta26026"),
  ("C-11", "Comparison period", "Every case ended in 2055, so an inheritance in 2050 was judged over five years.", "Ten years after each inheritance year.", "irs_basis"),
- ("C-12", "Roll values in public files", "Assessment histories were published to the nearest $10, and one bill to the dollar.", "Generalised to the nearest $10,000 and $100. Year-over-year changes are shown as percentages.", "boe_lta26002"),
- ("C-13", "California surcharge on large gains", "The one-time-gain rate used 12.3% for California and stopped there.", "RTC 17043 adds 1% on taxable income above $1,000,000. Added as a published sensitivity, not as a model change: the 2045 stock result falls by $36,170 and the ranking holds (FL-25, SG-13).", "rtc17043"),
+ ("C-12", "Roll values in public files", "Assessment histories were published to the nearest $10, and one bill to the dollar.", "Generalised to the nearest $10,000 and $100, then republished at the owner's instruction on 12 November 2026 (C-13).", "boe_lta26002"),
+ ("C-13", "Property tax and assessment tables", "The year-by-year bills and assessments were withheld altogether, on the view that any published roll figure identifies a parcel.", "Published in full at the precision the owner chose on 12 November 2026 (nearest $10), with the published state factor beside each year and the percentage changes computed before rounding. The setting is a committed file, so it can be raised to $1,000 or $10,000 without touching the analysis.", "boe_lta26002"),
 ]
 CB = {"C-01": "V", "C-02": "V", "C-03": "C", "C-04": "C", "C-05": "V", "C-06": "C", "C-07": "V", "C-08": "A", "C-09": "V", "C-10": "V", "C-11": "C", "C-12": "C", "C-13": "C"}
 rows = [([i, item, old, new], CB[i], S(src)) for i, item, old, new, src in corr]
@@ -1019,7 +1408,7 @@ repo = [
  ("Published pages", "Fifteen pages are generated from one model and one source ledger. A stale page fails the build."),
  ("Retired pages and data files", "Paths used by earlier editions hold withdrawal notices with no figures. The build fails if any other tracked file appears."),
  ("Source ledger", "Each source records how it was checked: opened, or read as an excerpt served from the official domain."),
- ("Checks", "Every table row must link to an official publisher. Dollar amounts must be multiples of $10. City names, ZIP codes, parcel numbers and e-mail addresses fail the build."),
+ ("Checks", "Every factual table row must link to an official publisher; a row that records a choice must link to the reasoning behind it. Dollar amounts must be multiples of $10. City names, postal codes, parcel numbers and e-mail addresses fail the build."),
  ("Publishing", "The site is served from the main branch. Both publishing paths carry the same sanitised files. Earlier sessions report that the setting itself could not be changed with the available permissions."),
  ("Repository history", "Earlier commits contain exact figures and location details. Not rewritten. Needs the owner's decision."),
  ("Pull requests from other sessions", "Three pull requests (#23, #25 and #34) would each have replaced this edition with a model that predates the corrections listed above. They were closed without merging on 11 November 2026; their branches remain for reference. The substantive additions in #34 - a 40-window historical replay and an insurance framework - are covered by the two black-swan pages and by the sensitivity cases on the decision page, including insurance at three times the owner's guess."),
@@ -1038,12 +1427,31 @@ The earlier edition's source work was sound: its quotations matched the official
 <p>The arithmetic was re-checked independently of the renderer: all 35 projection years for each property were recomputed from the model's own formulas (tax = rate x assessed value plus fixed charges; running costs summed; assessed value capped at 2%), the estate-room rows were recomputed from the exclusion less both homes, and the 2045 reassessment was recomputed from the Proposition 19 formula. Every published figure agreed to the nearest $10. The page structure was also changed: the menu is now grouped into five sections, the two black-swan pages are labelled as parts 1 and 2 of one section instead of appearing twice under different names, and the overview states which of the three editions in this repository a reader is looking at.</p></section>
 <section><h2>Pass of 12 November 2026 (merged from PR #53)</h2>
 <p>A later session re-opened four documents on the publishers' own domains and checked them against what this edition says. Proposition 19 on the Board of Equalization's page — the comparison chart and questions 2, 3 and 6 — confirms the mechanics the model uses: the family home is excluded only while at least one heir lives in it; the value limit is the prior taxable value plus $1,000,000, adjusted every second year; and a home that is rented does not qualify at all. The worked example in question 6 reaches the same taxable value as the formula in the model, with the $1,000,000 amount the model indexes each second year. The IRS estate page was re-opened: the 2026 filing threshold is $15,000,000 and the portability election is made on a timely filed return. That page does not state the 40% rate, so FL-16 stays open.</p>
-<p>Two rules the brief asks about had never appeared in this edition. Both are now read at the publisher and published on the <a href="taxes.html#heir">tax page</a>: an inheritance is not income to the heir (26 U.S.C. 102, subsection (a), read on the Government Publishing Office's site, with subsection (b) leaving the income from the property taxable), and an inherited retirement account must generally be emptied within ten years where the owner died after 2019, with the exceptions the IRS lists. Two source badges on the <a href="suggestions.html">suggestions page</a> were also withdrawn: they pointed at the IRS estate page for a repository-history question and for a question about which edition to act on, which that page does not support. Those two suggestions are now listed without a badge. No model figure, projection row or ranking changed.</p></section>
-<section><h2>Pass of 12 November 2026 (this branch)</h2>
-<p>Another session re-opened fifteen ledger entries on the publishers' own domains before this edition was published again. Every figure already published matched: the federal exclusion of $15,000,000 for 2026 and $15,480,000 for 2027 and the $5,945,800 basic credit; the nine-month Form 706 deadline and the portability rule; the inherited-basis rule; the absence of a California estate or inheritance tax and the constitutional ban on one; the Proposition 19 conditions, the $1,044,590 two-year amount (the letter states it to the dollar), the one-year homeowners' exemption and the three-year claim window; the 1.18162182% secured rate; the 1.6% rent cap; the Department of Insurance survey's scope; the 10-year Treasury at 4.88% on 9 November 2026; and the 12.09% one-year return on the index fund used as the official return reference.</p>
-<p>One gap was found and is now published as a limitation. The one-time-gain rate used in the model was 20% federal, 3.8% net investment income tax and 12.3% California. Section 17043 of the Revenue and Taxation Code adds another 1% on the portion of taxable income above $1,000,000, which the 12.3% bracket rate does not include. It is recorded as FL-25 and SG-13, and the dollar effect is published as a sensitivity rather than folded into the model, so no previously published figure changes: applied to the gain alone it lowers the 2045 stock result from $10,052,910 to $10,016,750, and the sale stays first.</p>
-<p>Two wording faults were corrected on the same pass. The flagged list had said it was ordered by how much each item could change the answer, although FL-24 sat between FL-15 and FL-16; the page now says the number is a stable identifier and groups items by subject. The source library and the review-date lines said 10 to 11 November; they now say 10 to 12 November, which is the span of the four passes.</p>
-<p>What this pass did not do: it did not open the text of Proposition 19 or of any local ordinance, it did not contact an insurer, appraiser or broker, it did not look up a parcel, and it did not test the pages in a browser. It read the publishers' pages named in the ledger and recomputed the sensitivity from the model's own formulas.</p></section>
+<p>Two rules the brief asks about had never appeared in this edition. Both are now read at the publisher and published on the <a href="taxes.html#heir">tax page</a>: an inheritance is not income to the heir (26 U.S.C. 102, subsection (a), read on the Government Publishing Office's site, with subsection (b) leaving the income from the property taxable), and an inherited retirement account must generally be emptied within ten years where the owner died after 2019, with the exceptions the IRS lists. Two source badges on the <a href="suggestions.html">suggestions page</a> were also withdrawn: they pointed at the IRS estate page for a repository-history question and for a question about which edition to act on, which that page does not support. Those two suggestions are now listed without a badge. The legend's review window was extended to 12 November 2026. No model figure, projection row or ranking changed.</p></section>
+<section><h2>Fifth pass, 12 November 2026 (this session)</h2>
+<p>This session re-opened, on the publishers' own domains, the documents behind the figures that decide the answer: the IRS estate tax
+threshold page (the 2026 threshold of $15,000,000 and the portability election), the IRS 2027 inflation release ($15,480,000 and the
+$20,000 gift exclusion), the Board of Equalization's Proposition 19 comparison charts (the value limit, the one-year occupancy and
+homeowners' exemption condition, the three-year claim), the State Controller's estate tax page (no California return for deaths since
+1 January 2005), Revenue and Taxation Code sections 480 and 63.2 (the 150-day change in ownership statement; the one-year occupancy and
+claim), and the IRS inherited-basis FAQ. Every figure already published matched.</p>
+<p><strong>Two sources were added in this pass</strong>, both from the Department of Insurance: the department's top-ten guidance, which
+states that the FAIR Plan is open to every homeowner as a last option and that its maximum for all coverages combined is $3,000,000 —
+below Property A's current estimated value — and the 2019 release that establishes the plan as the insurer of last resort. The ledger now
+holds {len(SRC)} entries.</p>
+<p><strong>The two "Decide next" pages were rebuilt and extended.</strong> The question register on
+<a href="questions.html">Questions before deciding</a> now holds {len(q_money + q_a + q_b + q_d)} rows, each with its status, the official rule
+behind it, the step that would close it, and what changes if the answer differs; the gate and status columns from the earlier register are
+kept in substance. <a href="suggestions.html">Suggestions for review</a> now holds four paths, {len(sug)} suggestions with effort and privacy
+cost, four decision gates, and the privacy-precision choice. No row of the earlier registers was dropped: rows that duplicated a fuller row
+were merged into it, and the four suggestions and four questions the earlier pages had that this one lacked were added.</p>
+<p><strong>One setting changed.</strong> The owner instructed on 12 November 2026 that the property tax and assessment history be published
+at $10 precision. It is now published in full, at that precision, on both property pages, with percentage changes computed before rounding.
+The trade-off is stated on every page and on this page's privacy disclosures; the precision is a committed setting, not a rewrite.</p>
+<p><strong>What was checked by hand and what was not.</strong> Every projection row was recomputed from the model's own formulas after the
+precision change and agreed to the nearest $10. The arithmetic of the estate room, the reassessment and the break-evens was re-run by the
+model and asserted in the build. Not done: no insurer was contacted, no address or parcel lookup was made, no water or electricity tariff
+was read, and no statute not named above was opened in this session.</p></section>
 <section><h2>Repository review</h2><p>Findings from reading the repository itself. These are observations, not sourced facts.</p>{rlist}</section>
 <section><h2>How this edition relates to the cross-check</h2>
 <p>A separate <a href="plan/index.html">cross-check edition</a> was built by another session with its own model and its own source ledger. It leaves unverifiable inputs blank and reports break-evens.
@@ -1066,7 +1474,7 @@ for sid, s in SRC.items():
     rows.append(([f"<code>{sid}</code>", e(s["publisher"]), e(s["title"]), "<br>".join(e(v) for v in s["verifies"]), e(how)], basis, a(sid)))
 body = f"""<p>{len(SRC)} official sources. The exact words relied on are stored with each source in <a href="assets/sources.json">sources.json</a>.
 Local sources name the jurisdiction in their web address; the pages refer to it as County A or City B.</p>
-{tbl("Source library", ["Id", "Publisher", "Document", "What it supports", "How it was checked (10-12 November 2026)"], rows)}{LEGEND}{PRIV}"""
+{tbl("Source library", ["Id", "Publisher", "Document", "What it supports", "How it was checked (10 to 12 November 2026)"], rows)}{LEGEND}{PRIV}"""
 PAGES["sources.html"] = page("sources.html", "Source library", "Source library", "Every source, and how it was checked",
                              "Open any link to check the figure yourself.", body)
 
@@ -1076,8 +1484,9 @@ for name, text in PAGES.items():
 # Plain-text executive summary kept in the repository
 (ROOT / "EXECUTIVE_SUMMARY.md").write_text(f"""# Executive summary
 
-Reviewed 10-12 November 2026. Anonymised: Property A (single-family home, County A), Property B (small multi-unit building, City B).
-Dollar figures are rounded to the nearest $10. Planning analysis, not legal, tax or investment advice.
+Reviewed 10 to 12 November 2026. Anonymised: Property A (single-family home, County A), Property B (small multi-unit building, City B).
+Every dollar figure is rounded to the nearest $10. Assessment-roll values and tax bills are published at the owner's chosen precision
+({M["privacy"]["description"]}); percentage changes are computed before rounding. Planning analysis, not legal, tax or investment advice.
 
 **Best plan on these numbers: sell Property A soon after inheriting it, reinvest, and keep Property B.**
 
@@ -1094,15 +1503,20 @@ Inheritance in 2045, house prices rising 4% a year, measured ten years later aft
 - The low property tax does not survive. About ${NOW_A['property_tax']:,} a year today becomes ${LIVE['tax_first']:,} if a child moves in and ${RENT['tax_first']:,} if rented (2045).
 - Renting wins only if stocks return under {BE['stock_return']}% a year or the home appreciates about {BE['house_growth']}% a year.
 - Living in the home costs about ${B45['live_cost_month_today']:,} a month in today's dollars compared with selling.
-- Federal estate tax: $15,000,000 per person in 2026 and $15,480,000 in 2027; California has none.
-- Above the exclusion the estate pays 40 cents for every dollar: an estate $5,000,000 over the room owes about $2,000,000 before credits. The tax is on the estate, not on the heir, and is due with Form 706 nine months after the death. California and its cities impose no death tax.
+- The inheritance itself is not income to the heir (26 U.S.C. 102); income from the property, and a later sale, are taxed.
+- An inherited retirement account, if there is one, must generally be emptied within ten years and each withdrawal is ordinary income.
+- Federal estate tax: $15,000,000 per person in 2026 and $15,480,000 in 2027; California has none and its cities may not impose one.
+- Above the exclusion the estate pays 40 cents for every dollar: an estate $5,000,000 over the room owes about $2,000,000 before credits. The tax is on the estate, not on the heir, and is due with Form 706 nine months after the death.
 - The owner states Property B is already owned by the heir, so under that statement it sits outside the decedent's estate; if it were in the same estate its tax would reset: ${BR45['tax_keep']:,} to ${BR45['tax_reset']:,} a year in 2045.
 - Under that same statement one person's estate-tax room in 2045 is ${ROOM_B_OWNED:,} instead of ${E45['room_single_base']:,}, larger by Property B's 2045 value of ${B_VALUE_2045:,}. The deed was not seen (FL-01).
-- Insurance premiums are unverified and left blank; tripling the owner's guess does not change the ranking.
+- Insurance premiums are unverified and left blank. The FAIR Plan, the state's insurer of last resort, caps a residential risk at $3,000,000 for all coverages combined, below Property A's current value; tripling the owner's guess does not change the ranking.
+- Property tax and assessment: the full history, 2014 to 2026 for Property A and 2016 to 2025 for Property B, is published at $10 precision on the property pages, with the published state factor beside each year.
 - Black swans, part 1 (black-swans.html): the baseline's official anchors, fifty years of state inflation data, and the fixed amounts whose real value erodes.
 - Black swans, part 2 (stress.html): stock returns at 4.0%, inflation at 4.0% or a flat decade for house prices - selling still finishes first, and a lost decade only moves the proceeds to Treasuries. Verified 1929, 1965-82, 2000-02, 2007-09 and 2020 episodes re-run against the 2045 inheritance: the sale decision holds in 5 of 7 analogues, and only the reinvestment vehicle changes with the regime.
-- Re-checked on 11 November 2026 by a third pass: 13 sources re-opened on the publishers' sites, every projection row recomputed from the model's formulas, one open flag closed (31 U.S.C. 3124, Treasury interest is free of state tax) and one stale count corrected. No figure changed.
+- New on 12 November 2026: a page of {len(q_money + q_a + q_b + q_d)} questions with their status and the step that closes each one (questions.html), and a page of four paths and {len(sug)} suggestions with effort and privacy cost (suggestions.html).
+- Sources: {len(SRC)} official documents, four added on 12 November 2026 (26 U.S.C. 102; the IRS RMD FAQ; two Department of Insurance pages on insurance availability). The figures behind the decision were re-opened on the publishers' sites that day; none changed.
 
-Site: index.html. Suggestions (none decided): suggestions.html. Questions first: questions.html. Open items: review.html. How it was checked: audit.html. Sources: sources.html.
+Site: index.html. Open questions: questions.html. Options: suggestions.html. Open items: review.html. How it was checked: audit.html. Sources: sources.html.
 """, encoding="utf-8")
+
 print(f"built {len(PAGES)} pages")
