@@ -30,7 +30,7 @@
    "verifies": [
     "For calendar year 2027 the basic exclusion amount under section 2010(c)(3) is $15,480,000"
    ],
-   "quote": ".44 Basic Exclusion Amount for Estate Tax. For calendar year 2027, the basic exclusion amount under \u00a7 2010(c)(3) is $15,480,000.",
+   "quote": ".44 Basic Exclusion Amount for Estate Tax. For calendar year 2027, the basic exclusion amount under § 2010(c)(3) is $15,480,000.",
    "checked": "official-domain search excerpt read in this session (full document not opened)"
   },
   "irs_whatsnew": {
@@ -40,7 +40,7 @@
    "verifies": [
     "Public Law 119-21 (4 July 2025) raised the basic exclusion amount to $15,000,000 for 2026"
    ],
-   "quote": "WFTC amends \u00a7 2010(c)(3) by increasing the basic exclusion amount to $15,000,000 for calendar year 2026.",
+   "quote": "WFTC amends § 2010(c)(3) by increasing the basic exclusion amount to $15,000,000 for calendar year 2026.",
    "checked": "opened on the publisher's site in this session"
   },
   "irs_rp2532": {
@@ -85,7 +85,7 @@
     "Assets of an irrevocable grantor trust that are not included in the gross estate get no basis adjustment at death",
     "Property the decedent placed in a trust that stayed revocable is treated as acquired from the decedent (section 1014(b)(2) and (3))"
    ],
-   "quote": "the basis of Asset is not adjusted to its fair market value on the date of A's death under \u00a7 1014 because Asset was not acquired or passed from a decedent as defined in \u00a7 1014(b).",
+   "quote": "the basis of Asset is not adjusted to its fair market value on the date of A's death under § 1014 because Asset was not acquired or passed from a decedent as defined in § 1014(b).",
    "checked": "opened on the publisher's site in this session"
   },
   "irs_tc409": {
@@ -805,6 +805,18 @@
    ],
    "quote": "the SECURE Act requires the entire balance of the participant's account be distributed within ten years. This 10-year rule has an exception for a surviving spouse, a child who has not reached the age of majority, a disabled or chronically ill person or a person not more than ten years younger than the employee or IRA account owner. ... Your withdrawals are included in taxable income except for any part that was already taxed (your basis) or that can be received tax-free (such as qualified distributions from designated Roth accounts).",
    "checked": "opened on the publisher's site on 12 November 2026: the overview and Q1 were read"
+  },
+  "rtc17043": {
+   "publisher": "California Legislative Information",
+   "title": "Revenue and Taxation Code section 17043 (additional 1% tax above $1,000,000)",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=17043",
+   "verifies": [
+    "For taxable years beginning on or after 1 January 2005 an additional tax of 1% applies to the portion of taxable income above $1,000,000",
+    "The additional tax is imposed in addition to any other taxes imposed by Part 10"
+   ],
+   "quote": "in addition to any other taxes imposed by this part, an additional tax shall be imposed at the rate of 1 percent on that portion of a taxpayer's taxable income in excess of one million dollars ($1,000,000).",
+   "checked": "opened on the publisher's site on 12 November 2026 (arena/593368ef-tino3): the 1% rate and the $1,000,000 threshold, added to the graduated rates; the published sensitivity applies it to the taxable gain alone, a lower bound"
   }
- }
+ },
+ "reviewer_session": "; 2026-11-12: arena/593368ef-tino3 re-opened fifteen publisher pages, confirmed every published figure and added rtc17043 (the 1% California tax above $1,000,000, published as a sensitivity)"
 }
