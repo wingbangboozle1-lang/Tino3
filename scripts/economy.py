@@ -449,6 +449,11 @@ def build():
         "gap_live_max": r10(max(r["sell_stock"] - r["live"] for r in win_rows)),
         "wins": [{"case": k, "label": dict(OPTIONS)[k], "windows": counts[k]} for k, _ in OPTIONS],
         "windows_sale_ahead": sum(1 for r in win_rows if r["sell_stock"] >= max(r["rent"], r["live"])),
+        # how the constant-rate answer sits among the 40 real stretches
+        "above_constant": sum(1 for r in win_rows if r["sell_stock"] > const_res["sell_stock"]["wealth"]),
+        "below_constant": sum(1 for r in win_rows if r["sell_stock"] < const_res["sell_stock"]["wealth"]),
+        "worst_window": min(win_rows, key=lambda r: r["sell_stock"])["first"],
+        "worst_window_end": min(win_rows, key=lambda r: r["sell_stock"])["last"],
         "spread_min": r10(min(r["spread"] for r in win_rows)),
         "spread_max": r10(max(r["spread"] for r in win_rows)),
     }

@@ -8,7 +8,7 @@ federal estate tax.
 
 ## What this repository publishes
 
-Fifteen static pages, one stylesheet, one source ledger, one privacy setting and three CSV downloads, plus the separate cross-check edition under `plan/` — nothing else. The published
+Sixteen static pages, one stylesheet, one source ledger, one privacy setting, the economy data file and three CSV downloads, plus the separate cross-check edition under `plan/` — nothing else. The published
 artifact is an allowlist built by `scripts/package_site.py`; every path an earlier edition published is
 replaced by a content-free withdrawal notice, so a stale URL cannot return an old figure.
 
@@ -20,25 +20,27 @@ replaced by a content-free withdrawal notice, so a stale URL cannot return an ol
 | `property-b.html` | The rental: inputs, the 2016–2025 tax and assessment history, tax-bill breakdown, rent rules, reassessment exposure if it is in the same estate |
 | `taxes.html` | Federal, California and local rules, verified; what the heir receives and what is still taxed; pending law changes |
 | `projections.html` | Year-by-year value, assessed value, tax and running costs, 2026–2060, and the ten years after an inheritance |
+| `economy.html` | The year-by-year economy: 49 years of official annual data for consumer prices, both areas' house prices, the 10-year yield and the NASDAQ; 2,000 resampled fifty-year paths; the decision re-run on each of the 40 real ten-year stretches; adversarial paths; the lesser-of assessment rule in a crash |
 | `decision.html` | Sell vs rent vs move in for 2040/2045/2050, break-evens, sensitivities, the assumption register |
 | `stress.html` | Black swans, part 2: verified 1929, Great Inflation, oil-shock, dot-com, Great Recession and COVID episodes re-run against the 2045 inheritance; the playbook |
 | `black-swans.html` | Black swans, part 1: baseline anchors (Fed, SSA, CBO), fifty years of official state inflation data, fixed-amount erosion, and the single-input stress cases |
 | `inheritance.html` | Statutory timeline after the death, with deadlines |
 | `review.html` | 31 flagged items (unverified values left blank, owner questions, record irregularities) and four privacy disclosures |
 | `audit.html` | Independent verification: twelve corrections to the first quantitative edition, repository review |
-| `suggestions.html` | Four paths and 20 suggestions with effort, privacy cost and status; four decision gates; the privacy-precision choice |
+| `suggestions.html` | Four paths and 23 suggestions with effort, privacy cost and status; four decision gates; the privacy-precision choice |
 | `questions.html` | 39 questions with status: what is settled and linked to its publisher, what is missing, the step that closes it, and what changes if the answer differs |
 | `sources.html` | 75 official sources, what each one supports and how each was checked |
 
 ## How the site is organised
 
-The menu is grouped into six sections: **The decision** (overview, summary, decision analysis, projections),
+The menu is grouped into six sections: **The decision** (overview, executive summary, decision analysis,
+year-by-year projections, year-by-year economy),
 **Black swans** (conditions and history, stress tests — one section in two parts), **The properties**
 (A, B), **Tax and process** (tax and law watch, inheritance steps), **Decide next** (suggestions for review, questions before deciding) and **Evidence** (flagged items,
 independent verification, source library).
 
 Three editions of the same analysis sit in this repository. They use separate models, so their figures
-differ and must not be mixed: the fifteen pages in the menu (the edition to act on), the independent
+differ and must not be mixed: the sixteen pages in the menu (the edition to act on), the independent
 cross-check at `/plan/`, and the 50-year and ownership suite at `/analysis/`. The overview page says
 which one a reader is looking at.
 
@@ -71,7 +73,8 @@ be verified is left blank or published on the Flagged for Review page — never 
 
 ```bash
 python3 scripts/model.py        # writes assets/data/model.json and the CSV downloads
-python3 scripts/build.py        # renders the fifteen pages
+python3 scripts/economy.py      # writes assets/data/economy.json from the model's own constants
+python3 scripts/build.py        # renders the sixteen pages
 python3 scripts/verify.py       # reproducible-build, citation, link, privacy and rounding checks
 python3 scripts/package_site.py # writes the _site artifact (allowlist + withdrawal notices)
 
@@ -85,7 +88,7 @@ was checked.
 
 ## Data
 
-`assets/sources.json` — source ledger (75 entries, each with the words relied on and how it was checked).
+`assets/sources.json` — source ledger (80 entries, each with the words relied on and how it was checked).
 `assets/privacy.json` — the published precision for assessment-roll values and tax bills.
 `assets/data/model.json` — every figure on the site.
 `assets/data/property_a.csv`, `property_b.csv`, `decision.csv` — the same numbers for offline work.
