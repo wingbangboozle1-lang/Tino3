@@ -24,11 +24,11 @@ replaced by a content-free withdrawal notice, so a stale URL cannot return an ol
 | `stress.html` | Black swans, part 2: verified 1929, Great Inflation, oil-shock, dot-com, Great Recession and COVID episodes re-run against the 2045 inheritance; the playbook |
 | `black-swans.html` | Black swans, part 1: baseline anchors (Fed, SSA, CBO), fifty years of official state inflation data, fixed-amount erosion, and the single-input stress cases |
 | `inheritance.html` | Statutory timeline after the death, with deadlines |
-| `review.html` | 30 flagged items (unverified values left blank, owner questions, record irregularities) and four privacy disclosures |
+| `review.html` | 31 flagged items (unverified values left blank, owner questions, record irregularities) and four privacy disclosures |
 | `audit.html` | Independent verification: twelve corrections to the first quantitative edition, repository review |
 | `suggestions.html` | Four paths and 20 suggestions with effort, privacy cost and status; four decision gates; the privacy-precision choice |
 | `questions.html` | 39 questions with status: what is settled and linked to its publisher, what is missing, the step that closes it, and what changes if the answer differs |
-| `sources.html` | 73 official sources, what each one supports and how each was checked |
+| `sources.html` | 75 official sources, what each one supports and how each was checked |
 
 ## How the site is organised
 
@@ -85,7 +85,7 @@ was checked.
 
 ## Data
 
-`assets/sources.json` — source ledger (73 entries, each with the words relied on and how it was checked).
+`assets/sources.json` — source ledger (75 entries, each with the words relied on and how it was checked).
 `assets/privacy.json` — the published precision for assessment-roll values and tax bills.
 `assets/data/model.json` — every figure on the site.
 `assets/data/property_a.csv`, `property_b.csv`, `decision.csv` — the same numbers for offline work.
