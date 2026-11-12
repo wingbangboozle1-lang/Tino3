@@ -1,5 +1,6 @@
 private/
 __pycache__/
+*.py[cod]
 node_modules/
 
 _site/
