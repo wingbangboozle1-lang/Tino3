@@ -2,6 +2,25 @@
 
 Privacy rule: public pages use generic Property A / Property B placeholders. Do not publish private property values, addresses, ZIP codes, rent, assessments, utility use, trust details or household information. Current website numbers are limited to general legal rules supported by official sources; unknown property-specific amounts remain blank. Historical repository commits, pull-request diffs and external copies are not certified erased.
 
+
+## Session `arena/e63a407b-tino3` — privacy-safe public edition consolidation and official-source review · 2026-11-12
+
+*Branch note:* Arena pins this session to `arena/e63a407b-tino3`. The original claim was based on `fd2b5a8`; the current work is rebased onto `origin/main` at `6eb3eb0` after PR #63 landed. The general Civil Code section 1946.2 guidance from that update is retained with coverage limits; the prior owner-specific model outputs are not. The requested `session-<id>/<task>` naming cannot be used.
+
+| Task | Status | Owner | Scope |
+|---|---|---|---|
+| P1 Consolidate to one clearly labelled public edition; remove property-specific inputs/projections and other owner-derived details from Pages; preserve the A-inherited/B-already-owned distinction using placeholders; replace retired editions with content-free notices | done locally | `arena/e63a407b-tino3` | public root pages, builder, allowlist packager, privacy verifier, source ledger, workflows, README and executive summary; legacy trees remain in the repository but are not copied into the artifact |
+| P2 Recheck official inheritance, federal/California tax, property reassessment, rental, utility/insurance and irregular-economic-condition sources; leave unconfirmed property-specific amounts blank and flagged | done for the cited general claims; not a complete legal review | `arena/e63a407b-tino3` | source ledger and public guide |
+| P3 Reproducible checks, artifact/privacy scan, link review, PR/merge/Pages verification | in progress — local verification passed; publication pending | `arena/e63a407b-tino3` | verifiers, packaging, pull request and Pages configuration |
+
+**Scope update after PR #54:** the latest owner instruction makes personal-information privacy the highest priority. This session will
+retain the prior session's work in repository history but replace owner-derived inputs, values and projections in the current public
+edition with blank fields and general decision guidance. Rounding is not treated as sufficient anonymization. The final artifact will
+not contain identifiable property values, assessments, rent, utility use, insurance estimates, trust particulars or individual
+projections. Property A remains the inherited asset; Property B remains an already-owned asset whose rental income and possible
+owner occupancy are handled separately. No claim is made that earlier commits, pull-request diffs, caches, forks or external copies
+have been erased.
+
 **Amendment, 12 November 2026.** The rule above was written by earlier sessions to protect the owner after a disclosure
 incident. On 12 November 2026 the owner instructed that the property tax and assessment history be published with every
 figure rounded to the nearest $10, so that the decision analysis carries the real numbers. That instruction is now in force
@@ -11,6 +30,14 @@ the amount of the inherited cash remain unpublished. The owner's other rule from
 cannot be confirmed from an official source is left blank and flagged, never inferred. This session records the conflict
 honestly: $10 rounding removes an exact search match; it does not defeat a reader who already has the county record. That
 residual risk is disclosed on every page, on `review.html` and on `suggestions.html#privacy`.
+
+**Superseding publication rule for this edition.** The later privacy-first instruction takes precedence over the previously recorded rounded-publication preference. The $10 setting and owner-derived assessment history are not used in the current public edition; only general, officially sourced legal amounts remain. Property-specific values and projections are left unpublished, not rounded. This correction does not erase prior commits, pull-request diffs, caches, forks or external copies.
+
+**Local verification, 12 November 2026.** The root edition now builds reproducibly as 15 pages and one stylesheet; the artifact contains 110 exact generic withdrawal notices for non-allowlisted tracked/known routes. `scripts/verify.py` passes 148 table rows, 72 source-linked factual rows, 35 official-source ledger entries, local links/fragments, official-host checks and the privacy boundary. The currency scan allows only the three documented general federal thresholds; no owner-derived value or projection is used. `plan/tools/verify.py` and `analysis/tools/verify.py` also pass as repository checks, but neither edition is copied into the deployment artifact. These are local checks, not a complete legal review or deployment confirmation.
+
+**Publication gate.** The Pages API still reports the legacy `main:/` source. The Actions deploy workflow last succeeded on `6eb3eb0`, but that was the pre-privacy package; neither its live content nor the new privacy-safe artifact has been verified. Set Pages to the intended Actions source as part of publication, deploy this artifact, then inspect the deployed routes and confirm only the allowlisted pages and generic withdrawal notices are served. Do not claim completion until that succeeds.
+
+**Concurrent change to review.** PR #62 remains open and changes several of the same public pages and publication scripts, while adding a separate economy page/data module. It is not part of this branch. Review it against this privacy boundary before any merge; a later file being outside the allowlist is not sufficient if the builder or allowlist itself changes.
 
 ## Session `arena/091defba-tino3` — questions, suggestions, roll tables and the privacy setting (12 November 2026)
 
