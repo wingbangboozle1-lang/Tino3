@@ -12,11 +12,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "_site"
 
-PAGES = ["index.html", "executive-summary.html", "questions.html", "suggestions.html",
+PAGES = ["index.html", "executive-summary.html", "questions.html", "suggestions.html", "economy.html",
          "property-a.html", "property-b.html", "taxes.html", "projections.html", "decision.html",
          "stress.html", "black-swans.html", "inheritance.html", "review.html", "audit.html",
          "sources.html"]
-ASSETS = ["assets/style.css", "assets/sources.json", "assets/privacy.json",
+ASSETS = ["assets/style.css", "assets/sources.json", "assets/privacy.json", "assets/data/economy.json",
           "assets/data/model.json", "assets/data/property_a.csv",
           "assets/data/property_b.csv", "assets/data/decision.csv",
           "scripts/privacy_tier.py"]
