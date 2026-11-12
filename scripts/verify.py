@@ -22,6 +22,10 @@ OFFICIAL_HOSTS = {
     "bls.gov", "www.bls.gov", "congress.gov", "www.congress.gov", "govinfo.gov", "www.govinfo.gov",
 }
 FORBIDDEN_TAGS = {"script", "iframe", "form", "input", "textarea", "object", "embed"}
+# Every decision-facing data row must carry an official source or validation anchor.
+# Header rows and source-library rows are handled separately; worksheet/proposal rows are
+# included because an evidence checklist still needs a published rule or agency anchor.
+DATA_ROW_CLASSES = {"fact-row", "worksheet-row", "framework-row", "choice-row", "proposal-row", "flag-row"}
 
 
 class PageAudit(HTMLParser):
@@ -39,6 +43,7 @@ class PageAudit(HTMLParser):
         self.current_count = 0
         self.rows: list[dict[str, object]] = []
         self.fact_rows: list[dict[str, object]] = []
+        self.sourced_rows: list[dict[str, object]] = []
         self.row: dict[str, object] | None = None
         self.cell_open = False
 
@@ -98,9 +103,11 @@ class PageAudit(HTMLParser):
             classes = self.row["classes"]
             if isinstance(classes, set) and "fact-row" in classes:
                 self.fact_rows.append(self.row)
+            if isinstance(classes, set) and classes.intersection(DATA_ROW_CLASSES):
+                self.sourced_rows.append(self.row)
                 hrefs = self.row["hrefs"]
                 if not isinstance(hrefs, list) or not any(urlsplit(href).scheme == "https" for href in hrefs):
-                    self.errors.append("fact row lacks an HTTPS publisher link")
+                    self.errors.append("decision data row lacks an HTTPS official-source link")
             self.rows.append(self.row)
             self.row = None
 
@@ -179,16 +186,16 @@ def audit_page(path: Path, ledger_urls: set[str]) -> tuple[list[str], PageAudit]
                 if unquote(parsed.fragment) not in target_parser.ids:
                     errors.append(f"broken local fragment: {href}")
 
-    for row in parser.fact_rows:
+    for row in parser.sourced_rows:
         hrefs = row["hrefs"]
         assert isinstance(hrefs, list)
         external = [href for href in hrefs if urlsplit(href).scheme]
         source_links = [href for href in external if href in ledger_urls]
         unlisted = [href for href in external if href not in ledger_urls]
         if not source_links:
-            errors.append("factual table row lacks a source-ledger URL")
+            errors.append("decision data row lacks a source-ledger URL")
         if unlisted:
-            errors.append(f"factual table row has external links outside the source ledger: {unlisted}")
+            errors.append(f"decision data row has external links outside the source ledger: {unlisted}")
 
     # Scan only the actual public page. The artifact path allowlist prevents private models/data
     # from being copied; these patterns catch the common direct identifiers and location clues.
@@ -228,11 +235,13 @@ def main() -> int:
     failures: list[str] = []
     total_rows = 0
     factual_rows = 0
+    sourced_rows = 0
     for name in PAGES:
         page_errors, parser = audit_page(SITE / name, ledger_urls)
         failures.extend(f"{name}: {error}" for error in page_errors)
         total_rows += len(parser.rows)
         factual_rows += len(parser.fact_rows)
+        sourced_rows += len(parser.sourced_rows)
 
     if failures:
         print("FAIL")
@@ -242,7 +251,7 @@ def main() -> int:
 
     print(
         f"PASS: {len(PAGES)} reproducible public pages; {total_rows} table rows, "
-        f"{factual_rows} source-linked factual rows; {len(sources)} official-source ledger entries; "
+        f"{sourced_rows} source-linked decision rows ({factual_rows} factual); {len(sources)} official-source ledger entries; " 
         "local links/fragments, official hosts, privacy scan, allowlisted package and withdrawal notices clean."
     )
     print(

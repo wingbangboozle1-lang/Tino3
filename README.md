@@ -20,13 +20,13 @@ The current edition has 15 static HTML pages and one stylesheet:
 | `stress.html` | Selected official-source historical economic episodes |
 | `taxes.html` | General federal and California tax, property and rental-law references |
 | `inheritance.html` | General estate, trust, assessor and tax steps |
-| `questions.html` | Facts to obtain privately before comparing options |
-| `suggestions.html` | Proposed improvements; none is selected automatically |
+| `questions.html` | 20 facts/documents/questions to resolve privately before comparing options |
+| `suggestions.html` | 12 proposed improvements; none is selected automatically |
 | `review.html` | Unknown and decision-sensitive items to resolve privately |
 | `audit.html` | Privacy, evidence, deployment and history limitations |
 | `sources.html` | Source ledger and the limits of each source |
 
-This is a static, no-input site: it has no calculator, form, analytics, tracking pixel or remote asset. The private evidence fields are blank, and the site does not collect or store answers.
+This is a static, no-input site: it has no calculator, form, analytics, tracking pixel or remote asset. The private evidence fields are blank, and the site does not collect or store answers. Every decision-facing table row has an official source or validation-anchor link; a link anchors the rule or evidence step, not a property-specific fact.
 
 ## Privacy and publication boundary
 
