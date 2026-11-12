@@ -70,7 +70,7 @@ LABEL = {"irs_estate": "Estate tax thresholds", "irs_2027": "2027 amounts", "irs
          "fedhist_1929": "Crash of 1929", "fedhist_greatinflation": "The Great Inflation",
          "fedhist_greatrecession": "The Great Recession", "nyfed_covid": "COVID-19 and the Fed",
          "fred_ussthpi": "US house price index", "fred_nasdaqcom": "NASDAQ Composite",
-         "uscode3124": "31 USC 3124", "uscode102": "26 USC 102", "irs_rmd": "RMD FAQ",
+         "uscode3124": "31 USC 3124", "uscode102": "26 USC 102", "irs_rmd": "RMD FAQ", "rtc17043": "RTC 17043",
          "cdi_tips": "Finding insurance", "cdi_fairplan": "FAIR Plan"}
 
 e = html.escape
@@ -169,6 +169,7 @@ BE = M["breakeven"]
 LAW = M["law"]
 BR45 = next(x for x in M["b_reset"] if x["year"] == 2045)
 E45 = next(x for x in M["estate"] if x["year"] == 2045)
+TS = M["tax_sens"]
 
 # Owner statement, 11 November 2026: Property B is already owned by the beneficiary, not by
 # the parents. Under that statement Property B is not part of the decedent's taxable estate, so
@@ -241,6 +242,8 @@ Renting the home out ends with {usd(RENT['wealth'])} and moving in ends with {us
 <div class="cards">
 <div class="card"><div class="k">The reasoning</div><p><a href="decision.html">Decision analysis</a>: results for 2040, 2045 and 2050, break-even points and every assumption.</p></div>
 <div class="card"><div class="k">The numbers</div><p><a href="projections.html">Year-by-year projections</a> to 2060: market value, assessed value, property tax and running costs.</p></div>
+<div class="card"><div class="k">Choose the path</div><p><a href="suggestions.html">Suggestions for review</a>: 13 tabled suggestions, two process notes, four paths to choose from, and five gates that must pass before anything changes. Nothing adopted yet.</p></div>
+<div class="card"><div class="k">Questions first</div><p><a href="questions.html">What the law already answers</a>, what the owner must supply, and the plan to obtain each missing document.</p></div>
 </div>
 <h3 class="grp">Black swans &mdash; one section, two pages</h3>
 <div class="cards">
@@ -298,6 +301,7 @@ rows = [
  (["Insurance: what is available", "The FAIR Plan, capped at $3,000,000", "The state's insurer of last resort is open to every homeowner, but its maximum for all coverages combined is below Property A's current estimated value, and it covers fire, lightning, explosion and smoke only. No premium is verified for either property."], "V", S("cdi_tips", "cdi_fairplan", flag=True)),
  (["Property tax and assessment history", f"Published to the nearest $10, 2014 to 2026", "The full table is on the Property A page, with the published state factor beside each year. Percentage changes are computed before rounding, so they are exact at any privacy setting."], "O", S("boe_lta26002")),
  (["Insurance", BLANK, "No official premium figure or insurer quote was confirmed for either property. The owner's guesses are used as placeholders; tripling them does not change the ranking."], "U", S("cdi_compare", flag=True)),
+ (["State tax on a large gain", "The 12.3% rate does not include the 1% above $1,000,000", f"Revenue and Taxation Code section 17043 adds 1% on taxable income above $1,000,000. Applied to the gain alone, the 2045 stock result falls by {usd(TS['delta'])} to {usd(TS['with_surcharge'])}; the sale stays first. Not folded into the model."], "C", S("rtc17043", "irs_tc409", flag=True)),
  (["Law under discussion", "The initiative to repeal the 2021 inheritance rules failed for lack of signatures", f"It would have restored the pre-2021 exclusion. If a later measure did so, Property A's 2045 tax would be {usd(LAW['tax_restored'])}. Selling would still come out ahead."], "V", S("sos_memo", "lao_250017", "sos_measures")),
  (["State tax on financial assets", "The one-time state tax on certain taxpayers was rejected in the unofficial count", "Results on 10 November 2026: Proposition 40 rejected with 52.6% no; Proposition 42 ahead with 51.5% yes. Certification due 11 December 2026."], "V", S("sos_results")),
  (["Black-swan stress tests", "Selling stays first in every stress case tested", "Stocks at 4.0% a year, inflation at 4.0% a year, or a flat decade for house prices: the ranking holds. A lost decade only moves the proceeds from the stock fund to Treasuries."], "C", S("frh_recession", "boe_lta26002", "fred_casthpi", asm=True)),
@@ -311,6 +315,12 @@ body = f"""{tbl("Important details", ["Topic", "Finding", "What it means"], rows
 <li><strong>Decide within the first year.</strong> Sell, unless living in the home is worth about {usd(B45['live_cost_month_today'])} a month in today's dollars to the family. If moving in, occupy within one year and file both claims.</li>
 <li><strong>Reinvest.</strong> A stock index fund has the higher expected result. Treasuries at today's yield finish ahead of renting when house prices grow 4% a year or less. A mix sits between the two.</li>
 <li><strong>Keep Property B.</strong> Its low assessed value and steady rent make it the better property to hold, provided it is not reassessed in the same estate.</li>
+</ol></section>
+<section><h2>Before acting: answer, choose, then implement</h2><ol>
+<li><strong>Answer the gating questions.</strong> The law settles ten of them on the <a href="questions.html">questions page</a> (QA-01 to QA-10). Nine documents settle the rest without publishing anything private: the deed, the trust, the itemised bills, two quotes per property, the estate inventory, the solar letter, a rent survey, the occupancy record and, at the death, an appraisal (D-01 to D-09).</li>
+<li><strong>Choose a path.</strong> The <a href="suggestions.html">suggestions page</a> sets out four: sell and reinvest (P1, recommended), rent Property A (P2), move in (P3), or defer (P4, not modelled). Nothing is implemented until the choice is recorded.</li>
+<li><strong>Pass the gates.</strong> Evidence, privacy, arithmetic, the owner's recorded choice, then publication. A row without an official link fails the build; so does a name, address, postal code or parcel number.</li>
+<li><strong>Re-run, do not edit.</strong> A change means editing the model, re-running it, and comparing the new result with the old one before anything is published.</li>
 </ol></section>{PRIV}"""
 PAGES["executive-summary.html"] = page("executive-summary.html", "Executive summary", "Executive summary", "What matters, in one table",
                                        "Each row states a finding, the number behind it, and the official source.", body)
@@ -1361,10 +1371,11 @@ fl = [
  ("FL-21", "County form names and the trust's tax filing", "The steps cite the statutes. Form numbers and the trust's income tax return were not verified.", "The assessor's forms page; a tax preparer", "rtc480"),
  ("FL-22", "Building share of value, bedrooms, condition", "Drive depreciation and maintenance. Assumed.", "The assessor's land and improvement split; an inspection", "irs_p527"),
  ("FL-23", "Sources read as excerpts", "Twelve sources were read as excerpts served from the official domain, not as whole documents. They are marked in the source library.", "Open each link", "irs_i706"),
+ ("FL-31", "California's 1% additional tax above $1,000,000", "The one-time-gain rate is 20% federal, 3.8% net investment income tax and 12.3% California. RTC 17043 adds 1% on taxable income above $1,000,000, which the 12.3% bracket rate does not include. Applied to the gain alone it lowers the 2045 stock result by $36,170 and the ranking holds (C-14); other income would make it larger.", "Adopt the surcharge in the model, or keep it as the published sensitivity", "rtc17043"),
 ]
 rows = [([i, item, why, BLANK, fix], "U", S(src)) for i, item, why, fix, src in fl]
 body = f"""<div class="note"><strong>Nothing on this page blocks the plan.</strong> These are the items that could not be confirmed from an official source, or that only the owner can settle.
-Each value is left blank rather than estimated. The list is ordered by how much each item could change the answer.</div>
+Each value is left blank rather than estimated. The number is a stable identifier, not a ranking: the first fifteen are the ownership and record facts, the next group is assumptions and law, .</div>
 {tbl("Flagged for Review", ["No.", "Item", "Why it is flagged", "Value", "What settles it"], rows)}{LEGEND}
 <section><h2>Four privacy disclosures</h2><ul>
 <li><strong>Repository history.</strong> Earlier commits in this public repository contain exact figures and location details, and earlier pull-request titles named jurisdictions. This edition cannot remove them. Rewriting the history or making the repository private is the owner's decision (suggestion S-12).</li>
@@ -1390,11 +1401,12 @@ corr = [
  ("C-11", "Comparison period", "Every case ended in 2055, so an inheritance in 2050 was judged over five years.", "Ten years after each inheritance year.", "irs_basis"),
  ("C-12", "Roll values in public files", "Assessment histories were published to the nearest $10, and one bill to the dollar.", "Generalised to the nearest $10,000 and $100, then republished at the owner's instruction on 12 November 2026 (C-13).", "boe_lta26002"),
  ("C-13", "Property tax and assessment tables", "The year-by-year bills and assessments were withheld altogether, on the view that any published roll figure identifies a parcel.", "Published in full at the precision the owner chose on 12 November 2026 (nearest $10), with the published state factor beside each year and the percentage changes computed before rounding. The setting is a committed file, so it can be raised to $1,000 or $10,000 without touching the analysis.", "boe_lta26002"),
+ ("C-14", "California surcharge on large gains", "The one-time-gain rate used 12.3% for California and stopped there.", "RTC 17043 adds 1% on taxable income above $1,000,000. Published as a sensitivity, not folded into the model: the 2045 stock result falls by $36,170 and the ranking holds (FL-31).", "rtc17043"),
 ]
-CB = {"C-01": "V", "C-02": "V", "C-03": "C", "C-04": "C", "C-05": "V", "C-06": "C", "C-07": "V", "C-08": "A", "C-09": "V", "C-10": "V", "C-11": "C", "C-12": "C", "C-13": "C"}
+CB = {"C-01": "V", "C-02": "V", "C-03": "C", "C-04": "C", "C-05": "V", "C-06": "C", "C-07": "V", "C-08": "A", "C-09": "V", "C-10": "V", "C-11": "C", "C-12": "C", "C-13": "C", "C-14": "C"}
 rows = [([i, item, old, new], CB[i], S(src)) for i, item, old, new, src in corr]
 repo = [
- ("Published pages", "Thirteen pages are generated from one model and one source ledger. A stale page fails the build."),
+ ("Published pages", "Fifteen pages are generated from one model and one source ledger. A stale page fails the build."),
  ("Retired pages and data files", "Paths used by earlier editions hold withdrawal notices with no figures. The build fails if any other tracked file appears."),
  ("Source ledger", "Each source records how it was checked: opened, or read as an excerpt served from the official domain."),
  ("Checks", "Every factual table row must link to an official publisher; a row that records a choice must link to the reasoning behind it. Dollar amounts must be multiples of $10. City names, postal codes, parcel numbers and e-mail addresses fail the build."),
@@ -1405,7 +1417,7 @@ repo = [
 rlist = "<ul>" + "".join(f"<li><strong>{area}.</strong> {finding}</li>" for area, finding in repo) + "</ul>"
 body = f"""
 <section><h2>What this page is</h2>
-<p>A second session re-checked the edition published earlier the same day, line by line, against the official sources. Twelve items were corrected. The largest effects came from C-04, C-05 and C-06.
+<p>Independent sessions re-checked the edition, line by line, against the official sources. Thirteen items were corrected across four passes; the last was found on 12 November 2026. The largest effects came from C-04, C-05 and C-06.
 The earlier edition's source work was sound: its quotations matched the official pages wherever they were re-opened.</p>
 {tbl("Corrections to the earlier edition", ["No.", "Item", "Earlier edition", "This edition"], rows)}{LEGEND}</section>
 <section><h2>What the 11 November 2026 pass added</h2>
@@ -1414,7 +1426,7 @@ The earlier edition's source work was sound: its quotations matched the official
 <p>A third session re-checked this edition on 11 November 2026 before publishing it. Thirteen ledger entries were re-opened on the publishers' own domains: the IRS estate page, the 2026 Form 706 instructions, the 2027 inflation release, the Proposition 19 page and Letter 2025/009, Revenue and Taxation Code sections 63.2 and 13301, the local secured-tax page, the local rent-increase page, the Department of Insurance premium-survey page, the Secretary of State's initiative memorandum and its unofficial election results, and the Treasury yield table. The figures already published matched in every case; no number changed.</p>
 <p>Three things were added or corrected. First, a gap: the state-tax treatment of Treasury interest had been left as an unverified assumption (FL-17). It is now read in 31 U.S.C. 3124 on the U.S. Government Publishing Office's own site, which exempts Treasury obligations and their interest from state and local tax but expressly not from an estate or inheritance tax; the flag is closed and the rule appears on the tax page. Second, the 40% estate-tax rate is now tied to the published 2026 credit of $5,945,800, which is exactly $345,800 plus 40% of the excess over $1,000,000; the rate table itself is still not opened, so FL-16 stays open. Third, a stale count on this page (58 sources) was replaced by a number the build computes.</p>
 <p>The arithmetic was re-checked independently of the renderer: all 35 projection years for each property were recomputed from the model's own formulas (tax = rate x assessed value plus fixed charges; running costs summed; assessed value capped at 2%), the estate-room rows were recomputed from the exclusion less both homes, and the 2045 reassessment was recomputed from the Proposition 19 formula. Every published figure agreed to the nearest $10. The page structure was also changed: the menu is now grouped into five sections, the two black-swan pages are labelled as parts 1 and 2 of one section instead of appearing twice under different names, and the overview states which of the three editions in this repository a reader is looking at.</p></section>
-<section><h2>Fourth pass, 12 November 2026</h2>
+<section><h2>Pass of 12 November 2026 (merged from PR #53)</h2>
 <p>A later session re-opened four documents on the publishers' own domains and checked them against what this edition says. Proposition 19 on the Board of Equalization's page — the comparison chart and questions 2, 3 and 6 — confirms the mechanics the model uses: the family home is excluded only while at least one heir lives in it; the value limit is the prior taxable value plus $1,000,000, adjusted every second year; and a home that is rented does not qualify at all. The worked example in question 6 reaches the same taxable value as the formula in the model, with the $1,000,000 amount the model indexes each second year. The IRS estate page was re-opened: the 2026 filing threshold is $15,000,000 and the portability election is made on a timely filed return. That page does not state the 40% rate, so FL-16 stays open.</p>
 <p>Two rules the brief asks about had never appeared in this edition. Both are now read at the publisher and published on the <a href="taxes.html#heir">tax page</a>: an inheritance is not income to the heir (26 U.S.C. 102, subsection (a), read on the Government Publishing Office's site, with subsection (b) leaving the income from the property taxable), and an inherited retirement account must generally be emptied within ten years where the owner died after 2019, with the exceptions the IRS lists. Two source badges on the <a href="suggestions.html">suggestions page</a> were also withdrawn: they pointed at the IRS estate page for a repository-history question and for a question about which edition to act on, which that page does not support. Those two suggestions are now listed without a badge. The legend's review window was extended to 12 November 2026. No model figure, projection row or ranking changed.</p></section>
 <section><h2>Fifth pass, 12 November 2026 (this session)</h2>
@@ -1441,6 +1453,10 @@ The trade-off is stated on every page and on this page's privacy disclosures; th
 precision change and agreed to the nearest $10. The arithmetic of the estate room, the reassessment and the break-evens was re-run by the
 model and asserted in the build. Not done: no insurer was contacted, no address or parcel lookup was made, no water or electricity tariff
 was read, and no statute not named above was opened in this session.</p></section>
+<section><h2>Additional check of the state gain rate, 12 November 2026</h2>
+<p>A separate session re-opened fifteen publisher pages the same day. Every already-published figure matched: the 2026 and 2027 exclusions, the Form 706 deadline and portability rule, the inherited-basis rule, the absence of a state death tax, the Proposition 19 conditions and the two-year amount, the local secured rate, the rent cap, the insurance survey's scope, the 10-year Treasury at 4.88% on 9 November 2026 and the index fund's 12.09% one-year return.</p>
+<p>One gap was found. The one-time-gain rate used in the model is 20% federal, 3.8% net investment income tax and 12.3% California, and 12.3% is the top bracket of the graduated schedule. Section 17043 of the Revenue and Taxation Code adds a further 1% on the portion of taxable income above $1,000,000. It is published as FL-31 and C-14, with the dollar effect as a sensitivity rather than a model change, so no previously published figure moves: applied to the gain alone, the 2045 stock result falls from $10,052,910 to $10,016,750, and the sale remains first. Other income would push more of the gain above the threshold, so the figure published is a lower bound on that tax.</p>
+<p>What this check did not do: it did not open the text of Proposition 19 or any local ordinance, contact an insurer, appraiser or broker, look up a parcel, or test the pages in a browser.</p></section>
 <section><h2>Repository review</h2><p>Findings from reading the repository itself. These are observations, not sourced facts.</p>{rlist}</section>
 <section><h2>How this edition relates to the cross-check</h2>
 <p>A separate <a href="plan/index.html">cross-check edition</a> was built by another session with its own model and its own source ledger. It leaves unverifiable inputs blank and reports break-evens.
@@ -1452,8 +1468,8 @@ The cross-check's reconciliation table describes the edition that preceded this 
 <li>No insurer was contacted and no quote was obtained.</li>
 <li>Pages were checked by build rules and by reading the generated files, not in a browser.</li>
 </ul></section>{PRIV}"""
-PAGES["audit.html"] = page("audit.html", "Independent verification", "Independent verification", "What a second check changed",
-                           "Twelve corrections to the earlier edition, each with the official source that settles it.", body)
+PAGES["audit.html"] = page("audit.html", "Independent verification", "Independent verification", "What independent checks changed",
+                           f"{len(corr)} corrections to the earlier edition, each with the official source that settles it.", body)
 
 # ------------------------------------------------------------------------------------------------ sources
 rows = []

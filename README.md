@@ -34,7 +34,7 @@ replaced by a content-free withdrawal notice, so a stale URL cannot return an ol
 | `audit.html` | Independent verification: twelve corrections to the first quantitative edition, repository review |
 | `suggestions.html` | Four paths and 20 suggestions with effort, privacy cost and status; four decision gates; the privacy-precision choice |
 | `questions.html` | 39 questions with status: what is settled and linked to its publisher, what is missing, the step that closes it, and what changes if the answer differs |
-| `sources.html` | 72 official sources, what each one supports and how each was checked |
+| `sources.html` | 73 official sources, what each one supports and how each was checked |
 
 ## How the site is organised
 
@@ -68,14 +68,16 @@ which one a reader is looking at.
   `review.html`; changing it is `python3 scripts/privacy_tier.py 2` (or 3) followed by a rebuild.
 - Properties appear only as Property A and Property B; jurisdictions are described generically, with
   the official rate documents cited.
-- No forms, no scripts, no analytics, no remote assets. Nothing on the site accepts or stores input.
+- Residual risk is disclosed rather than hidden: the two owner-supplied market values and the monthly rent are
+already multiples of $10, so rounding does not disguise them. The review page says so, and SG-14 puts the choice
+between bands, a coarser rounding or withdrawal to the owner.
 
 ## Verification standard
 
 Every rule on the site was retrieved from the publishing agency's own domain between 10 and 12 November 2026 (see the source library for the session that opened each document) and linked
 from the row that uses it. Two independent passes re-checked the edition on 11 November 2026; the third pass re-opened thirteen ledger entries on the publishers' sites, recomputed
 every projection row from the model's own formulas (all agreed to the nearest $10), closed one open flag with 31 U.S.C. 3124 (Treasury interest is exempt from state tax) and corrected a
-stale source count. It found no wrong figure. A fourth pass on 12 November 2026 added the two rules the brief asks about that the edition had never covered (an inheritance is not income to the heir; what happens to an inherited retirement account) and removed two source badges that pointed at an unrelated IRS page. What it did not do is listed on `audit.html`. `assets/sources.json` records what each document verifies. Anything that could not
+stale source count. It found no wrong figure. What it did not do is listed on `audit.html`. `assets/sources.json` records what each document verifies. A fourth pass on 12 November 2026 added the two rules the brief asks about that the edition had never covered (an inheritance is not income to the heir; what happens to an inherited retirement account) and removed two source badges that pointed at an unrelated IRS page. A further pass the same day re-opened fifteen publisher pages, confirmed every published figure, and added one finding: the 1% California tax above $1,000,000 of taxable income (RTC 17043) is not in the 12.3% rate used in the model, so it is published as a sensitivity (the 2045 stock result falls by $36,170 and the ranking holds). Anything that could not
 be verified is left blank or published on the Flagged for Review page — never inferred.
 
 ## Build
@@ -97,7 +99,7 @@ was checked.
 ## Data
 
 <<<<<<< HEAD
-`assets/sources.json` — source ledger (72 entries, each with the words relied on and how it was checked).
+`assets/sources.json` — source ledger (73 entries, each with the words relied on and how it was checked).
 `assets/privacy.json` — the published precision for assessment-roll values and tax bills.
 =======
 `assets/sources.json` — source ledger (70 entries, each with the words relied on and how it was checked).
