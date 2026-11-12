@@ -29,7 +29,7 @@ Inheritance in 2045, house prices rising 4% a year, measured ten years later aft
 - Property tax and assessment: the full history, 2014 to 2026 for Property A and 2016 to 2025 for Property B, is published at $10 precision on the property pages, with the published state factor beside each year.
 - Black swans, part 1 (black-swans.html): the baseline's official anchors, fifty years of state inflation data, and the fixed amounts whose real value erodes.
 - Black swans, part 2 (stress.html): stock returns at 4.0%, inflation at 4.0% or a flat decade for house prices - selling still finishes first, and a lost decade only moves the proceeds to Treasuries. Verified 1929, 1965-82, 2000-02, 2007-09 and 2020 episodes re-run against the 2045 inheritance: the sale decision holds in 5 of 7 analogues, and only the reinvestment vehicle changes with the regime.
-- New on 12 November 2026: a page of 35 questions with their status and the step that closes each one (questions.html), and a page of four paths and sixteen suggestions with effort and privacy cost (suggestions.html).
+- New on 12 November 2026: a page of 39 questions with their status and the step that closes each one (questions.html), and a page of four paths and 20 suggestions with effort and privacy cost (suggestions.html).
 - Sources: 72 official documents, four added on 12 November 2026 (26 U.S.C. 102; the IRS RMD FAQ; two Department of Insurance pages on insurance availability). The figures behind the decision were re-opened on the publishers' sites that day; none changed.
 
 Site: index.html. Open questions: questions.html. Options: suggestions.html. Open items: review.html. How it was checked: audit.html. Sources: sources.html.

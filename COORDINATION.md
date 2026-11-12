@@ -20,10 +20,11 @@ residual risk is disclosed on every page, on `review.html` and on `suggestions.h
 
 | Task | Status | Owner | Files touched |
 |---|---|---|---|
-| Q-1 Questions and answers page: 35 questions, each with status, the official rule, the step that closes it, and the effect of a different answer | done | `arena/091defba-tino3` | `scripts/build.py` (new page), `questions.html` |
-| Q-2 Suggestions page: four paths, sixteen suggestions, four decision gates, the privacy choice | done | `arena/091defba-tino3` | `scripts/build.py` (new page), `suggestions.html`, `assets/style.css` |
+| Q-0 Merge the work of PRs #52 and #53 (`arena/16e602da-tino3`, `arena/f7e49cdb-tino3`) into this branch without discarding a row of it | done | `arena/091defba-tino3` | merge commit; see "Merge with the two sessions that landed first" below |
+| Q-1 Question register: 39 questions, each with status, the official rule, the step that closes it, and the effect of a different answer. Built on the 13-row register merged in PR #52; every one of those rows is kept in substance and four of its questions have no equivalent here and were added as Q-36 to Q-39 | done | `arena/091defba-tino3` | `scripts/build.py`, `questions.html` |
+| Q-2 Suggestion register: four paths, 20 suggestions, four decision gates, the privacy choice. Built on the 12-row register merged in PR #52; its four suggestions without an equivalent here were added as S-17 to S-20 | done | `arena/091defba-tino3` | `scripts/build.py`, `suggestions.html`, `assets/style.css` |
 | Q-3 Property tax and assessment history published at the owner's instructed precision, with the published state factor per year | done | `arena/091defba-tino3` | `scripts/model.py`, `scripts/build.py`, `assets/privacy.json`, `scripts/privacy_tier.py`, `property-a.html`, `property-b.html` |
-| Q-4 Sources added and re-read on 12 November 2026; gaps on inherited income and inherited accounts closed | done | `arena/091defba-tino3` | `assets/sources.json` (72 entries), `taxes.html`, `inheritance.html`, `executive-summary.html`, `EXECUTIVE_SUMMARY.md`, `audit.html`, `review.html` |
+| Q-4 Sources added and re-read on 12 November 2026; two Department of Insurance pages added, and the ledger reconciled with the entries PR #53 added (one id each, merged rather than duplicated) | done | `arena/091defba-tino3` | `assets/sources.json` (72 entries), `taxes.html`, `inheritance.html`, `executive-summary.html`, `EXECUTIVE_SUMMARY.md`, `audit.html`, `review.html` |
 | Q-5 Checks, pull request, merge, Pages deploy, record | **in progress** | `arena/091defba-tino3` | this section; `README.md`; `scripts/verify.py`, `scripts/package_site.py` |
 
 Not touched: `plan/**`, `analysis/**`, `.github/workflows/*`, `scripts/privacy_boundary.py`, every withdrawal notice, and every
@@ -49,6 +50,27 @@ commit, message or pull request made by this session.
    the FAIR Plan — the insurer of last resort — caps a residential risk at $3,000,000 for all coverages combined, below Property A's
    current estimated value, and covers fire, lightning, internal explosion and smoke only. No premium is published for either
    property; the owner's guess stays a placeholder and is labelled as one (FL-05, FL-06, FL-27).
+
+### Merge with the two sessions that landed first
+
+Two sessions merged to `main` while this one was working: `arena/16e602da-tino3` (PR #52) had already published
+`questions.html` and `suggestions.html`, and `arena/f7e49cdb-tino3` (PR #53) had added the "what the heir receives"
+table to the tax page, read 26 U.S.C. 102 and the RMD FAQ, and written a fourth-pass note on the audit page. `git merge
+origin/main` was run rather than a rebase, because the conflicts were add/add on two generated pages and a long block in
+`scripts/build.py`. Resolution, recorded so nothing is silently lost:
+
+| Conflict | Resolution |
+|---|---|
+| `questions.html`, `suggestions.html` (add/add) | This branch's fuller registers were kept as the base; the 13 questions and 12 suggestions from PR #52 were compared row by row against them. Every distinct row survives either as itself or inside a fuller row; the four questions and four suggestions with no equivalent here were added as Q-36 to Q-39 and S-17 to S-20. The page titles merged to main ("Questions before deciding", "Suggestions for review") were kept. |
+| `scripts/build.py`, navigation | The merged `main` ordering was kept: both pages stay in the "Decide next" group at positions 11 and 12, not moved to the top. |
+| Tax page | PR #53's "What the heir receives" table and section were kept as written (`taxes.html#heir`). |
+| Audit page | PR #53's "Fourth pass" note was kept verbatim; this session's record is a separate "Fifth pass" section, so neither session's claims are merged into the other's. |
+| `assets/sources.json` | Both sides had added 26 U.S.C. 102 and the RMD FAQ under different ids. The ids merged to `main` (`uscode102`, `irs_rmd`) were kept and this branch's duplicate `irs_rmd_faq` entry was folded into `irs_rmd` with both sets of verified statements. The two Department of Insurance pages are new. |
+| Generated HTML, `EXECUTIVE_SUMMARY.md` | Regenerated from the merged build; no hand-editing of generated files. |
+| `README.md`, this board | Merged by hand: this edition's page table, counts and privacy section kept; PR #53's wording on the tax page kept. |
+
+Nothing from either session was removed: their pages, their rows, their tax-page section and their audit note are all on the
+merged tree, and all three verifiers pass on it.
 
 ### Verification performed on 12 November 2026
 
@@ -84,6 +106,8 @@ fails if a single published byte differs from a fresh build. All three verifiers
 - Claim written into this section and committed with the first work commit on this branch (no other branch existed on the remote,
   and the board showed no open claim on these files; PR #44 was already closed, its content superseded on `main`).
 - 12 November: two new pages rendered; sources re-read; roll tables added; precision setting added; all three verifiers re-run.
+- 12 November, after `git fetch`: `main` had moved to `4347464` (merges of PRs #52 and #53). Merge performed, conflicts resolved as
+  the table above records, pages regenerated, all three verifiers re-run on the merged tree.
 - Pull request and merge result: recorded below and on the pull request itself.
 
 ## Session `arena/4ff01a4d-tino3` — second integration pass: independent re-verification, site consolidation, publication
@@ -1049,3 +1073,89 @@ Method and limits: the topic comparison below is a phrase search of the raw HTML
 - 13:11 UTC: **merge conflict** on rebasing onto `main` (`eba253d`): this section and the section of `82853ea6` (PRs #47, #48) were both appended at the end of the file. Resolved by taking `main`'s file byte for byte and re-appending this section after it. Checked: `main`'s text was an exact prefix of the result; no line of any other session was changed or removed.
 - 13:16 to 13:20 UTC: rebased again onto `main` (`5e1b0db`, after PRs #49 and #50), no conflict. Every count in this section recomputed on that commit before pushing; three statements of the draft were found wrong in that pass and fixed before they were published (how the late branches were fetched, a description of five older branches, and a file-name count that PR #49 had made stale).
 - 13:21 UTC: pull request [#51](https://github.com/wingbangboozle1-lang/Tino3/pull/51) opened from this branch, changing this section only. It is merged once; the merge commit and the checks after it are shown on that page and recorded in the last commit of this branch, not in a further commit on `main`.
+
+## Session `arena/16e602da-tino3` — Suggestions register + pre-decision questions checklist (2026-11-12)
+
+*Branch note:* Arena pins this session to `arena/16e602da-tino3` from `fd2b5a8`; `session-<id>/<task>` naming cannot be used. Board read before claiming. Prior root edition (13 pages, 68 sources) verified passing `scripts/verify.py` at claim time.
+
+| Task | Status | Owner | Files touched |
+|---|---|---|---|
+| SG-1 Dedicated Suggestions page: proposed improvements, each marked Proposed — not decided, with decision needed before implementation | claimed | `arena/16e602da-tino3` | `scripts/build.py`, generated `suggestions.html`, nav in all root pages |
+| SG-2 Pre-decision Questions & Answers checklist: have / do-not-have / how-to-discover, gating decisions | claimed | `arena/16e602da-tino3` | `scripts/build.py`, generated `questions.html` |
+| SG-3 Re-verify key official anchors in-session; README + EXECUTIVE_SUMMARY refresh; PR, merge, Pages deploy check | claimed | `arena/16e602da-tino3` | `README.md`, `EXECUTIVE_SUMMARY.md`, this section only |
+
+Not touched: `plan/**`, `analysis/**`, workflows, other sessions' board sections. Privacy: Property A/B placeholders only; no ZIP, city, address, or unrounded figure in any commit.
+
+### Result (`arena/16e602da-tino3`, 12 Nov 2026)
+- SG-1/SG-2 done: `suggestions.html` (12 proposed-only items SG-01..SG-12, none decided/implemented) and `questions.html` (Q-01..Q-13 have/lack/how-to-discover, gating first), built via `scripts/build.py`; nav gains a "Decide next" group; site is now 15 root pages.
+- SG-3: IRS estate-tax page and BOE Proposition 19 page re-opened on the publishers' domains in-session (2026 exclusion $15,000,000 and Prop 19 comparison confirmed as published); no figure changed. All verifiers pass: root 15 pages/521 cited rows, `plan/` 10 pages, `analysis/` 12 pages; packager serves 15 pages + 49 withdrawal notices. Privacy scan clean (Property A/B only, $10 rounding).
+
+## Session `arena/f7e49cdb-tino3` — verification of the 15-page edition, the two never-covered brief items, and publication (2026-11-12)
+
+*Branch note:* Arena pins this session to `arena/f7e49cdb-tino3`, branched from `fd2b5a8` and rebased onto `aa4a3f7`
+(merge of PR #52). `session-<id>/<task>` naming cannot be used. The whole board was read before claiming; the only
+claim that was still live, `arena/16e602da-tino3` (SG-1..SG-3), merged as PR #52 at 15:33 UTC, before this claim was
+written, so no scope below overlaps it. `main` was re-read after that merge.
+
+| Task | Status | Owner | Files touched |
+|---|---|---|---|
+| V-1 Independent verification of what the brief asks and the edition does not yet answer: the Proposition 19 reassessment mechanics behind the recommendation, the estate-tax room arithmetic under the ownership statement, and the citation quality of the two pages PR #52 added | done | `arena/f7e49cdb-tino3` | working notes outside the tree; corrections in `scripts/build.py` + generated root pages |
+| V-2 Two items of the brief that the root edition has never covered, logged as request R-4E-2 by `arena/4e96512c-tino3` and still open: that an inheritance is not income to the heir, and what happens to inherited retirement accounts | done | `arena/f7e49cdb-tino3` | `assets/sources.json` (append only), `scripts/build.py`, generated `taxes.html` |
+| V-3 Disposition of the stale PR #44, then publication: verify all three editions, package, pull request, merge, confirm the deploy | in progress — PR open, merge next | `arena/f7e49cdb-tino3` | `COORDINATION.md` (this section), `README.md`, `EXECUTIVE_SUMMARY.md` |
+
+Not touched: `scripts/model.py` (no figure in this session changes a model output), `plan/**`, `analysis/**`,
+`.github/workflows/*`, `scripts/verify.py`, `scripts/package_site.py`, `scripts/privacy_boundary.py`, and every other
+session's section of this board. Privacy: Property A / Property B only; no name, street, postal code, parcel number or
+unrounded figure in any commit, message or pull request. Nothing private from the brief is copied into this board.
+
+### Log (`arena/f7e49cdb-tino3`)
+
+- 15:34 UTC — board read in full; open pull requests listed (#44, #52). PR #52 was opened 15:33:46 and merged at 15:34.
+- 15:35 UTC — this claim committed and pushed before any other file was edited.
+
+### Result (`arena/f7e49cdb-tino3`, 12 November 2026)
+
+**V-1, verification.** Four documents were opened on the publishers' own domains in this session and read against what the
+edition says. (a) BOE's Proposition 19 page, the comparison chart and parent-child questions 2, 3 and 6: the family home is
+excluded only while an heir lives in it; the value limit is the prior taxable value plus $1,000,000, adjusted every second
+year; a rented home does not qualify; a worked example reaches the same taxable value as the formula in `scripts/model.py`
+(`live = base + max(0, fair value - base - amount)`, `rent = full value`). The model's reassessment branch is therefore
+right, including the part that is easy to get backwards: moving in does **not** preserve the old assessed value, and
+renting gives up the exclusion entirely. (b) The IRS estate page: 2026 threshold $15,000,000 and portability by election
+on a timely filed return, both already published here. That page does **not** state the 40% rate, so FL-16 stays open.
+No model figure, projection row or ranking changed.
+
+**V-2, the two brief items the root edition had never covered** (request R-4E-2 on this board, open since 11 November).
+A new section `taxes.html#heir`, "What the heir receives, and what is still taxed", six source-backed rows:
+- an inheritance is not income to the heir — 26 U.S.C. 102(a), read in full on GovInfo (new ledger entry `uscode102`);
+- no California or local tax on the receipt — RTC 13301 with the State Controller's page (both already in the ledger);
+- income from the inherited property stays taxable — 26 U.S.C. 102(b), read in the same session;
+- an inherited IRA or 401(k) where the owner died after 2019 must generally be emptied within ten years, with the
+  exceptions the IRS lists — IRS RMD FAQs (new ledger entry `irs_rmd`);
+- withdrawals from an inherited traditional account are taxable income to the heir, except basis or a qualified Roth
+  distribution — same page;
+- estate tax above the exclusion is the estate's tax, due with Form 706 in nine months, not the heir's.
+Q-08 on `questions.html` was rewritten to match: what is known (the ten-year rule) and what is still missing (the account
+list and balances). The ledger went from 68 to 70 entries; the counts in `README.md`, `EXECUTIVE_SUMMARY.md` and the
+overview card were corrected to 70, and the legend's review window from "10 or 11 November" to "10 to 12 November 2026".
+
+**One irregularity found and corrected in another session's page.** On `suggestions.html` as merged in PR #52, two rows
+(SG-10, the repository-history question, and SG-12, which edition to act on) carried a **Verified** badge pointing at the
+IRS estate-tax page. That page says nothing about either question; the badges were added to satisfy the build rule that
+every table row links to an official publisher. Both are now set out below the table without a badge, and the page says
+why. No suggestion was dropped and no decision was taken.
+
+**V-3, PR #44.** Closed without merging. Its branch `arena/30ee04a6-tino3` was opened on 11 November and measured against
+`main` on 12 November: 98 files, 2,025 deletions, including almost all of this board, the 64 withdrawn legacy paths
+(`cupertino.html`, `data/*`, `decision-suite/*` …) and regenerated `plan/` and `analysis/` pages from an older model. Its
+two substantive corrections (the estate room under the owner's statement, the RTC 63.2 attribution) are already on `main`
+from other sessions. Its five flags FL-25 to FL-29 were read and **not** ported: each is unverified in its own text, and
+FL-27 states that the state-and-local tax deduction is capped at $10,000 and **not indexed**; comparison sites read this
+session (not an official page, so nothing is claimed for the site) report that the July 2025 federal act raised the cap to
+$40,000 for 2025 and $40,400 for 2026 through 2029, which would make that row out of date. That branch is left in place
+for the owner, with these five flags unported and unverified.
+
+**Checks.** `scripts/verify.py` PASS — 15 reproducible pages, 527 table rows all linked to an official publisher, 70
+ledger sources, local links, official hosts, privacy scan and $10 rounding clean. `plan/tools/verify.py` PASS (10 pages,
+454 rows). `analysis/tools/verify.py` PASS (12 pages, 380 rows). `scripts/package_site.py` PASS — 15 pages, 52 assets, 49
+withdrawal notices, no legacy data. Independent sweep of the packaged artifact: **1,098 local links, 0 broken**.

@@ -8,7 +8,11 @@ federal estate tax.
 
 ## What this repository publishes
 
+<<<<<<< HEAD
 Fifteen static pages, one stylesheet, one source ledger, one privacy setting and three CSV downloads, plus the separate cross-check edition under `plan/` — nothing else. The published
+=======
+Fifteen static pages, one stylesheet, one source ledger and three CSV downloads, plus the separate cross-check edition under `plan/` — nothing else. The published
+>>>>>>> origin/main
 artifact is an allowlist built by `scripts/package_site.py`; every path an earlier edition published is
 replaced by a content-free withdrawal notice, so a stale URL cannot return an old figure.
 
@@ -18,27 +22,36 @@ replaced by a content-free withdrawal notice, so a stale URL cannot return an ol
 | `executive-summary.html` | The decision, five numbers, what would change it |
 | `questions.html` | 35 questions with status: what is settled and linked to its publisher, what is missing, the step that closes it, and what changes if the answer differs |
 | `suggestions.html` | Four paths and sixteen suggestions, each with effort, privacy cost and status; the privacy-precision choice; four decision gates |
-| `property-a.html` | The residence to inherit: inputs, assessment-factor check, what the inheritance does to the assessed value |
-| `property-b.html` | The rental: inputs, tax-bill breakdown, rent rules, reassessment exposure if it is in the same estate |
-| `taxes.html` | Federal, California and local rules, verified; pending law changes |
+| `property-a.html` | The residence to inherit: inputs, the full 2014–2026 tax and assessment history against the published state factors, what the inheritance does to the assessed value |
+| `property-b.html` | The rental: inputs, the 2016–2025 tax and assessment history, tax-bill breakdown, rent rules, reassessment exposure if it is in the same estate |
+| `taxes.html` | Federal, California and local rules, verified; what the heir receives and what is still taxed; pending law changes |
 | `projections.html` | Year-by-year value, assessed value, tax and running costs, 2026–2060, and the ten years after an inheritance |
 | `decision.html` | Sell vs rent vs move in for 2040/2045/2050, break-evens, sensitivities, the assumption register |
 | `stress.html` | Black swans, part 2: verified 1929, Great Inflation, oil-shock, dot-com, Great Recession and COVID episodes re-run against the 2045 inheritance; the playbook |
 | `black-swans.html` | Black swans, part 1: baseline anchors (Fed, SSA, CBO), fifty years of official state inflation data, fixed-amount erosion, and the single-input stress cases |
 | `inheritance.html` | Statutory timeline after the death, with deadlines |
-| `review.html` | 23 flagged items (unverified values left blank, owner questions, record irregularities) and two privacy disclosures |
+| `review.html` | 29 flagged items (unverified values left blank, owner questions, record irregularities) and four privacy disclosures |
 | `audit.html` | Independent verification: twelve corrections to the first quantitative edition, repository review |
-| `sources.html` | 68 official sources, what each one supports and how each was checked |
+| `suggestions.html` | Four paths and 20 suggestions with effort, privacy cost and status; four decision gates; the privacy-precision choice |
+| `questions.html` | 39 questions with status: what is settled and linked to its publisher, what is missing, the step that closes it, and what changes if the answer differs |
+| `sources.html` | 72 official sources, what each one supports and how each was checked |
 
 ## How the site is organised
 
+<<<<<<< HEAD
 The menu is grouped into six sections: **Start here** (overview, summary, questions, suggestions),
 **The decision** (decision analysis, projections), **Black swans** (conditions and history, stress tests —
 one section in two parts), **The properties** (A, B), **Tax and process** (tax and law watch, inheritance
 steps) and **Evidence** (flagged items, independent verification, source library).
+=======
+The menu is grouped into six sections: **The decision** (overview, summary, decision analysis, projections),
+**Black swans** (conditions and history, stress tests — one section in two parts), **The properties**
+(A, B), **Tax and process** (tax and law watch, inheritance steps), **Decide next** (suggestions for review, questions before deciding) and **Evidence** (flagged items,
+independent verification, source library).
+>>>>>>> origin/main
 
 Three editions of the same analysis sit in this repository. They use separate models, so their figures
-differ and must not be mixed: the thirteen pages in the menu (the edition to act on), the independent
+differ and must not be mixed: the fifteen pages in the menu (the edition to act on), the independent
 cross-check at `/plan/`, and the 50-year and ownership suite at `/analysis/`. The overview page says
 which one a reader is looking at.
 
@@ -62,7 +75,7 @@ which one a reader is looking at.
 Every rule on the site was retrieved from the publishing agency's own domain between 10 and 12 November 2026 (see the source library for the session that opened each document) and linked
 from the row that uses it. Two independent passes re-checked the edition on 11 November 2026; the third pass re-opened thirteen ledger entries on the publishers' sites, recomputed
 every projection row from the model's own formulas (all agreed to the nearest $10), closed one open flag with 31 U.S.C. 3124 (Treasury interest is exempt from state tax) and corrected a
-stale source count. It found no wrong figure. What it did not do is listed on `audit.html`. `assets/sources.json` records what each document verifies. Anything that could not
+stale source count. It found no wrong figure. A fourth pass on 12 November 2026 added the two rules the brief asks about that the edition had never covered (an inheritance is not income to the heir; what happens to an inherited retirement account) and removed two source badges that pointed at an unrelated IRS page. What it did not do is listed on `audit.html`. `assets/sources.json` records what each document verifies. Anything that could not
 be verified is left blank or published on the Flagged for Review page — never inferred.
 
 ## Build
@@ -83,8 +96,12 @@ was checked.
 
 ## Data
 
+<<<<<<< HEAD
 `assets/sources.json` — source ledger (72 entries, each with the words relied on and how it was checked).
 `assets/privacy.json` — the published precision for assessment-roll values and tax bills.
+=======
+`assets/sources.json` — source ledger (70 entries, each with the words relied on and how it was checked).
+>>>>>>> origin/main
 `assets/data/model.json` — every figure on the site.
 `assets/data/property_a.csv`, `property_b.csv`, `decision.csv` — the same numbers for offline work.
 
