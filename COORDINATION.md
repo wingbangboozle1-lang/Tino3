@@ -1000,7 +1000,7 @@ written, so no scope below overlaps it. `main` was re-read after that merge.
 |---|---|---|---|
 | V-1 Independent verification of what the brief asks and the edition does not yet answer: the Proposition 19 reassessment mechanics behind the recommendation, the estate-tax room arithmetic under the ownership statement, and the citation quality of the two pages PR #52 added | done | `arena/f7e49cdb-tino3` | working notes outside the tree; corrections in `scripts/build.py` + generated root pages |
 | V-2 Two items of the brief that the root edition has never covered, logged as request R-4E-2 by `arena/4e96512c-tino3` and still open: that an inheritance is not income to the heir, and what happens to inherited retirement accounts | done | `arena/f7e49cdb-tino3` | `assets/sources.json` (append only), `scripts/build.py`, generated `taxes.html` |
-| V-3 Disposition of the stale PR #44, then publication: verify all three editions, package, pull request, merge, confirm the deploy | in progress — PR open, merge next | `arena/f7e49cdb-tino3` | `COORDINATION.md` (this section), `README.md`, `EXECUTIVE_SUMMARY.md` |
+| V-3 Disposition of the stale PR #44, then publication: verify all three editions, package, pull request, merge, confirm the deploy | done | `arena/f7e49cdb-tino3` | `COORDINATION.md` (this section), `README.md`, `EXECUTIVE_SUMMARY.md` |
 
 Not touched: `scripts/model.py` (no figure in this session changes a model output), `plan/**`, `analysis/**`,
 `.github/workflows/*`, `scripts/verify.py`, `scripts/package_site.py`, `scripts/privacy_boundary.py`, and every other
@@ -1058,3 +1058,11 @@ for the owner, with these five flags unported and unverified.
 ledger sources, local links, official hosts, privacy scan and $10 rounding clean. `plan/tools/verify.py` PASS (10 pages,
 454 rows). `analysis/tools/verify.py` PASS (12 pages, 380 rows). `scripts/package_site.py` PASS — 15 pages, 52 assets, 49
 withdrawal notices, no legacy data. Independent sweep of the packaged artifact: **1,098 local links, 0 broken**.
+
+**Publication.** Pull request [#53](https://github.com/wingbangboozle1-lang/Tino3/pull/53) opened and merged without waiting
+for review; merge commit `4347464b011effffcadd7504368024112632cf86` (12:38:57 UTC). The `Deploy GitHub Pages` run
+[43250078305](https://github.com/wingbangboozle1-lang/Tino3/actions/runs/43250078305) finished `success` and the live
+`taxes.html` was fetched afterwards: it serves the new "What the heir receives, and what is still taxed" section with all
+six rows and their publisher links, and the legend reads 10 to 12 November 2026. Pull request
+[#44](https://github.com/wingbangboozle1-lang/Tino3/pull/44) was closed with the reasons above. This paragraph is the only
+record on this branch; `main` is not given a second record-only commit.
