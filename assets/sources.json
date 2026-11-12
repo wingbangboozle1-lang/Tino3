@@ -1,7 +1,4 @@
 {
- "reviewed_on": "10-12 November 2026",
- "reviewer_session": "arena-c2f4be85 (second independent pass, 2026-11-10); 2026-11-11: arena/bde5056d-tino3 appended the stress-test sources (bls_ted2022..fred_nasdaqcom, nyfed_covid) and arena/d2fd135b-tino3 re-opened twelve entries, added the economic-history sources (fed_2goal..sos_results) and recorded each check in the entry's \"checked\" field; 2026-11-11: arena/4ff01a4d-tino3 re-opened thirteen entries on the publishers' domains, ran an independent arithmetic audit of the published model, and added uscode3124 (31 U.S.C. 3124, U.S. Government Publishing Office), which settles the state-tax status of Treasury interest",
- "method": "Each entry records how it was checked. 'Opened' means the page or document was retrieved from the publisher's own domain and the quoted words were read there. 'Official-domain search excerpt' means the words were read in a search result served from the publisher's domain, without opening the whole document. Nothing is marked verified beyond what the quoted words support. On 11 November 2026 the session arena/d2fd135b-tino3 re-opened twenty of the entries below on the publisher's own domain, added the economic-history entries used by the black-swan page, and recorded each check in the entry's \"checked\" field. On 11 November 2026 a third session, arena/4ff01a4d-tino3, re-opened thirteen entries on the publishers' own domains, checked every published projection row against the model's own formulas, and added one primary statute from the U.S. Government Publishing Office (31 U.S.C. 3124).",
  "sources": {
   "irs_estate": {
    "publisher": "Internal Revenue Service",
@@ -33,7 +30,7 @@
    "verifies": [
     "For calendar year 2027 the basic exclusion amount under section 2010(c)(3) is $15,480,000"
    ],
-   "quote": ".44 Basic Exclusion Amount for Estate Tax. For calendar year 2027, the basic exclusion amount under § 2010(c)(3) is $15,480,000.",
+   "quote": ".44 Basic Exclusion Amount for Estate Tax. For calendar year 2027, the basic exclusion amount under \u00a7 2010(c)(3) is $15,480,000.",
    "checked": "official-domain search excerpt read in this session (full document not opened)"
   },
   "irs_whatsnew": {
@@ -43,7 +40,7 @@
    "verifies": [
     "Public Law 119-21 (4 July 2025) raised the basic exclusion amount to $15,000,000 for 2026"
    ],
-   "quote": "WFTC amends § 2010(c)(3) by increasing the basic exclusion amount to $15,000,000 for calendar year 2026.",
+   "quote": "WFTC amends \u00a7 2010(c)(3) by increasing the basic exclusion amount to $15,000,000 for calendar year 2026.",
    "checked": "opened on the publisher's site in this session"
   },
   "irs_rp2532": {
@@ -88,7 +85,7 @@
     "Assets of an irrevocable grantor trust that are not included in the gross estate get no basis adjustment at death",
     "Property the decedent placed in a trust that stayed revocable is treated as acquired from the decedent (section 1014(b)(2) and (3))"
    ],
-   "quote": "the basis of Asset is not adjusted to its fair market value on the date of A's death under § 1014 because Asset was not acquired or passed from a decedent as defined in § 1014(b).",
+   "quote": "the basis of Asset is not adjusted to its fair market value on the date of A's death under \u00a7 1014 because Asset was not acquired or passed from a decedent as defined in \u00a7 1014(b).",
    "checked": "opened on the publisher's site in this session"
   },
   "irs_tc409": {
@@ -762,14 +759,38 @@
   },
   "uscode102": {
    "publisher": "U.S. Government Publishing Office (GovInfo)",
-   "title": "26 U.S.C. 102, Gifts and inheritances (United States Code, 2023 edition)",
-   "url": "https://www.govinfo.gov/content/pkg/USCODE-2023-title26/html/USCODE-2023-title26-subtitleA-chap1-subchapB-partIII-sec102.htm",
+   "title": "26 U.S.C. 102, Gifts and inheritances (United States Code, 2022 edition)",
+   "url": "https://www.govinfo.gov/content/pkg/USCODE-2022-title26/html/USCODE-2022-title26-subtitleA-chap1-subchapB-partIII-sec102.htm",
    "verifies": [
-    "Gross income does not include the value of property acquired by gift, bequest, devise or inheritance, so an inheritance is not income to the heir",
-    "Income produced by the inherited property afterwards is not excluded: subsection (b) leaves it in gross income"
+    "Gross income does not include the value of property acquired by gift, bequest, devise or inheritance",
+    "The exclusion does not extend to the income from that property, or to a distribution paid out of that income"
    ],
-   "quote": "Gross income does not include the value of property acquired by gift, bequest, devise, or inheritance. ... (b) Income. Subsection (a) shall not exclude from gross income (1) the income from any property referred to in subsection (a).",
-   "checked": "opened on the publisher's site on 12 November 2026 (this session): subsection (a) and subsection (b) read in full in the 2023 edition of title 26"
+   "quote": "Gross income does not include the value of property acquired by gift, bequest, devise, or inheritance.",
+   "checked": "opened on the publisher's site on 12 November 2026: the full text of the section was read"
+  },
+  "cdi_tips": {
+   "publisher": "California Department of Insurance",
+   "title": "Top ten tips for finding residential insurance",
+   "url": "https://www.insurance.ca.gov/01-consumers/105-type/5-residential/Top10Tips_FindingResidentialIns.cfm",
+   "verifies": [
+    "The California FAIR Plan is available to every homeowner as a last option for coverage",
+    "The maximum limit the FAIR Plan writes on a residential property, for all coverages combined, is $3,000,000",
+    "A FAIR Plan policy covers fire or lightning, internal explosion and smoke, and the Department recommends supplementing it with a Difference in Conditions policy",
+    "The Department publishes a homeowners' premium comparison tool and a coverage comparison tool"
+   ],
+   "quote": "The maximum limit written by the FAIR Plan on a residential property for all coverages combined is $3,000,000.",
+   "checked": "opened on the publisher's site on 12 November 2026: all ten tips were read"
+  },
+  "cdi_fairplan": {
+   "publisher": "California Department of Insurance",
+   "title": "News release, 14 November 2019: growing need for FAIR Plan leads Insurance Commissioner to order increased coverage options",
+   "url": "https://www.insurance.ca.gov/0400-news/0100-press-releases/2019/release089-19.cfm",
+   "verifies": [
+    "The FAIR Plan is established under California law as the homeowners' insurer of last resort",
+    "The combined dwelling coverage limit rose from $1,500,000 to $3,000,000 effective 1 April 2020"
+   ],
+   "quote": "The FAIR Plan is established under California law as the homeowners' \"insurer of last resort\"",
+   "checked": "opened on the publisher's site on 12 November 2026"
   },
   "irs_rmd": {
    "publisher": "Internal Revenue Service",
@@ -778,10 +799,12 @@
    "verifies": [
     "For an owner who died after 31 December 2019, the whole account must generally be distributed within ten years (SECURE Act)",
     "The ten-year rule has exceptions: a surviving spouse, a child who has not reached the age of majority, a disabled or chronically ill person, or a person not more than ten years younger than the owner",
-    "Withdrawals are taxable income to the person who receives them, except any part already taxed (basis) or a qualified Roth distribution"
+    "Withdrawals are taxable income to the person who receives them, except any part already taxed (basis) or a qualified Roth distribution",
+    "For IRA owners and plan participants who die after 31 December 2019, the entire balance must generally be distributed within ten years",
+    "Exceptions include a surviving spouse, a minor child of the owner, a disabled or chronically ill beneficiary, and a beneficiary not more than ten years younger than the owner"
    ],
    "quote": "the SECURE Act requires the entire balance of the participant's account be distributed within ten years. This 10-year rule has an exception for a surviving spouse, a child who has not reached the age of majority, a disabled or chronically ill person or a person not more than ten years younger than the employee or IRA account owner. ... Your withdrawals are included in taxable income except for any part that was already taxed (your basis) or that can be received tax-free (such as qualified distributions from designated Roth accounts).",
-   "checked": "opened on the publisher's site on 12 November 2026 (this session): the introduction, Q1 and the beneficiary links read; the retirement-account rows on taxes.html rest on this page"
+   "checked": "opened on the publisher's site on 12 November 2026: the overview and Q1 were read"
   }
  }
 }

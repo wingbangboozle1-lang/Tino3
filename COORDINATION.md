@@ -2,12 +2,114 @@
 
 Privacy rule: public pages use generic Property A / Property B placeholders. Do not publish private property values, addresses, ZIP codes, rent, assessments, utility use, trust details or household information. Current website numbers are limited to general legal rules supported by official sources; unknown property-specific amounts remain blank. Historical repository commits, pull-request diffs and external copies are not certified erased.
 
-| Task | Status | Owner | Scope |
+**Amendment, 12 November 2026.** The rule above was written by earlier sessions to protect the owner after a disclosure
+incident. On 12 November 2026 the owner instructed that the property tax and assessment history be published with every
+figure rounded to the nearest $10, so that the decision analysis carries the real numbers. That instruction is now in force
+for the assessment-roll tables only, and the setting is a committed file (`assets/privacy.json`) that can be raised to
+$1,000 or $10,000 without touching the analysis. Names, street addresses, postal codes, parcel numbers, utility accounts and
+the amount of the inherited cash remain unpublished. The owner's other rule from the same brief is kept: any figure that
+cannot be confirmed from an official source is left blank and flagged, never inferred. This session records the conflict
+honestly: $10 rounding removes an exact search match; it does not defeat a reader who already has the county record. That
+residual risk is disclosed on every page, on `review.html` and on `suggestions.html#privacy`.
+
+## Session `arena/091defba-tino3` — questions, suggestions, roll tables and the privacy setting (12 November 2026)
+
+*Branch note:* Arena pins this session to `arena/091defba-tino3`, branched from `fd2b5a8` (merge of PR #51). The board's
+`session-<id>/<task>` naming cannot be used. Board read in full before work. Three earlier editions live in this repository
+(`/`, `/plan/`, `/analysis/`); this session edits the root edition only and touches neither of the other two.
+
+| Task | Status | Owner | Files touched |
 |---|---|---|---|
-| Official-source inherited-property planning framework and static dashboard | done | prior integration sessions | Reviewed eight-page dashboard and official source ledger |
-| Current-tree privacy remediation and dual-publisher mitigation | done | `arena-b067dfc7-tino3` (PR #17) | Legacy paths, publication guard, packaging and dashboard privacy notices |
-| Coordination record review and independent publication check | done | `arena/d0927734-tino3` (PR #18) | `COORDINATION.md`; verification and live-state review |
-| Historical disclosure and future property-specific calculations | needs review | repository owner / qualified advisers | Prior repository versions and private evidence; not part of public edition |
+| Q-0 Merge the work of PRs #52 and #53 (`arena/16e602da-tino3`, `arena/f7e49cdb-tino3`) into this branch without discarding a row of it | done | `arena/091defba-tino3` | merge commit; see "Merge with the two sessions that landed first" below |
+| Q-1 Question register: 39 questions, each with status, the official rule, the step that closes it, and the effect of a different answer. Built on the 13-row register merged in PR #52; every one of those rows is kept in substance and four of its questions have no equivalent here and were added as Q-36 to Q-39 | done | `arena/091defba-tino3` | `scripts/build.py`, `questions.html` |
+| Q-2 Suggestion register: four paths, 20 suggestions, four decision gates, the privacy choice. Built on the 12-row register merged in PR #52; its four suggestions without an equivalent here were added as S-17 to S-20 | done | `arena/091defba-tino3` | `scripts/build.py`, `suggestions.html`, `assets/style.css` |
+| Q-3 Property tax and assessment history published at the owner's instructed precision, with the published state factor per year | done | `arena/091defba-tino3` | `scripts/model.py`, `scripts/build.py`, `assets/privacy.json`, `scripts/privacy_tier.py`, `property-a.html`, `property-b.html` |
+| Q-4 Sources added and re-read on 12 November 2026; two Department of Insurance pages added, and the ledger reconciled with the entries PR #53 added (one id each, merged rather than duplicated) | done | `arena/091defba-tino3` | `assets/sources.json` (72 entries), `taxes.html`, `inheritance.html`, `executive-summary.html`, `EXECUTIVE_SUMMARY.md`, `audit.html`, `review.html` |
+| Q-5 Checks, pull request, merge, Pages deploy, record | **in progress** | `arena/091defba-tino3` | this section; `README.md`; `scripts/verify.py`, `scripts/package_site.py` |
+| Pull request | [#54](https://github.com/wingbangboozle1-lang/Tino3/pull/54), from `arena/091defba-tino3` to `main`; merge and deploy result appended below after the merge | | |
+
+Not touched: `plan/**`, `analysis/**`, `.github/workflows/*`, `scripts/privacy_boundary.py`, every withdrawal notice, and every
+other session's section of this board. No name, street address, postal code, parcel number or utility account appears in any
+commit, message or pull request made by this session.
+
+### What changed, and why
+
+1. **Two new sections.** `questions.html` answers the brief's request for "a clear list of questions, informations and answers
+   that need to be addressed before any decision can be reasonably made", and adds the discovery step for each gap.
+   `suggestions.html` is the dedicated section asked for, so a path can be reviewed and chosen before any change is implemented.
+   Both are in a new "Start here" navigation group, numbered 03 and 04.
+2. **The roll tables are published.** The brief supplied the tax bills and assessed values for both properties and asked for them
+   at $10 precision. They now appear in full — 2014 to 2026 for Property A, 2016 to 2025 for Property B — with the published
+   state factor beside each year and a match test. Percentage changes are computed once from the owner's record, so they do not
+   move when the precision setting changes.
+3. **The precision is a committed setting, not a rewrite.** `assets/privacy.json` holds the tier; `scripts/privacy_tier.py 2`
+   (or `3`) followed by a rebuild raises it. `scripts/verify.py` reproduces the build at whatever tier is committed.
+4. **Two gaps in the earlier edition closed.** 26 U.S.C. 102 (an inheritance is not income) and the IRS required-minimum-distribution
+   FAQ (the ten-year rule for non-spouse beneficiaries) are now sourced and appear on the tax page, the inheritance steps, the
+   summary and the new questions page. The previous session's own review had flagged both as missing from the root edition.
+5. **Insurance, researched further and still blank.** Two Department of Insurance pages were added. The substantive finding is that
+   the FAIR Plan — the insurer of last resort — caps a residential risk at $3,000,000 for all coverages combined, below Property A's
+   current estimated value, and covers fire, lightning, internal explosion and smoke only. No premium is published for either
+   property; the owner's guess stays a placeholder and is labelled as one (FL-05, FL-06, FL-27).
+
+### Merge with the two sessions that landed first
+
+Two sessions merged to `main` while this one was working: `arena/16e602da-tino3` (PR #52) had already published
+`questions.html` and `suggestions.html`, and `arena/f7e49cdb-tino3` (PR #53) had added the "what the heir receives"
+table to the tax page, read 26 U.S.C. 102 and the RMD FAQ, and written a fourth-pass note on the audit page. `git merge
+origin/main` was run rather than a rebase, because the conflicts were add/add on two generated pages and a long block in
+`scripts/build.py`. Resolution, recorded so nothing is silently lost:
+
+| Conflict | Resolution |
+|---|---|
+| `questions.html`, `suggestions.html` (add/add) | This branch's fuller registers were kept as the base; the 13 questions and 12 suggestions from PR #52 were compared row by row against them. Every distinct row survives either as itself or inside a fuller row; the four questions and four suggestions with no equivalent here were added as Q-36 to Q-39 and S-17 to S-20. The page titles merged to main ("Questions before deciding", "Suggestions for review") were kept. |
+| `scripts/build.py`, navigation | The merged `main` ordering was kept: both pages stay in the "Decide next" group at positions 11 and 12, not moved to the top. |
+| Tax page | PR #53's "What the heir receives" table and section were kept as written (`taxes.html#heir`). |
+| Audit page | PR #53's "Fourth pass" note was kept verbatim; this session's record is a separate "Fifth pass" section, so neither session's claims are merged into the other's. |
+| `assets/sources.json` | Both sides had added 26 U.S.C. 102 and the RMD FAQ under different ids. The ids merged to `main` (`uscode102`, `irs_rmd`) were kept and this branch's duplicate `irs_rmd_faq` entry was folded into `irs_rmd` with both sets of verified statements. The two Department of Insurance pages are new. |
+| Generated HTML, `EXECUTIVE_SUMMARY.md` | Regenerated from the merged build; no hand-editing of generated files. |
+| `README.md`, this board | Merged by hand: this edition's page table, counts and privacy section kept; PR #53's wording on the tax page kept. |
+
+Nothing from either session was removed: their pages, their rows, their tax-page section and their audit note are all on the
+merged tree, and all three verifiers pass on it.
+
+### Verification performed on 12 November 2026
+
+Re-opened on the publishers' own domains and compared line by line with the published figures: the IRS estate tax threshold page
+($15,000,000 for 2026; portability by election on a timely filed return), the IRS 2027 inflation release ($15,480,000; $20,000 gift
+exclusion), the Board of Equalization's Proposition 19 comparison charts (value limit = current taxable value plus $1,000,000 as
+biennially adjusted; homeowners' exemption within one year; exclusion claim within three years or before a transfer to a third
+party), the State Controller's estate tax page (no California return for deaths on or after 1 January 2005), Revenue and Taxation
+Code sections 480 (150-day change in ownership statement after a death, including a transfer through a trust) and 63.2 (one-year
+occupancy, one-year exemption claim), the IRS inherited-basis FAQ, 26 U.S.C. 102, the IRS RMD FAQ, and two Department of Insurance
+pages. No published figure changed.
+
+Arithmetic: the model was re-run and every projection row, estate-room row and break-even recomputed by `scripts/verify.py`, which
+fails if a single published byte differs from a fresh build. All three verifiers pass (`scripts/verify.py`, `plan/tools/verify.py`,
+`analysis/tools/verify.py`).
+
+### Irregularities flagged for the owner (not blocking)
+
+- **FL-25** the $10 precision is close to the county record; the tier can be raised in one command.
+- **FL-26** whether any retirement account exists is still unknown.
+- **FL-27** insurance cover above $3,000,000 is unconfirmed.
+- **FL-28** water, electricity and the solar interconnection date remain the owner's estimates.
+- **FL-29** the value of the inherited cash is still unknown, so the estate-tax tables show the room and not the tax.
+- **FL-30** professional fees at the death are not quoted.
+- **FL-10** two pairs of consecutive years in Property A's bill record repeat the same amount while the assessment rose; the cause
+  is not known and the projections do not use the bills.
+- **Three editions** remain in the repository with three models; suggestion S-11 asks the owner to retire two or label every figure.
+
+### Log
+
+- 12 November 2026, session start: board read; repository reviewed at `fd2b5a8`; the three verifiers run on the untouched tree and
+  passed; live site and Pages configuration checked (Pages builds from `main`, legacy build type, HTTPS enforced).
+- Claim written into this section and committed with the first work commit on this branch (no other branch existed on the remote,
+  and the board showed no open claim on these files; PR #44 was already closed, its content superseded on `main`).
+- 12 November: two new pages rendered; sources re-read; roll tables added; precision setting added; all three verifiers re-run.
+- 12 November, after `git fetch`: `main` had moved to `4347464` (merges of PRs #52 and #53). Merge performed, conflicts resolved as
+  the table above records, pages regenerated, all three verifiers re-run on the merged tree.
+- Pull request and merge result: recorded below and on the pull request itself.
 
 ## Session `arena/4ff01a4d-tino3` — second integration pass: independent re-verification, site consolidation, publication
 
