@@ -1026,6 +1026,10 @@
    }
   ],
   "windows_sale_ahead": 33,
+  "above_constant": 33,
+  "below_constant": 7,
+  "worst_window": 2001,
+  "worst_window_end": 2010,
   "spread_min": -4929640,
   "spread_max": 28006360
  },
