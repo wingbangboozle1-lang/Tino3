@@ -8,7 +8,7 @@ federal estate tax.
 
 ## What this repository publishes
 
-Thirteen static pages, one stylesheet, one source ledger and three CSV downloads, plus the separate cross-check edition under `plan/` — nothing else. The published
+Fifteen static pages, one stylesheet, one source ledger, one privacy setting and three CSV downloads, plus the separate cross-check edition under `plan/` — nothing else. The published
 artifact is an allowlist built by `scripts/package_site.py`; every path an earlier edition published is
 replaced by a content-free withdrawal notice, so a stale URL cannot return an old figure.
 
@@ -16,6 +16,8 @@ replaced by a content-free withdrawal notice, so a stale URL cannot return an ol
 |---|---|
 | `index.html` | Dashboard: recommendation, decision snapshot, and a grouped index of the site |
 | `executive-summary.html` | The decision, five numbers, what would change it |
+| `questions.html` | 35 questions with status: what is settled and linked to its publisher, what is missing, the step that closes it, and what changes if the answer differs |
+| `suggestions.html` | Four paths and sixteen suggestions, each with effort, privacy cost and status; the privacy-precision choice; four decision gates |
 | `property-a.html` | The residence to inherit: inputs, assessment-factor check, what the inheritance does to the assessed value |
 | `property-b.html` | The rental: inputs, tax-bill breakdown, rent rules, reassessment exposure if it is in the same estate |
 | `taxes.html` | Federal, California and local rules, verified; pending law changes |
@@ -30,10 +32,10 @@ replaced by a content-free withdrawal notice, so a stale URL cannot return an ol
 
 ## How the site is organised
 
-The menu is grouped into five sections: **The decision** (overview, summary, decision analysis, projections),
-**Black swans** (conditions and history, stress tests — one section in two parts), **The properties**
-(A, B), **Tax and process** (tax and law watch, inheritance steps) and **Evidence** (flagged items,
-independent verification, source library).
+The menu is grouped into six sections: **Start here** (overview, summary, questions, suggestions),
+**The decision** (decision analysis, projections), **Black swans** (conditions and history, stress tests —
+one section in two parts), **The properties** (A, B), **Tax and process** (tax and law watch, inheritance
+steps) and **Evidence** (flagged items, independent verification, source library).
 
 Three editions of the same analysis sit in this repository. They use separate models, so their figures
 differ and must not be mixed: the thirteen pages in the menu (the edition to act on), the independent
@@ -42,17 +44,22 @@ which one a reader is looking at.
 
 ## Privacy rules enforced in code
 
-- No names, street addresses, ZIP codes, parcel numbers, utility account numbers or unrounded assessment
-  figures in any published file. Assessment-roll values and tax bills can be matched to a parcel, so they are
-  generalised further: assessed values to the nearest $10,000, bills to the nearest $100. `scripts/verify.py` fails the build if a ZIP-code pattern, a city name, an
-  e-mail address, a street address or a non-$10 amount appears in a page or in the data files.
+- No names, street addresses, postal codes, parcel numbers, utility account numbers or unrounded figures in
+  any published file. `scripts/verify.py` fails the build if a postal-code pattern, a city name, an e-mail
+  address, a street address or an amount that is not a multiple of $10 appears in a page or a data file.
+- Assessment-roll values and tax bills are published at a precision the owner chooses in
+  `assets/privacy.json`: tier 1, the setting in force since 12 November 2026, is the nearest $10; tier 2 is
+  the nearest $1,000; tier 3 the nearest $10,000. Percentage changes in the roll tables are computed before
+  rounding, so they are identical at every tier. The setting is committed, so the build and the checks
+  reproduce the same pages. What tier 1 does and does not protect is stated on every page and on
+  `review.html`; changing it is `python3 scripts/privacy_tier.py 2` (or 3) followed by a rebuild.
 - Properties appear only as Property A and Property B; jurisdictions are described generically, with
   the official rate documents cited.
 - No forms, no scripts, no analytics, no remote assets. Nothing on the site accepts or stores input.
 
 ## Verification standard
 
-Every rule on the site was retrieved from the publishing agency's own domain on 10 or 11 November 2026 (see the source library for the session that opened each document) and linked
+Every rule on the site was retrieved from the publishing agency's own domain between 10 and 12 November 2026 (see the source library for the session that opened each document) and linked
 from the row that uses it. Two independent passes re-checked the edition on 11 November 2026; the third pass re-opened thirteen ledger entries on the publishers' sites, recomputed
 every projection row from the model's own formulas (all agreed to the nearest $10), closed one open flag with 31 U.S.C. 3124 (Treasury interest is exempt from state tax) and corrected a
 stale source count. It found no wrong figure. What it did not do is listed on `audit.html`. `assets/sources.json` records what each document verifies. Anything that could not
@@ -62,18 +69,22 @@ be verified is left blank or published on the Flagged for Review page — never 
 
 ```bash
 python3 scripts/model.py        # writes assets/data/model.json and the CSV downloads
-python3 scripts/build.py        # renders the thirteen pages
+python3 scripts/build.py        # renders the fifteen pages
 python3 scripts/verify.py       # reproducible-build, citation, link, privacy and rounding checks
 python3 scripts/package_site.py # writes the _site artifact (allowlist + withdrawal notices)
+
+python3 scripts/privacy_tier.py 3   # optional: raise the roll-value precision, then rebuild
 ```
 
 `verify.py` re-runs the model and the renderer and fails if any published byte changes, so a stale committed
-page cannot survive CI. It also fails on any table row that does not link to an official publisher, and on any
-ledger entry that does not say how it was checked.
+page cannot survive CI. It also fails on any factual table row that does not link to an official publisher
+(rows that record a choice must link to their reasoning), and on any ledger entry that does not say how it
+was checked.
 
 ## Data
 
-`assets/sources.json` — source ledger (67 entries, each with the words relied on and how it was checked).
+`assets/sources.json` — source ledger (72 entries, each with the words relied on and how it was checked).
+`assets/privacy.json` — the published precision for assessment-roll values and tax bills.
 `assets/data/model.json` — every figure on the site.
 `assets/data/property_a.csv`, `property_b.csv`, `decision.csv` — the same numbers for offline work.
 
@@ -86,7 +97,8 @@ sources today and are flagged as unverified.
 ## Coordination
 
 `COORDINATION.md` is the shared task board for parallel sessions, including the handoff log, the privacy
-remediation record and the deployment result.
+remediation record and the deployment result. The session of 12 November 2026 claimed the questions and
+suggestions pages, the roll tables and the privacy setting there before editing anything.
 
 ## Independent cross-check (`plan/`)
 
