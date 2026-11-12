@@ -1413,3 +1413,59 @@ data. `python3 scripts/privacy_boundary.py` **PASS**. Independent sweep of the p
  — board read in full on `main`; all remote session branches fetched; open pull requests listed (none);
   the merged-pull-request list read end to end; PRs #52 and #53 read in full, including their "not touched" lists.
 - 15:41 UTC — this claim committed and pushed before any other file was edited.
+---
+
+## Session `arena/5c70fa05-tino3` — independent end-to-end verification, R-4E-1 analysis/ remediation (superseded), publication (2026-11-12)
+
+*Branch note:* Arena binds this session to `arena/5c70fa05-tino3`, branched from `fd2b5a8` (merge of PR #51); the `session-<id>/<task>` naming cannot be used. Board read in full before claiming; `git ls-remote` and the open PRs (#44, #52) read before this claim was written. Claim pushed before any other file was edited.
+
+Timeline (all times UTC, 12 November 2026): claim pushed ~15:35. `main` moved under this session repeatedly — #52 merged 15:34:16, #53 merged 15:38:57, #54 merged 15:43:21, #55 merged 15:45:19, #56 merged 15:45:29, #58 merged 15:49:06. This branch was rebased three times; each mid-rebase conflict in this board was resolved by keeping `main`'s text byte for byte and re-appending this section, with no other session's line changed or removed (checked by diff after every rebase: zero removed lines).
+
+**Takeover note (60-minute idle rule).** Logged request **R-4E-1** (six unsupported wordings in `analysis/tools/build.py`, with replacement texts prepared in `arena/ceb4a929-tino3` commit `2e25a58`) was addressed to `arena/f2039411-tino3` and `arena/ca7ad6a2-tino3`. Their claim commits (`1045f9c`, `0e0aa98`) are dated 2026-11-11 12:56–12:57 UTC; `git ls-remote` showed both branch tips unchanged; neither session logged a result section on this board. This session took over that request only.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| 5C-1 Independent end-to-end verification of the three editions and the packaged `_site`; live-site fetch check | **done** (evidence below) | `arena/5c70fa05-tino3` | `COORDINATION.md` (this section only) |
+| 5C-2 Apply R-4E-1 to `analysis/tools/build.py` | **superseded — not published by this session.** See below | `arena/5c70fa05-tino3` | `analysis/tools/build.py`, `analysis/*.html` (this session's edits, later discarded) |
+| 5C-3 Disposition of open PRs #44, #52 and of R-4E-2/R-4E-3 | **done** (dispositions below) | `arena/5c70fa05-tino3` | `COORDINATION.md` (this section only) |
+| 5C-4 PR, merge, Pages deploy check, result recorded | **done — this PR; result recorded on the PR page and in the follow-up record** | `arena/5c70fa05-tino3` | `COORDINATION.md` (this section only) |
+
+### 5C-2 · What happened (an honest record)
+
+This session implemented the six R-4E-1 replacement wordings at ~15:37–15:40 UTC (owner-supplied badges in place of Verified, no absolute anonymity claim, no inference of exemption or levy composition, portability-election qualifier, privacy/uncertainty callouts), regenerated the twelve analysis/ pages, and passed `analysis/tools/verify.py`. One adaptation: the replacement privacy wording prepared in `ceb4a929` cites an HHS page that was not on this edition's official-host allowlist, so this session published the statement without the link rather than edit `analysis/tools/verify.py` (outside its claimed scope).
+
+While this branch was being rebased, `arena/542472a5-tino3` merged **PR #58** (15:49:06), which implements the same request under the same takeover rule, re-opened the underlying documents (BOE LTA 2026/002, IRS estate tax page, IRS Form 706 instructions, HHS SACHRP Attachment A), published the HHS citation and added `www.hhs.gov` to the analysis edition's official-host allowlist. Their result is a superset of this session's. **This session's analysis/ commits were discarded when the branch was reset onto `3678084` (merge of PR #58); nothing of 5C-2 is published from this branch.** The duplication is recorded rather than concealed: two sessions took the same >24 h-idle request in the same hour, neither could have seen the other's branch.
+
+### 5C-1 · Verification evidence (2026-11-12, this session, on `main` at `3678084`)
+
+| Check | Result |
+|---|---|
+| `scripts/verify.py` | PASS — 15 reproducible pages; 608 table rows (581 factual, all linked to an official publisher; 27 decision rows, all linking to their reasoning); 73 ledger sources; local links, official hosts, privacy scan, $10 rounding clean |
+| `plan/tools/verify.py` | PASS — 10 pages byte-identical, 454 rows, 47 ledger sources |
+| `analysis/tools/verify.py` | PASS — 12 reproducible pages, 380 rows, 52 sources (as merged by PR #58) |
+| `scripts/package_site.py` | PASS — 15 pages, 54 assets, 49 withdrawal notices; no legacy data |
+| Live site fetch (HTTP, in this session) | index serves the recommendation; `suggestions.html` and `questions.html` serve (merged in PR #52); `taxes.html` serves the heir-rules section (PR #53); `analysis/properties.html` served the pre-remediation wording in this session's check — after PR #58 the remediated wording is what Pages serves |
+| Deploy runs on `main` after #53 / #54 / #58 | all `success` (`Verify static site`, `Deploy GitHub Pages`, legacy `pages build and deployment`; e.g. 43250077820/43250077023 after #53; 43250866129/43250865823 after #54) |
+
+The live-site checks prove reachability and content, not visual layout; no browser automation was available to this session.
+
+### 5C-3 · Dispositions (with the two items that moved while this session ran)
+
+| Item | Disposition |
+|---|---|
+| PR #52 (suggestions/questions pages, `16e602da`) | Merged by its owner 15:34:16; not edited by this session |
+| PR #53 (heir rules; the two never-covered brief items R-4E-2 named: 26 U.S.C. 102 read on GovInfo, IRS RMD FAQs — `taxes.html#heir`; ledger +2) | Merged by its owner 15:38:57; not edited by this session |
+| PR #54 (questions/suggestions extended to 39/20 rows; roll tables at the brief's $10 precision; `assets/privacy.json` + `scripts/privacy_tier.py`; CDI FAIR Plan pages; ledger 72) | Merged by its owner 15:43:21; not edited by this session. Its CDI 2019 FAIR Plan release (insurer of last resort) answers R-4E-3(b) on root pages |
+| PR #55 (CA 1% surcharge finding; suggestions as a decision instrument; law-answered questions, `593368ef`) | Merged 15:45:19; not edited by this session |
+| PR #56 (badge correction and merge/deploy record) | Merged 15:45:29; not edited by this session |
+| PR #57 (root edition: inheritance-not-income, inherited retirement accounts, insurer of last resort, `1143f682`) | **Open at the time of this commit** — the same two brief items #53 covered, extended on what #54/#55/#56 landed. Root-edition territory; not edited by this session; noted for the owner and for its owner's merge |
+| PR #44 (`30ee04a6`, independent audit; stale, CONFLICTING, diverged 23) | **Closed without merging** by `arena/f7e49cdb-tino3` (PR #53, V-3); reasoning recorded there — its substantive corrections duplicate what is already merged (#35, #53), and its FL-25…FL-29 are each unverified in their own text (FL-27's SALT row is out of date against the July 2025 act per the comparison sites read there). This session's independent read of the #44 diff agrees with that disposition |
+| PR #58 (R-4E-1 analysis/ remediation, `542472a5`) | Merged 15:49:06; this session's duplicate 5C-2 work was dropped in its favour (above) |
+| Cross-edition note | The root publishes the 2045 one-person estate room under the ownership statement as **$17,612,290** (components published by PR #35); the analysis/ edition publishes **$17,612,280**. Both are arithmetically consistent inside their models; the $10 difference is the editions' separate rounding paths, which differ by design. Recorded so a future integration does not silently mix the models |
+
+### Irregularities found by this session
+
+1. Cross-edition $10 estate-room difference (above). Not a defect; not unified by this session.
+2. The analysis/ edition's privacy box claimed figures are rounded "so no figure can be traced back to a parcel online" — an absolute claim; remediated by PR #58 (this session's duplicate fixed the same thing).
+3. Two sessions claiming R-4E-1 in the same hour — a coordination outcome worth recording; the claim board works when claims are visible, and it cannot stop two honest takes of an orphaned request.
+4. No name, street address, postal code, parcel number or unrounded roll figure appears in this session's commits, messages or pull requests.
