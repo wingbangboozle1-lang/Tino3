@@ -1410,6 +1410,43 @@ data. `python3 scripts/privacy_boundary.py` **PASS**. Independent sweep of the p
   they support; the six corrections applied to `analysis/tools/build.py`; the twelve pages regenerated; the
   `www.hhs.gov` host added to the verifier allow-list.
 - 15:52 UTC — all five check suites re-run after the change; packaged artifact swept for broken local links.
+- 15:45 to 15:50 UTC — branch rebased onto `7c8f03c` after PRs #54 to #56 landed; the one conflict resolved as
+  recorded below; all five check suites re-run on the rebased tree; packaged artifact swept again.
+
+### Publication result · `arena/542472a5-tino3` · 2026-11-12
+
+- **PR [#58](https://github.com/wingbangboozle1-lang/Tino3/pull/58) — MERGED** 2026-11-12T15:49:06Z, merge commit
+  `3678084f09ec4ab378c64976114015549c4da136`. Pre-merge `Verify static site` passed on the pull request (run
+  `43251804932`).
+- **After the merge, on `main`:** `Verify static site` run **43251891487** success; `Deploy GitHub Pages` run
+  **43251891556** success; legacy `pages build and deployment` run **43251888929** success.
+- **Live check by fetch with a cache-buster, after the deploy:** `/analysis/properties.html` serves the corrected
+  section 2 — the owner-supplied ratios beside the official factors, "Exemption status unverified", "Bill composition
+  unverified", and the six roll rows badged Owner-supplied; `/analysis/flagged.html` serves the privacy-and-evidence
+  note with the HHS citation, the decision-uncertainty note and the "what the flags below are for" note, and FL-06 now
+  reads "Roll ratios do not establish exemption status". An earlier fetch without the cache-buster returned the
+  pre-correction text, so the deploy was confirmed against a cache-busted URL rather than read as a cache miss.
+- **Rebase before the merge.** The pull request was opened against `main` at `4347464` (PR #53). PRs #54, #55 and #56
+  then landed, all in the root edition. This branch was rebased onto `7c8f03c`. The only conflict was the end-of-file
+  append in `COORDINATION.md`; it was resolved by taking `main`'s file byte for byte and re-appending this session's
+  section, so `main`'s board text is an exact prefix of the result and no line of another session was changed or
+  removed. No conflict in `analysis/**`.
+- **Unrelated failures seen and not touched.** Three `Verify static site` runs failed during this session
+  (`43251445036` 15:46:37, `43251548295` 15:47:12, `43251943277` 15:49:26). All three are pushes to branch
+  `arena/cd0dd59b-tino3`, a different session working at the same time; none is a push to `main`. The runs that decide
+  this merge — the pull-request run and the two post-merge `main` runs — all passed. Their logs could not be
+  downloaded (`gh run view --log` returned EOF from the log receiver on every attempt), so this session does not say
+  what failed inside them and changed nothing in that branch.
+- **Pages source setting, recorded for the owner.** The repository's Pages source is the branch, not the artifact:
+  `source.branch = main`, `source.path = /`, `build_type = legacy`. What is live is the `main` tree, so every tracked
+  path serves — the cross-check editions under `plan/` and `analysis/`, and any withdrawal stub that still exists. The
+  `pages.yml` Actions job uploads `_site` as well, but the branch publisher is what answers. This was already found by
+  `arena/1b705871-tino3` (PX-2) on 11 November; it is recorded here because it explains why the live check above had to
+  be made against the repo tree.
+- **Still open for the owner:** the flags on the root `review.html`, the history-rewrite decision (`CR-5`), the
+  jurisdiction-name question (`CR-6`), insurance quotes, and the certification of the 3 November 2026 ballot results
+  on 11 December 2026.
+
  — board read in full on `main`; all remote session branches fetched; open pull requests listed (none);
   the merged-pull-request list read end to end; PRs #52 and #53 read in full, including their "not touched" lists.
 - 15:41 UTC — this claim committed and pushed before any other file was edited.
