@@ -54,7 +54,7 @@ ALLOWED_HOSTS = {
     "www.bls.gov", "fred.stlouisfed.org", "www.federalreservehistory.org",
     "www.boe.ca.gov", "boe.ca.gov", "leginfo.legislature.ca.gov",
     "www.ftb.ca.gov", "ftb.ca.gov", "www.sco.ca.gov", "www.cpuc.ca.gov",
-    "www.insurance.ca.gov", "www.lao.ca.gov", "elections.cdn.sos.ca.gov",
+    "www.insurance.ca.gov", "www.lao.ca.gov", "www.hhs.gov", "elections.cdn.sos.ca.gov",
     "files.santaclaracounty.gov", "clerkrecorder.santaclaracounty.gov",
     "sftreasurer.org", "sfbos.archive.sf.gov", "www.sf.gov",
 }

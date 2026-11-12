@@ -1329,3 +1329,87 @@ No line of another session was removed from the board. The published pages are g
 - 16:05 UTC — PR #55 opened.
 - 16:15 UTC — PR #54 landed with a rewrite of the same pages; `gh pr merge 55` refused for conflicts; `main` merged in,
   duplicate draft dropped, surcharge work re-applied, all three verifiers and the packager re-run.
+
+---
+
+## Session `arena/542472a5-tino3` — the six unsupported wordings in the `analysis/` edition (request R-4E-1), then publication (2026-11-12)
+
+*Branch note:* Arena pins this session to `arena/542472a5-tino3`, branched from `fd2b5a8`; the `session-<id>/<task>`
+naming cannot be used. The whole board was read on `main` at `4347464` (merge of PR #53) before claiming, and every
+remote session branch was fetched and read. At claim time **no pull request was open** and no claim on this board was
+live: `16e602da` (SG-1..SG-3) merged as PR #52 and `f7e49cdb` (V-1..V-3) merged as PR #53, both before this claim was
+written, and both list `analysis/**` as not touched.
+
+| Task | Status | Owner | Files touched |
+|---|---|---|---|
+| AN-1 Apply the six wording corrections logged as request R-4E-1 by `arena/4e96512c-tino3` (merged in PR #51) to the `analysis/` edition: the privacy box's absolute traceability claim, the six owner-supplied roll-ratio rows carrying a Verified badge, the "proving" inference about the $7,000 exemption, the "doubles estate exclusion" planning row, the un-itemised bill-composition claim, and the review-policy sentence | claimed | `arena/542472a5-tino3` | `analysis/tools/build.py`, the twelve generated `analysis/*.html` pages |
+| AN-2 Re-open, in this session, the official documents the corrected rows rest on, before the new wording is published | claimed | `arena/542472a5-tino3` | no shared file; the ledger entry for each document read |
+| AN-3 Verifiers for all three editions, packaging, pull request to `main`, merge, Pages deploy confirmation, result recorded | claimed | `arena/542472a5-tino3` | `COORDINATION.md` (this section only) |
+
+Not touched: `scripts/*`, `assets/*`, root `*.html`, `plan/**`, `.github/workflows/*`, withdrawal notices, and every other
+session's section of this board. Privacy: Property A / Property B only; no name, street address, postal code, parcel number
+or unrounded roll figure in any commit, message or pull request.
+
+### Scope taken, and why it is free
+
+R-4E-1 names `analysis/tools/build.py`. That scope was claimed on 11 November by `ca7ad6a2` (12:56:42) and by `f2039411`
+(12:57:11). Neither ever reached `main`: the merged-pull-request list holds no entry from either branch, and both tips
+last moved on 11 November. Under the board's take-over rule (a claim more than 60 minutes old with no commits) the scope
+is free, and this session notes the handoff here rather than silently editing it.
+
+Items 2 and 3 of R-4E-1 fall directly under the owner's rules "never mark anything verified without checking it against
+an official source" and "never infer". Both are published today on a live page: six rows compare **owner-supplied**
+assessment-roll ratios with the state inflation factor and carry a Verified badge although only the factor was checked
+against an official source, and one paragraph says a matching ratio **proves** the supplied figures are before the $7,000
+homeowners' exemption. Nothing in this session adds a figure; it removes two unsupported ones.
+
+### Result (`arena/542472a5-tino3`, 12 November 2026)
+
+**AN-1, the six wordings.** All six are corrected in `analysis/tools/build.py`; the twelve generated
+`analysis/*.html` pages were regenerated. Nothing was added. Two claims are withdrawn outright and four are
+qualified:
+
+| # | What was published | What it is now |
+|---|---|---|
+| 1 | "Strict Privacy &amp; Anonymization Boundary ... so no figure can be traced back to a parcel online" | A re-identification warning: direct identifiers are omitted, but combinations of household details and rounded amounts may still identify someone, and neither rounding nor placeholders guarantee anonymity. Points to the Flagged for Review page. |
+| 2 | Six roll-audit rows comparing **owner-supplied** ratios with the state factor, badged **Verified** | Badged **Owner-supplied**; each finding says the parcel data are unverified and names what would settle it. Only the BOE factor was ever checked against an official source. |
+| 3 | A ratio match "proving the supplied figures are un-netted Factored Base Year Values before any $7,000 exemption" | "A ratio that happens to agree with the state inflation factor does not show whether a homeowners' exemption was applied." CA R&amp;TC 218 cited; FL-06 retained. |
+| 4 | A pre-transfer planning row: a step "doubles estate exclusion" | "Confirm basis eligibility and any available deceased-spouse unused exclusion; neither outcome is automatic." |
+| 5 | The bill-to-charge difference "consists of flat voter-approved parcel taxes and per-unit fees" | "An estimated difference between a rounded bill and an estimated ad valorem charge cannot establish the amounts or types of individual levies. An itemized bill is required." |
+| 6 | "None of the twelve items below alters the baseline or Black-Swan default recommendation ... unless (a) ... or (b) ..." | A privacy-and-evidence note, a decision-uncertainty note, and a note naming the two flags that do change the arithmetic (FL-05 basis, FL-01 estate size). The count of twelve flags was checked and is correct. |
+
+`www.hhs.gov` was added to the verifier's official-host allow-list for the one new citation. No figure,
+projection, ranking or model input changed; `analysis/tools/model.py` is untouched.
+
+**AN-2, documents opened in this session on the publishers' own domains.**
+
+| Document | What it says | Effect |
+|---|---|---|
+| BOE Letter to Assessors 2026/002 — https://www.boe.ca.gov/proptaxes/pdf/lta26002.pdf | 2026-27 CCPI **3.307%**, factor **1.02**; the 51-year table gives 1.01998 (2015-16), 1.01525 (2016-17), 1.01036 (2021-22) and 1.02 elsewhere; because of the fall 2025 federal shutdown the 2026 factor was computed from **August 2024 to August 2025** | Every factor the roll-audit table publishes matches this document. The citation stands; the rows no longer claim the parcel data are verified. |
+| IRS, Estate tax — https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax | Filing thresholds 2011 to 2026 (2026 = $15,000,000); "estates of decedents survived by a spouse **may elect** to pass any of the decedent's unused exemption to the surviving spouse. **This election is made on a timely filed estate tax return** for the decedent with a surviving spouse." | Supports correction 4: the unused exclusion is not automatic and does not by itself double anything. |
+| IRS, Instructions for Form 706 (Rev. July 2026) — https://www.irs.gov/instructions/i706 | Carries the sections "Portability election" and "Extension to elect portability" and a "Table of Basic Exclusion Amounts" | The ledger entry `irs_i706` that row 4 cites is the right document for that statement. |
+| HHS, SACHRP Attachment A — https://www.hhs.gov/ohrp/sachrp-committee/recommendations/august-12-2020-attachment-a-nih-data-sharing-policy/index.html | Discusses the risk of **re-identification**: combining de-identified data sets with other data "increase[s] the risk of re-identification and misuse of previously de-identified data", and recommends that plans consider that risk for their particular data sets | The one new citation. The page's own term is "re-identification", so the published wording follows the page rather than the looser term "linkage". It is cited for the risk it describes; the page says nothing about this kind of asset and the published text says so. |
+
+Not re-opened in this session, and said so: CA R&amp;TC 218, RTC 63.2, City B Resolution 447-25 and IRS Rev. Rul. 2023-2 are
+already in the `analysis/` ledger. The corrections do not add a claim about them beyond what the edition already
+published; correction 3 removes a claim rather than making one.
+
+**AN-3, checks.** `python3 analysis/tools/verify.py` **PASS** — 12 reproducible pages, 380 table rows, 100% cited to
+official domains, 52 directly-opened sources, local links, `#fragments`, privacy scan and $10 rounding clean.
+`python3 scripts/verify.py` **PASS** — 15 pages, 527 rows, 70 ledger sources. `python3 plan/tools/verify.py` **PASS** —
+10 pages, 454 rows. `python3 scripts/package_site.py` **PASS** — 15 pages, 52 assets, 49 withdrawal notices, no legacy
+data. `python3 scripts/privacy_boundary.py` **PASS**. Independent sweep of the packaged `_site` artifact: **68 pages,
+674 distinct local links, 0 broken**.
+
+### Log (`arena/542472a5-tino3`)
+
+- 15:36 to 15:41 UTC — board read in full on `main`; all remote session branches fetched; open pull requests listed
+  (none); the merged-pull-request list read end to end; PRs #52 and #53 read in full, including their "not touched" lists.
+- 15:41 UTC — this claim committed and pushed before any other file was edited.
+- 15:41 to 15:52 UTC — the four documents above opened on the publishers' own domains and read against the wording
+  they support; the six corrections applied to `analysis/tools/build.py`; the twelve pages regenerated; the
+  `www.hhs.gov` host added to the verifier allow-list.
+- 15:52 UTC — all five check suites re-run after the change; packaged artifact swept for broken local links.
+ — board read in full on `main`; all remote session branches fetched; open pull requests listed (none);
+  the merged-pull-request list read end to end; PRs #52 and #53 read in full, including their "not touched" lists.
+- 15:41 UTC — this claim committed and pushed before any other file was edited.
