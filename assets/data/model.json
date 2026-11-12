@@ -2499,6 +2499,13 @@
    "room_single_half": 1097900
   }
  ],
+ "tax_sens": {
+  "year": 2045,
+  "threshold": 1000000,
+  "base": 10052910,
+  "with_surcharge": 10016750,
+  "delta": -36170
+ },
  "stress": [
   {
    "id": "S0",

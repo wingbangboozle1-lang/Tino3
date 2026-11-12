@@ -15,7 +15,7 @@ replaced by a content-free withdrawal notice, so a stale URL cannot return an ol
 | Page | Contents |
 |---|---|
 | `index.html` | Dashboard: recommendation, decision snapshot, and a grouped index of the site |
-| `executive-summary.html` | The decision, five numbers, what would change it |
+| `executive-summary.html` | The decision, every important number with its source, what would change it, and the answer/choose/implement sequence |
 | `property-a.html` | The residence to inherit: inputs, assessment-factor check, what the inheritance does to the assessed value |
 | `property-b.html` | The rental: inputs, tax-bill breakdown, rent rules, reassessment exposure if it is in the same estate |
 | `taxes.html` | Federal, California and local rules, verified; pending law changes |
@@ -24,15 +24,15 @@ replaced by a content-free withdrawal notice, so a stale URL cannot return an ol
 | `stress.html` | Black swans, part 2: verified 1929, Great Inflation, oil-shock, dot-com, Great Recession and COVID episodes re-run against the 2045 inheritance; the playbook |
 | `black-swans.html` | Black swans, part 1: baseline anchors (Fed, SSA, CBO), fifty years of official state inflation data, fixed-amount erosion, and the single-input stress cases |
 | `inheritance.html` | Statutory timeline after the death, with deadlines |
-| `review.html` | 23 flagged items (unverified values left blank, owner questions, record irregularities) and two privacy disclosures |
-| `audit.html` | Independent verification: twelve corrections to the first quantitative edition, repository review |
-| `suggestions.html` | Proposed improvements — none decided; review and choose before implementing anything |
-| `questions.html` | Questions, information and answers needed before any decision: have / lack / how to discover |
-| `sources.html` | 68 official sources, what each one supports and how each was checked |
+| `suggestions.html` | A register of 15 proposed improvements, four decision paths to choose from, and five change-control gates. Nothing is adopted |
+| `questions.html` | What the law already answers, what the owner must supply, a document-by-document discovery plan, and the thresholds that decide whether an unknown matters |
+| `review.html` | 24 flagged items (unverified values left blank, owner questions, record irregularities) and three privacy disclosures |
+| `audit.html` | Independent verification: thirteen corrections across three passes, including the 12 November 2026 surcharge finding, and the repository review |
+| `sources.html` | 69 official sources, what each one supports and how each was checked |
 
 ## How the site is organised
 
-The menu is grouped into five sections: **The decision** (overview, summary, decision analysis, projections),
+The menu is grouped into six sections: **The decision** (overview, summary, decision analysis, projections),
 **Black swans** (conditions and history, stress tests — one section in two parts), **The properties**
 (A, B), **Tax and process** (tax and law watch, inheritance steps), **Decide next** (suggestions for review, questions before deciding) and **Evidence** (flagged items,
 independent verification, source library).
@@ -50,14 +50,16 @@ which one a reader is looking at.
   e-mail address, a street address or a non-$10 amount appears in a page or in the data files.
 - Properties appear only as Property A and Property B; jurisdictions are described generically, with
   the official rate documents cited.
-- No forms, no scripts, no analytics, no remote assets. Nothing on the site accepts or stores input.
+- Residual risk is disclosed rather than hidden: the two owner-supplied market values and the monthly rent are
+already multiples of $10, so rounding does not disguise them. The review page says so, and SG-14 puts the choice
+between bands, a coarser rounding or withdrawal to the owner.
 
 ## Verification standard
 
-Every rule on the site was retrieved from the publishing agency's own domain on 10 or 11 November 2026 (see the source library for the session that opened each document) and linked
+Every rule on the site was retrieved from the publishing agency's own domain between 10 and 12 November 2026 (see the source library for the session that opened each document) and linked
 from the row that uses it. Two independent passes re-checked the edition on 11 November 2026; the third pass re-opened thirteen ledger entries on the publishers' sites, recomputed
 every projection row from the model's own formulas (all agreed to the nearest $10), closed one open flag with 31 U.S.C. 3124 (Treasury interest is exempt from state tax) and corrected a
-stale source count. It found no wrong figure. What it did not do is listed on `audit.html`. `assets/sources.json` records what each document verifies. Anything that could not
+stale source count. It found no wrong figure. What it did not do is listed on `audit.html`. `assets/sources.json` records what each document verifies. A fourth pass on 12 November 2026 re-opened fifteen entries, confirmed every published figure, and added one finding: the 1% California tax above $1,000,000 of taxable income (RTC 17043) is not in the 12.3% rate used in the model, so it is published as a sensitivity (the 2045 stock result falls by $36,170 and the ranking holds). Anything that could not
 be verified is left blank or published on the Flagged for Review page — never inferred.
 
 ## Build
@@ -75,7 +77,7 @@ ledger entry that does not say how it was checked.
 
 ## Data
 
-`assets/sources.json` — source ledger (67 entries, each with the words relied on and how it was checked).
+`assets/sources.json` — source ledger (69 entries, each with the words relied on and how it was checked).
 `assets/data/model.json` — every figure on the site.
 `assets/data/property_a.csv`, `property_b.csv`, `decision.csv` — the same numbers for offline work.
 

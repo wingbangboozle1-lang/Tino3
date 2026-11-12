@@ -1,5 +1,5 @@
 {
- "reviewed_on": "2026-11-10, re-checked and extended 2026-11-11 (two independent passes on 11 November 2026)",
+ "reviewed_on": "12 November 2026",
  "reviewer_session": "arena-c2f4be85 (second independent pass, 2026-11-10); 2026-11-11: arena/bde5056d-tino3 appended the stress-test sources (bls_ted2022..fred_nasdaqcom, nyfed_covid) and arena/d2fd135b-tino3 re-opened twelve entries, added the economic-history sources (fed_2goal..sos_results) and recorded each check in the entry's \"checked\" field; 2026-11-11: arena/4ff01a4d-tino3 re-opened thirteen entries on the publishers' domains, ran an independent arithmetic audit of the published model, and added uscode3124 (31 U.S.C. 3124, U.S. Government Publishing Office), which settles the state-tax status of Treasury interest",
  "method": "Each entry records how it was checked. 'Opened' means the page or document was retrieved from the publisher's own domain and the quoted words were read there. 'Official-domain search excerpt' means the words were read in a search result served from the publisher's domain, without opening the whole document. Nothing is marked verified beyond what the quoted words support. On 11 November 2026 the session arena/d2fd135b-tino3 re-opened twenty of the entries below on the publisher's own domain, added the economic-history entries used by the black-swan page, and recorded each check in the entry's \"checked\" field. On 11 November 2026 a third session, arena/4ff01a4d-tino3, re-opened thirteen entries on the publishers' own domains, checked every published projection row against the model's own formulas, and added one primary statute from the U.S. Government Publishing Office (31 U.S.C. 3124).",
  "sources": {
@@ -759,6 +759,17 @@
    ],
    "quote": "(a) Stocks and obligations of the United States Government are exempt from taxation by a State or political subdivision of a State. ... (2) an estate or inheritance tax.",
    "checked": "opened on the publisher's site on 11 November 2026: the full section text was read on govinfo.gov"
+  },
+  "rtc17043": {
+   "publisher": "California Legislative Information",
+   "title": "Revenue and Taxation Code section 17043 (additional 1% tax above $1,000,000)",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=17043",
+   "verifies": [
+    "For taxable years beginning on or after 1 January 2005 an additional tax of 1% applies to the portion of taxable income above $1,000,000",
+    "The additional tax is imposed in addition to any other taxes imposed by Part 10"
+   ],
+   "quote": "in addition to any other taxes imposed by this part, an additional tax shall be imposed at the rate of 1 percent on that portion of a taxpayer's taxable income in excess of one million dollars ($1,000,000).",
+   "checked": "opened on the publisher's site on 12 November 2026: the 1% rate and the $1,000,000 threshold, added to the graduated rates"
   }
  }
 }

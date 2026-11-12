@@ -170,6 +170,27 @@ def treasury_after_tax(p0, n):
     return p0 * (1 + V["treasury_10y"] * (1 - A["t_treasury"])) ** n
 
 
+def stock_after_tax_surcharge(p0, n, rs=None, threshold=1_000_000, extra=0.01):
+    """The stock path with California's 1% additional tax above $1,000,000 of taxable income.
+
+    Revenue and Taxation Code section 17043 imposes 1% on the portion of taxable income above
+    $1,000,000, in addition to the graduated rates. The 12.3% top bracket used in T_GAIN is the
+    schedule rate only, so this function adds the surcharge to the taxable gain at the end. It
+    applies the surcharge to the gain alone, which understates taxable income if other income
+    pushes the total higher; the published figure is therefore a lower bound on that tax.
+    """
+    rs = A["stock_return"] if rs is None else rs
+    p = basis = p0
+    for i in range(n):
+        r = rs[i] if isinstance(rs, (list, tuple)) else rs
+        div = p * A["stock_dividend"]
+        tax = div * A["t_div"]
+        p = p * (1 + r) - tax
+        basis += div - tax
+    gain = max(0.0, p - basis)
+    return p - gain * T_GAIN - max(0.0, gain - threshold) * extra
+
+
 def reassess(year, g, law="current"):
     """Assessed value of Property A in the year of inheritance under each use."""
     fmv, base, amt = a_value(year, g), a_base(year), prop19_amount(year, g)
@@ -477,6 +498,14 @@ def build():
             row[f"room_couple_{tag}"] = r10(2 * ex - re_)
         row["room_single_half"] = r10(ex / 2 - a_value(yy, g) - b_value(yy, g))
         d["estate"].append(row)
+
+    # California 1% additional tax above $1,000,000 (RTC 17043), which the 12.3% assumption omits.
+    start45 = a_value(2045, g) * (1 - SELL_COST)
+    base45 = stock_after_tax(start45, n)
+    sur45 = stock_after_tax_surcharge(start45, n)
+    assert abs(base45 - run("sell_stock", 2045, g)["wealth"]) < 0.01, "surcharge check drifted from run()"
+    d["tax_sens"] = {"year": 2045, "threshold": 1_000_000, "base": r10(base45),
+                     "with_surcharge": r10(sur45), "delta": r10(sur45 - base45)}
 
     # Black-swan stress tests (2045 inheritance; post-inheritance world swapped)
     d["stress"] = stress(2045)
