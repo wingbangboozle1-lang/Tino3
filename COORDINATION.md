@@ -5,8 +5,7 @@ Privacy rule: public pages use generic Property A / Property B placeholders. Do 
 
 ## Session `arena/e63a407b-tino3` — privacy-safe public edition consolidation and official-source review · 2026-11-12
 
-*Branch note:* Arena pins this session to `arena/e63a407b-tino3`. The original claim was based on `fd2b5a8` and has been
-rebased onto `origin/main` at `02f1066` after PR #54 landed. The requested `session-<id>/<task>` naming cannot be used.
+*Branch note:* Arena pins this session to `arena/e63a407b-tino3`. The original claim was based on `fd2b5a8`; the current work is rebased onto `origin/main` at `6eb3eb0` after PR #63 landed. The general Civil Code section 1946.2 guidance from that update is retained with coverage limits; the prior owner-specific model outputs are not. The requested `session-<id>/<task>` naming cannot be used.
 
 | Task | Status | Owner | Scope |
 |---|---|---|---|
@@ -36,7 +35,7 @@ residual risk is disclosed on every page, on `review.html` and on `suggestions.h
 
 **Local verification, 12 November 2026.** The root edition now builds reproducibly as 15 pages and one stylesheet; the artifact contains 110 exact generic withdrawal notices for non-allowlisted tracked/known routes. `scripts/verify.py` passes 148 table rows, 72 source-linked factual rows, 35 official-source ledger entries, local links/fragments, official-host checks and the privacy boundary. The currency scan allows only the three documented general federal thresholds; no owner-derived value or projection is used. `plan/tools/verify.py` and `analysis/tools/verify.py` also pass as repository checks, but neither edition is copied into the deployment artifact. These are local checks, not a complete legal review or deployment confirmation.
 
-**Publication gate.** The Pages API still reports the legacy `main:/` source. The new artifact workflow has not been run on GitHub and the live site has not been verified. Change the Pages source to GitHub Actions as part of publication, then inspect the deployed routes and confirm only the allowlisted pages and generic withdrawal notices are served. Do not claim completion until that succeeds.
+**Publication gate.** The Pages API still reports the legacy `main:/` source. The Actions deploy workflow last succeeded on `6eb3eb0`, but that was the pre-privacy package; neither its live content nor the new privacy-safe artifact has been verified. Set Pages to the intended Actions source as part of publication, deploy this artifact, then inspect the deployed routes and confirm only the allowlisted pages and generic withdrawal notices are served. Do not claim completion until that succeeds.
 
 **Concurrent change to review.** PR #62 remains open and changes several of the same public pages and publication scripts, while adding a separate economy page/data module. It is not part of this branch. Review it against this privacy boundary before any merge; a later file being outside the allowlist is not sufficient if the builder or allowlist itself changes.
 
