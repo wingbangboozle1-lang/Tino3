@@ -70,7 +70,7 @@ LABEL = {"irs_estate": "Estate tax thresholds", "irs_2027": "2027 amounts", "irs
          "fedhist_1929": "Crash of 1929", "fedhist_greatinflation": "The Great Inflation",
          "fedhist_greatrecession": "The Great Recession", "nyfed_covid": "COVID-19 and the Fed",
          "fred_ussthpi": "US house price index", "fred_nasdaqcom": "NASDAQ Composite",
-         "uscode3124": "31 USC 3124", "uscode102": "26 USC 102", "irs_rmd": "RMD FAQ",
+         "uscode3124": "31 USC 3124", "uscode102": "26 USC 102", "irs_rmd": "RMD FAQ", "rtc17043": "RTC 17043",
          "cdi_tips": "Finding insurance", "cdi_fairplan": "FAIR Plan"}
 
 e = html.escape
@@ -1371,11 +1371,11 @@ fl = [
  ("FL-21", "County form names and the trust's tax filing", "The steps cite the statutes. Form numbers and the trust's income tax return were not verified.", "The assessor's forms page; a tax preparer", "rtc480"),
  ("FL-22", "Building share of value, bedrooms, condition", "Drive depreciation and maintenance. Assumed.", "The assessor's land and improvement split; an inspection", "irs_p527"),
  ("FL-23", "Sources read as excerpts", "Twelve sources were read as excerpts served from the official domain, not as whole documents. They are marked in the source library.", "Open each link", "irs_i706"),
- ("FL-25", "California's 1% additional tax above $1,000,000", "The one-time-gain rate is 20% federal, 3.8% net investment income tax and 12.3% California. RTC 17043 adds 1% on taxable income above $1,000,000, which the 12.3% bracket rate does not include. Applied to the gain alone it lowers the 2045 stock result by $36,170 (SG-13); other income would make it larger.", "Adopt the surcharge in the model, or keep it as the published sensitivity", "rtc17043"),
+ ("FL-31", "California's 1% additional tax above $1,000,000", "The one-time-gain rate is 20% federal, 3.8% net investment income tax and 12.3% California. RTC 17043 adds 1% on taxable income above $1,000,000, which the 12.3% bracket rate does not include. Applied to the gain alone it lowers the 2045 stock result by $36,170 and the ranking holds (C-14); other income would make it larger.", "Adopt the surcharge in the model, or keep it as the published sensitivity", "rtc17043"),
 ]
 rows = [([i, item, why, BLANK, fix], "U", S(src)) for i, item, why, fix, src in fl]
 body = f"""<div class="note"><strong>Nothing on this page blocks the plan.</strong> These are the items that could not be confirmed from an official source, or that only the owner can settle.
-Each value is left blank rather than estimated. The number is a stable identifier, not a ranking: the first fifteen are the ownership and record facts, the next group is assumptions and law, and FL-25 was added on 12 November 2026.</div>
+Each value is left blank rather than estimated. The number is a stable identifier, not a ranking: the first fifteen are the ownership and record facts, the next group is assumptions and law, .</div>
 {tbl("Flagged for Review", ["No.", "Item", "Why it is flagged", "Value", "What settles it"], rows)}{LEGEND}
 <section><h2>Four privacy disclosures</h2><ul>
 <li><strong>Repository history.</strong> Earlier commits in this public repository contain exact figures and location details, and earlier pull-request titles named jurisdictions. This edition cannot remove them. Rewriting the history or making the repository private is the owner's decision (suggestion S-12).</li>
@@ -1401,8 +1401,9 @@ corr = [
  ("C-11", "Comparison period", "Every case ended in 2055, so an inheritance in 2050 was judged over five years.", "Ten years after each inheritance year.", "irs_basis"),
  ("C-12", "Roll values in public files", "Assessment histories were published to the nearest $10, and one bill to the dollar.", "Generalised to the nearest $10,000 and $100, then republished at the owner's instruction on 12 November 2026 (C-13).", "boe_lta26002"),
  ("C-13", "Property tax and assessment tables", "The year-by-year bills and assessments were withheld altogether, on the view that any published roll figure identifies a parcel.", "Published in full at the precision the owner chose on 12 November 2026 (nearest $10), with the published state factor beside each year and the percentage changes computed before rounding. The setting is a committed file, so it can be raised to $1,000 or $10,000 without touching the analysis.", "boe_lta26002"),
+ ("C-14", "California surcharge on large gains", "The one-time-gain rate used 12.3% for California and stopped there.", "RTC 17043 adds 1% on taxable income above $1,000,000. Published as a sensitivity, not folded into the model: the 2045 stock result falls by $36,170 and the ranking holds (FL-31).", "rtc17043"),
 ]
-CB = {"C-01": "V", "C-02": "V", "C-03": "C", "C-04": "C", "C-05": "V", "C-06": "C", "C-07": "V", "C-08": "A", "C-09": "V", "C-10": "V", "C-11": "C", "C-12": "C", "C-13": "C"}
+CB = {"C-01": "V", "C-02": "V", "C-03": "C", "C-04": "C", "C-05": "V", "C-06": "C", "C-07": "V", "C-08": "A", "C-09": "V", "C-10": "V", "C-11": "C", "C-12": "C", "C-13": "C", "C-14": "C"}
 rows = [([i, item, old, new], CB[i], S(src)) for i, item, old, new, src in corr]
 repo = [
  ("Published pages", "Fifteen pages are generated from one model and one source ledger. A stale page fails the build."),
@@ -1452,6 +1453,10 @@ The trade-off is stated on every page and on this page's privacy disclosures; th
 precision change and agreed to the nearest $10. The arithmetic of the estate room, the reassessment and the break-evens was re-run by the
 model and asserted in the build. Not done: no insurer was contacted, no address or parcel lookup was made, no water or electricity tariff
 was read, and no statute not named above was opened in this session.</p></section>
+<section><h2>Additional check of the state gain rate, 12 November 2026</h2>
+<p>A separate session re-opened fifteen publisher pages the same day. Every already-published figure matched: the 2026 and 2027 exclusions, the Form 706 deadline and portability rule, the inherited-basis rule, the absence of a state death tax, the Proposition 19 conditions and the two-year amount, the local secured rate, the rent cap, the insurance survey's scope, the 10-year Treasury at 4.88% on 9 November 2026 and the index fund's 12.09% one-year return.</p>
+<p>One gap was found. The one-time-gain rate used in the model is 20% federal, 3.8% net investment income tax and 12.3% California, and 12.3% is the top bracket of the graduated schedule. Section 17043 of the Revenue and Taxation Code adds a further 1% on the portion of taxable income above $1,000,000. It is published as FL-31 and C-14, with the dollar effect as a sensitivity rather than a model change, so no previously published figure moves: applied to the gain alone, the 2045 stock result falls from $10,052,910 to $10,016,750, and the sale remains first. Other income would push more of the gain above the threshold, so the figure published is a lower bound on that tax.</p>
+<p>What this check did not do: it did not open the text of Proposition 19 or any local ordinance, contact an insurer, appraiser or broker, look up a parcel, or test the pages in a browser.</p></section>
 <section><h2>Repository review</h2><p>Findings from reading the repository itself. These are observations, not sourced facts.</p>{rlist}</section>
 <section><h2>How this edition relates to the cross-check</h2>
 <p>A separate <a href="plan/index.html">cross-check edition</a> was built by another session with its own model and its own source ledger. It leaves unverifiable inputs blank and reports break-evens.

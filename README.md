@@ -34,7 +34,7 @@ replaced by a content-free withdrawal notice, so a stale URL cannot return an ol
 | `audit.html` | Independent verification: twelve corrections to the first quantitative edition, repository review |
 | `suggestions.html` | Four paths and 20 suggestions with effort, privacy cost and status; four decision gates; the privacy-precision choice |
 | `questions.html` | 39 questions with status: what is settled and linked to its publisher, what is missing, the step that closes it, and what changes if the answer differs |
-| `sources.html` | 72 official sources, what each one supports and how each was checked |
+| `sources.html` | 73 official sources, what each one supports and how each was checked |
 
 ## How the site is organised
 
@@ -99,7 +99,7 @@ was checked.
 ## Data
 
 <<<<<<< HEAD
-`assets/sources.json` — source ledger (72 entries, each with the words relied on and how it was checked).
+`assets/sources.json` — source ledger (73 entries, each with the words relied on and how it was checked).
 `assets/privacy.json` — the published precision for assessment-roll values and tax bills.
 =======
 `assets/sources.json` — source ledger (70 entries, each with the words relied on and how it was checked).
