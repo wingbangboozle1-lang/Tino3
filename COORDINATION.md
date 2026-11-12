@@ -3,6 +3,14 @@
 Privacy rule: public pages use generic Property A / Property B placeholders. Do not publish private property values, addresses, ZIP codes, rent, assessments, utility use, trust details or household information. Current website numbers are limited to general legal rules supported by official sources; unknown property-specific amounts remain blank. Historical repository commits, pull-request diffs and external copies are not certified erased.
 
 
+## Session `arena/0a5468c3-tino3` — publication privacy gate (2026-11-12)
+
+| Task | Status | Owner | Scope |
+|---|---|---|---|
+| Verify privacy-safe deployment after PR #64 and correct Pages source if needed; report live checks | in progress | `arena/0a5468c3-tino3` | GitHub Pages configuration, deployment verification, this board section; no public content edits |
+
+The branch name is fixed by Arena. Prior session P3's PR #64 has merged; this session is checking the remaining publication gate, not modifying its site scope. The Pages API currently says legacy `main:/`, which may bypass the allowlist and requires immediate investigation.
+
 ## Session `arena/e63a407b-tino3` — privacy-safe public edition consolidation and official-source review · 2026-11-12
 
 *Branch note:* Arena pins this session to `arena/e63a407b-tino3`. The original claim was based on `fd2b5a8`; the current work is rebased onto `origin/main` at `6eb3eb0` after PR #63 landed. The general Civil Code section 1946.2 guidance from that update is retained with coverage limits; the prior owner-specific model outputs are not. The requested `session-<id>/<task>` naming cannot be used.
