@@ -79,13 +79,15 @@ LEGEND_HTML = (
 )
 
 PRIVACY_HTML = (
-    '<div class="privacy-box"><strong>Strict Privacy &amp; Anonymization Boundary.</strong> '
-    "All personal, parcel, and location identifiers are excluded. Properties appear solely as "
+    '<div class="privacy-box"><strong>Privacy warning: re-identification risk.</strong> '
+    "Direct identifiers are omitted, but combinations of household details and rounded amounts may still identify "
+    "someone. Properties appear as "
     "<strong>[PROPERTY_A]</strong> (single-family home in County A, being inherited via trust) and "
     "<strong>[PROPERTY_B]</strong> (3-unit residential property in City B, already owned by [BENEFICIARY]). "
     "Individuals appear solely as [GRANTOR], [SUCCESSOR_TRUSTEE], and [BENEFICIARY]. Public assessment-roll "
     "benchmarks are generalized ($10,000 assessed-value increments; $100 historical tax-bill increments) and "
-    "every projected or modeled figure is rounded to the nearest $10 so no figure can be traced back to a parcel online.</div>"
+    "projected or modeled figures are rounded to the nearest $10. Neither rounding nor placeholders guarantee "
+    "anonymity; see the Flagged for Review page.</div>"
 )
 
 
@@ -472,12 +474,12 @@ def render_all(target_root: Path) -> dict[str, str]:
     ]
 
     roll_audit_rows = [
-        (["2014 &rarr; 2015", ("n", "+2.00%"), ("n", "1.998%"), ("n", "1.01998"), "[PROPERTY_A] roll ratio matches BOE 2015-16 CCPI factor"], "V", cite("boe_lta26002")),
-        (["2015 &rarr; 2016", ("n", "+1.53%"), ("n", "1.525%"), ("n", "1.01525"), "Sub-2% CCPI year: both [PROPERTY_A] and [PROPERTY_B] match BOE factor"], "V", cite("boe_lta26002")),
-        (["2016 &rarr; 2020 (each year)", ("n", "+2.00%/yr"), ("n", "2.62%&ndash;3.85%"), ("n", "1.02000"), "Prop 13 2% cap binding; [PROPERTY_B] tax bill jumped +18.4% in 2018 due to fixed parcel levies (FL-09)"], "V", cite("boe_lta26002", "cityb_res447", extra_local=("flagged.html", "FL-09"))),
-        (["2020 &rarr; 2021", ("n", "+1.04%"), ("n", "1.036%"), ("n", "1.01036"), "Pandemic low-CPI year: exact 1.01036 factor confirmed on both properties"], "V", cite("boe_lta26002")),
-        (["2021 &rarr; 2025 (each year)", ("n", "+2.00%/yr"), ("n", "2.51%&ndash;7.27%"), ("n", "1.02000"), "Prop 13 2% cap shielded owners from 5.56% (2022-23) &amp; 7.27% (2023-24) CA inflation; one minor ~1.96% [PROPERTY_B] roll variance flagged (FL-10)"], "V", cite("boe_lta26002", extra_local=("flagged.html", "FL-10"))),
-        (["2025 &rarr; 2026", ("n", "+2.00%"), ("n", "3.307% (Aug&ndash;Aug)"), ("n", "1.02000"), "BOE LTA 2026/002 used Aug 2024&ndash;Aug 2025 DIR data due to fall 2025 federal shutdown; 2026 tax bills not yet supplied (FL-08)"], "V", cite("boe_lta26002", extra_local=("flagged.html", "FL-08"))),
+        (["2014 &rarr; 2015", ("n", "+2.00%"), ("n", "1.998%"), ("n", "1.01998"), "Owner-supplied ratio compared with the official factor; the parcel data are unverified"], "O", cite("boe_lta26002")),
+        (["2015 &rarr; 2016", ("n", "+1.53%"), ("n", "1.525%"), ("n", "1.01525"), "Owner-supplied ratios compared with the official factor; the parcel data are unverified"], "O", cite("boe_lta26002")),
+        (["2016 &rarr; 2020 (each year)", ("n", "+2.00%/yr"), ("n", "2.62%&ndash;3.85%"), ("n", "1.02000"), "The supplied bill changed; the reasons and any parcel levies are unverified (FL-09)"], "O", cite("boe_lta26002", "cityb_res447", extra_local=("flagged.html", "FL-09"))),
+        (["2020 &rarr; 2021", ("n", "+1.04%"), ("n", "1.036%"), ("n", "1.01036"), "Owner-supplied ratios compared with the official factor; the parcel data are unverified"], "O", cite("boe_lta26002")),
+        (["2021 &rarr; 2025 (each year)", ("n", "+2.00%/yr"), ("n", "2.51%&ndash;7.27%"), ("n", "1.02000"), "Official factors compared with unverified supplied ratios; assessor records are needed"], "O", cite("boe_lta26002", extra_local=("flagged.html", "FL-10"))),
+        (["2025 &rarr; 2026", ("n", "+2.00%"), ("n", "3.307% (Aug&ndash;Aug)"), ("n", "1.02000"), "Official factor compared with the unverified supplied ratio; 2026 bills not supplied (FL-08)"], "O", cite("boe_lta26002", extra_local=("flagged.html", "FL-08"))),
     ]
 
     pages["properties.html"] = wrap_page(
@@ -496,10 +498,10 @@ def render_all(target_root: Path) -> dict[str, str]:
         {LEGEND_HTML}
 
         <h2>2. Line-by-Line Audit of Historical Assessment Growth Against Official BOE CCPI Factors</h2>
-        <p>Exact parcel roll figures from the brief are withheld from public tables so neither parcel can be looked up on public county tax portals. However, auditing the year-over-year percentage ratios against <a href="{e(SOURCES['boe_lta26002']['url'])}" target="_blank" rel="noopener noreferrer">BOE Letter to Assessors 2026/002</a> confirms two critical technical facts:</p>
+        <p>Exact parcel roll figures from the brief are withheld from public tables so neither parcel can be looked up on public county tax portals. The comparison below puts the unverified owner-supplied ratios beside the official state factors from <a href="{e(SOURCES['boe_lta26002']['url'])}" target="_blank" rel="noopener noreferrer">BOE Letter to Assessors 2026/002</a>. It does not establish what the assessment roll or the tax bills actually contain.</p>
         <ul>
-          <li><strong>Fact 1 &mdash; Exact BOE Factor Alignment &amp; Missing $7,000 Exemption Netting:</strong> [PROPERTY_A]'s year-over-year ratios match the state factor to five significant digits (e.g., 1.01036 in 2021 and 1.01525 in 2016), proving the supplied figures are un-netted Factored Base Year Values before any $7,000 <a href="{e(SOURCES['rtc_218']['url'])}" target="_blank" rel="noopener noreferrer">CA R&amp;TC &sect; 218</a> Homeowners' Exemption. Confirming whether [GRANTOR] currently has BOE-266 on file for [PROPERTY_A] is flagged as <strong>FL-06</strong> because principal-residence status of [GRANTOR] is a prerequisite for Proposition 19.</li>
-          <li><strong>Fact 2 &mdash; Non-Ad-Valorem Parcel Charges Explain Tax Rate Overstatement:</strong> Dividing [PROPERTY_B]'s 2025 tax bill (~$2,400) by its assessed value (~$110,000) yields an apparent ~2.1% rate, nearly double City B's verified 1.18268325% ad valorem rate (<a href="{e(SOURCES['cityb_res447']['url'])}" target="_blank" rel="noopener noreferrer">Res. 447-25</a>). The ~{usd(mdl.FIXED_CHARGES_B_2025)} difference consists of flat voter-approved parcel taxes and per-unit fees that do <strong>not</strong> multiply when assessed value resets.</li>
+          <li><strong>Exemption status unverified:</strong> A ratio that happens to agree with the state inflation factor does not show whether a homeowners' exemption was applied. Confirm the assessor records and the eligibility conditions under <a href="{e(SOURCES['rtc_218']['url'])}" target="_blank" rel="noopener noreferrer">CA R&amp;TC &sect; 218</a>; see FL-06.</li>
+          <li><strong>Bill composition unverified:</strong> An estimated difference between a rounded bill and an estimated ad valorem charge cannot establish the amounts or types of individual levies. An itemized bill is required; see FL-09.</li>
         </ul>
         {render_table(
             "Verification of Owner-Supplied Assessment Roll Growth Against BOE LTA 2026/002",
@@ -853,7 +855,7 @@ def render_all(target_root: Path) -> dict[str, str]:
     # 09. STEP-BY-STEP TRUST INHERITANCE PROCESS (inheritance-steps.html)
     # =========================================================================
     step_rows = [
-        (["Pre-Transfer (2026&ndash;2040)", "Confirm revocable trust inclusion, non-pro-rata distribution power, BOE-266 on [PROPERTY_A], solar interconnection date, and Form 706 portability if a first spouse has died", "None (proactive)", "Preserves 100% IRC &sect; 1014 basis step-up (<a href='flagged.html'>FL-05</a>) and doubles estate exclusion"], "V", cite("irs_rr2023_2", "boe_lta26026", "irs_i706")),
+        (["Pre-Transfer (2026&ndash;2040)", "Confirm revocable trust inclusion, non-pro-rata distribution power, BOE-266 on [PROPERTY_A], solar interconnection date, and Form 706 portability if a first spouse has died", "None (proactive)", "Confirm basis eligibility and any available deceased-spouse unused exclusion; neither outcome is automatic (<a href='flagged.html'>FL-05</a>)"], "V", cite("irs_rr2023_2", "boe_lta26026", "irs_i706")),
         (["Step 1 &middot; Days 1&ndash;30", "Obtain certified death certificates; [SUCCESSOR_TRUSTEE] accepts trust administration, secures [PROPERTY_A] insurance continuation, and obtains a Trust EIN (IRS Form SS-4)", "Immediate", "Prevents coverage lapse as revocable trust becomes irrevocable"], "V", cite("prob_16061_7", "cdi_tips")),
         (["Step 2 &middot; Within 60 Days", "[SUCCESSOR_TRUSTEE] serves mandatory statutory Notification by Trustee on all beneficiaries and legal heirs", "<strong>60 days</strong> from death", "Required by CA Probate Code &sect; 16061.7; starts 120-day contest limitation window"], "V", cite("prob_16061_7")),
         (["Step 3 &middot; Date-of-Death Valuation", "Order a qualified date-of-death real-estate appraisal of [PROPERTY_A] (and inventory trust cash/securities); leave already-owned [PROPERTY_B] out of gross estate", "Within 3&ndash;6 months", "Establishes stepped-up basis under IRC &sect; 1014 &amp; evaluates BS-4 trough rule"], "V", cite("irs_basis", "irs_estate")),
@@ -940,7 +942,7 @@ def render_all(target_root: Path) -> dict[str, str]:
         (["FL-05", "Trust Instrument Revocability &amp; Non-Pro-Rata Distribution Clauses", BLANK,
           "Must be revocable / estate-included for IRC &sect; 1014 step-up (Rev. Rul. 2023-2) and authorize non-pro-rata allocation if multiple beneficiaries exist"], "U", cite("irs_rr2023_2", "boe_lta26026")),
         (["FL-06", "[GRANTOR] Principal-Residence &amp; BOE-266 Status on [PROPERTY_A]", BLANK,
-          "Roll ratios show un-netted FBYV; Prop 19 requires [PROPERTY_A] to be [GRANTOR]'s principal residence at transfer"], "U", cite("rtc_63_2", "rtc_218")),
+          "Roll ratios do not establish exemption status; Proposition 19 eligibility depends on the transferor's and transferee's principal residence and other conditions"], "U", cite("rtc_63_2", "rtc_218")),
         (["FL-07", "Exact County A Tax Rate Area (TRA) &amp; Solar Interconnection Date on [PROPERTY_A]", BLANK,
           "County A has 816 TRAs (1.1258%&ndash;1.2409%); solar interconnection year sets exact 20-year CPUC NEM 2.0 expiration date"], "U", cite("cnty_a_rates", "cpuc_nem")),
         (["FL-08", "2026 Secured Property Tax Bills for [PROPERTY_A] and [PROPERTY_B]", BLANK,
@@ -963,7 +965,21 @@ def render_all(target_root: Path) -> dict[str, str]:
         "Every item that could not be confirmed from an official primary source is left blank below (never inferred) and paired with the governing official link for manual owner/advisor review.",
         f"""
         <div class="callout warn">
-          <p><strong>Non-Blocking Review Policy:</strong> None of the twelve items below alters the baseline or Black-Swan default recommendation under tested sensitivity bands, unless (a) the trust holding [PROPERTY_A] is an excluded irrevocable trust (<strong>FL-05</strong>) or (b) [GRANTOR]'s financial estate exceeds the federal estate exclusion and requires liquidity planning (<strong>FL-01</strong>).</p>
+          <p><strong>Privacy and evidence review.</strong> This edition, and the others beside it, publish
+          household-derived financial figures and property characteristics. Rounding and placeholders do not establish
+          anonymity: separate facts can be combined with outside data to identify someone. A federal discussion of that
+          risk, written for research data, is available from
+          <a href="https://www.hhs.gov/ohrp/sachrp-committee/recommendations/august-12-2020-attachment-a-nih-data-sharing-policy/index.html" target="_blank" rel="noopener noreferrer">HHS, SACHRP Attachment A</a>.
+          It is cited for the risk it describes and not to imply that health privacy law applies here. Public
+          repository history and third-party copies may remain reachable after these corrections.</p>
+          <p><strong>Decision uncertainty.</strong> Missing information, model assumptions, changes in the law and
+          market paths can each change the recommendation. Nothing on this page or the pages beside it proves a uniquely
+          optimal decision; read the cited laws and take private professional advice before acting.</p>
+          <p><strong>What the flags below are for.</strong> Each item is left blank rather than inferred, and each names
+          the document that would settle it. Two of them change the arithmetic if they resolve the other way: whether the
+          trust holding [PROPERTY_A] is estate-included (<strong>FL-05</strong>) decides the basis step-up, and whether
+          [GRANTOR]'s financial estate exceeds the federal exclusion (<strong>FL-01</strong>) decides whether liquidity
+          planning is needed. The rest narrow the error bars; they do not by themselves reverse the default.</p>
         </div>
 
         <h2>Unverified Parcel, Trust &amp; Household Inputs (Intentionally Left Blank)</h2>
