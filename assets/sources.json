@@ -1,7 +1,4 @@
 {
- "reviewed_on": "2026-11-10, re-checked and extended 2026-11-11 (two independent passes on 11 November 2026)",
- "reviewer_session": "arena-c2f4be85 (second independent pass, 2026-11-10); 2026-11-11: arena/bde5056d-tino3 appended the stress-test sources (bls_ted2022..fred_nasdaqcom, nyfed_covid) and arena/d2fd135b-tino3 re-opened twelve entries, added the economic-history sources (fed_2goal..sos_results) and recorded each check in the entry's \"checked\" field; 2026-11-11: arena/4ff01a4d-tino3 re-opened thirteen entries on the publishers' domains, ran an independent arithmetic audit of the published model, and added uscode3124 (31 U.S.C. 3124, U.S. Government Publishing Office), which settles the state-tax status of Treasury interest",
- "method": "Each entry records how it was checked. 'Opened' means the page or document was retrieved from the publisher's own domain and the quoted words were read there. 'Official-domain search excerpt' means the words were read in a search result served from the publisher's domain, without opening the whole document. Nothing is marked verified beyond what the quoted words support. On 11 November 2026 the session arena/d2fd135b-tino3 re-opened twenty of the entries below on the publisher's own domain, added the economic-history entries used by the black-swan page, and recorded each check in the entry's \"checked\" field. On 11 November 2026 a third session, arena/4ff01a4d-tino3, re-opened thirteen entries on the publishers' own domains, checked every published projection row against the model's own formulas, and added one primary statute from the U.S. Government Publishing Office (31 U.S.C. 3124).",
  "sources": {
   "irs_estate": {
    "publisher": "Internal Revenue Service",
@@ -771,17 +768,6 @@
    "quote": "Gross income does not include the value of property acquired by gift, bequest, devise, or inheritance.",
    "checked": "opened on the publisher's site on 12 November 2026: the full text of the section was read"
   },
-  "irs_rmd_faq": {
-   "publisher": "Internal Revenue Service",
-   "title": "Retirement plan and IRA required minimum distributions FAQs",
-   "url": "https://www.irs.gov/retirement-plans/retirement-plan-and-ira-required-minimum-distributions-faqs",
-   "verifies": [
-    "For IRA owners and plan participants who die after 31 December 2019, the entire balance must generally be distributed within ten years",
-    "Exceptions include a surviving spouse, a minor child of the owner, a disabled or chronically ill beneficiary, and a beneficiary not more than ten years younger than the owner"
-   ],
-   "quote": "the SECURE Act requires the entire balance of the participant's account be distributed within ten years",
-   "checked": "opened on the publisher's site on 12 November 2026: the overview and Q1 were read"
-  },
   "cdi_tips": {
    "publisher": "California Department of Insurance",
    "title": "Top ten tips for finding residential insurance",
@@ -805,6 +791,20 @@
    ],
    "quote": "The FAIR Plan is established under California law as the homeowners' \"insurer of last resort\"",
    "checked": "opened on the publisher's site on 12 November 2026"
+  },
+  "irs_rmd": {
+   "publisher": "Internal Revenue Service",
+   "title": "Retirement plan and IRA required minimum distributions: frequently asked questions",
+   "url": "https://www.irs.gov/retirement-plans/retirement-plan-and-ira-required-minimum-distributions-faqs",
+   "verifies": [
+    "For an owner who died after 31 December 2019, the whole account must generally be distributed within ten years (SECURE Act)",
+    "The ten-year rule has exceptions: a surviving spouse, a child who has not reached the age of majority, a disabled or chronically ill person, or a person not more than ten years younger than the owner",
+    "Withdrawals are taxable income to the person who receives them, except any part already taxed (basis) or a qualified Roth distribution",
+    "For IRA owners and plan participants who die after 31 December 2019, the entire balance must generally be distributed within ten years",
+    "Exceptions include a surviving spouse, a minor child of the owner, a disabled or chronically ill beneficiary, and a beneficiary not more than ten years younger than the owner"
+   ],
+   "quote": "the SECURE Act requires the entire balance of the participant's account be distributed within ten years. This 10-year rule has an exception for a surviving spouse, a child who has not reached the age of majority, a disabled or chronically ill person or a person not more than ten years younger than the employee or IRA account owner. ... Your withdrawals are included in taxable income except for any part that was already taxed (your basis) or that can be received tax-free (such as qualified distributions from designated Roth accounts).",
+   "checked": "opened on the publisher's site on 12 November 2026: the overview and Q1 were read"
   }
  }
 }
