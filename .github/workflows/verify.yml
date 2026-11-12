@@ -1,4 +1,4 @@
-name: Verify static site
+name: Verify public edition
 on:
   push:
   pull_request:
@@ -13,5 +13,3 @@ jobs:
         with:
           python-version: '3.12'
       - run: python scripts/verify.py
-      - run: python plan/tools/verify.py
-      - run: python analysis/tools/verify.py
