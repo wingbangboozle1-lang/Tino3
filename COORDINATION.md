@@ -972,3 +972,15 @@ Method and limits: the topic comparison below is a phrase search of the raw HTML
 - 13:11 UTC: **merge conflict** on rebasing onto `main` (`eba253d`): this section and the section of `82853ea6` (PRs #47, #48) were both appended at the end of the file. Resolved by taking `main`'s file byte for byte and re-appending this section after it. Checked: `main`'s text was an exact prefix of the result; no line of any other session was changed or removed.
 - 13:16 to 13:20 UTC: rebased again onto `main` (`5e1b0db`, after PRs #49 and #50), no conflict. Every count in this section recomputed on that commit before pushing; three statements of the draft were found wrong in that pass and fixed before they were published (how the late branches were fetched, a description of five older branches, and a file-name count that PR #49 had made stale).
 - 13:21 UTC: pull request [#51](https://github.com/wingbangboozle1-lang/Tino3/pull/51) opened from this branch, changing this section only. It is merged once; the merge commit and the checks after it are shown on that page and recorded in the last commit of this branch, not in a further commit on `main`.
+
+## Session `arena/16e602da-tino3` — Suggestions register + pre-decision questions checklist (2026-11-12)
+
+*Branch note:* Arena pins this session to `arena/16e602da-tino3` from `fd2b5a8`; `session-<id>/<task>` naming cannot be used. Board read before claiming. Prior root edition (13 pages, 68 sources) verified passing `scripts/verify.py` at claim time.
+
+| Task | Status | Owner | Files touched |
+|---|---|---|---|
+| SG-1 Dedicated Suggestions page: proposed improvements, each marked Proposed — not decided, with decision needed before implementation | claimed | `arena/16e602da-tino3` | `scripts/build.py`, generated `suggestions.html`, nav in all root pages |
+| SG-2 Pre-decision Questions & Answers checklist: have / do-not-have / how-to-discover, gating decisions | claimed | `arena/16e602da-tino3` | `scripts/build.py`, generated `questions.html` |
+| SG-3 Re-verify key official anchors in-session; README + EXECUTIVE_SUMMARY refresh; PR, merge, Pages deploy check | claimed | `arena/16e602da-tino3` | `README.md`, `EXECUTIVE_SUMMARY.md`, this section only |
+
+Not touched: `plan/**`, `analysis/**`, workflows, other sessions' board sections. Privacy: Property A/B placeholders only; no ZIP, city, address, or unrounded figure in any commit.
