@@ -20,10 +20,12 @@ from pathlib import Path
 from urllib.parse import urlparse, unquote
 
 ROOT = Path(__file__).resolve().parents[1]
-PAGES = ["index.html", "executive-summary.html", "questions.html", "suggestions.html", "property-a.html",
+PAGES = ["index.html", "executive-summary.html", "questions.html", "suggestions.html", "economy.html",
+         "property-a.html",
          "property-b.html", "taxes.html", "projections.html", "decision.html", "stress.html",
          "black-swans.html", "inheritance.html", "review.html", "audit.html", "sources.html"]
-ASSETS = ["assets/style.css", "assets/sources.json", "assets/privacy.json", "assets/data/model.json",
+ASSETS = ["assets/style.css", "assets/sources.json", "assets/privacy.json", "assets/data/economy.json",
+          "assets/data/model.json",
           "assets/data/property_a.csv", "assets/data/property_b.csv", "assets/data/decision.csv"]
 
 ALLOWED_HOSTS = {
@@ -148,6 +150,8 @@ def main() -> int:
     # 1. reproducible build
     before = {p: (ROOT / p).read_bytes() for p in PAGES + ASSETS}
     subprocess.run([sys.executable, "scripts/model.py"], cwd=ROOT, check=True, capture_output=True)
+    # The economy module reads the model's own constants, so it runs after it and before the renderer.
+    subprocess.run([sys.executable, "scripts/economy.py"], cwd=ROOT, check=True, capture_output=True)
     subprocess.run([sys.executable, "scripts/build.py"], cwd=ROOT, check=True, capture_output=True)
     after = {p: (ROOT / p).read_bytes() for p in PAGES + ASSETS}
     stale = [p for p in PAGES + ASSETS if before[p] != after[p]]
