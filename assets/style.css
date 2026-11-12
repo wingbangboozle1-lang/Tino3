@@ -62,7 +62,8 @@ th, td { min-width: 130px; padding: 9px 12px; border-bottom: 1px solid var(--lin
 thead th { background: #edf2f7; color: #334455; font-size: .72rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
 tbody tr:last-child td { border-bottom: 0; }
 tbody tr:hover td { background: #fafcff; }
-.fact-row td:last-child { min-width: 180px; font-size: .82rem; }
+.fact-row td:last-child, .worksheet-row td:last-child, .proposal-row td:last-child, .flag-row td:last-child { min-width: 210px; font-size: .82rem; }
+.source-label { color: var(--muted); font-size: .68rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
 .framework-row td:first-child, .choice-row td:first-child { font-weight: 700; }
 .flag-row td:first-child { color: var(--accent); font-variant-numeric: tabular-nums; font-weight: 750; white-space: nowrap; }
 .worksheet-row td.blank, td.blank { min-width: 138px; background: var(--bad-bg); color: var(--bad); font-style: italic; font-weight: 650; }

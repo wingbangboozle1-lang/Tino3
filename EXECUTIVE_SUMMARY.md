@@ -58,6 +58,9 @@ Growth and inflation are uneven over long periods. The guide keeps a constant-ra
 - Separates ownership, basis, income, occupancy and expense records for A and B.
 - Summarizes selected federal and California inheritance, tax, property-tax and rental rules with official links.
 - Provides blank checklists and a year-by-year method for private scenario testing.
+- Lists 20 questions with the private evidence needed and the decision effect of a different answer.
+- Keeps 12 implementation suggestions in a separate review register; none is selected automatically.
+- Requires an official source or validation anchor on every decision-facing table row.
 - Flags missing facts rather than inferring or publishing them.
 
 ## Privacy boundary

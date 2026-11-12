@@ -59,15 +59,36 @@ def fact_table(caption: str, headers: list[str], rows: list[tuple[list[str], str
             f'<thead><tr>{head}</tr></thead><tbody>{"".join(body)}</tbody></table></div>')
 
 
-def blank_table(caption: str, headers: list[str], rows: list[list[str]]) -> str:
-    """Render a non-factual worksheet with deliberately blank value cells."""
+def _source_ids(value: str | list[str]) -> list[str]:
+    ids = [value] if isinstance(value, str) else value
+    assert ids and all(source_id in SOURCES for source_id in ids), ids
+    return ids
+
+
+def _source_cell(value: str | list[str], label: str = "Official source / validation anchor") -> str:
+    links = "<br>".join(source_link(source_id) for source_id in _source_ids(value))
+    return f'<td><span class="source-label">{esc(label)}</span><br>{links}</td>'
+
+
+def blank_table(
+    caption: str,
+    headers: list[str],
+    rows: list[list[str]],
+    row_sources: list[str | list[str]] | None = None,
+) -> str:
+    """Render a worksheet whose unknown values stay blank and whose rows have official anchors."""
+    if row_sources is None:
+        row_sources = ["boe_assessor_contacts"] * len(rows)
+    assert len(rows) == len(row_sources), (len(rows), len(row_sources))
     head = "".join(f"<th scope=\"col\">{esc(value)}</th>" for value in headers)
+    head += '<th scope="col">Official source / validation anchor</th>'
     body = []
-    for cells in rows:
+    for cells, source_ids in zip(rows, row_sources):
         rendered = []
         for cell in cells:
             text = str(cell)
             rendered.append(text if text.lstrip().startswith("<td") else f"<td>{text}</td>")
+        rendered.append(_source_cell(source_ids))
         body.append('<tr class="worksheet-row">' + "".join(rendered) + "</tr>")
     return (f'<div class="table-wrap"><table><caption>{esc(caption)}</caption>'
             f'<thead><tr>{head}</tr></thead><tbody>{"".join(body)}</tbody></table></div>')
@@ -77,13 +98,18 @@ def plain_table(
     caption: str,
     headers: list[str],
     rows: list[list[str]],
+    row_sources: list[str | list[str]] | None = None,
     row_class: str = "proposal-row",
 ) -> str:
-    """Render a proposal or unresolved-item register, not a factual-claim table."""
+    """Render a proposal or unresolved-item register with an official validation anchor per row."""
+    if row_sources is None:
+        row_sources = ["boe_assessor_contacts"] * len(rows)
+    assert len(rows) == len(row_sources), (len(rows), len(row_sources))
     head = "".join(f"<th scope=\"col\">{esc(value)}</th>" for value in headers)
+    head += '<th scope="col">Official source / validation anchor</th>'
     body = []
-    for cells in rows:
-        body.append(f'<tr class="{esc(row_class)}">' + "".join(f"<td>{cell}</td>" for cell in cells) + "</tr>")
+    for cells, source_ids in zip(rows, row_sources):
+        body.append(f'<tr class="{esc(row_class)}">' + "".join(f"<td>{cell}</td>" for cell in cells) + _source_cell(source_ids) + "</tr>")
     return (f'<div class="table-wrap"><table><caption>{esc(caption)}</caption>'
             f'<thead><tr>{head}</tr></thead><tbody>{"".join(body)}</tbody></table></div>')
 
@@ -469,56 +495,49 @@ def build_pages() -> None:
 
     pages["questions.html"] = (
         "Questions before deciding",
-        "A clear list of questions, information and answers that need to be addressed before any decision can be reasonably made, and how to discover missing information.",
-        '''<p>Keep answers and supporting documents in a private working file. The public cells below remain blank; no answer is requested or stored by this site. The list distinguishes what the public guide can answer from official sources and what must be verified privately.</p>
-<section><h2>Resolve these questions first — have vs missing, answer, discovery</h2>''' + blank_table(
-            "Private question register — blank until verified; information we have vs do not have",
-            ["Order", "Question", "Public answer (official rule only)", "How to resolve / discover"],
+        "A structured list of facts, documents and answers needed before comparing the inherited property with the already-owned property.",
+        '''<p>Keep answers and supporting documents in a private working file. The public cells below remain blank; no answer is requested or stored by this site. The last column explains how a different answer could change the decision.</p>
+<section><h2>Resolve these questions first</h2>''' + blank_table(
+            "Private question register — blank until verified",
+            ["Order", "Question", "Public answer", "How to resolve", "If the answer changes"],
             [
-                ["1 · Ownership", "Who holds legal and beneficial title to A and B, and what transfers on death?", '<td class="blank">Not published</td>', "Recorded title, trust/will, beneficiary and estate records; verify who is trustee at death"],
-                ["2 · Timing", "What event/date triggers notice, assessor, tax and claim deadlines?", '<td class="blank">Not published</td>', "Death/transfer documents and official notices; see <a href=\"inheritance.html\">Inheritance steps</a> for calendars"],
-                ["3 · A's basis", "What is A's defensible date-of-death value and basis record?", '<td class="blank">Not published</td>', f"Independent valuation and estate records; {source_link('irs_inherited_basis', 'IRS inherited-basis rule')}"],
-                ["4 · Property tax", "Does A qualify for a family-home exclusion, and were the occupancy/exemption/claim steps met?", '<td class="blank">Not published</td>', f"Current statute and assessor decision; {source_link('rtc_63_2', 'RTC section 63.2')} and {source_link('boe_prop19', 'BOE Prop 19 overview')}"],
-                ["5 · B's income", "What rent was collected, what was vacant, and what expenses/depreciation are recorded?", '<td class="blank">Not published</td>', f"Leases, rent ledger, bills and prior returns; {source_link('irs_rental', 'IRS Publication 527')}"],
-                ["6 · Occupancy", "Would the recipient use A or B as a home, and what rent or housing cost would change?", '<td class="blank">Not published</td>', "Personal housing plan, tenant/lease review and current costs; note B can be lived in without losing all rent only if a unit remains rentable"],
-                ["7 · Running costs", "What are property tax, insurance, water, electricity/solar, maintenance and repair costs year by year?", '<td class="blank">Not published</td>', f"Actual bills, policy/utility agreements, inspections and estimates; {source_link('cdi_premiums', 'CDI survey limits')} and {source_link('cpuc_solar', 'CPUC tariff overview')}"],
-                ["8 · Local law", "Which local rental, transfer-tax, property-tax and utility rules apply to each property?", '<td class="blank">Not published</td>', "Verify jurisdiction privately; check assessor, local ordinance and utility/provider records"],
-                ["9 · Estate total and prior gifts", "What are the estate's total assets, deductions, prior gifts and elections against the federal threshold?", '<td class="blank">Not published</td>', f"Executor's records and current Form 706 instructions; {source_link('irs_estate', 'IRS estate-tax rules')} and {source_link('irs_2027_adjustments', 'IRS 2027 thresholds')}"],
-                ["10 · Retirement accounts", "Are there retirement accounts or plans, who is designated as beneficiary, and what distribution rules apply?", '<td class="blank">Not published</td>', f"Latest beneficiary designation and current plan/IRS rules; {source_link('irs_retirement_beneficiary', 'IRS beneficiary rules')}"],
-                ["11 · Cash inheritance", "How much liquid inheritance is expected and when will it be available?", '<td class="blank">Not published</td>', "Estate/trust account statements and distribution provisions; keep amount private"],
-                ["12 · Solar and utility tariffs", "What are the solar system, interconnection, tariff and export-credit terms for A and B?", '<td class="blank">Not published</td>', f"System agreement, bill and provider; {source_link('cpuc_solar', 'CPUC tariff overview')}"],
-                ["13 · Insurance and replacement", "Can each property be insured for its full value at the intended use and occupancy?", '<td class="blank">Not published</td>', f"Written quotes per occupancy; {source_link('cdi_premiums', 'CDI premium comparison limits')}"],
-                ["14 · Risk and priorities", "What liquidity, workload, market, insurance and family-use risks matter most for this household?", '<td class="blank">Not published</td>', "Agree decision criteria and time horizon before choosing assumptions"],
-            ]) + '''</section>
-<section><h2>What the public guide already answers vs what must be discovered privately</h2>''' + plain_table(
-            "Information status — official general rules vs private facts",
-            ["Category", "What we have (official, source-linked)", "What is still missing (private, blank)"],
-            [
-                ["Federal estate and gift rules", "2026 and 2027 thresholds and filing rules from IRS", "Estate total, prior gifts, deductions, elections for this household"],
-                ["California property tax", "Prop 13 1% base, 2% cap, reassessment and family-home statute", "Each property's roll, bill, supplemental notices and assessor decision"],
-                ["Rental and tenancy", "Federal reporting, statewide cap and just-cause statutes", "Leases, lawful coverage, actual rent, vacancy and local ordinance"],
-                ["Insurance and utilities", "Comparison-survey limits and tariff-source overview", "Quotes, coverage, deductibles, actual bills and system agreements"],
-                ["Economic stress", "Five official historical episodes as anchors", "Household-specific income, repair lump sums and liquidity needs"],
+                ["1 · Ownership", "Who holds legal and beneficial title to A and B, and what transfers on death?", '<td class="blank">Not published</td>', "Recorded deeds, trust/will, beneficiary and estate records", "Changes who can sign, what transfers and which tax records apply."],
+                ["2 · Transfer path", "Does A pass through a trust, probate, beneficiary designation or another instrument?", '<td class="blank">Not published</td>', "Read the controlling instrument and obtain fiduciary advice", "Changes notice, administration and assessor steps."],
+                ["3 · Timing", "What event/date triggers notice, assessor, tax and claim deadlines?", '<td class="blank">Not published</td>', "Death/transfer documents and official notices; see Inheritance steps", "Changes the applicable filing period, valuation date and law snapshot."],
+                ["4 · A's basis", "What is A's defensible date-of-death value and basis record?", '<td class="blank">Not published</td>', f"Independent valuation and estate records; {source_link('irs_inherited_basis', 'IRS inherited-basis rule')}", "Changes taxable gain/loss and net sale proceeds."],
+                ["5 · A's condition", "What inspection findings, deferred work, liens or debt affect A?", '<td class="blank">Not published</td>', "Private inspection, title search, loan and lien records", "Changes repair reserves, timing, liquidity and the keep/sell ranking."],
+                ["6 · Property tax", "Does A qualify for a family-home exclusion, and were occupancy, exemption and claim steps met?", '<td class="blank">Not published</td>', f"Current statute and assessor decision; {source_link('rtc_63_2', 'RTC section 63.2')}", "Changes recurring carrying cost and the value of occupying A."],
+                ["7 · A's use", "Will the recipient live in A, rent it, sell it or defer a change?", '<td class="blank">Not published</td>', "Written household plan, rent evidence, sale estimate and deadline calendar", "Changes income, housing value, insurance, tenant duties and possible exclusion eligibility."],
+                ["8 · B title and basis", "What title, basis, prior depreciation and debt records support the treatment of B as already owned?", '<td class="blank">Not published</td>', "Recorded title, prior closing records, returns and loan documents", "Prevents A's inherited basis or tax treatment from being incorrectly applied to B."],
+                ["9 · B's income", "What rent was collected, what was vacant, and what expenses/depreciation are recorded?", '<td class="blank">Not published</td>', f"Leases, rent ledger, bills and prior returns; {source_link('irs_rental', 'IRS Publication 527')}", "Changes B's after-tax cash flow and the value of continuing to rent."],
+                ["10 · B occupancy", "Would the recipient use B as a home, and what rent or housing cost would change?", '<td class="blank">Not published</td>', "Personal housing plan, tenant/lease review and current costs", "Changes lost rent, notice obligations, utilities and the comparison with occupying A."],
+                ["11 · Insurance", "What coverage, exclusions, deductible, premium and renewal terms apply to each use?", '<td class="blank">Not published</td>', f"Current declarations and written quotes; {source_link('cdi_premiums', 'CDI premium-survey limits')}", "Changes carrying cost, risk tolerance and whether a use is insurable."],
+                ["12 · Utilities / solar", "What are water, electricity, solar credits, gas and service costs under each use?", '<td class="blank">Not published</td>', f"Actual bills and system/interconnection records; {source_link('cpuc_solar', 'CPUC tariff overview')}", "Changes operating cash flow and the sensitivity to tariff changes."],
+                ["13 · Repairs", "What routine maintenance, major repairs and capital work are likely, and when?", '<td class="blank">Not published</td>', f"Inspection, invoices and contractor estimates; {source_link('irs_rental', 'IRS repair/improvement guidance')}", "Changes reserve needs, tax classification and the timing of a sale or rental."],
+                ["14 · Local law", "Which local rental, transfer-tax, property-tax and utility rules apply?", '<td class="blank">Not published</td>', f"Verify jurisdiction privately; use the assessor directory, current ordinance and provider records; {source_link('boe_assessor_contacts', 'BOE assessor directory')}", "Changes lawful rent, notices, taxes, credits and transaction costs."],
+                ["15 · Sale proceeds", "What sale price, selling costs, transfer taxes, debt payoff and tax reporting would apply?", '<td class="blank">Not published</td>', f"Written sale estimate, title/loan records and local rule; {source_link('rtc_11911', 'transfer-tax authorization')}", "Changes the amount available to reinvest or preserve as liquidity."],
+                ["16 · Estate tax", "What are the estate's total assets, deductions, prior gifts and elections?", '<td class="blank">Not published</td>', f"Executor's records and current Form 706 instructions; {source_link('irs_estate', 'IRS estate-tax rules')}", "A property value alone cannot establish filing or tax exposure; the ranking may change materially."],
+                ["17 · Cash and retirement", "Does the inheritance include cash, retirement accounts or other assets, and who are the beneficiaries?", '<td class="blank">Not published</td>', f"Account statements, beneficiary forms and custodian/IRS rules; {source_link('irs_retirement_beneficiary', 'IRS beneficiary rules')}", "Changes tax timing, liquidity, diversification and estate size."],
+                ["18 · Liquidity and alternatives", "How much liquidity is required, and what private investment or savings alternatives are actually available?", '<td class="blank">Not published</td>', f"Private cash-flow plan and current account terms; use historical stress anchors, not a promised return; {source_link('frh_1929', 'Federal Reserve History market episode')}", "Changes the opportunity cost of keeping property and the ability to absorb shocks."],
+                ["19 · Priorities and horizon", "What matters most: maximum expected wealth, current housing, income, diversification, workload or family continuity, and over what horizon?", '<td class="blank">Not published</td>', "Write the ranking criteria before choosing assumptions", "Changes the decision even when the arithmetic is unchanged."],
+                ["20 · Review date", "Who will recheck sources, law, quotes and calculations before implementation?", '<td class="blank">Not published</td>', f"Assign a private reviewer and a dated refresh checklist; {source_link('irs_form706', 'IRS current instructions')}", "Reduces the risk that stale law or unsupported assumptions drive a decision."],
             ],
-            row_class="framework-row",
+            row_sources=[
+                "rtc_480", "probate_16061_7", "rtc_480", "irs_inherited_basis", "irs_survivors", "rtc_63_2", "rtc_63_2",
+                ["rtc_480", "irs_rental"], "irs_rental", "civ_1946_2", "cdi_premiums", "cpuc_solar", "irs_rental",
+                ["boe_assessor_contacts", "civ_1947_12", "rtc_11911"], ["irs_inherited_basis", "rtc_11911"], ["irs_estate", "irs_form706"],
+                ["uscode102", "irs_retirement_beneficiary"], ["frh_1929", "frh_great_recession"], "irs_estate", "irs_form706"
+            ],
         ) + '''</section>
-<section><h2>Suggestions to discover missing information</h2>''' + list_html([
-            'Request current assessor roll and tax bill for each property and ask the assessor for written eligibility guidance before relying on any exclusion.',
-            'Obtain a qualified date-of-death valuation and keep the appraisal with estate records for basis support.',
-            'Reconcile rent ledgers, leases, deposits and vacancy month by month for B; do the same prospectively for any rent of A.',
-            'Collect 12 months of actual water, electricity/solar, insurance and maintenance invoices; separate routine maintenance from capital work with contractor estimates.',
-            'Contact each retirement custodian for the latest beneficiary designation and plan distribution rules; do not assume a ten-year or spouse rule without confirmation.',
-            'Have a licensed professional review title, trust terms, tenant notices, coverage and local ordinances in private.',
-            'Document decision criteria and then test each path under the irregular economic cases rather than a single growth rate.'
-        ], ordered=True) + '''<div class="note"><strong>Privacy reminder.</strong> Do not paste deeds, tax bills, account numbers, exact assessments, quotes or other personal details into a public issue, pull request or website field. Keep them in the private workbook described on <a href="suggestions.html">Suggestions for review</a>.</div>'''
+<div class="note"><strong>Privacy reminder.</strong> Do not paste deeds, tax bills, account numbers, exact assessments, quotes or other personal details into a public issue, pull request or website field.</div>'''
     )
 
     pages["suggestions.html"] = (
         "Suggestions for review",
         "Proposed improvements are kept separate from the public edition; no suggestion is selected or implemented automatically.",
-        '''<div class="answer"><strong>Selection status: none recorded.</strong> This page is a review register, not a feature request form. Nothing listed below changes the site until it is separately reviewed and selected. Review each row, choose a path only after weighing privacy, cost and maintenance, then implement outside this page.</div>
-<section><h2>Proposals — site and decision improvements</h2>''' + plain_table(
-            "Suggestions kept separate for review — choose before implementing",
+        '''<div class="answer"><strong>Selection status: none recorded.</strong> This page is a review register, not a feature request form. Nothing listed below changes the site until it is separately reviewed and selected.</div>
+<section><h2>Proposals</h2>''' + plain_table(
+            "Suggestions kept separate for review",
             ["ID", "Proposal", "Privacy / decision benefit", "Status"],
             [
                 ["S-01", "Keep all property-specific inputs in an offline, access-controlled workbook.", "Avoids publishing or collecting figures; allows private records and supporting documents.", "Proposed — not selected or implemented."],
@@ -526,12 +545,20 @@ def build_pages() -> None:
                 ["S-03", "Have a qualified tax/legal professional review any future property-specific calculations before use.", "Checks title, local law, occupancy, basis, tax treatment and deadlines without publishing personal records.", "Proposed — not selected or implemented."],
                 ["S-04", "Recheck official rules at the transfer date, before a sale or occupancy change, and after material law changes.", "Prevents stale federal, state and local assumptions from being treated as permanent.", "Proposed — not selected or implemented."],
                 ["S-05", "If a calculator is later selected, make it local-only and show sources, blank unknowns and stress cases.", "Avoids transmitting private inputs; separates fact, assumption and computation.", "Proposed — not selected or implemented."],
-                ["S-06", "Add a private, offline year-by-year projection workbook with irregular historical paths, not a constant rate.", "Mimics real-world uneven growth and inflation over 50 years; keep the constant-rate illustration off the public site.", "Proposed — not selected or implemented."],
-                ["S-07", "Maintain a maintenance and capital-reserve schedule from inspection and contractor estimates, not averages alone.", "Surfaces a large, lumpy repair that an average hides; keep estimates private.", "Proposed — not selected or implemented."],
-                ["S-08", "Verify insurance coverage, renewability and the state insurer-of-last-resort limit with written quotes per use.", "Confirms whether full replacement can be insured at the relevant value and occupancy.", "Proposed — not selected or implemented."],
-                ["S-09", "Check city/county rental, transfer-tax and utility tariffs privately for each property.", "State rules alone do not establish local coverage or cost; verify jurisdiction before a rent or sale decision.", "Proposed — not selected or implemented."],
-                ["S-10", "Record decision criteria and risk priorities before running any calculation.", "Prevents a presentation choice from driving the winner; criteria include cash flow, housing value, liquidity and workload.", "Proposed — not selected or implemented."],
-            ]) + '''</section>
+                ["S-06", "Label every private input as verified, owner-supplied, assumed or unknown, and block unknowns from silent calculation.", "Makes the evidence boundary visible and prevents an estimate from becoming a fact.", "Proposed — not selected or implemented."],
+                ["S-07", "Version the assumptions and record an as-of date for every tax, law, insurance and utility check.", "Makes stale rules and changed quotes detectable before implementation.", "Proposed — not selected or implemented."],
+                ["S-08", "Add a decision gate: do not rank an option while title, basis, estate size or required filing status is unresolved.", "Stops precise arithmetic from masking a missing legal or tax fact.", "Proposed — not selected or implemented."],
+                ["S-09", "Require a private insurance, inspection and repair-reserve review before changing occupancy or accepting a rental plan.", "Prices coverage and physical-risk uncertainty before a commitment is made.", "Proposed — not selected or implemented."],
+                ["S-10", "Use a tenant and local-law checklist before changing B's occupancy, rent or tenancy status.", "Reduces notice, relocation-assistance and local-protection errors.", "Proposed — not selected or implemented."],
+                ["S-11", "Keep black-swan scenarios as ranges and decision triggers rather than expected returns.", "Tests liquidity, vacancy, drawdown, inflation, insurance and repair shocks without false precision.", "Proposed — not selected or implemented."],
+                ["S-12", "Run a privacy audit on every release, including source files, route allowlists, generated pages and old-history exposure.", "Protects the highest-priority requirement while allowing a useful general framework.", "Proposed — not selected or implemented."],
+            ],
+            row_sources=[
+                "boe_assessor_contacts", ["rtc_63_2", "irs_rental"], ["irs_estate", "rtc_63_2"], ["boe_prop19", "civ_1947_12"],
+                ["cpuc_solar", "cdi_premiums"], "irs_inherited_basis", "irs_form706", "irs_estate", ["cdi_premiums", "irs_rental"],
+                ["civ_1946_2", "civ_1947_12"], ["frh_1929", "frh_great_inflation", "frh_great_recession"], "boe_assessor_contacts"
+            ],
+        ) + '''</section>
 <section><h2>How to review a suggestion</h2>''' + list_html([
             'Read the proposal, its benefit and the private inputs it would require.',
             'Check whether it can be done without putting personal values, addresses or parcel records into a public page or artifact.',
@@ -539,7 +566,7 @@ def build_pages() -> None:
             'Decide whether to adopt, defer or reject; record the choice offline. The site does not collect a selection.',
             'If adopted, re-run <code>python3 scripts/build.py</code>, <code>python3 scripts/verify.py</code> and <code>python3 scripts/privacy_boundary.py</code> and confirm the artifact remains allowlisted.'
         ], ordered=True) + '''</section>
-<section><h2>Selection gate</h2><p>Before any proposal is implemented, decide whether its benefit is worth the privacy and maintenance cost, define the inputs it would require, identify its official sources, and test that no private values enter a public artifact. The suggestions page itself does not collect a selection.</p><div class="note"><strong>Privacy reminder.</strong> Do not paste deeds, tax bills, rent ledgers, account numbers, exact assessments or quotes into a public issue, pull request or website field. Keep them in the private workbook described in S-01.</div></section>'''
+<section><h2>Selection gate</h2><p>Before any proposal is implemented, decide whether its benefit is worth the privacy and maintenance cost, define the inputs it would require, identify its official sources, and test that no private values enter a public artifact. A reviewer should record: selected or declined, owner, files affected, privacy test, source recheck date, rollback plan and acceptance test. The suggestions page itself does not collect a selection.</p><div class="note"><strong>Privacy reminder.</strong> Do not paste deeds, tax bills, rent ledgers, account numbers, exact assessments or quotes into a public issue, pull request or website field. Keep them in the private workbook described in S-01.</div></section>'''
     )
 
     pages["review.html"] = (
