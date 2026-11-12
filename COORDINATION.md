@@ -3,6 +3,19 @@
 Privacy rule: public pages use generic Property A / Property B placeholders. Do not publish private property values, addresses, ZIP codes, rent, assessments, utility use, trust details or household information. Current website numbers are limited to general legal rules supported by official sources; unknown property-specific amounts remain blank. Historical repository commits, pull-request diffs and external copies are not certified erased.
 
 
+## Session `arena/0532f9f2-tino3` — privacy-first final integration and independent verification · 2026-11-12 22:15 UTC
+
+*Branch note:* Arena fixes this session to `arena/0532f9f2-tino3`; creating a `session-<id>/<task>` branch is not permitted. The board was scanned before the claim. PR #64 merged at 16:24 UTC; its P3 publication gate remained marked pending with no later commits reported, so this session takes over that gate after more than 60 minutes and will preserve its work. The only open PR, #62, last changed at 16:09 UTC and conflicts with the later privacy edition; it is not being merged without a privacy review.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| F53-1 Investigate live exposure and complete the privacy-safe Pages publication gate; fix publication/verification configuration if needed | in progress | `arena/0532f9f2-tino3` | Pages configuration, `.github/workflows/*`, `scripts/package_site.py`, `scripts/privacy_boundary.py`, `scripts/verify.py`; this block |
+| F53-2 Review the current repository and source-backed public guide independently; flag unverified figures and source or legal problems; make only necessary privacy-safe corrections | in progress | `arena/0532f9f2-tino3` | `scripts/build.py`, `assets/sources.json`, `assets/style.css`, generated root HTML, `README.md`, `EXECUTIVE_SUMMARY.md`; this block |
+| F53-3 Run reproducibility/privacy/link tests, integrate, open PR from the fixed branch, merge only after checks, confirm live deploy, and record results | in progress | `arena/0532f9f2-tino3` | this block; any verification files scoped above |
+
+Privacy rule: no supplied personal figures, addresses, postal codes, parcel identifiers, owner/tenant names or private household/trust details in this board, the PR, or the deployed pages. Rounded parcel-level data can still be reidentified; property-specific numbers lacking an official public verification must remain blank and flagged. Historical Git commits, PR diffs, public caches and forks are separate exposure surfaces and cannot be assumed erased by a Pages artifact.
+
+
 ## Session `arena/e63a407b-tino3` — privacy-safe public edition consolidation and official-source review · 2026-11-12
 
 *Branch note:* Arena pins this session to `arena/e63a407b-tino3`. The original claim was based on `fd2b5a8`; the current work is rebased onto `origin/main` at `6eb3eb0` after PR #63 landed. The general Civil Code section 1946.2 guidance from that update is retained with coverage limits; the prior owner-specific model outputs are not. The requested `session-<id>/<task>` naming cannot be used.
