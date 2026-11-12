@@ -972,3 +972,19 @@ Method and limits: the topic comparison below is a phrase search of the raw HTML
 - 13:11 UTC: **merge conflict** on rebasing onto `main` (`eba253d`): this section and the section of `82853ea6` (PRs #47, #48) were both appended at the end of the file. Resolved by taking `main`'s file byte for byte and re-appending this section after it. Checked: `main`'s text was an exact prefix of the result; no line of any other session was changed or removed.
 - 13:16 to 13:20 UTC: rebased again onto `main` (`5e1b0db`, after PRs #49 and #50), no conflict. Every count in this section recomputed on that commit before pushing; three statements of the draft were found wrong in that pass and fixed before they were published (how the late branches were fetched, a description of five older branches, and a file-name count that PR #49 had made stale).
 - 13:21 UTC: pull request [#51](https://github.com/wingbangboozle1-lang/Tino3/pull/51) opened from this branch, changing this section only. It is merged once; the merge commit and the checks after it are shown on that page and recorded in the last commit of this branch, not in a further commit on `main`.
+
+## Session `arena/16e602da-tino3` — Suggestions register + pre-decision questions checklist (2026-11-12)
+
+*Branch note:* Arena pins this session to `arena/16e602da-tino3` from `fd2b5a8`; `session-<id>/<task>` naming cannot be used. Board read before claiming. Prior root edition (13 pages, 68 sources) verified passing `scripts/verify.py` at claim time.
+
+| Task | Status | Owner | Files touched |
+|---|---|---|---|
+| SG-1 Dedicated Suggestions page: proposed improvements, each marked Proposed — not decided, with decision needed before implementation | claimed | `arena/16e602da-tino3` | `scripts/build.py`, generated `suggestions.html`, nav in all root pages |
+| SG-2 Pre-decision Questions & Answers checklist: have / do-not-have / how-to-discover, gating decisions | claimed | `arena/16e602da-tino3` | `scripts/build.py`, generated `questions.html` |
+| SG-3 Re-verify key official anchors in-session; README + EXECUTIVE_SUMMARY refresh; PR, merge, Pages deploy check | claimed | `arena/16e602da-tino3` | `README.md`, `EXECUTIVE_SUMMARY.md`, this section only |
+
+Not touched: `plan/**`, `analysis/**`, workflows, other sessions' board sections. Privacy: Property A/B placeholders only; no ZIP, city, address, or unrounded figure in any commit.
+
+### Result (`arena/16e602da-tino3`, 12 Nov 2026)
+- SG-1/SG-2 done: `suggestions.html` (12 proposed-only items SG-01..SG-12, none decided/implemented) and `questions.html` (Q-01..Q-13 have/lack/how-to-discover, gating first), built via `scripts/build.py`; nav gains a "Decide next" group; site is now 15 root pages.
+- SG-3: IRS estate-tax page and BOE Proposition 19 page re-opened on the publishers' domains in-session (2026 exclusion $15,000,000 and Prop 19 comparison confirmed as published); no figure changed. All verifiers pass: root 15 pages/521 cited rows, `plan/` 10 pages, `analysis/` 12 pages; packager serves 15 pages + 49 withdrawal notices. Privacy scan clean (Property A/B only, $10 rounding).
