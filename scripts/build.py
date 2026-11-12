@@ -71,6 +71,7 @@ LABEL = {"irs_estate": "Estate tax thresholds", "irs_2027": "2027 amounts", "irs
          "fedhist_greatrecession": "The Great Recession", "nyfed_covid": "COVID-19 and the Fed",
          "fred_ussthpi": "US house price index", "fred_nasdaqcom": "NASDAQ Composite",
          "uscode3124": "31 USC 3124", "uscode102": "26 USC 102", "irs_rmd": "RMD FAQ", "rtc17043": "RTC 17043",
+         "civ1947_12": "CIV 1947.12", "civ1946_2": "CIV 1946.2",
          "cdi_tips": "Finding insurance", "cdi_fairplan": "FAIR Plan"}
 
 e = html.escape
@@ -474,7 +475,7 @@ q_b = [
   OPEN_R,
   "Not known: it depends on when the building was first occupied for residential use. Covered units have capped annual increases and restrictions on eviction; a new tenancy may start at any rent. The 2026-27 allowed increase is 1.6%.",
   "Ask the Rent Board, in writing, whether the building is covered, quoting the date of first occupancy from the building record. Keep the answer with the deed.",
-  "If covered, rent growth is capped; the plan already assumes 1.5% a year, so the ranking does not change."),
+  "If covered, the local 1.5% cap governs and the plan already assumes it. If NOT covered, Civil Code 1947.12 governs instead at 7.5% a year, and the Property B page prices both paths; the recommendation does not change, the value of the rental does."),
  ("Q-26", "Is the third unit legal and rentable?",
   OPEN_R,
   "Not supplied. The plan values it at $3,580 a month if the family moves out, equal to the average of the two rented units, and treats it as free housing while occupied.",
@@ -570,7 +571,7 @@ QSRC = {
  "Q-32": ("irs_tc701",), "Q-33": ("fred_hpi_a",), "Q-34": ("treasury_cmt", "irs_p925"),
  "Q-35": ("sos_memo", "lao_250017"), "Q-36": ("irs_basis", "cnty_a_recorder"),
  "Q-37": ("hud_fmr",), "Q-38": ("fedhist_greatrecession", "fedhist_greatinflation"),
- "Q-39": ("sos_results", "irs_estate"),
+ "Q-39": ("sos_results", "irs_estate"), "Q-25": ("cityb_rent", "civ1947_12"),
 }
 
 
@@ -1195,6 +1196,9 @@ rows = [
  (["Fixed charges on the bill", "about " + usd(M["fixed"]["b"]), "The bill is about 80% more than rate times assessed value. The difference is fixed charges; the line items were not supplied."], "C", S("cityb_rate", flag=True)),
  (["Rent, two units", "$7,150 a month", "The third unit is available to the family at no loss of rent."], "O", S("cityb_rent")),
  (["Allowed rent increase, March 2026 to February 2027", ("n", "1.6%"), "For sitting tenants in covered units: 60% of the regional price index. A new tenancy may start at any rent."], "V", S("cityb_rent")),
+ (["Rent growth used in every projection", (P(M["rates"]["rent_ctrl"], 1)), "60% of the modelled 2.5% inflation, applied to sitting tenants. This is the base case, and it assumes the local ordinance covers the building (FL-14)."], "C", S("cityb_rent", "civ1947_12", asm=True, flag=True)),
+ (["Rent growth if the ordinance does NOT cover it", ("n", f'{M["b_rentcap"]["state_rate"]:.1f}% a year, to a {M["verified"]["state_rent_max"] * 100:.0f}% ceiling'), "The statewide cap in Civil Code 1947.12: 5% plus the change in the cost of living, or 10%, whichever is lower. Section 1947.12(d)(3) switches it off only where a stricter local ordinance applies, so which rule binds depends on the open coverage question."], "V", S("civ1947_12", flag=True)),
+ (["Ending a tenancy", "Just cause after 12 months", "Civil Code 1946.2. A no-fault ending also requires relocation assistance or a waiver of the last month's rent, equal to one month's rent, within 15 calendar days."], "V", S("civ1946_2")),
  (["Rent Board fee", "about $60 a unit a year", "Charged on family-occupied units too unless an exemption is filed."], "V", S("cityb_rentfee")),
  (["Water, whole building", "$4,380 a year", "Midpoint of the owner's $330 to $400 a month."], "O", S("irs_p527")),
  (["Electricity", "$600 a year", "Midpoint of the owner's $30 to $70 a month."], "O", S("irs_p527")),
@@ -1212,6 +1216,9 @@ ttx = [
  (["Transfer at death", "Exempt", "No documentary transfer tax on a transfer by reason of death, outright or in trust."], "V", S("rtc11930")),
 ]
 brows = roll_rows(M["roll_b"], "B")
+rcap = [([str(x["year"]), N(x["rent_local"]), N(x["rent_state"]), N(x["diff_first_year"]),
+          N(x["ten_year_local"]), N(x["ten_year_state"]), N(x["ten_year_diff"])], "C",
+         S("cityb_rent", "civ1947_12", asm=True, flag=True)) for x in M["b_rentcap"]["rows"]]
 body = f"""
 <section><h2>What is known</h2>{tbl("Property B: inputs and current income", ["Item", "Value", "Note"], rows)}{LEGEND}</section>
 <section><h2>Tax and assessment history, 2016 to 2025</h2>
@@ -1223,6 +1230,18 @@ that year. One bill fell about 6% and one rose about 18% while the assessment mo
 <p>The owner states (11 November 2026) that the building is already owned by the beneficiary; the deed was not seen, so the question stays flagged (FL-01). If instead the parents hold title, the building changes ownership at the same death and is reassessed. In a multi-unit building the family-home exclusion covers only the unit that was the parent's principal residence and becomes the child's.
 Under the owner's statement none of this applies; the table is kept as the contingency case.</p>
 {tbl("Property B reassessed at market value, house prices rising 4% a year", ["Year", "Market value", "Tax, no change", "Tax, reassessed", "Increase", "Rent, two units", "Net income, no change", "Net income, reassessed"], reset)}</section>
+<section><h2>Which rent cap actually binds</h2>
+<p>Every projection on this site grows Property B's sitting-tenant rent at {M["rates"]["rent_ctrl"] * 100:.1f}% a year, the local formula.
+That is right only if the local ordinance covers the building, and coverage was not looked up (FL-14, FL-32). If it does not cover it, the
+statewide cap in Civil Code 1947.12 applies instead: 5% plus the change in the cost of living, or {M["verified"]["state_rent_max"] * 100:.0f}%,
+whichever is lower &mdash; {M["b_rentcap"]["state_rate"]:.1f}% a year at the modelled 2.5% inflation. Section 1947.12(d)(3) is what makes the two
+mutually exclusive: the state cap does not apply where a local ordinance already restricts increases to less than the state formula. The local
+cap is stricter, so where it applies it governs; where it does not, the state cap is five times looser. Section 1947.12(d)(4) is a second route to
+the same question: housing with a certificate of occupancy issued within the previous 15 years is outside the state cap altogether.</p>
+{tbl("Property B, two rented units: rent under each cap, house prices rising 4% a year", ["Year", "Rent that year, local cap", "Rent that year, state cap", "Difference that year", "Ten years, local cap", "Ten years, state cap", "Ten-year difference"], rcap)}
+<p>Read this as the size of the unknown, not as a forecast. The direction favours keeping Property B either way, so it does not change the
+recommendation &mdash; but it changes how much the rental is worth, and by 2045 the ten-year spread is {usd(M["b_rentcap"]["rows"][1]["ten_year_diff"])}.
+One document settles which column is the lawful one.</p></section>
 <section><h2>If Property B is ever sold</h2>{tbl("City B transfer tax on a sale", ["Price", "Rate on the whole price", "Note"], ttx)}</section>{PRIV}"""
 PAGES["property-b.html"] = page("property-b.html", "Property B", "Property B", "The rented building to keep",
                                 "A small multi-unit building in City B. Two units rented, one available to the family. Very low assessed value.", body)
@@ -1262,6 +1281,10 @@ st = [
  (["Claim deadline", "3 years, or before a sale", "Or six months after a supplemental assessment notice. A late claim works only from the year it is filed."], "V", S("rtc63_2", "boe_lta26026")),
  (["Transfer tax on a sale, County A", ("n", "0.11%"), "Three cities in the county add a further 0.33%; confirm on the recorder's page."], "V", S("rtc11911", "cnty_a_recorder")),
  (["Transfer tax at death", "Exempt", "Applies to the transfer from the trust to the heir."], "V", S("rtc11930")),
+ (["Statewide rent cap", "5% plus inflation, to a 10% ceiling", "Civil Code 1947.12. Over any 12 months an owner may not raise the gross rent by more than 5% plus the change in the cost of living, or 10%, whichever is lower. At the modelled 2.5% inflation that is 7.5% a year."], "V", S("civ1947_12")),
+ (["When the state cap does NOT apply", "A stricter local ordinance, or a new building", "Section 1947.12(d)(3) switches the state cap off where a local ordinance limits increases to less than the state formula; (d)(4) switches it off for housing with a certificate of occupancy issued within the previous 15 years. The local cap is 60% of the price index, so where it covers the building it is the one that binds."], "V", S("civ1947_12", "cityb_rent", flag=True)),
+ (["A new tenancy", "Initial rent is free", "Where no tenant from the prior tenancy remains, the owner may set the starting rent; the cap then governs later increases."], "V", S("civ1947_12", "cityb_rent")),
+ (["Ending a tenancy", "Just cause after 12 months", "Civil Code 1946.2. A no-fault ending also requires relocation assistance or a waiver of the last month's rent, equal to one month's rent, within 15 calendar days."], "V", S("civ1946_2")),
 ]
 est = [([str(x["year"]), N(x["exclusion"]), N(x["exclusion_couple"]), N(x["homes_base"]), N(x["room_single_low"]), N(x["room_single_base"]), N(x["room_single_high"]),
          N(x["room_couple_base"]), N(x["room_single_half"])], "C",
@@ -1355,7 +1378,8 @@ fl = [
  ("FL-11", "One year of Property B's assessed value", "It rose slightly less than the state factor. The year is reported to the owner privately.", "The assessor's roll history", "boe_lta26002"),
  ("FL-12", "2026 figures", "No 2026 tax bill for Property A and no 2026 assessed value or bill for Property B were supplied.", "The 2026-27 bills", "boe_lta26002"),
  ("FL-13", "Solar connection date and tariff", "The 20-year period decides when the electricity credit ends.", "The utility's interconnection letter", "cpuc_nem"),
- ("FL-14", "Whether the rent ordinance covers Property B", "Depends on the date of first occupancy and the legal unit count. No parcel lookup was performed.", "Certificate of occupancy; Rent Board record", "cityb_rent"),
+ ("FL-14", "Whether the rent ordinance covers Property B", "Depends on the date of first occupancy and the legal unit count. No parcel lookup was performed. Every projection assumes it does: rent grows 1.5% a year. If it does not, the statewide cap governs at 7.5%; the Property B page now shows both paths (FL-32).", "Certificate of occupancy; Rent Board record", "cityb_rent"),
+ ("FL-32", "Which rent cap binds on Property B, and why", "FL-14 asks whether the local ordinance covers the building. This is the second half: Civil Code 1947.12(d) also exempts housing with a certificate of occupancy issued within the previous 15 years, separately alienable units and corporate owners. Which exemption applies decides whether the 1.5% or the 7.5% path is the lawful one, and by 2045 the ten-year difference is $3,398,970.", "Certificate of occupancy; title; Rent Board record", "civ1947_12"),
  ("FL-15", "Result of the 3 November 2026 measures", "Results are not certified; certification is due 11 December 2026. The unofficial count on 10 November 2026 had Proposition 42 ahead with 51.5% yes and Proposition 40 rejected with 52.6% no.", "The certified statement of vote", "sos_results"),
  ("FL-24", "Any mortgage or debt on either property", "The model assumes both properties are unencumbered. A loan would have to be repaid from a sale, or would reduce the room under the federal exclusion.", "Loan statements or the trustee's schedule of assets", "irs_estate"),
  ("FL-25", "Privacy precision of the roll tables", "At the owner's instruction of 12 November 2026 the roll values and bills are published to the nearest $10. That is close enough to the county record that a reader who knows the record could match it; the tier can be raised to $1,000 or $10,000 with one command.", "The owner's choice of tier", "boe_lta26002"),
