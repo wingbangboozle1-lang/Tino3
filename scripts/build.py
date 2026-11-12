@@ -12,9 +12,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 M = json.loads((ROOT / "assets" / "data" / "model.json").read_text(encoding="utf-8"))
 SRC = json.loads((ROOT / "assets" / "sources.json").read_text(encoding="utf-8"))["sources"]
+ECO = json.loads((ROOT / "assets" / "data" / "economy.json").read_text(encoding="utf-8"))
+# Option names, shared by the economy tables; EDEC is the economy module's own decision block.
+OPTIONS_NAMES = {"sell_stock": "Sell A, buy a stock index fund", "sell_treasury": "Sell A, buy Treasuries",
+                 "rent": "Keep A and rent it out", "live": "Move into A"}
 
 NAV = [("index.html", "Overview"), ("executive-summary.html", "Executive summary"),
        ("decision.html", "Decision analysis"), ("projections.html", "Year-by-year projections"),
+       ("economy.html", "Year-by-year economy"),
        ("black-swans.html", "Conditions and history"), ("stress.html", "Stress tests"),
        ("property-a.html", "Property A"), ("property-b.html", "Property B"),
        ("taxes.html", "Tax, thresholds, law watch"), ("inheritance.html", "Inheritance steps"),
@@ -24,8 +29,8 @@ NAV = [("index.html", "Overview"), ("executive-summary.html", "Executive summary
 
 # Navigation is grouped so a reader sees the shape of the site: start here (what is settled and what
 # is not), one decision, one black-swan section in two parts, two properties, the rules, the evidence.
-NAV_GROUPS = [("The decision", 0, 4), ("Black swans", 4, 6), ("The properties", 6, 8),
-              ("Tax and process", 8, 10), ("Decide next", 10, 12), ("Evidence", 12, 15)]
+NAV_GROUPS = [("The decision", 0, 5), ("Black swans", 5, 7), ("The properties", 7, 9),
+              ("Tax and process", 9, 11), ("Decide next", 11, 13), ("Evidence", 13, 16)]
 
 SHORT = {"Internal Revenue Service": "IRS", "California State Board of Equalization": "BOE",
          "California Legislative Information": "CA code", "California Franchise Tax Board": "FTB",
@@ -72,6 +77,9 @@ LABEL = {"irs_estate": "Estate tax thresholds", "irs_2027": "2027 amounts", "irs
          "fred_ussthpi": "US house price index", "fred_nasdaqcom": "NASDAQ Composite",
          "uscode3124": "31 USC 3124", "uscode102": "26 USC 102", "irs_rmd": "RMD FAQ", "rtc17043": "RTC 17043",
          "civ1947_12": "CIV 1947.12", "civ1946_2": "CIV 1946.2",
+         "bls_cpi_annual": "CPI, annual 1977-2025",
+         "hpi_a_annual": "Area A house prices, annual", "hpi_b_annual": "Area B house prices, annual",
+         "gs10_annual": "10-year yield, annual", "nasdaq_annual": "NASDAQ, annual", "rtc51": "RTC 51",
          "cdi_tips": "Finding insurance", "cdi_fairplan": "FAIR Plan"}
 
 e = html.escape
@@ -237,7 +245,7 @@ Renting the home out ends with {usd(RENT['wealth'])} and moving in ends with {us
 <div class="cards">
 <div class="card"><div class="k">The answer</div><p><a href="executive-summary.html">Executive summary</a>: the decision, every important number with its source, and what would change it.</p></div>
 <div class="card"><div class="k">What is not settled</div><p><a href="questions.html">Questions before deciding</a>: 39 questions, each with what is known, what is missing and the step that closes it.</p></div>
-<div class="card"><div class="k">What to change</div><p><a href="suggestions.html">Suggestions for review</a>: four paths and 20 suggestions, with effort and privacy cost, to choose before anything changes.</p></div>
+<div class="card"><div class="k">What to change</div><p><a href="suggestions.html">Suggestions for review</a>: four paths and 23 suggestions, with effort and privacy cost, to choose before anything changes.</p></div>
 </div>
 <h3 class="grp">The decision</h3>
 <div class="cards">
@@ -271,7 +279,7 @@ Renting the home out ends with {usd(RENT['wealth'])} and moving in ends with {us
 <section><h2>Three editions in one repository</h2>
 <p>This dashboard is one of three editions kept side by side. They answer the same question with separate models, so their figures differ; each page states which model it comes from. Do not mix a number from one edition with a table in another.</p>
 <div class="cards">
-<div class="card win"><div class="k">This edition &middot; 15 pages</div><p>The pages in the menu. One model, one source ledger of {len(SRC)} entries, re-checked line by line on 11 and 12 November 2026. Act on these numbers.</p></div>
+<div class="card win"><div class="k">This edition &middot; {len(PAGES) + 1} pages</div><p>The pages in the menu. One model, one source ledger of {len(SRC)} entries, re-checked line by line on 11 and 12 November 2026. Act on these numbers.</p></div>
 <div class="card"><div class="k">Cross-check &middot; 10 pages</div><p><a href="plan/index.html">A second model</a> built from official figures only, leaving unverifiable inputs blank and reporting break-evens instead. It reaches the same default: sell and keep Property B.</p></div>
 <div class="card"><div class="k">50-year suite &middot; 12 pages</div><p><a href="analysis/index.html">2026&ndash;2076 schedules</a>, a 1977&ndash;2026 state cycle replay with decline-in-value relief, a 60/40 Treasury barbell and the ownership-asymmetry tables.</p></div>
 </div></section>{PRIV}"""
@@ -710,6 +718,15 @@ sug = [
   "None.", REC),
  ("S-19", "Pre-commit the black-swan playbook in writing.",
   "In the verified analogues the sale held but the reinvestment vehicle changed with the regime; deciding the switch in advance avoids a panic decision.", "One page, written now",
+  "None.", CALL),
+ ("S-21", "Before selling Property A, fix the reinvestment rule in writing: sell into a real-return asset, and switch to keeping the home only if the yield available is below the inflation rate. Then check the rule against the year-by-year page.",
+  "On forty real ten-year stretches the sale wins 31, Treasuries 4 and renting 5, and in two of four adversarial shapes held for fifty years the sale loses. A written rule decided in advance is what stops the year of the death being the worst possible time for a panicked change of plan.", "An hour, with the economy page open",
+  "None.", CALL),
+ ("S-22", "Ask the county assessor in writing whether a decline-in-value review can be requested, and what it requires, before relying on the lesser-of rule in a crash.",
+  "State law assesses at the lesser of the capped value and full cash value, but the county's own procedure for a review was not read, and the effect measured here is small (about $3,500 over sixteen years in one replayed crash).", "One letter, or one look at the assessor's page",
+  "None.", REC),
+ ("S-23", "Decide whether the year-by-year record or the constant 4% should be the headline number in the executive summary.",
+  "The median real-path result differs from the constant baseline, and the range is far wider than either; the summary should say which one it is quoting.", "A decision",
   "None.", CALL),
  ("S-20", "Put the date-of-death appraisal in the trustee's instructions.",
   "The appraisal is the evidence for the basis and for the estate return, and it has to be contemporaneous to be useful.", "A paragraph in the instructions",
@@ -1328,6 +1345,134 @@ property acquired by inheritance, and California imposes no inheritance or estat
 afterwards, and the gain on a later sale measured from the value at the date of death.</p>
 {tbl("What the heir receives", ["Item", "Tax treatment", "Detail"], heir)}</section>
 <section><h2>Law changes under discussion</h2>{tbl("Law watch", ["Item", "Status on 10 November 2026", "What it would change", "Effect on this decision"], watch)}</section>{PRIV}"""
+# ------------------------------------------------------------------------------------------------ year-by-year economy
+# Built from assets/data/economy.json, which scripts/economy.py derives from five official annual
+# series. The constant case there is asserted equal to this edition's own model, so this page and
+# the decision page cannot disagree about the baseline.
+ES = {x["key"]: x for x in ECO["stats"]}
+EBOOT = {x["key"]: x for x in ECO["bootstrap"]["rows"]}
+EC = ECO["bootstrap"]["constant"]
+EI = {x["option"]: x for x in ECO["reconcile"]}
+EDEC = ECO["decision"]
+ECONST = EDEC["constant"]
+BIND = {x["key"]: x for x in ECO["bind_cases"]}
+
+
+def money_or_mult(r, value):
+    """Round a percentile the same way everywhere: money to $10, a multiple to two places."""
+    return usd(r10(value)) if r["money"] else f"{value:.2f}"
+
+
+# How even is the record? One row per series, straight from the publisher's numbers.
+even_rows = [
+    ([r["label"], f"{r['first']}&ndash;{r['last']}", f"{r['n']}",
+      f"{r['min']:.2f}% ({r['min_year']})", f"{r['max']:.2f}% ({r['max_year']})",
+      f"{r['mean']:.2f}%", ("Not comparable" if r["level"] else f"{r['cagr'] * 100:.2f}%"),
+      f"{r['spread']:.2f} points", ("&mdash;" if r["level"] else f"{r['down']} of {r['n']}")],
+     "V", S("bls_cpi_annual" if r["key"] == "cpi" else "hpi_a_annual" if r["key"] == "house_a"
+            else "hpi_b_annual" if r["key"] == "house_b" else "gs10_annual" if r["key"] == "tsy"
+            else "nasdaq_annual"))
+    for r in ECO["stats"]]
+
+# The long-horizon distributions.
+boot_rows = []
+for k in ("a_value", "a_value_real", "a_taxable", "a_tax", "a_tax_real", "b_value", "b_tax", "cpi_multiple"):
+    r = EBOOT[k]
+    boot_rows.append(([r["label"], money_or_mult(r, r["p05"]), money_or_mult(r, r["p25"]),
+                       money_or_mult(r, r["p50"]), money_or_mult(r, r["p75"]), money_or_mult(r, r["p95"]),
+                       money_or_mult(r, r["constant"]),
+                       f"{r['p_below_constant'] * 100:.1f}%"],
+                      "C", S("hpi_a_annual", "hpi_b_annual", "bls_cpi_annual", "boe_lta26002", asm=True)))
+
+# The decision, re-run on each real ten-year stretch.
+win_rows = [([f"{w['first']}&ndash;{w['last']}", N(w["sell_stock"]), N(w["sell_treasury"]), N(w["rent"]),
+              N(w["live"]), dict(OPTIONS_NAMES)[w["winner"]],
+              ("Yes" if w["same_answers"] else "No")], "C",
+             S("hpi_a_annual", "hpi_b_annual", "bls_cpi_annual", "gs10_annual", "nasdaq_annual", asm=True))
+            for w in EDEC["windows"]]
+
+bind_rows = [([r["year"], str(r["analog"]), f"{r['house']:.2f}%", N(r["market"]), N(r["taxable_today"]),
+               N(r["tax_cap_only"]), N(r["taxable_reset"]), N(r["tax_reset_cap_only"]),
+               ("Yes" if r["binds_today"] else "No"), ("Yes" if r["binds_reset"] else "No")],
+              "C", S("rtc51", "bls_cpi_annual", asm=True)) for r in BIND["crash_at_once"]["rows"]]
+
+bind2_rows = [([r["year"], str(r["analog"]), f"{r['house']:.2f}%", N(r["market"]), N(r["taxable_today"]),
+                N(r["tax_cap_only"]), N(r["taxable_reset"]), N(r["tax_reset_cap_only"]),
+                ("Yes" if r["binds_today"] else "No"), ("Yes" if r["binds_reset"] else "No")],
+               "C", S("rtc51", "bls_cpi_annual", asm=True)) for r in BIND["crash_later"]["rows"]]
+
+adv_rows = [([a["name"], f"{a['cpi']:.2f}%", f"{a['house']:.2f}%", f"{a['stock']:.2f}%",
+              N(a["a_value"]), N(a["a_value_real"]), N(a["a_tax"]), N(a["sell_stock"]), N(a["rent"]),
+              N(a["live"]), dict(OPTIONS_NAMES)[a["winner"]], N(a["sell_gap"])], "C",
+             S("bls_cpi_annual", "hpi_a_annual", "gs10_annual", "nasdaq_annual", asm=True))
+            for a in ECO["adversarial"]]
+
+replay_rows = [([f"{r['start_analog']}&ndash;{r['end_analog']}", f"{r['cpi_cagr'] * 100:.2f}%",
+                 f"{r['a_cagr'] * 100:.2f}%", f"{r['b_cagr'] * 100:.2f}%", str(r["down_years_a"]),
+                 N(r["a_value"]), N(r["a_value_real"]), N(r["a_tax"]), N(r["b_tax"]),
+                 N(r["vs_constant"])], "C",
+                S("hpi_a_annual", "hpi_b_annual", "bls_cpi_annual", asm=True))
+               for r in ECO["replay"]]
+
+THR_SRC = {"Federal estate exclusion": ("irs_estate", "irs_2027"),
+           "Proposition 19 excluded amount": ("boe_lta25009",),
+           "Assessment cap": ("rtc51", "boe_lta26002"),
+           "Home-sale exclusion": ("irs_tc701",),
+           "State and local tax deduction cap": ("irs_estate",)}
+thr_rows = [([t["item"], (f"${t['nominal_2026']:,}" if t["nominal_2026"] else "A share, not an amount"),
+              t["indexed"], t["note"]], "V", S(*THR_SRC[t["item"]])) for t in ECO["thresholds"]]
+
+sell_draws = next(w for w in ECO["bootstrap"]["wins"] if w["case"] == "sell_stock")
+tres_draws = next(w for w in ECO["bootstrap"]["wins"] if w["case"] == "sell_treasury")
+rent_draws = next(w for w in ECO["bootstrap"]["wins"] if w["case"] == "rent")
+live_draws = next(w for w in ECO["bootstrap"]["wins"] if w["case"] == "live")
+crash_once, crash_later = BIND["crash_at_once"], BIND["crash_later"]
+
+body = f"""<div class="note"><strong>A single growth rate is not a forecast.</strong> Every other page of this edition projects with one constant rate: 4% house prices, 2.5% inflation, 7% stocks, 4.88% Treasuries. This page replaces that with the year-by-year record: {ECO['meta']['n_years']} years of official annual data ({ECO['meta']['record'][0]}&ndash;{ECO['meta']['record'][1]}) read from each publisher on {ECO['meta']['retrieved']}, replayed and resampled over fifty years. The baseline here reconciles with the decision page to the dollar.</div>
+<section><h2>The baseline is the weakest assumption in the edition</h2>
+<p>Each row below is one official annual series, taken as published. Read the range and the number of falling years, not the average. House prices in the area of Property A fell in <strong>{ES['house_a']['down']} of {ES['house_a']['n']}</strong> years and moved by as much as {ES['house_a']['max']:.1f}% up and {abs(ES['house_a']['min']):.1f}% down in a single year. Consumer prices fell in {ES['cpi']['down']} year. A constant 4% and a constant 2.5% sit inside that record only as averages; no single year looked like them.</p>
+{tbl("What the official record shows, year by year", ["Series", "Years", "Years of data", "Lowest year", "Highest year", "Arithmetic mean", "Compounded change", "Range", "Falling years"], even_rows)}</section>
+<section><h2>Fifty years, drawn from the record 2,000 times</h2>
+<p>The fifty years from 2026 are not knowable. What can be done is to take the {ECO['meta']['n_years']} years of official data, cut them into the {ECO['meta']['windows']} complete ten-year blocks, and draw blocks at random until fifty years are filled &mdash; {ECO['meta']['blocks_drawn']:,} times. Each draw replays real sequences, including real crashes and real booms, not invented ones. The table gives the 5th, 25th, 50th, 75th and 95th percentile of the result and, for comparison, the constant-rate answer this edition publishes elsewhere.</p>
+{tbl(f"Fifty-year results, {ECO['meta']['blocks_drawn']:,} paths of ten-year blocks from the official record, stated at the start of {ECO['meta']['stated_at']}", ["Measure", "5th percentile", "25th", "Median", "75th", "95th", "Constant-rate baseline", "Share of draws below the constant-rate answer"], boot_rows)}
+<p><strong>What this changes and what it does not.</strong> Property A's market value in {ECO['meta']['stated_at']} has a median of {usd(r10(EBOOT['a_value']['p50']))} against {usd(EC['a_value'])} on the constant path, and a 5th-to-95th range of {usd(r10(EBOOT['a_value']['p05']))} to {usd(r10(EBOOT['a_value']['p95']))}. The tax bill is far tighter, because the 2% cap, not the market, sets it. That is the central point of this whole page: <strong>the house price is a wide distribution and the property tax is not.</strong> The sell decision is the one that carries the market risk; keeping the home converts a wide market outcome into a narrow tax outcome plus a wide maintenance and rent outcome.</p>
+<p>Re-running the decision on all {ECO['meta']['blocks_drawn']:,} draws, selling into the index fund is the best of the four options in {sell_draws['draws']:,} draws ({sell_draws['share'] * 100:.1f}%), Treasuries in {tres_draws['draws']} ({tres_draws['share'] * 100:.1f}%), renting Property A in {rent_draws['draws']} ({rent_draws['share'] * 100:.1f}%) and moving in in {live_draws['draws']}. The margin of the sale over the better of rent and moving in has a median of {usd(r10(ECO['bootstrap']['gap']['p50']))}, a 5th percentile of {usd(r10(ECO['bootstrap']['gap']['p05']))} and a 95th percentile of {usd(r10(ECO['bootstrap']['gap']['p95']))}; it is negative in {ECO['bootstrap']['gap']['neg_share'] * 100:.1f}% of draws. So the sale is the better bet, not a certainty, and the size of the bet is stated rather than hidden.</p></section>
+<section><h2>The decision on real ten-year stretches</h2>
+<p>The decision page holds every option open for ten years after an inheritance in {EDEC['year']}. This table runs the same ten-year comparison on each of the {EDEC['n']} complete ten-year stretches in the official record, one stretch per row, with that stretch's own house prices, inflation, yields and index returns. No averaging.</p>
+{tbl(f"Each of the {EDEC['n']} real ten-year stretches, inheritance in {EDEC['year']}, ten years later", ["Stretch", "Sell, index fund", "Sell, Treasuries", "Rent A", "Move in", "Best in that stretch", "Sale still the better of the two keep options"], win_rows)}
+<p>Across the {EDEC['n']} stretches the sale is the best option in {EDEC['counts']['sell_stock']}, Treasuries in {EDEC['counts']['sell_treasury']} and renting Property A in {EDEC['counts']['rent']}; moving in is never the best. Selling beats the better of rent and moving in in {EDEC['windows_sale_ahead']} of {EDEC['n']} stretches. Over the worse stretches the sale's advantage disappears and reverses: the gap between the sale and that better keep option runs from {usd(EDEC['gap_rent_min'])} to {usd(EDEC['gap_rent_max'])}. The rows where it is negative are the reason the suggestion register asks for a pre-committed switch rather than a rule of thumb.</p>
+<p>For reference, the same {EDEC['year']} inheritance on this edition's constant baseline: sell into the index fund {usd(ECONST['sell_stock'])}, Treasuries {usd(ECONST['sell_treasury'])}, rent {usd(ECONST['rent'])}, move in {usd(ECONST['live'])}. The constant-rate figure sits close to the middle of the forty real stretches: {EDEC['above_constant']} of them end above it and {EDEC['below_constant']} below, the lowest being the stretch replayed from {EDEC['worst_window']}.</p></section>
+<section><h2>Property A, year by year, from 2026 to 2076</h2>
+<p>Thirty-year stretches of the official record, applied in order from 2026. The assessment cap is applied year by year, so the tax column follows the lesser-of rule rather than a single index. This is what "growth is never consistent" looks like when it is actually used, rather than assumed.</p>
+{tbl("Thirty-year record replays from 2026", ["Stretch replayed", "Inflation a year", "Property A a year", "Property B a year", "Falling years for A", "Property A value at the start of 2056", "A value in 2026 dollars", "A tax bill", "B tax bill", "A value against the constant 4% path"], replay_rows)}</section>
+<section><h2>When the tax follows the market down</h2>
+<p>State law assesses real property at the <strong>lesser</strong> of the factored base year value and the full cash value on the lien date. The constant model uses only the first half of that sentence. Two facts follow, and they point in opposite directions:</p>
+<ul>
+<li><strong>Before a death</strong> the gap is enormous. Property A's taxable value is {usd(ECO['lesser_of']['today']['taxable'])} against a market value of {usd(ECO['lesser_of']['today']['market'])}. Market value would have to fall {abs(ECO['lesser_of']['today']['threshold']) * 100:.1f}% before the rule lowered the bill at all.</li>
+<li><strong>At the death the gap closes</strong>, because the taxable value is reset to market value. From that moment any fall in market value lowers the taxable value, so the rule binds on small falls, not only on crashes.</li>
+</ul>
+<p>Table: the 2003&ndash;2018 record replayed from 2026, so the 2006&ndash;2011 crash arrives in 2029&ndash;2034. The columns under "from today's roll" keep the pre-death taxable value; the columns under "from a reset at the death" start at market value. "{crash_once['binds_reset']}" of {len(crash_once['rows'])} years bind in the reset case and {crash_once['binds_today']} in the other.</p>
+{tbl("The 2003-2018 record replayed from 2026, two starting positions", ["Year", "Record year", "House prices", "Market value", "Taxable: today's roll", "Tax, capped only", "Taxable: reset at the death", "Tax, capped only, reset", "Rule binds: today", "Rule binds: reset"], bind_rows)}
+<p>Table: the same crash arriving four years later, so the base year value has had time to compound first.</p>
+{tbl("The 1999-2014 record replayed from 2026, two starting positions", ["Year", "Record year", "House prices", "Market value", "Taxable: today's roll", "Tax, capped only", "Taxable: reset at the death", "Tax, capped only, reset", "Rule binds: today", "Rule binds: reset"], bind2_rows)}
+<p>Total effect over the sixteen years: {usd(crash_once['saved_today'])} from today's roll position and {usd(crash_once['saved_reset'])} from a reset. It is small in dollars and it is what the constant model omits, which is why it is on the Flagged for Review page (FL-29). The direction matters more than the size: leaving the rule out makes keeping the home look slightly <em>worse</em> than it is, never better, so the sell-versus-keep gap printed on the decision page is, if anything, too wide against the home. In the deflation case below the same rule holds the 2076 bill at {usd(next(a['a_tax'] for a in ECO['adversarial'] if a['name'].startswith('Deflation')))} instead of the {usd(next(a['a_tax_if_cap_only'] for a in ECO['adversarial'] if a['name'].startswith('Deflation')))} a capped-only calculation would give.</p></section>
+<section><h2>What would have to be true for the answer to change</h2>
+<p>The adversarial cases below are the counter-case to the sell recommendation: one condition held for every year of the fifty-year horizon, not a spike. Each is a shape the official record actually produced somewhere, made permanent.</p>
+<p>In the first three cases "2026 dollars" means less than the nominal figure; in the deflation case it means more, because prices are falling. Both columns are arithmetic, not a forecast.</p>
+{tbl("Adversarial conditions held for the whole horizon, inheritance in 2045", ["Condition", "Inflation", "House prices", "Stocks", "A value 2076", "A value, 2026 dollars", "A tax bill 2076", "Sell, index fund", "Rent A", "Move in", "Best", "Sale ahead by"], adv_rows)}
+<p><strong>What the counter-case shows.</strong> Two of the four adversarial shapes reverse the recommendation and both reverse it towards renting Property A, not towards moving in: a repeating stagflation makes Treasuries the best of the two sale vehicles and ends with renting Property A ahead of both, and a permanent deflation with falling house prices makes renting the outright winner by a wide margin. Moving in is the best option in none of them. So the decision rule the evidence supports is narrower than "sell": <em>sell into a real-return asset unless inflation runs above the yield available, in which case keep a leveraged, capped-tax asset instead.</em> That is the condition the suggestions page asks to have decided in advance.</p></section>
+<section><h2>The amounts that do not rise with inflation</h2>
+<p>Inflation matters twice: it raises costs, and it erodes every amount fixed in dollars. The assessment cap and the federal exclusion are protected; the rest are not.</p>
+{tbl("Indexed and unindexed amounts", ["Amount", "2026 figure", "How it moves", "Why it matters here"], thr_rows)}</section>
+<section><h2>Reconciliation: this page and the decision page agree</h2>
+<p>The constant case in this module is computed with the same tax structure as the edition's own model. Any divergence would be a defect, so it is asserted at build time and printed here.</p>
+{tbl("Constant-rate case, this module against the published model, inheritance 2045", ["Option", "Published decision page", "This page's constant case", "Difference"], [([dict(OPTIONS_NAMES)[k], N(v["model"]), N(v["economy"]), N(v["diff"])], "C", S("irs_basis", "boe_prop19", asm=True)) for k, v in EI.items()])}
+<p>The largest difference is {usd(ECO['reconcile_worst'])}; the build fails if it exceeds $10.</p></section>
+<p class="legend">Source links point at the publisher's own series page; each value was read from that publisher's own export on {ECO['meta']['retrieved']}. Percentiles are of {ECO['meta']['blocks_drawn']:,} draws with a fixed seed, so the figures are reproducible. Nothing here is a forecast: it is the official record, resampled.</p>{PRIV}"""
+PAGES["economy.html"] = page("economy.html", "Year-by-year economy", "Year-by-year economy",
+                             "Growth and inflation are never that even",
+                             "The official annual record from 1977 to 2025, replayed and resampled over fifty years, so the plan rests on real sequences rather than one constant rate.", body)
+
 PAGES["taxes.html"] = page("taxes.html", "Tax, thresholds, law watch", "Tax and law", "Rules, thresholds and what may change",
                            "Federal, state and local. Each rule was read on the official publisher's site.", body)
 
@@ -1395,6 +1540,7 @@ fl = [
  ("FL-21", "County form names and the trust's tax filing", "The steps cite the statutes. Form numbers and the trust's income tax return were not verified.", "The assessor's forms page; a tax preparer", "rtc480"),
  ("FL-22", "Building share of value, bedrooms, condition", "Drive depreciation and maintenance. Assumed.", "The assessor's land and improvement split; an inspection", "irs_p527"),
  ("FL-23", "Sources read as excerpts", "Twelve sources were read as excerpts served from the official domain, not as whole documents. They are marked in the source library.", "Open each link", "irs_i706"),
+ ("FL-32", "The lesser-of rule in a crash, and decline-in-value relief", "The model applies the 2% assessment cap and does not apply RTC 51(a)(2), which assesses at the lesser of the factored base year value and full cash value. Before a death the rule needs a fall of about 82% to bite; after a death, when the taxable value is reset to market value, any fall counts. The economy page measures it: three of sixteen years in a replayed crash, about $3,500 in total in that case. The county's own decline-in-value review, which a owner may request, was not read.", "The county assessor's decline-in-value page, and a decision on modelling it", "rtc51"),
  ("FL-31", "California's 1% additional tax above $1,000,000", "The one-time-gain rate is 20% federal, 3.8% net investment income tax and 12.3% California. RTC 17043 adds 1% on taxable income above $1,000,000, which the 12.3% bracket rate does not include. Applied to the gain alone it lowers the 2045 stock result by $36,170 and the ranking holds (C-14); other income would make it larger.", "Adopt the surcharge in the model, or keep it as the published sensitivity", "rtc17043"),
 ]
 rows = [([i, item, why, BLANK, fix], "U", S(src)) for i, item, why, fix, src in fl]
@@ -1542,8 +1688,9 @@ Inheritance in 2045, house prices rising 4% a year, measured ten years later aft
 - Property tax and assessment: the full history, 2014 to 2026 for Property A and 2016 to 2025 for Property B, is published at $10 precision on the property pages, with the published state factor beside each year.
 - Black swans, part 1 (black-swans.html): the baseline's official anchors, fifty years of state inflation data, and the fixed amounts whose real value erodes.
 - Black swans, part 2 (stress.html): stock returns at 4.0%, inflation at 4.0% or a flat decade for house prices - selling still finishes first, and a lost decade only moves the proceeds to Treasuries. Verified 1929, 1965-82, 2000-02, 2007-09 and 2020 episodes re-run against the 2045 inheritance: the sale decision holds in 5 of 7 analogues, and only the reinvestment vehicle changes with the regime.
-- New on 12 November 2026: a page of {len(q_money + q_a + q_b + q_d)} questions with their status and the step that closes each one (questions.html), and a page of four paths and {len(sug)} suggestions with effort and privacy cost (suggestions.html).
-- Sources: {len(SRC)} official documents, four added on 12 November 2026 (26 U.S.C. 102; the IRS RMD FAQ; two Department of Insurance pages on insurance availability). The figures behind the decision were re-opened on the publishers' sites that day; none changed.
+- New on 12 November 2026: a year-by-year economy section (economy.html) that replaces the single constant rate with {ECO['meta']['n_years']} years of official annual data replayed and resampled. Across {ECO['meta']['blocks_drawn']:,} fifty-year paths drawn from the record, selling into the index fund is the best option in {next(w for w in ECO['bootstrap']['wins'] if w['case'] == 'sell_stock')['share'] * 100:.1f}% of paths and the median outcome is {usd(r10(EBOOT['a_value']['p50']))} for Property A's 2076 value; across the {ECO['decision']['n']} real ten-year stretches the sale wins {ECO['decision']['counts']['sell_stock']}. Two adversarial shapes held for fifty years reverse the answer towards keeping the home, which is why S-21 asks for the switch to be fixed in writing first.
+- A page of {len(q_money + q_a + q_b + q_d)} questions with their status and the step that closes each one (questions.html), and a page of four paths and {len(sug)} suggestions with effort and privacy cost (suggestions.html).
+- Sources: {len(SRC)} official documents. This session appended six, each opened on the publisher's own domain on 12 November 2026: the annual consumer price index, the annual house price index for each property's area, the 10-year Treasury annual average, the NASDAQ Composite annual change, and RTC 51 (the lesser-of rule). The figures behind the decision were re-opened on the publishers' sites that day; none changed.
 
 Site: index.html. Open questions: questions.html. Options: suggestions.html. Open items: review.html. How it was checked: audit.html. Sources: sources.html.
 """, encoding="utf-8")
