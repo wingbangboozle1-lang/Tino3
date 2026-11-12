@@ -1,0 +1,26 @@
+name: CI diagnose
+on: workflow_dispatch
+permissions:
+  contents: read
+  checks: write
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: arena/cd0dd59b-tino3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify, and publish the failure text as an annotation
+        run: |
+          set +e
+          out=$(python scripts/verify.py 2>&1)
+          code=$?
+          echo "$out"
+          if [ $code -ne 0 ]; then
+            printf '%s\n' "$out" | head -25 | sed 's/^/LINE: /'
+            safe=$(printf '%s' "$out" | head -c 3000 | tr '\n' ' ' | sed 's/%/%25/g; s/\r//g')
+            echo "::error title=verify-output::$safe"
+          fi
