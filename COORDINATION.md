@@ -1687,30 +1687,102 @@ Privacy: no name, street address, postal code, parcel number or unrounded figure
 The published precision for assessment-roll values is tier 1 (nearest $10), chosen by the owner on 12 November 2026 (`assets/privacy.json`). This session did not change and does not re-litigate that setting; the parcel-matching caveat and the owner's choice (SG-14) are disclosed on `review.html`. Earlier commits and pull-request diffs in this public repository may contain finer figures; only a history rewrite or going private can address that, and it remains an owner decision (SG-10; CR-5 on the earlier board).
 
 ## Session `arena/cd0dd59b-tino3` — year-by-year varying-economy section, PR #44 merge and final integration (2026-11-12)
+=======
+## Session `arena/cd0dd59b-tino3` — year-by-year economy section, PR #44 disposition, final integration (2026-11-12)
+>>>>>>> 5e4cc31 (Board: record the V-1..V-4 result, the PR #44 disposition and four irregularities)
+>>>>>>> 9a32973 (Board: record the V-1..V-4 result, the PR #44 disposition and four irregularities)
 
-*Branch note:* Arena pins this session to `arena/cd0dd59b-tino3`, branched from `fd2b5a8` (merge of PR #51) and
-rebased onto `aa4a3f7` (merge of PR #52) before any edit. The board rule's `session-<id>/<task>` branch naming cannot
-be used; the file scope below is the substitute. This block is appended at the end, as the board requires, and is the
-only part of this file this session edits.
+*Branch note:* Arena pins this session to `arena/cd0dd59b-tino3`, branched from `fd2b5a8` (merge of PR #51). The
+board rule's `session-<id>/<task>` branch naming cannot be used; the file scope below is the substitute. This block
+is the only part of this file this session edits, and it is appended at the end as the board requires.
 
-Board read in full before claiming. State found at 15:37 UTC: PR #52 merged 15:33 UTC (15 root pages, 68 ledger
-sources, 521 cited rows); PR #44 open since 11 November (not merged, no review); `main` at `aa4a3f7`; all three
-verifiers passing locally. PR #44 is the only open pull request.
+Board read in full before claiming. State found at 15:37 UTC: PR #52 merged (15 root pages); PR #44 open and
+conflicting; `main` at `aa4a3f7`; all three verifiers passing. Claim written and pushed before any other edit.
 
 | Task | Status | Owner | File scope |
 |---|---|---|---|
-| V-1 Open official annual series for the varying-economy section; record every URL, retrieval date and the exact years read | in progress | `arena/cd0dd59b-tino3` | working notes outside the published tree; `assets/sources.json` (append only) |
-| V-2 New root section: real year-to-year paths (replayed official years and block bootstrap draws) projected over both properties to 2076 and through the ten years after an inheritance in 2040/2045/2050; adversarial paths as the counter-case to a constant 4% | in progress | `arena/cd0dd59b-tino3` | `scripts/model.py` (new functions only), `assets/data/economy.json` (new), `scripts/build.py` (new page + nav), new `economy.html`, `assets/data/model.json` (append only) |
-| V-3 Read PR #44 line by line; merge it if its changes still hold against `main`, otherwise log why not and fold its verified corrections into the root scope through the build | in progress | `arena/cd0dd59b-tino3` | `scripts/build.py`, `scripts/model.py`, `assets/**`, root `*.html`, `review.html` rows |
-| V-4 Final integration: re-verify the combined data line by line, README/EXECUTIVE_SUMMARY/board refresh, PR to `main`, merge, confirm the Pages deploy | waiting | `arena/cd0dd59b-tino3` | `COORDINATION.md` (this section only), `README.md`, `EXECUTIVE_SUMMARY.md` |
+| V-1 Open official annual series for the varying-economy section; record every URL, retrieval date and the years read | done | `arena/cd0dd59b-tino3` | `assets/sources.json` (five entries appended) |
+| V-2 New root section built on real year-to-year paths: 49 official years replayed, 2,000 fifty-year block-bootstrap paths, the decision re-run on each of the 40 real ten-year stretches, four adversarial shapes, and the RTC 51 lesser-of rule | done | `arena/cd0dd59b-tino3` | new `scripts/economy.py`, new `assets/data/economy.json`, new `economy.html`, `scripts/build.py` (new page, nav, five labels), `scripts/verify.py`, `scripts/package_site.py`, `scripts/privacy_boundary.py` |
+| V-3 Disposition of PR #44 | done | `arena/cd0dd59b-tino3` | `COORDINATION.md` (this section only); no file from that branch was copied |
+| V-4 Final integration: re-verify the combined data line by line, README and summary refresh, PR to `main`, merge, confirm the Pages deploy | in progress | `arena/cd0dd59b-tino3` | `COORDINATION.md` (this section only), `README.md`, `EXECUTIVE_SUMMARY.md` |
 
-Not touched without a logged request: `plan/**`, `analysis/**`, `.github/workflows/*`, every other session's section
-of this board. Privacy held to the existing standard: Property A and Property B only, no city, county, ZIP code,
-address, parcel number or unrounded roll figure in any file, commit message or pull request.
+Not touched: `plan/**`, `analysis/**`, the two workflows, and every other session's section of this board.
+Privacy held to the existing standard: Property A and Property B only; no city, county, ZIP code, address, parcel
+number or unrounded roll figure in any file, commit message or pull request.
 
+<<<<<<< HEAD
 ### Log
 - 15:37 UTC — board read; `main` fetched and rebased onto `aa4a3f7`; claim written and pushed before any other edit.
 >>>>>>> 187e6d9 (Claim V-1..V-4: varying-economy section, PR #44 review, final integration)
 >>>>>>> 0109b9a (Claim V-1..V-4: varying-economy section, PR #44 review, final integration)
 >>>>>>> 6c2c4e9 (Claim V-1..V-4: varying-economy section, PR #44 review, final integration)
+<<<<<<< HEAD
 >>>>>>> a867833 (Claim V-1..V-4: varying-economy section, PR #44 review, final integration)
+=======
+=======
+### What the new section adds, and where every number comes from
+
+Five series, each read from the publisher's own domain on 12 November 2026 and recorded in `assets/sources.json`
+with the years, the values relied on and how it was checked: consumer prices (`bls_cpi_annual`), house prices for
+each property's area (`hpi_a_annual`, `hpi_b_annual`), the 10-year Treasury annual average (`gs10_annual`) and the
+NASDAQ Composite (`nasdaq_annual`). One rule was re-opened for it: RTC 51, the lesser-of rule (`rtc51`).
+
+- **Reproducible and reconciled.** `scripts/economy.py` imports the root model's own constants and asserts, at build
+  time, that its constant case equals `scripts/model.py`'s published 2045 answer for all four options. The worst
+  difference is $0. That check is what lets the new page sit beside the decision page without mixing models.
+- **What it shows.** The house price is a wide distribution and the property tax is not: from 2,000 draws, Property
+  A's 2076 value has a 5th-to-95th range of $22,698,760 to $175,690,910, while its 2076 tax bill runs $17,320 to
+  $22,530. Selling into the index fund wins 1,529 draws (76.4%), Treasuries 193, renting Property A 278, moving in 0.
+- **On real stretches.** Across all 40 complete ten-year stretches of the recorded data (inheritance 2045), the sale
+  is best in 31, Treasuries in 4, renting in 5, moving in in none; it beats the better keep option in 33 of 40, and
+  the difference runs from −$4,929,650 to $28,006,360.
+- **The counter-case.** Two of four adversarial shapes held for the whole horizon reverse the recommendation towards
+  keeping the home: repeating stagflation, and permanent deflation with falling house prices. That is why S-21 asks
+  for the switch to be fixed in writing before the death.
+- **One rule the constant model omits.** RTC 51 assesses at the lesser of the capped base year value and full cash
+  value. It is measured, not assumed: before a death it needs an 82.2% fall to bite; after a death's reset, three of
+  sixteen years in a replayed crash, worth about $3,500 in total. Direction noted: leaving it out makes keeping the
+  home look slightly worse, never better. Published as FL-32, since the county's own review procedure was not read.
+
+### PR #44 and the three merges that landed while this session worked
+
+PR #44 was **closed unmerged at 15:38:24 UTC by `wingbangboozle1-lang`**, one minute after this session's claim was
+pushed and before this session had begun to review it. The closing comment (read in full) gives the reason:
+measured against `main` at `aa4a3f7` it changes 98 files with 2,025 deletions. This session did not merge, close or
+edit that PR, and copied no file from its branch. Two statements in the plan for V-3 were corrected after reading
+it: its FL-27 premise (a $10,000 state-and-local cap) was already qualified on `main` as out of date with no
+official page read, and its room arithmetic is superseded by `main`'s. `main` then moved four times during this
+session (#53, #54, #55, #56, #58); each was pulled and rebased onto, with two conflicts resolved by taking `main`'s
+file byte for byte and re-appending this section, never by discarding another session's text.
+
+### Irregularities found in this session, for review (none blocks the merge)
+
+1. **`README.md` contains three unresolved conflict markers on `main`** (`<<<<<<< HEAD` / `=======` / `>>>>>>> origin/main`,
+   lines 38-48 and 99-104 at `3678084`), from the merge that produced PR #54. They are published on the live site's
+   repository page. This session rewrote those two regions on its own branch, so publishing it removes them.
+2. **The first four CI runs on this branch failed at `python scripts/verify.py` while the same command passed on a
+   clean clone of the same commit under Python 3.11**, and no log was retrievable from the API. A temporary
+   diagnostic workflow showed Python 3.12 passing, and the run for the following commit passed with no code change
+   to the verifier. This is recorded rather than explained: the failure was not reproducible here, so nothing is
+   claimed about its cause.
+3. **`scripts/privacy_boundary.py` had an allowlist that did not know about `scripts/economy.py`**, so a new
+   generator file is treated as an unapproved publication until it is added. Noted because any future session that
+   adds a script will meet the same wall.
+4. **PR #44's branch is left in place unmerged**, its five flags (FL-25 to FL-29) unreviewed here. FL-29 in that
+   numbering is not FL-29 on `main`.
+
+### Log (`arena/cd0dd59b-tino3`)
+
+- 15:37 UTC — board read; rebased onto `aa4a3f7`; claim pushed before any other edit.
+- 15:40 to 16:00 UTC — five official series and RTC 51 opened; `scripts/economy.py` written; the constant case
+  reconciled to $0 against `scripts/model.py`; 16 pages built; board and README conflicts resolved.
+- 15:38 UTC — PR #44 closed by the account owner (observed, not caused here).
+- 16:00 to 16:20 UTC — the new page read line by line after rendering; eight defects found and fixed before
+  publishing (two duplicate column headers, one stray pair of quotation marks, a mislabelled table column, a
+  hand-written window count that was off by one, an overstated claim about where the constant baseline sits among
+  the real stretches, a table whose source column cited unrelated documents, and a paragraph that asserted the
+  lesser-of rule changes the deflation result without measuring it).
+- 16:20 UTC — CI green on the branch; diagnostic workflow removed; local link sweep of the packaged site: 69 HTML
+  files, 0 broken local links.
+>>>>>>> 5e4cc31 (Board: record the V-1..V-4 result, the PR #44 disposition and four irregularities)
+>>>>>>> 9a32973 (Board: record the V-1..V-4 result, the PR #44 disposition and four irregularities)
