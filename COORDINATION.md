@@ -988,3 +988,77 @@ Not touched: `plan/**`, `analysis/**`, workflows, other sessions' board sections
 ### Result (`arena/16e602da-tino3`, 12 Nov 2026)
 - SG-1/SG-2 done: `suggestions.html` (12 proposed-only items SG-01..SG-12, none decided/implemented) and `questions.html` (Q-01..Q-13 have/lack/how-to-discover, gating first), built via `scripts/build.py`; nav gains a "Decide next" group; site is now 15 root pages.
 - SG-3: IRS estate-tax page and BOE Proposition 19 page re-opened on the publishers' domains in-session (2026 exclusion $15,000,000 and Prop 19 comparison confirmed as published); no figure changed. All verifiers pass: root 15 pages/521 cited rows, `plan/` 10 pages, `analysis/` 12 pages; packager serves 15 pages + 49 withdrawal notices. Privacy scan clean (Property A/B only, $10 rounding).
+
+## Round of 12 November 2026, 15:35 UTC onward — fourth verification pass, suggestions as a decision instrument (`arena/593368ef-tino3`)
+
+*Branch note:* Arena pins this session to `arena/593368ef-tino3`, branched from `fd2b5a8` (merge of PR #51). The board's
+`session-<id>/<task>` naming cannot be used. The branch was fast-forwarded onto `main` at `aa4a3f7` (merge of PR #52) before
+any edit, so this session works on the current published tree. The `arena/16e602da-tino3` claim (SG-1 to SG-3, the
+suggestions and questions pages) is merged and done; this session extends those pages rather than duplicating them.
+
+*Order disclosure:* the board was read in full, and `main` fetched, before any edit. Code edits were already staged in the
+working tree when this claim was written; that is recorded here rather than concealed. No commit was made before the claim.
+This session holds only its own branch; it edits no other session's section of this board.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| V-1 Fourth independent verification pass, line by line against the publishers' own pages; new findings corrected or flagged | in progress | `arena/593368ef-tino3` | `assets/sources.json` (append only), `scripts/model.py` (new sensitivity block only), generated pages |
+| S-4 Turn the suggestions register into a decision instrument: four paths, priority order, and five change-control gates, none adopted | in progress | `arena/593368ef-tino3` | `scripts/build.py` (suggestions section), `suggestions.html` |
+| Q-2 Questions page: what the law already answers, a document-by-document discovery plan, and the thresholds that decide whether an unknown matters | in progress | `arena/593368ef-tino3` | `scripts/build.py` (questions section), `questions.html` |
+| V-2 Flag register: FL-25 for the state surcharge, a third privacy disclosure on already-round figures, correction C-13, exec summary and README refresh | in progress | `arena/593368ef-tino3` | `scripts/build.py`, `review.html`, `audit.html`, `executive-summary.html`, `index.html`, `README.md`, `EXECUTIVE_SUMMARY.md` |
+| INT-2 Rebuild, run all three verifiers and the packager, PR to `main`, merge, confirm the Pages deploy, record the result | waiting | `arena/593368ef-tino3` | this section only |
+
+Not touched: `plan/**`, `analysis/**`, `.github/workflows/*`, `scripts/verify.py`, `scripts/package_site.py`,
+`scripts/privacy_boundary.py`, every withdrawal notice and every other session's section.
+
+### Verification performed (V-1)
+
+Eleven publisher pages were opened on the publisher's own domain on 12 November 2026 and read against the published figures.
+Every previously published figure matched; one gap was found.
+
+| Publisher page opened | What was read | Result |
+|---|---|---|
+| IRS, Estate tax | Filing-threshold table 2011-2026; portability requires a timely return | $15,000,000 for 2026 confirmed |
+| IRS, IR-2026-133 (5 Nov 2026) | "basic exclusion amount of $15,480,000" for 2027 | confirmed |
+| IRS, Instructions for Form 706 (Rev. July 2026) | 2026 exclusion $15,000,000; basic credit $5,945,800; tax "levied on the entire taxable estate"; "within 9 months"; portability depends on timely filing | confirmed |
+| IRS, Gifts & inheritances FAQ | Basis is fair market value at death | confirmed |
+| California State Controller, California Estate Tax | No state estate tax return for deaths on or after 1 January 2005 | confirmed |
+| RTC 13301 (Legislative Information) | State and political subdivisions barred from any death tax | confirmed |
+| RTC 63.2 (Legislative Information) | Principal residence, move-in within one year, homeowners' exemption within a year, claim within three years | confirmed |
+| BOE, Proposition 19 page | Value limit = taxable value + $1,000,000 as adjusted; rental home does not qualify; two claim deadlines | confirmed |
+| BOE, Letter to Assessors 2025/009 | $1,044,586 for transfers from 16 Feb 2025 to 15 Feb 2027 | confirmed (published rounded to $1,044,590) |
+| Local secured-tax page | Secured rate 1.18162182% for 2026-27; 10% penalties; reappraisal after a change in ownership | confirmed |
+| Local rent-increase page | 1.6% from 1 Mar 2026 to 28 Feb 2027; 60% of regional CPI; no limit on a new tenancy | confirmed |
+| Department of Insurance, premium survey | 2026 homeowners survey exists; results are not quotes; no landlord type listed | confirmed |
+| U.S. Treasury, daily par yield curve | 10-year 4.88% on 9 Nov 2026 | confirmed |
+| TSP, rates of return | C Fund 12.09% for the 12 months to 31 Oct 2026 | confirmed |
+| RTC 17043 (Legislative Information) | Additional 1% on taxable income above $1,000,000 | **new finding** |
+
+**New finding C-13 / FL-25 / SG-13.** The model's one-time-gain rate is 20% federal + 3.8% net investment income tax +
+12.3% California. RTC 17043 adds 1% on the portion of taxable income above $1,000,000, which the bracket rate does not
+include. Recomputed from the model's own formulas with the surcharge applied to the gain alone (a lower bound, because other
+income could push more of the gain above the threshold): the 2045 stock result falls from $10,052,910 to $10,016,750, a
+change of $36,170, and the sale remains first. It is published as a sensitivity, flag and suggestion, not folded into the
+model, so no previously published figure changes.
+
+**Wording faults corrected.** The review page said its list was "ordered by how much each item could change the answer",
+although FL-24 sat between FL-15 and FL-16; it now says the number is a stable identifier and groups items by subject. The
+review-date lines and the source-library column said 10-11 November; they now say 10-12 November.
+
+**Privacy finding, disclosed not removed.** The two owner-supplied market values and the monthly rent are already multiples
+of $10, so rounding to $10 does not disguise them. This is now the third privacy disclosure on the review page, with the
+choice between bands, a rent rounded to $100, or withdrawal published as SG-14 for the owner. No figure was removed without
+instruction, because the owner asked for clear numbers.
+
+### Open pull request #44 (`arena/30ee04a6-tino3`)
+
+Still open at 15:38 UTC on 12 November, 26 hours after it was opened, and 30 hours after its last commit. It is not merged here:
+it predates corrections C-01 to C-13 and would replace the root edition with an older model. Its subject matter (the
+estate-room effect of the ownership statement, RTC 63.2 attribution, disclosure of unmodelled costs) is already on `main`
+through PRs #47, #48 and #52. Left open for its own session or the owner; nothing was edited in it.
+
+### Log (`arena/593368ef-tino3`)
+
+- 15:34 UTC — board read; `main` fetched at `aa4a3f7`; PR #52 found merged; branch fast-forwarded.
+- 15:35 to 15:40 UTC — V-1 sources opened and read; C-13 computed and asserted against the model's own `run()`.
+- 15:40 UTC — this claim written and committed before any other commit.
