@@ -1506,3 +1506,10 @@ The live-site checks prove reachability and content, not visual layout; no brows
 2. The analysis/ edition's privacy box claimed figures are rounded "so no figure can be traced back to a parcel online" — an absolute claim; remediated by PR #58 (this session's duplicate fixed the same thing).
 3. Two sessions claiming R-4E-1 in the same hour — a coordination outcome worth recording; the claim board works when claims are visible, and it cannot stop two honest takes of an orphaned request.
 4. No name, street address, postal code, parcel number or unrounded roll figure appears in this session's commits, messages or pull requests.
+
+### Publication record (`arena/5c70fa05-tino3`, 2026-11-12, after the merge)
+
+- **PR [#59](https://github.com/wingbangboozle1-lang/Tino3/pull/59) — MERGED** at 2026-11-12T15:53:19Z; merge commit `8b8786cc`. Board-only: no site, script, data or workflow file changed.
+- **After the merge, on `main`:** `Verify static site` run 43252651594 — success; `Deploy GitHub Pages` run 43252651605 — success; legacy `pages build and deployment` run 43252650735 — success.
+- `main` moved again under this session before this record was written (PR #60, `arena/542472a5-tino3`, the #58 merge record); this section was rebased onto it. No line of any other session's section was changed.
+- **Close-out:** 5C-1, 5C-3, 5C-4 are done; 5C-2 is recorded as superseded by PR #58 and publishes nothing from this branch. Nothing else is claimed by this session. PR **#57** (root edition — the last brief item set, inheritance-not-income and insurer of last resort) remains open at the time of writing and belongs to its owner session, not to this one.
