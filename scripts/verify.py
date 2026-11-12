@@ -20,10 +20,10 @@ from pathlib import Path
 from urllib.parse import urlparse, unquote
 
 ROOT = Path(__file__).resolve().parents[1]
-PAGES = ["index.html", "executive-summary.html", "property-a.html", "property-b.html", "taxes.html",
-         "projections.html", "decision.html", "stress.html", "black-swans.html", "inheritance.html",
-         "review.html", "audit.html", "sources.html", "suggestions.html", "questions.html"]
-ASSETS = ["assets/style.css", "assets/sources.json", "assets/data/model.json",
+PAGES = ["index.html", "executive-summary.html", "questions.html", "suggestions.html", "property-a.html",
+         "property-b.html", "taxes.html", "projections.html", "decision.html", "stress.html",
+         "black-swans.html", "inheritance.html", "review.html", "audit.html", "sources.html"]
+ASSETS = ["assets/style.css", "assets/sources.json", "assets/privacy.json", "assets/data/model.json",
           "assets/data/property_a.csv", "assets/data/property_b.csv", "assets/data/decision.csv"]
 
 ALLOWED_HOSTS = {
@@ -74,6 +74,7 @@ class Page(HTMLParser):
         self.title = 0
         self.current = 0
         self.basis = "fact"
+        self.choice_rows = 0
         self.external = 0
         self.internal = 0
         self.errors = []
@@ -122,19 +123,26 @@ class Page(HTMLParser):
             if not self.header:
                 if not self.row:
                     self.errors.append("uncited table row")
+                elif self.basis == "choice":
+                    # A decision row is a choice, not a claim about the world. It must still link
+                    # somewhere the reader can check the reasoning, which may be an internal page.
+                    self.choice_rows += 1
                 else:
                     has_external = any(urlparse(h).scheme for h in self.row)
-                    has_internal = any(not urlparse(h).scheme for h in self.row)
                     if has_external:
                         self.fact_rows += 1
                     else:
-                        # Every row must link to an official publisher. An internal link alone is not enough.
+                        # Every factual row must link to an official publisher.
                         self.errors.append("table row without a link to an official publisher")
                 self.rows += 1
             self.row = None
 
 
+total_choice = 0
+
+
 def main() -> int:
+    global total_choice
     failures = []
 
     # 1. reproducible build
@@ -164,6 +172,7 @@ def main() -> int:
             failures.append(f"{name}: aria-current count {pg.current}")
         total_rows += pg.rows
         total_fact += pg.fact_rows
+        total_choice += pg.choice_rows
         total_scenario += pg.scenario_rows
 
         # 5. privacy
@@ -209,7 +218,8 @@ def main() -> int:
         return 1
 
     print(f"PASS: {len(PAGES)} reproducible pages; {total_rows} table rows "
-          f"(all {total_fact} link to an official publisher); {len(ledger)} ledger sources; "
+          f"({total_fact} factual rows, all linking to an official publisher; "
+          f"{total_choice} decision rows, all linking to their reasoning); {len(ledger)} ledger sources; "
           f"local links, official hosts, privacy scan and $10 rounding all clean.")
     print("Scope: structural and privacy checks only. They do not prove legal completeness, "
           "and they cannot verify an insurance quote, an appraisal or a future statute.")
