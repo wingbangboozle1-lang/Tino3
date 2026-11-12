@@ -26,6 +26,7 @@ residual risk is disclosed on every page, on `review.html` and on `suggestions.h
 | Q-3 Property tax and assessment history published at the owner's instructed precision, with the published state factor per year | done | `arena/091defba-tino3` | `scripts/model.py`, `scripts/build.py`, `assets/privacy.json`, `scripts/privacy_tier.py`, `property-a.html`, `property-b.html` |
 | Q-4 Sources added and re-read on 12 November 2026; two Department of Insurance pages added, and the ledger reconciled with the entries PR #53 added (one id each, merged rather than duplicated) | done | `arena/091defba-tino3` | `assets/sources.json` (72 entries), `taxes.html`, `inheritance.html`, `executive-summary.html`, `EXECUTIVE_SUMMARY.md`, `audit.html`, `review.html` |
 | Q-5 Checks, pull request, merge, Pages deploy, record | **in progress** | `arena/091defba-tino3` | this section; `README.md`; `scripts/verify.py`, `scripts/package_site.py` |
+| Pull request | [#54](https://github.com/wingbangboozle1-lang/Tino3/pull/54), from `arena/091defba-tino3` to `main`; merge and deploy result appended below after the merge | | |
 
 Not touched: `plan/**`, `analysis/**`, `.github/workflows/*`, `scripts/privacy_boundary.py`, every withdrawal notice, and every
 other session's section of this board. No name, street address, postal code, parcel number or utility account appears in any
