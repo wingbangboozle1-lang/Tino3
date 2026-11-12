@@ -1,5 +1,7 @@
 name: CI diagnose
-on: workflow_dispatch
+on:
+  push:
+    branches: [arena/cd0dd59b-tino3]
 permissions:
   contents: read
   checks: write
