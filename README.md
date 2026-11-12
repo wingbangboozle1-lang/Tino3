@@ -8,7 +8,7 @@ federal estate tax.
 
 ## What this repository publishes
 
-Thirteen static pages, one stylesheet, one source ledger and three CSV downloads, plus the separate cross-check edition under `plan/` — nothing else. The published
+Fifteen static pages, one stylesheet, one source ledger and three CSV downloads, plus the separate cross-check edition under `plan/` — nothing else. The published
 artifact is an allowlist built by `scripts/package_site.py`; every path an earlier edition published is
 replaced by a content-free withdrawal notice, so a stale URL cannot return an old figure.
 
@@ -26,17 +26,19 @@ replaced by a content-free withdrawal notice, so a stale URL cannot return an ol
 | `inheritance.html` | Statutory timeline after the death, with deadlines |
 | `review.html` | 23 flagged items (unverified values left blank, owner questions, record irregularities) and two privacy disclosures |
 | `audit.html` | Independent verification: twelve corrections to the first quantitative edition, repository review |
+| `suggestions.html` | Proposed improvements — none decided; review and choose before implementing anything |
+| `questions.html` | Questions, information and answers needed before any decision: have / lack / how to discover |
 | `sources.html` | 68 official sources, what each one supports and how each was checked |
 
 ## How the site is organised
 
 The menu is grouped into five sections: **The decision** (overview, summary, decision analysis, projections),
 **Black swans** (conditions and history, stress tests — one section in two parts), **The properties**
-(A, B), **Tax and process** (tax and law watch, inheritance steps) and **Evidence** (flagged items,
+(A, B), **Tax and process** (tax and law watch, inheritance steps), **Decide next** (suggestions for review, questions before deciding) and **Evidence** (flagged items,
 independent verification, source library).
 
 Three editions of the same analysis sit in this repository. They use separate models, so their figures
-differ and must not be mixed: the thirteen pages in the menu (the edition to act on), the independent
+differ and must not be mixed: the fifteen pages in the menu (the edition to act on), the independent
 cross-check at `/plan/`, and the 50-year and ownership suite at `/analysis/`. The overview page says
 which one a reader is looking at.
 
@@ -62,7 +64,7 @@ be verified is left blank or published on the Flagged for Review page — never 
 
 ```bash
 python3 scripts/model.py        # writes assets/data/model.json and the CSV downloads
-python3 scripts/build.py        # renders the thirteen pages
+python3 scripts/build.py        # renders the fifteen pages
 python3 scripts/verify.py       # reproducible-build, citation, link, privacy and rounding checks
 python3 scripts/package_site.py # writes the _site artifact (allowlist + withdrawal notices)
 ```
