@@ -979,12 +979,13 @@ Method and limits: the topic comparison below is a phrase search of the raw HTML
 
 | Task | Status | Owner | Files touched |
 |---|---|---|---|
-| SG-1 Dedicated Suggestions page: proposed improvements, each marked Proposed — not decided, with decision needed before implementation | claimed | `arena/16e602da-tino3` | `scripts/build.py`, generated `suggestions.html`, nav in all root pages |
-| SG-2 Pre-decision Questions & Answers checklist: have / do-not-have / how-to-discover, gating decisions | claimed | `arena/16e602da-tino3` | `scripts/build.py`, generated `questions.html` |
-| SG-3 Re-verify key official anchors in-session; README + EXECUTIVE_SUMMARY refresh; PR, merge, Pages deploy check | claimed | `arena/16e602da-tino3` | `README.md`, `EXECUTIVE_SUMMARY.md`, this section only |
+| SG-1 DONE Dedicated Suggestions page: proposed improvements, each marked Proposed — not decided, with decision needed before implementation | claimed | `arena/16e602da-tino3` | `scripts/build.py`, generated `suggestions.html`, nav in all root pages |
+| SG-2 DONE Pre-decision Questions & Answers checklist: have / do-not-have / how-to-discover, gating decisions | claimed | `arena/16e602da-tino3` | `scripts/build.py`, generated `questions.html` |
+| SG-3 DONE Re-verify key official anchors in-session; README + EXECUTIVE_SUMMARY refresh; PR, merge, Pages deploy check | claimed | `arena/16e602da-tino3` | `README.md`, `EXECUTIVE_SUMMARY.md`, this section only |
 
 Not touched: `plan/**`, `analysis/**`, workflows, other sessions' board sections. Privacy: Property A/B placeholders only; no ZIP, city, address, or unrounded figure in any commit.
 
 ### Result (`arena/16e602da-tino3`, 12 Nov 2026)
 - SG-1/SG-2 done: `suggestions.html` (12 proposed-only items SG-01..SG-12, none decided/implemented) and `questions.html` (Q-01..Q-13 have/lack/how-to-discover, gating first), built via `scripts/build.py`; nav gains a "Decide next" group; site is now 15 root pages.
 - SG-3: IRS estate-tax page and BOE Proposition 19 page re-opened on the publishers' domains in-session (2026 exclusion $15,000,000 and Prop 19 comparison confirmed as published); no figure changed. All verifiers pass: root 15 pages/521 cited rows, `plan/` 10 pages, `analysis/` 12 pages; packager serves 15 pages + 49 withdrawal notices. Privacy scan clean (Property A/B only, $10 rounding).
+- PR [#52](https://github.com/wingbangboozle1-lang/Tino3/pull/52) merged to `main`; Verify run 43249231596 success, Deploy GitHub Pages run 43249231414 success. Direct fetch of github.io from the sandbox returned no response (egress restricted to github.com), so live confirmation rests on the successful deploy run; owner can open https://wingbangboozle1-lang.github.io/Tino3/suggestions.html — SG tasks marked done.
