@@ -88,7 +88,7 @@ was checked.
 
 ## Data
 
-`assets/sources.json` — source ledger (80 entries, each with the words relied on and how it was checked).
+`assets/sources.json` — source ledger (81 entries, each with the words relied on and how it was checked).
 `assets/privacy.json` — the published precision for assessment-roll values and tax bills.
 `assets/data/model.json` — every figure on the site.
 `assets/data/property_a.csv`, `property_b.csv`, `decision.csv` — the same numbers for offline work.

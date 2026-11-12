@@ -1686,11 +1686,7 @@ Privacy: no name, street address, postal code, parcel number or unrounded figure
 
 The published precision for assessment-roll values is tier 1 (nearest $10), chosen by the owner on 12 November 2026 (`assets/privacy.json`). This session did not change and does not re-litigate that setting; the parcel-matching caveat and the owner's choice (SG-14) are disclosed on `review.html`. Earlier commits and pull-request diffs in this public repository may contain finer figures; only a history rewrite or going private can address that, and it remains an owner decision (SG-10; CR-5 on the earlier board).
 
-## Session `arena/cd0dd59b-tino3` — year-by-year varying-economy section, PR #44 merge and final integration (2026-11-12)
-=======
 ## Session `arena/cd0dd59b-tino3` — year-by-year economy section, PR #44 disposition, final integration (2026-11-12)
->>>>>>> 5e4cc31 (Board: record the V-1..V-4 result, the PR #44 disposition and four irregularities)
->>>>>>> 9a32973 (Board: record the V-1..V-4 result, the PR #44 disposition and four irregularities)
 
 *Branch note:* Arena pins this session to `arena/cd0dd59b-tino3`, branched from `fd2b5a8` (merge of PR #51). The
 board rule's `session-<id>/<task>` branch naming cannot be used; the file scope below is the substitute. This block
@@ -1710,16 +1706,8 @@ Not touched: `plan/**`, `analysis/**`, the two workflows, and every other sessio
 Privacy held to the existing standard: Property A and Property B only; no city, county, ZIP code, address, parcel
 number or unrounded roll figure in any file, commit message or pull request.
 
-<<<<<<< HEAD
 ### Log
 - 15:37 UTC — board read; `main` fetched and rebased onto `aa4a3f7`; claim written and pushed before any other edit.
->>>>>>> 187e6d9 (Claim V-1..V-4: varying-economy section, PR #44 review, final integration)
->>>>>>> 0109b9a (Claim V-1..V-4: varying-economy section, PR #44 review, final integration)
->>>>>>> 6c2c4e9 (Claim V-1..V-4: varying-economy section, PR #44 review, final integration)
-<<<<<<< HEAD
->>>>>>> a867833 (Claim V-1..V-4: varying-economy section, PR #44 review, final integration)
-=======
-=======
 ### What the new section adds, and where every number comes from
 
 Five series, each read from the publisher's own domain on 12 November 2026 and recorded in `assets/sources.json`
@@ -1755,6 +1743,15 @@ official page read, and its room arithmetic is superseded by `main`'s. `main` th
 session (#53, #54, #55, #56, #58); each was pulled and rebased onto, with two conflicts resolved by taking `main`'s
 file byte for byte and re-appending this section, never by discarding another session's text.
 
+### Verification of this branch as merged into `main`
+
+`scripts/verify.py` **PASS** — 16 reproducible pages, **771 table rows** (741 factual, each linked to the
+publisher of the document it cites; 30 decision rows, each linked to its reasoning), **81 ledger sources**
+(`main`'s 75 + the six this session added: the five annual series and RTC 51), local links, official hosts,
+privacy scan and $10 rounding all clean. `plan/tools/verify.py` and `analysis/tools/verify.py` **PASS** on the
+combined tree, and `scripts/package_site.py` packages 16 pages and 55 assets with 49 withdrawal notices.
+Against `main` the ledger only grows: nothing from `main` was dropped and no shared entry was changed.
+
 ### Irregularities found in this session, for review (none blocks the merge)
 
 1. **`README.md` contains three unresolved conflict markers on `main`** (`<<<<<<< HEAD` / `=======` / `>>>>>>> origin/main`,
@@ -1782,7 +1779,8 @@ file byte for byte and re-appending this section, never by discarding another se
   hand-written window count that was off by one, an overstated claim about where the constant baseline sits among
   the real stretches, a table whose source column cited unrelated documents, and a paragraph that asserted the
   lesser-of rule changes the deflation result without measuring it).
-- 16:20 UTC — CI green on the branch; diagnostic workflow removed; local link sweep of the packaged site: 69 HTML
-  files, 0 broken local links.
->>>>>>> 5e4cc31 (Board: record the V-1..V-4 result, the PR #44 disposition and four irregularities)
->>>>>>> 9a32973 (Board: record the V-1..V-4 result, the PR #44 disposition and four irregularities)
+- 16:20 UTC — local link sweep of the packaged site: 69 HTML files, 0 broken local links.
+- 16:35 UTC — the four earlier CI failures were traced to this session itself: `.github/workflows/diag.yml`, added
+  to read the failure output, is a tracked path that `scripts/privacy_boundary.py` does not allow, so every run
+  that included it failed the boundary check before reaching any figure. Removed; the run after removal is green.
+  The same trap is recorded above as irregularity 3.
