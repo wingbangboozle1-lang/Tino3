@@ -139,7 +139,7 @@ def read_ledger() -> tuple[list[dict[str, str]], set[str]]:
     return sources, urls
 
 
-def audit_page(path: Path, ledger_urls: set[str]) -> tuple[list[str], PageAudit]:
+def audit_page(path: Path, ledger_urls: set[str], artifact_root: Path = SITE) -> tuple[list[str], PageAudit]:
     try:
         text = path.read_text(encoding="utf-8")
     except (OSError, UnicodeDecodeError) as exc:
@@ -173,7 +173,7 @@ def audit_page(path: Path, ledger_urls: set[str]) -> tuple[list[str], PageAudit]
             relative = unquote(parsed.path)
             target = (path.parent / relative).resolve() if relative else path.resolve()
             try:
-                target.relative_to(SITE.resolve())
+                target.relative_to(artifact_root.resolve())
             except ValueError:
                 errors.append(f"local URL escapes the artifact: {href}")
                 continue
@@ -226,6 +226,7 @@ def main() -> int:
         raise SystemExit(f"Generated files were stale; rebuild and review: {stale}")
 
     sources, ledger_urls = read_ledger()
+    run([sys.executable, "scripts/verify_legacy.py", "--config-only"], "legacy Pages source guard")
     run([sys.executable, "scripts/package_site.py"], "site packaging")
     try:
         verify_privacy_boundary()
