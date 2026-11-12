@@ -2,6 +2,26 @@
 
 Privacy rule: public pages use generic Property A / Property B placeholders. Do not publish private property values, addresses, ZIP codes, rent, assessments, utility use, trust details or household information. Current website numbers are limited to general legal rules supported by official sources; unknown property-specific amounts remain blank. Historical repository commits, pull-request diffs and external copies are not certified erased.
 
+
+## Session `arena/e63a407b-tino3` — privacy-safe public edition consolidation and official-source review · 2026-11-12
+
+*Branch note:* Arena pins this session to `arena/e63a407b-tino3`. The original claim was based on `fd2b5a8` and has been
+rebased onto `origin/main` at `02f1066` after PR #54 landed. The requested `session-<id>/<task>` naming cannot be used.
+
+| Task | Status | Owner | Scope |
+|---|---|---|---|
+| P1 Consolidate to one clearly labelled public edition; remove property-specific inputs/projections and other owner-derived details from Pages; preserve the A-inherited/B-already-owned distinction using placeholders; replace retired editions with content-free notices | in progress | `arena/e63a407b-tino3` | root pages, builder/packager/verifier, `assets/**`, `plan/**`, `analysis/**`, workflows, README and executive summary |
+| P2 Recheck official inheritance, federal/California tax, property reassessment, rental, utility/insurance and irregular-economic-condition sources; leave unconfirmed property-specific amounts blank and flagged | in progress | `arena/e63a407b-tino3` | source ledger and public guide |
+| P3 Reproducible checks, artifact/privacy scan, link review, PR/merge/Pages verification | waiting | `arena/e63a407b-tino3` | verifiers, packaging and coordination record |
+
+**Scope update after PR #54:** the latest owner instruction makes personal-information privacy the highest priority. This session will
+retain the prior session's work in repository history but replace owner-derived inputs, values and projections in the current public
+edition with blank fields and general decision guidance. Rounding is not treated as sufficient anonymization. The final artifact will
+not contain identifiable property values, assessments, rent, utility use, insurance estimates, trust particulars or individual
+projections. Property A remains the inherited asset; Property B remains an already-owned asset whose rental income and possible
+owner occupancy are handled separately. No claim is made that earlier commits, pull-request diffs, caches, forks or external copies
+have been erased.
+
 **Amendment, 12 November 2026.** The rule above was written by earlier sessions to protect the owner after a disclosure
 incident. On 12 November 2026 the owner instructed that the property tax and assessment history be published with every
 figure rounded to the nearest $10, so that the decision analysis carries the real numbers. That instruction is now in force
