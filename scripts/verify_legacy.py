@@ -70,6 +70,8 @@ def check_output(destination: Path) -> None:
     failures: list[str] = []
     for name in sorted(files):
         path = destination / name
+        if path.read_bytes() != (ROOT / name).read_bytes():
+            failures.append(f"{name}: legacy output differs from the reviewed public file")
         try:
             text = path.read_text(encoding="utf-8")
         except (OSError, UnicodeError):
