@@ -1,0 +1,394 @@
+{
+ "source_ids": [
+  "bls_cpi_series",
+  "fred_hpi_ca"
+ ],
+ "span": [
+  1976,
+  2025
+ ],
+ "years": 49,
+ "record": [
+  {
+   "year": 1977,
+   "cpi": 6.47,
+   "hpi": 25.28,
+   "real_hpi": 18.81
+  },
+  {
+   "year": 1978,
+   "cpi": 7.63,
+   "hpi": 19.21,
+   "real_hpi": 11.58
+  },
+  {
+   "year": 1979,
+   "cpi": 11.25,
+   "hpi": 17.24,
+   "real_hpi": 5.99
+  },
+  {
+   "year": 1980,
+   "cpi": 13.5,
+   "hpi": 15.05,
+   "real_hpi": 1.55
+  },
+  {
+   "year": 1981,
+   "cpi": 10.38,
+   "hpi": 9.44,
+   "real_hpi": -0.94
+  },
+  {
+   "year": 1982,
+   "cpi": 6.16,
+   "hpi": -5.54,
+   "real_hpi": -11.7
+  },
+  {
+   "year": 1983,
+   "cpi": 3.16,
+   "hpi": 8.62,
+   "real_hpi": 5.46
+  },
+  {
+   "year": 1984,
+   "cpi": 4.37,
+   "hpi": 3.16,
+   "real_hpi": -1.21
+  },
+  {
+   "year": 1985,
+   "cpi": 3.53,
+   "hpi": 5.47,
+   "real_hpi": 1.94
+  },
+  {
+   "year": 1986,
+   "cpi": 1.94,
+   "hpi": 6.93,
+   "real_hpi": 4.99
+  },
+  {
+   "year": 1987,
+   "cpi": 3.58,
+   "hpi": 10.48,
+   "real_hpi": 6.9
+  },
+  {
+   "year": 1988,
+   "cpi": 4.1,
+   "hpi": 15.7,
+   "real_hpi": 11.6
+  },
+  {
+   "year": 1989,
+   "cpi": 4.79,
+   "hpi": 21.01,
+   "real_hpi": 16.22
+  },
+  {
+   "year": 1990,
+   "cpi": 5.42,
+   "hpi": 8.25,
+   "real_hpi": 2.83
+  },
+  {
+   "year": 1991,
+   "cpi": 4.22,
+   "hpi": -0.31,
+   "real_hpi": -4.53
+  },
+  {
+   "year": 1992,
+   "cpi": 3.04,
+   "hpi": -1.23,
+   "real_hpi": -4.27
+  },
+  {
+   "year": 1993,
+   "cpi": 2.97,
+   "hpi": -3.77,
+   "real_hpi": -6.74
+  },
+  {
+   "year": 1994,
+   "cpi": 2.6,
+   "hpi": -4.88,
+   "real_hpi": -7.48
+  },
+  {
+   "year": 1995,
+   "cpi": 2.81,
+   "hpi": -1.85,
+   "real_hpi": -4.66
+  },
+  {
+   "year": 1996,
+   "cpi": 2.94,
+   "hpi": -0.25,
+   "real_hpi": -3.19
+  },
+  {
+   "year": 1997,
+   "cpi": 2.34,
+   "hpi": 2.65,
+   "real_hpi": 0.31
+  },
+  {
+   "year": 1998,
+   "cpi": 1.55,
+   "hpi": 8.44,
+   "real_hpi": 6.89
+  },
+  {
+   "year": 1999,
+   "cpi": 2.19,
+   "hpi": 7.99,
+   "real_hpi": 5.8
+  },
+  {
+   "year": 2000,
+   "cpi": 3.37,
+   "hpi": 12.54,
+   "real_hpi": 9.17
+  },
+  {
+   "year": 2001,
+   "cpi": 2.82,
+   "hpi": 12.76,
+   "real_hpi": 9.94
+  },
+  {
+   "year": 2002,
+   "cpi": 1.6,
+   "hpi": 11.16,
+   "real_hpi": 9.56
+  },
+  {
+   "year": 2003,
+   "cpi": 2.3,
+   "hpi": 12.48,
+   "real_hpi": 10.18
+  },
+  {
+   "year": 2004,
+   "cpi": 2.67,
+   "hpi": 22.74,
+   "real_hpi": 20.07
+  },
+  {
+   "year": 2005,
+   "cpi": 3.37,
+   "hpi": 23.53,
+   "real_hpi": 20.16
+  },
+  {
+   "year": 2006,
+   "cpi": 3.22,
+   "hpi": 10.24,
+   "real_hpi": 7.02
+  },
+  {
+   "year": 2007,
+   "cpi": 2.87,
+   "hpi": -5.42,
+   "real_hpi": -8.29
+  },
+  {
+   "year": 2008,
+   "cpi": 3.81,
+   "hpi": -19.98,
+   "real_hpi": -23.79
+  },
+  {
+   "year": 2009,
+   "cpi": -0.32,
+   "hpi": -13.46,
+   "real_hpi": -13.14
+  },
+  {
+   "year": 2010,
+   "cpi": 1.64,
+   "hpi": -3.01,
+   "real_hpi": -4.65
+  },
+  {
+   "year": 2011,
+   "cpi": 3.14,
+   "hpi": -5.22,
+   "real_hpi": -8.36
+  },
+  {
+   "year": 2012,
+   "cpi": 2.07,
+   "hpi": 0.27,
+   "real_hpi": -1.8
+  },
+  {
+   "year": 2013,
+   "cpi": 1.47,
+   "hpi": 12.22,
+   "real_hpi": 10.75
+  },
+  {
+   "year": 2014,
+   "cpi": 1.62,
+   "hpi": 11.92,
+   "real_hpi": 10.3
+  },
+  {
+   "year": 2015,
+   "cpi": 0.12,
+   "hpi": 7.1,
+   "real_hpi": 6.98
+  },
+  {
+   "year": 2016,
+   "cpi": 1.27,
+   "hpi": 7.07,
+   "real_hpi": 5.8
+  },
+  {
+   "year": 2017,
+   "cpi": 2.13,
+   "hpi": 6.54,
+   "real_hpi": 4.41
+  },
+  {
+   "year": 2018,
+   "cpi": 2.44,
+   "hpi": 6.49,
+   "real_hpi": 4.05
+  },
+  {
+   "year": 2019,
+   "cpi": 1.81,
+   "hpi": 3.24,
+   "real_hpi": 1.43
+  },
+  {
+   "year": 2020,
+   "cpi": 1.25,
+   "hpi": 4.25,
+   "real_hpi": 3.0
+  },
+  {
+   "year": 2021,
+   "cpi": 4.68,
+   "hpi": 14.07,
+   "real_hpi": 9.39
+  },
+  {
+   "year": 2022,
+   "cpi": 7.99,
+   "hpi": 15.18,
+   "real_hpi": 7.19
+  },
+  {
+   "year": 2023,
+   "cpi": 4.13,
+   "hpi": 0.98,
+   "real_hpi": -3.15
+  },
+  {
+   "year": 2024,
+   "cpi": 2.95,
+   "hpi": 4.6,
+   "real_hpi": 1.65
+  },
+  {
+   "year": 2025,
+   "cpi": 2.63,
+   "hpi": 1.91,
+   "real_hpi": -0.72
+  }
+ ],
+ "decades": [
+  {
+   "start": 1977,
+   "years": 10,
+   "cpi_mean": 6.84,
+   "hpi_mean": 10.49,
+   "cpi_min": 1.94,
+   "cpi_max": 13.5,
+   "hpi_min": -5.54,
+   "hpi_max": 25.28
+  },
+  {
+   "start": 1987,
+   "years": 10,
+   "cpi_mean": 3.65,
+   "hpi_mean": 4.31,
+   "cpi_min": 2.6,
+   "cpi_max": 5.42,
+   "hpi_min": -4.88,
+   "hpi_max": 21.01
+  },
+  {
+   "start": 1997,
+   "years": 10,
+   "cpi_mean": 2.54,
+   "hpi_mean": 12.45,
+   "cpi_min": 1.55,
+   "cpi_max": 3.37,
+   "hpi_min": 2.65,
+   "hpi_max": 23.53
+  },
+  {
+   "start": 2007,
+   "years": 10,
+   "cpi_mean": 1.77,
+   "hpi_mean": -0.85,
+   "cpi_min": -0.32,
+   "cpi_max": 3.81,
+   "hpi_min": -19.98,
+   "hpi_max": 12.22
+  },
+  {
+   "start": 2017,
+   "years": 9,
+   "cpi_mean": 3.33,
+   "hpi_mean": 6.36,
+   "cpi_min": 1.25,
+   "cpi_max": 7.99,
+   "hpi_min": 0.98,
+   "hpi_max": 15.18
+  }
+ ],
+ "summary": {
+  "cpi_mean": 3.63,
+  "cpi_min": -0.32,
+  "cpi_min_year": 2009,
+  "cpi_max": 13.5,
+  "cpi_max_year": 1980,
+  "hpi_mean": 6.56,
+  "hpi_min": -19.98,
+  "hpi_min_year": 2008,
+  "hpi_max": 25.28,
+  "hpi_max_year": 1977,
+  "real_hpi_mean": 2.92,
+  "years_cpi_above_4": 14,
+  "years_cpi_below_2": 11,
+  "years_hpi_falling": 12,
+  "worst_stretch": {
+   "start": 2007,
+   "end": 2016,
+   "real_pct": -27.0,
+   "nominal_pct": -13.1
+  }
+ },
+ "paths": {
+  "draws": 2000,
+  "start_value": 3100000,
+  "years": 50,
+  "blocks": 40,
+  "p05": 8118410,
+  "p25": 12948960,
+  "p50": 17808220,
+  "p75": 25046330,
+  "p95": 39045920,
+  "worst": 3188630,
+  "best": 94997850
+ }
+}

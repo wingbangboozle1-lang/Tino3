@@ -88,9 +88,9 @@ V = {
     "fed_excl_2027": 15_480_000,      # irs_2027
     "prop19_amount": 1_044_586,       # boe_lta25009 (shown rounded to $10)
     "prop13_cap": 0.02,               # boe_lta26002
-    "rate_b_2026": 0.0118162182,      # cityb_rate   (fiscal year 2026-27)
-    "rate_b_2025": 0.0118268325,      # cityb_res447 (fiscal year 2025-26)
-    "rate_a_low": 0.011258, "rate_a_high": 0.012409,   # cnty_a_rates (range across tax rate areas)
+    "rate_b_2026": 0.0118162182,      # SCENARIO: local secured rate not verified; no jurisdiction-identifying document is cited
+    "rate_b_2025": 0.0118268325,      # SCENARIO: same; kept so the fixed-charge split reproduces
+    "rate_a_low": 0.011258, "rate_a_high": 0.012409,   # SCENARIO: range typical of county rate books; not read
     "county_transfer_tax": 0.0011,    # rtc11911
     "treasury_10y": 0.0488,           # treasury_cmt, 9 Nov 2026
     "state_rent_base": 0.05,          # civ1947_12(a)(1): 5% plus the change in the cost of living ...
@@ -132,7 +132,7 @@ FIXED_B = r10(IN["b_bill_2025"] - V["rate_b_2025"] * IN["b_av_2025"])     # abou
 ASSUMPTIONS = [
     ("g", "House price growth, both properties", "3% / 4% / 5% a year", "Scenario band. The official index for each area rose 5.3% to 5.7% a year since 1995 but was flat to slightly down over the last four quarters, so the base case sits below the long-run rate.", ["fred_hpi_a", "fred_hpi_b"]),
     ("inflation", "General inflation, used for costs", "2.5% a year", "Scenario. The 2% assessment cap has been binding in every year since 2022 because the California CPI ran above 2%.", ["boe_lta26002"]),
-    ("rate_a", "Ad valorem tax rate, Property A", "1.18%", "The owner's bill does not show the tax rate area, so the rate cannot be read off the county table. 1.18% sits inside the verified county range of 1.126% to 1.241%.", ["cnty_a_rates"]),
+    ("rate_a", "Ad valorem tax rate, Property A", "1.18%", "Scenario. The bill does not show the tax rate area, so the rate cannot be read off a published table without identifying the parcel. 1.18% is a mid-range scenario for a California county; the row is flagged unverified.", ["cnty_a_rates"]),
     ("fixed", "Fixed charges on each tax bill", "about $830 (A) and $1,100 (B) a year, rising with inflation", "The part of each bill that the percentage rate does not explain. Fixed charges do not grow when the assessed value is reset.", ["cnty_a_rates", "cityb_rate"]),
     ("cap_growth", "Growth of the Proposition 19 amount", "one year of house price growth, every second year", "Follows the adjustment rule as written: one year's index change, applied every other February.", ["boe_lta25009"]),
     ("stock_return", "Stock index fund, total return", "7.0% a year, of which 1.5% is dividends", "Scenario, not a forecast. One recent official 12-month figure for an S&P 500 index fund is 12.09%; a long-run official average could not be read in this session.", ["tsp_returns"]),
@@ -144,7 +144,7 @@ ASSUMPTIONS = [
     ("state_rent", "Rent growth if the local ordinance does NOT cover Property B", "7.5% a year, to a 10% ceiling", "The statewide cap is 5% plus the change in the cost of living, or 10%, whichever is lower. With 2.5% inflation that is 7.5%. It applies only where the local ordinance does not; the coverage question is open.", ["civ1947_12"]),
     ("building", "Share of value that is building, not land", "30% (A) and 40% (B)", "Scenario. Only the building is depreciated. The assessor's land and improvement split was not supplied.", ["irs_p527"]),
     ("maint", "Maintenance and repairs", "$9,300 a year (A) and $10,800 a year (B) in 2026, rising with inflation", "Scenario: 1.0% of building value for A and 1.5% for B. The owner states that A costs less to maintain than B.", ["irs_p527"]),
-    ("sale_cost", "Cost of selling Property A", "5.11% of the price", "5.0% scenario allowance for agents, escrow, title and preparation, plus the verified 0.11% county transfer tax.", ["rtc11911", "cnty_a_recorder"]),
+    ("sale_cost", "Cost of selling Property A", "5.11% of the price", "5.0% scenario allowance for agents, escrow, title and preparation, plus the 0.11% county documentary transfer tax that Revenue and Taxation Code 11911 permits.", ["rtc11911", "cnty_a_recorder"]),
     ("t_ord", "Tax on rental income and on rental losses used", "33.3%", "Scenario household: 24% federal plus 9.3% California. Losses are assumed usable against Property B's rental income.", ["irs_p925", "ftb_rates"]),
     ("t_gain", "Tax on a large one-time gain", "36.1%", "20% federal, 3.8% net investment income tax and 12.3% California. Depreciation taken is taxed at 41.1%.", ["irs_tc409", "irs_tc559", "ftb_cg"]),
     ("t_div", "Tax on dividends and on Treasury interest", "28.1% and 27.8%", "15% + 3.8% + 9.3% on dividends. Treasury interest is free of state tax under 31 U.S.C. 3124, verified on 11 November 2026, so it carries federal tax only.", ["irs_tc409", "irs_tc559", "uscode3124"]),
