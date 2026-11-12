@@ -915,7 +915,31 @@
    "quote": "(a) ... the taxable value of real property shall ... be the lesser of: (1) Its base year value, compounded annually since the base year by an inflation factor ... (D) In no event shall the percentage increase for any assessment year ... exceed 2 percent of the prior year's value. (2) Its full cash value, as defined in Section 110, as of the lien date, taking into account reductions in value due to damage, destruction, depreciation, obsolescence, removal of property, or other factors causing a decline in value.",
    "checked": "section opened on the publisher's site on 12 November 2026; the two subdivisions and the 2% cap read in the section text",
    "status": "read"
+  },
+  "cityb_261020": {
+   "publisher": "City B Board of Supervisors",
+   "title": "Legislation File No. 261020: cap on banked and capital-improvement rent increases for rent-controlled units",
+   "url": "https://sfgov.legistar.com/LegislationDetail.aspx?ID=8217304&GUID=7EDA4662-EBFB-4AF5-962F-C669B64AA770",
+   "verifies": [
+    "File No. 261020, introduced 15 September 2026, is an ordinance amending the Administrative Code",
+    "It caps banked rent increases and capital-improvement rent increases on rent-controlled units at a combined 10% per year, for three years",
+    "Status as of 12 November 2026: pending in the Land Use and Transportation Committee; it has not been enacted"
+   ],
+   "quote": "Ordinance amending the Administrative Code to provide that banked rent increases and capital improvement rent increases for rent-controlled units may not increase a tenant's rent by more than a total of 10% per year, for the next three years.",
+   "checked": "legistar record opened 12 November 2026; status Pending Committee Action; introduced 9/15/2026; Youth Commission response received 10/7/2026"
+  },
+  "gh_pages_docs": {
+   "publisher": "GitHub",
+   "title": "Configuring a publishing source for your GitHub Pages site",
+   "url": "https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site",
+   "verifies": [
+    "A Pages site publishes either from a branch root or from a GitHub Actions workflow artifact",
+    "The source is set in the repository Settings under Pages"
+   ],
+   "quote": "You can configure a GitHub Pages site to publish from a branch or from a GitHub Actions workflow.",
+   "checked": "documented behaviour; the API attempt on this repository on 12 November 2026 returned HTTP 403 Resource not accessible by integration"
   }
  },
- "reviewer_session": "; 2026-11-12: arena/593368ef-tino3 re-opened fifteen publisher pages, confirmed every published figure and added rtc17043 (the 1% California tax above $1,000,000, published as a sensitivity); 2026-11-12: arena/de474f38-tino3 opened Civil Code sections 1947.12 and 1946.2 on leginfo.legislature.ca.gov and added them; 2026-11-12: arena/cd0dd59b-tino3 opened the annual consumer price index, the annual house price index for each property's area, the 10-year Treasury annual average and the NASDAQ Composite, and re-read RTC 51 for the lesser-of rule (five entries appended)"
+ "reviewer_session": "; 2026-11-12: arena/593368ef-tino3 re-opened fifteen publisher pages, confirmed every published figure and added rtc17043 (the 1% California tax above $1,000,000, published as a sensitivity); 2026-11-12: arena/de474f38-tino3 opened Civil Code sections 1947.12 and 1946.2 on leginfo.legislature.ca.gov and added them; 2026-11-12: arena/cd0dd59b-tino3 opened the annual consumer price index, the annual house price index for each property's area, the 10-year Treasury annual average and the NASDAQ Composite, and re-read RTC 51 for the lesser-of rule (five entries appended)",
+ "count_note": "two entries appended 12 November 2026 by arena/b709c64d-tino3 (cityb_261020, gh_pages_docs)"
 }

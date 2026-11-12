@@ -42,7 +42,9 @@ ALLOWED_HOSTS = {
     # local government (jurisdiction A and jurisdiction B)
     "sfbos.archive.sf.gov", "sftreasurer.org", "www.sf.gov",
     "clerkrecorder.santaclaracounty.gov", "files.santaclaracounty.gov",
-    "electionresults.sos.ca.gov",
+    "electionresults.sos.ca.gov", "sfgov.legistar.com",
+    # publication tooling (GitHub Pages documentation for the publishing-source rule)
+    "docs.github.com",
 }
 
 # Identifier patterns that must never appear in the published edition.
