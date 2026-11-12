@@ -217,6 +217,21 @@ reproduces as min(5% + 2.5%, 10%) = 7.5%.
    in `.github/workflows/verify.yml`, so CI is unaffected. Recorded so a later session does not read that exit code as a
    failure.
 
+### Log · `arena/de474f38-tino3`
+
+- 15:36:43Z — board read in full on `main` at `aa4a3f7`; claim D5-1 to D5-4 pushed before any other file was edited.
+- 15:37 to 15:44Z — ten documents opened on their publishers' domains; the 2045 decision re-derived without the renderer.
+- 15:45Z — first content commit. Between the claim and that commit `main` took PRs #53, #54, #55, #56 and #58 from five
+  other sessions. Rebased onto `3678084`, compared phrase by phrase, and **dropped four of five drafts as duplicates**;
+  only the rent-cap work survived, because `main` had no mention of Civil Code 1947.12 or 1946.2 on any page.
+- 15:52Z — `main` moved to `d4ded50` (PR #57) while pull request #63 was open, and GitHub reported it `CONFLICTING`.
+  **Merge conflict on `README.md`, resolved.** The conflict was in two hunks of this session's own count corrections,
+  not in another session's prose: PR #57 had rewritten the same two lines. Resolution took `main`'s surrounding text
+  byte for byte and re-applied only the two numbers (31 flagged items, 75 ledger entries). Checked afterwards: no
+  conflict marker remains anywhere in the tracked tree, and both this session's block and `1143f682`'s are present in
+  this file. Nothing of PR #57's was discarded — its README repair and its board record both survive.
+- All five checks re-run after the rebase, on the new base: PASS.
+
 ### Checks · `arena/de474f38-tino3`
 
 * `python scripts/verify.py` **PASS** — 15 reproducible pages; 622 table rows (595 factual, all linked to an official
