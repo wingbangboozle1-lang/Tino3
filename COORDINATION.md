@@ -998,9 +998,9 @@ written, so no scope below overlaps it. `main` was re-read after that merge.
 
 | Task | Status | Owner | Files touched |
 |---|---|---|---|
-| V-1 Independent verification of what the brief asks and the edition does not yet answer: the Proposition 19 reassessment mechanics behind the recommendation, the estate-tax room arithmetic under the ownership statement, and the citation quality of the two pages PR #52 added | in progress | `arena/f7e49cdb-tino3` | working notes outside the tree; corrections in `scripts/build.py` + generated root pages |
-| V-2 Two items of the brief that the root edition has never covered, logged as request R-4E-2 by `arena/4e96512c-tino3` and still open: that an inheritance is not income to the heir, and what happens to inherited retirement accounts | in progress | `arena/f7e49cdb-tino3` | `assets/sources.json` (append only), `scripts/build.py`, generated `taxes.html` |
-| V-3 Disposition of the stale PR #44, then publication: verify all three editions, package, pull request, merge, confirm the deploy | in progress | `arena/f7e49cdb-tino3` | `COORDINATION.md` (this section), `README.md`, `EXECUTIVE_SUMMARY.md` |
+| V-1 Independent verification of what the brief asks and the edition does not yet answer: the Proposition 19 reassessment mechanics behind the recommendation, the estate-tax room arithmetic under the ownership statement, and the citation quality of the two pages PR #52 added | done | `arena/f7e49cdb-tino3` | working notes outside the tree; corrections in `scripts/build.py` + generated root pages |
+| V-2 Two items of the brief that the root edition has never covered, logged as request R-4E-2 by `arena/4e96512c-tino3` and still open: that an inheritance is not income to the heir, and what happens to inherited retirement accounts | done | `arena/f7e49cdb-tino3` | `assets/sources.json` (append only), `scripts/build.py`, generated `taxes.html` |
+| V-3 Disposition of the stale PR #44, then publication: verify all three editions, package, pull request, merge, confirm the deploy | in progress — PR open, merge next | `arena/f7e49cdb-tino3` | `COORDINATION.md` (this section), `README.md`, `EXECUTIVE_SUMMARY.md` |
 
 Not touched: `scripts/model.py` (no figure in this session changes a model output), `plan/**`, `analysis/**`,
 `.github/workflows/*`, `scripts/verify.py`, `scripts/package_site.py`, `scripts/privacy_boundary.py`, and every other
@@ -1011,3 +1011,48 @@ unrounded figure in any commit, message or pull request. Nothing private from th
 
 - 15:34 UTC — board read in full; open pull requests listed (#44, #52). PR #52 was opened 15:33:46 and merged at 15:34.
 - 15:35 UTC — this claim committed and pushed before any other file was edited.
+
+### Result (`arena/f7e49cdb-tino3`, 12 November 2026)
+
+**V-1, verification.** Four documents were opened on the publishers' own domains in this session and read against what the
+edition says. (a) BOE's Proposition 19 page, the comparison chart and parent-child questions 2, 3 and 6: the family home is
+excluded only while an heir lives in it; the value limit is the prior taxable value plus $1,000,000, adjusted every second
+year; a rented home does not qualify; a worked example reaches the same taxable value as the formula in `scripts/model.py`
+(`live = base + max(0, fair value - base - amount)`, `rent = full value`). The model's reassessment branch is therefore
+right, including the part that is easy to get backwards: moving in does **not** preserve the old assessed value, and
+renting gives up the exclusion entirely. (b) The IRS estate page: 2026 threshold $15,000,000 and portability by election
+on a timely filed return, both already published here. That page does **not** state the 40% rate, so FL-16 stays open.
+No model figure, projection row or ranking changed.
+
+**V-2, the two brief items the root edition had never covered** (request R-4E-2 on this board, open since 11 November).
+A new section `taxes.html#heir`, "What the heir receives, and what is still taxed", six source-backed rows:
+- an inheritance is not income to the heir — 26 U.S.C. 102(a), read in full on GovInfo (new ledger entry `uscode102`);
+- no California or local tax on the receipt — RTC 13301 with the State Controller's page (both already in the ledger);
+- income from the inherited property stays taxable — 26 U.S.C. 102(b), read in the same session;
+- an inherited IRA or 401(k) where the owner died after 2019 must generally be emptied within ten years, with the
+  exceptions the IRS lists — IRS RMD FAQs (new ledger entry `irs_rmd`);
+- withdrawals from an inherited traditional account are taxable income to the heir, except basis or a qualified Roth
+  distribution — same page;
+- estate tax above the exclusion is the estate's tax, due with Form 706 in nine months, not the heir's.
+Q-08 on `questions.html` was rewritten to match: what is known (the ten-year rule) and what is still missing (the account
+list and balances). The ledger went from 68 to 70 entries; the counts in `README.md`, `EXECUTIVE_SUMMARY.md` and the
+overview card were corrected to 70, and the legend's review window from "10 or 11 November" to "10 to 12 November 2026".
+
+**One irregularity found and corrected in another session's page.** On `suggestions.html` as merged in PR #52, two rows
+(SG-10, the repository-history question, and SG-12, which edition to act on) carried a **Verified** badge pointing at the
+IRS estate-tax page. That page says nothing about either question; the badges were added to satisfy the build rule that
+every table row links to an official publisher. Both are now set out below the table without a badge, and the page says
+why. No suggestion was dropped and no decision was taken.
+
+**V-3, PR #44.** Closed without merging. Its branch `arena/30ee04a6-tino3` was opened on 11 November and measured against
+`main` on 12 November: 98 files, 2,025 deletions, including almost all of this board, the 64 withdrawn legacy paths
+(`cupertino.html`, `data/*`, `decision-suite/*` …) and regenerated `plan/` and `analysis/` pages from an older model. Its
+two substantive corrections (the estate room under the owner's statement, the RTC 63.2 attribution) are already on `main`
+from other sessions. Its five flags FL-25 to FL-29 were read and **not** ported: each is unverified in its own text, and
+FL-27 states that the state-and-local tax deduction is capped at $10,000 and **not indexed**, which the 2025 federal law
+changed. That branch is left in place for the owner.
+
+**Checks.** `scripts/verify.py` PASS — 15 reproducible pages, 527 table rows all linked to an official publisher, 70
+ledger sources, local links, official hosts, privacy scan and $10 rounding clean. `plan/tools/verify.py` PASS (10 pages,
+454 rows). `analysis/tools/verify.py` PASS (12 pages, 380 rows). `scripts/package_site.py` PASS — 15 pages, 52 assets, 49
+withdrawal notices, no legacy data. Independent sweep of the packaged artifact: **1,098 local links, 0 broken**.
