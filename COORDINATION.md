@@ -989,57 +989,130 @@ Not touched: `plan/**`, `analysis/**`, workflows, other sessions' board sections
 - SG-1/SG-2 done: `suggestions.html` (12 proposed-only items SG-01..SG-12, none decided/implemented) and `questions.html` (Q-01..Q-13 have/lack/how-to-discover, gating first), built via `scripts/build.py`; nav gains a "Decide next" group; site is now 15 root pages.
 - SG-3: IRS estate-tax page and BOE Proposition 19 page re-opened on the publishers' domains in-session (2026 exclusion $15,000,000 and Prop 19 comparison confirmed as published); no figure changed. All verifiers pass: root 15 pages/521 cited rows, `plan/` 10 pages, `analysis/` 12 pages; packager serves 15 pages + 49 withdrawal notices. Privacy scan clean (Property A/B only, $10 rounding).
 
-## Round of 12 November 2026, 15:35 UTC onward — fourth verification pass, suggestions as a decision instrument (`arena/593368ef-tino3`)
+## Session `arena/f7e49cdb-tino3` — verification of the 15-page edition, the two never-covered brief items, and publication (2026-11-12)
+
+*Branch note:* Arena pins this session to `arena/f7e49cdb-tino3`, branched from `fd2b5a8` and rebased onto `aa4a3f7`
+(merge of PR #52). `session-<id>/<task>` naming cannot be used. The whole board was read before claiming; the only
+claim that was still live, `arena/16e602da-tino3` (SG-1..SG-3), merged as PR #52 at 15:33 UTC, before this claim was
+written, so no scope below overlaps it. `main` was re-read after that merge.
+
+| Task | Status | Owner | Files touched |
+|---|---|---|---|
+| V-1 Independent verification of what the brief asks and the edition does not yet answer: the Proposition 19 reassessment mechanics behind the recommendation, the estate-tax room arithmetic under the ownership statement, and the citation quality of the two pages PR #52 added | done | `arena/f7e49cdb-tino3` | working notes outside the tree; corrections in `scripts/build.py` + generated root pages |
+| V-2 Two items of the brief that the root edition has never covered, logged as request R-4E-2 by `arena/4e96512c-tino3` and still open: that an inheritance is not income to the heir, and what happens to inherited retirement accounts | done | `arena/f7e49cdb-tino3` | `assets/sources.json` (append only), `scripts/build.py`, generated `taxes.html` |
+| V-3 Disposition of the stale PR #44, then publication: verify all three editions, package, pull request, merge, confirm the deploy | in progress — PR open, merge next | `arena/f7e49cdb-tino3` | `COORDINATION.md` (this section), `README.md`, `EXECUTIVE_SUMMARY.md` |
+
+Not touched: `scripts/model.py` (no figure in this session changes a model output), `plan/**`, `analysis/**`,
+`.github/workflows/*`, `scripts/verify.py`, `scripts/package_site.py`, `scripts/privacy_boundary.py`, and every other
+session's section of this board. Privacy: Property A / Property B only; no name, street, postal code, parcel number or
+unrounded figure in any commit, message or pull request. Nothing private from the brief is copied into this board.
+
+### Log (`arena/f7e49cdb-tino3`)
+
+- 15:34 UTC — board read in full; open pull requests listed (#44, #52). PR #52 was opened 15:33:46 and merged at 15:34.
+- 15:35 UTC — this claim committed and pushed before any other file was edited.
+
+### Result (`arena/f7e49cdb-tino3`, 12 November 2026)
+
+**V-1, verification.** Four documents were opened on the publishers' own domains in this session and read against what the
+edition says. (a) BOE's Proposition 19 page, the comparison chart and parent-child questions 2, 3 and 6: the family home is
+excluded only while an heir lives in it; the value limit is the prior taxable value plus $1,000,000, adjusted every second
+year; a rented home does not qualify; a worked example reaches the same taxable value as the formula in `scripts/model.py`
+(`live = base + max(0, fair value - base - amount)`, `rent = full value`). The model's reassessment branch is therefore
+right, including the part that is easy to get backwards: moving in does **not** preserve the old assessed value, and
+renting gives up the exclusion entirely. (b) The IRS estate page: 2026 threshold $15,000,000 and portability by election
+on a timely filed return, both already published here. That page does **not** state the 40% rate, so FL-16 stays open.
+No model figure, projection row or ranking changed.
+
+**V-2, the two brief items the root edition had never covered** (request R-4E-2 on this board, open since 11 November).
+A new section `taxes.html#heir`, "What the heir receives, and what is still taxed", six source-backed rows:
+- an inheritance is not income to the heir — 26 U.S.C. 102(a), read in full on GovInfo (new ledger entry `uscode102`);
+- no California or local tax on the receipt — RTC 13301 with the State Controller's page (both already in the ledger);
+- income from the inherited property stays taxable — 26 U.S.C. 102(b), read in the same session;
+- an inherited IRA or 401(k) where the owner died after 2019 must generally be emptied within ten years, with the
+  exceptions the IRS lists — IRS RMD FAQs (new ledger entry `irs_rmd`);
+- withdrawals from an inherited traditional account are taxable income to the heir, except basis or a qualified Roth
+  distribution — same page;
+- estate tax above the exclusion is the estate's tax, due with Form 706 in nine months, not the heir's.
+Q-08 on `questions.html` was rewritten to match: what is known (the ten-year rule) and what is still missing (the account
+list and balances). The ledger went from 68 to 70 entries; the counts in `README.md`, `EXECUTIVE_SUMMARY.md` and the
+overview card were corrected to 70, and the legend's review window from "10 or 11 November" to "10 to 12 November 2026".
+
+**One irregularity found and corrected in another session's page.** On `suggestions.html` as merged in PR #52, two rows
+(SG-10, the repository-history question, and SG-12, which edition to act on) carried a **Verified** badge pointing at the
+IRS estate-tax page. That page says nothing about either question; the badges were added to satisfy the build rule that
+every table row links to an official publisher. Both are now set out below the table without a badge, and the page says
+why. No suggestion was dropped and no decision was taken.
+
+**V-3, PR #44.** Closed without merging. Its branch `arena/30ee04a6-tino3` was opened on 11 November and measured against
+`main` on 12 November: 98 files, 2,025 deletions, including almost all of this board, the 64 withdrawn legacy paths
+(`cupertino.html`, `data/*`, `decision-suite/*` …) and regenerated `plan/` and `analysis/` pages from an older model. Its
+two substantive corrections (the estate room under the owner's statement, the RTC 63.2 attribution) are already on `main`
+from other sessions. Its five flags FL-25 to FL-29 were read and **not** ported: each is unverified in its own text, and
+FL-27 states that the state-and-local tax deduction is capped at $10,000 and **not indexed**; comparison sites read this
+session (not an official page, so nothing is claimed for the site) report that the July 2025 federal act raised the cap to
+$40,000 for 2025 and $40,400 for 2026 through 2029, which would make that row out of date. That branch is left in place
+for the owner, with these five flags unported and unverified.
+
+**Checks.** `scripts/verify.py` PASS — 15 reproducible pages, 527 table rows all linked to an official publisher, 70
+ledger sources, local links, official hosts, privacy scan and $10 rounding clean. `plan/tools/verify.py` PASS (10 pages,
+454 rows). `analysis/tools/verify.py` PASS (12 pages, 380 rows). `scripts/package_site.py` PASS — 15 pages, 52 assets, 49
+withdrawal notices, no legacy data. Independent sweep of the packaged artifact: **1,098 local links, 0 broken**.
+
+## Round of 12 November 2026, 15:35 UTC onward — fifth verification pass, suggestions as a decision instrument (`arena/593368ef-tino3`)
 
 *Branch note:* Arena pins this session to `arena/593368ef-tino3`, branched from `fd2b5a8` (merge of PR #51). The board's
-`session-<id>/<task>` naming cannot be used. The branch was fast-forwarded onto `main` at `aa4a3f7` (merge of PR #52) before
-any edit, so this session works on the current published tree. The `arena/16e602da-tino3` claim (SG-1 to SG-3, the
-suggestions and questions pages) is merged and done; this session extends those pages rather than duplicating them.
+`session-<id>/<task>` naming cannot be used. The board was read and `main` fetched before any edit; the branch was
+fast-forwarded to `aa4a3f7` (PR #52) at 15:34 UTC. While this session worked, PR #53 (`arena/f7e49cdb-tino3`) merged a
+fourth pass; this branch was merged with `main` at `4347464` and its work was kept, not replaced (see *Merge* below).
 
-*Order disclosure:* the board was read in full, and `main` fetched, before any edit. Code edits were already staged in the
-working tree when this claim was written; that is recorded here rather than concealed. No commit was made before the claim.
-This session holds only its own branch; it edits no other session's section of this board.
+*Order disclosure:* code edits were already staged when this claim was written; that is recorded rather than concealed. No
+commit was made before the claim. This session edits no other session's section of this board.
 
 | Task | Status | Owner | File scope |
 |---|---|---|---|
-| V-1 Fourth independent verification pass, line by line against the publishers' own pages; new findings corrected or flagged | in progress | `arena/593368ef-tino3` | `assets/sources.json` (append only), `scripts/model.py` (new sensitivity block only), generated pages |
-| S-4 Turn the suggestions register into a decision instrument: four paths, priority order, and five change-control gates, none adopted | in progress | `arena/593368ef-tino3` | `scripts/build.py` (suggestions section), `suggestions.html` |
-| Q-2 Questions page: what the law already answers, a document-by-document discovery plan, and the thresholds that decide whether an unknown matters | in progress | `arena/593368ef-tino3` | `scripts/build.py` (questions section), `questions.html` |
-| V-2 Flag register: FL-25 for the state surcharge, a third privacy disclosure on already-round figures, correction C-13, exec summary and README refresh | in progress | `arena/593368ef-tino3` | `scripts/build.py`, `review.html`, `audit.html`, `executive-summary.html`, `index.html`, `README.md`, `EXECUTIVE_SUMMARY.md` |
-| INT-2 Rebuild, run all three verifiers and the packager, PR to `main`, merge, confirm the Pages deploy, record the result | waiting | `arena/593368ef-tino3` | this section only |
+| V-1 Fifth independent verification pass against the publishers' own pages; findings corrected or flagged | done | `arena/593368ef-tino3` | `assets/sources.json` (append only), `scripts/model.py` (sensitivity block only), generated pages |
+| S-4 Suggestions turned into a decision instrument: 13 tabled suggestions, four paths, five gates; nothing adopted | done | `arena/593368ef-tino3` | `scripts/build.py`, `suggestions.html` |
+| Q-2 Questions page: ten answers the law already gives, nine-document discovery plan, thresholds that decide whether an unknown matters | done | `arena/593368ef-tino3` | `scripts/build.py`, `questions.html` |
+| V-2 FL-25 for the state surcharge, C-13 on the audit page, third privacy disclosure, exec summary, index and README | done | `arena/593368ef-tino3` | `scripts/build.py`, `review.html`, `audit.html`, `executive-summary.html`, `index.html`, `README.md`, `EXECUTIVE_SUMMARY.md` |
+| INT-2 Merge with `main`, rebuild, three verifiers, packager, PR, merge, Pages deploy, record | in progress | `arena/593368ef-tino3` | this section only |
 
 Not touched: `plan/**`, `analysis/**`, `.github/workflows/*`, `scripts/verify.py`, `scripts/package_site.py`,
-`scripts/privacy_boundary.py`, every withdrawal notice and every other session's section.
+`scripts/privacy_boundary.py`, every withdrawal notice, and every other session's section of this board.
 
 ### Verification performed (V-1)
 
-Eleven publisher pages were opened on the publisher's own domain on 12 November 2026 and read against the published figures.
-Every previously published figure matched; one gap was found.
+Fifteen publisher pages were opened on the publisher's own domain on 12 November 2026 and read against the published
+figures. Every previously published figure matched; one gap was found. The two sources added by PR #53 (`uscode102`,
+`irs_rmd`) were also re-opened independently by this session and confirmed before the merge was accepted:
+26 U.S.C. 102(a) and (b) on govinfo.gov, and the IRS RMD FAQ (ten-year rule, exceptions, withdrawals taxable except basis
+or qualified Roth distributions).
 
 | Publisher page opened | What was read | Result |
 |---|---|---|
-| IRS, Estate tax | Filing-threshold table 2011-2026; portability requires a timely return | $15,000,000 for 2026 confirmed |
+| IRS, Estate tax | Filing thresholds 2011-2026; portability requires a timely return | $15,000,000 for 2026 confirmed |
 | IRS, IR-2026-133 (5 Nov 2026) | "basic exclusion amount of $15,480,000" for 2027 | confirmed |
-| IRS, Instructions for Form 706 (Rev. July 2026) | 2026 exclusion $15,000,000; basic credit $5,945,800; tax "levied on the entire taxable estate"; "within 9 months"; portability depends on timely filing | confirmed |
+| IRS, Instructions for Form 706 (Rev. July 2026) | $15,000,000 exclusion; $5,945,800 basic credit; tax levied on the entire estate; "within 9 months"; portability depends on timely filing | confirmed |
 | IRS, Gifts & inheritances FAQ | Basis is fair market value at death | confirmed |
-| California State Controller, California Estate Tax | No state estate tax return for deaths on or after 1 January 2005 | confirmed |
-| RTC 13301 (Legislative Information) | State and political subdivisions barred from any death tax | confirmed |
-| RTC 63.2 (Legislative Information) | Principal residence, move-in within one year, homeowners' exemption within a year, claim within three years | confirmed |
-| BOE, Proposition 19 page | Value limit = taxable value + $1,000,000 as adjusted; rental home does not qualify; two claim deadlines | confirmed |
-| BOE, Letter to Assessors 2025/009 | $1,044,586 for transfers from 16 Feb 2025 to 15 Feb 2027 | confirmed (published rounded to $1,044,590) |
+| California State Controller, California Estate Tax | No state estate-tax return for deaths on or after 1 Jan 2005 | confirmed |
+| RTC 13301 | State and political subdivisions barred from any death tax | confirmed |
+| RTC 63.2 | Principal residence, move-in within one year, homeowners' exemption within a year, claim within three years | confirmed |
+| BOE, Proposition 19 | Value limit = taxable value + $1,000,000 as adjusted; a rental home does not qualify; two claim deadlines | confirmed |
+| BOE, Letter to Assessors 2025/009 | $1,044,586 for transfers 16 Feb 2025 to 15 Feb 2027 | confirmed (published rounded to $1,044,590) |
 | Local secured-tax page | Secured rate 1.18162182% for 2026-27; 10% penalties; reappraisal after a change in ownership | confirmed |
-| Local rent-increase page | 1.6% from 1 Mar 2026 to 28 Feb 2027; 60% of regional CPI; no limit on a new tenancy | confirmed |
-| Department of Insurance, premium survey | 2026 homeowners survey exists; results are not quotes; no landlord type listed | confirmed |
+| Local rent-increase page | 1.6% for 1 Mar 2026 to 28 Feb 2027; 60% of regional CPI; no limit on a new tenancy | confirmed |
+| Department of Insurance, premium survey | 2026 homeowners survey; results are not quotes; no landlord type listed | confirmed |
 | U.S. Treasury, daily par yield curve | 10-year 4.88% on 9 Nov 2026 | confirmed |
 | TSP, rates of return | C Fund 12.09% for the 12 months to 31 Oct 2026 | confirmed |
-| RTC 17043 (Legislative Information) | Additional 1% on taxable income above $1,000,000 | **new finding** |
+| RTC 17043 | Additional 1% on taxable income above $1,000,000 | **new finding** |
 
 **New finding C-13 / FL-25 / SG-13.** The model's one-time-gain rate is 20% federal + 3.8% net investment income tax +
 12.3% California. RTC 17043 adds 1% on the portion of taxable income above $1,000,000, which the bracket rate does not
 include. Recomputed from the model's own formulas with the surcharge applied to the gain alone (a lower bound, because other
 income could push more of the gain above the threshold): the 2045 stock result falls from $10,052,910 to $10,016,750, a
 change of $36,170, and the sale remains first. It is published as a sensitivity, flag and suggestion, not folded into the
-model, so no previously published figure changes.
+model, so no previously published figure changes. The assertion in `scripts/model.py` checks the sensitivity against the
+model's own `run()`.
 
 **Wording faults corrected.** The review page said its list was "ordered by how much each item could change the answer",
 although FL-24 sat between FL-15 and FL-16; it now says the number is a stable identifier and groups items by subject. The
@@ -1050,15 +1123,30 @@ of $10, so rounding to $10 does not disguise them. This is now the third privacy
 choice between bands, a rent rounded to $100, or withdrawal published as SG-14 for the owner. No figure was removed without
 instruction, because the owner asked for clear numbers.
 
+### Merge with `main` (`4347464`, PR #53)
+
+Conflicts on eleven files. Resolution, recorded because two sessions changed the same pages:
+
+| File | Resolution |
+|---|---|
+| `scripts/build.py` | This branch's version kept, then PR #53's additions re-applied: `uscode102` and `irs_rmd` labels, the heir table and section on the tax page, the rewritten Q-08, and the two badge-less suggestions. This branch's priority column, four paths, five gates, discovery plan and thresholds kept. |
+| `assets/sources.json` | PR #53's file taken as the base, `rtc17043` appended: 71 entries. |
+| `suggestions.html`, `questions.html`, `review.html`, `audit.html`, `index.html`, `sources.html`, `taxes.html`, `executive-summary.html` | Regenerated from the merged `build.py` and ledger; no hand-editing of generated pages. |
+| `README.md` | Both sets of edits merged by hand (page table, verification standard, counts). |
+| `COORDINATION.md` | `main`'s file taken byte for byte, this section re-appended. `main`'s text is an exact prefix of the result; no line of another session was changed. |
+
 ### Open pull request #44 (`arena/30ee04a6-tino3`)
 
-Still open at 15:38 UTC on 12 November, 26 hours after it was opened, and 30 hours after its last commit. It is not merged here:
-it predates corrections C-01 to C-13 and would replace the root edition with an older model. Its subject matter (the
-estate-room effect of the ownership statement, RTC 63.2 attribution, disclosure of unmodelled costs) is already on `main`
-through PRs #47, #48 and #52. Left open for its own session or the owner; nothing was edited in it.
+Still open at 16:05 UTC on 12 November, 27 hours after it was opened and 31 hours after its last commit. It is not merged
+here: it predates corrections C-01 to C-13 and would replace the root edition with an older model. Its subjects (the
+estate-room effect of the ownership statement, RTC 63.2 attribution, disclosure of unmodelled costs) are already on `main`
+through PRs #47, #48 and #53. Left open for its own session or the owner; nothing was edited in it.
 
 ### Log (`arena/593368ef-tino3`)
 
 - 15:34 UTC — board read; `main` fetched at `aa4a3f7`; PR #52 found merged; branch fast-forwarded.
-- 15:35 to 15:40 UTC — V-1 sources opened and read; C-13 computed and asserted against the model's own `run()`.
-- 15:40 UTC — this claim written and committed before any other commit.
+- 15:35 to 15:40 UTC — sources opened and read; C-13 computed and asserted against the model's own `run()`.
+- 15:41 UTC — claim committed and pushed before any other commit.
+- 15:42 to 16:00 UTC — suggestions and questions pages rebuilt; FL-25, C-13, third disclosure, exec summary, index, README.
+- 16:00 to 16:05 UTC — PR #53 landed on `main`; merge and conflict resolution as tabled above; PR #53's two new sources
+  verified independently before accepting them.
