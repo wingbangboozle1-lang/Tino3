@@ -988,3 +988,26 @@ Not touched: `plan/**`, `analysis/**`, workflows, other sessions' board sections
 ### Result (`arena/16e602da-tino3`, 12 Nov 2026)
 - SG-1/SG-2 done: `suggestions.html` (12 proposed-only items SG-01..SG-12, none decided/implemented) and `questions.html` (Q-01..Q-13 have/lack/how-to-discover, gating first), built via `scripts/build.py`; nav gains a "Decide next" group; site is now 15 root pages.
 - SG-3: IRS estate-tax page and BOE Proposition 19 page re-opened on the publishers' domains in-session (2026 exclusion $15,000,000 and Prop 19 comparison confirmed as published); no figure changed. All verifiers pass: root 15 pages/521 cited rows, `plan/` 10 pages, `analysis/` 12 pages; packager serves 15 pages + 49 withdrawal notices. Privacy scan clean (Property A/B only, $10 rounding).
+
+## Session `arena/f7e49cdb-tino3` — verification of the 15-page edition, the two never-covered brief items, and publication (2026-11-12)
+
+*Branch note:* Arena pins this session to `arena/f7e49cdb-tino3`, branched from `fd2b5a8` and rebased onto `aa4a3f7`
+(merge of PR #52). `session-<id>/<task>` naming cannot be used. The whole board was read before claiming; the only
+claim that was still live, `arena/16e602da-tino3` (SG-1..SG-3), merged as PR #52 at 15:33 UTC, before this claim was
+written, so no scope below overlaps it. `main` was re-read after that merge.
+
+| Task | Status | Owner | Files touched |
+|---|---|---|---|
+| V-1 Independent verification of what the brief asks and the edition does not yet answer: the Proposition 19 reassessment mechanics behind the recommendation, the estate-tax room arithmetic under the ownership statement, and the citation quality of the two pages PR #52 added | in progress | `arena/f7e49cdb-tino3` | working notes outside the tree; corrections in `scripts/build.py` + generated root pages |
+| V-2 Two items of the brief that the root edition has never covered, logged as request R-4E-2 by `arena/4e96512c-tino3` and still open: that an inheritance is not income to the heir, and what happens to inherited retirement accounts | in progress | `arena/f7e49cdb-tino3` | `assets/sources.json` (append only), `scripts/build.py`, generated `taxes.html` |
+| V-3 Disposition of the stale PR #44, then publication: verify all three editions, package, pull request, merge, confirm the deploy | in progress | `arena/f7e49cdb-tino3` | `COORDINATION.md` (this section), `README.md`, `EXECUTIVE_SUMMARY.md` |
+
+Not touched: `scripts/model.py` (no figure in this session changes a model output), `plan/**`, `analysis/**`,
+`.github/workflows/*`, `scripts/verify.py`, `scripts/package_site.py`, `scripts/privacy_boundary.py`, and every other
+session's section of this board. Privacy: Property A / Property B only; no name, street, postal code, parcel number or
+unrounded figure in any commit, message or pull request. Nothing private from the brief is copied into this board.
+
+### Log (`arena/f7e49cdb-tino3`)
+
+- 15:34 UTC — board read in full; open pull requests listed (#44, #52). PR #52 was opened 15:33:46 and merged at 15:34.
+- 15:35 UTC — this claim committed and pushed before any other file was edited.
