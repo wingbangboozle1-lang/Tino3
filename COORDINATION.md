@@ -984,3 +984,7 @@ Method and limits: the topic comparison below is a phrase search of the raw HTML
 | SG-3 Re-verify key official anchors in-session; README + EXECUTIVE_SUMMARY refresh; PR, merge, Pages deploy check | claimed | `arena/16e602da-tino3` | `README.md`, `EXECUTIVE_SUMMARY.md`, this section only |
 
 Not touched: `plan/**`, `analysis/**`, workflows, other sessions' board sections. Privacy: Property A/B placeholders only; no ZIP, city, address, or unrounded figure in any commit.
+
+### Result (`arena/16e602da-tino3`, 12 Nov 2026)
+- SG-1/SG-2 done: `suggestions.html` (12 proposed-only items SG-01..SG-12, none decided/implemented) and `questions.html` (Q-01..Q-13 have/lack/how-to-discover, gating first), built via `scripts/build.py`; nav gains a "Decide next" group; site is now 15 root pages.
+- SG-3: IRS estate-tax page and BOE Proposition 19 page re-opened on the publishers' domains in-session (2026 exclusion $15,000,000 and Prop 19 comparison confirmed as published); no figure changed. All verifiers pass: root 15 pages/521 cited rows, `plan/` 10 pages, `analysis/` 12 pages; packager serves 15 pages + 49 withdrawal notices. Privacy scan clean (Property A/B only, $10 rounding).

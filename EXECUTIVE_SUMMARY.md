@@ -1,6 +1,6 @@
 # Executive summary
 
-Reviewed 10-11 November 2026. Anonymised: Property A (single-family home, County A), Property B (small multi-unit building, City B).
+Reviewed 10-12 November 2026. Anonymised: Property A (single-family home, County A), Property B (small multi-unit building, City B).
 Dollar figures are rounded to the nearest $10. Planning analysis, not legal, tax or investment advice.
 
 **Best plan on these numbers: sell Property A soon after inheriting it, reinvest, and keep Property B.**
@@ -27,4 +27,4 @@ Inheritance in 2045, house prices rising 4% a year, measured ten years later aft
 - Black swans, part 2 (stress.html): stock returns at 4.0%, inflation at 4.0% or a flat decade for house prices - selling still finishes first, and a lost decade only moves the proceeds to Treasuries. Verified 1929, 1965-82, 2000-02, 2007-09 and 2020 episodes re-run against the 2045 inheritance: the sale decision holds in 5 of 7 analogues, and only the reinvestment vehicle changes with the regime.
 - Re-checked on 11 November 2026 by a third pass: 13 sources re-opened on the publishers' sites, every projection row recomputed from the model's formulas, one open flag closed (31 U.S.C. 3124, Treasury interest is free of state tax) and one stale count corrected. No figure changed.
 
-Site: index.html. Open items: review.html. How it was checked: audit.html. Sources: sources.html.
+Site: index.html. Suggestions (none decided): suggestions.html. Questions first: questions.html. Open items: review.html. How it was checked: audit.html. Sources: sources.html.
