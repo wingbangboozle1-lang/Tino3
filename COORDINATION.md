@@ -1712,3 +1712,21 @@ Privacy: no name, street address, postal code, parcel number or unrounded figure
 ### Disclosure
 
 The published precision for assessment-roll values is tier 1 (nearest $10), chosen by the owner on 12 November 2026 (`assets/privacy.json`). This session did not change and does not re-litigate that setting; the parcel-matching caveat and the owner's choice (SG-14) are disclosed on `review.html`. Earlier commits and pull-request diffs in this public repository may contain finer figures; only a history rewrite or going private can address that, and it remains an owner decision (SG-10; CR-5 on the earlier board).
+
+## Session `arena/671913cc-tino3` — executive summary, suggestions, questions and black-swan enhancement (2026-11-12)
+
+*Branch note:* Arena pins this session to `arena/671913cc-tino3`, branched from `b23f405` (merge of PR #64). The board's `session-<id>/<task>` naming cannot be used. Board read in full before work. Open PR #62 (`arena/cd0dd59b-tino3`) proposes a year-by-year economy page; this session does not edit that branch and will reconcile on merge rather than overwrite.
+
+| Task | Status | Owner | Scope |
+|---|---|---|---|
+| E-671 Executive summary outlining important details: two-property distinction, cost drivers, inheritance timeline 2040-2050, tax thresholds, black-swan note, next steps | claimed | `arena/671913cc-tino3` | `EXECUTIVE_SUMMARY.md`, `executive-summary.html` via `scripts/build.py`, `README.md` |
+| S-671 Suggestions for review: dedicated review section with selection gate; site and decision improvement proposals reviewable before implementation | claimed | `arena/671913cc-tino3` | `suggestions.html` via `scripts/build.py` |
+| Q-671 Questions, information and answers: clear list of facts to resolve, what we have vs missing, official answers where available, discovery suggestions | claimed | `arena/671913cc-tino3` | `questions.html` via `scripts/build.py` |
+| B-671 Black-swan economic conditions: separate stress section mimicking real-world irregular growth and inflation over 50 years | claimed | `arena/671913cc-tino3` | `stress.html`, `projections.html` via `scripts/build.py` |
+| P-671 Step-by-step trust inheritance (2040-2050) and year-by-year projection method: property tax, assessed value, insurance, utilities, maintenance | claimed | `arena/671913cc-tino3` | `inheritance.html`, `costs.html`, `projections.html`, `property-a.html`, `property-b.html` via `scripts/build.py` |
+| V-671 Line-by-line verification against official sources; every factual row source-linked; blank unverified; privacy boundary | claimed | `arena/671913cc-tino3` | `assets/sources.json`, `scripts/verify.py`, `scripts/privacy_boundary.py`, `scripts/package_site.py` |
+| PUB-671 PR to main, merge, Pages deploy verification, coordination record | claimed | `arena/671913cc-tino3` | `COORDINATION.md` (this section only), `.github/workflows/*` if needed |
+
+Not in scope: `plan/**`, `analysis/**`, direct edit of open PR #62's `economy.html`/`economy.json`/`economy.py`; if a file needs a change owned by another session, request logged not edited.
+
+Privacy: Property A / Property B only. No name, address, ZIP, parcel, rent, assessment, utility use, insurance estimate, or owner-derived projection appears on any public page. Rounding is not treated as anonymization. Historical commits not certified erased.
