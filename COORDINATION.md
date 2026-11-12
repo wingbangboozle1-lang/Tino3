@@ -1712,3 +1712,11 @@ Privacy: no name, street address, postal code, parcel number or unrounded figure
 ### Disclosure
 
 The published precision for assessment-roll values is tier 1 (nearest $10), chosen by the owner on 12 November 2026 (`assets/privacy.json`). This session did not change and does not re-litigate that setting; the parcel-matching caveat and the owner's choice (SG-14) are disclosed on `review.html`. Earlier commits and pull-request diffs in this public repository may contain finer figures; only a history rewrite or going private can address that, and it remains an owner decision (SG-10; CR-5 on the earlier board).
+
+## Session `arena/62ffa885-tino3` — publication-source safety gate (12 November 2026)
+
+| Task | Status | Owner | Scope |
+|---|---|---|---|
+| PAGES-1 Ensure deployment uses the privacy-safe Actions artifact rather than the legacy root source; verify artifact and live routes | in progress | `arena/62ffa885-tino3` | Pages repository setting, `COORDINATION.md`; no public pages or builder files claimed |
+
+Claimed after reading the board and checking the existing public edition. The branch name is fixed by Arena; no other session branch will be created. PR #62 owns economy/page changes and is not included in this scope. The current Pages API reports `main:/`, which can expose legacy root files despite the Actions artifact; do not claim privacy-safe publication until the source is corrected and live routes are checked.
