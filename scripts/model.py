@@ -93,6 +93,8 @@ V = {
     "rate_a_low": 0.011258, "rate_a_high": 0.012409,   # cnty_a_rates (range across tax rate areas)
     "county_transfer_tax": 0.0011,    # rtc11911
     "treasury_10y": 0.0488,           # treasury_cmt, 9 Nov 2026
+    "state_rent_base": 0.05,          # civ1947_12(a)(1): 5% plus the change in the cost of living ...
+    "state_rent_max": 0.10,           # civ1947_12(a)(1): ... or 10%, whichever is lower
     "rent_cap_share_of_cpi": 0.60,    # cityb_rent
     "depreciation_years": 27.5,       # irs_p527
     "fed_gain": 0.20, "fed_recapture": 0.25, "niit": 0.038, "ca_top": 0.123,  # irs_tc409, irs_tc559, ftb_rates
@@ -139,6 +141,7 @@ ASSUMPTIONS = [
     ("vacancy", "Vacancy and turnover allowance", "5% of rent", "Scenario.", ["irs_p527"]),
     ("unit3", "Rent for the third unit of Property B when the family moves out", "$3,580 a month in 2026", "Set equal to the average of the two rented units. A new tenancy may start at any rent, then rises with the capped increase.", ["cityb_rent"]),
     ("rent_ctrl", "Rent growth for sitting tenants in Property B", "1.5% a year", "60% of the assumed 2.5% inflation, which is the published formula. The current allowed increase is 1.6%.", ["cityb_rent"]),
+    ("state_rent", "Rent growth if the local ordinance does NOT cover Property B", "7.5% a year, to a 10% ceiling", "The statewide cap is 5% plus the change in the cost of living, or 10%, whichever is lower. With 2.5% inflation that is 7.5%. It applies only where the local ordinance does not; the coverage question is open.", ["civ1947_12"]),
     ("building", "Share of value that is building, not land", "30% (A) and 40% (B)", "Scenario. Only the building is depreciated. The assessor's land and improvement split was not supplied.", ["irs_p527"]),
     ("maint", "Maintenance and repairs", "$9,300 a year (A) and $10,800 a year (B) in 2026, rising with inflation", "Scenario: 1.0% of building value for A and 1.5% for B. The owner states that A costs less to maintain than B.", ["irs_p527"]),
     ("sale_cost", "Cost of selling Property A", "5.11% of the price", "5.0% scenario allowance for agents, escrow, title and preparation, plus the verified 0.11% county transfer tax.", ["rtc11911", "cnty_a_recorder"]),
@@ -415,7 +418,8 @@ def build():
          "assumptions": [{"id": i, "item": a, "value": b, "reason": c, "src": s} for i, a, b, c, s in ASSUMPTIONS]}
     d["verified"] = {"prop19_amount": r10(V["prop19_amount"]), "fed_excl_2026": V["fed_excl_2026"],
                      "fed_excl_2027": V["fed_excl_2027"], "rate_b_2026": V["rate_b_2026"], "rate_b_2025": V["rate_b_2025"],
-                     "rate_a_low": V["rate_a_low"], "rate_a_high": V["rate_a_high"], "treasury_10y": V["treasury_10y"]}
+                     "rate_a_low": V["rate_a_low"], "rate_a_high": V["rate_a_high"], "treasury_10y": V["treasury_10y"],
+                     "state_rent_base": V["state_rent_base"], "state_rent_max": V["state_rent_max"]}
 
     # Year-by-year, nothing changes (no death, no sale): 2026-2060
     d["proj_a"], d["proj_b"] = [], []
@@ -520,6 +524,24 @@ def build():
         d["b_reset"].append({"year": yy, "value": r10(fmv), "assessed_keep": r10(b_base(yy)), "tax_keep": r10(keep),
                              "tax_reset": r10(reset), "increase": r10(reset - keep), "rent": r10(rent),
                              "net_keep": r10(rent - costs - keep), "net_reset": r10(rent - costs - reset)})
+
+    # Which rent cap governs Property B. The base case uses the local ordinance (60% of the price
+    # index). Civil Code 1947.12(d)(3) makes the statewide cap inapplicable where a local ordinance
+    # restricts increases to LESS than the state formula - so the local cap governs only if the
+    # building is covered. If it is not, 1947.12(a)(1) applies: 5% plus the change in the cost of
+    # living, or 10%, whichever is lower. Coverage is open, so both paths are published.
+    state_cap = min(V["state_rent_base"] + A["inflation"], V["state_rent_max"])
+    d["b_rentcap"] = {"state_rate": round(state_cap * 100, 2), "local_rate": round(RENT_CTRL * 100, 2),
+                      "state_ceiling": round(V["state_rent_max"] * 100, 1), "rows": []}
+    for yy in A["years"]:
+        local = IN["b_rent_mo"] * 12 * (1 + RENT_CTRL) ** (yy - 2026)
+        state = IN["b_rent_mo"] * 12 * (1 + state_cap) ** (yy - 2026)
+        lv = sum(IN["b_rent_mo"] * 12 * (1 + RENT_CTRL) ** (yy + t - 2026) * (1 - A["vacancy"]) for t in range(10))
+        sv = sum(IN["b_rent_mo"] * 12 * (1 + state_cap) ** (yy + t - 2026) * (1 - A["vacancy"]) for t in range(10))
+        d["b_rentcap"]["rows"].append({"year": yy, "rent_local": r10(local), "rent_state": r10(state),
+                                       "diff_first_year": r10(state - local),
+                                       "ten_year_local": r10(lv), "ten_year_state": r10(sv),
+                                       "ten_year_diff": r10(sv - lv)})
 
     # Federal estate tax headroom
     d["estate"] = []

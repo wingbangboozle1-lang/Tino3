@@ -816,7 +816,32 @@
    ],
    "quote": "in addition to any other taxes imposed by this part, an additional tax shall be imposed at the rate of 1 percent on that portion of a taxpayer's taxable income in excess of one million dollars ($1,000,000).",
    "checked": "opened on the publisher's site on 12 November 2026 (arena/593368ef-tino3): the 1% rate and the $1,000,000 threshold, added to the graduated rates; the published sensitivity applies it to the taxable gain alone, a lower bound"
+  },
+  "civ1947_12": {
+   "publisher": "California Legislative Information",
+   "title": "Civil Code section 1947.12 (statewide residential rent cap)",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1947.12",
+   "verifies": [
+    "Over any 12-month period an owner may not raise the gross rental rate by more than 5% plus the percentage change in the cost of living, or 10%, whichever is lower",
+    "The cap is measured from the lowest gross rental rate charged in the previous 12 months, and rent may not be raised in more than two increments in a 12-month period",
+    "For a new tenancy with no prior tenant remaining, the owner may set the initial rent freely; the cap then governs later increases",
+    "The section does not apply to housing already subject to a local rent ordinance that limits increases to LESS than the state formula, nor to housing with a certificate of occupancy issued within the previous 15 years"
+   ],
+   "quote": "an owner of residential real property shall not, over the course of any 12-month period, increase the gross rental rate for a dwelling or a unit more than 5 percent plus the percentage change in the cost of living, or 10 percent, whichever is lower ... For a new tenancy in which no tenant from the prior tenancy remains in lawful possession ... the owner may establish the initial rental rate not subject to subdivision (a). ... This section shall not apply to the following residential real properties: ... (3) Housing subject to rent or price control through a public entity's valid exercise of its police power ... that restricts annual increases in the rental rate to an amount less than that provided in subdivision (a).",
+   "checked": "opened on the publisher's site on 12 November 2026 (session arena/de474f38-tino3): subdivisions (a)(1), (a)(2), (b) and (d)(1) to (d)(5) read in full on leginfo.legislature.ca.gov"
+  },
+  "civ1946_2": {
+   "publisher": "California Legislative Information",
+   "title": "Civil Code section 1946.2 (just cause to terminate a residential tenancy)",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1946.2",
+   "verifies": [
+    "After a tenant has continuously and lawfully occupied a residential property for 12 months, the owner may not terminate the tenancy without just cause stated in the written notice",
+    "A no-fault termination requires relocation assistance or a waiver of the final month's rent, equal to one month's rent, provided within 15 calendar days",
+    "The section lists the properties it does not cover, and its exemption notice names section 1947.12 as the rent-limit section"
+   ],
+   "quote": "after a tenant has continuously and lawfully occupied a residential real property for 12 months, the owner of the residential real property shall not terminate a tenancy without just cause, which shall be stated in the written notice to terminate tenancy. ... This property is not subject to the rent limits imposed by Section 1947.12 of the Civil Code and is not subject to the just cause requirements of Section 1946.2 of the Civil Code.",
+   "checked": "opened on the publisher's site on 12 November 2026 (session arena/de474f38-tino3): subdivisions (a), (c), (d) and (e) read on leginfo.legislature.ca.gov"
   }
  },
- "reviewer_session": "; 2026-11-12: arena/593368ef-tino3 re-opened fifteen publisher pages, confirmed every published figure and added rtc17043 (the 1% California tax above $1,000,000, published as a sensitivity)"
+ "reviewer_session": "; 2026-11-12: arena/593368ef-tino3 re-opened fifteen publisher pages, confirmed every published figure and added rtc17043 (the 1% California tax above $1,000,000, published as a sensitivity); 2026-11-12: arena/de474f38-tino3 opened Civil Code sections 1947.12 and 1946.2 on leginfo.legislature.ca.gov and added them"
 }
