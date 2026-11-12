@@ -20,4 +20,13 @@ jobs:
           source: ./
           destination: ./_legacy_site
       - name: Audit actual Jekyll output
-        run: python scripts/verify_legacy.py --site _legacy_site
+        shell: bash
+        run: |
+          set +e
+          result=$(python scripts/verify_legacy.py --site _legacy_site 2>&1)
+          code=$?
+          printf '%s\n' "$result"
+          if [ "$code" -ne 0 ]; then
+            while IFS= read -r line; do echo "::error title=Legacy output audit::$line"; done <<< "$result"
+          fi
+          exit "$code"
