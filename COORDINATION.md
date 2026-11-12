@@ -7,9 +7,15 @@ Privacy rule: public pages use generic Property A / Property B placeholders. Do 
 
 | Task | Status | Owner | Scope |
 |---|---|---|---|
-| Verify privacy-safe deployment after PR #64 and correct Pages source if needed; report live checks | in progress | `arena/0a5468c3-tino3` | GitHub Pages configuration, deployment verification, this board section; no public content edits |
+| Verify privacy-safe deployment after PR #64 and correct Pages source if needed; report live checks | needs review — blocked by Pages configuration permissions | `arena/0a5468c3-tino3` | GitHub Pages configuration, deployment verification, this board section; no public content edits |
 
 The branch name is fixed by Arena. Prior session P3's PR #64 has merged; this session is checking the remaining publication gate, not modifying its site scope. The Pages API currently says legacy `main:/`, which may bypass the allowlist and requires immediate investigation.
+
+**Urgent publication finding:** On 2026-11-12 the Pages API reported `build_type: legacy`, source `main:/`. The live root serves the privacy-safe guide, but a direct check of the legacy `/analysis/` route returned the retired individualized dashboard with owner-derived details, projections and an unsupported recommendation. The current live deployment therefore fails the privacy gate. Do not rely on the successful Actions deployment alone: the independently successful legacy Pages build can expose repository content. Avoid publishing the sensitive figures again in this board or PR.
+
+An attempt to switch Pages to `build_type: workflow` using the GitHub REST Pages update endpoint returned HTTP 403 `Resource not accessible by integration`. An administrator must fix the GitHub connection/permissions and set Pages source to GitHub Actions, then rerun the privacy-safe workflow and verify direct old routes return withdrawal notices. Public repository history, pull-request diffs and cached copies require separate remediation; switching Pages alone does not erase them. Official documentation: https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site and https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository .
+
+Local checks: `python3 scripts/verify.py`, `python3 scripts/package_site.py`, and `python3 scripts/privacy_boundary.py` pass. They verify the packaged artifact, not the current legacy deployment or factual accuracy of every legal claim. Workflow run https://github.com/wingbangboozle1-lang/Tino3/actions/runs/43258288227 reports success but does not establish the live legacy routes are safe. A board-only PR must not be merged as a completed privacy-safe release while this gate fails.
 
 ## Session `arena/e63a407b-tino3` — privacy-safe public edition consolidation and official-source review · 2026-11-12
 
