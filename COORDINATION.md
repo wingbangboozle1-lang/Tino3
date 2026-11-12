@@ -1730,3 +1730,25 @@ The published precision for assessment-roll values is tier 1 (nearest $10), chos
 Not in scope: `plan/**`, `analysis/**`, direct edit of open PR #62's `economy.html`/`economy.json`/`economy.py`; if a file needs a change owned by another session, request logged not edited.
 
 Privacy: Property A / Property B only. No name, address, ZIP, parcel, rent, assessment, utility use, insurance estimate, or owner-derived projection appears on any public page. Rounding is not treated as anonymization. Historical commits not certified erased.
+
+### Result `arena/671913cc-tino3` — 2026-11-12
+
+**Changes built on this branch:**
+
+- `scripts/build.py` enhanced: executive summary now outlines important details (two-property distinction, six evidence groups, four paths, five steps, trust 2040-2050 sequencing, why constant 50-year growth is not used). Suggestions expanded 5→10 with How to review and Selection gate. Questions expanded 11→14 with have-vs-missing table and seven discovery steps. Stress page now black-swan/irregular 50-year paths (Why smooth line misleads, 5 conditions, private method with 4 irregular types). Projections page adds Year-by-year worksheet (3 rows, 8 cols) with blank private years. Inheritance page adds 5-phase trust sequencing table (pre-transfer → hold-and-decide) with source links.
+- `EXECUTIVE_SUMMARY.md` refreshed to match the html summary; `executive-summary.html`, `suggestions.html`, `questions.html`, `stress.html`, `projections.html`, `inheritance.html` regenerated.
+- No new ledger sources (35 remain, all HTTPS official hosts, checked 2026-11-12). No dollar amounts or place names added; privacy boundary still rejects Cupertino/San Francisco/ZIP/parcel and only allows $15,000,000, $15,480,000, $20,000.
+
+**Verification performed on this branch (local, before PR):**
+
+- `python3 scripts/build.py` — Rendered 15 privacy-safe public pages
+- `python3 scripts/verify.py` — **PASS**: 15 reproducible pages; 190 table rows, 72 source-linked factual rows; 35 ledger entries; local links/fragments, official hosts, privacy scan, allowlisted package and withdrawal notices clean
+- `python3 scripts/package_site.py` — Packaged 15 public pages, 1 runtime asset and 110 content-free withdrawal routes
+- `python3 scripts/privacy_boundary.py` — PASS: 15 allowlisted pages + 1 asset scanned; 110 retired routes are exact content-free withdrawal notices; no forbidden identifiers or unapproved currency
+- `git grep -nE '^(<<<<<<<|>>>>>>>)'` — no matches
+- Manual line-by-line check: every factual row links to a ledger URL; every blank row is intentionally blank; no hallucinated value
+
+**Privacy note:** All property-specific inputs remain blank and unrounded on the public site. The owner's supplied values (assessments, tax bills, rent, utility use, insurance estimates, cash inheritance) are not published, even rounded, because rounding alone is not treated as anonymization. Historical commits and PR diffs outside the current artifact are not certified erased.
+
+**Next:** create PR to `main`, merge, verify Pages deploy, record result here and update board status.
+
