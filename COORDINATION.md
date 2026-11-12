@@ -25,8 +25,15 @@ residual risk is disclosed on every page, on `review.html` and on `suggestions.h
 | Q-2 Suggestion register: four paths, 20 suggestions, four decision gates, the privacy choice. Built on the 12-row register merged in PR #52; its four suggestions without an equivalent here were added as S-17 to S-20 | done | `arena/091defba-tino3` | `scripts/build.py`, `suggestions.html`, `assets/style.css` |
 | Q-3 Property tax and assessment history published at the owner's instructed precision, with the published state factor per year | done | `arena/091defba-tino3` | `scripts/model.py`, `scripts/build.py`, `assets/privacy.json`, `scripts/privacy_tier.py`, `property-a.html`, `property-b.html` |
 | Q-4 Sources added and re-read on 12 November 2026; two Department of Insurance pages added, and the ledger reconciled with the entries PR #53 added (one id each, merged rather than duplicated) | done | `arena/091defba-tino3` | `assets/sources.json` (72 entries), `taxes.html`, `inheritance.html`, `executive-summary.html`, `EXECUTIVE_SUMMARY.md`, `audit.html`, `review.html` |
-| Q-5 Checks, pull request, merge, Pages deploy, record | **in progress** | `arena/091defba-tino3` | this section; `README.md`; `scripts/verify.py`, `scripts/package_site.py` |
-| Pull request | [#54](https://github.com/wingbangboozle1-lang/Tino3/pull/54), from `arena/091defba-tino3` to `main`; merge and deploy result appended below after the merge | | |
+| Q-5 Checks, pull request, merge, Pages deploy, record | done | `arena/091defba-tino3` | this section; `README.md`; `scripts/verify.py`, `scripts/package_site.py` |
+
+### Result
+
+- **Pull request:** [#54](https://github.com/wingbangboozle1-lang/Tino3/pull/54), `arena/091defba-tino3` to `main`. Check `verify` passed (8s) before the merge.
+- **Merged:** 12 November 2026, 15:43:21 UTC, merge commit `02f1066`.
+- **Deploy:** the `Deploy GitHub Pages` run for that merge completed `success` (run 43250865823). The Pages build record reports `status: built` for `02f1066`.
+- **Live check after deploy:** `questions.html` and `suggestions.html` both serve the merged content (39 questions; four paths and 20 suggestions), and `property-a.html` serves the 2014–2026 roll table. Pages is configured with `main` as its source and HTTPS enforced.
+- **Flagged items** are published on `review.html` and do not block anything, as the owner asked.
 
 Not touched: `plan/**`, `analysis/**`, `.github/workflows/*`, `scripts/privacy_boundary.py`, every withdrawal notice, and every
 other session's section of this board. No name, street address, postal code, parcel number or utility account appears in any
@@ -109,6 +116,10 @@ fails if a single published byte differs from a fresh build. All three verifiers
 - 12 November: two new pages rendered; sources re-read; roll tables added; precision setting added; all three verifiers re-run.
 - 12 November, after `git fetch`: `main` had moved to `4347464` (merges of PRs #52 and #53). Merge performed, conflicts resolved as
   the table above records, pages regenerated, all three verifiers re-run on the merged tree.
+- 12 November: PR #54 opened; `verify` check passed; merged with a merge commit; Pages deploy succeeded; live pages fetched and read
+  after the deploy. Two cosmetic corrections were made on a follow-up commit and published as PR #55: question rows were re-badged
+  from "Your choice" to "Status" (a partly-answered question is not a choice), and the intro sentence now points to the two rows that
+  really are family decisions.
 - Pull request and merge result: recorded below and on the pull request itself.
 
 ## Session `arena/4ff01a4d-tino3` — second integration pass: independent re-verification, site consolidation, publication
