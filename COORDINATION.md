@@ -122,6 +122,112 @@ fails if a single published byte differs from a fresh build. All three verifiers
   really are family decisions.
 - Pull request and merge result: recorded below and on the pull request itself.
 
+## Session `arena/de474f38-tino3` — independent re-verification, brief gap check, and the statewide rent cap (2026-11-12)
+
+*Branch note:* Arena pins this session to `arena/de474f38-tino3`, branched from `fd2b5a8` and fast-forwarded through
+`aa4a3f7` (PR #52) to `3678084` (PR #58). The board's `session-<id>/<task>` naming cannot be used. This block sits near
+the top on purpose: other sessions append at the end, so the edits merge without conflict. The claim was pushed at
+15:36:43Z, before any other file was edited.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| D5-1 Independent re-verification of the published figures against the publishers' own pages, opened in this session | done | `arena/de474f38-tino3` | `assets/sources.json`, root `*.html`, `assets/data/*` |
+| D5-2 Gap check of the root edition against each item of the owner's brief; repair inside the root edition only | done | `arena/de474f38-tino3` | `scripts/model.py`, `scripts/build.py`, root `*.html`, `README.md` |
+| D5-3 Arithmetic audit independent of the renderer | done | `arena/de474f38-tino3` | no shared file |
+| D5-4 Disposition of open PR #44, all checks, PR, merge, deploy verification, result recorded | done | `arena/de474f38-tino3` | `COORDINATION.md` (this block only) |
+
+### Result · `arena/de474f38-tino3` · 2026-11-12
+
+**The round moved while this session worked.** This session claimed at 15:36:43Z, second of six. Between that claim and
+the first content commit, `main` took PRs #53, #54, #55, #56 and #58 from five other sessions. This session then rebased
+onto `3678084` and compared, phrase by phrase, what `main` already had against what this branch had built. **Four of the
+five things this session had written were duplicates and were dropped.** One survived, because a phrase search of every
+root page on `main` returned zero hits for it.
+
+| This session had written | On `main` after the rebase? | Disposition |
+|---|---|---|
+| Civil Code 1947.12, the statewide rent cap, and Civil Code 1946.2, just cause | **No — 0 of 15 pages** | **Kept.** This is the whole of what merged. |
+| Insurer of last resort and its $3,000,000 combined dwelling limit | Yes — 7 pages | Dropped. `main` has it. |
+| Inherited retirement account rules | Yes — 9 pages | Dropped. `main` has it, and better: it also carries 26 USC 102 and an RMD FAQ. |
+| The 40% estate-tax rate from Table A of the Form 706 instructions | Yes — 5 pages | Dropped. `main` has it. |
+| The 10-year Treasury anchor refreshed to 10 November 2026 (4.98%) | Partly — noted, not adopted | Dropped. `main`'s model still uses 4.88% from 9 November and says so; changing it is not this session's call once four others have built on that number. |
+| "An inheritance is not income to the heir" | Yes — 4 pages | Never written here; `main` has it and this branch did not. |
+
+**What merged.** Two statutes, both read in full on `leginfo.legislature.ca.gov` on 12 November 2026:
+
+1. **Civil Code 1947.12(a)(1)** — over any 12 months an owner may not raise gross rent by more than 5% plus the change in
+   the cost of living, or 10%, whichever is lower. At the modelled 2.5% inflation that is 7.5% a year.
+2. **Civil Code 1947.12(d)(3)** — the state cap does *not* apply where a local ordinance already restricts increases to
+   less than the state formula. That makes the state and local caps mutually exclusive, so the open coverage question
+   (FL-14) decides which one is lawful. Every projection assumed the local 1.5% cap and never said what happens if the
+   assumption is wrong; both paths are now priced. At a 2045 inheritance the ten-year spread is $3,398,970. **(d)(4)** is
+   a second route to the same question: housing with a certificate of occupancy issued within the previous 15 years sits
+   outside the state cap.
+3. **Civil Code 1946.2** — just cause after 12 months of continuous occupancy, plus relocation assistance or a waiver of
+   the final month's rent within 15 calendar days on a no-fault ending.
+
+Ledger 73 to 75 entries. New flag FL-32. Q-25's last column said the answer "does not change the ranking" and stopped
+there; it now names the 7.5% fallback. Root rows 608 to 622.
+
+### D5-1 · verification performed, independently of the ledger
+
+Opened on the publishers' own domains on 12 November 2026 and compared with the figure the site publishes:
+
+| Source | Figure confirmed |
+|---|---|
+| https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax | 2026 filing threshold $15,000,000; the 2011-to-2026 table matches every row on the tax page |
+| https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts | 2027 basic exclusion $15,480,000; gift exclusion $20,000 (2027) and $19,000 (2026) |
+| https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf | $1,044,586 for transfers 16 February 2025 to 15 February 2027; next adjustment February 2027; the 2021 and 2023 amounts in the enclosed table |
+| https://boe.ca.gov/proptaxes/pdf/lta26002.pdf | 2% cap on base-year value growth (California Constitution article XIII A, section 2(b)); the 2026 factor of 1.02 and the reason for the August-to-August calculation |
+| https://www.irs.gov/businesses/small-businesses-self-employed/frequently-asked-questions-on-estate-taxes | Form 706 due nine months after death; automatic six-month extension on Form 4768; Public Law 119-21 signed 4 July 2025 |
+| https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value_month=202611 | Seven rows, 2 to 10 November; 10-year 4.88% on 9 November and 4.98% on 10 November |
+| https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1947.12 | 5% plus the cost of living to a 10% ceiling; the new-tenancy rule; the (d) exemptions |
+| https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1946.2 | Just cause after 12 months; the relocation-assistance rule |
+| https://www.insurance.ca.gov/0400-news/0100-press-releases/2019/release089-19.cfm | The FAIR Plan is the insurer of last resort under California law; combined dwelling limit $3,000,000 from 1 April 2020 |
+| https://www.irs.gov/retirement-plans/plan-participant-employee/retirement-topics-beneficiary | Taxable distributions go in gross income; the 10-year rule; spousal rollover; inherited-Roth treatment |
+
+**No figure already published was found to be wrong.** Every one of these matched.
+
+### D5-3 · arithmetic re-derived without the renderer
+
+The 2045 inheritance at 4% growth was recomputed from the assumption register alone, in a script that does not import
+`scripts/model.py`. Market value $6,531,230; assessed value before the death $801,250; the Proposition 19 amount
+$1,546,240; assessed value if a child moves in $4,984,990; net sale proceeds $6,197,490; and then all four options. The
+wealth figures came out at $10,052,910, $8,761,920, $8,583,650 and $7,945,640, the first-year cash flows at $0, $0,
+$46,590 and minus $31,900, and the first-year property tax at $60,150 and $78,400. Every one matched the published table
+to the dollar. The new rent-cap block was re-derived the same way: all 18 published cells reproduce, and the state rate
+reproduces as min(5% + 2.5%, 10%) = 7.5%.
+
+### D5-4 · irregularities and dispositions
+
+1. **PR #44 closed unmerged.** It reported `mergeable: CONFLICTING`, had no commit after 2026-11-11T13:04:55Z, and would
+   have re-rendered the root edition from a 13-page model. Its estate-room correction (C-13) is already on `main` at
+   $17,612,290; its RTC 63.2 attribution and move-out rule are already there too. **Not merged, and not lost:** a review
+   comment on the pull request lists five items it holds that `main` still lacks — the withdrawn IRC 121 conformance
+   assumption, the unindexed $10,000 SALT cap, the California homeowner deduction, decline-in-value relief in this
+   edition, and a conflict between two Board of Equalization letters on the 2027 amount — for a later session to port.
+   Note for whoever ports them: `main` now uses FL-25 and FL-26 for other things, so those numbers must change.
+2. **README flag count was stale before this session.** The page renders 31 flags (FL-01 to FL-32; FL-17 was closed and
+   its number retired) and the README said 29. Corrected to 31, and the source count to 75, for the same reason.
+3. **The Treasury anchor differs between editions and only one of them says so.** This edition's model uses 4.88% from
+   9 November; the cross-check uses 4.98% from 10 November and discloses the difference on its own flagged page. The
+   latest published row on 12 November is still 10 November, because 11 November is a federal holiday. Not changed here:
+   four sessions have built on the current number since this session claimed, and it moves no ranking.
+4. **`scripts/privacy_tier.py` is a module, not a check.** Running it prints what it writes and exits non-zero. It is not
+   in `.github/workflows/verify.yml`, so CI is unaffected. Recorded so a later session does not read that exit code as a
+   failure.
+
+### Checks · `arena/de474f38-tino3`
+
+* `python scripts/verify.py` **PASS** — 15 reproducible pages; 622 table rows (595 factual, all linked to an official
+  publisher; 27 decision rows, all linked to their reasoning); 75 ledger sources; local links, official hosts, privacy
+  scan and $10 rounding clean.
+* `python plan/tools/verify.py` **PASS** — 10 pages, 454 rows. `python analysis/tools/verify.py` **PASS** — 12 pages,
+  380 rows. `python scripts/package_site.py` **PASS** — 15 pages, 54 assets, 49 withdrawal notices.
+  `python scripts/privacy_boundary.py` **PASS**.
+* Not done: no browser rendering, no quote, no appraisal, no parcel lookup. Table A of the Form 706 instructions was read
+  as an official-domain search excerpt, not by opening the whole 50-part page; the ledger entry says so.
+
 ## Session `arena/4ff01a4d-tino3` — second integration pass: independent re-verification, site consolidation, publication
 
 *Branch note:* Arena pins this session to `arena/4ff01a4d-tino3`, branched from `f6b2873` (merge of PR #39); the board's
