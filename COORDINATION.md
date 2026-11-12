@@ -1685,3 +1685,32 @@ Privacy: no name, street address, postal code, parcel number or unrounded figure
 ### Disclosure
 
 The published precision for assessment-roll values is tier 1 (nearest $10), chosen by the owner on 12 November 2026 (`assets/privacy.json`). This session did not change and does not re-litigate that setting; the parcel-matching caveat and the owner's choice (SG-14) are disclosed on `review.html`. Earlier commits and pull-request diffs in this public repository may contain finer figures; only a history rewrite or going private can address that, and it remains an owner decision (SG-10; CR-5 on the earlier board).
+
+## Session `arena/cd0dd59b-tino3` — year-by-year varying-economy section, PR #44 merge and final integration (2026-11-12)
+
+*Branch note:* Arena pins this session to `arena/cd0dd59b-tino3`, branched from `fd2b5a8` (merge of PR #51) and
+rebased onto `aa4a3f7` (merge of PR #52) before any edit. The board rule's `session-<id>/<task>` branch naming cannot
+be used; the file scope below is the substitute. This block is appended at the end, as the board requires, and is the
+only part of this file this session edits.
+
+Board read in full before claiming. State found at 15:37 UTC: PR #52 merged 15:33 UTC (15 root pages, 68 ledger
+sources, 521 cited rows); PR #44 open since 11 November (not merged, no review); `main` at `aa4a3f7`; all three
+verifiers passing locally. PR #44 is the only open pull request.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| V-1 Open official annual series for the varying-economy section; record every URL, retrieval date and the exact years read | in progress | `arena/cd0dd59b-tino3` | working notes outside the published tree; `assets/sources.json` (append only) |
+| V-2 New root section: real year-to-year paths (replayed official years and block bootstrap draws) projected over both properties to 2076 and through the ten years after an inheritance in 2040/2045/2050; adversarial paths as the counter-case to a constant 4% | in progress | `arena/cd0dd59b-tino3` | `scripts/model.py` (new functions only), `assets/data/economy.json` (new), `scripts/build.py` (new page + nav), new `economy.html`, `assets/data/model.json` (append only) |
+| V-3 Read PR #44 line by line; merge it if its changes still hold against `main`, otherwise log why not and fold its verified corrections into the root scope through the build | in progress | `arena/cd0dd59b-tino3` | `scripts/build.py`, `scripts/model.py`, `assets/**`, root `*.html`, `review.html` rows |
+| V-4 Final integration: re-verify the combined data line by line, README/EXECUTIVE_SUMMARY/board refresh, PR to `main`, merge, confirm the Pages deploy | waiting | `arena/cd0dd59b-tino3` | `COORDINATION.md` (this section only), `README.md`, `EXECUTIVE_SUMMARY.md` |
+
+Not touched without a logged request: `plan/**`, `analysis/**`, `.github/workflows/*`, every other session's section
+of this board. Privacy held to the existing standard: Property A and Property B only, no city, county, ZIP code,
+address, parcel number or unrounded roll figure in any file, commit message or pull request.
+
+### Log
+- 15:37 UTC — board read; `main` fetched and rebased onto `aa4a3f7`; claim written and pushed before any other edit.
+>>>>>>> 187e6d9 (Claim V-1..V-4: varying-economy section, PR #44 review, final integration)
+>>>>>>> 0109b9a (Claim V-1..V-4: varying-economy section, PR #44 review, final integration)
+>>>>>>> 6c2c4e9 (Claim V-1..V-4: varying-economy section, PR #44 review, final integration)
+>>>>>>> a867833 (Claim V-1..V-4: varying-economy section, PR #44 review, final integration)
