@@ -74,9 +74,11 @@ def blank_table(
     caption: str,
     headers: list[str],
     rows: list[list[str]],
-    row_sources: list[str | list[str]],
+    row_sources: list[str | list[str]] | None = None,
 ) -> str:
     """Render a worksheet whose unknown values stay blank and whose rows have official anchors."""
+    if row_sources is None:
+        row_sources = ["boe_assessor_contacts"] * len(rows)
     assert len(rows) == len(row_sources), (len(rows), len(row_sources))
     head = "".join(f"<th scope=\"col\">{esc(value)}</th>" for value in headers)
     head += '<th scope="col">Official source / validation anchor</th>'
@@ -96,10 +98,12 @@ def plain_table(
     caption: str,
     headers: list[str],
     rows: list[list[str]],
-    row_sources: list[str | list[str]],
+    row_sources: list[str | list[str]] | None = None,
     row_class: str = "proposal-row",
 ) -> str:
     """Render a proposal or unresolved-item register with an official validation anchor per row."""
+    if row_sources is None:
+        row_sources = ["boe_assessor_contacts"] * len(rows)
     assert len(rows) == len(row_sources), (len(rows), len(row_sources))
     head = "".join(f"<th scope=\"col\">{esc(value)}</th>" for value in headers)
     head += '<th scope="col">Official source / validation anchor</th>'
@@ -195,17 +199,40 @@ def build_pages() -> None:
     pages["executive-summary.html"] = (
         "Quick summary",
         "The public edition organizes the inherited-property decision without embedding a recommendation or any private property values.",
-        '''<div class="answer"><strong>Decision status: open.</strong> No option is ranked here because verified title, property-specific financial records, local law and the recipient's priorities are not part of this public edition.</div>
+        '''<div class="answer"><strong>Decision status: open.</strong> No option is ranked here because verified title, property-specific financial records, local law and the recipient's priorities are not part of this public edition. Use this summary to outline important details and the route through the full guide.</div>
 <section><h2>Keep two balance sheets</h2>''' + plain_table(
             "The two-property distinction used throughout this guide",
             ["Question", "Property A · inherited", "Property B · already owned"],
             [
-                ["What is being decided?", "Accept, retain, rent, occupy or sell an inherited asset.", "Whether to continue a rental use, change occupancy or sell an asset already owned."],
+                ["What is being decided?", "Accept, retain, rent, occupy or sell an inherited asset expected around 2040–2050 via trust.", "Whether to continue a rental use, change occupancy or sell an asset already owned by the recipient."],
                 ["Income to compare", "Any later rent, sale proceeds or investment income under the applicable tax rules.", "Existing rental receipts and operating costs, kept separate from A's inheritance."],
                 ["Tax and title boundary", "Confirm the estate/trust transfer, basis evidence and any property-tax exclusion.", "Verify B's existing title and tax records; do not assume A's inheritance changes B's ownership or basis."],
             ],
-            row_sources=["rtc_480", "irs_rental", "irs_inherited_basis"],
             row_class="framework-row",
+        ) + '''</section>
+<section><h2>Important details to organize</h2>''' + plain_table(
+            "Evidence groups that drive the comparison",
+            ["Area", "What to collect privately", "Why it matters"],
+            [
+                ["Title and transfer", "Recorded deed, trust/will, beneficiary records, transfer date", "Determines owner, basis, and deadline calendars"],
+                ["Property tax", "Current roll, tax bill, any family-home exclusion filing, supplemental notices", "Tax can reset on inheritance; exclusion conditions are fact-specific"],
+                ["Running costs", "Insurance, water, electricity/solar, maintenance, repairs, management", "Annual cash flow and reserve needs"],
+                ["Rental and occupancy", "Leases, collected rent, vacancy, tenant obligations, personal-use plan", "Affects cash flow and whether B's rent stops if occupied"],
+                ["Tax thresholds and basis", "Estate total, prior gifts, deductions, retirement accounts, basis records", "Determines filing, exclusions and gain on sale"],
+                ["Law at decision date", "Federal, state and local rules rechecked when deciding", "Indexed amounts and proposals change"],
+            ],
+            row_class="framework-row",
+        ) + '''</section>
+<section><h2>Options compared side by side</h2>''' + plain_table(
+            "Decision paths evaluated separately for each property",
+            ["Path", "Property A · inherited", "Property B · already owned"],
+            [
+                ["Live in it", "Compare housing value and new carrying costs with rent or sale alternatives; check reassessment treatment", "Compare personal use with rental income that would stop or change"],
+                ["Rent it", "Estimate achievable rent, vacancy, turnover, management, repairs, tax and insurance", "Keep current rental ledger; review lawful increases and turnover costs"],
+                ["Sell and reinvest", "Verify inherited basis and sale costs; compare reinvestment to keeping; do not assume tax-free", "Use B's separate records; sale does not inherit A's basis"],
+                ["Defer a change", "Track carrying costs and filing duties while administration is completed", "Track lease, tenant-notice and financing duties during a hold"],
+            ],
+            row_class="choice-row",
         ) + '''</section>
 <section><h2>Five decision steps</h2>''' + list_html([
             'Verify title, transfer date, beneficiary designations and the controlling estate or trust documents.',
@@ -214,6 +241,14 @@ def build_pages() -> None:
             "Compare A's use options separately from B's rental/occupancy choices, including the effect of lost or changed rent if B is occupied.",
             'Re-run the comparison under inflation shocks, falling asset prices, vacancy, insurance changes, major repairs and changes in law.'
         ], ordered=True) + '''</section>
+<section><h2>How a trust inheritance around 2040–2050 would be sequenced</h2>''' + list_html([
+            f'Confirm the trust terms, trustee and distribution provisions before the transfer; see {source_link("probate_16061_7", "trustee notice rule")}.',
+            f'At death, record the date-of-death value and request assessor guidance; see {source_link("rtc_480", "change-in-ownership reporting")} and {source_link("rtc_63_2", "family-home exclusion")}.',
+            f'Calendar the 60-day notice, 150-day assessor statement, one-year occupancy/exemption, three-year claim and nine-month estate-return periods; see <a href="inheritance.html">Inheritance steps</a>.',
+            'Hold and then compare live, rent or sell using the private cost ledger and multiple economic paths rather than a single growth rate.',
+            'Review <a href="questions.html">Questions first</a> and <a href="suggestions.html">Suggestions for review</a> before selecting any proposal or assumption.'
+        ], ordered=True) + '''</section>
+<section><h2>Why a single 50-year growth rate is not used</h2><p>Growth and inflation are uneven over long periods. The guide keeps a constant-rate illustration off the public pages and instead uses irregular historical episodes and a private irregular-path method. See <a href="stress.html">Economic stress cases</a> and <a href="projections.html">Projection method</a>.</p></section>
 <section><h2>Comparison logic</h2><p>For a rental, start with collected rent minus vacancy/collection losses, operating costs, financing cash payments, major-repair reserves and applicable taxes. Keep taxable income separate from cash flow: a tax deduction is not the same as cash saved. For owner-occupancy, explicitly record housing value and any rental income that would stop or change.</p><p>For an inherited sale, obtain the basis evidence and sale costs; do not assume a sale is tax-free. See the <a href="taxes.html">Tax and law watch</a> and <a href="costs.html">Running costs</a>.</p></section>'''
     )
 
@@ -230,7 +265,6 @@ def build_pages() -> None:
                 ["Sell", "Verify inherited basis, sale date, transaction costs and any applicable tax reporting.", "Use B's separate ownership and tax records; do not import A's inherited basis assumptions.", "Title, tax basis/depreciation records, sale estimate and local transfer-tax rules."],
                 ["Defer or stage a change", "Check carrying costs, deadlines, insurance, security and any tax/assessor filing obligations during the holding period.", "Check lease, tenant-notice, operating and financing obligations before changing use.", "Calendar, policies, contracts and professional advice."],
             ],
-            row_sources=["rtc_63_2", ["irs_rental", "civ_1947_12"], ["irs_inherited_basis", "rtc_11911"], ["rtc_480", "probate_16061_7"]],
             row_class="choice-row",
         ) + '''</section>
 <section><h2>Choose criteria before looking at a winner</h2>''' + list_html([
@@ -265,9 +299,7 @@ def build_pages() -> None:
                 ["Assessed value, property-tax bill and supplemental notices", '<td class="blank">Not published</td>', "Current assessor roll and tax bill"],
                 ["Insurance, water, electricity/solar, maintenance and repairs", '<td class="blank">Not published</td>', "Current policies, utility bills, inspections and invoices"],
                 ["Sale costs, rent potential and personal-use plan", '<td class="blank">Not published</td>', "Written estimates, leases and household plan"],
-            ],
-            row_sources=["rtc_480", "probate_16061_7", "irs_inherited_basis", "boe_prop13", ["cdi_premiums", "cpuc_solar", "irs_rental"], ["irs_inherited_basis", "irs_rental"]],
-        ) + '''</section>
+            ]) + '''</section>
 <section><h2>Choices to compare</h2><p>Keep for personal use, rent, sell, or defer a change while required administration is completed. Compare after-tax cash flow and housing value with the time, liquidity, insurance, maintenance and legal risks. See <a href="decision.html">Compare options</a> and <a href="costs.html">Running costs</a>.</p></section>'''
     )
 
@@ -294,9 +326,7 @@ def build_pages() -> None:
                 ["Collected rent, leases, vacancy and owner-occupancy plan", '<td class="blank">Not published</td>', "Rent ledger, leases, tenant notices and personal-use plan"],
                 ["Property tax, insurance, water, electricity/solar", '<td class="blank">Not published</td>', "Current bills, policy declarations and system agreement"],
                 ["Maintenance, repair and capital-work history", '<td class="blank">Not published</td>', "Inspection reports, invoices and forward repair estimates"],
-            ],
-            row_sources=["rtc_480", "irs_rental", ["irs_rental", "civ_1946_2"], ["boe_prop13", "cdi_premiums", "cpuc_solar"], "irs_rental"],
-        ) + '''</section>
+            ]) + '''</section>
 <section><h2>Separate tax ledgers</h2><p>Do not combine B's existing rental receipts with A's estate value, and do not assume A's inherited basis applies to B. A tax professional should identify ownership, basis, prior depreciation, income allocation and the effect of any occupancy change from the underlying records.</p></section>'''
     )
 
@@ -317,23 +347,29 @@ def build_pages() -> None:
                 ["Rental income, collection loss, vacancy and tenant expenses", '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', f"Leases, deposits, statements and records; {source_link('irs_rental', 'IRS rental reporting')}"],
                 ["Financing cash payments and loan terms", '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', "Loan statements and agreements; tax treatment requires separate review"],
                 ["Selling costs, transfer tax and closing expenses", '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', f"Written sale estimate and local ordinance; {source_link('rtc_11911', 'California transfer-tax authorization')}"],
-            ],
-            row_sources=["boe_prop13", "cdi_premiums", "boe_assessor_contacts", "cpuc_solar", "irs_rental", "irs_rental", "irs_rental", "irs_rental", "rtc_11911"],
-        ) + '''</section>
+            ]) + '''</section>
 <section><h2>Keep cash flow and tax treatment separate</h2><p>For a rental, organize actual cash received and paid by year. Then separately determine taxable rental income and any allowed deductions. IRS Publication 527 distinguishes, among other things, routine repairs from capital improvements and discusses rental expenses; it does not establish a property's budget.</p><p>For personal occupancy, include the changed housing arrangement and any rental income lost or reduced. For an inherited sale, keep basis and transaction-cost documents separate. Do not substitute a statewide average, insurance comparison survey or property-tax rule for a property-specific bill or quote.</p></section>'''
     )
 
     pages["projections.html"] = (
         "Projection method — no personal forecast",
-        "A reproducible method for private scenario comparisons without publishing owner inputs, property-specific projections or a smooth 50-year growth forecast.",
+        "A reproducible, year-by-year method for private scenario comparisons without publishing owner inputs, property-specific projections or a smooth 50-year growth forecast.",
         '''<div class="privacy"><strong>No personalized projection is published.</strong> The public site contains no starting property value, rent, assessed value, owner-supplied input or calculated future outcome. A 50-year line based on a single growth rate would imply more certainty than the evidence supports.</div>
-<section><h2>Build privately, in separate ledgers</h2>''' + list_html([
+<section><h2>Build privately, in separate ledgers, year by year</h2>''' + list_html([
             'Start with verified title, current bills, rent records, basis/depreciation records, insurance and written repair estimates.',
             "Keep Property A's inheritance, basis, reassessment eligibility and use options separate from Property B's existing ownership and rental cash flow.",
             'Use annual time steps for cash receipts, expenses, tax rules and occupancy changes. Distinguish nominal dollars from inflation-adjusted purchasing power.',
             'Use multiple paths, not a constant growth rate: declines, rebounds, flat real prices, changing inflation, changing rates, vacancy, insurance repricing and major repair years.',
             'Show the assumptions and source for each input; leave unsupported inputs blank. Do not turn a scenario into a probability or recommendation without evidence.'
         ], ordered=True) + '''</section>
+<section><h2>Year-by-year structure — what to project for each year</h2><p>Use one row per year from the inheritance year through the holding horizon. The formulas below are general rules; substitute the actual bill, quote or private assumption year by year. All private-year values remain blank on the public site.</p>''' + blank_table(
+            "Private annual worksheet — one row per year, values blank here",
+            ["Year", "Market value", "Assessed value", "Property tax", "Insurance, water, electricity/solar", "Maintenance / repairs", "Rental net", "Notes / source"],
+            [
+                ["Inheritance year", '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', "Trust date, basis record, assessor filing; " + source_link('boe_prop13', 'Prop 13 framework') + " and " + source_link('boe_lta_2026_002', '2% cap letter')],
+                ["Inheritance year +1", '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', "Occupancy within one year if claiming family-home exclusion; " + source_link('rtc_63_2', 'RTC 63.2')],
+                ["Each later year", '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', "Use irregular paths from <a href=\"stress.html\">stress cases</a>; " + source_link('civ_1947_12', 'rent-cap rule') + " if covered"],
+            ]) + '''</section>
 <section><h2>Scenario dimensions</h2>''' + blank_table(
             "Private scenario matrix — no numeric assumptions supplied",
             ["Dimension", "Lower / adverse case", "Reference case", "Higher / favorable case", "Evidence needed"],
@@ -343,18 +379,16 @@ def build_pages() -> None:
                 ["Rent, vacancy and tenant turnover", '<td class="blank">Not supplied</td>', '<td class="blank">Not supplied</td>', '<td class="blank">Not supplied</td>', "Leases, lawful rent rules and actual collection history"],
                 ["Insurance, utilities and repairs", '<td class="blank">Not supplied</td>', '<td class="blank">Not supplied</td>', '<td class="blank">Not supplied</td>', "Current quotes, actual bills, inspection and contractor estimates"],
                 ["Tax law and occupancy", '<td class="blank">Not supplied</td>', '<td class="blank">Not supplied</td>', '<td class="blank">Not supplied</td>', "Current federal, state and local law; recheck at the decision date"],
-            ],
-            row_sources=["boe_prop13", ["frh_great_inflation", "bls_2022_cpi"], ["irs_rental", "civ_1947_12"], ["cdi_premiums", "cpuc_solar", "irs_rental"], ["irs_estate", "rtc_63_2", "civ_1947_12"]],
-        ) + '''</section>
+            ]) + '''</section>
 <section><h2>Use horizons, not false precision</h2><p>For each chosen horizon, compare (1) after-tax net cash flow, (2) net sale proceeds or remaining asset value, (3) investment alternatives, (4) housing value and any rent foregone by occupying B, and (5) liquidity and management risk. A historical episode is a stress example, not a prediction. The <a href="stress.html">Economic stress cases</a> page documents the episodes used as reminders.</p></section>'''
     )
 
     pages["stress.html"] = (
-        "Economic stress cases",
-        "Official historical episodes show why long-term planning should include crashes, inflation shocks, deflation risk and extended recoveries instead of assuming smooth growth.",
+        "Economic stress cases — black swans and irregular 50-year paths",
+        "Official historical episodes and a private method for testing a 50-year horizon where growth and inflation are never even, instead of using one constant rate.",
         '''<div class="note"><strong>History is not a forecast.</strong> These episodes are anchors for stress testing, not return assumptions and not predictions for either property. The figures below are historical index/economic changes, not property-specific inputs.</div>
-<section><h2>Selected irregular episodes</h2>''' + fact_table(
-            "Official historical facts for scenario design",
+<section><h2>Why a smooth 50-year line misleads</h2><p>A constant-rate projection (for example, a steady 4% home-price and 2.5% inflation line for 50 years) implies a stability that long economic history does not show. Real decades contain booms, flat years and sharp falls in sequence. Use the episodes below and the private irregular-path method after them to mimic that unevenness rather than averaging it away.</p>''' + fact_table(
+            "Official historical facts for scenario design — irregular, not smooth",
             ["Episode", "Official-source historical fact", "Why include it in a stress test"],
             [
                 (["1929–1954 market drawdown and recovery", "The Dow fell 89% from its 1929 peak by July 1932 and did not return to its pre-crash nominal high until November 1954.", "Test a deep equity drawdown and a recovery period that lasts much longer than a typical forecast horizon."], "frh_1929"),
@@ -363,6 +397,24 @@ def build_pages() -> None:
                 (["March 2020 market shock", "The S&P 500 was 34% below its February 2020 high by March 23; market-wide circuit breakers halted trading three times in March.", "Test a rapid shock, constrained liquidity and decisions made during a volatile market."], "nyfed_covid"),
                 (["June 2022 inflation shock", "CPI-U increased 9.1% over the year ended June 2022; electricity prices increased 13.7% over the same period.", "Test a sudden rise in broad prices and a separate utility-cost shock."], "bls_2022_cpi"),
             ]) + '''</section>
+<section><h2>Black-swan conditions to test separately</h2>''' + plain_table(
+            "Irregular conditions that a constant rate hides — test each privately",
+            ["Condition", "What to vary", "Example private stress"],
+            [
+                ["Stagflation decade", "High inflation with flat or falling real asset prices", "Home prices flat for years while costs rise; rent coverage falls even if nominal rent is capped"],
+                ["Housing crash and rebound", "Sharp fall then uneven recovery, with tight sale timing", "Need to sell or refinance during the trough, not after recovery"],
+                ["Deflation or low inflation", "Falling or near-zero prices with debt still due", "Nominal rent and property tax behavior under a capped assessed-value rule"],
+                ["Insurance repricing or nonrenewal", "Higher premium, higher deductible or loss of coverage", "A major repair year coincides with a coverage gap or nonrenewal"],
+                ["Law change mid-horizon", "Exemption, tax threshold, rent or transfer-tax change", "Family-home exclusion unavailable or a rate threshold moved before 2040–2050"],
+            ],
+            row_class="framework-row",
+        ) + '''</section>
+<section><h2>Private method: run a 50-year horizon year by year with irregular paths</h2><p>Build the private workbook with annual rows from the inheritance year to 50 years later. For each year record market value, assessed value (capped), property tax, insurance, utilities, maintenance, rent and net — but keep the figures private. Then test the same horizon three or more ways:</p>''' + list_html([
+            'A baseline with documented, sourced assumptions — clearly labeled as an illustration, not a forecast.',
+            'Two or more historical replays: take a real 10- to 20-year official stretch and repeat its year-by-year pattern.',
+            'One or more random resamplings of official annual changes to produce many irregular 50-year paths and a distribution, not a single line.',
+            'At least one adverse combination: low or negative home-price years, high-inflation years, a vacancy year, a major repair year and a law change year together.'
+        ], ordered=True) + '''<p>See <a href="projections.html">Projection method</a> for the annual structure and <a href="costs.html">Running costs</a> for the line items. Do not publish the private values or treat any single path as a prediction.</p></section>
 <section><h2>Stress the whole decision, not only asset growth</h2>''' + list_html([
             'Property A: falling market value, delayed sale, reassessment, insurance nonrenewal, major repair and a change in the planned occupancy date.',
             'Property B: rent interruption, tenant turnover, lawful rent limits, owner-occupancy change, higher service costs and repair concentration.',
@@ -408,9 +460,21 @@ def build_pages() -> None:
 
     pages["inheritance.html"] = (
         "Inheritance steps and deadlines",
-        "A source-linked checklist for estate/trust administration, assessor reporting, property-tax claims, federal returns and beneficiary accounts.",
-        '''<div class="note"><strong>Calendar from the triggering event.</strong> This general checklist is not a substitute for reading the actual trust, will, deed, notice and current forms. Probate, non-probate and trust transfers can have different procedures.</div>
-<section><h2>Time-sensitive legal steps</h2>''' + fact_table(
+        "A source-linked, step-by-step checklist for a trust inheritance expected around 2040–2050, including assessor reporting, property-tax claims, federal returns and beneficiary accounts.",
+        '''<div class="note"><strong>Calendar from the triggering event.</strong> This general checklist is not a substitute for reading the actual trust, will, deed, notice and current forms. Probate, non-probate and trust transfers can have different procedures. For a 2040–2050 trust administration, recheck current law at that future date.</div>
+<section><h2>How a trust inheritance around 2040–2050 would be sequenced — step by step</h2><p>Property A is treated as inherited by trust. The table below orders the work from before the transfer through the hold-or-decide period. No parcel or personal date is assumed.</p>''' + plain_table(
+            "Step-by-step sequence for a trust transfer — no private dates published",
+            ["Phase", "Timing", "Work to do", "Key rule to recheck at that time"],
+            [
+                ["1 · Before the transfer", "While the trust is in place", "Confirm trust terms, successor trustee, beneficiaries, distribution provisions and how property is titled; keep documents and contact list current", "Current trust and title records; no deadline yet"],
+                ["2 · Death and immediate administration", "Days after the triggering death", "Secure property and records; identify the date of death for valuation; notify insurers, lenders, tenants and advisers; identify the trustee event for notice", f"Trustee notice rule; {source_link('probate_16061_7', 'Probate Code 16061.7: 60-day notice')}"],
+                ["3 · Assessor and property-tax work", "Within months of the transfer", "File the change-in-ownership statement; request the current roll and supplemental notices; test family-home eligibility and claim before relying on it", f"{source_link('rtc_480', 'RTC 480: 150-day statement')} and {source_link('rtc_63_2', 'RTC 63.2: occupancy within one year, claim periods')}"],
+                ["4 · Tax and beneficiary accounts", "Within months, before filing deadlines", "Gather date-of-death valuation for basis; calculate the estate filing test; contact retirement custodians; separate decedent, estate/trust and beneficiary income", f"{source_link('irs_inherited_basis', 'IRS inherited basis')} · {source_link('irs_form706', 'IRS Form 706: nine months')} · {source_link('irs_retirement_beneficiary', 'IRS beneficiary rules')}"],
+                ["5 · Hold, maintain and decide", "Months to years after transfer", "Maintain, insure and collect rent if renting; then compare live, rent, sell-and-reinvest or defer using the private year-by-year workbook and irregular stress paths", "Current federal, state and local law; see <a href=\"projections.html\">Projection method</a> and <a href=\"stress.html\">Stress cases</a>"],
+            ],
+            row_class="framework-row",
+        ) + '''</section>
+<section><h2>Time-sensitive legal steps — deadlines to calendar</h2>''' + fact_table(
             "General California and federal deadlines",
             ["Step", "General rule summary", "Action"],
             [
@@ -425,7 +489,7 @@ def build_pages() -> None:
             'Secure the property and records; notify insurers, lenders, tenants, service providers and tax professionals as applicable.',
             'Separate the decedent’s final individual income from later estate/trust income and beneficiary income. Keep receipts, valuations and distributions.',
             'Record each property’s ownership, transfer date, use, income and expense trail separately. Do not combine Property B with Property A without title evidence.',
-            'Recheck current federal, state and local law before making a sale, occupancy change or distribution.'
+            'Recheck current federal, state and local law before making a sale, occupancy change or distribution — especially for a transfer expected in 2040–2050.'
         ]) + '''<p>Use the <a href="questions.html">Questions first</a> page to identify missing documents. This page deliberately contains no personal names, dates, forms completed or property-specific deadlines.</p></section>'''
     )
 
@@ -495,7 +559,14 @@ def build_pages() -> None:
                 ["civ_1946_2", "civ_1947_12"], ["frh_1929", "frh_great_inflation", "frh_great_recession"], "boe_assessor_contacts"
             ],
         ) + '''</section>
-<section><h2>Selection gate</h2><p>Before any proposal is implemented, decide whether its benefit is worth the privacy and maintenance cost, define the inputs it would require, identify its official sources, and test that no private values enter a public artifact. A reviewer should record: selected or declined, owner, files affected, privacy test, source recheck date, rollback plan and acceptance test. The suggestions page itself does not collect a selection.</p></section>'''
+<section><h2>How to review a suggestion</h2>''' + list_html([
+            'Read the proposal, its benefit and the private inputs it would require.',
+            'Check whether it can be done without putting personal values, addresses or parcel records into a public page or artifact.',
+            'Identify the official source that would support any new factual row before it is published.',
+            'Decide whether to adopt, defer or reject; record the choice offline. The site does not collect a selection.',
+            'If adopted, re-run <code>python3 scripts/build.py</code>, <code>python3 scripts/verify.py</code> and <code>python3 scripts/privacy_boundary.py</code> and confirm the artifact remains allowlisted.'
+        ], ordered=True) + '''</section>
+<section><h2>Selection gate</h2><p>Before any proposal is implemented, decide whether its benefit is worth the privacy and maintenance cost, define the inputs it would require, identify its official sources, and test that no private values enter a public artifact. A reviewer should record: selected or declined, owner, files affected, privacy test, source recheck date, rollback plan and acceptance test. The suggestions page itself does not collect a selection.</p><div class="note"><strong>Privacy reminder.</strong> Do not paste deeds, tax bills, rent ledgers, account numbers, exact assessments or quotes into a public issue, pull request or website field. Keep them in the private workbook described in S-01.</div></section>'''
     )
 
     pages["review.html"] = (
@@ -519,7 +590,6 @@ def build_pages() -> None:
                 ["F-11", "Retirement accounts and beneficiary designations", "Distribution periods and tax treatment vary by account and relationship.", f"Contact each custodian and verify plan terms; {source_link('irs_retirement_beneficiary', 'IRS beneficiary overview')}"],
                 ["F-12", "Future returns, inflation, law and decision date", "A long horizon is uncertain; one growth rate is not a reliable 50-year forecast.", 'Use multiple paths and update rules at decision time; see <a href="stress.html">historical stress cases</a>.' ],
             ],
-            row_sources=["rtc_480", "irs_inherited_basis", "rtc_63_2", ["irs_rental", "rtc_480"], "irs_rental", "cdi_premiums", "cpuc_solar", "irs_rental", ["boe_assessor_contacts", "civ_1947_12", "rtc_11911"], "irs_estate", "irs_retirement_beneficiary", ["frh_1929", "frh_great_inflation", "civ_1947_12"]],
             row_class="flag-row",
         ) + '''</section>
 <p>No figure is inferred from a rounded assessment, public database, nearby property, online estimate or another edition. Property-specific monetary values remain unpublished; this register does not establish the condition or amount of any item.</p>'''
