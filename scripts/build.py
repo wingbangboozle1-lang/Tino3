@@ -326,11 +326,18 @@ OPEN_P = '<em>Open &middot; needs a professional</em>'
 OPEN_T = '<em>Open &middot; only at the death</em>'
 OPEN_L = '<em>Open &middot; depends on future law</em>'
 
+_mtx = {(r["g"], r["rs"]): r for r in M["matrix"]}
+_gap7 = {g: _mtx[(g, 0.07)]["sell"] - _mtx[(g, 0.07)]["rent"] for g in (0.03, 0.04, 0.05)}
+_gap5pc = _mtx[(0.04, 0.05)]["sell"] - _mtx[(0.04, 0.05)]["rent"]
+_ann = r10(1000 * sum((1 + B45["r_eq"] / 100) ** (9 - t) for t in range(10)))
+_avdiff_today = r10(M["inputs"]["a_av_2026"] * 0.00115)
+_avdiff_2045 = r10(A45["fmv"] * 0.00115)
+
 q_money = [
  ("Q-01", "How much can be inherited before a federal tax applies?",
   OFF + "<br>Not a limit on what you may receive",
   f"$15,000,000 per person for a death in 2026, $15,480,000 in 2027, indexed after. Tax above it is 40 cents on the dollar and is charged to the estate, not to the heir. One person's room in 2045 is {usd(E45['room_single_base'])} if both homes are in the estate, or {usd(ROOM_B_OWNED)} under your statement that Property B is already yours.",
-  "Nothing, for 2026 and 2027. For later years the index is a scenario: the tax page shows $13,819,960 and $17,612,290 as the 2045 range, not a forecast.",
+  f"Nothing, for 2026 and 2027. For later years the index is a scenario: the tax page shows {usd(E45['room_single_base'])} (both homes in the estate) and {usd(ROOM_B_OWNED)} (Property B already yours) as the 2045 range, not a forecast.",
   "Every $100,000 of estate above the room costs the estate $40,000."),
  ("Q-02", "Is the inheritance itself income to me?",
   OFF,
@@ -429,7 +436,7 @@ q_a = [
   OPEN_R,
   "Your record shows a credit of $10 to $20 a month. The older net-metering tariffs run 20 years from the date of connection; the connection date was not supplied.",
   "Find the interconnection date on the utility bill or the net-metering agreement. Add 20 years. After that date the electricity line moves from a credit to a cost.",
-  f"The projections carry the credit to 2060; if it ends earlier, add roughly {usd(600)} to {usd(1_200)} a year of running cost from that year."),
+  "The projections carry the credit to 2060. If it ends and the home then pays $100 a month, the running-cost line worsens by about $1,380 a year from that year."),
  ("Q-21", "What does water cost?",
   OWN + " &middot; rate not verified",
   "Your figure: $100 to $150 a month for Property A, and $330 to $400 a month for the whole of Property B. Published tariffs for the serving districts were not read in this edition.",
@@ -439,7 +446,7 @@ q_a = [
   PART,
   "Not known: the bill does not show it. The county's published rates for 2025-26 run from 1.126% to 1.241%. The model uses 1.18%, inside that range.",
   "The rate area is printed on the bill or available from the assessor by parcel. Once known, replace the 1.18% assumption and re-run the model.",
-  "The difference between 1.126% and 1.241% is $230 a year today and about $1,500 a year after reassessment in 2045."),
+  f"The difference between 1.126% and 1.241% is {usd(_avdiff_today)} a year today and about {usd(_avdiff_2045)} a year after reassessment in 2045."),
  ("Q-23", "Will the tax really rise only 2% a year until the death?",
   OFF + " &middot; with one check",
   "Yes while ownership does not change: the assessed value may rise by the lower of 2% or the published inflation factor, and 2% has been the binding figure every year since 2022. Your own record matches the published factors in every year to within one basis point.",
@@ -449,7 +456,7 @@ q_a = [
   PART,
   "Computed: property tax after reassessment, insurance (your guess, unverified), water, the solar credit and maintenance, year by year to 2060 on the projections page. First-year total after an inheritance in 2045 is in the executive summary.",
   "Three real inputs would replace the estimates: an insurance quote, the water tariff, and a contractor's view of deferred maintenance. The rest is arithmetic.",
-  "Every $1,000 a year of cost is about $8,500 over ten years at the model's after-tax return."),
+  f"Every $1,000 a year of cost is about {usd(_ann)} over ten years at the model's after-tax return of {B45['r_eq']}%."),
 ]
 
 q_b = [
@@ -462,7 +469,7 @@ q_b = [
   OPEN_R,
   "Not supplied. The plan values it at $3,580 a month if the family moves out, equal to the average of the two rented units, and treats it as free housing while occupied.",
   "Check the building permit history for the third unit and any accessory-dwelling rules. A unit that cannot legally be rented changes the income line, not the property-tax line.",
-  "About $42,960 a year of gross rent, or roughly $30,000 after costs and tax."),
+  "About $42,960 a year of gross rent, before vacancy, costs and income tax."),
  ("Q-27", "Is the building insured as a rental?",
   OPEN_P,
   "Unverified. A landlord policy differs from a homeowners policy: it covers the structure and loss of rent, not the tenant's belongings. The state's survey lists no landlord type, so only a broker can price it.",
@@ -490,7 +497,7 @@ q_d = [
   PART + " &middot; assumption",
   "7.0% a year for a stock index fund is a scenario, not a forecast; no long-run official average was read. The 10-year Treasury yielded 4.88% on 9 November 2026, verified. Renting beats selling only if stocks return under 4.7%.",
   "Decide the assumption you are willing to plan on, and write it down. The sensitivity table shows the answer at 5%, 6%, 7% and 8%.",
-  "At 5% instead of 7%, selling still leads; the margin narrows to about $1,000,000 over ten years."),
+  f"At 5% instead of 7%, selling still leads, but the margin narrows from {usd(_gap7[0.04])} to {usd(_gap5pc)}."),
  ("Q-32", "What is living in the home worth to the family?",
   OPEN_R,
   f"A decision, not a fact. The model prices it at {usd(B45['live_cost_month_today'])} a month in today's dollars compared with the best alternative, and it is the most expensive option in every case tested.",
@@ -500,7 +507,7 @@ q_d = [
   OFF + " &middot; scenario grid",
   "Selling leads in all nine combinations of inheritance year (2040, 2045, 2050) and growth (3%, 4%, 5%). Renting overtakes only at about 7.0% growth a year, or if stocks return under 4.7%.",
   "Nothing further. Re-run the grid when the Treasury yield moves by more than a percentage point.",
-  "The ranking, not the margin, is what the grid tests; the margin moves by about $1,000,000 across the growth range."),
+  f"The ranking, not the margin, is what the grid tests. The sell-versus-rent margin runs from {usd(_gap7[0.03])} at 3% growth to {usd(_gap7[0.05])} at 5%, and closes at about 7%."),
  ("Q-34", "What would change the recommendation?",
   OFF + " &middot; computed break-evens",
   "Four things: a stock return below 4.7%, house growth above 7.0%, a market rent above $14,250 a month, or a law that restored the pre-2021 exclusion. Insurance at three times the guess does not change it.",
