@@ -1761,3 +1761,24 @@ Privacy: Property A / Property B only. No name, address, ZIP, parcel, rent, asse
 - **Pages API:** `status: built`, `source: main:/`, `https_enforced: true`, `https://wingbangboozle1-lang.github.io/Tino3/`
 - **Live check (cache-busted):** `executive-summary.html` shows outline with six evidence groups, four paths, five steps and trust sequencing; `suggestions.html` shows S-01 to S-10 and How to review + Selection gate; `questions.html` shows 14 questions, have-vs-missing table (5 categories) and seven discovery steps; `stress.html` shows Why smooth line misleads, 5 episodes, Black-swan conditions (5 rows) and Private method (4 irregular types); `projections.html` shows Year-by-year worksheet (3 rows, 8 cols); `inheritance.html` shows 5-phase trust sequence. No dollar amount outside the three allowed thresholds and no location/ZIP/parcel/email in artifact.
 - **Next reconciliations:** open PR #62 (`arena/cd0dd59b-tino3`, year-by-year economy) remains open and untouched by this session; review against this privacy boundary before any merge. Other in-progress branches (`0532f9f2`, `b709c64d`, `e45a26be`) are independent and not merged here.
+
+## Session `arena/e45a26be-tino3` — final public-edition audit and decision-framework refinement · 2026-11-12
+
+*Branch note:* Arena pins this session to `arena/e45a26be-tino3`, based at `b23f405`. The board was read before work began.
+No other active claim was visible. This session is the final integration/audit pass for the current privacy-safe root edition; it does not revive retired editions or publish owner-derived property data.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| E45-1 Re-verify the current public edition, privacy boundary, generated output and official-source links | done locally | `arena/e45a26be-tino3` | `scripts/*`, `assets/*`, root public pages, this section |
+| E45-2 Improve decision guidance so the inherited Property A / already-owned Property B distinction, local-law gaps, private cost ledger, projections, black-swan cases, questions, suggestions and flagged items are explicit without publishing personal information | done locally | `arena/e45a26be-tino3` | root public pages via `scripts/build.py`, `assets/style.css` as needed |
+| E45-3 Build, run all checks, open and merge PR, verify GitHub Pages deployment and record result | in progress | `arena/e45a26be-tino3` | workflow/publication record; this section |
+
+**Privacy boundary for this pass.** Do not publish names, street addresses, postal codes, parcel numbers, owner-derived assessments, values, rent, utility use, insurance estimates, trust particulars, household details or individualized projections. Rounded figures are not treated as anonymization. General statutory thresholds and historical aggregate facts may remain when linked to official publishers and clearly labelled as non-property-specific. Every factual table row must retain an official source link; unsupported property-specific fields stay blank and flagged.
+
+### Log
+
+- 2026-11-12 — Read the full coordination board, checked the clean base at `b23f405`, and confirmed the existing local verifier passes before making content changes.
+- 2026-11-12 — Added an official validation-anchor column to every decision-facing worksheet, framework, choice, proposal and flag row; expanded the private question register to 20 rows with a decision-effect column; expanded the suggestions register to 12 review-only proposals; and strengthened `scripts/verify.py` so every decision-facing data row must link to a URL in `assets/sources.json`.
+- 2026-11-12 — Re-opened the IRS estate-tax and inherited-basis pages, California RTC sections 63.2 and 480, Civil Code sections 1947.12 and 1946.2, BOE Proposition 19, CDI premium guidance, CPUC solar/net-billing guidance, IRS beneficiary guidance, Federal Reserve History episodes and the BLS June 2022 CPI release. The published general claims remain within those sources; no owner-derived value was added.
+- 2026-11-12 — Local checks pass before integrating the concurrent session: `python3 scripts/build.py`; `python3 scripts/verify.py` (15 pages, 164 table rows, 148 source-linked decision rows, 35 official-source entries); `python3 scripts/privacy_boundary.py`; and a direct generated-HTML sweep found no decision-facing row without an HTTPS ledger link. No new source entry was required.
+- 2026-11-12 — PR #68 initially reported a non-clean merge because PR #67 landed on `main` while this branch was open. `origin/main` was merged locally. The resolution retained session 671's trust, year-by-year and black-swan enhancements, this session's 20-question/12-suggestion registers and official-anchor verifier, and regenerated the public pages. The merged tree now passes with 192 table rows and 171 source-linked decision rows; no owner-derived values were added.
