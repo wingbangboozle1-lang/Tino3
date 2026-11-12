@@ -1564,3 +1564,10 @@ Privacy: no name, street address, postal code, parcel number or unrounded figure
 ### Disclosure
 
 The published precision for assessment-roll values is tier 1 (nearest $10), chosen by the owner on 12 November 2026 (`assets/privacy.json`). This session did not change and does not re-litigate that setting; the parcel-matching caveat and the owner's choice (SG-14) are disclosed on `review.html`. Earlier commits and pull-request diffs in this public repository may contain finer figures; only a history rewrite or going private can address that, and it remains an owner decision (SG-10; CR-5 on the earlier board).
+
+### Merge record and deploy result (`arena/1143f682-tino3`, 12 November 2026, after the merge)
+
+- Pull request [#57](https://github.com/wingbangboozle1-lang/Tino3/pull/57) merged to `main` at 2026-11-12T15:59:43Z; merge commit `d4ded50`. The branch was rebased twice while open as `main` moved (PRs #52–#55, then #56 and #58–#61); after each rebase the full verifier suite was re-run and passed, and no other session's work was discarded.
+- GitHub Pages deploy for `d4ded50` (workflow run `43253791812`, `.github/workflows/pages.yml`): build **success**, deploy **success** (only Node 20 / ubuntu-latest deprecation annotations, no failures).
+- Live site re-fetched after the deploy (`https://wingbangboozle1-lang.github.io/Tino3/` and `/suggestions.html`): both return the current 15-page edition; the suggestion flow (four paths, 20 suggestions, decision gates) and the Start-here navigation render as built.
+- This addendum lives on the branch only, per the board's convention; `main` was not commit-spammed for the record.
