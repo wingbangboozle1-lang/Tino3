@@ -1329,3 +1329,42 @@ No line of another session was removed from the board. The published pages are g
 - 16:05 UTC — PR #55 opened.
 - 16:15 UTC — PR #54 landed with a rewrite of the same pages; `gh pr merge 55` refused for conflicts; `main` merged in,
   duplicate draft dropped, surcharge work re-applied, all three verifiers and the packager re-run.
+
+---
+
+## Session `arena/542472a5-tino3` — the six unsupported wordings in the `analysis/` edition (request R-4E-1), then publication (2026-11-12)
+
+*Branch note:* Arena pins this session to `arena/542472a5-tino3`, branched from `fd2b5a8`; the `session-<id>/<task>`
+naming cannot be used. The whole board was read on `main` at `4347464` (merge of PR #53) before claiming, and every
+remote session branch was fetched and read. At claim time **no pull request was open** and no claim on this board was
+live: `16e602da` (SG-1..SG-3) merged as PR #52 and `f7e49cdb` (V-1..V-3) merged as PR #53, both before this claim was
+written, and both list `analysis/**` as not touched.
+
+| Task | Status | Owner | Files touched |
+|---|---|---|---|
+| AN-1 Apply the six wording corrections logged as request R-4E-1 by `arena/4e96512c-tino3` (merged in PR #51) to the `analysis/` edition: the privacy box's absolute traceability claim, the six owner-supplied roll-ratio rows carrying a Verified badge, the "proving" inference about the $7,000 exemption, the "doubles estate exclusion" planning row, the un-itemised bill-composition claim, and the review-policy sentence | claimed | `arena/542472a5-tino3` | `analysis/tools/build.py`, the twelve generated `analysis/*.html` pages |
+| AN-2 Re-open, in this session, the official documents the corrected rows rest on, before the new wording is published | claimed | `arena/542472a5-tino3` | no shared file; the ledger entry for each document read |
+| AN-3 Verifiers for all three editions, packaging, pull request to `main`, merge, Pages deploy confirmation, result recorded | claimed | `arena/542472a5-tino3` | `COORDINATION.md` (this section only) |
+
+Not touched: `scripts/*`, `assets/*`, root `*.html`, `plan/**`, `.github/workflows/*`, withdrawal notices, and every other
+session's section of this board. Privacy: Property A / Property B only; no name, street address, postal code, parcel number
+or unrounded roll figure in any commit, message or pull request.
+
+### Scope taken, and why it is free
+
+R-4E-1 names `analysis/tools/build.py`. That scope was claimed on 11 November by `ca7ad6a2` (12:56:42) and by `f2039411`
+(12:57:11). Neither ever reached `main`: the merged-pull-request list holds no entry from either branch, and both tips
+last moved on 11 November. Under the board's take-over rule (a claim more than 60 minutes old with no commits) the scope
+is free, and this session notes the handoff here rather than silently editing it.
+
+Items 2 and 3 of R-4E-1 fall directly under the owner's rules "never mark anything verified without checking it against
+an official source" and "never infer". Both are published today on a live page: six rows compare **owner-supplied**
+assessment-roll ratios with the state inflation factor and carry a Verified badge although only the factor was checked
+against an official source, and one paragraph says a matching ratio **proves** the supplied figures are before the $7,000
+homeowners' exemption. Nothing in this session adds a figure; it removes two unsupported ones.
+
+### Log (`arena/542472a5-tino3`)
+
+- 15:36 to 15:41 UTC — board read in full on `main`; all remote session branches fetched; open pull requests listed (none);
+  the merged-pull-request list read end to end; PRs #52 and #53 read in full, including their "not touched" lists.
+- 15:41 UTC — this claim committed and pushed before any other file was edited.
