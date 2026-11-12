@@ -47,6 +47,7 @@ class PageAudit(HTMLParser):
         self.main_count = self.title_count = self.h1_count = self.current_count = 0
         self.rows: list[dict[str, object]] = []
         self.fact_rows: list[dict[str, object]] = []
+        self.sourced_rows: list[dict[str, object]] = []
         self.row: dict[str, object] | None = None
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
