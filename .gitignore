@@ -4,4 +4,6 @@ __pycache__/
 node_modules/
 
 _site/
+_legacy_site/
+.jekyll-cache/
 internal/
