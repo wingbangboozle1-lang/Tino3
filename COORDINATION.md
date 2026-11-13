@@ -2060,3 +2060,54 @@ column now carries markup; the rest are escaped.
 **Gates after the merge:** `verify.py` PASS (18 pages, 690 rows, 640 source-linked,
 49 logged unsourceable, 2,409 links, 105 sources), `privacy_boundary.py` PASS,
 `verify_legacy.py --config-only` PASS, `package_site.py` PASS (117 withdrawal routes).
+
+
+## Session arena/33a8d086-tino3 - T-6 complete: PR #74 merged and the site is live
+
+**Pull request:** https://github.com/wingbangboozle1-lang/Tino3/pull/74
+**Merge result:** MERGED at 2026-11-13T07:40:26Z, merge commit `8ef63ab`.
+**Branch:** `arena/33a8d086-tino3` into `main`, as a true merge commit with both parents
+(`9aaf63c` from this branch and `e429e4c` from main), so no other session's history is lost.
+
+Checks before merging:
+- `Verify static site` workflow: pass (the workflow from main, which rebuilds the pages,
+  runs verify.py, runs the privacy boundary, packages the artifact, rejects stale
+  generated pages, then builds and audits the real Jekyll output).
+- `Deploy GitHub Pages` workflow on the merge commit: completed, success, 24 seconds.
+- Local gates: `verify.py` PASS (18 pages, 690 table rows, 640 source-linked, 49 logged
+  unsourceable, 2,409 links, 105 sources), `privacy_boundary.py` PASS,
+  `verify_legacy.py --config-only` PASS, `package_site.py` PASS with 117 withdrawal routes.
+
+Live checks after deployment, against https://wingbangboozle1-lang.github.io/Tino3/:
+- Pages build status: `built`, latest build reports no error.
+- `/` serves the new dashboard, with the privacy notice, the six KPI cards and the
+  one-line answer intact.
+- `/black-swan.html` serves the six-regime stress table with every row source-linked.
+- `/sources.html` serves the merged 105-entry ledger, including `cityb_transfer`,
+  `cdi_homeowners_avg`, `cdi_part1` and `sfpuc_rates` from the parallel session.
+- `/audit.html` returns 404, confirming the retired route is gone from the deployment.
+- `main:/` now contains exactly the 18 published pages; `audit.html`, `black-swans.html`
+  and `stress.html` are no longer present.
+
+Note on the publishing route: GitHub Pages is still configured as `legacy` from
+`main:/`, so the live site is the Jekyll build of the repository root, not the Actions
+artifact. The root `_config.yml` exclusion list is what keeps `scripts/`,
+`assets/data`, `assets/sources.json`, `COORDINATION.md`, `README.md` and
+`EXECUTIVE_SUMMARY.md` out of the published site, and `verify_legacy.py` fails closed
+if a tracked path would bypass it. Switching the source to GitHub Actions returned
+HTTP 403 for this repository and remains the cleaner long-term fix.
+
+## Still open, for whoever picks this up next
+
+1. The Actions-artifact publishing route (403 when changing the Pages source).
+2. Ledger items never confirmed against an official source, all published as blank and
+   flagged rather than inferred: San Jose Water Company's CPUC tariff for Property A,
+   Cupertino Sanitary District sewer rates, the Santa Clara tax-rate-area tables beyond
+   page one, and the city transfer-tax band above $10,000,000.
+3. The other session's `scripts/economy.py` and `assets/data/economy.json` are carried
+   on main but no longer feed this edition's build; they are dead weight unless someone
+   reconciles them with `scripts/model.py`.
+4. Open PRs 62, 65, 66 and 70 are still conflicting and still unmerged. They are board
+   records and superseded work; nothing in this edition depends on them.
+5. Git history still contains the earlier editions, including versions with unrounded
+   owner figures. Rewriting it is a decision for the owner, not for a session.
