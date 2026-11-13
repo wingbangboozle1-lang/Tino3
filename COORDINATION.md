@@ -11,7 +11,7 @@ Privacy rule (12 November 2026, owner's current brief): public pages use generic
 
 | Task | Status | Owner | File scope |
 |---|---|---|---|
-| I-25 Take over the stale I-claim, keep its content, fix publication defects, verify, open PR to `main`, merge, confirm Pages | in progress | `arena/25fdb181-tino3` | this section; `scripts/*`, `.github/workflows/*`, root pages via `scripts/build.py`, `README.md`, `_config.yml`, `analysis/` and `plan/` (removed from the tree) |
+| I-25 Take over the stale I-claim, keep its content, fix publication defects, verify, open PR to `main`, merge, confirm Pages | done — PR #71 merged, Pages live (see Publication result below) | `arena/25fdb181-tino3` | this section; `scripts/*`, `.github/workflows/*`, root pages via `scripts/build.py`, `README.md`, `_config.yml`, `analysis/` and `plan/` (removed from the tree) |
 
 ### Defects found and fixed in this session
 
@@ -1886,3 +1886,12 @@ Against `main` the ledger only grows: nothing from `main` was dropped and no sha
   to read the failure output, is a tracked path that `scripts/privacy_boundary.py` does not allow, so every run
   that included it failed the boundary check before reaching any figure. Removed; the run after removal is green.
   The same trap is recorded above as irregularity 3.
+
+### Publication result `arena/25fdb181-tino3` — 2026-11-13
+
+- **PR:** [#71](https://github.com/wingbangboozle1-lang/Tino3/pull/71) `arena/25fdb181-tino3` → `main` — merged 2026-11-13T06:49:07Z, merge commit `3f8ab7e`, merge method `--merge`.
+- **Checks on the PR and push:** `Verify static site` — success (runs 43381137130 and 43381130954, Python 3.11). Earlier failing runs (43380802647, 43380981381) were the Python 3.12 difference in the regenerated economy output and the combined gate; both are recorded here for the audit trail.
+- **Post-merge on `main`:** `Verify static site` — success (43381339008); `Deploy GitHub Pages` — success (43381339003); `pages build and deployment` — success (43381337888, built `3f8ab7e`).
+- **Live checks (`https://wingbangboozle1-lang.github.io/Tino3/`):** `review.html` (Flagged for review) renders; `plan/index.html` and `COORDINATION.md` return 404, as intended.
+- **PR #70 and PR #62:** GitHub recorded both as merged at 06:49:08 and 06:49:09 UTC because their commits are contained in this merge. No separate merge or close was made for them.
+- **Open items handed to the owner (not blocking):** the repository is public and its Git history contains earlier unrounded figures; the Pages source is still `legacy` (switching it needs `pages=write`); the flagged items on the review page remain unverified where stated.
