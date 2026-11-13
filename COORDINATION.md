@@ -1,5 +1,27 @@
 # Coordination board
 
+## Session `arena/5c71d227-tino3` — documentation synchronization and end-to-end publication audit · 2026-11-13
+
+*Branch note:* Arena pins this session to `arena/5c71d227-tino3`, based on `main` at `19e5ccf6a83e94bc7dd0fc0e9d294af85768fa19`. The current branch is used; no branch was created or switched.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| D-1 Reconcile repository-facing documentation with the current published 18-page edition; run local publication/privacy checks and confirm the live Pages deployment | done — PR and deployment recorded below | `arena/5c71d227-tino3` | `COORDINATION.md`, `README.md`, `EXECUTIVE_SUMMARY.md` |
+
+The previously completed integration already contains the requested dashboard, projections, questions, suggestions, official-source ledger and flagged-items page. This scoped follow-up corrected repository-facing documentation and independently checked the current build/deployment; it did not change property inputs, projections, or legal conclusions.
+
+### Work and verification
+
+- Rewrote `README.md` to match the actual 18-page, 105-source edition, its source/privacy gates, and the current Pages/Jekyll publication path. Updated `EXECUTIVE_SUMMARY.md` to the live summary's 2045/30-year model output and current caveats; removed stale routes and stale 10-year projections.
+- Local gates on 2026-11-13: `python3 scripts/build.py`, `python3 scripts/verify.py`, `python3 scripts/privacy_boundary.py`, `python3 scripts/package_site.py`, `python3 scripts/verify_legacy.py --config-only`, and `git diff --check` all pass. Verifier reports 18 pages, 689 table rows (640 official-source linked; 49 registered as unsourceable), 2,410 links, and 105 source records. Artifact contains 18 pages, one stylesheet, 117 content-free withdrawal routes, and `.nojekyll` only in the generated artifact.
+- Read the IRS estate-tax page (2026 filing threshold $15,000,000) and BOE LTA 2025/009 (Prop 19 adjustment $1,044,586 for transfers from 16 February 2025 through 15 February 2027) directly from their official domains: https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax and https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf.
+- GitHub Pages API reports `build_type: legacy`, `main:/`, `status: built`; main's latest verification and deploy workflows at base commit `19e5ccf6a83e94bc7dd0fc0e9d294af85768fa19` completed successfully. The live dashboard, review page and black-swan page were fetched successfully. These docs are excluded from the public Jekyll output, so the docs-only change does not alter user-facing site content.
+- Residual privacy issue remains explicitly disclosed: this public repository's older Git history and PR diffs may preserve more precise figures. This work did not rewrite history, change repository visibility, or claim those copies erased.
+
+### Publication result
+
+- PR: pending creation after this completion note is committed.
+- Merge and deployment: pending PR checks and merge.
 Privacy rule (12 November 2026, owner's current brief): public pages use generic Property A / Property B placeholders for the two homes. No personal names, street addresses, postal codes, parcel numbers, account numbers, utility accounts or trust particulars ever appear. The owner has instructed that the owner-supplied figures (market values, the property-tax and assessment roll history, the rent, the utility and insurance estimates) be published rounded to the nearest $10, so the decision analysis carries clear numbers; `assets/privacy.json` tier 1 holds that choice. Rounding to $10 removes an exact search match; it does not defeat a reader who already holds the county record, and every page says so. Any figure that cannot be confirmed from an official source is left blank and flagged, never inferred. Historical repository commits, pull-request diffs, caches, forks, downloads and external copies are not certified erased.
 
 
