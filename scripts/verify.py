@@ -43,6 +43,11 @@ OFFICIAL_HOSTS = {
     "www.REDACTED.gov", "REDACTED.archive.REDACTED", "elections.cdn.sos.ca.gov",
     "www.cbo.gov", "www.federalreserve.gov", "www.huduser.gov", "www.lao.ca.gov",
     "home.treasury.gov", "www.tsp.gov", "docs.github.com",
+    # the CPUC-regulated retail water supplier's own filed tariff sheet
+    "REDACTED.com", "www.REDACTED.com",
+    # the county's own parcel lookup tools and the county's wholesale water agency
+    "payments.sccgov.org", "weedabatement.REDACTEDcounty.gov",
+    "www.valleywater.org", "valleywater.org",
 }
 FORBIDDEN_TAGS = {"script", "iframe", "form", "input", "textarea", "object", "embed", "img"}
 
