@@ -1802,3 +1802,28 @@ No other active claim was visible. This session is the final integration/audit p
 - 2026-11-12 — Re-opened the IRS estate-tax and inherited-basis pages, California RTC sections 63.2 and 480, Civil Code sections 1947.12 and 1946.2, BOE Proposition 19, CDI premium guidance, CPUC solar/net-billing guidance, IRS beneficiary guidance, Federal Reserve History episodes and the BLS June 2022 CPI release. The published general claims remain within those sources; no owner-derived value was added.
 - 2026-11-12 — Local checks pass before integrating the concurrent session: `python3 scripts/build.py`; `python3 scripts/verify.py` (15 pages, 164 table rows, 148 source-linked decision rows, 35 official-source entries); `python3 scripts/privacy_boundary.py`; and a direct generated-HTML sweep found no decision-facing row without an HTTPS ledger link. No new source entry was required.
 - 2026-11-12 — PR #68 initially reported a non-clean merge because PR #67 landed on `main` while this branch was open. `origin/main` was merged locally. The resolution retained session 671's trust, year-by-year and black-swan enhancements, this session's 20-question/12-suggestion registers and official-anchor verifier, and regenerated the public pages. The merged tree now passes with 192 table rows and 171 source-linked decision rows; no owner-derived values were added.
+
+## Session `arena/33a8d086-tino3` — owner-brief final integration: anonymized quantitative dashboard · 2026-11-13
+
+*Branch note:* Arena fixes this session to `arena/33a8d086-tino3`, based at `b4b7c20`. The board was read before work began (all sections, including the 12 November sessions `0532f9f2`, `e63a407b`, `671913cc`, `e45a26be`).
+
+**Takeover notice.** PR #70 (`arena/b709c64d-tino3`, "restore the anonymized quantitative dashboard (owner brief)") last committed 2026-11-12T22:27:32Z and has had no commits for more than 60 minutes. Under the board rule this session takes the task over and records the handoff here. Its source ledger (83 entries, `assets/sources.json` on that branch) is retained as the starting ledger and re-verified rather than discarded; its other files are not merged as-is because the branch conflicts with `main` and this session must re-verify every published figure line by line.
+
+**Governing instruction — conflict between two owner messages.** The 12 November sessions recorded a "privacy-first" rule that blanked every property figure. The brief received for *this* session re-states the opposite, in detail: *"Costs and numbers should be used but rounded to the nearest $10 increments such as in the following property tax, assessed value tables, etc … and should be reported in any decision analysis to provide clarity."* The later, more specific instruction governs. This edition therefore publishes the assessment-roll and tax-bill history, the value estimates, the rent and the running-cost ranges **rounded to the nearest $10**, while still withholding the categories the brief calls personal information.
+
+**Privacy boundary adopted for this edition.**
+Published, rounded to the nearest $10: market-value estimates, assessed values, tax bills, rent, water/electricity ranges, insurance and maintenance allowances, and all model outputs.
+Withheld from every page, every data file and the deployed artifact: street address, parcel/APN number, exact ZIP code, owner/trustee/beneficiary names, trust instrument details, utility/insurance account numbers, and the amount of the inherited cash (handled as anonymous scenario bands instead).
+Named on the page only at the level the law requires: the county (Santa Clara County) and the city (City and County of San Francisco). ZIP codes are replaced by "County A" / "City B" style placeholders plus the county name.
+Residual-risk disclosure: rounding to $10 does not defeat re-identification by a reader who already holds the county record. That is stated on the landing page, the privacy note, the suggestions page and the Flagged-for-Review page.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| T-1 Board claim, takeover record and rebase discipline | in progress | `arena/33a8d086-tino3` | `COORDINATION.md` (this section only) |
+| T-2 Official-source re-verification of every figure the site will publish (estate tax, Prop 19, Prop 13, transfers, rent rules, utilities, solar, insurance, macro history) | in progress | `arena/33a8d086-tino3` | `assets/sources.json`, `assets/data/verified.json` |
+| T-3 Anonymous quantitative model: rounded inputs, year-by-year projections 2026→2100, four ownership paths, break-evens, black-swan regimes, scenario bands for the cash inheritance | in progress | `arena/33a8d086-tino3` | `scripts/model.py`, `assets/data/model.json`, `assets/data/*.csv` |
+| T-4 Site build: dashboard landing page + categorised subpages, every row source-linked, suggestions-for-review section, questions register, flagged page | in progress | `arena/33a8d086-tino3` | `scripts/build.py`, `assets/style.css`, root `*.html` |
+| T-5 Verification: line-by-line row/source audit, privacy boundary, link check, reproducible build | in progress | `arena/33a8d086-tino3` | `scripts/verify.py`, `scripts/privacy_boundary.py`, `scripts/package_site.py` |
+| T-6 PR to `main`, merge, Pages deploy confirmation, board record | in progress | `arena/33a8d086-tino3` | `COORDINATION.md` (this section only), `.github/workflows/*` only if a step is required |
+
+Not in scope: `plan/**`, `analysis/**` (left in the repository but excluded from the published artifact); no edit to files another live session has claimed.
