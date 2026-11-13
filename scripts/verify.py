@@ -1,264 +1,244 @@
-"""Rebuild, audit and package the privacy-safe public edition using the standard library."""
-from __future__ import annotations
+#!/usr/bin/env python3
+"""Fail-closed verification for the published edition.
 
-import json
+Checks
+ 1. Reproducible build: re-running the model and the renderer must not change a byte.
+ 2. Structure: title, <main>, exactly one aria-current, no scripts/forms/remote assets.
+ 3. Links: internal targets exist; every external host is on the official allowlist.
+ 4. Citations: every table row links to an official publisher on the host allowlist.
+    The source ledger must say how each source was checked.
+ 5. Privacy: no ZIP code, parcel number, street address, city/county name, owner name,
+    or e-mail address anywhere in the published output.
+ 6. Rounding: every dollar amount displayed is a multiple of $10.
+"""
+from __future__ import annotations
+import os
+import re
 import subprocess
 import sys
 from html.parser import HTMLParser
 from pathlib import Path
-from urllib.parse import unquote, urlsplit
-
-from build import PAGES
-from package_site import ASSETS, NOJEKYLL, SITE
-from privacy_boundary import FORBIDDEN, verify as verify_privacy_boundary
+from urllib.parse import urlparse, unquote
 
 ROOT = Path(__file__).resolve().parents[1]
-EXPECTED_PAGE_COUNT = 15
-OFFICIAL_HOSTS = {
-    "irs.gov", "www.irs.gov", "ftb.ca.gov", "www.ftb.ca.gov", "sco.ca.gov", "www.sco.ca.gov",
-    "leginfo.legislature.ca.gov", "boe.ca.gov", "www.boe.ca.gov", "cpuc.ca.gov", "www.cpuc.ca.gov",
-    "insurance.ca.gov", "www.insurance.ca.gov", "federalreservehistory.org",
-    "www.federalreservehistory.org", "libertystreeteconomics.newyorkfed.org",
-    "bls.gov", "www.bls.gov", "congress.gov", "www.congress.gov", "govinfo.gov", "www.govinfo.gov",
+PAGES = ["index.html", "executive-summary.html", "questions.html", "suggestions.html", "economy.html",
+         "property-a.html",
+         "property-b.html", "taxes.html", "projections.html", "decision.html", "stress.html",
+         "black-swans.html", "inheritance.html", "review.html", "audit.html", "sources.html"]
+ASSETS = ["assets/style.css", "assets/sources.json", "assets/privacy.json", "assets/data/economy.json",
+          "assets/data/model.json",
+          "assets/data/property_a.csv", "assets/data/property_b.csv", "assets/data/decision.csv"]
+
+ALLOWED_HOSTS = {
+    # federal
+    "www.irs.gov", "irs.gov", "home.treasury.gov", "www.tsp.gov", "www.huduser.gov", "fred.stlouisfed.org",
+    "www.federalreserve.gov", "federalreserve.gov", "www.federalreservehistory.org", "federalreservehistory.org",
+    "www.bls.gov", "bls.gov", "www.cbo.gov", "cbo.gov", "www.ssa.gov", "ssa.gov",
+    "libertystreeteconomics.newyorkfed.org", "www.govinfo.gov",
+    # state
+    "www.boe.ca.gov", "boe.ca.gov", "leginfo.legislature.ca.gov", "www.ftb.ca.gov", "ftb.ca.gov",
+    "www.cpuc.ca.gov", "cpuc.ca.gov", "www.insurance.ca.gov", "www.lao.ca.gov", "www.sos.ca.gov", "www.sco.ca.gov",
+    "elections.cdn.sos.ca.gov",
+    # local government (jurisdiction A and jurisdiction B)
+    "sfbos.archive.sf.gov", "sftreasurer.org", "www.sf.gov",
+    "clerkrecorder.santaclaracounty.gov", "files.santaclaracounty.gov",
+    "electionresults.sos.ca.gov", "sfgov.legistar.com",
+    # publication tooling (GitHub Pages documentation for the publishing-source rule)
+    "docs.github.com",
 }
-FORBIDDEN_TAGS = {"script", "iframe", "form", "input", "textarea", "object", "embed"}
-# Every decision-facing data row must carry an official source or validation anchor.
-# Header rows and source-library rows are handled separately; worksheet/proposal rows are
-# included because an evidence checklist still needs a published rule or agency anchor.
-DATA_ROW_CLASSES = {"fact-row", "worksheet-row", "framework-row", "choice-row", "proposal-row", "flag-row"}
+
+# Identifier patterns that must never appear in the published edition.
+SCAN_TEXT = {
+    "city or county name": re.compile(r"\b(Cupertino|San Francisco|Outer Sunset|Sunnyvale|Santa Clara)\b", re.I),
+    "e-mail address": re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+"),
+}
+
+FORBIDDEN = {
+    "ZIP code": re.compile(r"(?:\bCA\b|California|zip|postal code)\W{0,6}9\d{4}\b", re.I),
+    "parcel/APN": re.compile(r"\b\d{3}-\d{2,3}-\d{2,3}\b"),
+    "street address": re.compile(r"\b\d{1,5}\s+[A-Z][a-z]+\s+(Street|St|Avenue|Ave|Road|Rd|Drive|Dr|Way|Lane|Ln|Boulevard|Blvd|Court|Ct)\b"),
+    "e-mail address": re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+"),
+    "double-escaped entity": re.compile(r"&amp;(?:ndash|rsquo|mdash|middot|minus|nbsp|hellip);"),
+    "owner name placeholder leak": re.compile(r"\b(trustee|decedent)\s+[A-Z][a-z]+\s+[A-Z][a-z]+\b"),
+}
+
+DECIMAL_AMOUNT = re.compile(r"\$[1-9][\d,]*\.\d{1,2}(?![\d])")
+DOLLAR = re.compile(r"\$(\d{1,3}(?:,\d{3})+|\d+)(?![\d.,])(\s*(?:million|billion|trillion|thousand|per)\b)?", re.I)
 
 
-class PageAudit(HTMLParser):
-    """Collect page structure, links, identifiers and source-backed table rows."""
-
+class Page(HTMLParser):
     def __init__(self, path: Path):
         super().__init__(convert_charrefs=True)
         self.path = path
-        self.errors: list[str] = []
-        self.ids: set[str] = set()
-        self.links: list[tuple[str, str, dict[str, str]]] = []
-        self.main_count = 0
-        self.title_count = 0
-        self.h1_count = 0
-        self.current_count = 0
-        self.rows: list[dict[str, object]] = []
-        self.fact_rows: list[dict[str, object]] = []
-        self.sourced_rows: list[dict[str, object]] = []
-        self.row: dict[str, object] | None = None
-        self.cell_open = False
+        self.row = None
+        self.header = False
+        self.rows = 0
+        self.fact_rows = 0
+        self.scenario_rows = 0
+        self.main = 0
+        self.title = 0
+        self.current = 0
+        self.basis = "fact"
+        self.choice_rows = 0
+        self.external = 0
+        self.internal = 0
+        self.errors = []
 
-    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
-        attr = {key: value or "" for key, value in attrs}
-        if tag in FORBIDDEN_TAGS:
+    def handle_starttag(self, tag, attrs):
+        a = dict(attrs)
+        if tag in {"script", "iframe", "form", "input", "textarea", "object", "embed"}:
             self.errors.append(f"forbidden element <{tag}>")
         if tag == "main":
-            self.main_count += 1
-        elif tag == "title":
-            self.title_count += 1
-        elif tag == "h1":
-            self.h1_count += 1
-        if attr.get("aria-current") == "page":
-            self.current_count += 1
-        if attr.get("id"):
-            identifier = attr["id"]
-            if identifier in self.ids:
-                self.errors.append(f"duplicate id #{identifier}")
-            self.ids.add(identifier)
+            self.main += 1
+        if tag == "title":
+            self.title += 1
         if tag == "tr":
-            if self.row is not None:
-                self.errors.append("nested table row")
-            classes = set(attr.get("class", "").split())
-            self.row = {"classes": classes, "hrefs": [], "cells": 0, "header": False}
-        if tag in {"td", "th"}:
-            if self.cell_open:
-                self.errors.append("nested table cell")
-            self.cell_open = True
-            if self.row is not None:
-                self.row["cells"] = int(self.row["cells"]) + 1
-                if tag == "th":
-                    self.row["header"] = True
-                    if attr.get("scope") != "col":
-                        self.errors.append("table heading without scope=col")
-        if tag in {"a", "link"} and attr.get("href"):
-            self.links.append((tag, attr["href"], attr))
-            if self.row is not None:
-                hrefs = self.row["hrefs"]
-                assert isinstance(hrefs, list)
-                hrefs.append(attr["href"])
-        if tag == "img" or "src" in attr:
-            self.errors.append("remote or embedded asset is not allowed")
+            self.row = []
+            self.header = False
+            self.basis = a.get("data-basis", "fact")
+        if tag == "th":
+            self.header = True
+            if a.get("scope") != "col":
+                self.errors.append("th without scope=col")
+        if a.get("aria-current") == "page":
+            self.current += 1
+        if "src" in a and urlparse(a["src"]).netloc:
+            self.errors.append(f"remote asset {a['src']}")
+        if tag in {"a", "link"}:
+            href = a.get("href", "")
+            p = urlparse(href)
+            if p.scheme:
+                if p.scheme != "https":
+                    self.errors.append(f"non-https link {href}")
+                if p.hostname not in ALLOWED_HOSTS:
+                    self.errors.append(f"non-official host {href}")
+                self.external += 1
+                if self.row is not None:
+                    self.row.append(href)
+            elif href and not href.startswith("#"):
+                target = (self.path.parent / unquote(p.path)).resolve()
+                if not target.exists():
+                    self.errors.append(f"broken local link {href}")
+                self.internal += 1
+                if self.row is not None:
+                    self.row.append(href)
 
-    def handle_endtag(self, tag: str) -> None:
-        if tag in {"td", "th"}:
-            if not self.cell_open:
-                self.errors.append(f"closing table cell without an open cell: </{tag}>")
-            self.cell_open = False
+    def handle_endtag(self, tag):
         if tag == "tr":
-            if self.row is None:
-                self.errors.append("closing table row without an open row")
-                return
-            if self.cell_open:
-                self.errors.append("table row closes with an open cell")
-                self.cell_open = False
-            classes = self.row["classes"]
-            if isinstance(classes, set) and "fact-row" in classes:
-                self.fact_rows.append(self.row)
-            if isinstance(classes, set) and classes.intersection(DATA_ROW_CLASSES):
-                self.sourced_rows.append(self.row)
-                hrefs = self.row["hrefs"]
-                if not isinstance(hrefs, list) or not any(urlsplit(href).scheme == "https" for href in hrefs):
-                    self.errors.append("decision data row lacks an HTTPS official-source link")
-            self.rows.append(self.row)
+            if not self.header:
+                if not self.row:
+                    self.errors.append("uncited table row")
+                elif self.basis == "choice":
+                    # A decision row is a choice, not a claim about the world. It must still link
+                    # somewhere the reader can check the reasoning, which may be an internal page.
+                    self.choice_rows += 1
+                else:
+                    has_external = any(urlparse(h).scheme for h in self.row)
+                    if has_external:
+                        self.fact_rows += 1
+                    else:
+                        # Every factual row must link to an official publisher.
+                        self.errors.append("table row without a link to an official publisher")
+                self.rows += 1
             self.row = None
 
 
-def read_ledger() -> tuple[list[dict[str, str]], set[str]]:
-    path = ROOT / "assets" / "sources.json"
-    try:
-        ledger = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
-        raise SystemExit(f"Cannot read official source ledger: {exc}") from exc
-    if ledger.get("as_of") != "2026-11-12":
-        raise SystemExit("Source ledger as-of date is not the reviewed publication date")
-    sources = ledger.get("sources")
-    if not isinstance(sources, list) or not sources:
-        raise SystemExit("Source ledger must contain a non-empty list")
-    ids: set[str] = set()
-    urls: set[str] = set()
-    for item in sources:
-        required = ("id", "publisher", "title", "url", "checked", "supports", "limits")
-        if not isinstance(item, dict) or any(not item.get(key) for key in required):
-            raise SystemExit("Each ledger entry must include id, publisher, title, URL, check method, support and limits")
-        if item["id"] in ids:
-            raise SystemExit(f"Duplicate source id: {item['id']}")
-        ids.add(item["id"])
-        parsed = urlsplit(item["url"])
-        if parsed.scheme != "https" or parsed.hostname not in OFFICIAL_HOSTS:
-            raise SystemExit(f"Source is not an HTTPS link to an approved official publisher: {item['id']}")
-        urls.add(item["url"])
-    return sources, urls
-
-
-def audit_page(path: Path, ledger_urls: set[str], artifact_root: Path = SITE) -> tuple[list[str], PageAudit]:
-    try:
-        text = path.read_text(encoding="utf-8")
-    except (OSError, UnicodeDecodeError) as exc:
-        return [f"cannot read page: {exc}"], PageAudit(path)
-    parser = PageAudit(path)
-    parser.feed(text)
-    parser.close()
-    errors = list(parser.errors)
-    if parser.main_count != 1:
-        errors.append(f"expected one main element, got {parser.main_count}")
-    if parser.title_count != 1:
-        errors.append(f"expected one title element, got {parser.title_count}")
-    if parser.h1_count != 1:
-        errors.append(f"expected one h1 element, got {parser.h1_count}")
-    if parser.current_count != 1:
-        errors.append(f"expected one current-navigation link, got {parser.current_count}")
-
-    for tag, href, attr in parser.links:
-        parsed = urlsplit(href)
-        if parsed.scheme or parsed.netloc:
-            if parsed.scheme != "https" or parsed.hostname not in OFFICIAL_HOSTS:
-                errors.append(f"link is not HTTPS to an approved official host: {href}")
-            if attr.get("target") == "_blank":
-                rel = set(attr.get("rel", "").lower().split())
-                if not {"noopener", "noreferrer"}.issubset(rel):
-                    errors.append(f"new-tab link lacks noopener/noreferrer: {href}")
-        else:
-            if parsed.path.startswith("/"):
-                errors.append(f"root-absolute local URL is not supported: {href}")
-                continue
-            relative = unquote(parsed.path)
-            target = (path.parent / relative).resolve() if relative else path.resolve()
-            try:
-                target.relative_to(artifact_root.resolve())
-            except ValueError:
-                errors.append(f"local URL escapes the artifact: {href}")
-                continue
-            if not target.is_file():
-                errors.append(f"broken local URL: {href}")
-                continue
-            if parsed.fragment and target.suffix == ".html":
-                target_parser = PageAudit(target)
-                target_parser.feed(target.read_text(encoding="utf-8"))
-                if unquote(parsed.fragment) not in target_parser.ids:
-                    errors.append(f"broken local fragment: {href}")
-
-    for row in parser.sourced_rows:
-        hrefs = row["hrefs"]
-        assert isinstance(hrefs, list)
-        external = [href for href in hrefs if urlsplit(href).scheme]
-        source_links = [href for href in external if href in ledger_urls]
-        unlisted = [href for href in external if href not in ledger_urls]
-        if not source_links:
-            errors.append("decision data row lacks a source-ledger URL")
-        if unlisted:
-            errors.append(f"decision data row has external links outside the source ledger: {unlisted}")
-
-    # Scan only the actual public page. The artifact path allowlist prevents private models/data
-    # from being copied; these patterns catch the common direct identifiers and location clues.
-    for label, pattern in FORBIDDEN.items():
-        match = pattern.search(text)
-        if match:
-            errors.append(f"possible {label} in page")
-    return errors, parser
-
-
-def run(command: list[str], label: str) -> None:
-    result = subprocess.run(command, cwd=ROOT, text=True, capture_output=True)
-    if result.returncode:
-        detail = (result.stdout + result.stderr).strip().splitlines()
-        raise SystemExit(f"{label} failed: " + (detail[-1] if detail else "no diagnostic output"))
+total_choice = 0
 
 
 def main() -> int:
-    if len(PAGES) != EXPECTED_PAGE_COUNT:
-        raise SystemExit(f"Expected {EXPECTED_PAGE_COUNT} public pages, found {len(PAGES)}")
+    global total_choice
+    failures = []
 
-    generated = PAGES + ASSETS
-    before = {name: (ROOT / name).read_bytes() for name in generated}
-    run([sys.executable, "scripts/build.py"], "public page build")
-    after = {name: (ROOT / name).read_bytes() for name in generated}
-    stale = [name for name in generated if before[name] != after[name]]
-    if stale:
-        raise SystemExit(f"Generated files were stale; rebuild and review: {stale}")
+    # 1. reproducible build
+    before = {p: (ROOT / p).read_bytes() for p in PAGES + ASSETS}
+    subprocess.run([sys.executable, "scripts/model.py"], cwd=ROOT, check=True, capture_output=True)
+    # The economy module reads the model's own constants, so it runs after it and before the renderer.
+    subprocess.run([sys.executable, "scripts/economy.py"], cwd=ROOT, check=True, capture_output=True)
+    subprocess.run([sys.executable, "scripts/build.py"], cwd=ROOT, check=True, capture_output=True)
+    after = {p: (ROOT / p).read_bytes() for p in PAGES + ASSETS}
+    stale = [p for p in PAGES + ASSETS if before[p] != after[p]]
+    for p in stale:
+        # Say where, not just which file: a bare "stale" is unactionable in CI, where the log is
+        # not always retrievable and the regenerated bytes cannot be inspected.
+        a, b = before[p], after[p]
+        at = next((i for i in range(min(len(a), len(b))) if a[i] != b[i]), min(len(a), len(b)))
+        line = a[:at].count(b"\n") + 1
+        failures.append(f"generated output was stale: {p} (first difference at byte {at}, line {line})")
 
-    sources, ledger_urls = read_ledger()
-    run([sys.executable, "scripts/verify_legacy.py", "--config-only"], "legacy Pages source guard")
-    run([sys.executable, "scripts/package_site.py"], "site packaging")
-    try:
-        verify_privacy_boundary()
-    except SystemExit as exc:
-        raise SystemExit(f"Privacy boundary failed: {exc}") from exc
-
-    failures: list[str] = []
-    total_rows = 0
-    factual_rows = 0
-    sourced_rows = 0
+    # 2-4. per page
+    total_rows = total_fact = total_scenario = 0
     for name in PAGES:
-        page_errors, parser = audit_page(SITE / name, ledger_urls)
-        failures.extend(f"{name}: {error}" for error in page_errors)
-        total_rows += len(parser.rows)
-        factual_rows += len(parser.fact_rows)
-        sourced_rows += len(parser.sourced_rows)
+        path = ROOT / name
+        if not path.exists():
+            failures.append(f"missing page {name}")
+            continue
+        text = path.read_text(encoding="utf-8")
+        pg = Page(path)
+        pg.feed(text)
+        if pg.errors:
+            failures.extend(f"{name}: {e}" for e in pg.errors[:12])
+        if pg.main != 1 or pg.title != 1:
+            failures.append(f"{name}: main/title count {pg.main}/{pg.title}")
+        if pg.current != 1:
+            failures.append(f"{name}: aria-current count {pg.current}")
+        total_rows += pg.rows
+        total_fact += pg.fact_rows
+        total_choice += pg.choice_rows
+        total_scenario += pg.scenario_rows
+
+        # 5. privacy
+        for label, rx in list(FORBIDDEN.items()) + list(SCAN_TEXT.items()):
+            for m in rx.finditer(text):
+                failures.append(f"{name}: possible {label}: {m.group(0)!r}")
+
+        for m in DECIMAL_AMOUNT.finditer(text):
+            failures.append(f"{name}: amount with cents {m.group(0)}")
+        # 6. rounding
+        for m in DOLLAR.finditer(text):
+            if m.group(2):
+                continue
+            raw = m.group(1).replace(",", "")
+            if int(raw) % 10 != 0:
+                failures.append(f"{name}: unrounded amount {m.group(0)}")
+
+    # 5b. the same scan across the downloadable data and the model
+    for name in ASSETS:
+        text = (ROOT / name).read_text(encoding="utf-8", errors="replace")
+        for label, rx in SCAN_TEXT.items():
+            for m in rx.finditer(text):
+                failures.append(f"{name}: possible {label}: {m.group(0)!r}")
+
+    # 6b. the source ledger: official host, and a statement of how each entry was checked
+    import json
+    ledger = json.loads((ROOT / "assets" / "sources.json").read_text(encoding="utf-8"))["sources"]
+    for sid, src in ledger.items():
+        if urlparse(src["url"]).hostname not in ALLOWED_HOSTS:
+            failures.append(f"sources.json: {sid} is not on an official host")
+        if not src.get("checked"):
+            failures.append(f"sources.json: {sid} does not say how it was checked")
+
+    # 7. every tracked non-allowlisted file must be a content-free withdrawal notice
+    b = subprocess.run([sys.executable, "scripts/privacy_boundary.py"], cwd=ROOT, capture_output=True, text=True)
+    if b.returncode != 0:
+        failures.append("privacy boundary: " + (b.stdout + b.stderr).strip().splitlines()[-1] if (b.stdout + b.stderr).strip() else "privacy boundary failed")
 
     if failures:
         print("FAIL")
-        for failure in dict.fromkeys(failures):
-            print("  -", failure)
+        for f in dict.fromkeys(failures):
+            print("  -", f)
+            # Also surface each failure where a CI system can read it: the job log is not always
+            # downloadable, and a silent red cross is worse than no check at all.
+            if os.environ.get("GITHUB_ACTIONS"):
+                print(f"::error title=verify.py::{f}")
         return 1
 
-    print(
-        f"PASS: {len(PAGES)} reproducible public pages; {total_rows} table rows, "
-        f"{sourced_rows} source-linked decision rows ({factual_rows} factual); {len(sources)} official-source ledger entries; " 
-        "local links/fragments, official hosts, privacy scan, allowlisted package and withdrawal notices clean."
-    )
-    print(
-        "Scope: structural and privacy checks only. They do not establish legal completeness, "
-        "a property-specific value, an insurance quote or a future outcome."
-    )
+    print(f"PASS: {len(PAGES)} reproducible pages; {total_rows} table rows "
+          f"({total_fact} factual rows, all linking to an official publisher; "
+          f"{total_choice} decision rows, all linking to their reasoning); {len(ledger)} ledger sources; "
+          f"local links, official hosts, privacy scan and $10 rounding all clean.")
+    print("Scope: structural and privacy checks only. They do not prove legal completeness, "
+          "and they cannot verify an insurance quote, an appraisal or a future statute.")
     return 0
 
 

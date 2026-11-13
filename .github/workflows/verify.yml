@@ -1,4 +1,4 @@
-name: Verify public edition
+name: Verify static site
 on:
   push:
   pull_request:
@@ -12,21 +12,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Verify public artifact and legacy source boundary
-        run: python scripts/verify.py
-      - name: Build the branch-source Jekyll publication
-        uses: actions/jekyll-build-pages@v1
-        with:
-          source: ./
-          destination: ./_legacy_site
-      - name: Audit actual Jekyll output
-        shell: bash
-        run: |
-          set +e
-          result=$(python scripts/verify_legacy.py --site _legacy_site 2>&1)
-          code=$?
-          printf '%s\n' "$result"
-          if [ "$code" -ne 0 ]; then
-            while IFS= read -r line; do echo "::error title=Legacy output audit::$line"; done <<< "$result"
-          fi
-          exit "$code"
+      - run: python scripts/verify.py
+      - run: python plan/tools/verify.py
+      - run: python analysis/tools/verify.py

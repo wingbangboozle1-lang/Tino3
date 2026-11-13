@@ -1,76 +1,36 @@
 # Executive summary
 
-## Decision status: open
+Reviewed 10 to 12 November 2026. Anonymised: Property A (single-family home, County A), Property B (small multi-unit building, City B).
+Every dollar figure is rounded to the nearest $10. Assessment-roll values and tax bills are published at the owner's chosen precision
+(roll values to the nearest $10); percentage changes are computed before rounding. Planning analysis, not legal, tax or investment advice.
 
-This edition provides a general framework, not a personalized recommendation. It keeps **Property A, the inherited asset (trust transfer expected around 2040–2050)**, separate from **Property B, an asset already owned by the recipient**. No option is ranked because verified property records, local rules, current costs and the decision-maker's priorities are not part of the public edition. Use this summary to outline important details and the route through the full guide.
+**Best plan on these numbers: sell Property A soon after inheriting it, reinvest, and keep Property B.**
 
-## The two-property distinction
+Inheritance in 2045, house prices rising 4% a year, measured ten years later after all taxes and selling costs:
 
-| Question | Property A · inherited | Property B · already owned |
+| Option | Wealth after 10 years | Behind the best by |
 |---|---|---|
-| What is being decided? | Accept, retain, rent, occupy or sell an inherited asset expected around 2040–2050 via trust. | Whether to continue a rental use, change occupancy or sell an asset already owned by the recipient. |
-| Income to compare | Any later rent, sale proceeds or investment income under the applicable tax rules. | Existing rental receipts and operating costs, kept separate from A's inheritance. |
-| Tax and title boundary | Confirm the estate/trust transfer, basis evidence and any property-tax exclusion. | Verify B's existing title and tax records; do not assume A's inheritance changes B's ownership or basis. |
+| Sell, stock index fund | $10,052,910 | $0 |
+| Sell, Treasuries | $8,761,920 | $1,291,000 |
+| Rent the home out | $8,583,500 | $1,469,410 |
+| Move in | $7,945,420 | $2,107,490 |
 
-## Important details to organize before deciding
+- The sale is almost tax-free: the tax basis resets to the value at death, provided the trust is revocable.
+- The low property tax does not survive. About $7,340 a year today becomes $60,170 if a child moves in and $78,410 if rented (2045).
+- Renting wins only if stocks return under 4.7% a year or the home appreciates about 7.0% a year.
+- Living in the home costs about $8,580 a month in today's dollars compared with selling.
+- The inheritance itself is not income to the heir (26 U.S.C. 102); income from the property, and a later sale, are taxed.
+- An inherited retirement account, if there is one, must generally be emptied within ten years and each withdrawal is ordinary income.
+- Federal estate tax: $15,000,000 per person in 2026 and $15,480,000 in 2027; California has none and its cities may not impose one.
+- Above the exclusion the estate pays 40 cents for every dollar: an estate $5,000,000 over the room owes about $2,000,000 before credits. The tax is on the estate, not on the heir, and is due with Form 706 nine months after the death.
+- The owner states Property B is already owned by the heir, so under that statement it sits outside the decedent's estate; if it were in the same estate its tax would reset: $3,790 to $46,600 a year in 2045.
+- Under that same statement one person's estate-tax room in 2045 is $17,612,290 instead of $13,819,960, larger by Property B's 2045 value of $3,792,330. The deed was not seen (FL-01).
+- Insurance premiums are unverified and left blank. The FAIR Plan, the state's insurer of last resort, caps a residential risk at $3,000,000 for all coverages combined, below Property A's current value; tripling the owner's guess does not change the ranking.
+- Property tax and assessment: the full history, 2014 to 2026 for Property A and 2016 to 2025 for Property B, is published at $10 precision on the property pages, with the published state factor beside each year.
+- Black swans, part 1 (black-swans.html): the baseline's official anchors, fifty years of state inflation data, and the fixed amounts whose real value erodes.
+- Black swans, part 2 (stress.html): stock returns at 4.0%, inflation at 4.0% or a flat decade for house prices - selling still finishes first, and a lost decade only moves the proceeds to Treasuries. Verified 1929, 1965-82, 2000-02, 2007-09 and 2020 episodes re-run against the 2045 inheritance: the sale decision holds in 5 of 7 analogues, and only the reinvestment vehicle changes with the regime.
+- New on 12 November 2026: a year-by-year economy section (economy.html) that replaces the single constant rate with 49 years of official annual data replayed and resampled. Across 2,000 fifty-year paths drawn from the record, selling into the index fund is the best option in 76.4% of paths and the median outcome is $64,475,290 for Property A's 2076 value; across the 40 real ten-year stretches the sale wins 31. Two adversarial shapes held for fifty years reverse the answer towards keeping the home, which is why S-21 asks for the switch to be fixed in writing first.
+- A page of 39 questions with their status and the step that closes each one (questions.html), and a page of four paths and 23 suggestions with effort and privacy cost (suggestions.html).
+- Sources: 83 official documents. This session appended six, each opened on the publisher's own domain on 12 November 2026: the annual consumer price index, the annual house price index for each property's area, the 10-year Treasury annual average, the NASDAQ Composite annual change, and RTC 51 (the lesser-of rule). The figures behind the decision were re-opened on the publishers' sites that day; none changed.
 
-| Area | What to collect privately | Why it matters |
-|---|---|---|
-| Title and transfer | Recorded deed, trust/will, beneficiary records, transfer date | Determines owner, basis, and deadline calendars |
-| Property tax | Current roll, tax bill, any family-home exclusion filing, supplemental notices | Tax can reset on inheritance; exclusion conditions are fact-specific |
-| Running costs | Insurance, water, electricity/solar, maintenance, repairs, management | Annual cash flow and reserve needs |
-| Rental and occupancy | Leases, collected rent, vacancy, tenant obligations, personal-use plan | Affects cash flow and whether B's rent stops if occupied |
-| Tax thresholds and basis | Estate total, prior gifts, deductions, retirement accounts, basis records | Determines filing, exclusions and gain on sale |
-| Law at decision date | Federal, state and local rules rechecked when deciding | Indexed amounts and proposals change |
-
-## Options compared side by side
-
-| Path | Property A · inherited | Property B · already owned |
-|---|---|---|
-| Live in it | Compare housing value and new carrying costs with rent or sale alternatives; check reassessment treatment | Compare personal use with rental income that would stop or change |
-| Rent it | Estimate achievable rent, vacancy, turnover, management, repairs, tax and insurance | Keep current rental ledger; review lawful increases and turnover costs |
-| Sell and reinvest | Verify inherited basis and sale costs; compare reinvestment to keeping; do not assume tax-free | Use B's separate records; sale does not inherit A's basis |
-| Defer a change | Track carrying costs and filing duties while administration is completed | Track lease, tenant-notice and financing duties during a hold |
-
-## Five decision steps
-
-1. Verify title, transfer date, beneficiary designations and the controlling estate or trust documents.
-2. Calendar deadlines before comparing outcomes; some statutory periods are short and fact-dependent.
-3. Collect actual annual costs and one-time repair or transaction estimates. Keep them private.
-4. Compare A's use options separately from B's rental/occupancy choices, including the effect of lost or changed rent if B is occupied.
-5. Re-run the comparison under inflation shocks, falling asset prices, vacancy, insurance changes, major repairs and changes in law.
-
-## How a trust inheritance around 2040–2050 would be sequenced
-
-1. Confirm the trust terms, trustee and distribution provisions before the transfer.
-2. At death, record the date-of-death value and request assessor guidance for change-in-ownership reporting and any family-home exclusion.
-3. Calendar the 60-day notice, 150-day assessor statement, one-year occupancy/exemption, three-year claim and nine-month estate-return periods (see Inheritance steps).
-4. Hold and then compare live, rent or sell using the private cost ledger and multiple economic paths rather than a single growth rate.
-5. Review Questions first and Suggestions for review before selecting any proposal or assumption.
-
-## Why a single 50-year growth rate is not used
-
-Growth and inflation are uneven over long periods. The guide keeps a constant-rate illustration off the public pages and instead uses irregular historical episodes and a private irregular-path method. See Economic stress cases and Projection method.
-
-## What the guide does
-
-- Organizes evidence needed to compare use, rental, sale or deferral options.
-- Separates ownership, basis, income, occupancy and expense records for A and B.
-- Summarizes selected federal and California inheritance, tax, property-tax and rental rules with official links.
-- Provides blank checklists and a year-by-year method for private scenario testing.
-- Lists 20 questions with the private evidence needed and the decision effect of a different answer.
-- Keeps 12 implementation suggestions in a separate review register; none is selected automatically.
-- Requires an official source or validation anchor on every decision-facing table row.
-- Flags missing facts rather than inferring or publishing them.
-
-## Privacy boundary
-
-The public edition contains no address, property description, assessment, rent, utility use, insurance estimate, owner-derived projection, trust detail or household-specific amount. Rounding is not treated as anonymization. The static Pages artifact is built from an allowlist; legacy routes and other tracked paths are replaced in that artifact by generic withdrawal notices. No private input is collected by the site.
-
-This changes only the current publication. It does not erase or certify removal of earlier commits, pull-request diffs, caches, forks, downloads or copies outside the repository.
-
-## Important limitations
-
-The official source library describes the general rules checked for the November 12, 2026 edition and states the limits of each source. The library cannot establish a specific property's title, basis, eligibility, cost, rent, coverage, local jurisdiction or tax result. Statutes, indexed amounts, bill status and policies change; confirm the controlling rules and records with the appropriate agency and qualified professional before acting.
-
-The historical economic episodes are examples of U.S. aggregate or market conditions, not forecasts for a particular property or investment. This guide is not legal, tax, appraisal or personalized financial advice. For a 2040–2050 transfer, recheck current law at that future date.
+Site: index.html. Open questions: questions.html. Options: suggestions.html. Open items: review.html. How it was checked: audit.html. Sources: sources.html.
