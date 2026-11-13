@@ -1,89 +1,51 @@
-"""Verify that the deployable artifact contains only approved pages and generic notices."""
-from __future__ import annotations
-
-import re
-from pathlib import Path, PurePosixPath
-
-from package_site import ASSETS, NOJEKYLL, PAGES, SITE, notice_content, retired_paths
-
+"""Fail closed: legacy paths must contain only withdrawal notices, not household data."""
+from pathlib import Path
+import subprocess
 ROOT = Path(__file__).resolve().parents[1]
+# The allowlist is read from package_site.py so the two cannot drift apart.
+import importlib.util
+_spec = importlib.util.spec_from_file_location('package_site', Path(__file__).with_name('package_site.py'))
+_pkg = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_pkg)
+PAGES = tuple(_pkg.PAGES)
+ASSETS = tuple(_pkg.ASSETS)
+APPROVED = set(PAGES + ASSETS + (
+    '.gitignore','.nojekyll','COORDINATION.md','README.md','EXECUTIVE_SUMMARY.md',
+    '.github/workflows/pages.yml','.github/workflows/verify.yml',
+    'scripts/build.py','scripts/package_site.py','scripts/verify.py','scripts/privacy_boundary.py',
+    'scripts/model.py','scripts/economy.py','scripts/privacy_tier.py','scripts/verify_legacy.py','_config.yml',
+))
+MARKER = 'PUBLICATION_WITHDRAWN'
 
-# Identifiers that must never be present in the public artifact. Their checks complement—not
-# replace—the path allowlist: rounded figures are not treated as anonymous data.
-FORBIDDEN = {
-    "known local place name": re.compile(r"\b(Cupertino|San Francisco|Outer Sunset|Sunnyvale|Santa Clara)\b", re.I),
-    "email address": re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+"),
-    "postal code": re.compile(r"(?:\bCA\b|California|zip|postal code)\W{0,6}9\d{4}\b", re.I),
-    "parcel or APN": re.compile(r"\b\d{3}-\d{2,3}-\d{2,3}\b"),
-    "street address": re.compile(r"\b\d{1,5}\s+[A-Z][a-z]+\s+(?:Street|St|Avenue|Ave|Road|Rd|Drive|Dr|Way|Lane|Ln|Boulevard|Blvd|Court|Ct)\b"),
-}
-FORBIDDEN_ELEMENTS = re.compile(r"<(?:script|iframe|form|input|textarea|object|embed)\b", re.I)
-CURRENCY_AMOUNT = re.compile(r"\$\s*\d[\d,]*(?:\.\d+)?")
-# Only general, officially sourced 2026/2027 federal thresholds are allowed in this edition.
-# Add a future legal threshold only after checking its official source and scope.
-ALLOWED_GENERAL_CURRENCY = {"$15,000,000", "$15,480,000", "$20,000"}
+def tracked():
+    return subprocess.check_output(['git','ls-files'],cwd=ROOT,text=True).splitlines()
 
+def notice(name):
+    path = Path(name)
+    if path.suffix == '.html':
+        home = '../' * (len(path.parts)-1) + 'index.html'
+        return ('<!doctype html><html lang="en"><head><meta charset="utf-8">'
+                '<meta name="viewport" content="width=device-width, initial-scale=1">'
+                '<meta name="robots" content="noindex"><title>Publication withdrawn</title></head>'
+                '<body><main><h1>Earlier publication withdrawn</h1>'
+                '<p>Unverified financial content was withdrawn for privacy and evidence review.</p>'
+                f'<p><a href="{home}">Open the reviewed planning dashboard</a></p>'
+                f'<p>{MARKER}</p></main></body></html>\n')
+    if path.suffix == '.json':
+        return '{"status":"' + MARKER + '"}\n'
+    if path.suffix == '.csv':
+        return 'status\n' + MARKER + '\n'
+    if path.suffix == '.py':
+        return f'"""{MARKER}: legacy generator disabled to prevent republication."""\n'
+    if path.suffix in ('.js','.css'):
+        return f'/* {MARKER}: earlier content removed. */\n'
+    return f'# {MARKER}\n\nEarlier content withdrawn for privacy and evidence review.\n'
 
-def artifact_files() -> set[str]:
-    if not SITE.is_dir():
-        raise SystemExit("_site is missing; run scripts/package_site.py before the privacy check")
-    return {
-        path.relative_to(SITE).as_posix()
-        for path in SITE.rglob("*")
-        if path.is_file()
-    }
+def verify():
+    for name in tracked():
+        if name not in APPROVED:
+            assert (ROOT/name).read_text() == notice(name), f'Unapproved publication: {name}'
+    print('PASS: all tracked non-allowlisted files are content-free withdrawal notices.')
 
-
-def verify() -> int:
-    retired = retired_paths()
-    expected = set(PAGES + ASSETS + retired + [NOJEKYLL])
-    actual = artifact_files()
-    unexpected = sorted(actual - expected)
-    missing = sorted(expected - actual)
-    if unexpected or missing:
-        raise SystemExit(f"Artifact path boundary failed: unexpected={unexpected}, missing={missing}")
-
-    if (SITE / NOJEKYLL).read_bytes() != b"":
-        raise SystemExit(".nojekyll must be an empty marker file")
-
-    for name in actual:
-        for label, pattern in FORBIDDEN.items():
-            if pattern.search(name):
-                raise SystemExit(f"Possible {label} in public artifact path {name}")
-
-    for name in retired:
-        path = SITE.joinpath(*PurePosixPath(name).parts)
-        try:
-            content = path.read_text(encoding="utf-8")
-        except (OSError, UnicodeDecodeError) as exc:
-            raise SystemExit(f"Withdrawal route is not readable text: {name}: {exc}") from exc
-        if content != notice_content(PurePosixPath(name)):
-            raise SystemExit(f"Retired path contains non-generic content: {name}")
-
-    scanned = 0
-    for name in PAGES + ASSETS:
-        path = SITE / name
-        try:
-            content = path.read_text(encoding="utf-8")
-        except (OSError, UnicodeDecodeError) as exc:
-            raise SystemExit(f"Public allowlisted file is not readable text: {name}: {exc}") from exc
-        scanned += 1
-        for label, pattern in FORBIDDEN.items():
-            match = pattern.search(content)
-            if match:
-                raise SystemExit(f"Possible {label} in public artifact {name}")
-        for amount in CURRENCY_AMOUNT.findall(content):
-            if amount.replace(" ", "") not in ALLOWED_GENERAL_CURRENCY:
-                raise SystemExit(f"Unapproved monetary amount in public artifact {name}")
-        if name.endswith(".html") and FORBIDDEN_ELEMENTS.search(content):
-            raise SystemExit(f"Interactive or remote-code element found in public page {name}")
-
-    print(
-        f"PASS: {len(PAGES)} allowlisted pages and {len(ASSETS)} runtime asset scanned; "
-        f"{len(retired)} non-allowlisted routes are exact content-free withdrawal notices."
-    )
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(verify())
+if __name__ == '__main__':
+    verify()

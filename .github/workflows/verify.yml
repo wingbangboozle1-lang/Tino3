@@ -1,4 +1,4 @@
-name: Verify public edition
+name: Verify static site
 on:
   push:
   pull_request:
@@ -11,22 +11,33 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Verify public artifact and legacy source boundary
-        run: python scripts/verify.py
-      - name: Build the branch-source Jekyll publication
+          python-version: '3.11'
+      - name: Rebuild the public pages from data and the source ledger
+        run: python scripts/build.py
+      - name: Verify sources, links, rounding and privacy
+        run: |
+          set -o pipefail
+          if ! python scripts/verify.py 2>&1 | tee /tmp/verify.txt; then
+            while IFS= read -r line; do echo "::error title=verify.py::$line"; done < /tmp/verify.txt
+            exit 1
+          fi
+      - name: Privacy boundary
+        run: python scripts/privacy_boundary.py
+      - name: Build the Actions artifact
+        run: python scripts/package_site.py
+      - name: Generated pages are not stale
+        run: |
+          if ! git diff --quiet -- '*.html' assets/data; then
+            git --no-pager diff --stat -- '*.html' assets/data
+            echo "::error::committed generated pages differ from a fresh build; run scripts/build.py and commit"
+            exit 1
+          fi
+      - name: Check the legacy source boundary
+        run: python scripts/verify_legacy.py --config-only
+      - name: Build the legacy Jekyll publication (the live publisher)
         uses: actions/jekyll-build-pages@v1
         with:
           source: ./
           destination: ./_legacy_site
       - name: Audit actual Jekyll output
-        shell: bash
-        run: |
-          set +e
-          result=$(python scripts/verify_legacy.py --site _legacy_site 2>&1)
-          code=$?
-          printf '%s\n' "$result"
-          if [ "$code" -ne 0 ]; then
-            while IFS= read -r line; do echo "::error title=Legacy output audit::$line"; done <<< "$result"
-          fi
-          exit "$code"
+        run: python scripts/verify_legacy.py --site _legacy_site

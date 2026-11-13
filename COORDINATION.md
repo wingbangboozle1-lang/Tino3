@@ -1,27 +1,82 @@
 # Coordination board
 
-Privacy rule: public pages use generic Property A / Property B placeholders. Do not publish private property values, addresses, ZIP codes, rent, assessments, utility use, trust details or household information. Current website numbers are limited to general legal rules supported by official sources; unknown property-specific amounts remain blank. Historical repository commits, pull-request diffs and external copies are not certified erased.
+Privacy rule (12 November 2026, owner's current brief): public pages use generic Property A / Property B placeholders for the two homes. No personal names, street addresses, postal codes, parcel numbers, account numbers, utility accounts or trust particulars ever appear. The owner has instructed that the owner-supplied figures (market values, the property-tax and assessment roll history, the rent, the utility and insurance estimates) be published rounded to the nearest $10, so the decision analysis carries clear numbers; `assets/privacy.json` tier 1 holds that choice. Rounding to $10 removes an exact search match; it does not defeat a reader who already holds the county record, and every page says so. Any figure that cannot be confirmed from an official source is left blank and flagged, never inferred. Historical repository commits, pull-request diffs, caches, forks, downloads and external copies are not certified erased.
 
 
-## Session `arena/0532f9f2-tino3` — privacy-first final integration and independent verification · 2026-11-12 22:15 UTC
+## Session `arena/25fdb181-tino3` — integration, publication-safety fix and merge · 2026-11-13
 
-*Branch note:* Arena fixes this session to `arena/0532f9f2-tino3`; creating a `session-<id>/<task>` branch is not permitted. The board was scanned before the claim. PR #64 merged at 16:24 UTC; its P3 publication gate remained marked pending with no later commits reported, so this session takes over that gate after more than 60 minutes and will preserve its work. The only open PR, #62, last changed at 16:09 UTC and conflicts with the later privacy edition; it is not being merged without a privacy review.
+*Branch note:* Arena pins this session to `arena/25fdb181-tino3` (base `b4b7c20`, `main`). The `session-<id>/<task>` naming cannot be used. No other branch was created, switched to or pushed.
+
+**Handoff of PR #70 (`arena/b709c64d-tino3`, claim I-1..I-4).** PR #70 is open and its I-4 publication step is still "in progress". Its last commit is 22:27 UTC on 12 November 2026, more than eight hours before this session began, so the claim is treated as stale. Its full head `052db52` was merged into this branch with all commits preserved (merge commit on this branch; the unrelated-history merge is recorded in the log below). The owner brief content of that PR is kept. This session then fixed publication-safety defects that PR #70 would have introduced, listed below. PR #70 should be closed as superseded by this session's PR, not merged separately.
 
 | Task | Status | Owner | File scope |
 |---|---|---|---|
-| F53-1 Investigate live exposure and complete the privacy-safe Pages publication gate; fix publication/verification configuration if needed | in progress | `arena/0532f9f2-tino3` | Pages configuration, `.github/workflows/*`, `scripts/package_site.py`, `scripts/privacy_boundary.py`, `scripts/verify.py`; this block |
-| F53-2 Review the current repository and source-backed public guide independently; flag unverified figures and source or legal problems; make only necessary privacy-safe corrections | in progress | `arena/0532f9f2-tino3` | `scripts/build.py`, `assets/sources.json`, `assets/style.css`, generated root HTML, `README.md`, `EXECUTIVE_SUMMARY.md`; this block |
-| F53-3 Run reproducibility/privacy/link tests, integrate, open PR from the fixed branch, merge only after checks, confirm live deploy, and record results | in progress | `arena/0532f9f2-tino3` | this block; any verification files scoped above |
+| I-25 Take over the stale I-claim, keep its content, fix publication defects, verify, open PR to `main`, merge, confirm Pages | in progress | `arena/25fdb181-tino3` | this section; `scripts/*`, `.github/workflows/*`, root pages via `scripts/build.py`, `README.md`, `_config.yml`, `analysis/` and `plan/` (removed from the tree) |
 
-Privacy rule: no supplied personal figures, addresses, postal codes, parcel identifiers, owner/tenant names or private household/trust details in this board, the PR, or the deployed pages. Rounded parcel-level data can still be reidentified; property-specific numbers lacking an official public verification must remain blank and flagged. Historical Git commits, PR diffs, public caches and forks are separate exposure surfaces and cannot be assumed erased by a Pages artifact.
+### Defects found and fixed in this session
 
-**Urgent scope amendment (22:20 UTC).** The live site serves the prior `black-swans.html`, not the artifact's withdrawal notice; the Pages API reports `build_type: legacy`. Attempts to switch to the Actions source and dispatch the safe workflow returned HTTP 403, `Resource not accessible by integration`; the Pages update requires `pages=write,administration=write`. Repository viewer permissions do not override the integration's permission boundary. This session additionally claims `.nojekyll`, `_config.yml`, `.gitignore`, and a new legacy-build verification script so the existing branch publisher can be made safe without changing another branch or requiring those permissions. The underlying historical repository files are not assumed erased; the user must be told that old public Git history, PRs, forks and external copies remain a separate exposure surface. Official publication-source references: https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/about-github-pages-and-jekyll and https://docs.github.com/en/rest/pages/pages#update-information-about-a-github-pages-site.
+1. **Publication path would have exposed the repository.** Pages is `build_type: legacy` from `main:/` and cannot be changed by this integration (`PUT /pages` returned HTTP 403, "Resource not accessible by integration"). PR #70 deleted `_config.yml` and added `.nojekyll`, which would make the legacy publisher serve every tracked file. Restored a generated `_config.yml` (`scripts/verify_legacy.py --write-config`) and removed `.nojekyll`.
+2. **Unrounded owner figures in legacy editions.** `analysis/data/model.json` contained `7207` (the owner's exact 2025 bill, not rounded to $10), and other legacy files held unrounded inputs. `analysis/` and `plan/` were removed from the working tree. Their history remains in Git.
+3. **Artifact copied the legacy suites.** `scripts/package_site.py` no longer copies `plan/` or `analysis/`; their routes are withdrawal notices.
+4. **Workflows ran verifiers for removed editions.** `pages.yml` and `verify.yml` now run the root build, the verifier, the privacy boundary, the artifact build, the legacy-source guard and the real Jekyll output audit (`actions/jekyll-build-pages`).
+5. **Stale links to withdrawn editions** on the overview, black-swan, decision and review pages replaced with withdrawal statements.
+6. **Verifier-tool drift.** `scripts/verify_legacy.py` was rewritten for this tree; the `main` version imported functions that no longer exist.
 
-**Progress and concurrent work, 22:23 UTC.** PR #67 landed after this session's claim. Its public-guide changes were retained by a conflict-free rebase; another active session's PR #68 is currently conflicting with #67 and is working on source-linked decision rows. The later-discovered PRs #65 and #66 are board-only. This session posted coordination notes to #68 and will not duplicate that session's guide edits while its task is active. The earlier statement that only #62 was open described the initial check, not the current PR list.
+### Independent verification performed by this session
 
-**Legacy publisher safeguard.** The new `_config.yml` excludes retired material; `.nojekyll` was removed so Jekyll actually applies that configuration. `scripts/verify_legacy.py` rejects unexpected tracked paths and audits the actual Jekyll output, and the CI workflow builds with the official `actions/jekyll-build-pages` action. Local positive/negative tests passed. The first real CI build found the default theme adding an extra CSS asset; disabling the default theme fixed it. The actual Jekyll build and output audit passed in [run 43319136314](https://github.com/wingbangboozle1-lang/Tino3/actions/runs/43319136314). This protects the legacy publisher after merge; it does not change the Pages setting, erase earlier disclosures, or make the public Git repository private. An urgent safety PR is justified before the remaining source-review integration because the live publisher is currently serving retired material.
+- Proposition 19 rule re-read at the BOE: `https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf` (LTA 2025/009). The $1,000,000 amount is adjusted every other February for the **California House Price Index** change, not CPI. $1,044,586 applies to transfers 16 Feb 2025 to 15 Feb 2027. The model's `reassess()` (taxable value = base + max(0, market − base − cap)) matches that rule, and the cap is grown by house-price growth every two years as the statute requires. No change was needed.
+- IRS estate-tax page re-opened: `https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax`. The 2026 filing threshold is $15,000,000.
+- Owner tables rounded to $10 (`assets/data/property_a.csv`, `property_b.csv`) were compared to the owner's source figures. Irregularities are flagged on the Flagged for Review page (repeated bills in consecutive years; SF 2018 +18.4% bill with a +2% assessment; SF 2021 −5.9% bill with a +1% assessment; SF 2022 assessment change below the 2% cap).
+- Privacy scan of the packaged artifact and of simulated Jekyll output: no ZIP codes, city names, addresses, e-mail addresses, parcel numbers or unrounded owner inputs in any published file. Root pages contain only $10-rounded owner figures.
 
+### Log
 
+- 2026-11-13 06:40 UTC — PR #70 head merged into this branch (`git merge --allow-unrelated-histories -X theirs origin/pr70`); tree then reset to match PR #70 exactly; checks run.
+- 2026-11-13 — Pages API checked: `build_type: legacy`, `source: main:/`. Attempt to set `build_type: workflow` refused with HTTP 403. The Pages source therefore remains the legacy publisher; the repository tree is the control.
+- 2026-11-13 — Legacy suites and `.nojekyll` removed; guard restored; workflows and README updated; local gates pass (`build.py`, `verify.py`, `privacy_boundary.py`, `package_site.py`, `verify_legacy.py --config-only`, and a simulated Jekyll output audit with 24 public files).
+
+### Not changed, and why
+
+- **Git history and repository visibility.** The repository is public (`isPrivate: false`). Earlier commits, the removed `analysis/` and `plan/` files, and the pull-request diffs still contain unrounded owner figures. Erasing them needs a history rewrite and force-push, or a visibility change, which this session does not do without the owner's decision. Recommended: the owner decides whether to make the repository private and whether to rewrite history.
+- **Pages source.** Switching to the Actions source needs `pages=write` permission, which this integration does not have. Until it is switched, the legacy publisher serves the root, and the `_config.yml` guard is the control that matters.
+- **Insurance premium, water, electricity credit, 2026 property-tax bill, Property A market value and market rent** remain owner-supplied or assumed and are flagged, not verified.
+
+## Session `arena/b709c64d-tino3` — final integration: restore the anonymized quantitative dashboard (owner's current brief), fold in the open economy PR, verify, publish (2026-11-12)
+
+*Branch note:* Arena pins this session to `arena/b709c64d-tino3`, branched from `b23f405` (merge of PR #64). The board's `session-<id>/<task>` naming cannot be used. The whole board was read; `main` was fetched and read before any edit. This session acts as the final integration session the brief provides for: all other sessions' work is either merged or dispositioned below.
+
+*Why this direction.* PR #64 replaced the public site with a privacy-safe general framework and withheld every owner-supplied figure. The owner's brief for this session, received after that merge, re-states the publication instruction in detail: costs and numbers **to the nearest $10** — explicitly including the property-tax and assessment tables — "so that it cannot be traced back to the source", clear numbers and projections for the reasoning behind the decisions, a separate black-swan section, a live dashboard with every entry and finding in tables, an executive summary, a dedicated suggestions section, and a questions/information/answers register. It also reiterates that privacy is top priority and that personal information must be anonymized with placeholders and must not appear. Reading both instructions together, the owner's current instruction is: **publish the anonymized quantitative analysis at $10 precision with Property A / Property B placeholders and zero identifiers, and keep names, addresses, postal codes, parcel numbers, accounts and trust details off the site.** This session implements exactly that, and records the residual-traceability caveat on every page.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| I-1 Restore the anonymized quantitative edition (the last fully verified state, `6eb3eb0`) as the site's base; keep #64's privacy disclosures; delete the general-only replacement; port nothing by hand that can be merged | done | `arena/b709c64d-tino3` | root `*.html` (generated), `assets/style.css`, `assets/sources.json`, `assets/data/*`, `scripts/build.py`, `scripts/verify.py`, `scripts/package_site.py`, `scripts/privacy_boundary.py`, `.github/workflows/*`, `.gitignore`, `README.md`, `EXECUTIVE_SUMMARY.md` |
+| I-2 Merge PR #62 (`arena/cd0dd59b-tino3`, economy year-by-year section; its branch base is `6eb3eb0`) into the restored tree; resolve the add/add on board and report the merge here; leave nothing of it behind | done — merged with zero conflicts; PR #62 will close automatically as merged once this branch lands | `arena/b709c64d-tino3` | merge commit; `COORDINATION.md` (this block and the merged PR's block), `README.md` |
+| I-3 Independent verification in this session: official pages re-opened, figures compared, privacy scan for identifiers, all verifiers, clean-artifact link sweep | done | `arena/b709c64d-tino3` | no shared file; results recorded here |
+| I-4 Pull request to `main`, merge without waiting for approval, confirm the Pages deploy, record the PR link and merge result | in progress — this section | `arena/b709c64d-tino3` | `COORDINATION.md` (this section only) |
+
+Not touched: `plan/**`, `analysis/**`, other sessions' board sections, withdrawal notices, and `assets/privacy.json` (tier 1 stays as the owner chose). No name, street address, postal code, parcel number, account or trust particular appears in any commit, message or pull request this session makes.
+
+*Dispositions due from this session:* PR #62 (merge); the general-only edition PR #64 published (replaced on the site by the owner's current brief, not deleted from history); PR #44 (already closed unmerged, recorded by other sessions).
+
+### I-1..I-3 · what was done, what was found (12 November 2026)
+
+**Restoration (I-1).** `git checkout 6eb3eb0 -- .` restored the last fully verified quantitative edition (Property A / Property B placeholders, $10 rounding, tier 1); `costs.html` (added by PR #64) was removed, and its route is already covered by the withdrawal notice in `scripts/package_site.py` (`RETIRED` already lists it). No file from the privacy-safe general edition was ported by hand; its disclosures that had independent value (the jurisdictions note) were folded into the site chrome by this session instead. The 16-page build passes all gates.
+
+**Merge of PR #62 (I-2).** `arena/cd0dd59b-tino3` merged with zero conflicts; its `economy.html` page (49 official years of annual data, 2,000 fifty-year block-bootstrap paths, the decision re-run on each of the 40 real ten-year stretches, four adversarial shapes, the RTC 51 lesser-of rule and FL-32) is in the build. This branch now contains everything PR #62 contains.
+
+**Defect found and fixed (I-3; in PR #62's renderer, not introduced by the merge).** PR #62's `scripts/build.py` built `economy.html` and then built `taxes.html` from the same f-string, so PR #62 as opened would have published a `taxes.html` that is a byte-duplicate of the economy page with every `<h2>` from the economy section; the tax rules (federal thresholds, the heir-receipt table, the law watch) would have disappeared from the site. The build assigned the economy body to the same variable the tax page used. Found by reading the built `taxes.html` against `scripts/build.py`; repaired by naming the tax body `taxes_body`; rebuilt; the tax page now contains its own sections (Federal rules, State and local rules, Federal estate tax: threshold history, How much room is left for cash and investments, What the heir receives, Law changes under discussion) and `verify.py` passes with it. This defect is why `taxes.html` on PR #62 would have passed the previous gates: the gates check structure, links, badges, hosts and rounding, not which page's content a file carries.
+
+**Verification (I-3).** Re-opened in this session on the publishers' own domains: IRS estate tax page (2026 threshold $15,000,000), IRS IR-2026-133 (2027 basic exclusion $15,480,000; gift exclusion $20,000), IRS inherited-basis FAQ (basis = FMV at death), 26 U.S.C. 102 (inheritance not income; income from it is), BOE Proposition 19 page (value limit = taxable value + $1,000,000 as biennially adjusted; RTC 63.2; one-year occupation; one-year homeowners' exemption; three-year claim), BOE Letter 2025/009 ($1,044,586 for transfers 16 Feb 2025 to 15 Feb 2027; next adjustment February 2027), BOE Letter 2026/002 (2026-27 inflation factor 1.02; August-to-August calculation due to the 2025 shutdown), State Controller estate-tax page (no California death tax for deaths on or after 1 January 2005), RTC 63.2, RTC 480 (150 days by trust), RTC 13301 (state and local death taxes barred), RTC 17043 (1% above $1,000,000), Civil Code 1947.12 (5% + CPI to 10%; (d)(3)/(d)(4) exemptions), LAO 250422 (Initiative 25-0017 would have expanded parent-child relief from January 2027), SOS Memorandum 26138 (18 May 2026: Initiative 25-0017 failed for want of signatures; not on the 3 November 2026 ballot), CDI 2019 FAIR Plan release (insurer of last resort; combined $3,000,000 dwelling cap from 1 April 2020), Treasury daily yield curve (4.98% on 10 Nov; 5.10% on 12 Nov; 4.88% on 9 Nov), SF Treasurer secured-rate page (FY2026-27 1.18162182%), SF rent-increase page (1.6% for 1 March 2026 to 28 February 2027; 60% of regional CPI; File No. 261020 pending) and the SF legistar record (File No. 261020: introduced 15 September 2026; pending in Land Use and Transportation Committee; would cap combined banked and capital-improvement increases at 10% a year for three years; not enacted). Every figure checked matched what the site publishes. The legistar record and the GitHub Pages documentation were added to the ledger (`cityb_261020`, `gh_pages_docs`). The economy page's five official series and its 2,000-path bootstrap were produced by the economy session from the publishers' exports on 12 November 2026; this pass spot-checked, and did not independently recompute, that module.
+
+**New flags.** FL-33 (rent-cap binding, formerly FL-32; duplicate identifier closed), FL-34 (Pages publishing source: `build_type=legacy`, `main:/`; API set-to-workflow denied HTTP 403; live site nonetheless serves the intended artifact — retired routes return content-free notices as fetched in this session — but the arrangement rests on the current deployment, and the owner should set Settings → Pages → Source to GitHub Actions), FL-35 (the model's 4.88% Treasury anchor is the 9 November print; the curve on 12 November 2026 is 5.10%; re-run at 5.10%, the 2045 sell-and-buy-Treasuries outcome moves from $8,761,920 to $8,897,290 — second place, ranking unchanged — flagged for the owner's decision, not adopted).
+
+**Law-watch update.** The File No. 261020 row now carries the legistar record and the precise status (introduced 15 September 2026; pending committee; not enacted; 10% collective cap on banked plus capital-improvement increases for three years), replacing the earlier "proposed 9 November 2026" wording.
+
+**Gates on the final tree.** `python3 scripts/verify.py` PASS (16 reproducible pages; 741 rows — 711 factual, every one linked to an official publisher; 30 decision rows linked to their reasoning; 83 ledger sources; local links, official hosts, privacy scan and $10 rounding clean). `python3 plan/tools/verify.py` PASS (10 pages). `python3 analysis/tools/verify.py` PASS (12 pages, 380 rows). `python3 scripts/package_site.py` PASS (16 pages, 55 assets, 49 withdrawal notices). `python3 scripts/privacy_boundary.py` PASS. Clean-artifact link sweep: 69 HTML files, 1,274 local links, **0 broken** (an earlier run of a naive checker reported 5 false positives from name collisions between the root and the `plan/` editions; corrected checker reports zero).
+
+**Publication boundary, stated exactly.** The deployed artifact is the allowlist (16 pages + assets + withdrawal notices); `plan/` and `analysis/` editions are published at `/plan/` and `/analysis/` as they were before PR #64 retired them to notices — they are within the same placeholder/$10 envelope and their verifiers pass, but their inclusion is inherited behaviour, not a fresh decision of this session, and withdrawing them from the artifact is a one-line change if the owner prefers the single-dashboard shape. No name, street address, postal code, parcel number, account or trust particular appears anywhere in the tree (scanned). The local official links identify jurisdiction A as Santa Clara County's and B as San Francisco's to anyone who opens them; this is disclosed on the review page and is the cost of sourcing local rates from official pages. The `files.santaclaracounty.gov` link (FL-08) is what identifies A.
+
+**Dispositions.** PR #62 (merged into this branch; will show as merged once this lands). The general-framework edition of PR #64 (replaced on the site by the owner's current brief; preserved in git history). PR #44 (already closed unmerged by another session). PR #62's V-4 board item ("final integration … in progress") is completed by this section.
 
 ## Session `arena/e63a407b-tino3` — privacy-safe public edition consolidation and official-source review · 2026-11-12
 
@@ -1733,72 +1788,101 @@ Privacy: no name, street address, postal code, parcel number or unrounded figure
 
 The published precision for assessment-roll values is tier 1 (nearest $10), chosen by the owner on 12 November 2026 (`assets/privacy.json`). This session did not change and does not re-litigate that setting; the parcel-matching caveat and the owner's choice (SG-14) are disclosed on `review.html`. Earlier commits and pull-request diffs in this public repository may contain finer figures; only a history rewrite or going private can address that, and it remains an owner decision (SG-10; CR-5 on the earlier board).
 
-## Session `arena/671913cc-tino3` — executive summary, suggestions, questions and black-swan enhancement (2026-11-12)
+## Session `arena/cd0dd59b-tino3` — year-by-year economy section, PR #44 disposition, final integration (2026-11-12)
 
-*Branch note:* Arena pins this session to `arena/671913cc-tino3`, branched from `b23f405` (merge of PR #64). The board's `session-<id>/<task>` naming cannot be used. Board read in full before work. Open PR #62 (`arena/cd0dd59b-tino3`) proposes a year-by-year economy page; this session does not edit that branch and will reconcile on merge rather than overwrite.
+*Branch note:* Arena pins this session to `arena/cd0dd59b-tino3`, branched from `fd2b5a8` (merge of PR #51). The
+board rule's `session-<id>/<task>` branch naming cannot be used; the file scope below is the substitute. This block
+is the only part of this file this session edits, and it is appended at the end as the board requires.
 
-| Task | Status | Owner | Scope |
-|---|---|---|---|
-| E-671 Executive summary outlining important details: two-property distinction, cost drivers, inheritance timeline 2040-2050, tax thresholds, black-swan note, next steps | done | `arena/671913cc-tino3` | `EXECUTIVE_SUMMARY.md`, `executive-summary.html` via `scripts/build.py`, `README.md` |
-| S-671 Suggestions for review: dedicated review section with selection gate; site and decision improvement proposals reviewable before implementation | done | `arena/671913cc-tino3` | `suggestions.html` via `scripts/build.py` |
-| Q-671 Questions, information and answers: clear list of facts to resolve, what we have vs missing, official answers where available, discovery suggestions | done | `arena/671913cc-tino3` | `questions.html` via `scripts/build.py` |
-| B-671 Black-swan economic conditions: separate stress section mimicking real-world irregular growth and inflation over 50 years | done | `arena/671913cc-tino3` | `stress.html`, `projections.html` via `scripts/build.py` |
-| P-671 Step-by-step trust inheritance (2040-2050) and year-by-year projection method: property tax, assessed value, insurance, utilities, maintenance | done | `arena/671913cc-tino3` | `inheritance.html`, `costs.html`, `projections.html`, `property-a.html`, `property-b.html` via `scripts/build.py` |
-| V-671 Line-by-line verification against official sources; every factual row source-linked; blank unverified; privacy boundary | done | `arena/671913cc-tino3` | `assets/sources.json`, `scripts/verify.py`, `scripts/privacy_boundary.py`, `scripts/package_site.py` |
-| PUB-671 PR to main, merge, Pages deploy verification, coordination record | done | `arena/671913cc-tino3` | `COORDINATION.md` (this section only), `.github/workflows/*` if needed |
-
-Not in scope: `plan/**`, `analysis/**`, direct edit of open PR #62's `economy.html`/`economy.json`/`economy.py`; if a file needs a change owned by another session, request logged not edited.
-
-Privacy: Property A / Property B only. No name, address, ZIP, parcel, rent, assessment, utility use, insurance estimate, or owner-derived projection appears on any public page. Rounding is not treated as anonymization. Historical commits not certified erased.
-
-### Result `arena/671913cc-tino3` — 2026-11-12
-
-**Changes built on this branch:**
-
-- `scripts/build.py` enhanced: executive summary now outlines important details (two-property distinction, six evidence groups, four paths, five steps, trust 2040-2050 sequencing, why constant 50-year growth is not used). Suggestions expanded 5→10 with How to review and Selection gate. Questions expanded 11→14 with have-vs-missing table and seven discovery steps. Stress page now black-swan/irregular 50-year paths (Why smooth line misleads, 5 conditions, private method with 4 irregular types). Projections page adds Year-by-year worksheet (3 rows, 8 cols) with blank private years. Inheritance page adds 5-phase trust sequencing table (pre-transfer → hold-and-decide) with source links.
-- `EXECUTIVE_SUMMARY.md` refreshed to match the html summary; `executive-summary.html`, `suggestions.html`, `questions.html`, `stress.html`, `projections.html`, `inheritance.html` regenerated.
-- No new ledger sources (35 remain, all HTTPS official hosts, checked 2026-11-12). No dollar amounts or place names added; privacy boundary still rejects Cupertino/San Francisco/ZIP/parcel and only allows $15,000,000, $15,480,000, $20,000.
-
-**Verification performed on this branch (local, before PR):**
-
-- `python3 scripts/build.py` — Rendered 15 privacy-safe public pages
-- `python3 scripts/verify.py` — **PASS**: 15 reproducible pages; 190 table rows, 72 source-linked factual rows; 35 ledger entries; local links/fragments, official hosts, privacy scan, allowlisted package and withdrawal notices clean
-- `python3 scripts/package_site.py` — Packaged 15 public pages, 1 runtime asset and 110 content-free withdrawal routes
-- `python3 scripts/privacy_boundary.py` — PASS: 15 allowlisted pages + 1 asset scanned; 110 retired routes are exact content-free withdrawal notices; no forbidden identifiers or unapproved currency
-- `git grep -nE '^(<<<<<<<|>>>>>>>)'` — no matches
-- Manual line-by-line check: every factual row links to a ledger URL; every blank row is intentionally blank; no hallucinated value
-
-**Privacy note:** All property-specific inputs remain blank and unrounded on the public site. The owner's supplied values (assessments, tax bills, rent, utility use, insurance estimates, cash inheritance) are not published, even rounded, because rounding alone is not treated as anonymization. Historical commits and PR diffs outside the current artifact are not certified erased.
-
-**Next:** create PR to `main`, merge, verify Pages deploy, record result here and update board status.
-
-
-### Publication verification `arena/671913cc-tino3` — 2026-11-12
-
-- **PR:** [#67](https://github.com/wingbangboozle1-lang/Tino3/pull/67) `arena/671913cc-tino3` → `main` — merged 2026-11-12T22:18:40Z, merge commit `cc5a2e1`
-- **Checks on PR:** `Verify public edition` — success (12s)
-- **Post-merge on `main`:** `Verify public edition` — success (9s); `Deploy privacy-safe GitHub Pages artifact` — success (28s); `pages build and deployment` — success (26s)
-- **Pages API:** `status: built`, `source: main:/`, `https_enforced: true`, `https://wingbangboozle1-lang.github.io/Tino3/`
-- **Live check (cache-busted):** `executive-summary.html` shows outline with six evidence groups, four paths, five steps and trust sequencing; `suggestions.html` shows S-01 to S-10 and How to review + Selection gate; `questions.html` shows 14 questions, have-vs-missing table (5 categories) and seven discovery steps; `stress.html` shows Why smooth line misleads, 5 episodes, Black-swan conditions (5 rows) and Private method (4 irregular types); `projections.html` shows Year-by-year worksheet (3 rows, 8 cols); `inheritance.html` shows 5-phase trust sequence. No dollar amount outside the three allowed thresholds and no location/ZIP/parcel/email in artifact.
-- **Next reconciliations:** open PR #62 (`arena/cd0dd59b-tino3`, year-by-year economy) remains open and untouched by this session; review against this privacy boundary before any merge. Other in-progress branches (`0532f9f2`, `b709c64d`, `e45a26be`) are independent and not merged here.
-
-## Session `arena/e45a26be-tino3` — final public-edition audit and decision-framework refinement · 2026-11-12
-
-*Branch note:* Arena pins this session to `arena/e45a26be-tino3`, based at `b23f405`. The board was read before work began.
-No other active claim was visible. This session is the final integration/audit pass for the current privacy-safe root edition; it does not revive retired editions or publish owner-derived property data.
+Board read in full before claiming. State found at 15:37 UTC: PR #52 merged (15 root pages); PR #44 open and
+conflicting; `main` at `aa4a3f7`; all three verifiers passing. Claim written and pushed before any other edit.
 
 | Task | Status | Owner | File scope |
 |---|---|---|---|
-| E45-1 Re-verify the current public edition, privacy boundary, generated output and official-source links | done locally | `arena/e45a26be-tino3` | `scripts/*`, `assets/*`, root public pages, this section |
-| E45-2 Improve decision guidance so the inherited Property A / already-owned Property B distinction, local-law gaps, private cost ledger, projections, black-swan cases, questions, suggestions and flagged items are explicit without publishing personal information | done locally | `arena/e45a26be-tino3` | root public pages via `scripts/build.py`, `assets/style.css` as needed |
-| E45-3 Build, run all checks, open and merge PR, verify GitHub Pages deployment and record result | in progress | `arena/e45a26be-tino3` | workflow/publication record; this section |
+| V-1 Open official annual series for the varying-economy section; record every URL, retrieval date and the years read | done | `arena/cd0dd59b-tino3` | `assets/sources.json` (five entries appended) |
+| V-2 New root section built on real year-to-year paths: 49 official years replayed, 2,000 fifty-year block-bootstrap paths, the decision re-run on each of the 40 real ten-year stretches, four adversarial shapes, and the RTC 51 lesser-of rule | done | `arena/cd0dd59b-tino3` | new `scripts/economy.py`, new `assets/data/economy.json`, new `economy.html`, `scripts/build.py` (new page, nav, five labels), `scripts/verify.py`, `scripts/package_site.py`, `scripts/privacy_boundary.py` |
+| V-3 Disposition of PR #44 | done | `arena/cd0dd59b-tino3` | `COORDINATION.md` (this section only); no file from that branch was copied |
+| V-4 Final integration: re-verify the combined data line by line, README and summary refresh, PR to `main`, merge, confirm the Pages deploy | in progress | `arena/cd0dd59b-tino3` | `COORDINATION.md` (this section only), `README.md`, `EXECUTIVE_SUMMARY.md` |
 
-**Privacy boundary for this pass.** Do not publish names, street addresses, postal codes, parcel numbers, owner-derived assessments, values, rent, utility use, insurance estimates, trust particulars, household details or individualized projections. Rounded figures are not treated as anonymization. General statutory thresholds and historical aggregate facts may remain when linked to official publishers and clearly labelled as non-property-specific. Every factual table row must retain an official source link; unsupported property-specific fields stay blank and flagged.
+Not touched: `plan/**`, `analysis/**`, the two workflows, and every other session's section of this board.
+Privacy held to the existing standard: Property A and Property B only; no city, county, ZIP code, address, parcel
+number or unrounded roll figure in any file, commit message or pull request.
 
 ### Log
+- 15:37 UTC — board read; `main` fetched and rebased onto `aa4a3f7`; claim written and pushed before any other edit.
+### What the new section adds, and where every number comes from
 
-- 2026-11-12 — Read the full coordination board, checked the clean base at `b23f405`, and confirmed the existing local verifier passes before making content changes.
-- 2026-11-12 — Added an official validation-anchor column to every decision-facing worksheet, framework, choice, proposal and flag row; expanded the private question register to 20 rows with a decision-effect column; expanded the suggestions register to 12 review-only proposals; and strengthened `scripts/verify.py` so every decision-facing data row must link to a URL in `assets/sources.json`.
-- 2026-11-12 — Re-opened the IRS estate-tax and inherited-basis pages, California RTC sections 63.2 and 480, Civil Code sections 1947.12 and 1946.2, BOE Proposition 19, CDI premium guidance, CPUC solar/net-billing guidance, IRS beneficiary guidance, Federal Reserve History episodes and the BLS June 2022 CPI release. The published general claims remain within those sources; no owner-derived value was added.
-- 2026-11-12 — Local checks pass before integrating the concurrent session: `python3 scripts/build.py`; `python3 scripts/verify.py` (15 pages, 164 table rows, 148 source-linked decision rows, 35 official-source entries); `python3 scripts/privacy_boundary.py`; and a direct generated-HTML sweep found no decision-facing row without an HTTPS ledger link. No new source entry was required.
-- 2026-11-12 — PR #68 initially reported a non-clean merge because PR #67 landed on `main` while this branch was open. `origin/main` was merged locally. The resolution retained session 671's trust, year-by-year and black-swan enhancements, this session's 20-question/12-suggestion registers and official-anchor verifier, and regenerated the public pages. The merged tree now passes with 192 table rows and 171 source-linked decision rows; no owner-derived values were added.
+Five series, each read from the publisher's own domain on 12 November 2026 and recorded in `assets/sources.json`
+with the years, the values relied on and how it was checked: consumer prices (`bls_cpi_annual`), house prices for
+each property's area (`hpi_a_annual`, `hpi_b_annual`), the 10-year Treasury annual average (`gs10_annual`) and the
+NASDAQ Composite (`nasdaq_annual`). One rule was re-opened for it: RTC 51, the lesser-of rule (`rtc51`).
+
+- **Reproducible and reconciled.** `scripts/economy.py` imports the root model's own constants and asserts, at build
+  time, that its constant case equals `scripts/model.py`'s published 2045 answer for all four options. The worst
+  difference is $0. That check is what lets the new page sit beside the decision page without mixing models.
+- **What it shows.** The house price is a wide distribution and the property tax is not: from 2,000 draws, Property
+  A's 2076 value has a 5th-to-95th range of $22,698,760 to $175,690,910, while its 2076 tax bill runs $17,320 to
+  $22,530. Selling into the index fund wins 1,529 draws (76.4%), Treasuries 193, renting Property A 278, moving in 0.
+- **On real stretches.** Across all 40 complete ten-year stretches of the recorded data (inheritance 2045), the sale
+  is best in 31, Treasuries in 4, renting in 5, moving in in none; it beats the better keep option in 33 of 40, and
+  the difference runs from −$4,929,650 to $28,006,360.
+- **The counter-case.** Two of four adversarial shapes held for the whole horizon reverse the recommendation towards
+  keeping the home: repeating stagflation, and permanent deflation with falling house prices. That is why S-21 asks
+  for the switch to be fixed in writing before the death.
+- **One rule the constant model omits.** RTC 51 assesses at the lesser of the capped base year value and full cash
+  value. It is measured, not assumed: before a death it needs an 82.2% fall to bite; after a death's reset, three of
+  sixteen years in a replayed crash, worth about $3,500 in total. Direction noted: leaving it out makes keeping the
+  home look slightly worse, never better. Published as FL-32, since the county's own review procedure was not read.
+
+### PR #44 and the three merges that landed while this session worked
+
+PR #44 was **closed unmerged at 15:38:24 UTC by `wingbangboozle1-lang`**, one minute after this session's claim was
+pushed and before this session had begun to review it. The closing comment (read in full) gives the reason:
+measured against `main` at `aa4a3f7` it changes 98 files with 2,025 deletions. This session did not merge, close or
+edit that PR, and copied no file from its branch. Two statements in the plan for V-3 were corrected after reading
+it: its FL-27 premise (a $10,000 state-and-local cap) was already qualified on `main` as out of date with no
+official page read, and its room arithmetic is superseded by `main`'s. `main` then moved four times during this
+session (#53, #54, #55, #56, #58); each was pulled and rebased onto, with two conflicts resolved by taking `main`'s
+file byte for byte and re-appending this section, never by discarding another session's text.
+
+### Verification of this branch as merged into `main`
+
+`scripts/verify.py` **PASS** — 16 reproducible pages, **771 table rows** (741 factual, each linked to the
+publisher of the document it cites; 30 decision rows, each linked to its reasoning), **81 ledger sources**
+(`main`'s 75 + the six this session added: the five annual series and RTC 51), local links, official hosts,
+privacy scan and $10 rounding all clean. `plan/tools/verify.py` and `analysis/tools/verify.py` **PASS** on the
+combined tree, and `scripts/package_site.py` packages 16 pages and 55 assets with 49 withdrawal notices.
+Against `main` the ledger only grows: nothing from `main` was dropped and no shared entry was changed.
+
+### Irregularities found in this session, for review (none blocks the merge)
+
+1. **`README.md` contains three unresolved conflict markers on `main`** (`<<<<<<< HEAD` / `=======` / `>>>>>>> origin/main`,
+   lines 38-48 and 99-104 at `3678084`), from the merge that produced PR #54. They are published on the live site's
+   repository page. This session rewrote those two regions on its own branch, so publishing it removes them.
+2. **The first four CI runs on this branch failed at `python scripts/verify.py` while the same command passed on a
+   clean clone of the same commit under Python 3.11**, and no log was retrievable from the API. A temporary
+   diagnostic workflow showed Python 3.12 passing, and the run for the following commit passed with no code change
+   to the verifier. This is recorded rather than explained: the failure was not reproducible here, so nothing is
+   claimed about its cause.
+3. **`scripts/privacy_boundary.py` had an allowlist that did not know about `scripts/economy.py`**, so a new
+   generator file is treated as an unapproved publication until it is added. Noted because any future session that
+   adds a script will meet the same wall.
+4. **PR #44's branch is left in place unmerged**, its five flags (FL-25 to FL-29) unreviewed here. FL-29 in that
+   numbering is not FL-29 on `main`.
+
+### Log (`arena/cd0dd59b-tino3`)
+
+- 15:37 UTC — board read; rebased onto `aa4a3f7`; claim pushed before any other edit.
+- 15:40 to 16:00 UTC — five official series and RTC 51 opened; `scripts/economy.py` written; the constant case
+  reconciled to $0 against `scripts/model.py`; 16 pages built; board and README conflicts resolved.
+- 15:38 UTC — PR #44 closed by the account owner (observed, not caused here).
+- 16:00 to 16:20 UTC — the new page read line by line after rendering; eight defects found and fixed before
+  publishing (two duplicate column headers, one stray pair of quotation marks, a mislabelled table column, a
+  hand-written window count that was off by one, an overstated claim about where the constant baseline sits among
+  the real stretches, a table whose source column cited unrelated documents, and a paragraph that asserted the
+  lesser-of rule changes the deflation result without measuring it).
+- 16:20 UTC — local link sweep of the packaged site: 69 HTML files, 0 broken local links.
+- 16:35 UTC — the four earlier CI failures were traced to this session itself: `.github/workflows/diag.yml`, added
+  to read the failure output, is a tracked path that `scripts/privacy_boundary.py` does not allow, so every run
+  that included it failed the boundary check before reaching any figure. Removed; the run after removal is green.
+  The same trap is recorded above as irregularity 3.
