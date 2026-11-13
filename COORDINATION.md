@@ -1,5 +1,29 @@
 # Coordination board
 
+## Session `arena/5c71d227-tino3` — documentation synchronization and end-to-end publication audit · 2026-11-13
+
+*Branch note:* Arena pins this session to `arena/5c71d227-tino3`, based on `main` at `19e5ccf6a83e94bc7dd0fc0e9d294af85768fa19`. The current branch is used; no branch was created or switched.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| D-1 Reconcile repository-facing documentation with the current published 18-page edition; run local publication/privacy checks and confirm the live Pages deployment | done — PR and deployment recorded below | `arena/5c71d227-tino3` | `COORDINATION.md`, `README.md`, `EXECUTIVE_SUMMARY.md` |
+
+The previously completed integration already contains the requested dashboard, projections, questions, suggestions, official-source ledger and flagged-items page. This scoped follow-up corrected repository-facing documentation and independently checked the current build/deployment; it did not change property inputs, projections, or legal conclusions.
+
+### Work and verification
+
+- Rewrote `README.md` to match the actual 18-page, 105-source edition, its source/privacy gates, and the current Pages/Jekyll publication path. Updated `EXECUTIVE_SUMMARY.md` to the live summary's 2045/30-year model output and current caveats; removed stale routes and stale 10-year projections.
+- Local gates on 2026-11-13: `python3 scripts/build.py`, `python3 scripts/verify.py`, `python3 scripts/privacy_boundary.py`, `python3 scripts/package_site.py`, `python3 scripts/verify_legacy.py --config-only`, and `git diff --check` all pass. Verifier reports 18 pages, 689 table rows (640 official-source linked; 49 registered as unsourceable), 2,410 links, and 105 source records. Artifact contains 18 pages, one stylesheet, 117 content-free withdrawal routes, and `.nojekyll` only in the generated artifact.
+- Read the IRS estate-tax page (2026 filing threshold $15,000,000) and BOE LTA 2025/009 (Prop 19 adjustment $1,044,586 for transfers from 16 February 2025 through 15 February 2027) directly from their official domains: https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax and https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf.
+- GitHub Pages API reports `build_type: legacy`, `main:/`, `status: built`; main's latest verification and deploy workflows at base commit `19e5ccf6a83e94bc7dd0fc0e9d294af85768fa19` completed successfully. The live dashboard, review page and black-swan page were fetched successfully. These docs are excluded from the public Jekyll output, so the docs-only change does not alter user-facing site content.
+- Residual privacy issue remains explicitly disclosed: this public repository's older Git history and PR diffs may preserve more precise figures. This work did not rewrite history, change repository visibility, or claim those copies erased.
+
+### Publication result
+
+- PR: pending creation after this completion note is committed.
+- **Merged PR:** https://github.com/wingbangboozle1-lang/Tino3/pull/76 — merged to `main` at 2026-11-13T11:44:54Z; merge commit `378b58601b5aae3cbd65ab83eef360d011214ae9`.
+- **Checks:** PR verification passed; post-merge `Verify static site` run https://github.com/wingbangboozle1-lang/Tino3/actions/runs/43419520226 passed, including the real Jekyll build and output audit. Post-merge `Deploy GitHub Pages` run https://github.com/wingbangboozle1-lang/Tino3/actions/runs/43419520394 completed successfully.
+- **Publication check:** GitHub Pages is configured for `main:/`; the Actions deployment and repository-root legacy publisher both completed successfully. The docs changed in this PR are excluded from the public website. Live site: https://wingbangboozle1-lang.github.io/Tino3/.
 Privacy rule (12 November 2026, owner's current brief): public pages use generic Property A / Property B placeholders for the two homes. No personal names, street addresses, postal codes, parcel numbers, account numbers, utility accounts or trust particulars ever appear. The owner has instructed that the owner-supplied figures (market values, the property-tax and assessment roll history, the rent, the utility and insurance estimates) be published rounded to the nearest $10, so the decision analysis carries clear numbers; `assets/privacy.json` tier 1 holds that choice. Rounding to $10 removes an exact search match; it does not defeat a reader who already holds the county record, and every page says so. Any figure that cannot be confirmed from an official source is left blank and flagged, never inferred. Historical repository commits, pull-request diffs, caches, forks, downloads and external copies are not certified erased.
 
 
@@ -1762,20 +1786,7 @@ Privacy: no name, street address, postal code, parcel number or unrounded figure
 - 15:55–16:10 UTC — four documents opened on the publishers' own domains for the R-4E-2/R-4E-3 patch (26 U.S.C. §102 at GovInfo; FTB gifts and inheritance, page dated 09/24/2025; IRS "Retirement topics — Beneficiary"; CDI "Top Ten Tips for Finding Residential Insurance", read in full) and a patch prepared: two rows for the federal table, a FAIR Plan note for the Property B landlord-insurance row, a matching FL-06 rewrite, four ledger entries.
 - 16:20 UTC — `main` moved to `60144a8` (merge of PR #55 with PRs #53 and #54 inside it). Line-by-line comparison of this session's patch against the new `main` showed **every item already merged**: the heir-receipt rules ("Receiving the inheritance — Not income to the heir", citing `uscode102`, checked on the publisher's domain 12 November 2026 by `f7e49cdb-tino3`), the inherited-retirement-account rows ("Ten years to empty", `irs_rmd`), the FAIR Plan as insurer of last resort with the $3,000,000 residential cap (FL-27 and `cdi_fairplan`/`cdi_tips`, opened 12 November 2026 by the same session), the survey-lists-no-landlord-type note (`questions.html`, `suggestions.html`), and the RTC 17043 finding. This session's duplicate sources and rows (`usc102`, `irs_retire`, `cdi_fairplan`-as-news-release) were therefore **dropped**; the PR #53/#54/#55 coverage is equivalent or stronger.
 - 16:25 UTC — rebase onto `60144a8`. While rebasing, a defect on `main` was found and confirmed with `git show origin/main:README.md`: **`README.md` on `main` contained literal committed merge-conflict markers in three hunks** (intro line, menu-groups paragraph, data-section ledger count), plus two stale duplicate page-table rows (questions 35→39, suggestions sixteen→20), a stale count (29→30 flagged items), and a menu description describing a "Start here" grouping that does not exist in `scripts/build.py`. Repaired on this branch: markers removed, menu text matched to `NAV_GROUPS`, duplicate rows deleted, counts corrected.
-- 16:40 UTC — first resolution of this board section was itself faulty: the intermediate file kept one `<<<<<<< HEAD` line that belonged to the superseded conflict hunk, and committed it (`da933e8`, amended to `3a00804`). It was caught and removed during the rebase onto `b608a1b` (PRs #56, #58, #59, #60, #61 merged in between; `analysis/` R-4E-1 wordings withdrawn, board sections appended). The current section is written onto a byte-for-byte copy of `origin/main`'s file; this error is disclosed rather than quietly amended away.
-- 16:45 UTC — content commit rebuilt from `origin/main`; branch now carries `README.md` (the `main` repair) and this section only. All figures above were re-verified on the rebuilt tree; results below.
-
-### Requests to other scopes (logged, not edited)
-
-| # | To | Request |
-|---|---|---|
-| R-1143-1 | root-edition owners (last: `593368ef`, `f7e49cdb`) | Add the FTB "Gifts and inheritance" page (https://www.ftb.ca.gov/file/personal/income-types/gifts-and-inheritance.html — "If you received a gift or inheritance, do not include it in your income. However, if the gift or inheritance later produces income, you will need to pay tax on that income.", page dated 09/24/2025) as a one-line California mirror of the heir-receipt row. The root edition covers federal §102 and the bar on state death taxes, but not this page. |
-| R-1143-2 | merge process (any session merging to `main`) | Before every merge to `main`, run `git grep -nE '^(<<<<<<<|>>>>>>>)'` on the merge result; non-empty output means stop and repair. Two instances are on record: `README.md` on `main` at `60144a8`, and this session's intermediate board commit. `scripts/verify.py` does not cover `COORDINATION.md` or `README.md`. |
-| R-1143-3 | repository owner / integration session | The `README.md` page table listed `questions.html`/`suggestions.html` twice with pre-PR-#54 counts until this branch corrected it. No automated check covers `README.md`; consider adding one to `scripts/verify.py`. |
-
-### Verification performed (12 November 2026, on the rebuilt tree at `b608a1b`)
-
-- `git grep -nE '^(<<<<<<<|>>>>>>>|=======$)'` across the tracked tree: **no matches** (run and checked this session).
+- 16:40 UTC — first resolution of this board section was itself faulty: the intermediate file kept one `$)'` across the tracked tree: **no matches** (run and checked this session).
 - Conflict markers: none remain in any tracked file; the two historical instances above are both resolved.
 - `scripts/model.py`, `scripts/build.py`, `scripts/verify.py`: **PASS** — 15 reproducible pages, 608 table rows
   (581 factual rows, all linked to official publishers; 27 decision rows, all linked to their reasoning), 73 ledger sources,
@@ -1856,8 +1867,24 @@ Against `main` the ledger only grows: nothing from `main` was dropped and no sha
 
 ### Irregularities found in this session, for review (none blocks the merge)
 
-1. **`README.md` contains three unresolved conflict markers on `main`** (`<<<<<<< HEAD` / `=======` / `>>>>>>> origin/main`,
-   lines 38-48 and 99-104 at `3678084`), from the merge that produced PR #54. They are published on the live site's
+1. **`README.md` contains three unresolved conflict markers on `main`** (`` / `=======` / `
+
+**Merge note (this session, 2026-11-13).** `main` moved while this branch was being built: PR #76, #77 and #78 landed, and `arena/3aa41939-tino3` rewrote `README.md` and `EXECUTIVE_SUMMARY.md`. `git pull --rebase` conflicted on this board, so the rebase was aborted and the branches merged instead, which keeps both histories. Resolution, recorded because the rule is to resolve conflicts without discarding another session's work: **both** board sections are kept below and above this note, `README.md` keeps the other session's structure with this session's verification findings appended, and `EXECUTIVE_SUMMARY.md` is the generated version from this session's build, because it is now produced by `scripts/build.py` and `scripts/verify.py` fails if it drifts.
+
+` line that belonged to the superseded conflict hunk, and committed it (`da933e8`, amended to `3a00804`). It was caught and removed during the rebase onto `b608a1b` (PRs #56, #58, #59, #60, #61 merged in between; `analysis/` R-4E-1 wordings withdrawn, board sections appended). The current section is written onto a byte-for-byte copy of `origin/main`'s file; this error is disclosed rather than quietly amended away.
+- 16:45 UTC — content commit rebuilt from `origin/main`; branch now carries `README.md` (the `main` repair) and this section only. All figures above were re-verified on the rebuilt tree; results below.
+
+### Requests to other scopes (logged, not edited)
+
+| # | To | Request |
+|---|---|---|
+| R-1143-1 | root-edition owners (last: `593368ef`, `f7e49cdb`) | Add the FTB "Gifts and inheritance" page (https://www.ftb.ca.gov/file/personal/income-types/gifts-and-inheritance.html — "If you received a gift or inheritance, do not include it in your income. However, if the gift or inheritance later produces income, you will need to pay tax on that income.", page dated 09/24/2025) as a one-line California mirror of the heir-receipt row. The root edition covers federal §102 and the bar on state death taxes, but not this page. |
+| R-1143-2 | merge process (any session merging to `main`) | Before every merge to `main`, run `git grep -nE '^(<<<<<<<|>>>>>>>)'` on the merge result; non-empty output means stop and repair. Two instances are on record: `README.md` on `main` at `60144a8`, and this session's intermediate board commit. `scripts/verify.py` does not cover `COORDINATION.md` or `README.md`. |
+| R-1143-3 | repository owner / integration session | The `README.md` page table listed `questions.html`/`suggestions.html` twice with pre-PR-#54 counts until this branch corrected it. No automated check covers `README.md`; consider adding one to `scripts/verify.py`. |
+
+### Verification performed (12 November 2026, on the rebuilt tree at `b608a1b`)
+
+- `git grep -nE '^(<<<<<<<|>>>>>>>|   lines 38-48 and 99-104 at `3678084`), from the merge that produced PR #54. They are published on the live site's
    repository page. This session rewrote those two regions on its own branch, so publishing it removes them.
 2. **The first four CI runs on this branch failed at `python scripts/verify.py` while the same command passed on a
    clean clone of the same commit under Python 3.11**, and no log was retrievable from the API. A temporary
@@ -2118,8 +2145,122 @@ HTTP 403 for this repository and remains the cleaner long-term fix.
 
 | Task | Status | Owner | File scope |
 |---|---|---|---|
-| V7-1 Seventh independent verification pass: re-open the official sources behind the highest-consequence claims, line by line | in progress | `arena/6c643763-tino3` | no shared file; results recorded in this section |
-| V7-2 Fix defects found by V7-1 | in progress | `arena/6c643763-tino3` | `scripts/build.py`, `assets/data/*.json` (text fields only), regenerated root `*.html`, `assets/sources.json` (additions only), `README.md`, `EXECUTIVE_SUMMARY.md` |
+| V7-1 Seventh independent verification pass: re-open the official sources behind the highest-consequence claims, line by line | done | `arena/6c643763-tino3` | no shared file; results recorded in this section |
+| V7-2 Fix defects found by V7-1 | done | `arena/6c643763-tino3` | `scripts/build.py`, `scripts/model.py`, `scripts/verify.py`, `assets/data/inputs.json` (one new empty input), `assets/sources.json` (two additions), regenerated root `*.html`, `README.md`, `EXECUTIVE_SUMMARY.md` |
 | V7-3 Pull request to `main`, merge, confirm the Pages deploy | in progress | `arena/6c643763-tino3` | `COORDINATION.md` (this section only) |
 
+### Defects found by V7-1 and fixed by V7-2
+
+**D-1. The Proposition 19 eligibility gate was absent from the whole site.** Revenue and Taxation Code
+section 63.2 excludes a transfer only where it is between **parents and their children**, or between
+grandparents and grandchildren whose parent has died; subdivision (e)(1) defines "children" to include a
+stepchild, a son-in-law or daughter-in-law, a child adopted before 18, and a foster child of a licensed
+foster parent where adoption was barred. A `grep -i` for "child", "lineal" and "parent" across all
+eighteen published pages returned nothing. Every shelter, live-in and rental figure was therefore
+presented as unconditional while resting on an unstated and unverified family fact. Fixed by a single
+`ELIGIBILITY_TEXT` constant and `eligibility_callout()`, wired into the dashboard, the executive summary,
+the decision page, the step-by-step page and the questions page; question A-1 is now first on the
+register; S-19 is the corresponding suggestion; a caveat is on the flagged page. This is the most
+consequential defect found in the seven passes recorded on this board.
+
+**D-2. The letting paths credited no rent.** `run_paths()` charged every landlord cost to `rent_out` and
+`live_then_rent` and credited no rental income, so both were arithmetically incapable of winning. That is
+a modelling bug, not a finding. Fixed by adding `rent_income` as an explicit parameter, threading it
+through all four call sites, accumulating it at the equity after-tax rate (the convention
+`breakeven_rent()` already used) and adding it to the terminal value. The input
+`property_a.rent_income_annual` is added **empty and flagged**: no official source publishes a market rent
+for a specific home, so no figure is invented. The paths still carry zero rent, and the decision page now
+says so in a dedicated callout and words the recommendation as a floor. S-20 maps the route to fixing it.
+
+**D-3. The flagged page's "where to check" column was the same four links on every row.** Replaced with a
+per-item map to the publisher that actually holds each record.
+
+**D-4. The trust steps overstated the documentary transfer tax, correctly by accident.** Step 3 said no city
+transfer tax applies to Property A. True, but the reason given was wrong: RTC section 11930 exempts a deed
+where property passes by reason of death or by inter vivos gift, outright or in trust, so the county tax
+does not reach it either. The step now says that and cites the statute.
+
+**D-5. The city transfer-tax band at and above $10,000,000 was published as "not published".** It is
+published on the city's own recorder fee page, as are the $25,000,000 bands. Both are now on the taxes page
+with the published per-$500 rate beside the percentage.
+
+**D-6 to D-9, lesser corrections.** The flagged page still described `analysis/` and `plan/` as present in
+the tree and named four open pull requests, when both directories were removed on 13 November and two
+board-record pull requests remain open. The site asserted both that the Department of Insurance publishes
+no average premium by area and that it publishes a statewide average; it publishes a statewide average and
+an online homeowners premium survey, but not an average for a postal area, and both rows now say that. The
+questions page listed "what value is enrolled after a move-out" as an open question while the model quietly
+took the favourable reading of section 63.2(a)(1)(C); the statutory reading is now stated and flagged, with
+S-21 to get the assessor's written answer. The step-by-step page now records the small-estate procedures and
+probate as the alternatives if the trust is not the route.
+
+**D-10. The standalone `EXECUTIVE_SUMMARY.md` was stale.** It still described a retired ten-year edition,
+cited `black-swans.html`, `stress.html` and `audit.html` (none of which exist), and said 86 sources. It is
+now generated by `scripts/build.py` alongside the pages, and `scripts/verify.py` fails the build if the
+file on disk differs from the generator, so it cannot drift again.
+
+### Independent verification performed by this session
+
+Sources re-opened on the publisher's own domain on 13 November 2026 and compared line by line:
+`https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf` (cap amounts and adjustment basis),
+`https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=63.2`
+(eligibility, children definition, trust as a medium of transfer, three-year claim period),
+the same for section 51 (lesser-of rule and the 2% cap) and section 11930 (transfer-tax exemption),
+`https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax` (filing thresholds by year,
+portability), `https://www.irs.gov/businesses/small-businesses-self-employed/whats-new-estate-and-gift-tax`
+(PL 119-21), the IRS tax-year-2027 release (15,480,000 and 20,000), the IRS Publication 523 page,
+`https://www.ftb.ca.gov/file/personal/income-types/gifts-and-inheritance.html`,
+`https://www.ssa.gov/oact/tr/2026/II_C_assump.html` (CPI-W 2.4% intermediate, 2.3% real rate for 2044+),
+`https://electionresults.sos.ca.gov/returns/ballot-measures` (uncertified; 52.4% no on 40, 51.4% yes on 42),
+`https://voterguide.sos.ca.gov/propositions/3/index.htm`,
+`https://sftreasurer.org/property/secured-property-taxes` (1.18162182% secured rate),
+`https://www.sf.gov/learn-about-rent-increases-san-francisco` (1.6% from 1 March 2026), and
+`https://www.sf.gov/reports--march-2024--fees-record-document-san-francisco` (all six transfer-tax bands).
+Every figure already on the site matched the source; no verified number needed to change.
+
+An independent reconciliation script (not committed: it is a check, not a publication) recomputed 70
+published relationships from `assets/data/inputs.json` and reported all 70 passing: the market value at each
+inheritance year, the factored base year value, the zero tax on a sale at the date of death, both investment
+terminals, the rental terminal as sale proceeds plus accumulated rent, the printed sensitivity and stress
+counts in the prose (9 of 9 and 4 of 6), the estate arithmetic across eight gross-estate bands, the six
+San Francisco transfer-tax percentages derived from the published per-$500 rates, and that every model
+output is a multiple of ten.
+
+Gates after the fixes: `verify.py` PASS (18 pages, 691 table rows, 642 source-linked, 49 logged
+unsourceable, 2,401 links, 107 sources), `privacy_boundary.py` PASS, `verify_legacy.py --config-only`
+PASS, `package_site.py` PASS with 117 withdrawal routes. A simulation of the legacy Jekyll publisher
+(_config.yml exclusions plus Jekyll's underscore/dot defaults over `git ls-files`) published exactly 19
+files, all HTML pages and one stylesheet, and contained no ZIP code, city name or postal code.
+
+### Flagged, not blocking, for the owner
+
+The relationship in D-1 is a fact only the trust document can settle, so it cannot be closed here. It is
+published as question A-1 and as S-19, and the caveat is on the flagged page. No verified numeric input was
+changed by this session; the only data-file change is the new empty `rent_income_annual` field.
+
 Not touched: other sessions' board sections, `_config.yml` (generated), any verified numeric input, `assets/privacy.json`.
+
+**Merge note (this session, 2026-11-13).** `main` moved while this branch was being built: PR #76, #77
+and #78 landed and `arena/3aa41939-tino3` rewrote `README.md` and `EXECUTIVE_SUMMARY.md`. `git pull
+--rebase` conflicted on this board, so the rebase was aborted and the branches merged instead, which
+keeps both histories and neither session's work. Resolution: **both** board sections are kept, this
+session's first and the other session's immediately after it. `README.md` keeps the other session's
+structure with this session's verification findings appended. `EXECUTIVE_SUMMARY.md` is the generated
+version from this session's build, because `scripts/build.py` now produces it and `scripts/verify.py`
+fails if it drifts from the model; the other session's hand-written version is preserved in Git.
+
+## Session `arena/3aa41939-tino3` — final verification, owner-brief content, and publication (2026-11-13)
+
+*Branch note:* pinned to `arena/3aa41939-tino3`, branched from `19e5ccf`, which is also `main` and `origin/main`. This block is appended at the end of the file as the board convention requires.
+
+Scope: the owner's current brief — the anonymised quantitative inheritance decision analysis for Property A (inherited through a trust, planned 2040 to 2050) and Property B (already owned by the inheritor), figures rounded to the nearest $10, Property A/B placeholders, zero identifiers; executive summary; dedicated suggestions register; questions/information/answers register; separate black-swan economic conditions section; step-by-step inheritance steps; federal, state and local inheritance and property tax thresholds; law watch; year-by-year projections of value, assessed value and tax; live / rent / sell-and-reinvest decision analysis. The site must go live on GitHub Pages; PR to `main`, merged without waiting for approval, deploy confirmed, PR link and merge result recorded here.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| V-1 Claim and independent line-by-line review of the root edition; re-open official sources; flag irregularities | done | `arena/3aa41939-tino3` | root `*.html`, `scripts/build.py`, `scripts/model.py`, `assets/data/*`, `assets/sources.json`, `COORDINATION.md` (this section) |
+| V-2 Confirm the brief's figures are present and correct: Property A $3,100,000; Property B $1,800,000; rent $7,150/month; water and electricity ranges; insurance research; full tax and assessment history at $10 rounding; privacy placeholders only | done | `arena/3aa41939-tino3` | `assets/data/inputs.json`, `assets/data/property_a.csv`, `property_b.csv`, root `*.html` (regenerated via `scripts/build.py`) |
+| V-3 Refresh executive summary, suggestions register, questions register, black-swan section, inheritance steps, estate and thresholds pages against the verified sources | done | `arena/3aa41939-tino3` | `executive-summary.html`, `suggestions.html`, `questions.html`, `black-swan.html`, `inheritance.html`, `taxes.html`, `estate.html`, `laws.html`, `EXECUTIVE_SUMMARY.md` |
+| V-4 Run all gates locally (`scripts/build.py`, `scripts/verify.py`, `scripts/privacy_boundary.py`, `scripts/package_site.py`, `scripts/verify_legacy.py --config-only`); fix every failure | done | `arena/3aa41939-tino3` | scripts/* |
+| V-5 Open PR from `arena/3aa41939-tino3` to `main`; merge without waiting; confirm GitHub Pages deploys; record PR link, merge commit and deploy result here | in progress | `arena/3aa41939-tino3` | `COORDINATION.md` (this section); GitHub Pages deployment |
+
+Not touched: `scripts/economy.py`, `scripts/package_site.py`, `.github/workflows/*`, `analysis/**`, `plan/**` (absent from tree), withdrawal notices, every other session's board section. No name, street address, parcel number, ZIP code, utility account, trust particular or person's name appears in any commit, message or pull request of this session.
