@@ -1236,6 +1236,15 @@
    "checked": "Opened on the publisher's official domain on 2026-11-13.",
    "supports": "No documentary transfer tax is imposed on a deed or other writing where the property is transferred outright, or in trust for the benefit of any person or entity, by reason of an inter vivos gift or by reason of the death of any person.",
    "limits": "States the exemption; it does not decide whether a particular trust distribution is a gift or a death transfer, which is a question for the county recorder and counsel."
+  },
+  {
+   "id": "sjwc_tariff",
+   "publisher": "San Jose Water Company",
+   "title": "Advice Letter 621-A, approved: revised tariff sheets effective 1 January 2026, Decision D.24-12-077",
+   "url": "https://www.sjwater.com/media/zbkcksu3/san_jose_water_company_advice_letter_621-a_approved.pdf",
+   "checked": "Opened on the utility's official domain on 2026-11-13; the CPUC Water Division approval letter and the Schedule No. 1 general metered service sheets were read directly.",
+   "supports": "A CPUC-regulated utility's approved residential tariff sheets for 2026: a monthly readiness-to-serve charge by meter size plus tiered usage charges per 100 cubic feet, with a territory description that names the parts of the county the utility serves. Cited as a discovery path for the Property A water flag.",
+   "limits": "Discovery path only. Which utility actually serves the property is not identified, because the privacy rule excludes address-level identification, and no rate from this tariff is used in any figure on this site. The owner's water estimate stands until the bill and provider are confirmed against this tariff or another utility's published tariff."
   }
  ]
 }

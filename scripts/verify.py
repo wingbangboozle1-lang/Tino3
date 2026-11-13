@@ -43,6 +43,8 @@ OFFICIAL_HOSTS = {
     "www.sfpuc.gov", "sfbos.archive.sf.gov", "elections.cdn.sos.ca.gov",
     "www.cbo.gov", "www.federalreserve.gov", "www.huduser.gov", "www.lao.ca.gov",
     "home.treasury.gov", "www.tsp.gov", "docs.github.com",
+    # added by session arena/8e10089d-tino3 for the utility discovery paths
+    "www.sjwater.com", "www.cupertinosanitarydistrict.org",
 }
 FORBIDDEN_TAGS = {"script", "iframe", "form", "input", "textarea", "object", "embed", "img"}
 
