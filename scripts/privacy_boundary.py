@@ -13,7 +13,11 @@ APPROVED = set(PAGES + ASSETS + (
     '.gitignore','.nojekyll','COORDINATION.md','README.md','EXECUTIVE_SUMMARY.md',
     '.github/workflows/pages.yml','.github/workflows/verify.yml',
     'scripts/build.py','scripts/package_site.py','scripts/verify.py','scripts/privacy_boundary.py',
-    'scripts/model.py','scripts/economy.py','scripts/privacy_tier.py','scripts/verify_legacy.py','_config.yml',
+    'scripts/model.py','scripts/economy.py','scripts/privacy_tier.py',
+    # Repository-root publishing configuration and its guard: both are build-safety files with
+    # no household content, and the guard is what keeps the legacy Jekyll publisher inside the
+    # allowlist.
+    'scripts/verify_legacy.py','_config.yml',
 ))
 MARKER = 'PUBLICATION_WITHDRAWN'
 
