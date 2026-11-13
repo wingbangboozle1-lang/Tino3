@@ -43,6 +43,11 @@ OFFICIAL_HOSTS = {
     "www.sfpuc.gov", "sfbos.archive.sf.gov", "elections.cdn.sos.ca.gov",
     "www.cbo.gov", "www.federalreserve.gov", "www.huduser.gov", "www.lao.ca.gov",
     "home.treasury.gov", "www.tsp.gov", "docs.github.com",
+    # the CPUC-regulated retail water supplier's own filed tariff sheet
+    "sjwater.com", "www.sjwater.com",
+    # the county's own parcel lookup tools and the county's wholesale water agency
+    "payments.sccgov.org", "weedabatement.santaclaracounty.gov",
+    "www.valleywater.org", "valleywater.org",
 }
 FORBIDDEN_TAGS = {"script", "iframe", "form", "input", "textarea", "object", "embed", "img"}
 

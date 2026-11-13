@@ -217,8 +217,9 @@ def privacy_banner() -> str:
     return callout("privacy", "Privacy and accuracy notice", f"""
 <ul>
 <li><strong>What is published.</strong> Market values, assessed values, tax bills, rent and running costs, rounded to the nearest $10 as requested, plus the model outputs computed from them.</li>
-<li><strong>What is never published.</strong> No name, street address, parcel number, ZIP code, trust term, beneficiary detail or utility account appears on any page or in any published file. The two properties are called Property A (the home being inherited, in Santa Clara County) and Property B (the three-unit building already owned by the heir, in the City and County of San Francisco).</li>
+<li><strong>What is never published.</strong> No name, street address, parcel number, ZIP code, trust term, beneficiary detail or utility account appears on any page or in any published file. The two properties are called Property A (the home being inherited) and Property B (the three-unit building already owned by the heir).</li>
 <li><strong>The inherited cash.</strong> The amount is not published. The estate page works entirely in anonymous scenario bands.</li>
+<li><strong>The two jurisdictions are named.</strong> Property A is in Santa Clara County and Property B is in the City and County of San Francisco, and both are named on the property pages. A jurisdiction is not a personal identifier: no name, street address, parcel number, postal code or utility account is published anywhere on this site. Naming the jurisdiction is what makes every local rate checkable against the publisher that sets it, and the suggestion page records the option of withdrawing those citations.</li>
 <li><strong>Rounding is not anonymity.</strong> Rounding to $10 defeats a search for an exact figure; it does not stop someone who already holds the county record from recognising a parcel. That residual risk is disclosed here rather than hidden.</li>
 <li><strong>Owner figures are unverified.</strong> Values taken from the owner's own records are labelled <span class="badge unverified">unverified</span> unless an official public record was checked. They are listed again on the <a href="review.html">flagged for review</a> page.</li>
 <li><strong>History.</strong> Earlier commits in this public repository, previous pull-request diffs, forks and external copies are separate exposure surfaces. Nothing on this site can certify them erased.</li>
@@ -579,8 +580,9 @@ def page_property_a() -> str:
               [
                   f"<td>Role</td><td>Inherited through a trust, planned 2040 to 2050. Not owned by the heir today.</td>"
                   + src_cell([], "Owner statement"),
-                  f"<td>Jurisdiction</td><td>{esc(A['jurisdiction'])}</td>"
-                  + src_cell(["scc_ratebook"], "County rate book"),
+                  f"<td>Jurisdiction</td><td>{esc(A['jurisdiction'])}. The city inside the county, and with it the parcel's tax rate area, are not established.</td>"
+                  + src_cell(["scc_ratebook", "boe_scc_tra_maps", "scc_assessor_jurisdiction"],
+                             "County rate book and state maps"),
                   f"<td>Estimated market value, November 2026</td><td>{m(A['estimated_market_value_2026'])}</td>"
                   + src_cell([], "Owner estimate, unverified"),
                   f"<td>Current assessed value</td><td>{m(A['roll'][0]['assessed'])}</td>"
@@ -675,8 +677,9 @@ def page_property_b() -> str:
               [
                   f"<td>Role</td><td>Already owned by the heir. Rental income is already flowing and the heir can live here without losing it.</td>"
                   + src_cell([], "Owner statement"),
-                  f"<td>Jurisdiction</td><td>{esc(B['jurisdiction'])}</td>"
-                  + src_cell(["sf_treas_rate"], "SF Treasurer"),
+                  f"<td>Jurisdiction</td><td>{esc(B['jurisdiction'])}. The city's own published rates apply to it: the secured property tax rate, the water and sewer schedules and the transfer tax bands.</td>"
+                  + src_cell(["sf_treas_rate", "sfpuc_rates", "sf_recorder_fees"],
+                             "City rate schedules"),
                   f"<td>Estimated market value, November 2026</td><td>{m(B['estimated_market_value_2026'])}</td>"
                   + src_cell([], "Owner estimate, unverified"),
                   f"<td>Current assessed value</td><td>{m(B['roll'][0]['assessed'])}</td>"
@@ -787,6 +790,129 @@ def page_costs() -> str:
     net = MODEL["costs_b_now"]
     net_now = net["rent"] - sum(net[k] for k in ("water", "electricity", "insurance",
                                                  "maintenance", "property_tax"))
+
+    # The published tariff of the CPUC-regulated retail supplier that serves part of
+    # this area. Every figure below is read from the filed tariff sheet, not typed.
+    w_svc = V["property_a_water_service_charge_month_2026_07"]["value"]
+    w_t1 = V["property_a_water_quantity_tier1_2026_07"]["value"]
+    w_t2 = V["property_a_water_quantity_tier2_2026_07"]["value"]
+    w_t3 = V["property_a_water_quantity_tier3_2026_07"]["value"]
+    w_bench_ccf = 10
+    w_bench = w_svc + w_t1 * 6 + w_t2 * (w_bench_ccf - 6)
+    water_rows = [
+        f"<td>Monthly service charge, 5/8 x 3/4-inch or 3/4-inch meter</td>"
+        f"<td>${w_svc:,.2f} a month</td>"
+        f"<td>A readiness-to-serve charge. The quantity charge for the water used is added to it.</td>"
+        + src_cell(["sjwc_tariff"], "Filed tariff sheet"),
+        f"<td>Quantity charge, first tier</td><td>${w_t1:,.4f} per 100 cubic feet</td>"
+        f"<td>For the first 6 Ccf of a month. One Ccf is 748 gallons.</td>"
+        + src_cell(["sjwc_tariff"], "Filed tariff sheet"),
+        f"<td>Quantity charge, second tier</td><td>${w_t2:,.4f} per 100 cubic feet</td>"
+        f"<td>From 6 Ccf to 12 Ccf of a month.</td>"
+        + src_cell(["sjwc_tariff"], "Filed tariff sheet"),
+        f"<td>Quantity charge, third tier</td><td>${w_t3:,.4f} per 100 cubic feet</td>"
+        f"<td>Above 12 Ccf of a month.</td>"
+        + src_cell(["sjwc_tariff"], "Filed tariff sheet"),
+        f"<td>A household using {w_bench_ccf} Ccf a month</td>"
+        f"<td><strong>{m(money10(w_bench))} a month</strong></td>"
+        f"<td>Computed from the tariff above. {w_bench_ccf} Ccf is about 7,480 gallons.</td>"
+        + src_cell(["sjwc_tariff"], "Filed tariff sheet"),
+        f"<td>The same household over a year</td>"
+        f"<td><strong>{m(money10(w_bench * 12))} a year</strong></td>"
+        f"<td>Computed from the tariff above, at constant usage.</td>"
+        + src_cell(["sjwc_tariff"], "Filed tariff sheet"),
+        f"<td>The owner's estimate for this home</td>"
+        f"<td>{m(A['annual_costs']['water']['low'])} to {m(A['annual_costs']['water']['high'])} a year</td>"
+        f"<td>Owner estimate, unverified. It sits inside the range this tariff produces.</td>"
+        + src_cell([], "No official rate checked"),
+    ]
+    water_tbl = table("What metered water costs under the published tariff",
+                      ["Tariff line", "Amount", "Note", "Source"], water_rows,
+                      note="The tariff took effect on 1 July 2026. It is a published rate card that applies to "
+                           "every customer in the supplier's service area, not a quote for this property.")
+
+    # Sewer, read from the schedule of the city Property B is in. Property A's sewer
+    # district is not established, so no figure is published for it and none is inferred.
+    sw_svc = V["sf_residential_sewer_service_charge_2026_27"]["value"]
+    sw_unit = V["sf_residential_sewer_discharge_unit_2026_27"]["value"]
+    sw_t1 = V["sf_residential_stormwater_tier1_2026_27"]["value"]
+    sw_t2 = V["sf_residential_stormwater_tier2_2026_27"]["value"]
+    sw_t3 = V["sf_residential_stormwater_tier3_2026_27"]["value"]
+    sw_ccf = 10
+    sw_flow = 0.90
+    sw_units = sw_ccf * sw_flow
+    sw_month = sw_svc + sw_units * sw_unit + sw_t1
+    sewer_rows = [
+        f"<td>Monthly service charge</td>"
+        f"<td>${sw_svc:,.2f} a month</td>"
+        f"<td>A fixed charge for having the service. It does not depend on how much water is used.</td>"
+        + src_cell(["sfpuc_rates"], "Published rate schedule"),
+        f"<td>Volume charge per discharge unit</td>"
+        f"<td>${sw_unit:,.2f} per unit</td>"
+        f"<td>A discharge unit is metered water use multiplied by the flow factor: 90% for single-family "
+        f"residential customers and 95% for multi-family residential customers.</td>"
+        + src_cell(["sfpuc_rates"], "Published rate schedule"),
+        f"<td>Stormwater component, residential</td>"
+        f"<td>${sw_t1:,.2f}, ${sw_t2:,.2f} or ${sw_t3:,.2f} a month</td>"
+        f"<td>A tiered flat charge set by the parcel's net area: up to 1,700 square feet, 1,701 to 3,300, "
+        f"and 3,301 to 6,000. It applies to residential parcels of 6,000 square feet or less with six or "
+        f"fewer dwelling units.</td>"
+        + src_cell(["sfpuc_rates"], "Published rate schedule"),
+        f"<td>A household using {sw_ccf} Ccf a month</td>"
+        f"<td><strong>{m(money10(sw_month))} a month</strong></td>"
+        f"<td>Computed from the schedule above, on the smallest residential stormwater tier. {sw_ccf} Ccf is "
+        f"about 7,480 gallons, and at a 90% flow factor it is {sw_units:.0f} discharge units.</td>"
+        + src_cell(["sfpuc_rates"], "Published rate schedule"),
+        f"<td>The same household over a year</td>"
+        f"<td><strong>{m(money10(sw_month * 12))} a year</strong></td>"
+        f"<td>Computed from the schedule above, at constant usage and the same tier.</td>"
+        + src_cell(["sfpuc_rates"], "Published rate schedule"),
+        f"<td>Property A's sewer charge</td>"
+        f"<td><span class=\"blank\">not established</span></td>"
+        f"<td>The district that serves this parcel has not been identified, so no schedule can be cited for "
+        f"it. No amount is inferred and none is published.</td>"
+        + src_cell(["hsc_5473", "scc_assessor_jurisdiction"], "Statute and county lookup"),
+    ]
+    sewer_tbl = table("What a sewer bill is made of",
+                      ["Bill line", "Amount", "Note", "Source"], sewer_rows,
+                      note="These are the rates of the city Property B is in, effective 1 July 2026. They are "
+                           "unit prices from a published schedule, and the worked example is computed from "
+                           "them; none of it is a quote for either property.")
+
+    rates_rows = [
+        f"<td>Which company supplies the water, and on which tariff</td>"
+        f"<td>The county's wholesale water agency is not the retailer: it publishes a directory of "
+        f"retailers by city and an address lookup. The retailer bills the customer and files its own "
+        f"rate card with the state commission.</td>"
+        + src_cell(["scvwd_retailer_directory", "sjwc_tariff"], "Wholesale agency and filed tariff"),
+        f"<td>The size of the meter, which sets the service charge</td>"
+        f"<td>The bill names the meter size, and the retailer's tariff sheet prices each meter size "
+        f"separately.</td>"
+        + src_cell(["sjwc_tariff"], "Filed tariff sheet"),
+        f"<td>The parcel's tax rate area</td>"
+        f"<td>The state publishes the tax rate area maps for the county, and the county assessor "
+        f"publishes the workflow for confirming the area, and the agencies, that apply to a parcel.</td>"
+        + src_cell(["boe_scc_tra_maps", "scc_assessor_jurisdiction"], "State maps and county workflow"),
+        f"<td>The parcel's own ad valorem rate, and who levies what</td>"
+        f"<td>The county's compiled rate book lists every tax rate area with its total rate, and the "
+        f"county's allocation portal shows how a parcel's bill is split between the agencies that tax "
+        f"it.</td>"
+        + src_cell(["scc_ratebook", "scc_tax_allocation"], "County rate book and allocation portal"),
+        f"<td>The sewer district and its charge</td>"
+        f"<td>The charge is set by the district's own schedule. In the county a district may elect to "
+        f"collect it on the tax roll, and the county assessor can identify the district for a parcel.</td>"
+        + src_cell(["hsc_5473", "scc_assessor_jurisdiction"], "Statute and county workflow"),
+        f"<td>The transfer tax due when the trust transfers the house</td>"
+        f"<td>The county recorder publishes the documentary transfer tax rate, and the city publishes "
+        f"its own conveyance tax where it applies.</td>"
+        + src_cell(["scc_recorder", "sf_recorder_fees"], "Recorder and city fee schedules"),
+    ]
+    rates_tbl = table("Where this property's own rates come from",
+                       ["What has to be established", "Where it is published", "Source"], rates_rows,
+                       note="Each of these is a public record held by the body that sets the number. None "
+                            "of them requires an address to be published; the address is only needed to "
+                            "read the parcel's own entry.")
+
     return (
         callout("note", "Where these numbers come from", """
 <p>Water, electricity and insurance are <strong>owner estimates</strong> and are flagged unverified. Maintenance
@@ -795,6 +921,41 @@ bills plus the published or assumed ad valorem rate. Everything is rounded to th
 the modelled inflation rate of 2.5% a year.</p>""")
         + tbl_a
         + tbl_b
+        + '<h2>What the published water tariff implies for Property A</h2>'
+        + water_tbl
+        + callout("note", "Why this is a benchmark and not this property's bill", f"""
+<p>Two things have to be true before any of those figures apply to this property: that this is the supplier the
+home is on, and that the meter is the size assumed above. The bill settles both. The county also has water
+suppliers that are not regulated by the state commission and publish their own rates, so the tariff above may
+not be the one that applies.</p>
+<p>What it does establish is that the owner's estimate of
+{m(A['annual_costs']['water']['low'])} to {m(A['annual_costs']['water']['high'])} a year is
+<strong>plausible</strong>: the published tariff puts a typical household close to that range. It does not
+verify the estimate. The sewer charge is a separate line, and for Property A it is not published at all:
+the district that serves this parcel has not been identified, so there is no schedule to cite, and the
+amount is left blank and flagged. The section below sets out what a published sewer schedule looks like and
+where this property's own rates would be found.</p>
+<p><strong>The cost of citing it.</strong> The linked tariff sheet describes the supplier's service area, so
+opening it narrows the possible location of the property. It is linked because the brief asked for the water
+cost to be researched and because a rate card is a public document. The suggestions page records the choice of
+keeping or withdrawing that link, and the questions page records how to replace it with the figure from the
+bill.</p>""")
+        + '<h2>What a sewer bill is made of</h2>'
+        + sewer_tbl
+        + callout("note", "Why no sewer figure is published for Property A", f"""
+<p>Every figure in that table comes from the schedule of the city Property B is in. Property A is in a
+different county, on a different utility, and served by a sewer district that has not been identified, so
+there is no schedule this site can cite for it and no amount is inferred. The charge is left blank and
+flagged, and it is read from the annual property tax bill instead.</p>
+<p>Two things are settled and worth knowing. First, in the county a sewer entity may elect to have its
+charge collected on the tax roll with the general taxes, and it must then file the parcel-by-parcel charge
+with the county every year; the election stays in force until the rates change or it is repealed. A county
+sewer charge therefore usually arrives as a line on the annual tax bill rather than a monthly utility bill.
+Second, the state publishes a map of the tax rate areas for the county and the county's assessor can
+identify the area, and the agencies, that apply to a parcel, which is how the district and the parcel's own
+rate would be found.</p>""")
+        + '<h2>Where this property&#x27;s own rates come from</h2>'
+        + rates_tbl
         + callout("note", "What an insurance benchmark does and does not tell you", f"""
 <p>The California Department of Insurance publishes average written premiums from its Residential Property
 Insurance Report. The statewide average for an owner-occupied homeowners policy was about <strong>$1,070</strong>
@@ -952,18 +1113,24 @@ rules work, and it only exists at the moment of transfer.</p>""")
         + table("City transfer tax on a sale of Property B",
                 ["Price band", "Rate", "Note", "Source"],
                 [f"<td>{esc(a)}</td><td>{esc(b)}</td><td>{esc(c)}</td>"
-                 + src_cell(["cityb_transfer"], "City fee schedule")
+                 + src_cell(["sf_recorder_fees"], "City fee schedule")
                  for a, b, c in [
                      ("Up to $250,000", "0.5%", "Lowest band."),
                      ("Above $250,000 and below $1,000,000", "0.68%", "Applies to the whole price, not just the excess."),
                      ("$1,000,000 to under $5,000,000", "0.75%", "The band Property B is in today."),
                      ("$5,000,000 to under $10,000,000", "2.25%", "Crossing $5,000,000 triples the rate on the entire price."),
-                     ("$10,000,000 and above", "Not published here",
-                      "The schedule the city publishes does not set out the top band in the table this site read, so it is left blank rather than inferred."),
+                     ("$10,000,000 to under $25,000,000", "5.5%", "Far above any price this site models for Property B."),
+                     ("$25,000,000 and above", "6%", "The top band. Also far above any price this site models."),
                  ]],
                 note="The rate applies to the entire consideration, so a sale that crosses a threshold is not "
-                     "taxed band by band. This matters for Property B only; Property A is in the county, and "
-                     "no city transfer tax is charged there.")
+                     "taxed band by band. This matters for Property B only. Property A is outside San "
+                     "Francisco: the county charges its own documentary transfer tax of $0.55 per $500 of the "
+                     "sale price, and three named cities in that county add a further $1.65 per $500. The city "
+                     "for Property A is not established, so no city rate is applied to it here and the item is "
+                     "flagged for review. The published fee schedule is stated to be "
+                     "effective 1 January 2025, and a local measure on the November 2026 ballot would split the "
+                     "top two bands into two taxes without changing the combined rate; that measure is not "
+                     "verified against an official city source on this site.")
         + '<h2>What the model does and does not do</h2>'
         + callout("flag", "Not modelled, and flagged for a professional", """
 <ul>
@@ -992,7 +1159,7 @@ def page_inheritance() -> str:
         ("3", "The transfer event",
          "On the transfer, the trustee signs and records a deed moving the house out of the trust to the heir. Recording is what starts the county's clock.",
          "The trustee records with the county recorder.",
-         "Recording fees are due at recording. Property A is in the county, not the city, so no city transfer tax applies to it.",
+         "Recording fees are due at recording. Property A is outside San Francisco, so the county's documentary transfer tax applies to it at $0.55 per $500 of the sale price; three named cities in that county add a further $1.65 per $500, and the city for Property A is not established, so no city rate is applied here.",
          ["scc_recorder", "rtc11911"]),
         ("4", "Notice to beneficiaries",
          "When a revocable trust becomes irrevocable, the trustee must notify the heirs and beneficiaries and give them the information the statute requires.",
@@ -1490,14 +1657,14 @@ QUESTIONS = [
        "Get three quotes per building from admitted insurers, and check the FAIR Plan as a fallback. The "
        "FAIR Plan is the state's insurer of last resort and is not limited to a bare fire policy: it also "
        "offers a comprehensive homeowners form. Treat it as a fallback, not as a comparable quote.",
-       "The California Department of Insurance publishes no average premium by area, so this cannot be verified online.",
+       "The California Department of Insurance publishes statewide averages and, under Insurance Code section 929, ZIP-code level experience data. The area file was not opened, because an area figure would name the postal code. Quotes are the only route that does not.",
        ["cdi_tips", "cdi_fairplan"]),
       ("Who supplies water to Property A, and on what tariff?",
-       f"Owner range of {m(A['annual_costs']['water']['low'])} to {m(A['annual_costs']['water']['high'])} a year.",
-       "The provider and the published rate schedule.",
-       "Read the bill and the provider's published rates.",
-       "Water is small next to tax and maintenance, but it is checkable and should be checked.",
-       []),
+       f"Owner range of {m(A['annual_costs']['water']['low'])} to {m(A['annual_costs']['water']['high'])} a year. The published tariff of the regulated retailer that serves part of this county puts a typical household close to that range, so the estimate is plausible but unverified.",
+       "The retailer, the meter size, and the sewer district and its charge.",
+       "Read the bill: it names the retailer, the meter size and the quantity used. The county's wholesale water agency publishes a retailer directory and an address lookup. Read the sewer charge on the annual tax bill as well.",
+       "Water is small next to tax and maintenance, but it is checkable and should be checked. The meter size alone moves the service charge, and a county sewer charge is often collected on the tax bill rather than on a utility bill.",
+       ["sjwc_tariff", "scvwd_retailer_directory", "hsc_5473"]),
       ("What tariff is the solar system on, and when was it interconnected?",
        "The owner reports a small net annual credit.",
        "NEM 1.0, NEM 2.0 or the net billing tariff, and the interconnection date.",
@@ -1657,6 +1824,15 @@ SUGGESTIONS = [
     ("S-18", "Keep the data files in this repository as the single source of truth",
      "Every figure on the site is generated from assets/data. Editing the HTML by hand would break that and the verification.",
      "Low", "None", None, []),
+    ("S-19", "Decide whether the local source citations stay on the site",
+     "The two jurisdictions are named on the property pages, and the county rate book, the city tax collector, the city rent board and the water utility's filed tariff are linked from the pages that use them. Keeping them makes every local rate checkable against the publisher that sets it; withdrawing them narrows what a reader can trace, at the cost of the official link.",
+     "Low", "Low", "review", ["scc_ratebook", "sjwc_tariff"]),
+    ("S-20", "Read the water and sewer bills for Property A and replace the estimates with the figures on them",
+     "The bill gives the retailer, the meter size, the quantity used and the sewer charge. That replaces the last unverified running cost on the inherited home, and the meter size alone changes the service charge.",
+     "Low", "None", "costs", ["sjwc_tariff", "scvwd_retailer_directory", "hsc_5473"]),
+    ("S-21", "Decide whether the area-level insurance figures are published",
+     "The California Department of Insurance publishes ZIP-code level experience data under Insurance Code section 929. Publishing the figure for this property's postal code would replace the statewide benchmark, and would also name the postal code, which is why it is proposed here and not done.",
+     "Low", "Low", "costs", ["cdi_part1"]),
 ]
 
 
@@ -1697,7 +1873,10 @@ def page_suggestions() -> str:
                    "Add a liquidity model for the estate": ["irs_estate", "irs_i706"],
                    "Add a two-person household case": ["irs_tc409", "irs_estate"],
                    "Add a mortgage case": [],
-                   "Add a distribution chart to the projections": []}
+                   "Add a distribution chart to the projections": [],
+                   "Publish the model's data files as downloads": [],
+                   "Add the cost of administering the estate": ["irs_estate"],
+                   "Add a dated change log": []}
     improve_rows = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td>"
                     f'<td><span class="badge proposed">proposed</span></td>'
                     + (src_cell(improve_src[a], "Official source") if improve_src[a]
@@ -1711,6 +1890,9 @@ def page_suggestions() -> str:
                         ("Add a two-person household case", "Joint filing, the $500,000 exclusion and two exclusions for estate tax.", "The model currently uses the single-filer exclusion throughout, which is conservative."),
                         ("Add a mortgage case", "What happens if the heir borrows against either property instead of selling.", "Not modelled at all."),
                         ("Add a distribution chart to the projections", "A visual range rather than a single line.", "Readers tend to read the single line as a forecast."),
+                        ("Publish the model's data files as downloads", "The roll tables, the decision table, the projections and the fifty-year series as CSV and JSON.", "A reader who wants to check the arithmetic has to work from the printed tables, and the repository's data files are not in the deployment. Publishing them widens the published surface to the same figures in a second format."),
+                        ("Add the cost of administering the estate", "Court, probate and professional fees at the time of death.", "The net amount of the cash inheritance is overstated, and whether the estate can pay a federal tax bill without selling the house cannot be judged without it."),
+                        ("Add a dated change log", "A short list of what each edition changed, on the review page.", "The owner cannot tell which edition is live, or what an earlier reading meant, without reading the repository history."),
                     ]]
     improve = table("Improvements to this site, offered for review",
                     ["Proposal", "What it would add", "Cost of not doing it", "Status", "Source"],
@@ -1759,6 +1941,9 @@ def page_review() -> str:
         ("Insurance on both properties", m(A["annual_costs"]["insurance"]["mid"]) + " a year each",
          "Owner estimate. The California Department of Insurance publishes no average premium by area, so there is nothing official to check it against.",
          "Get three quotes per building."),
+        ("Estate administration and professional fees at the death", "Not supplied",
+         "Not a figure that can be read from an official source; it is quoted by the professionals who do the work.",
+         "Ask the estate's lawyer and accountant, and the court about its filing fee."),
         ("Maintenance on both properties", "0.5% / 0.75% of value for Property A, 1.5% for Property B",
          "Assumption. No figure was supplied.",
          "Assemble five years of actual spend and a capital plan."),
@@ -1771,11 +1956,36 @@ def page_review() -> str:
         ("San Francisco transfer tax reduction proposal", "Not used in any figure",
          "Reported publicly but not verified against an official city source",
          "Check the Board of Supervisors file before relying on it."),
+        ("Which water supplier and meter size serve Property A", "Not established",
+         "The tariff on the costs page is the rate card of one regulated retailer that serves part of this county, not a rate for this home. The county's wholesale water agency publishes a directory of retailers by city and an address lookup; the bill names the retailer and the meter size, and the meter size sets the service charge.",
+         "Read the water bill, then that retailer's filed tariff for the meter size on it."),
+        ("Sewer service charge for Property A", "Not published",
+         "The district that serves this parcel has not been identified, so there is no schedule to cite for it. In the county a sewer entity may elect to have its charge collected on the tax roll, so the charge usually appears as a line on the annual property tax bill. No figure is inferred and none is published.",
+         "Read the sewer charge on the annual tax bill; the county assessor can identify the district for the parcel."),
     ]
     uv_rows = [f"<td><strong>{esc(a)}</strong></td><td>{b}</td>"
                f'<td><span class="badge unverified">{esc(c)}</span></td><td>{esc(d)}</td>'
-               + src_cell(["cdi_tips", "scc_ratebook", "sf_treas_rate", "irs_estate"], "Where to check")
+               + src_cell(["cdi_tips", "scc_ratebook", "sf_treas_rate", "irs_estate",
+                           "sjwc_tariff", "boe_scc_tra_maps", "scc_assessor_jurisdiction",
+                           "scc_tax_allocation", "scvwd_retailer_directory", "hsc_5473"],
+                          "Where to check")
                for a, b, c, d in unverified]
+
+    disclosure = [
+        ("The two jurisdictions are named",
+         "Property A is in Santa Clara County and Property B is in the City and County of San Francisco, and both are named on the property pages. A jurisdiction is not a personal identifier: no name, street address, parcel number, postal code or utility account is published anywhere on this site. What is still withheld is the city inside the county, the parcel's tax rate area and the utility accounts, and the official links narrow the location further for anyone who opens them.",
+         "It keeps every local rate verifiable against the publisher that sets it, at the cost of making the two jurisdictions explicit. The owner can withdraw those citations; that choice is recorded as a suggestion and has not been taken here."),
+        ("Rounding to $10 is not anonymity",
+         "The assessed values and tax bills published on the property pages are public county roll figures rounded to the nearest $10. A reader who already holds the roll can recognise a parcel from the combination of them.",
+         "Disclosed rather than hidden. Publishing the roll at a coarser band, or not at all, would reduce it, and that is the owner's decision."),
+        ("The inherited cash is never published",
+         "The estate page works entirely in anonymous scenario bands, so the amount in the inheritance cannot be read off this site.",
+         "None. It is the one figure that could most easily identify the household."),
+    ]
+    dis_rows = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td>"
+                + src_cell(["scc_ratebook", "sf_treas_rate", "sjwc_tariff", "irs_estate"],
+                           "Related sources")
+                for a, b, c in disclosure]
 
     caveats = [
         ("The ad valorem rate for Property A is not identifiable from the data",
@@ -1839,6 +2049,9 @@ check before acting.</p>""")
         + table("Every figure that is not backed by an official public source",
                 ["Figure", "Value used", "Status", "What to do", "Where to look"],
                 uv_rows)
+        + '<h2>Disclosure: what this site can and cannot hide</h2>'
+        + table("Publication risk, stated plainly",
+                ["Risk", "What it is", "What it costs"], dis_rows)
         + '<h2>Modelling caveats</h2>'
         + table("Shortcuts that matter", ["Caveat", "What it means", "Source"], cav_rows)
         + '<h2>Repository audit</h2>'

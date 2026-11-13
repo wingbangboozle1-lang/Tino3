@@ -8,15 +8,15 @@ the building the beneficiary already owns. Owner figures are rounded to the near
 
 ## What is published
 
-Sixteen static HTML pages (`*.html` in the repository root), one stylesheet, one source ledger
-(`assets/sources.json`), one privacy setting (`assets/privacy.json`), the economy data file
-(`assets/data/economy.json`) and the downloadable tables in `assets/data/` (`decision.csv`, `model.json`,
+Eighteen static HTML pages (`*.html` in the repository root), one stylesheet, one source ledger
+(`assets/sources.json`) and the downloadable tables in `assets/data/` (`decision.csv`, `model.json`,
 `property_a.csv`, `property_b.csv`). Nothing else is published.
 
-Pages: overview, executive summary, decision analysis, year-by-year projections, year-by-year economy,
-black-swan conditions and history, stress tests, Property A, Property B, tax/thresholds/law watch,
-inheritance steps, suggestions for review, questions before deciding, flagged for review, independent
-verification and the source library.
+Pages: overview, executive summary, decision analysis, Property A, Property B, the ownership
+distinction, running costs, year-by-year projections, taxes and the transfer, the inheritance steps, the
+estate thresholds, the law watch, black-swan conditions and history, the fifty-year economy record, the
+questions before deciding, the suggestions for review, the flagged-for-review register and the source
+ledger.
 
 ## Publication path (read before changing anything)
 
@@ -47,7 +47,7 @@ No third-party Python packages are used.
 ## Evidence standard
 
 Every rule, threshold and rate on the site was read on the publishing agency's own domain between
-10 and 13 November 2026 and is linked from the row that uses it; `assets/sources.json` (86 entries)
+10 and 13 November 2026 and is linked from the row that uses it; `assets/sources.json` (106 entries)
 records what each document verifies and how it was checked. A factual table row with no link to an
 official publisher fails the build, and so does a name, street address, postal code, parcel number,
 e-mail address or a dollar figure that is not a multiple of $10. Anything that could not be verified
@@ -80,17 +80,49 @@ Research added in this pass:
   policy, the form a landlord buys. They are published on both property pages as a benchmark against
   the owner's guess, labelled statewide and not as a premium for either property. A property-specific
   premium still cannot be verified and remains blank (FL-38, S-24).
-- **Water and electricity (C-21).** City B's FY 2026-27 water schedule, approved in April 2026, was
-  read and its multi-family charges (schedule W-1B, which is what a three-unit building falls on) are
-  now on `property-b.html`. The CPUC's page settles the solar question: 20 years on NEM 2.0 from
-  interconnection, or the net billing tariff with a nine-year guarantee for systems connected since
-  15 April 2023. **Property A's water retailer could not be established from an official source** —
+- **Water and electricity (C-21).** The City and County of San Francisco's FY 2026-27 water schedule,
+  approved in April 2026, was read and its multi-family charges (schedule W-1B, which is what a three-unit
+  building falls on) are now on `property-b.html`. The CPUC's page settles the solar question: 20 years on
+  NEM 2.0 from interconnection, or the net billing tariff with a nine-year guarantee for systems connected
+  since 15 April 2023. **Property A's water retailer could not be established from an official source** —
   more than one retailer serves the county and the wholesaler is a separate district — so no rate for
   it is published (FL-39, S-25). This is the one item the brief asked to research that could not be
   closed from an official source.
 
-Not done: no insurer, broker or appraiser was contacted; no parcel, address or ZIP lookup was made;
-the sewer and stormwater schedules alongside City B's water rates were not read.
+Not done: no insurer, broker or appraiser was contacted; no parcel, address or ZIP lookup was made.
+
+## Verification pass of 13 November 2026 (seventh pass)
+
+This pass closed the remaining research gaps on the brief's running costs, reconciled how the two
+jurisdictions are described, and retired the one module in the repository that fed no published page.
+
+- **The water tariff is now a published rate card (C-22).** The CPUC-approved Advice Letter 629-A,
+  effective 1 July 2026, is on `costs.html`: a $79.67 monthly service charge for a 5/8 x 3/4-inch or
+  3/4-inch meter, $132.81 for a 1-inch meter, and quantity charges of $5.0355, $7.5156 and $14.3548 per
+  100 cubic feet. It is a benchmark, not a quote: which retailer and which meter size apply to Property A
+  is still read from the bill.
+- **The county's transfer tax is published, and its gap is named (C-23).** The Clerk-Recorder's page
+  states $0.55 per $500 of real property value, and $1.65 per $500 inside three named cities. The city for
+  Property A is not established, so only the county rate can be confirmed and the item is flagged.
+- **Official routes to this property's own rates (C-24).** Six sources were added: the state's tax rate
+  area maps for the county, the county assessor's parcel-jurisdiction workflow, the county's property tax
+  allocation portal, the county's wholesale water agency's retailer directory, and Health and Safety Code
+  sections 5470 and 5473 on sewer charges collected on the tax roll. They are on `costs.html` as a table
+  of what has to be established and where it is published.
+- **A sewer section, without a rate for Property A (C-25).** The city's residential wastewater schedule
+  is published: a $6.62 monthly service charge, $20.74 per discharge unit and a tiered stormwater
+  component, with a worked example computed from them. Property A's own sewer district has not been
+  identified, so no amount is published for it and the charge is read from the annual tax bill instead.
+- **The jurisdictions are named, on the rule that now governs (C-26).** Property A is in Santa Clara
+  County and Property B is in the City and County of San Francisco, and both are named on the property
+  pages. A county or a city is not a personal identifier; what stays withheld is the city inside the
+  county, the parcel's tax rate area, the address and the utility accounts. The nine source-ledger
+  entries that carried the placeholder labels "City B" and "County A" now name their official publishers,
+  and each of those documents is cited once.
+- **The unused second model is retired (C-27).** `scripts/economy.py` and `assets/data/economy.json`
+  fed no published page and could not run against the current model API, so they were deleted. The
+  published `economy.html` page is generated by `scripts/build.py` from `assets/data/series.json` and is
+  unchanged.
 
 ## Limits
 
