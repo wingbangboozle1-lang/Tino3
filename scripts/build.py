@@ -2153,7 +2153,7 @@ def page_review() -> str:
         "Depreciation follows a simple rule": ["irs_p527"],
         "No mortgage, no 1031 exchange, no instalment sale, no gifting": [],
         "The inheritance year is a range, not a date": [],
-        "The property tax lesser-of rule is not modelled": ["rtc51", "boe_pub29"],
+        "The property tax lesser-of rule is modelled only under the drawn inflation paths": ["rtc51", "boe_pub29", "fred_cpi"],
         "The Proposition 19 shelter path after 2027 is a projection": ["boe_lta25009"],
         "A sheltered base is assumed to survive a later move-out": ["rtc63_2_eligibility", "boe_prop19"],
         "Every reassessment figure is conditional on the parent-and-child relationship": ["rtc63_2_eligibility"],
