@@ -52,7 +52,8 @@ SHORT = {"Internal Revenue Service": "IRS", "California State Board of Equalizat
          "Federal Reserve Bank of St. Louis (data: Board of Governors of the Federal Reserve System)": "FRED 10-yr",
          "U.S. Bureau of Labor Statistics": "BLS",
          "Federal Reserve History (Federal Reserve System)": "Fed History",
-         "Federal Reserve Bank of New York (Liberty Street Economics)": "NY Fed"}
+         "Federal Reserve Bank of New York (Liberty Street Economics)": "NY Fed",
+         "San Francisco Public Utilities Commission": "SFPUC"}
 LABEL = {"irs_estate": "Estate tax thresholds", "irs_2027": "2027 amounts", "irs_rp2635": "Rev. Proc. 2026-35",
          "irs_whatsnew": "What's new", "irs_rp2532": "Rev. Proc. 2025-32", "irs_i706": "Form 706 instructions",
          "irs_basis": "Inherited basis", "irs_rr2023_2": "Rev. Rul. 2023-2", "irs_tc409": "Capital gains",
@@ -81,7 +82,9 @@ LABEL = {"irs_estate": "Estate tax thresholds", "irs_2027": "2027 amounts", "irs
          "bls_cpi_annual": "CPI, annual 1977-2025",
          "hpi_a_annual": "Area A house prices, annual", "hpi_b_annual": "Area B house prices, annual",
          "gs10_annual": "10-year yield, annual", "nasdaq_annual": "NASDAQ, annual", "rtc51": "RTC 51",
-         "cdi_tips": "Finding insurance", "cdi_fairplan": "FAIR Plan"}
+         "cdi_tips": "Finding insurance", "cdi_fairplan": "FAIR Plan",
+         "sfpuc_rates": "Water and sewer rates",
+         "cdi_homeowners_avg": "Homeowners averages", "cdi_part1": "Premium and exposure data"}
 
 e = html.escape
 
@@ -154,8 +157,8 @@ def page(name, title, eyebrow, h1, lead, body):
 <a class="skip" href="#main">Skip to content</a>
 <aside><a class="brand" href="index.html">Inheritance decision dashboard<small>Property A and Property B</small></a>
 <nav aria-label="Main navigation">{nav}</nav>
-<div class="aside-note">Anonymised (County A / City B). Dollar figures rounded to $10; local official links identify the jurisdictions. Reviewed 10 to 12 November 2026.</div></aside>
-<main id="main"><div class="top"><span>{eyebrow}</span><span>Reviewed 10 to 12 Nov 2026</span></div>
+<div class="aside-note">Anonymised (County A / City B). Dollar figures rounded to $10; local official links identify the jurisdictions. Reviewed 10 to 13 November 2026.</div></aside>
+<main id="main"><div class="top"><span>{eyebrow}</span><span>Reviewed 10 to 13 Nov 2026</span></div>
 <div class="hero"><div class="eyebrow">{eyebrow}</div><h1>{h1}</h1><p>{lead}</p></div>
 {body}
 <footer><span>Planning analysis, not legal, tax or investment advice. Confirm with an estate attorney and a tax preparer before acting.</span><span>No names, addresses, ZIP codes or parcel numbers are published.</span></footer></main></body></html>
@@ -213,6 +216,9 @@ PART1 = ('<div class="part-band"><strong>Black swans, part 1 of 2 &mdash; condit
 PART2 = ('<div class="part-band"><strong>Black swans, part 2 of 2 &mdash; stress tests.</strong> '
          'The verified episodes and the inheritance decision re-run under each of them. Part 1 sets out the baseline '
          'and the fifty-year record it contradicts: <a href="black-swans.html">conditions and history</a>.</div>')
+# The menu is fixed; it is declared here so the overview cannot report the page count of an
+# empty dict (PAGES is still empty when the overview body is built further down).
+EDITION_PAGES = 16
 PAGES = {}
 
 # ------------------------------------------------------------------------------------------------ overview
@@ -246,13 +252,13 @@ Renting the home out ends with {usd(RENT['wealth'])} and moving in ends with {us
 <div class="cards">
 <div class="card"><div class="k">The answer</div><p><a href="executive-summary.html">Executive summary</a>: the decision, every important number with its source, and what would change it.</p></div>
 <div class="card"><div class="k">What is not settled</div><p><a href="questions.html">Questions before deciding</a>: 39 questions, each with what is known, what is missing and the step that closes it.</p></div>
-<div class="card"><div class="k">What to change</div><p><a href="suggestions.html">Suggestions for review</a>: four paths and 23 suggestions, with effort and privacy cost, to choose before anything changes.</p></div>
+<div class="card"><div class="k">What to change</div><p><a href="suggestions.html">Suggestions for review</a>: four paths and 25 suggestions, with effort and privacy cost, to choose before anything changes.</p></div>
 </div>
 <h3 class="grp">The decision</h3>
 <div class="cards">
 <div class="card"><div class="k">The reasoning</div><p><a href="decision.html">Decision analysis</a>: results for 2040, 2045 and 2050, break-even points and every assumption.</p></div>
 <div class="card"><div class="k">The numbers</div><p><a href="projections.html">Year-by-year projections</a> to 2060: market value, assessed value, property tax and running costs.</p></div>
-<div class="card"><div class="k">Choose the path</div><p><a href="suggestions.html">Suggestions for review</a>: 13 tabled suggestions, two process notes, four paths to choose from, and five gates that must pass before anything changes. Nothing adopted yet.</p></div>
+<div class="card"><div class="k">Choose the path</div><p><a href="suggestions.html">Suggestions for review</a>: 25 tabled suggestions, four paths to choose from, the privacy-precision settings, four decision gates, and the three items marked done. Nothing adopted yet, so nothing here is committed.</p></div>
 <div class="card"><div class="k">Questions first</div><p><a href="questions.html">What the law already answers</a>, what the owner must supply, and the plan to obtain each missing document.</p></div>
 </div>
 <h3 class="grp">Black swans &mdash; one section, two pages</h3>
@@ -280,7 +286,7 @@ Renting the home out ends with {usd(RENT['wealth'])} and moving in ends with {us
 <section><h2>One edition on this site</h2>
 <p>Earlier cross-check and 50-year editions were built from unrounded owner figures. They are withdrawn from publication and their files are no longer in the working tree; the repository history still contains them. This site publishes only the pages in the menu.</p>
 <div class="cards">
-<div class="card win"><div class="k">This edition &middot; {len(PAGES) + 1} pages</div><p>The pages in the menu. One model, one source ledger of {len(SRC)} entries, re-checked line by line on 11 and 12 November 2026. Act on these numbers.</p></div>
+<div class="card win"><div class="k">This edition &middot; {EDITION_PAGES} pages</div><p>The pages in the menu. One model, one source ledger of {len(SRC)} entries, re-checked line by line on 11 and 13 November 2026. Act on these numbers.</p></div>
 <div class="card"><div class="k">Withdrawn editions</div><p>Earlier cross-check and 50-year suites are not published. Their figures are not comparable with this edition and should not be used.</p></div>
 </div></section>{PRIV}"""
 PAGES["index.html"] = page("index.html", "Overview", "Overview", "Sell, rent or move in?",
@@ -307,14 +313,13 @@ rows = [
  (["Is the inheritance itself income?", "No", "Property acquired by inheritance is not gross income. Income the property produces afterwards is taxable, and a later sale is a capital gain measured from the value at the date of death."], "V", S("uscode102")),
  (["Inherited retirement accounts, if any", "Ten years to empty", "For an owner who died after 2019 a non-spouse beneficiary must generally distribute the whole account within ten years; each withdrawal is ordinary income. Whether any account exists was not supplied (Q-06)."], "V", S("irs_rmd", flag=True)),
  (["What the transfer itself costs", "No death tax and no transfer tax", "A transfer by reason of death is exempt from documentary transfer tax, outright or in trust. What remains is the professional work: appraisal, trustee and attorney fees, recording. Those fees were not quoted."], "V", S("rtc11930", "rtc480")),
- (["Insurance: what is available", "The FAIR Plan, capped at $3,000,000", "The state's insurer of last resort is open to every homeowner, but its maximum for all coverages combined is below Property A's current estimated value, and it covers fire, lightning, explosion and smoke only. No premium is verified for either property."], "V", S("cdi_tips", "cdi_fairplan", flag=True)),
+ (["Insurance: what is available", "The FAIR Plan, capped at $3,000,000", "The state's insurer of last resort is open to every homeowner. Its combined dwelling coverage limit rose to $3,000,000 on 1 April 2020, below Property A's current estimated value, and the Commissioner ordered it to offer a comprehensive homeowners policy (HO-3) in addition to its dwelling-fire policy from 1 June 2020. No premium is verified for either property."], "V", S("cdi_tips", "cdi_fairplan", flag=True)),
  (["Property tax and assessment history", f"Published to the nearest $10, 2014 to 2026", "The full table is on the Property A page, with the published state factor beside each year. Percentage changes are computed before rounding, so they are exact at any privacy setting."], "O", S("boe_lta26002")),
  (["Insurance", BLANK, "No official premium figure or insurer quote was confirmed for either property. The owner's guesses are used as placeholders; tripling them does not change the ranking."], "U", S("cdi_compare", flag=True)),
  (["State tax on a large gain", "The 12.3% rate does not include the 1% above $1,000,000", f"Revenue and Taxation Code section 17043 adds 1% on taxable income above $1,000,000. Applied to the gain alone, the 2045 stock result falls by {usd(TS['delta'])} to {usd(TS['with_surcharge'])}; the sale stays first. Not folded into the model."], "C", S("rtc17043", "irs_tc409", flag=True)),
- (["Law under discussion", "The initiative to repeal the 2021 inheritance rules failed for lack of signatures", f"It would have restored the pre-2021 exclusion. If a later measure did so, Property A's 2045 tax would be {usd(LAW['tax_restored'])}. Selling would still come out ahead."], "V", S("sos_memo", "lao_250017", "sos_measures")),
- (["State tax on financial assets", "The one-time state tax on certain taxpayers was rejected in the unofficial count", "Results on 10 November 2026: Proposition 40 rejected with 52.6% no; Proposition 42 ahead with 51.5% yes. Certification due 11 December 2026."], "V", S("sos_results")),
- (["Black-swan stress tests", "Selling stays first in every stress case tested", "Stocks at 4.0% a year, inflation at 4.0% a year, or a flat decade for house prices: the ranking holds. A lost decade only moves the proceeds from the stock fund to Treasuries."], "C", S("frh_recession", "boe_lta26002", "fred_casthpi", asm=True)),
- (["Black swan stress tests", "Selling the home wins in 5 of 7 historical analogues; renting wins only when equities flatline", "The sale at the inheritance is robust; the reinvestment vehicle depends on the regime. Treasuries win when yields clear inflation (1970s analogues) or when stocks crash at the inheritance."], "A", S("bls_btn11", "fedhist_greatrecession", asm=True)),
+ (["Law under discussion", "The initiative to repeal the 2021 inheritance rules, Initiative 1994, failed for lack of signatures", f"It would have restored the pre-2021 exclusion. If a later measure did so, Property A's 2045 tax would be {usd(LAW['tax_restored'])}. Selling would still come out ahead."], "V", S("sos_memo", "lao_250017", "sos_measures")),
+ (["State tax on financial assets", "The one-time state tax on certain taxpayers was rejected in the unofficial count", "Unofficial count of 12 November 2026: Proposition 40 rejected with 52.4% no; Proposition 42 ahead with 51.4% yes. Certification due 11 December 2026. An earlier pass used the 10 November count (52.6% and 51.5%); the count has moved."], "V", S("sos_results")),
+ (["Black-swan stress tests", "Selling the home wins in every stress case tested and in 5 of 7 historical analogues", "Stocks at 4.0% a year, inflation at 4.0% a year or a flat decade for house prices: the ranking holds, and a lost decade only moves the proceeds from the stock fund to Treasuries. Re-run against the 1929, 1965-82, 2000-02, 2007-09 and 2020 episodes, the sale at the inheritance is robust; only the reinvestment vehicle changes with the regime, with Treasuries winning when yields clear inflation or when stocks crash at the inheritance."], "C", S("frh_recession", "boe_lta26002", "fred_casthpi", "bls_btn11", "fedhist_greatrecession", asm=True)),
  (["Deadlines after a death", "60 days, 150 days, 9 months, 1 year, 3 years", "Trustee notice; change in ownership statement; Form 706; homeowners' exemption; exclusion claim."], "V", S("prob16061_7", "rtc480", "irs_i706", "boe_prop19")),
 ]
 body = f"""{tbl("Important details", ["Topic", "Finding", "What it means"], rows)}{LEGEND}
@@ -734,6 +739,12 @@ sug = [
  ("S-16", "Put every document in one folder now: trust, deed, both tax bills, both policies, the solar agreement.",
   "The twelve-month window after a death should not be spent looking for paperwork.", "An afternoon",
   "Keep the folder private; publish nothing from it.", REC),
+ ("S-24", "Open the Department of Insurance ZIP-code level file for the two areas and replace the insurance placeholder with a published average, or confirm in writing that no average can be published.",
+  "Insurance is the one running cost with no verified figure on either property page. The Department publishes ZIP-level experience data under Insurance Code section 929; until it is read, the model carries the owner's guess and the site says so.", "An hour",
+  "Publishing an area average narrows the location; do it only if the owner accepts the tier-1 publication setting.", REC),
+ ("S-25", "Read one water bill for Property A and record the retailer, the meter size and the tariff.",
+  "City B's water rates are published and are on the Property B page. Property A's retailer was not established from an official source, so no rate for it is published anywhere on this site.", "Ten minutes",
+  "The bill carries the account and the service address; record the retailer and the tariff only, not the account.", REC),
 ]
 srow = [([s[0], s[1], s[2], s[3], s[4], s[5]], "X", '<a href="questions.html">Questions and answers</a>') for s in sug]
 
@@ -1099,7 +1110,7 @@ stress = [
  (["The 2021 inheritance rules are repealed", "A failed initiative would have restored the pre-2021 exclusion; a similar measure can be filed again.",
    f"Property A's 2045 tax would be {usd(LAW['tax_restored'])} instead of {usd(LAW['tax_live_current'])} if a child moved in. Selling still finishes first."], "C",
   S("sos_memo", "lao_250017", asm=True)),
- (["State tax on financial assets", "Unofficial results on 10 November 2026: Proposition 40, a one-time tax on certain taxpayers, was rejected with 52.6% no; Proposition 42 was ahead with 51.5% yes.",
+ (["State tax on financial assets", "Unofficial results of 12 November 2026: Proposition 40, a one-time tax on certain taxpayers, is rejected with 52.4% no; Proposition 42 is ahead with 51.4% yes.",
    "Certification is due 11 December 2026. As counted, the one-time state tax was rejected and a bar on new state personal-property taxes was ahead."], "V",
   S("sos_results")),
  (["A crash immediately after selling", "Black Monday: minus 22.6% in one session in 1987.",
@@ -1179,6 +1190,16 @@ rows = [
 hrows = roll_rows(M["roll_a"], "A")
 p19 = [([str(y), N(AFTER[y]["fmv"]), N(AFTER[y]["base"]), N(AFTER[y]["amount"]), N(AFTER[y]["live"]), N(AFTER[y]["rent"]), N(AFTER[y]["saving"])], "C",
         S("rtc63_2", "boe_lta25009", asm=True)) for y in (2040, 2045, 2050)]
+ins_a = [
+ (["Owner-occupied homeowners policy", "$1,180 a year", "Statewide average written premium across 2008 to 2023, all amounts of insurance. Not this home."], "V", S("cdi_part1")),
+ (["Owner-occupied homeowners policy, 2017", "$1,070 a year", "The published average for that experience year. Not this home."], "V", S("cdi_homeowners_avg")),
+ (["Average for these properties' areas", BLANK, "The Department publishes ZIP-code level data under Insurance Code section 929; that file was not opened, so nothing is published for these properties."], "U", S("cdi_part1", flag=True)),
+]
+util_a = [
+ (["Water retailer", BLANK, "Which retailer bills the home was not established from an official source: more than one retailer serves the county and the wholesaler is a separate district. Nothing about Property A's water rate is published here. The owner reports $100 to $150 a month."], "U", S("irs_p527", flag=True)),
+ (["Solar: how long the credit lasts", "20 years from the date the system was connected, if it is on NEM 2.0", "Under D.14-03-041 a customer-generator may remain on NEM 2.0 for 20 years from interconnection. The connection date was not supplied, so which tariff this system is on is not published."], "V", S("cpuc_nem", flag=True)),
+ (["Solar: systems connected since 15 April 2023", "Net billing tariff, guaranteed nine years to the original customer", "Export credits are paid at avoided-cost values, usually below the retail rate, rather than at the retail rate. A customer moving from an older net metering tariff is not eligible for the nine-year guarantee."], "V", S("cpuc_nem")),
+]
 body = f"""
 <section><h2>What is known</h2>{tbl("Property A: inputs and current running cost", ["Item", "Value", "Note"], rows)}{LEGEND}</section>
 <section><h2>Tax and assessment history, 2014 to 2026</h2>
@@ -1199,7 +1220,19 @@ explain both; the line items would settle it (question Q-19).</p></section>
 <p>If a child moves in, the new assessed value is the old one plus whatever market value exceeds the old value and the Proposition 19 amount together. With this home that is simply market value less the amount.
 If the home is rented, it is assessed at full market value. The amount grows by one year's house price change every second year.</p>
 {tbl("Property A at the inheritance, house prices rising 4% a year", ["Inherited in", "Market value", "Assessed before", "Proposition 19 amount", "Assessed, child moves in", "Assessed, rented", "Yearly tax saved by moving in"], p19)}
-<p>If the child later moves out, the home is taxed on its market value at the date of inheritance, factored forward. The saving ends; it is not clawed back.</p></section>{PRIV}"""
+<p>If the child later moves out, the home is taxed on its market value at the date of inheritance, factored forward. The saving ends; it is not clawed back.</p>
+<section><h2>Water and electricity: what is published and what is not</h2>
+<p>These are the two running costs the owner asked to have researched. The answers are not symmetrical: for electricity the official
+tariff rules are published, and for Property A's water they are not established here.</p>
+{tbl("Property A: water and electricity", ["Item", "Value", "Note"], util_a)}
+<p class="small">The owner's water figure is the one used in every projection. It is carried forward with inflation to 2060 on the
+<a href="projections.html">projections</a> page, alongside the property tax, insurance and maintenance lines.</p></section>
+<section><h2>Insurance: what an official source does say</h2>
+<p>No premium for this home could be verified, and none is published. What the Department of Insurance does publish is a statewide
+average, which is a way to judge the owner's guess rather than a figure to use in the model.</p>
+{tbl("California statewide average written premiums", ["Policy form", "Average written premium", "Note"], ins_a)}
+<p>The Department also publishes ZIP-code level experience data under Insurance Code section 929. That file was not opened for these
+properties, so no area average is published here; opening it is suggestion S-24 and flag FL-38.</p></section>{PRIV}"""
 PAGES["property-a.html"] = page("property-a.html", "Property A", "Property A", "The home expected to be inherited",
                                 "A single-family home in County A with solar, held in a trust. Low assessed value today; that value does not survive the inheritance.", body)
 
@@ -1236,6 +1269,17 @@ brows = roll_rows(M["roll_b"], "B")
 rcap = [([str(x["year"]), N(x["rent_local"]), N(x["rent_state"]), N(x["diff_first_year"]),
           N(x["ten_year_local"]), N(x["ten_year_state"]), N(x["ten_year_diff"])], "C",
          S("cityb_rent", "civ1947_12", asm=True, flag=True)) for x in M["b_rentcap"]["rows"]]
+ins_b = [
+ (["Landlord policy (tenant-occupied dwelling fire), statewide average", "$600 a year", "Statewide average written premium, 2008 to 2023. Not this building."], "V", S("cdi_part1")),
+ (["Owner-occupied homeowners policy, statewide average", "$1,180 a year", "The same series, for comparison; it is the form an owner-occupied home uses, not a rental."], "V", S("cdi_part1")),
+ (["Average for these properties' areas", BLANK, "The Department publishes ZIP-code level data under Insurance Code section 929; that file was not opened, so nothing is published for these properties."], "U", S("cdi_part1", flag=True)),
+]
+util_b = [
+ (["Water, a building of two or more dwelling units, from 1 July 2026", "About $20 per month per meter, then about $12 per unit for the first three units per dwelling unit each month and about $13 per unit after that", "Schedule W-1B. One unit is 748 gallons. The commission approved two years of rates in April 2026."], "V", S("sfpuc_rates")),
+ (["Water, single-family schedule, from 1 July 2026", "About $20 per month per meter, then about $12 per unit for the first four units each month and about $14 per unit after that", "Schedule W-1A, shown for comparison. Property B has three units, so W-1B applies."], "V", S("sfpuc_rates")),
+ (["Water, from 1 July 2027", "Both schedules rise again", "The published FY 2027-28 rates are higher on the service charge and on both volumetric tiers."], "V", S("sfpuc_rates")),
+ (["Electricity, common areas", BLANK, "Neither the tariff nor the account was supplied. The owner reports $30 to $70 a month for the whole building."], "U", S("irs_p527", flag=True)),
+]
 body = f"""
 <section><h2>What is known</h2>{tbl("Property B: inputs and current income", ["Item", "Value", "Note"], rows)}{LEGEND}</section>
 <section><h2>Tax and assessment history, 2016 to 2025</h2>
@@ -1259,6 +1303,14 @@ the same question: housing with a certificate of occupancy issued within the pre
 <p>Read this as the size of the unknown, not as a forecast. The direction favours keeping Property B either way, so it does not change the
 recommendation &mdash; but it changes how much the rental is worth, and by 2045 the ten-year spread is {usd(M["b_rentcap"]["rows"][1]["ten_year_diff"])}.
 One document settles which column is the lawful one.</p></section>
+<section><h2>Water and electricity: what City B's published schedule charges</h2>
+<p>City B publishes its water and sewer rates. Property B has three dwelling units, so it falls on the multi-family schedule rather than the single-family one. The charges below are unit prices from the official schedule; the owner's actual spend is the figure used in every projection.</p>
+{tbl("Property B: water and electricity", ["Item", "Value", "Note"], util_b)}
+<p class="small">Unit prices are shown to the nearest dollar because they are unit prices, not property amounts. Every property-level figure on this site is rounded to the nearest $10. The bill also carries sewer and stormwater charges, which were not read and are not published here.</p></section>
+<section><h2>Insurance: what an official source does say</h2>
+<p>No landlord premium for this building could be verified, and none is published. The statewide average below is a way to judge the owner's guess, not a figure to use in the model.</p>
+{tbl("California statewide average written premiums", ["Policy form", "Average written premium", "Note"], ins_b)}
+<p>The Department also publishes ZIP-code level experience data under Insurance Code section 929. That file was not opened for these properties, so no area average is published here; opening it is suggestion S-24 and flag FL-38.</p></section>
 <section><h2>If Property B is ever sold</h2>{tbl("City B transfer tax on a sale", ["Price", "Rate on the whole price", "Note"], ttx)}</section>{PRIV}"""
 PAGES["property-b.html"] = page("property-b.html", "Property B", "Property B", "The rented building to keep",
                                 "A small multi-unit building in City B. Two units rented, one available to the family. Very low assessed value.", body)
@@ -1308,9 +1360,9 @@ est = [([str(x["year"]), N(x["exclusion"]), N(x["exclusion_couple"]), N(x["homes
         S("irs_estate", "irs_2027", "irs_rp2532", asm=True)) for x in M["estate"]]
 watch = [
  (["Federal estate exclusion", "Law. $15,000,000 for 2026, indexed after.", "A future Congress could lower it.", f"At half the scenario amount, room for other assets in 2045 falls from {usd(E45['room_single_base'])} to {usd(E45['room_single_half'])} for one person. The decision between selling, renting and moving in does not change."], "C", S("irs_whatsnew", "irs_rp2532", asm=True)),
- (["Initiative to repeal the 2021 inheritance rules (analysed as 25-0017)", "Failed. The Secretary of State recorded on 18 May 2026 that it lacked the signatures to qualify. It was not on the 3 November 2026 ballot.", "Would have restored the pre-2021 rule from 2027, including for transfers since 2021: inherited homes fully excluded, other property on the first $1 million of assessed value. A similar measure could be filed again.", f"If such a rule were enacted, Property A's 2045 tax would be {usd(LAW['tax_restored'])} instead of {usd(LAW['tax_live_current'])} or {usd(LAW['tax_rent_current'])}. Renting and moving in each gain about $600,000 to $700,000 over ten years. Selling still finishes first."], "C", S("sos_memo", "lao_250017", "sos_measures", asm=True)),
- (["Proposition 42, November 2026", "Voted on 3 November 2026. Unofficial count on 10 November 2026: 51.5% yes. Certification due 11 December 2026.", "Would bar new state taxes on personal property, including financial assets, and certain retroactive taxes.", "As counted, it would constrain future state taxes on financial assets; it does not change this decision."], "V", S("sos_results", "sos_measures")),
- (["Proposition 40, November 2026: one-time tax on certain taxpayers", "Rejected in the unofficial count on 10 November 2026: 52.6% no. Certification due 11 December 2026.", "A one-time state tax on certain taxpayers, wide enough to reach investment income.", "None, as counted. A similar measure can be filed again."], "V", S("sos_results")),
+ (["Initiative to repeal the 2021 inheritance rules (Initiative 1994, Attorney General file 25-0017)", "Failed. The Secretary of State recorded on 18 May 2026 (CC/ROV Memorandum 26138) that it lacked the signatures to qualify. It was not on the 3 November 2026 ballot.", "Would have restored the pre-2021 rule from 2027, including for transfers since 2021: inherited homes fully excluded, other property on the first $1 million of assessed value. A similar measure could be filed again.", f"If such a rule were enacted, Property A's 2045 tax would be {usd(LAW['tax_restored'])} instead of {usd(LAW['tax_live_current'])} or {usd(LAW['tax_rent_current'])}. Renting and moving in each gain about $600,000 to $700,000 over ten years. Selling still finishes first."], "C", S("sos_memo", "lao_250017", "sos_measures", asm=True)),
+ (["Proposition 42, November 2026", "Voted on 3 November 2026. Unofficial count of 12 November 2026 (all 23,860 precincts partially reporting): 51.4% yes. Certification due 11 December 2026.", "Would bar new state taxes on personal property, including financial assets, and certain retroactive taxes.", "As counted, it would constrain future state taxes on financial assets; it does not change this decision."], "V", S("sos_results", "sos_measures")),
+ (["Proposition 40, November 2026: one-time tax on certain taxpayers", "Rejected in the unofficial count of 12 November 2026: 52.4% no. Certification due 11 December 2026.", "A one-time state tax on certain taxpayers, wide enough to reach investment income.", "None, as counted. A similar measure can be filed again."], "V", S("sos_results")),
  (["City B rent legislation, File No. 261020", "Introduced 15 September 2026; pending in the Land Use and Transportation Committee as of 12 November 2026; not enacted.", "Would cap combined banked and capital-improvement rent increases on rent-controlled units at 10% a year for three years.", "The model already grows sitting-tenant rent at 1.5% a year rather than banked stacks; if it applied, its ceiling would bind only in years a banked stack was imposed. No change to the ranking."], "V", S("cityb_rent", "cityb_261020")),
  (["Proposition 19 amount", "Law. Next adjustment February 2027.", "Rises by one year's house price change every second year, so it grows more slowly than house prices.", f"Modelled. The amount is {usd(A45['amount'])} in 2045 at 4% growth."], "C", S("boe_lta25009", asm=True)),
  (["Basis reset at death", "Law. No pending change was verified.", "If the reset were limited, a sale after inheriting would be taxed on the gain since the parents bought.", BLANK], "U", S("irs_basis", flag=True)),
@@ -1525,7 +1577,7 @@ fl = [
  ("FL-13", "Solar connection date and tariff", "The 20-year period decides when the electricity credit ends.", "The utility's interconnection letter", "cpuc_nem"),
  ("FL-14", "Whether the rent ordinance covers Property B", "Depends on the date of first occupancy and the legal unit count. No parcel lookup was performed. Every projection assumes it does: rent grows 1.5% a year. If it does not, the statewide cap governs at 7.5%; the Property B page now shows both paths (FL-33).", "Certificate of occupancy; Rent Board record", "cityb_rent"),
  ("FL-33", "Which rent cap binds on Property B, and why", "FL-14 asks whether the local ordinance covers the building. This is the second half: Civil Code 1947.12(d) also exempts housing with a certificate of occupancy issued within the previous 15 years, separately alienable units and corporate owners. Which exemption applies decides whether the 1.5% or the 7.5% path is the lawful one, and by 2045 the ten-year difference is $3,398,970.", "Certificate of occupancy; title; Rent Board record", "civ1947_12"),
- ("FL-15", "Result of the 3 November 2026 measures", "Results are not certified; certification is due 11 December 2026. The unofficial count on 10 November 2026 had Proposition 42 ahead with 51.5% yes and Proposition 40 rejected with 52.6% no.", "The certified statement of vote", "sos_results"),
+ ("FL-15", "Result of the 3 November 2026 measures", "Results are not certified; certification is due 11 December 2026. The unofficial count of 12 November 2026 has Proposition 42 ahead with 51.4% yes and Proposition 40 rejected with 52.4% no. The count moves as ballots are processed.", "The certified statement of vote", "sos_results"),
  ("FL-24", "Any mortgage or debt on either property", "The model assumes both properties are unencumbered. A loan would have to be repaid from a sale, or would reduce the room under the federal exclusion.", "Loan statements or the trustee's schedule of assets", "irs_estate"),
  ("FL-25", "Privacy precision of the roll tables", "At the owner's instruction of 12 November 2026 the roll values and bills are published to the nearest $10. That is close enough to the county record that a reader who knows the record could match it; the tier can be raised to $1,000 or $10,000 with one command.", "The owner's choice of tier", "boe_lta26002"),
  ("FL-26", "Whether any retirement account is in the estate", "Not supplied. If one exists the ten-year distribution rule applies and the withdrawals are ordinary income; nothing is modelled for it.", "The beneficiary designations", "irs_rmd"),
@@ -1543,6 +1595,8 @@ fl = [
  ("FL-32", "The lesser-of rule in a crash, and decline-in-value relief", "The model applies the 2% assessment cap and does not apply RTC 51(a)(2), which assesses at the lesser of the factored base year value and full cash value. Before a death the rule needs a fall of about 82% to bite; after a death, when the taxable value is reset to market value, any fall counts. The economy page measures it: three of sixteen years in a replayed crash, about $3,500 in total in that case. The county's own decline-in-value review, which a owner may request, was not read.", "The county assessor's decline-in-value page, and a decision on modelling it", "rtc51"),
  ("FL-31", "California's 1% additional tax above $1,000,000", "The one-time-gain rate is 20% federal, 3.8% net investment income tax and 12.3% California. RTC 17043 adds 1% on taxable income above $1,000,000, which the 12.3% bracket rate does not include. Applied to the gain alone it lowers the 2045 stock result by $36,170 and the ranking holds (C-14); other income would make it larger.", "Adopt the surcharge in the model, or keep it as the published sensitivity", "rtc17043"),
  ("FL-34", "The publishing source for this site", "GitHub Pages reports build_type=legacy, source main /. Every API attempt to set the source to the Actions artifact returned HTTP 403 (resource not accessible by integration). The live site currently serves the intended artifact (retired routes return content-free notices; checked 12 November 2026), but no technical guarantee holds if a legacy build re-deploys.", "The owner sets Settings → Pages → Source to GitHub Actions, or grants the integration permission once", "gh_pages_docs"),
+ ("FL-38", "Area insurance averages", "The Department of Insurance publishes ZIP-code level residential experience data under Insurance Code section 929. That file was not opened, so the property pages carry only the statewide averages (about $1,180 a year for an owner-occupied homeowners policy and about $600 a year for a landlord policy over 2008 to 2023) and leave the figures for these two properties blank.", "The Department's ZIP-code level file, or two written quotes", "cdi_part1"),
+ ("FL-39", "Property A's water retailer and tariff", "City B's water rates are published and appear on the Property B page. For Property A no retailer was established from an official source: more than one retailer serves the county and the wholesaler is a separate district. No rate for Property A is published; the owner reports $100 to $150 a month.", "One water bill: the retailer, the meter size and the tariff", "irs_p527"),
  ("FL-35", "The Treasury anchor in the model", "The model holds the 10-year yield constant at 4.88%, the 9 November 2026 print. The daily curve published on 12 November 2026 reads 5.10% (10 November: 4.98%). Re-run at 5.10%, the 2045 sell-and-buy-Treasuries result moves from $8,761,920 to $8,897,290, still second to stocks by about $1,156,000; the ranking does not change.", "Adopt 5.10% (or the decision date's print) as the anchor, or keep 4.88% as a dated scenario; the owner decides", "treasury_cmt"),
  ("FL-36", "Property B: the 2018 bill rise of 18.39%", "The secured bill rose from $1,740 in 2017 to $2,060 in 2018 while the assessed value rose 2%. The record does not explain the difference. The table marks the row Matches because only the assessment is checked; a new charge or a special tax would explain it, but none is in the record.", "The itemised 2017 and 2018 bills from the City B tax collector", "cityb_rate"),
  ("FL-37", "Property B: bill and assessment changes that do not match in 2021 and 2022", "2021: the bill fell 5.91% while the assessment rose 1.04%. 2022: the assessment rose 1.95% against the 2% state factor, and the bill rose 1.93%. Both rows are marked Differs. Neither changes a projection, which is built from the assessment and the rate.", "The 2021 and 2022 bill detail and the assessor roll change notices", "boe_lta26002"),
@@ -1575,12 +1629,20 @@ corr = [
  ("C-11", "Comparison period", "Every case ended in 2055, so an inheritance in 2050 was judged over five years.", "Ten years after each inheritance year.", "irs_basis"),
  ("C-12", "Roll values in public files", "Assessment histories were published to the nearest $10, and one bill to the dollar.", "Generalised to the nearest $10,000 and $100, then republished at the owner's instruction on 12 November 2026 (C-13).", "boe_lta26002"),
  ("C-13", "Property tax and assessment tables", "The year-by-year bills and assessments were withheld altogether, on the view that any published roll figure identifies a parcel.", "Published in full at the precision the owner chose on 12 November 2026 (nearest $10), with the published state factor beside each year and the percentage changes computed before rounding. The setting is a committed file, so it can be raised to $1,000 or $10,000 without touching the analysis.", "boe_lta26002"),
- ("C-14", "California surcharge on large gains", "The one-time-gain rate used 12.3% for California and stopped there.", "RTC 17043 adds 1% on taxable income above $1,000,000. Published as a sensitivity, not folded into the model: the 2045 stock result falls by $36,170 and the ranking holds (FL-31).", "rtc17043"),
+ ("C-14", "California surcharge on large gains", "The one-time-gain rate used 12.3% for California and stopped there.", "RTC 17043 adds 1% on taxable income above $1,000,000. Published as a sensitivity, not folded into the model: the 2045 stock result falls by $36,170 and the ranking holds (FL-31).", "rtc17043"), ("C-15", "What the FAIR Plan covers", "The executive summary said the FAIR Plan covers fire, lightning, explosion and smoke only.", "True of the dwelling-fire policy, but not the whole picture: the Commissioner ordered the FAIR Plan to offer a comprehensive homeowners (HO-3) policy from 1 June 2020. The $3,000,000 combined dwelling limit, effective 1 April 2020, is unchanged.", "cdi_fairplan"),
+ ("C-16", "The failed inheritance initiative", "Described only by its Attorney General file number, 25-0017.", "It is Initiative 1994, titled 'Repeals voter-enacted changes to property tax rules for transfers between family members'. The Secretary of State recorded the failure in CC/ROV Memorandum 26138 of 18 May 2026.", "sos_memo"),
+ ("C-17", "The November 2026 ballot counts", "Proposition 40 at 52.6% no and Proposition 42 at 51.5% yes, from the 10 November 2026 count.", "Re-read on 13 November 2026 with all 23,860 precincts partially reporting: Proposition 40 is at 52.4% no and Proposition 42 at 51.4% yes. Still unofficial; certification is due 11 December 2026 (FL-15).", "sos_results"),
+ ("C-18", "Duplicate black-swan row in the executive summary", "Two rows both named a form of 'Black-swan stress tests', one reporting the stress cases and one the historical analogues.", "Merged into one row that reports both, so the summary has one black-swan line with both findings.", "frh_recession"),
+ ("C-19", "Page count on the overview", "The overview said 'This edition - 1 pages': the count was taken from a dictionary that is still empty when the page body is built.", "A named constant of 16 pages, so the number cannot go stale again.", "gh_pages_docs"),
+ ("C-20", "Insurance research", "Insurance was a blank with the owner's $1,500 guess and no official figure at all.", "The Department of Insurance Residential Property Insurance Report was opened: statewide average written premiums are about $1,180 a year for an owner-occupied homeowners policy (2008-2023), $1,070 for 2017, and about $600 a year for a landlord (tenant-occupied dwelling fire) policy. A property-specific premium still cannot be verified and is still blank (FL-38).", "cdi_part1"),
+ ("C-21", "Water and electricity research", "Water and electricity had no official source anywhere on the site; the rows pointed at the rental-property publication only.", "City B's published water schedule was read and its multi-family charges are now on the Property B page. The solar tariff rules (20 years on NEM 2.0; nine years for the net billing tariff) are on the Property A page. Property A's water retailer could not be established from an official source, so no rate for it is published (FL-39).", "sfpuc_rates"),
 ]
-CB = {"C-01": "V", "C-02": "V", "C-03": "C", "C-04": "C", "C-05": "V", "C-06": "C", "C-07": "V", "C-08": "A", "C-09": "V", "C-10": "V", "C-11": "C", "C-12": "C", "C-13": "C", "C-14": "C"}
+CB = {"C-01": "V", "C-02": "V", "C-03": "C", "C-04": "C", "C-05": "V", "C-06": "C", "C-07": "V", "C-08": "A", "C-09": "V",
+      "C-10": "V", "C-11": "C", "C-12": "C", "C-13": "C", "C-14": "C", "C-15": "V", "C-16": "V", "C-17": "V", "C-18": "C",
+      "C-19": "C", "C-20": "V", "C-21": "V"}
 rows = [([i, item, old, new], CB[i], S(src)) for i, item, old, new, src in corr]
 repo = [
- ("Published pages", "Fifteen pages are generated from one model and one source ledger. A stale page fails the build."),
+ ("Published pages", "Sixteen pages are generated from one model and one source ledger. A stale page fails the build."),
  ("Retired pages and data files", "Paths used by earlier editions hold withdrawal notices with no figures. The build fails if any other tracked file appears."),
  ("Source ledger", "Each source records how it was checked: opened, or read as an excerpt served from the official domain."),
  ("Checks", "Every factual table row must link to an official publisher; a row that records a choice must link to the reasoning behind it. Dollar amounts must be multiples of $10. City names, postal codes, parcel numbers and e-mail addresses fail the build."),
@@ -1602,7 +1664,7 @@ The earlier edition's source work was sound: its quotations matched the official
 <p>The arithmetic was re-checked independently of the renderer: all 35 projection years for each property were recomputed from the model's own formulas (tax = rate x assessed value plus fixed charges; running costs summed; assessed value capped at 2%), the estate-room rows were recomputed from the exclusion less both homes, and the 2045 reassessment was recomputed from the Proposition 19 formula. Every published figure agreed to the nearest $10. The page structure was also changed: the menu is now grouped into five sections, the two black-swan pages are labelled as parts 1 and 2 of one section instead of appearing twice under different names, and the overview states which of the three editions in this repository a reader is looking at.</p></section>
 <section><h2>Pass of 12 November 2026 (merged from PR #53)</h2>
 <p>A later session re-opened four documents on the publishers' own domains and checked them against what this edition says. Proposition 19 on the Board of Equalization's page — the comparison chart and questions 2, 3 and 6 — confirms the mechanics the model uses: the family home is excluded only while at least one heir lives in it; the value limit is the prior taxable value plus $1,000,000, adjusted every second year; and a home that is rented does not qualify at all. The worked example in question 6 reaches the same taxable value as the formula in the model, with the $1,000,000 amount the model indexes each second year. The IRS estate page was re-opened: the 2026 filing threshold is $15,000,000 and the portability election is made on a timely filed return. That page does not state the 40% rate, so FL-16 stays open.</p>
-<p>Two rules the brief asks about had never appeared in this edition. Both are now read at the publisher and published on the <a href="taxes.html#heir">tax page</a>: an inheritance is not income to the heir (26 U.S.C. 102, subsection (a), read on the Government Publishing Office's site, with subsection (b) leaving the income from the property taxable), and an inherited retirement account must generally be emptied within ten years where the owner died after 2019, with the exceptions the IRS lists. Two source badges on the <a href="suggestions.html">suggestions page</a> were also withdrawn: they pointed at the IRS estate page for a repository-history question and for a question about which edition to act on, which that page does not support. Those two suggestions are now listed without a badge. The legend's review window was extended to 12 November 2026. No model figure, projection row or ranking changed.</p></section>
+<p>Two rules the brief asks about had never appeared in this edition. Both are now read at the publisher and published on the <a href="taxes.html#heir">tax page</a>: an inheritance is not income to the heir (26 U.S.C. 102, subsection (a), read on the Government Publishing Office's site, with subsection (b) leaving the income from the property taxable), and an inherited retirement account must generally be emptied within ten years where the owner died after 2019, with the exceptions the IRS lists. Two source badges on the <a href="suggestions.html">suggestions page</a> were also withdrawn: they pointed at the IRS estate page for a repository-history question and for a question about which edition to act on, which that page does not support. Those two suggestions are now listed without a badge. The legend's review window was extended to 13 November 2026. No model figure, projection row or ranking changed.</p></section>
 <section><h2>Fifth pass, 12 November 2026 (this session)</h2>
 <p>This session re-opened, on the publishers' own domains, the documents behind the figures that decide the answer: the IRS estate tax
 threshold page (the 2026 threshold of $15,000,000 and the portability election), the IRS 2027 inflation release ($15,480,000 and the
@@ -1631,6 +1693,44 @@ was read, and no statute not named above was opened in this session.</p></sectio
 <p>A separate session re-opened fifteen publisher pages the same day. Every already-published figure matched: the 2026 and 2027 exclusions, the Form 706 deadline and portability rule, the inherited-basis rule, the absence of a state death tax, the Proposition 19 conditions and the two-year amount, the local secured rate, the rent cap, the insurance survey's scope, the 10-year Treasury at 4.88% on 9 November 2026 and the index fund's 12.09% one-year return.</p>
 <p>One gap was found. The one-time-gain rate used in the model is 20% federal, 3.8% net investment income tax and 12.3% California, and 12.3% is the top bracket of the graduated schedule. Section 17043 of the Revenue and Taxation Code adds a further 1% on the portion of taxable income above $1,000,000. It is published as FL-31 and C-14, with the dollar effect as a sensitivity rather than a model change, so no previously published figure moves: applied to the gain alone, the 2045 stock result falls from $10,052,910 to $10,016,750, and the sale remains first. Other income would push more of the gain above the threshold, so the figure published is a lower bound on that tax.</p>
 <p>What this check did not do: it did not open the text of Proposition 19 or any local ordinance, contact an insurer, appraiser or broker, look up a parcel, or test the pages in a browser.</p></section>
+<section><h2>Sixth pass, 13 November 2026 (this session)</h2>
+<p>This pass re-opened the sources behind the figures most likely to be stale or wrong, and added the two running costs the brief
+asks to have researched. Each document below was read on the publisher's own domain on 13 November 2026.</p>
+<p><strong>Re-read and confirmed:</strong> the IRS estate tax page (2026 filing threshold $15,000,000; portability by election on a
+timely return); IR-2026-133 (2027 exclusion $15,480,000 and a $20,000 annual gift exclusion); the State Controller's estate tax page
+(no California return for deaths on or after 1 January 2005); Board of Equalization Letter to Assessors 2025/009 (the Proposition 19
+amount is just over $1,044,590 for transfers from 16 February 2025 to 15 February 2027, adjusted by one year's California house price change
+every second February); Letter to Assessors 2026/026 (trust transfers are eligible; the child must occupy within one year and file
+the homeowners' exemption within one year; the claim is timely within three years or before a third-party transfer, or within six
+months of a supplemental or escape assessment; an LLC is not an eligible transferee); the City B rent-increase page (1.6% from
+1 March 2026, 60% of the regional index; Board of Supervisors File No. 261020 noticed on 9 November 2026 and not enacted); and the
+Secretary of State's unofficial ballot-measure results.</p>
+<p><strong>Three documents corrected what the site said.</strong> The CDI release on the FAIR Plan establishes a $3,000,000 combined
+dwelling limit from 1 April 2020 <em>and</em> a comprehensive homeowners (HO-3) policy from 1 June 2020; the executive summary had
+said the plan covers fire, lightning, explosion and smoke only, which is the dwelling-fire policy on its own (C-15). The Secretary of
+State's CC/ROV Memorandum 26138 gives the failed initiative its number, Initiative 1994, with the Attorney General file 25-0017
+recorded separately (C-16). The ballot count moved: with all 23,860 precincts partially reporting on 12 November 2026, Proposition 40
+stands at 52.4% no and Proposition 42 at 51.4% yes, against the 52.6% and 51.5% recorded from the 10 November count (C-17, FL-15).</p>
+<p><strong>Insurance.</strong> The Department of Insurance Residential Property Insurance Report was opened and read. Statewide
+average written premiums are about $1,180 a year for an owner-occupied homeowners policy across 2008 to 2023, about $1,070 in
+experience year 2017, and about $600 a year for a tenant-occupied dwelling-fire policy, the form a landlord buys. They are published
+on both property pages as a benchmark against the owner's guess, clearly labelled as statewide and not as a figure for either
+property. A property-specific premium still cannot be verified and remains blank; the Department's ZIP-code level file exists under
+Insurance Code section 929 but was not opened, so FL-38 and S-24 stay open.</p>
+<p><strong>Water and electricity.</strong> City B publishes its water and sewer rates; the FY 2026-27 schedule approved in April 2026
+was read, and the multi-family charges for a building of two or more dwelling units are now on the Property B page. For Property A no
+water retailer could be established from an official source &mdash; more than one retailer serves the county and the wholesaler is a
+separate district &mdash; so no rate for it is published and the gap is recorded as FL-39 and S-25. On the electricity side the
+Public Utilities Commission's own page settles the solar question: a customer-generator may remain on NEM 2.0 for 20 years from
+interconnection, while systems connected since 15 April 2023 take the net billing tariff, whose guarantee runs nine years to the
+original customer and whose export credits are paid at avoided-cost values rather than at the retail rate.</p>
+<p><strong>Two defects in the site itself were found and fixed.</strong> The overview reported "This edition &middot; 1 pages",
+because the count was read from a dictionary that is still empty when that page's body is built; it is now a named constant (C-19).
+The executive summary carried two separate rows both named a form of "Black-swan stress tests"; they are merged into one row that
+carries both findings (C-18).</p>
+<p>What this pass did not do: it did not contact an insurer, a broker or an appraiser; it did not look up a parcel or an address; it
+did not read the sewer or stormwater schedules that sit alongside City B's water rates; and it did not open any statute other than
+those named above or already in the ledger.</p></section>
 <section><h2>Repository review</h2><p>Findings from reading the repository itself. These are observations, not sourced facts.</p>{rlist}</section>
 <section><h2>Earlier editions</h2>
 <p>An earlier cross-check edition and a 50-year suite were built by other sessions. Both are withdrawn from publication because they carried unrounded owner figures. This edition does not depend on them, and no figure in it is taken from them.</p></section>
@@ -1650,7 +1750,7 @@ for sid, s in SRC.items():
     rows.append(([f"<code>{sid}</code>", e(s["publisher"]), e(s["title"]), "<br>".join(e(v) for v in s["verifies"]), e(how)], basis, a(sid)))
 body = f"""<p>{len(SRC)} official sources. The exact words relied on are stored with each source in <a href="assets/sources.json">sources.json</a>.
 Local sources name the jurisdiction in their web address; the pages refer to it as County A or City B.</p>
-{tbl("Source library", ["Id", "Publisher", "Document", "What it supports", "How it was checked (10 to 12 November 2026)"], rows)}{LEGEND}{PRIV}"""
+{tbl("Source library", ["Id", "Publisher", "Document", "What it supports", "How it was checked (10 to 13 November 2026)"], rows)}{LEGEND}{PRIV}"""
 PAGES["sources.html"] = page("sources.html", "Source library", "Source library", "Every source, and how it was checked",
                              "Open any link to check the figure yourself.", body)
 
@@ -1660,7 +1760,7 @@ for name, text in PAGES.items():
 # Plain-text executive summary kept in the repository
 (ROOT / "EXECUTIVE_SUMMARY.md").write_text(f"""# Executive summary
 
-Reviewed 10 to 12 November 2026. Anonymised: Property A (single-family home, County A), Property B (small multi-unit building, City B).
+Reviewed 10 to 13 November 2026. Anonymised: Property A (single-family home, County A), Property B (small multi-unit building, City B).
 Every dollar figure is rounded to the nearest $10. Assessment-roll values and tax bills are published at the owner's chosen precision
 ({M["privacy"]["description"]}); percentage changes are computed before rounding. Planning analysis, not legal, tax or investment advice.
 

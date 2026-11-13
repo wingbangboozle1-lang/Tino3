@@ -44,6 +44,54 @@ python3 scripts/verify_legacy.py --site _legacy_site   # after the real Jekyll b
 
 No third-party Python packages are used.
 
+## Evidence standard
+
+Every rule, threshold and rate on the site was read on the publishing agency's own domain between
+10 and 13 November 2026 and is linked from the row that uses it; `assets/sources.json` (86 entries)
+records what each document verifies and how it was checked. A factual table row with no link to an
+official publisher fails the build, and so does a name, street address, postal code, parcel number,
+e-mail address or a dollar figure that is not a multiple of $10. Anything that could not be verified
+is left blank and flagged on `review.html` — never inferred.
+
+## Verification pass of 13 November 2026
+
+A sixth pass re-opened the sources behind the figures most likely to be stale and added the two running
+costs the brief asks to be researched. It corrected three statements and two defects:
+
+- **FAIR Plan coverage (C-15).** The executive summary said the plan covers fire, lightning, explosion
+  and smoke only. The CDI release of 14 November 2019 shows that describes the dwelling-fire policy: a
+  comprehensive homeowners (HO-3) policy was ordered for 1 June 2020. The $3,000,000 combined dwelling
+  limit of 1 April 2020 is unchanged.
+- **The failed inheritance initiative (C-16).** It is Initiative **1994**; 25-0017 is the Attorney
+  General file the LAO analysed. SOS CC/ROV Memorandum 26138 of 18 May 2026 records the failure.
+- **The November 2026 ballot counts (C-17).** The site carried the 10 November count (Proposition 40
+  52.6% no, Proposition 42 51.5% yes). With all 23,860 precincts partially reporting at 12 November
+  2026, 6:47 p.m. it is 52.4% no and 51.4% yes. Certification is due 11 December 2026 (FL-15).
+- **Duplicate row (C-18).** The executive summary carried two rows both named a form of "Black-swan
+  stress tests"; they are merged into one row carrying both findings.
+- **Page count (C-19).** The overview reported "This edition · 1 pages": the count was read from a
+  dictionary that is still empty when that page's body is built. It is now a named constant.
+
+Research added in this pass:
+
+- **Insurance (C-20).** The CDI Residential Property Insurance Report was opened. Statewide average
+  written premiums are about **$1,180 a year** for an owner-occupied homeowners policy (2008–2023),
+  **$1,070** in experience year 2017, and about **$600 a year** for a tenant-occupied dwelling-fire
+  policy, the form a landlord buys. They are published on both property pages as a benchmark against
+  the owner's guess, labelled statewide and not as a premium for either property. A property-specific
+  premium still cannot be verified and remains blank (FL-38, S-24).
+- **Water and electricity (C-21).** City B's FY 2026-27 water schedule, approved in April 2026, was
+  read and its multi-family charges (schedule W-1B, which is what a three-unit building falls on) are
+  now on `property-b.html`. The CPUC's page settles the solar question: 20 years on NEM 2.0 from
+  interconnection, or the net billing tariff with a nine-year guarantee for systems connected since
+  15 April 2023. **Property A's water retailer could not be established from an official source** —
+  more than one retailer serves the county and the wholesaler is a separate district — so no rate for
+  it is published (FL-39, S-25). This is the one item the brief asked to research that could not be
+  closed from an official source.
+
+Not done: no insurer, broker or appraiser was contacted; no parcel, address or ZIP lookup was made;
+the sewer and stormwater schedules alongside City B's water rates were not read.
+
 ## Limits
 
 This is planning analysis, not legal, tax or investment advice. Rules, indexed amounts and bill status can change;

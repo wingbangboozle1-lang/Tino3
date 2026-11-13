@@ -1895,3 +1895,60 @@ Against `main` the ledger only grows: nothing from `main` was dropped and no sha
 - **Live checks (`https://wingbangboozle1-lang.github.io/Tino3/`):** `review.html` (Flagged for review) renders; `plan/index.html` and `COORDINATION.md` return 404, as intended.
 - **PR #70 and PR #62:** GitHub recorded both as merged at 06:49:08 and 06:49:09 UTC because their commits are contained in this merge. No separate merge or close was made for them.
 - **Open items handed to the owner (not blocking):** the repository is public and its Git history contains earlier unrounded figures; the Pages source is still `legacy` (switching it needs `pages=write`); the flagged items on the review page remain unverified where stated.
+
+---
+
+## Session `arena/2125ec01-tino3` — owner-brief dashboard: independent sixth verification pass, insurance and utility research · 2026-11-13
+
+*Branch note:* Arena fixes this session to `arena/2125ec01-tino3`, based at `b4b7c20` (PR #69 merge). The board was read before any work began. The clone arrived shallow (depth 1); `git fetch --unshallow` was run first, because without it `git merge` refused with "unrelated histories".
+
+**Takeover of PR #70 (`arena/b709c64d-tino3`).** That session claimed the final integration (restoring the anonymized quantitative dashboard per the owner brief, folding in PR #62, verifying and publishing). Its last commit and PR update were at 2026-11-12T22:27:58Z, more than eight hours before this session started, and the PR reported `mergeable: CONFLICTING`. Under the board's stale-claim rule this session took the task over, preserved all of that work and merged its branch into this one rather than rebuilding the dashboard. Nothing from PR #70 was discarded.
+
+**Concurrent work:** session `arena/25fdb181-tino3` merged PR #71 and PR #72 into `main` while this pass was in progress. Those pull requests did two things: they brought the rest of PR #70's content onto `main`, and they removed the `plan/` and `analysis/` editions from the working tree (both were built from unrounded owner figures) and rewrote `README.md`, `scripts/package_site.py`, `scripts/verify_legacy.py` and `_config.yml` accordingly. This session's first push was rebased onto that `main` and **the rebase silently dropped this session's commit, because it was a merge commit and `git pull --rebase` discards merges by default**. The commit object survived (`80c6466`); the work was recovered by taking `git diff 052db52 80c6466` for the four files that carry content and re-applying it with `git apply -3`. One collision had to be resolved by hand: that session had already used **FL-36 and FL-37** for two Property B bill irregularities, so this session's two new flags were renumbered to **FL-38 (area insurance averages)** and **FL-39 (Property A's water retailer)**.
+
+*Lesson for the next session:* when a branch's work is recorded as a merge commit, use `git rebase --rebase-merges` (or cherry-pick the merge's own diff), not `git pull --rebase`.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| T1 Review the repository and the published edition line by line against official sources; flag irregularities | done | `arena/2125ec01-tino3` | `scripts/build.py`, `assets/sources.json`, root pages |
+| T2 Research the two running costs the brief asks for (insurance; water and electricity) on official domains | done | `arena/2125ec01-tino3` | `assets/sources.json` (+3 entries), `scripts/build.py`, `property-a.html`, `property-b.html` |
+| T3 Correct the statements and site defects found in T1 | done | `arena/2125ec01-tino3` | `scripts/build.py`, `audit.html` |
+| T4 Run every gate, integrate, open the pull request, merge, confirm the Pages deploy, record the result | in progress | `arena/2125ec01-tino3` | this block, `README.md`, `EXECUTIVE_SUMMARY.md` |
+
+**Privacy boundary for this pass.** Property A / Property B only. No name, street address, postal code, parcel number, utility account or trust particular appears in any published file. Dollar figures are rounded to the nearest $10 at the owner's instruction of 12 November 2026; utility *unit prices* are shown to the nearest dollar and the page says so, because they are unit prices and not property amounts. Nothing that could not be confirmed from an official source is published: it is left blank and flagged.
+
+### Sources re-opened on the publishers' own domains on 13 November 2026
+
+- IRS, [Estate tax](https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax) — 2026 filing threshold $15,000,000; 2025 $13,990,000; portability by election on a timely return.
+- IRS, [IR-2026-133](https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts) — 2027 exclusion $15,480,000; annual gift exclusion $20,000.
+- California State Controller, [California Estate Tax](https://www.sco.ca.gov/ardtax_estate_tax.html) — no return for deaths on or after 1 January 2005.
+- BOE, [LTA 2025/009](https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf) — the Proposition 19 amount is $1,044,586 for transfers 16 February 2025 to 15 February 2027; adjusted by one year's California house price change every second February.
+- BOE, [LTA 2026/026](https://www.boe.ca.gov/proptaxes/pdf/lta26026.pdf) — trust transfers are eligible (Q39); the child must occupy within one year and file the homeowners' exemption within one year (Q7, Q13); the claim is timely within three years of transfer or before a third-party transfer, or within six months of a supplemental or escape assessment (Q21, Q22); an LLC is not an eligible transferee (Q32–Q35); in a multi-unit building each unit is a separate principal residence (Q15).
+- SOS, [CC/ROV Memorandum 26138](https://elections.cdn.sos.ca.gov/ccrov/2026/may/26138jh.pdf) — Initiative **1994** failed for want of signatures on 18 May 2026.
+- SOS, [unofficial ballot-measure results](https://electionresults.sos.ca.gov/returns/ballot-measures) — all 23,860 precincts partially reporting at 12 November 2026, 6:47 p.m.: Proposition 40 52.4% no, Proposition 42 51.4% yes. Certification due 11 December 2026.
+- City B, [rent increases](https://www.sf.gov/learn-about-rent-increases-san-francisco) — 1.6% from 1 March 2026, 60% of the Bay Area CPI; File No. 261020 noticed 9 November 2026 and not enacted.
+- CDI, [FAIR Plan release of 14 November 2019](https://www.insurance.ca.gov/0400-news/0100-press-releases/2019/release089-19.cfm) — combined dwelling limit raised to $3,000,000 on 1 April 2020 **and** a comprehensive HO-3 policy ordered for 1 June 2020.
+- CDI, [Residential Property Insurance Report](https://www.insurance.ca.gov/0400-news/0200-studies-reports/0250-homeowners-study/), [Part I summary data](https://www.insurance.ca.gov/0400-news/0200-studies-reports/0250-homeowners-study/upload/A-Part-I-Data-Summary.xlsx), [Homeowners Multi-Peril 2001–2017](https://www.insurance.ca.gov/0400-news/0200-studies-reports/0250-homeowners-study/upload/A-Homeowners-2_v1-2.pdf) — statewide average written premiums.
+- SFPUC, [Rate schedules and fees for water and sewer service, FY 2026-27 and FY 2027-28](https://www.sfpuc.gov/sites/default/files/accounts-and-services/Rates_Schedule_Water_Sewer_2026-7.pdf) — schedules W-1A and W-1B; two years of rates approved April 2026.
+- CPUC, [Net Energy Metering and Net Billing](https://www.cpuc.ca.gov/industries-and-topics/electrical-energy/demand-side-management/customer-generation/net-energy-metering-and-net-billing) — NEM 2.0 for 20 years from interconnection (D.14-03-041); the net billing tariff applies to interconnections since 15 April 2023 with a nine-year guarantee to the original customer.
+
+### Irregularities found, and what was done (C-15 to C-21 on `audit.html`)
+
+1. **C-15 FAIR Plan coverage stated too narrowly** — corrected.
+2. **C-16 the failed initiative had no number** — corrected to Initiative 1994 / AG file 25-0017.
+3. **C-17 the ballot counts were stale** — corrected to the 12 November count.
+4. **C-18 duplicate "Black-swan stress tests" row** in the executive summary — merged.
+5. **C-19 the overview reported "This edition · 1 pages"** — replaced with a named constant.
+6. **C-20 insurance research** — CDI statewide averages published as a benchmark on both property pages; a property-specific premium remains blank (FL-38, S-24).
+7. **C-21 water and electricity research** — City B's published water schedule and the CPUC solar tariff rules published; **Property A's water retailer could not be established from an official source**, so no rate for it is published (FL-39, S-25). This is the one item the brief asked to research that this session could not close from an official source.
+
+### Verification performed
+
+- `python3 scripts/build.py` — built 16 pages.
+- `python3 scripts/verify.py` — **PASS**: 16 reproducible pages; 769 table rows (737 factual, every row linked to an official publisher; 32 decision rows linked to their reasoning); 86 ledger sources; local links, official hosts, privacy scan and $10 rounding clean.
+- `python3 scripts/package_site.py`, `python3 scripts/privacy_boundary.py`, `python3 scripts/verify_legacy.py --config-only` — **PASS**.
+- Link sweep of the built pages: 734 local links, 0 broken. No Liquid template markers in any published file, so the Jekyll root publisher cannot mangle them.
+
+### Not done in this pass
+
+No insurer, broker or appraiser was contacted; no parcel, address or ZIP lookup was made; the sewer and stormwater schedules alongside City B's water rates were not read; no statute other than those listed above was opened. Earlier commits, pull-request diffs, caches, forks and external copies remain a separate exposure surface and are not certified erased.
