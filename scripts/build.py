@@ -111,6 +111,37 @@ def src_cell(ids, label="Official source"):
 
 CORE_SOURCES = ["rtc63_2", "boe_pub29", "irs_basis", "irs_tc409"]
 
+# The gate that every reassessment figure on this site depends on. Revenue and Taxation
+# Code section 63.2 excludes a transfer from change in ownership only where the transferor
+# and transferee are parent and child (or grandparent and grandchild with the middle
+# generation deceased). If the relationship is different, no exclusion is available at all
+# and the prior taxable value plus the shelter is irrelevant. Read at leginfo, 13 Nov 2026.
+ELIGIBILITY_TEXT = (
+    "Every reassessment figure on this site assumes the transfer will qualify for the "
+    "intergenerational exclusion in Revenue and Taxation Code section 63.2. That section "
+    "excludes a transfer only where it is <strong>between parents and their children</strong>, "
+    "or between grandparents and grandchildren where every parent of the grandchild who is a "
+    "child of the grandparent has died. &ldquo;Children&rdquo; is defined in the statute to "
+    "include a stepchild, a son-in-law or daughter-in-law, and an adopted child adopted before "
+    "age 18; it also includes a foster child of a licensed foster parent where adoption was "
+    "barred. The relationship is a condition of the exclusion, not a detail: if the "
+    "transferor and the heir are not in one of those relationships, no exclusion is available, "
+    "the property is reassessed to full market value, and the entire saving shown on this page "
+    "disappears."
+)
+
+
+def eligibility_callout() -> str:
+    return callout(
+        "flag", "First gate: is the transfer between a parent and a child?",
+        f"<p>{ELIGIBILITY_TEXT}</p>"
+        f"<p>This analysis is written on the assumption that it is. The trust document is the "
+        f"only thing that confirms it, and this site has not seen it. Until it is confirmed, "
+        f"treat every Proposition 19 shelter figure here as conditional. See "
+        f"<a href=\"questions.html\">question A-1</a>.</p>"
+        f"<p class=\"callout-src\">{slink('rtc63_2_eligibility')} &middot; {slink('boe_prop19')} "
+        f"&middot; {slink('boe_lta25009')}</p>")
+
 
 def method_cell(href: str, text: str = "Model output", sources=None):
     """A computed row. Links the method page and the official rules the model implements."""
@@ -247,8 +278,14 @@ def page_index() -> str:
         kpi(pc(p45["breakeven_house_growth"]), "House growth needed to justify keeping it",
             "Per year, for 30 years, to match selling and investing at 7%"),
         kpi(m(p45["breakeven_rent_monthly"]), "Monthly rent needed to justify letting it",
-            "In 2045 dollars, against a 7% equity return"),
+            "In 2045 dollars, on zero rent credited to the letting paths"),
     ])
+    gating = callout("flag", "One fact is assumed, not verified, and everything else depends on it", f"""
+<p>The Proposition 19 exclusion applies only where the transfer is between a parent and a child, or between a
+grandparent and a grandchild whose parent has died. If that is not the relationship here, there is no exclusion:
+the property is reassessed to full market value, every shelter figure on this site disappears, and the case for
+selling gets stronger. The trust document is the only thing that settles it. <a href="questions.html">Answer
+question A-1</a> before relying on any number here. {slink('rtc63_2_eligibility')}</p>""")
     cards = []
     for group, pages in NAV_GROUPS:
         if group == "Start here":
@@ -259,6 +296,7 @@ def page_index() -> str:
         cards.append(f'<section class="card"><h2>{esc(group)}</h2><ul class="card-list">{items}</ul></section>')
     return (
         privacy_banner()
+        + gating
         + f'<section class="kpi-row">{kpis}</section>'
         + callout("answer", "The one-line answer", f"""
 <p>Under every baseline this site can build, <strong>selling Property A soon after it is inherited beats living in it or letting it out</strong>, and it is not close. The reason is a one-off combination: the inheritance resets the income-tax basis to the value at death, so an immediate sale pays almost no capital gains tax, while the property tax assessment jumps to market value under Proposition 19. Waiting converts a tax-free asset into a taxed one and adds roughly {m(p45['bill_if_rent_year1'] - p45['bill_today_projected'])} a year of extra property tax if the home is let out.</p>
@@ -323,6 +361,7 @@ def page_executive_summary() -> str:
         rows)
 
     facts = [
+        ("The condition everything rests on", "The Proposition 19 exclusion applies only to a transfer between a parent and a child, or between a grandparent and a grandchild where the middle generation has died. RTC section 63.2 sets that out. If the heir is not in that relationship to the transferor, the property is reassessed to full market value and every shelter figure here falls away."),
         ("Property A", f"Inherited through a trust, planned 2040 to 2050. Worth about {m(A['estimated_market_value_2026'])}. Not owned by the heir today."),
         ("Property B", f"Already owned by the heir. Worth about {m(B['estimated_market_value_2026'])}, three units, two let at {m(B['rent']['monthly'])} a month. The heir can live here without losing that rent."),
         ("The tax cliff at transfer", f"Today the Property A bill is about {m(MODEL['costs_a_now']['property_tax'])}. If the heir inherits in 2045 and does not move in, the bill becomes about {m(p45['bill_if_rent_year1'])}. If the heir does move in and claims the Proposition 19 exclusion, it becomes about {m(p45['bill_if_live_year1'])}."),
@@ -340,9 +379,10 @@ def page_executive_summary() -> str:
     ftab = table("The important details", ["Detail", "What this analysis found"], fact_rows)
 
     return (
-        callout("summary", "Recommendation", f"""
+        eligibility_callout()
+        + callout("summary", "Recommendation", f"""
 <p><strong>Sell Property A soon after it is inherited, unless the heir genuinely wants to live in that house.</strong></p>
-<p>Selling converts an asset earning nothing into capital, at almost no tax, and it removes a property tax bill that is about to multiply by six to eleven times. Living in the house is the only path that keeps the tax bill lower, and it still leaves the heir holding a single, undiversified, illiquid asset in one California school district. Letting it out is the weakest option in every scenario this site can build, because it combines the full reassessment with landlord costs and a rental yield far below the return available elsewhere.</p>
+<p>Selling converts an asset earning nothing into capital, at almost no tax, and it removes a property tax bill that is about to multiply by six to eleven times. Living in the house is the only path that keeps the tax bill lower, and it still leaves the heir holding a single, undiversified, illiquid asset in one California school district. Letting it out fails every scenario this site can build, because it combines the full reassessment with landlord costs and a rental yield below the return available elsewhere — but that comparison credits the letting paths with <strong>no rent at all</strong>, so read it as a floor and check the break-even rent below before relying on it.</p>
 <p>The counter-case is real and it is on the <a href="black-swan.html">black swan page</a>: if house prices in this area repeat their 1977 to 1981 or 2021 to 2023 pace, keeping the house wins. That is a bet on one neighbourhood, not a plan.</p>
 """)
         + ftab
@@ -360,6 +400,7 @@ def page_executive_summary() -> str:
 
 # ------------------------------------------------------------------ decision --
 def page_decision() -> str:
+    p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
     rows = []
     for p in MODEL["paths"]:
         for key, label in (("sell_equities", "Sell at inheritance, invest in equities"),
@@ -419,6 +460,21 @@ def page_decision() -> str:
     sens_sell = sum(1 for s in MODEL["sensitivity"] if s["best"].startswith("sell"))
     reg_total = len(MODEL["regimes"])
     reg_sell = sum(1 for r in MODEL["regimes"] if r["run"]["best"].startswith("sell"))
+    rent_callout = callout("flag", "The letting paths are credited with no rent at all", f"""
+<p>No market rent for Property A has been supplied, and no official source publishes a market rent for a
+specific home, so this site does not invent one. The consequence is that both letting paths carry every
+landlord cost and <strong>zero rental income</strong>. They are therefore not a test of whether letting the
+house works; they are a floor.</p>
+<p>The break-even rent is the honest figure: about <strong>{m(p45['breakeven_rent_monthly'])} a month in 2045</strong>,
+roughly {m(p45['breakeven_rent_annual'])} a year, to end thirty years in the same position as selling and
+investing. That is about {pc(p45['breakeven_rent_annual'] / p45['value_at_death'] * 100, 1)} of the property's
+value in gross rent, every year. Whether the market clears that is the open question, and it is the one
+question that could move the recommendation. See <a href="suggestions.html">suggestion S-06</a>; the input that
+would be used is named and empty in the data file, so a documented rent opinion can be added and the whole
+model rebuilt.</p>
+<p>Until then, read every statement that letting is the weakest path as <em>the weakest path at zero rent</em>.</p>
+""")
+
     sens_table = table(
         "Sensitivity: which path wins at each combination of house growth and equity return",
         ["House growth", "Equity return", "Sell, equities", "Sell, Treasuries",
@@ -435,13 +491,15 @@ def page_decision() -> str:
     ]) + "</div>"
 
     return (
-        callout("recommend", "What this site recommends", f"""
+        eligibility_callout()
+        + callout("recommend", "What this site recommends", f"""
 <p><strong>Sell soon after the inheritance.</strong> It leads in the baseline, in {sens_sell} of the {sens_total}
 sensitivity combinations, and in {reg_sell} of the {reg_total} stress regimes. It is also the only path that does
 not depend on the heir wanting to live in this particular house, being able to keep it as a principal residence,
 or finding a tenant at an implausible rent.</p>""")
         + sens_kpis
         + paths_table
+        + rent_callout
         + be_table
         + sens_table
         + '<h2>What the model does and does not do</h2>'
@@ -958,10 +1016,11 @@ rules work, and it only exists at the moment of transfer.</p>""")
                      ("Above $250,000 and below $1,000,000", "0.68%", "Applies to the whole price, not just the excess."),
                      ("$1,000,000 to under $5,000,000", "0.75%", "The band Property B is in today."),
                      ("$5,000,000 to under $10,000,000", "2.25%", "Crossing $5,000,000 triples the rate on the entire price."),
-                     ("$10,000,000 and above", "Not published here",
-                      "The schedule the city publishes does not set out the top band in the table this site read, so it is left blank rather than inferred."),
+                     ("$10,000,000 to under $25,000,000", "5.5%", "Published in the city schedule as 27 dollars 50 cents for each 500 dollars of the entire consideration. An earlier pass stopped at the previous band and left this blank; it is in the schedule."),
+                     ("$25,000,000 and above", "6.0%", "Published in the city schedule as 30 dollars for each 500 dollars of the entire consideration. Neither property is near this band at today's values."),
                  ]],
-                note="The rate applies to the entire consideration, so a sale that crosses a threshold is not "
+                note="Each rate is the city's per-500-dollar rate expressed as a percentage of the whole price. "
+                     "The rate applies to the entire consideration, so a sale that crosses a threshold is not "
                      "taxed band by band. This matters for Property B only; Property A is in the county, and "
                      "no city transfer tax is charged there.")
         + '<h2>What the model does and does not do</h2>'
@@ -980,10 +1039,10 @@ rules work, and it only exists at the moment of transfer.</p>""")
 def page_inheritance() -> str:
     steps = [
         ("1", "Before the transfer",
-         "Confirm that the trust actually holds title to the house, and read the trust to see whether the heir takes outright, in further trust, or for life.",
+         "Confirm three things: that the trust holds title to the house, that the heir's relationship to the transferor is a parent-and-child relationship (or grandparent and grandchild with the middle generation deceased), and whether the heir takes outright, in further trust, or for life. The relationship is what qualifies the transfer for the intergenerational exclusion; without it the property is reassessed in full.",
          "The successor trustee, with the trust instrument and the recorded deed.",
          "No statutory deadline, but this is the step that determines everything else.",
-         ["scc_recorder"]),
+         ["scc_recorder", "rtc63_2"]),
         ("2", "Check the assessment record now",
          "Confirm the assessed value, the tax rate area, the fixed charges on the bill and whether a homeowners' exemption is in place.",
          "The heir or the current owner, from the county assessor and the tax bill.",
@@ -992,8 +1051,8 @@ def page_inheritance() -> str:
         ("3", "The transfer event",
          "On the transfer, the trustee signs and records a deed moving the house out of the trust to the heir. Recording is what starts the county's clock.",
          "The trustee records with the county recorder.",
-         "Recording fees are due at recording. Property A is in the county, not the city, so no city transfer tax applies to it.",
-         ["scc_recorder", "rtc11911"]),
+         "Recording fees are due at recording. The documentary transfer tax does not apply to a deed where the property passes by reason of death or by inter vivos gift, so a transfer out of the trust at death should be exempt from it; the county recorder's fee schedule confirms the fee exemption for exempt transfers. Property A is in the county, not the city, so no city transfer tax applies to it either.",
+         ["scc_recorder", "rtc11930_trust", "rtc11911"]),
         ("4", "Notice to beneficiaries",
          "When a revocable trust becomes irrevocable, the trustee must notify the heirs and beneficiaries and give them the information the statute requires.",
          "The trustee.",
@@ -1052,16 +1111,35 @@ def page_inheritance() -> str:
 <p>This is the procedural path, in order, with the rule that governs each step. It is deliberately generic: it does
 not restate the trust, which this site has not seen. Where a deadline is set by statute the statute is linked so
 the current text can be read.</p>""")
+        + callout("flag", "The gap this site cannot close: what if the trust is not the route", f"""
+<p>Everything above assumes the house passes through a trust. Two other routes exist, and neither is modelled
+here because neither the trust nor the deed has been read.</p>
+<ul>
+<li><strong>A small estate.</strong> California provides a simplified transfer for estates below a statutory
+value, and a separate procedure for a decedent's real property worth a set amount or less. Both thresholds are
+set in the Probate Code and change over time. Property A is worth about {m(A['estimated_market_value_2026'])}
+today, far above any current threshold, so this route only helps if the house passes outside the estate
+altogether. Read the current text rather than a remembered figure.</li>
+<li><strong>Probate.</strong> If the house is held in the transferor's own name, with no trust and no beneficiary
+designation, a probate administration has to complete before the house can be sold. California sets statutory
+probate fees on a sliding scale of the gross value of the estate, so on an asset of this size the fees are
+material, and the administration runs for months. It also delays the sale, which matters because the basis
+step-up window is widest immediately after death.</li>
+</ul>
+<p>Neither route changes how the gain is taxed. Both change the timing and the cost. The action is the same
+either way: read the deed and the trust first. See <a href="questions.html">questions A-1 and A-2</a>.</p>""")
         + tbl
-        + callout("key", "The two deadlines that actually bite", """
+        + callout("key", "The three deadlines that actually bite", """
 <ol>
 <li><strong>Move in within one year</strong> if the Proposition 19 exclusion is going to be claimed. The guidance
 is explicit that there are no exceptions to that rule, and that the exclusion is removed when the home stops
 being the principal residence.</li>
 <li><strong>File the exclusion claim within three years</strong>, or before transferring the property to anyone
 else, whichever is earlier.</li>
+<li><strong>Be in a qualifying relationship</strong> to the transferor. If the heir is not a child of the
+transferor (or a grandchild whose parent has died), there is no exclusion to claim, no matter what is filed.</li>
 </ol>
-<p>Everything else on this list is administrative. These two are the ones that change the money.</p>""")
+<p>Everything else on this list is administrative. These three are the ones that change the money.</p>""")
     )
 
 
@@ -1352,6 +1430,12 @@ before 2025, the table shows a dash rather than filling the gap.</p>""")
 QUESTIONS = [
     ("A", "Title, trust and timing",
      [
+      ("Is the heir a child of the transferor?",
+       "The owner describes the house as being inherited through a trust. No relationship is stated anywhere in the material this site was built from.",
+       "The relationship between the transferor and the heir. The statute defines 'children' to include a stepchild, a son-in-law or daughter-in-law, an adopted child adopted before 18, and a foster child of a licensed foster parent where adoption was barred.",
+       "Read the trust instrument and the deed. This is the first thing to confirm, before any other question on this page.",
+       "Revenue and Taxation Code section 63.2 allows the intergenerational exclusion only between parents and their children, or grandparents and grandchildren where the middle generation has died. If the relationship is different, there is no exclusion, the property is reassessed to full market value on the transfer, and every Proposition 19 figure on this site falls away. It is the single condition the whole analysis rests on.",
+       ["rtc63_2_eligibility", "boe_prop19"]),
       ("Is the house actually titled in the trust today?",
        "The owner states the inheritance will come through a trust around 2040 to 2050.",
        "No deed, no parcel number, no trust document.",
@@ -1431,10 +1515,10 @@ QUESTIONS = [
        "Without occupation the property is reassessed in full. This is the largest single number in the analysis.",
        ["rtc63_2", "boe_lta26026"]),
       ("If the heir occupies and later moves out, what value is enrolled?",
-       "The statute says the base year value established at the change in ownership, adjusted annually, is enrolled.",
-       "Whether that means the Proposition 19 adjusted value or the full market value at transfer.",
-       "Ask the county assessor in writing, at the time.",
-       "Determines whether a live-then-rent structure is worth anything. This site models it conservatively and flags it.",
+       "Section 63.2(a)(1)(C) says the base year value established as of the change in ownership to which the exclusion applied, adjusted annually, is enrolled once the transferee is no longer eligible for the homeowners' or disabled veterans' exemption. That reads as the propounded base year value rather than the higher value that was sheltered.",
+       "Section 63.2(a)(1)(C) is the plain reading, but the county assessor applies it and this site has no written confirmation from the assessor.",
+       "Ask the county assessor in writing, before relying on it.",
+       "It decides whether the live-then-rent path keeps the sheltered base after the move-out. This site models it the way the statute reads and flags the residual uncertainty on the review page.",
        ["rtc63_2", "boe_lta26026"]),
       ("Could the heir keep the house as a principal residence for the whole of the relevant period?",
        "Not stated.",
@@ -1490,8 +1574,8 @@ QUESTIONS = [
        "Get three quotes per building from admitted insurers, and check the FAIR Plan as a fallback. The "
        "FAIR Plan is the state's insurer of last resort and is not limited to a bare fire policy: it also "
        "offers a comprehensive homeowners form. Treat it as a fallback, not as a comparable quote.",
-       "The California Department of Insurance publishes no average premium by area, so this cannot be verified online.",
-       ["cdi_tips", "cdi_fairplan"]),
+       "The Department publishes no statutory average premium by area. It does run an online homeowners premium survey, with sample rates by company that the reader can compare; the survey is not a quote and does not set a premium for either building. So the estimate can be compared against published sample rates, but it cannot be replaced by an official figure.",
+       ["cdi_tips", "cdi_fairplan", "cdi_compare"]),
       ("Who supplies water to Property A, and on what tariff?",
        f"Owner range of {m(A['annual_costs']['water']['low'])} to {m(A['annual_costs']['water']['high'])} a year.",
        "The provider and the published rate schedule.",
@@ -1597,7 +1681,10 @@ site already has, what is missing, how to find the answer, and why it changes th
 official source in the last column are matters of fact or preference that no public source can answer; they are
 listed anyway so nothing is assumed away.</p>
 <p>Every item here is also a candidate for the <a href="suggestions.html">suggestions page</a>, which is the
-review queue for turning them into action.</p>""")
+review queue for turning them into action.</p>
+<p><strong>Answer A-1 first.</strong> Whether the heir is a child of the transferor decides whether the
+intergenerational exclusion in Revenue and Taxation Code section 63.2 exists at all. Until it is answered, every
+Proposition 19 figure on this site is conditional.</p>""")
         + "".join(sections))
 
 
@@ -1657,6 +1744,18 @@ SUGGESTIONS = [
     ("S-18", "Keep the data files in this repository as the single source of truth",
      "Every figure on the site is generated from assets/data. Editing the HTML by hand would break that and the verification.",
      "Low", "None", None, []),
+    ("S-19", "Confirm the parent-and-child relationship before anything else on this list",
+     "It is the one condition that can remove every Proposition 19 shelter figure on the site. If the relationship is different, the reassessment is full and the case for selling gets stronger, not weaker.",
+     "Low", "Highest on the list", "questions", ["rtc63_2_eligibility", "boe_prop19"]),
+    ("S-20", "Put a market rent on Property A or accept that the letting paths are a floor",
+     "The letting paths currently carry every landlord cost and no rent. Either obtain a documented rent opinion and enter it in the data file, or read every letting result on this site as a floor rather than a comparison.",
+     "Low", "Medium: the rental case cannot be judged without it", "decision", ["hud_fmr"]),
+    ("S-21", "Get the county assessor's written answer on the base year after a move-out",
+     "Section 63.2(a)(1)(C) says the base year established at the change in ownership is enrolled when the transferee stops being eligible for the homeowners' exemption. The live-then-rent path is modelled on that reading. A written answer removes the uncertainty.",
+     "Low", "Medium: it moves the live-then-rent path, not the recommendation", "questions", ["rtc63_2_eligibility"]),
+    ("S-22", "Decide whether the public repository and its history should stay public",
+     "The repository is public and earlier commits contain unrounded owner figures. Rounding the published page does not change what Git history holds. Making the repository private, or rewriting history, are the only two ways to close that exposure.",
+     "Medium", "High for privacy, none for the analysis", "review", []),
 ]
 
 
@@ -1757,7 +1856,7 @@ def page_review() -> str:
         ("Property B electricity", f"{m(B['annual_costs']['electricity']['low'])} to {m(B['annual_costs']['electricity']['high'])} a year",
          "Owner estimate", "Read the bills."),
         ("Insurance on both properties", m(A["annual_costs"]["insurance"]["mid"]) + " a year each",
-         "Owner estimate. The California Department of Insurance publishes no average premium by area, so there is nothing official to check it against.",
+         "Owner estimate. The Department publishes a statewide average and an online premium survey, not an average for this postal area, so it can be compared against sample rates but not verified as the premium for this building.",
          "Get three quotes per building."),
         ("Maintenance on both properties", "0.5% / 0.75% of value for Property A, 1.5% for Property B",
          "Assumption. No figure was supplied.",
@@ -1772,10 +1871,27 @@ def page_review() -> str:
          "Reported publicly but not verified against an official city source",
          "Check the Board of Supervisors file before relying on it."),
     ]
-    uv_rows = [f"<td><strong>{esc(a)}</strong></td><td>{b}</td>"
-               f'<td><span class="badge unverified">{esc(c)}</span></td><td>{esc(d)}</td>'
-               + src_cell(["cdi_tips", "scc_ratebook", "sf_treas_rate", "irs_estate"], "Where to check")
-               for a, b, c, d in unverified]
+    # Each row names the publisher that actually holds the record for that item. The
+    # earlier build gave every row the same four links, which told the reader nothing.
+    where_to_check = {
+        "Property A market value, November 2026": ["scc_ratebook"],
+        "Property B market value, November 2026": ["sf_treas_rate"],
+        "Both assessment rolls and tax bills": ["scc_ratebook", "sf_treas_rate"],
+        "Property A ad valorem rate": ["scc_ratebook", "boe_pub29"],
+        "Property B ad valorem rate": ["sf_treas_rate"],
+        "Property A water": [],
+        "Property A electricity, net of solar": ["cpuc_nem"],
+        "Insurance on both properties": ["cdi_tips", "cdi_homeowners_avg"],
+        "Maintenance on both properties": [],
+        "Property B rent": ["cityb_rent"],
+        "San Francisco transfer tax reduction proposal": ["sf_file261020"],
+    }
+    uv_rows = []
+    for a, b, c, d in unverified:
+        ids = where_to_check.get(a, [])
+        uv_rows.append(f"<td><strong>{esc(a)}</strong></td><td>{b}</td>"
+                       f'<td><span class="badge unverified">{esc(c)}</span></td><td>{esc(d)}</td>'
+                       + src_cell(ids, "Where to check"))
 
     caveats = [
         ("The ad valorem rate for Property A is not identifiable from the data",
@@ -1798,24 +1914,31 @@ def page_review() -> str:
          "If house prices fall below the inflation-adjusted assessed value, the assessed value can be reduced. That is assessor-applied and would help the hold paths in a slump."),
         ("The Proposition 19 shelter path after 2027 is a projection",
          "The real amount is set every second February from the California house price index and is not published in advance. Three percent a year is assumed and flagged."),
+        ("A sheltered base is assumed to survive a later move-out",
+         "Section 63.2(a)(1)(C) says the base year value established at the change in ownership, adjusted annually, is enrolled when the transferee stops being eligible for the homeowners' exemption. The live-then-rent path is modelled on that reading, which is favourable to it. If the assessor instead enrolled full market value at the move-out, that path's tax bill would rise and its terminal value would fall. The recommendation does not depend on it: selling already leads that path."),
+        ("Every reassessment figure is conditional on the parent-and-child relationship",
+         "Section 63.2 excludes only transfers between parents and their children, or grandparents and grandchildren where the middle generation has died. Every shelter, live-in and rental figure on this site assumes that condition holds. The trust document is the only thing that confirms it and this site has not seen it."),
     ]
     cav_rows = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td>"
                 + src_cell(["scc_ratebook", "sos_results", "irs_tc409", "ftb_cg", "rtc51", "boe_lta25009"], "Related sources")
                 for a, b in caveats]
 
     audit = [
-        ("The repository contains far more than the published site",
-         "In addition to the published pages, the repository holds two earlier editions under analysis/ and plan/, and a very large coordination board. None of it is published: the Jekyll configuration and the packaging allowlist both exclude it.",
-         "It is still in the public repository and in its history. Deleting or rewriting history is a separate decision for the owner."),
+        ("The repository contains more than the published site",
+         "The published site is the eighteen pages in the repository root plus one stylesheet. What is not published is the build and verification code in scripts/, the data files in assets/data/, the source ledger, this page's own register, the README, the executive summary and a very large coordination board.",
+         "All of it is excluded from the published site by the Jekyll configuration and by the packaging allowlist, and the guard script fails the build if a tracked path would bypass those exclusions. It is still readable in the public repository."),
+        ("Two earlier editions were removed from the working tree",
+         "An earlier cross-check edition under plan/ and a fifty-year edition under analysis/ were built from unrounded owner figures. Both directories were removed from the tree on 13 November 2026; their routes now return content-free withdrawal notices.",
+         "They remain in the repository's Git history. Removing them from history needs a rewrite or a visibility change, which is the owner's decision, not a session's."),
         ("Earlier sessions published a version with no property figures at all",
          "Between 11 and 12 November 2026 several sessions built a privacy-first edition that blanked every value. This edition reverses that, because the brief for this session asks for the figures rounded to $10.",
          "The reversal is recorded in the coordination board. The blanked edition remains in the repository history."),
         ("Prior commits and pull-request diffs may contain finer figures",
          "Rounding to $10 applies to what this site publishes. It does not change what earlier commits contain.",
          "Older commits, pull-request diffs, forks and external copies are separate exposure surfaces. Nothing on this site can certify them erased."),
-        ("Four pull requests are open",
-         "PR 70 restored a version of this quantitative edition and had no commits for more than an hour before this session took the task over. PRs 62, 65 and 66 are board records and older work.",
-         "They are not merged. This session's work is self-contained and does not depend on them."),
+        ("Two pull requests remain open, and both are board records",
+         "PR 65 and PR 66 recorded a publication blocker on 12 November 2026. The blocker they describe, the legacy Pages route serving the whole repository, was closed by later merges. Neither contains work this edition depends on.",
+         "They are left open rather than silently closed. Nothing on this site depends on them."),
         ("The site is published from the repository root by Jekyll",
          "The GitHub Pages source is set to the main branch at the repository root, with a configuration file excluding everything outside the published allowlist. A separate workflow also builds an allowlisted artifact.",
          "The publishing route should be confirmed live after every change. The exclusion list is the control that keeps the rest of the repository out of the site."),
@@ -1829,10 +1952,10 @@ def page_review() -> str:
 
     return (
         callout("note", "What this page is for", """
-<p>Two lists. The first is every figure on this site that is not verified against an official source, and what to
-do about it. The second is every modelling shortcut that materially affects the answer. The third is the audit of
-the repository this site is built from. None of these block the recommendation, but each one is a reason to
-check before acting.</p>""")
+<p>Three lists. The first is every figure on this site that is not verified against an official source, and where
+the record for it is actually held. The second is every modelling shortcut that materially affects the answer.
+The third is the audit of the repository this site is built from. None of these block the recommendation, but
+each one is a reason to check before acting.</p>""")
         + '<h2 id="method-detail">How the model works</h2>'
         + callout("note", "Method, in one paragraph", f"""<p>{esc(METHOD_TEXT)}</p>""")
         + '<h2 id="register">Register of unverified and assumed items</h2>'

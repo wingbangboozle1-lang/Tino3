@@ -1,109 +1,482 @@
 {
-  "meta": {
-    "edition": "Anonymised quantitative decision edition",
-    "built": "2026-11-13",
-    "rounding": "Every dollar figure on the public site is rounded to the nearest $10. Owner-supplied figures are the owner's own records and are labelled unverified where no official public record was checked.",
-    "privacy": "No name, street address, parcel number, ZIP code, trust detail or utility account appears in this file. Placeholders: Property A (the home being inherited, in Santa Clara County), Property B (the three-unit building already owned by the heir, in the City and County of San Francisco)."
+ "meta": {
+  "edition": "Anonymised quantitative decision edition",
+  "built": "2026-11-13",
+  "rounding": "Every dollar figure on the public site is rounded to the nearest $10. Owner-supplied figures are the owner's own records and are labelled unverified where no official public record was checked.",
+  "privacy": "No name, street address, parcel number, ZIP code, trust detail or utility account appears in this file. Placeholders: Property A (the home being inherited, in Santa Clara County), Property B (the three-unit building already owned by the heir, in the City and County of San Francisco)."
+ },
+ "property_a": {
+  "label": "Property A",
+  "role": "Inherited through a trust. Not currently owned by the heir.",
+  "jurisdiction": "Santa Clara County, California",
+  "estimated_market_value_2026": 3100000,
+  "value_basis": "Owner estimate, November 2026",
+  "occupancy": "Currently occupied by the transferor as a principal residence",
+  "units": 1,
+  "solar": true,
+  "roll": [
+   {
+    "year": 2026,
+    "assessed": 550540,
+    "bill": null,
+    "note": "Bill not supplied for 2026-27"
+   },
+   {
+    "year": 2025,
+    "assessed": 539740,
+    "bill": 7210
+   },
+   {
+    "year": 2024,
+    "assessed": 529160,
+    "bill": 7000
+   },
+   {
+    "year": 2023,
+    "assessed": 518790,
+    "bill": 6920
+   },
+   {
+    "year": 2022,
+    "assessed": 508610,
+    "bill": 6760
+   },
+   {
+    "year": 2021,
+    "assessed": 498640,
+    "bill": 6660
+   },
+   {
+    "year": 2020,
+    "assessed": 493530,
+    "bill": 6570
+   },
+   {
+    "year": 2019,
+    "assessed": 483850,
+    "bill": 6570
+   },
+   {
+    "year": 2018,
+    "assessed": 474370,
+    "bill": 6380
+   },
+   {
+    "year": 2017,
+    "assessed": 465070,
+    "bill": 6380
+   },
+   {
+    "year": 2016,
+    "assessed": 455950,
+    "bill": 6410
+   },
+   {
+    "year": 2015,
+    "assessed": 449100,
+    "bill": 6130
+   },
+   {
+    "year": 2014,
+    "assessed": 440310,
+    "bill": 5970
+   }
+  ],
+  "annual_costs": {
+   "water": {
+    "low": 1200,
+    "high": 1800,
+    "mid": 1500,
+    "basis": "owner estimate",
+    "verified": false
+   },
+   "electricity": {
+    "low": -240,
+    "high": -120,
+    "mid": -180,
+    "basis": "owner estimate; solar export credit exceeds usage",
+    "verified": false
+   },
+   "insurance": {
+    "low": 1500,
+    "high": 1500,
+    "mid": 1500,
+    "basis": "owner estimate for a primary-residence policy",
+    "verified": false
+   },
+   "maintenance_pct_owner_occupied": {
+    "value": 0.005,
+    "basis": "assumption",
+    "verified": false
+   },
+   "maintenance_pct_rental": {
+    "value": 0.0075,
+    "basis": "assumption",
+    "verified": false
+   }
   },
-  "property_a": {
-    "label": "Property A",
-    "role": "Inherited through a trust. Not currently owned by the heir.",
-    "jurisdiction": "Santa Clara County, California",
-    "estimated_market_value_2026": 3100000,
-    "value_basis": "Owner estimate, November 2026",
-    "occupancy": "Currently occupied by the transferor as a principal residence",
-    "units": 1,
-    "solar": true,
-    "roll": [
-      {"year": 2026, "assessed": 550540, "bill": null, "note": "Bill not supplied for 2026-27"},
-      {"year": 2025, "assessed": 539740, "bill": 7210},
-      {"year": 2024, "assessed": 529160, "bill": 7000},
-      {"year": 2023, "assessed": 518790, "bill": 6920},
-      {"year": 2022, "assessed": 508610, "bill": 6760},
-      {"year": 2021, "assessed": 498640, "bill": 6660},
-      {"year": 2020, "assessed": 493530, "bill": 6570},
-      {"year": 2019, "assessed": 483850, "bill": 6570},
-      {"year": 2018, "assessed": 474370, "bill": 6380},
-      {"year": 2017, "assessed": 465070, "bill": 6380},
-      {"year": 2016, "assessed": 455950, "bill": 6410},
-      {"year": 2015, "assessed": 449100, "bill": 6130},
-      {"year": 2014, "assessed": 440310, "bill": 5970}
-    ],
-    "annual_costs": {
-      "water": {"low": 1200, "high": 1800, "mid": 1500, "basis": "owner estimate", "verified": false},
-      "electricity": {"low": -240, "high": -120, "mid": -180, "basis": "owner estimate; solar export credit exceeds usage", "verified": false},
-      "insurance": {"low": 1500, "high": 1500, "mid": 1500, "basis": "owner estimate for a primary-residence policy", "verified": false},
-      "maintenance_pct_owner_occupied": {"value": 0.005, "basis": "assumption", "verified": false},
-      "maintenance_pct_rental": {"value": 0.0075, "basis": "assumption", "verified": false}
-    },
-    "rent": {"known": false, "note": "Market rent is not supplied. The site reports the break-even rent instead of inventing a figure."}
+  "rent": {
+   "known": false,
+   "note": "Market rent is not supplied. The site reports the break-even rent instead of inventing a figure."
   },
-  "property_b": {
-    "label": "Property B",
-    "role": "Already owned by the heir. Rental income is already flowing. The heir can also live here without losing rental income.",
-    "jurisdiction": "City and County of San Francisco, California",
-    "estimated_market_value_2026": 1800000,
-    "value_basis": "Owner estimate, November 2026",
-    "units": 3,
-    "units_rented": 2,
-    "roll": [
-      {"year": 2025, "assessed": 114250, "bill": 2440},
-      {"year": 2024, "assessed": 112010, "bill": 2320},
-      {"year": 2023, "assessed": 109810, "bill": 2180},
-      {"year": 2022, "assessed": 107660, "bill": 2110},
-      {"year": 2021, "assessed": 105600, "bill": 2070},
-      {"year": 2020, "assessed": 104510, "bill": 2200},
-      {"year": 2019, "assessed": 102470, "bill": 2130},
-      {"year": 2018, "assessed": 100460, "bill": 2060},
-      {"year": 2017, "assessed": 98490, "bill": 1740},
-      {"year": 2016, "assessed": 96560, "bill": 1680}
-    ],
-    "rent": {"monthly": 7150, "annual": 85800, "basis": "owner statement, two units let", "verified": false},
-    "annual_costs": {
-      "water": {"low": 3960, "high": 4800, "mid": 4380, "basis": "owner estimate for all three units", "verified": false},
-      "electricity": {"low": 360, "high": 840, "mid": 600, "basis": "owner estimate", "verified": false},
-      "insurance": {"low": 1500, "high": 1500, "mid": 1500, "basis": "owner estimate for a rental policy", "verified": false},
-      "maintenance_pct": {"value": 0.015, "basis": "assumption; owner states repairs run higher here than at Property A", "verified": false}
-    }
-  },
-  "verified_parameters": {
-    "federal_basic_exclusion_2026": {"value": 15000000, "src": ["irs_estate", "irs_whatsnew"]},
-    "federal_basic_exclusion_2027": {"value": 15480000, "src": ["irs_2027"]},
-    "annual_gift_exclusion_2026": {"value": 19000, "src": ["irs_2027"]},
-    "annual_gift_exclusion_2027": {"value": 20000, "src": ["irs_2027"]},
-    "california_estate_tax": {"value": 0, "note": "No California estate tax return required for deaths on or after 1 January 2005", "src": ["sco_estate", "ftb_inheritance"]},
-    "prop19_value_cap_2025_2027": {"value": 1044586, "src": ["boe_lta25009", "rtc63_2"]},
-    "prop19_value_cap_prior_2021_2023": {"value": 1000000, "src": ["boe_lta25009"]},
-    "prop19_value_cap_prior_2023_2025": {"value": 1022600, "src": ["boe_lta25009"]},
-    "prop13_base_rate": {"value": 0.01, "src": ["boe_pub29", "scc_ratebook"]},
-    "prop13_inflation_cap": {"value": 0.02, "src": ["boe_pub29", "scc_ratebook", "rtc51"]},
-    "sf_secured_rate_2026_27": {"value": 0.0118162182, "src": ["sf_treas_rate"]},
-    "sf_allowed_rent_increase_2026_27": {"value": 0.016, "src": ["sf_rent_increase"]},
-    "statewide_rent_cap_base": {"value": 0.05, "src": ["civ1947_12"]},
-    "statewide_rent_cap_max": {"value": 0.10, "src": ["civ1947_12"]},
-    "section121_exclusion_single": {"value": 250000, "src": ["irs_p523"]},
-    "section121_exclusion_joint": {"value": 500000, "src": ["irs_p523"]},
-    "federal_long_term_capital_gains_top": {"value": 0.20, "src": ["irs_tc409"]},
-    "federal_niit": {"value": 0.038, "src": ["irs_tc559"]},
-    "federal_unrecaptured_1250": {"value": 0.25, "src": ["irs_tc409"]},
-    "ssa_intermediate_cpi": {"value": 0.024, "src": ["ssa_trustees"]},
-    "ssa_intermediate_real_rate": {"value": 0.023, "src": ["ssa_trustees"]}
-  },
-  "assumptions": {
-    "ad_valorem_rate_a": {"value": 0.0118, "basis": "Assumption, not a fitted result. The owner's own bills cannot separate the two parts of the bill: assessed value and the fixed charges both grow at about 2% a year, so any rate between roughly 1.05% and 1.60% fits the data almost equally well. 1.18% is used because Proposition 13 limits the rate to 1% plus voter-approved bond debt, because the published San Francisco rate is 1.18162182%, and because it puts the fixed part of the bill at a plausible level. The property's tax rate area is not published on this site, so this is flagged for review.", "src": ["boe_pub29", "scc_ratebook", "sf_treas_rate"]},
-    "ad_valorem_rate_b": {"value": 0.0118162182, "basis": "Published by the City and County of San Francisco for fiscal year 2026-27.", "src": ["sf_treas_rate"]},
-    "fixed_charge_growth": {"baseline": 0.025, "basis": "Fixed charges are projected at the modelled inflation rate. Diagnostic: the fixed part of the Property B bill grew at 8.1% a year between 2016 and 2025, so this projection is deliberately conservative and understates the bill if that pace continues.", "src": ["sf_treas_rate", "ssa_trustees"]},
-    "house_growth": {"baseline": 0.04, "low": 0.025, "high": 0.055, "basis": "Scenario band. The FHFA all-transactions index for Property A's area compounded at 6.9% a year from 1976 to 2025 but 3.3% a year over the last twenty years, so the baseline sits below the long run.", "src": ["fred_hpi_a", "fred_hpi_b"]},
-    "inflation": {"baseline": 0.025, "low": 0.018, "high": 0.030, "basis": "Scenario band anchored on the 2026 Social Security Trustees intermediate assumption of 2.4% for the CPI-W, with the low and high cases taken from the Trustees' high-cost and low-cost assumptions. The 1975-2024 CPI-U compounded at 3.6% a year and the last twenty years at 2.6% a year.", "src": ["ssa_trustees", "fred_cpi"]},
-    "equity_return_nominal_gross": {"baseline": 0.07, "low": 0.05, "high": 0.09, "basis": "Scenario band. No official agency publishes an equity return assumption, so this is a stated scenario and not an official figure.", "src": []},
-    "equity_tax_drag": {"baseline": 0.007, "basis": "Assumption for dividend and turnover tax on a taxable brokerage account.", "src": ["irs_tc409"]},
-    "treasury_yield_nominal": {"baseline": 0.047, "low": 0.036, "high": 0.058, "basis": "The 2026 Trustees intermediate assumption of a 2.3% real new-issue rate for 2044 and later plus 2.4% CPI-W gives about 4.7% nominal; the low and high cases use the Trustees' high-cost and low-cost pairs. The 2025 annual average 10-year yield was 4.29%.", "src": ["ssa_trustees", "fred_gs10"]},
-    "prop19_cap_growth": {"baseline": 0.03, "low": 0.0, "high": 0.05, "basis": "Assumption. The cap is reset every second February by the change in the California House Price Index, so its future path is not published. The low case holds it frozen at today's amount.", "src": ["boe_lta25009"]},
-    "selling_cost_pct": {"baseline": 0.055, "low": 0.04, "high": 0.07, "basis": "Assumption for commission, escrow, title and transfer charges. Verified component: the county documentary transfer tax rate is set by Revenue and Taxation Code section 11911; whether the city adds its own transfer tax is flagged for review.", "src": ["rtc11911"]},
-    "assessed_value_growth": {"baseline": 0.02, "basis": "The Proposition 13 inflation cap has been binding in every year of both assessment rolls supplied by the owner.", "src": ["boe_pub29", "scc_ratebook"]},
-    "combined_gain_tax_rate": {"baseline": 0.371, "basis": "Assumption for a high-income California seller with no offsetting losses: 20% federal capital gains plus 3.8% net investment income tax plus the 13.3% California top marginal rate, with no federal deduction taken for the state tax. State and federal rates are simply added, which is deliberately conservative.", "src": ["irs_tc409", "irs_tc559", "ftb_cg", "ftb_rates", "voterguide_p3"]},
-    "depreciation_recapture_rate": {"baseline": 0.411, "basis": "Assumption: 25% federal unrecaptured section 1250 rate plus the 13.3% California top rate, plus NIIT where applicable.", "src": ["irs_tc409", "ftb_cg"]},
-    "horizon_years": 30,
-    "inheritance_years": [2040, 2045, 2050]
+  "rent_income_annual": {
+   "value": null,
+   "basis": "Market rent for Property A is not supplied, and no official source publishes a market rent for a specific home. The value is therefore left empty and the letting paths credit no rent at all, which is the conservative case. The Decision page reports the break-even rent instead of inventing one. Replace this with a documented rent opinion and rebuild.",
+   "verified": false,
+   "src": [
+    "hud_fmr"
+   ]
   }
+ },
+ "property_b": {
+  "label": "Property B",
+  "role": "Already owned by the heir. Rental income is already flowing. The heir can also live here without losing rental income.",
+  "jurisdiction": "City and County of San Francisco, California",
+  "estimated_market_value_2026": 1800000,
+  "value_basis": "Owner estimate, November 2026",
+  "units": 3,
+  "units_rented": 2,
+  "roll": [
+   {
+    "year": 2025,
+    "assessed": 114250,
+    "bill": 2440
+   },
+   {
+    "year": 2024,
+    "assessed": 112010,
+    "bill": 2320
+   },
+   {
+    "year": 2023,
+    "assessed": 109810,
+    "bill": 2180
+   },
+   {
+    "year": 2022,
+    "assessed": 107660,
+    "bill": 2110
+   },
+   {
+    "year": 2021,
+    "assessed": 105600,
+    "bill": 2070
+   },
+   {
+    "year": 2020,
+    "assessed": 104510,
+    "bill": 2200
+   },
+   {
+    "year": 2019,
+    "assessed": 102470,
+    "bill": 2130
+   },
+   {
+    "year": 2018,
+    "assessed": 100460,
+    "bill": 2060
+   },
+   {
+    "year": 2017,
+    "assessed": 98490,
+    "bill": 1740
+   },
+   {
+    "year": 2016,
+    "assessed": 96560,
+    "bill": 1680
+   }
+  ],
+  "rent": {
+   "monthly": 7150,
+   "annual": 85800,
+   "basis": "owner statement, two units let",
+   "verified": false
+  },
+  "annual_costs": {
+   "water": {
+    "low": 3960,
+    "high": 4800,
+    "mid": 4380,
+    "basis": "owner estimate for all three units",
+    "verified": false
+   },
+   "electricity": {
+    "low": 360,
+    "high": 840,
+    "mid": 600,
+    "basis": "owner estimate",
+    "verified": false
+   },
+   "insurance": {
+    "low": 1500,
+    "high": 1500,
+    "mid": 1500,
+    "basis": "owner estimate for a rental policy",
+    "verified": false
+   },
+   "maintenance_pct": {
+    "value": 0.015,
+    "basis": "assumption; owner states repairs run higher here than at Property A",
+    "verified": false
+   }
+  }
+ },
+ "verified_parameters": {
+  "federal_basic_exclusion_2026": {
+   "value": 15000000,
+   "src": [
+    "irs_estate",
+    "irs_whatsnew"
+   ]
+  },
+  "federal_basic_exclusion_2027": {
+   "value": 15480000,
+   "src": [
+    "irs_2027"
+   ]
+  },
+  "annual_gift_exclusion_2026": {
+   "value": 19000,
+   "src": [
+    "irs_2027"
+   ]
+  },
+  "annual_gift_exclusion_2027": {
+   "value": 20000,
+   "src": [
+    "irs_2027"
+   ]
+  },
+  "california_estate_tax": {
+   "value": 0,
+   "note": "No California estate tax return required for deaths on or after 1 January 2005",
+   "src": [
+    "sco_estate",
+    "ftb_inheritance"
+   ]
+  },
+  "prop19_value_cap_2025_2027": {
+   "value": 1044586,
+   "src": [
+    "boe_lta25009",
+    "rtc63_2"
+   ]
+  },
+  "prop19_value_cap_prior_2021_2023": {
+   "value": 1000000,
+   "src": [
+    "boe_lta25009"
+   ]
+  },
+  "prop19_value_cap_prior_2023_2025": {
+   "value": 1022600,
+   "src": [
+    "boe_lta25009"
+   ]
+  },
+  "prop13_base_rate": {
+   "value": 0.01,
+   "src": [
+    "boe_pub29",
+    "scc_ratebook"
+   ]
+  },
+  "prop13_inflation_cap": {
+   "value": 0.02,
+   "src": [
+    "boe_pub29",
+    "scc_ratebook",
+    "rtc51"
+   ]
+  },
+  "sf_secured_rate_2026_27": {
+   "value": 0.0118162182,
+   "src": [
+    "sf_treas_rate"
+   ]
+  },
+  "sf_allowed_rent_increase_2026_27": {
+   "value": 0.016,
+   "src": [
+    "sf_rent_increase"
+   ]
+  },
+  "statewide_rent_cap_base": {
+   "value": 0.05,
+   "src": [
+    "civ1947_12"
+   ]
+  },
+  "statewide_rent_cap_max": {
+   "value": 0.1,
+   "src": [
+    "civ1947_12"
+   ]
+  },
+  "section121_exclusion_single": {
+   "value": 250000,
+   "src": [
+    "irs_p523"
+   ]
+  },
+  "section121_exclusion_joint": {
+   "value": 500000,
+   "src": [
+    "irs_p523"
+   ]
+  },
+  "federal_long_term_capital_gains_top": {
+   "value": 0.2,
+   "src": [
+    "irs_tc409"
+   ]
+  },
+  "federal_niit": {
+   "value": 0.038,
+   "src": [
+    "irs_tc559"
+   ]
+  },
+  "federal_unrecaptured_1250": {
+   "value": 0.25,
+   "src": [
+    "irs_tc409"
+   ]
+  },
+  "ssa_intermediate_cpi": {
+   "value": 0.024,
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  "ssa_intermediate_real_rate": {
+   "value": 0.023,
+   "src": [
+    "ssa_trustees"
+   ]
+  }
+ },
+ "assumptions": {
+  "ad_valorem_rate_a": {
+   "value": 0.0118,
+   "basis": "Assumption, not a fitted result. The owner's own bills cannot separate the two parts of the bill: assessed value and the fixed charges both grow at about 2% a year, so any rate between roughly 1.05% and 1.60% fits the data almost equally well. 1.18% is used because Proposition 13 limits the rate to 1% plus voter-approved bond debt, because the published San Francisco rate is 1.18162182%, and because it puts the fixed part of the bill at a plausible level. The property's tax rate area is not published on this site, so this is flagged for review.",
+   "src": [
+    "boe_pub29",
+    "scc_ratebook",
+    "sf_treas_rate"
+   ]
+  },
+  "ad_valorem_rate_b": {
+   "value": 0.0118162182,
+   "basis": "Published by the City and County of San Francisco for fiscal year 2026-27.",
+   "src": [
+    "sf_treas_rate"
+   ]
+  },
+  "fixed_charge_growth": {
+   "baseline": 0.025,
+   "basis": "Fixed charges are projected at the modelled inflation rate. Diagnostic: the fixed part of the Property B bill grew at 8.1% a year between 2016 and 2025, so this projection is deliberately conservative and understates the bill if that pace continues.",
+   "src": [
+    "sf_treas_rate",
+    "ssa_trustees"
+   ]
+  },
+  "house_growth": {
+   "baseline": 0.04,
+   "low": 0.025,
+   "high": 0.055,
+   "basis": "Scenario band. The FHFA all-transactions index for Property A's area compounded at 6.9% a year from 1976 to 2025 but 3.3% a year over the last twenty years, so the baseline sits below the long run.",
+   "src": [
+    "fred_hpi_a",
+    "fred_hpi_b"
+   ]
+  },
+  "inflation": {
+   "baseline": 0.025,
+   "low": 0.018,
+   "high": 0.03,
+   "basis": "Scenario band anchored on the 2026 Social Security Trustees intermediate assumption of 2.4% for the CPI-W, with the low and high cases taken from the Trustees' high-cost and low-cost assumptions. The 1975-2024 CPI-U compounded at 3.6% a year and the last twenty years at 2.6% a year.",
+   "src": [
+    "ssa_trustees",
+    "fred_cpi"
+   ]
+  },
+  "equity_return_nominal_gross": {
+   "baseline": 0.07,
+   "low": 0.05,
+   "high": 0.09,
+   "basis": "Scenario band. No official agency publishes an equity return assumption, so this is a stated scenario and not an official figure.",
+   "src": []
+  },
+  "equity_tax_drag": {
+   "baseline": 0.007,
+   "basis": "Assumption for dividend and turnover tax on a taxable brokerage account.",
+   "src": [
+    "irs_tc409"
+   ]
+  },
+  "treasury_yield_nominal": {
+   "baseline": 0.047,
+   "low": 0.036,
+   "high": 0.058,
+   "basis": "The 2026 Trustees intermediate assumption of a 2.3% real new-issue rate for 2044 and later plus 2.4% CPI-W gives about 4.7% nominal; the low and high cases use the Trustees' high-cost and low-cost pairs. The 2025 annual average 10-year yield was 4.29%.",
+   "src": [
+    "ssa_trustees",
+    "fred_gs10"
+   ]
+  },
+  "prop19_cap_growth": {
+   "baseline": 0.03,
+   "low": 0.0,
+   "high": 0.05,
+   "basis": "Assumption. The cap is reset every second February by the change in the California House Price Index, so its future path is not published. The low case holds it frozen at today's amount.",
+   "src": [
+    "boe_lta25009"
+   ]
+  },
+  "selling_cost_pct": {
+   "baseline": 0.055,
+   "low": 0.04,
+   "high": 0.07,
+   "basis": "Assumption for commission, escrow, title and transfer charges. Verified component: the county documentary transfer tax rate is set by Revenue and Taxation Code section 11911; whether the city adds its own transfer tax is flagged for review.",
+   "src": [
+    "rtc11911"
+   ]
+  },
+  "assessed_value_growth": {
+   "baseline": 0.02,
+   "basis": "The Proposition 13 inflation cap has been binding in every year of both assessment rolls supplied by the owner.",
+   "src": [
+    "boe_pub29",
+    "scc_ratebook"
+   ]
+  },
+  "combined_gain_tax_rate": {
+   "baseline": 0.371,
+   "basis": "Assumption for a high-income California seller with no offsetting losses: 20% federal capital gains plus 3.8% net investment income tax plus the 13.3% California top marginal rate, with no federal deduction taken for the state tax. State and federal rates are simply added, which is deliberately conservative.",
+   "src": [
+    "irs_tc409",
+    "irs_tc559",
+    "ftb_cg",
+    "ftb_rates",
+    "voterguide_p3"
+   ]
+  },
+  "depreciation_recapture_rate": {
+   "baseline": 0.411,
+   "basis": "Assumption: 25% federal unrecaptured section 1250 rate plus the 13.3% California top rate, plus NIIT where applicable.",
+   "src": [
+    "irs_tc409",
+    "ftb_cg"
+   ]
+  },
+  "horizon_years": 30,
+  "inheritance_years": [
+   2040,
+   2045,
+   2050
+  ]
+ }
 }
