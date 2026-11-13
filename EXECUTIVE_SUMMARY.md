@@ -1,38 +1,79 @@
 # Executive summary
 
-**Reviewed:** 13 November 2026. The published dashboard uses Property A for the home expected to be inherited through a trust around 2040–2050 and Property B for the three-unit building already owned by the heir. The difference in ownership is central: inheriting Property A may trigger a transfer-time reassessment and basis rules; Property B is already held and generates rental income. Public-facing figures are rounded to the nearest $10, and names, street addresses, postal codes, parcel identifiers, account information and trust particulars are omitted.
+Built 13 November 2026 from the same deterministic model as the site. Every dollar figure is rounded to the nearest $10. Anonymised throughout: **Property A** is the single-family home being inherited through a trust, in Santa Clara County; **Property B** is the three-unit building the heir already owns, in the City and County of San Francisco. No name, street address, postal parcel number, postal code, trust term or utility account appears here or on the site.
 
-**This is a planning model, not legal, tax, appraisal or investment advice.** The inputs include owner estimates and assumptions. Unverified values and missing facts are flagged in the public dashboard; do not treat a scenario output as a forecast.
+Planning analysis, not legal, tax or investment advice.
 
-## Conditional baseline conclusion
+## The recommendation
 
-The dashboard's baseline comparison favors **selling Property A soon after inheritance and reinvesting**, unless the heir genuinely wants to live there. On the baseline assumptions, renting Property A is weaker than selling because a rental combines a reassessed tax base, maintenance/operating costs and landlord risk. Living there can produce a different non-financial value and may qualify for the Proposition 19 parent-child exclusion if all legal and occupancy requirements are met; the model does not decide those questions.
+**Sell Property A soon after it is inherited, unless the heir genuinely wants to live in that house.** Selling leads in the baseline, in 9 of the 9 sensitivity combinations and in 4 of the 6 stress regimes, and it is the only path that does not depend on the heir wanting that house, being able to hold it as a principal residence, or finding a tenant at an implausible rent.
 
-Illustrative 2045 inheritance scenario, measured 30 years after the inheritance, nominal dollars, rounded to $10:
+## One condition outranks every number below
 
-| Path | Modelled terminal value | Modelled taxes and costs over 30 years |
-|---|---:|---:|
-| Sell at inheritance; invest in equities | $38,585,540 | $0 |
-| Sell at inheritance; reinvest at Treasury yields | $24,480,880 | $0 |
-| Move in and hold | $15,107,350 | $3,880,030 |
-| Move in for two years, then rent | $12,959,880 | $5,459,830 |
-| Rent from inheritance | $12,867,130 | $5,500,020 |
+The intergenerational exclusion in Revenue and Taxation Code section 63.2 applies **only** where the transfer is between a parent and a child, or between a grandparent and a grandchild whose parent has died. That is a condition of the exclusion, not a detail. If the relationship is different, no exclusion is available, the property is reassessed to full market value, every shelter figure below disappears, and the case for selling gets stronger. The trust document is the only thing that settles it and this analysis has not seen it. **Question A-1 on the questions page.**
 
-These figures are deterministic model outputs under stated growth, inflation, tax and cost assumptions, not a forecast. Different returns, property growth, inheritance timing, title/trust terms, tax rules, costs, personal use, and market conditions can change the comparison. The separate black-swan and historical-economy pages include adverse regimes and counter-cases; the baseline recommendation should not be mistaken for a guarantee.
+## Terminal value after thirty years
 
-## Key knowns and limits
+Selling and investing the proceeds, against keeping the house. Baseline: house prices 4.0% a year, inflation 2.5%, equities 7.0% gross of a 0.7% tax drag, Treasuries 4.7%, selling costs 5.5%.
 
-- **Property A:** owner-estimated current value about $3,100,000. The 2026-27 bill was not supplied. The historical assessment and bill series are owner-provided, rounded, and flagged; a parcel-level match was not performed.
-- **Property B:** owner-estimated current value about $1,800,000; owner reports two units rented for about $7,150 monthly and one unit available for the heir to occupy without displacing that rent. Rent and costs remain unverified owner inputs.
-- **Operating costs:** water, electricity/solar credits, insurance and maintenance are itemised on the running-cost pages. Property-specific premiums and some local tariffs could not be independently established; the missing figures remain blank/flagged rather than being invented.
-- **Property tax:** the model applies the stated California rules and distinguishes continued occupancy from rental use. The 2040–2050 figures are scenario projections; Prop 19 eligibility and transfer-date indexed limits must be rechecked when the transfer occurs.
-- **Federal estate tax:** the verified 2026 federal basic exclusion is $15,000,000 per person. Estate exposure depends on the decedent's total includible estate, lifetime taxable gifts, deductions, marital elections and applicable law at death; the inheritance amount alone does not establish whether tax is due. California currently has no state estate tax, but future law can change.
-- **Ownership and trust facts:** the deed, trust instrument, basis records and estate plan have not been reviewed. Property B is treated as already owned by the heir because that is the supplied fact; its inclusion in another person's estate is not assumed.
+| Inherited | Sell, equities | Sell, Treasuries | Live in it | Let it out |
+|---|---|---|---|---|
+| 2040 | $31,714,550 | $20,121,530 | $12,433,650 | $10,575,840 |
+| 2045 | $38,585,540 | $24,480,880 | $15,107,350 | $12,867,130 |
+| 2050 | $46,945,240 | $29,784,760 | $18,360,300 | $15,654,830 |
 
-## Before any decision
+The letting paths are credited with **no rent**, because no market rent for Property A has been supplied and no official source publishes one for a specific home. Read them as a floor, not as a comparison.
 
-First verify title, trust language, successor-trustee authority, the complete estate and prior taxable gifts, the beneficiary's eligibility and occupancy plan, current tax basis and liens. Then obtain actual insurance quotations, confirm the property-specific tax-rate area and utility/sewer tariffs, obtain a current independent appraisal and realistic rent/repair estimates, and rerun all options using the transfer-year law. The public **Questions**, **Suggestions for review**, **Flagged for Review**, **Inheritance**, and **Source ledger** pages provide the ordered checklist and official source links.
+## The numbers that drive it
 
-## Privacy caution
+- **The tax cliff.** The Property A bill is about $7,360 today. If the heir inherits in 2045 and does not move in, it becomes about $79,330. If the heir moves in and claims the exclusion, it becomes about $57,060.
+- **The shelter is smaller than the growth.** On a 2045 inheritance the exclusion shelters the old taxable value plus $1,886,640 against a market value of $6,531,230. Everything above the sum is reassessed.
+- **The tax-free window.** Property acquired from a decedent takes a basis equal to its value at death, so a sale soon afterwards pays about zero capital gains tax. In the 2045 baseline a $6,531,230 sale carries $0 of tax.
+- **What waiting costs.** Hold the same house thirty years and the tax on the eventual sale is about $4,910,950 after the section 121 exclusion; let it out as well and depreciation recapture pushes that to about $7,151,170.
+- **The break-even.** Keeping the home beats selling only if it appreciates 7.72% a year for thirty years. The verified index for this area compounded at 6.9% over fifty years and 3.3% over the last twenty.
+- **The break-even rent.** Letting would need about $30,180 a month, $362,120 a year, in 2045, to match selling and investing.
 
-The current website uses placeholders and excludes direct identifiers; rounding figures to $10 does not guarantee anonymity. The GitHub repository is public, and earlier commits or pull-request diffs may contain more precise values. The current site cannot certify removal of those historical copies. See the dashboard's privacy notice and repository audit before sharing the repository link.
+## The black swans, and what they do to the answer
+
+Real economies do not grow at a constant rate. In the verified record used here, annual consumer price inflation ran from minus 0.3% to plus 13.5%, and annual house price growth in Property A's area from minus 12.3% to plus 30.2%. The regimes below replay the worst stretches of that record against a 2045 inheritance over thirty years.
+
+| Regime | Inflation | House growth | Treasury | Best path |
+|---|---|---|---|---|
+| Great Inflation repeat | 9.8% | 18.9% | 10.13% | Live in it |
+| A long house price slump | 3.4% | -0.2% | 7.06% | Sell, reinvest in Treasuries |
+| A financial crisis crash | 2.2% | -5.6% | 3.51% | Sell, invest in equities |
+| A fast inflation burst then a rate shock | 5.6% | 8.3% | 2.78% | Live in it |
+| House prices flat for the whole horizon | 2.5% | 0.0% | 4.7% | Sell, invest in equities |
+| Low inflation and falling nominal house prices | 0.5% | -1.0% | 2.0% | Sell, invest in equities |
+
+Sold into equities or Treasuries wins five of the six. The exception is a repeat of the 1965-1982 Great Inflation or the 2021-2023 burst, where nominal house prices outran everything else. That is a bet on one neighbourhood repeating its best decades, not a plan.
+
+## Estate and inheritance tax
+
+- California has no estate tax and no inheritance tax. No California estate tax return is required for a death on or after 1 January 2005, and an inheritance is not California income.
+- The federal exclusion is $15,000,000 per person for 2026 and $15,480,000 for 2027. Portability lets a surviving spouse use a deceased spouse's unused exclusion if a timely return is filed.
+- Above the exclusion the federal rate reaches 40%. The tax is on the estate, not on the heir, and is due with Form 706 nine months after death, with an extension available.
+- The cash inheritance is deliberately not published and not modelled as a figure; the estate page works in anonymous scenario bands instead.
+
+## What is still open
+
+These sit on the flagged-for-review page, each with the publisher that holds the record:
+
+- The owner's market values, the property-tax and assessment histories, the rent and the utility and insurance estimates are the owner's own records, not checked against a county roll or a quote.
+- Property A's tax rate area and its published ad valorem rate. 1.18% is assumed and flagged.
+- A property-specific insurance premium for either building. The Department of Insurance publishes a statewide average and an online premium survey, not an average for a postal area.
+- A market rent for Property A, and the seller's actual selling costs.
+- Whether the trust actually holds title, and whether the transfer is between a parent and a child.
+
+## How this was checked
+
+Every rule, threshold and rate on the site was read on the publishing agency's own domain and is linked from the row that uses it. The ledger holds 107 sources. A build-time verifier fails if a table row has no official link, if the build is not reproducible, if any internal link or fragment does not resolve, or if any published dollar figure is not a multiple of $10. A separate check recomputed the published relationships from the inputs.
+
+## Read next
+
+- `index.html` — the dashboard
+- `decision.html` — the five paths, the sensitivity and the break-evens
+- `questions.html` — what is unknown and how to find it, starting with A-1
+- `suggestions.html` — the review queue; nothing there has been implemented
+- `review.html` — every unverified figure and modelling caveat
+- `sources.html` — the full ledger
