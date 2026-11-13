@@ -1245,6 +1245,33 @@
    "checked": "Opened on the utility's official domain on 2026-11-13; the CPUC Water Division approval letter and the Schedule No. 1 general metered service sheets were read directly.",
    "supports": "A CPUC-regulated utility's approved residential tariff sheets for 2026: a monthly readiness-to-serve charge by meter size plus tiered usage charges per 100 cubic feet, with a territory description that names the parts of the county the utility serves. Cited as a discovery path for the Property A water flag.",
    "limits": "Discovery path only. Which utility actually serves the property is not identified, because the privacy rule excludes address-level identification, and no rate from this tariff is used in any figure on this site. The owner's water estimate stands until the bill and provider are confirmed against this tariff or another utility's published tariff."
+  },
+  {
+   "id": "sjw_tariff",
+   "publisher": "San Jose Water Company",
+   "title": "Advice Letter 628A: CPUC Schedule No. 1, General Metered Service, effective 1 July 2026",
+   "url": "https://www.sjwater.com/media/qeeh013c/adv-628a_web.pdf",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "Schedule No. 1 applies to portions of San Jose, Santa Clara and contiguous county territory, including the area where Property A stands. Effective 1 July 2026 the monthly service charge for a 5/8 x 3/4-inch or 3/4-inch meter is about $80 (the exact amount is on the linked tariff sheet), and the residential quantity rate per hundred cubic feet rises in three steps: a low rate for the first 6, a middle rate from 6 to 12, and roughly triple the low rate above 12. Filed under CPUC Decision D.24-12-077 and Resolution 2026-22.",
+   "limits": "A CPUC tariff schedule, not a bill. Guest charges, CPUC fees and utility users' taxes are not in these lines. The parcel's own meter size and usage are not published here, so the derived bill range on the costs page is computed, not read."
+  },
+  {
+   "id": "cusd_rates",
+   "publisher": "Sanitary district serving the Property A area",
+   "title": "Sewer service and use charges: public hearing notice for FY 2026-2027",
+   "url": "https://cupertinosanitarydistrict.org/i/u/10207194/f/Home/Corrected_Notice_of_Public_Hearing-Rate_Increase_of_5__FY2025-26.pdf",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "Single family residential sewer service charge of about $800 a year in FY 2025-2026 (exact amount on the linked notice); about $880 in a pump station zone; about $610 for a multi family unit; about $590 for an accessory dwelling unit. The notice proposed an increase of up to 5 percent for FY 2026-2027.",
+   "limits": "The FY 2026-2027 column in this notice was a proposal. What was adopted is recorded in the district's own minutes (cusd_minutes). The district's name and the parcel's own district and zone are withheld from this site; the parcel's charge must be read from its tax bill."
+  },
+  {
+   "id": "cusd_minutes",
+   "publisher": "Sanitary district serving the Property A area",
+   "title": "Board minutes of 20 May 2026, in the 3 June 2026 agenda packet: 3 percent rate increase adopted",
+   "url": "https://cupertinosanitarydistrict.org/i/u/10207194/f/Agendas/2026-06-03_Agenda_Packet.pdf",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "At the 20 May 2026 public hearing the district board approved Ordinance No. 137 with a sewer rate increase of 3 percent for FY 2026-2027, below the 5 percent maximum in the notice, effective 1 July 2026.",
+   "limits": "The minutes record the percentage, not the resulting schedule. The FY 2026-2027 single family figure shown on this site is computed from the FY 2025-2026 charge and this 3 percent, and is labelled as computed."
   }
  ]
 }

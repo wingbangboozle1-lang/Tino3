@@ -18,6 +18,7 @@ SRC_DOC = json.loads((ROOT / "assets" / "sources.json").read_text(encoding="utf-
 SOURCES = {s["id"]: s for s in SRC_DOC["sources"]}
 INPUTS = json.loads((DATA / "inputs.json").read_text(encoding="utf-8"))
 MODEL = json.loads((DATA / "model.json").read_text(encoding="utf-8"))
+ECON = json.loads((DATA / "economy.json").read_text(encoding="utf-8"))
 
 A = INPUTS["property_a"]
 B = INPUTS["property_b"]
@@ -614,7 +615,7 @@ def page_property_a() -> str:
     cost_rows = [
         f"<td>Water</td><td>{m(A['annual_costs']['water']['low'])} to {m(A['annual_costs']['water']['high'])}</td><td>{m(A['annual_costs']['water']['mid'])}</td>"
         f'<td><span class="badge unverified">owner estimate</span></td>'
-        + src_cell([], "No official rate checked"),
+        + src_cell(["sjw_tariff"], "Provider tariff, now read"),
         f"<td>Electricity, net of solar export credit</td><td>{m(A['annual_costs']['electricity']['low'])} to {m(A['annual_costs']['electricity']['high'])}</td><td>{m(A['annual_costs']['electricity']['mid'])}</td>"
         f'<td><span class="badge unverified">owner estimate</span></td>'
         + src_cell(["cpuc_nem"], "Tariff rules"),
@@ -630,6 +631,47 @@ def page_property_a() -> str:
     ]
     costs = table("Property A annual running costs",
                   ["Cost", "Range supplied", "Used in the model", "Status", "Source"], cost_rows)
+
+    # Water and sewer context, computed from the official tariffs read on 13 November 2026.
+    # The unrounded tariff constants live only here; everything published is money10().
+    SVC = 78.64          # monthly service charge, 5/8 x 3/4-inch or 3/4-inch meter
+    T1, T2, T3 = 4.9692, 7.4167, 14.1659   # per Ccf: first 6, 6 to 12, above 12
+
+    def water_bill(ccf: float) -> float:
+        use = T1 * min(ccf, 6.0) + T2 * max(0.0, min(ccf - 6.0, 6.0)) + T3 * max(0.0, ccf - 12.0)
+        return SVC + use
+
+    sewer_fy2526 = 802.14
+    sewer_fy2627 = sewer_fy2526 * 1.03   # the adopted 3% increase, minutes of 20 May 2026
+
+    tariff_rows = [
+        f"<td>Water service charge, 5/8 x 3/4-inch or 3/4-inch meter</td><td>{m(money10(SVC))} a month</td>"
+        + src_cell(["sjw_tariff"], "CPUC tariff, from 1 July 2026"),
+        f"<td>Derived water bill at 8 Ccf a month (about 6,000 gallons)</td><td>{m(money10(water_bill(8)))}</td>"
+        + src_cell(["sjw_tariff"], "Computed from the tariff"),
+        f"<td>Derived water bill at 12 Ccf a month (about 9,000 gallons)</td><td>{m(money10(water_bill(12)))}</td>"
+        + src_cell(["sjw_tariff"], "Computed from the tariff"),
+        f"<td>Derived water bill at 15 Ccf a month (about 11,000 gallons)</td><td>{m(money10(water_bill(15)))}</td>"
+        + src_cell(["sjw_tariff"], "Computed from the tariff"),
+        f"<td>Sewer service charge, single family, FY 2025-26</td><td>{m(money10(sewer_fy2526))} a year</td>"
+        + src_cell(["cusd_rates"], "District hearing notice"),
+        f"<td>Sewer rate increase adopted for FY 2026-27</td><td>3%, from 1 July 2026</td>"
+        + src_cell(["cusd_minutes"], "Board minutes, 20 May 2026"),
+        f"<td>Sewer service charge, single family, FY 2026-27, derived</td><td>{m(money10(sewer_fy2627))} a year</td>"
+        + src_cell(["cusd_minutes", "cusd_rates"], "Computed from the two official figures"),
+    ]
+    tariffs = table(
+        "Water and sewer: what the official tariffs say",
+        ["Item", "Amount", "Source"], tariff_rows,
+        note="Rounded to the nearest $10; the exact tariff amounts are on the linked official pages. "
+             "Usage is billed in three tiers per hundred cubic feet, the top tier roughly triple the "
+             "first; the exact tier amounts are on the linked tariff sheet. The provider's territory "
+             "covers the area where Property A stands. The owner's water estimate of $100 to $150 a "
+             "month implies usage at the low end of the derived range, and excludes the guest charges, "
+             "CPUC fees and utility users' taxes a real bill carries. Sewer was never supplied by the "
+             "owner; the district's published charges are shown as context, and the parcel's own "
+             "district, zone and charge must be read from its tax bill. Neither figure is added to the "
+             "model totals.")
 
     return (
         table("Property A at a glance",
@@ -657,8 +699,26 @@ Proposition 13 protects that gap only until ownership changes. When the trust tr
 value resets to market value, less the Proposition 19 shelter of about {m(p45['prop19_cap'])} if the heir moves in
 within a year and files the claim, or with no shelter at all if not. Either way this is the largest single change
 in the whole analysis, and it happens by operation of law whether or not anyone plans for it.</p>""")
+        + table("How the county builds a property tax rate (published rate book, FY 2025-26)",
+                ["Component", "Rate", "Source"],
+                [("<td>1% maximum levy, applied to every parcel</td><td>1.00000%</td>"
+                  + src_cell(["scc_ratebook", "boe_pub29"], "Rate book summary")),
+                 ("<td>County Retirement Levy</td><td>0.03880%</td>"
+                  + src_cell(["scc_ratebook"], "Rate book summary")),
+                 ("<td>County Library Retirement Levy</td><td>0.00240%</td>"
+                  + src_cell(["scc_ratebook"], "Rate book summary")),
+                 ("<td>County Housing Bond 2016</td><td>0.00560%</td>"
+                  + src_cell(["scc_ratebook"], "Rate book summary")),
+                 ("<td>City, school and special-district voter-approved bonds</td><td>varies by tax rate area</td>"
+                  + src_cell(["scc_ratebook"], "816 areas listed in the book"))],
+                note="The county publishes 816 tax rate areas for FY 2025-26; the components above are the "
+                     "countywide ones listed in the book's own summary. The parcel's own rate area and total "
+                     "rate are deliberately not published on this site. The model's 1.18% ad valorem "
+                     "assumption stays flagged on the review page, and the parcel's exact rate must be read "
+                     "from its own tax bill.")
         + reassess
         + costs
+        + tariffs
         + callout("solar", "Solar and the electricity credit", """
 <p>The owner reports that the solar export credit currently exceeds usage, producing a small net credit rather than
 a bill. Two cautions. First, net energy metering tariffs are closed to new enrolment and since 15 April 2023 new
@@ -1411,8 +1471,69 @@ def page_economy() -> str:
 <p>The <a href="black-swan.html">black swan page</a> uses this record rather than invented scenarios. Every
 number below comes from one of four series hosted by the Federal Reserve Bank of St. Louis on behalf of the
 Bureau of Labor Statistics, the Federal Housing Finance Agency and the Board of Governors. Where a series stops
-before 2025, the table shows a dash rather than filling the gap.</p>""")
+before 2025, the table shows a dash rather than filling the gap.</p>
+<p>The tables after the annual record answer the objection that a single constant rate is unrealistic, in the
+one way the record supports: the fifty years to 2026 are sliced into ten-year blocks and redrawn two thousand
+times, so the projections become distributions instead of one guess. The last tables show what the record's
+inflation does to the rules that are written in fixed nominal dollars.</p>""")
         + tbl
+        + callout("note", "Two thousand fifty-year economies, redrawn from the record", f"""
+<p>Ten-year blocks of the official annual record are drawn with replacement - {ECON['bootstrap']['blocks']} blocks
+where both the house price series and the consumer price series are present - into
+{ECON['bootstrap']['draws']:,} fifty-year paths. House and inflation history move together inside a block,
+as they did in the record. The percentile of each outcome is shown against the constant-model case.</p>""")
+        + table("What the record's own history does to Property A's value",
+                ["Outcome across the draws", "5th percentile", "Median", "95th percentile",
+                 "Constant-model case", "Source"],
+                [f"<td>{esc(r['key'])}</td>"
+                 + (f"<td>{m(r['p05'])}</td><td>{m(r['p50'])}</td><td>{m(r['p95'])}</td>"
+                    f"<td>{m(r['constant'])}</td>" if r['unit'] == 'money' else
+                    f"<td>{pc(r['p05'], 2)}</td><td>{pc(r['p50'], 2)}</td><td>{pc(r['p95'], 2)}</td>"
+                    f"<td>{pc(r['constant'], 2)}</td>")
+                 + src_cell(["fred_hpi_a", "fred_cpi"], "Bootstrap source series")
+                 for r in ECON["bootstrap"]["rows"]],
+                note="The record's median is well above the model's 4% because the fifty years to 2026 "
+                     "include the 1970s and 1980s. The model's constant sits near the record's 5th "
+                     "percentile, not at its middle: it is a deliberately conservative anchor, and the "
+                     "decision page's conclusions do not depend on the median being this high.")
+        + table("How often each outcome happens across the draws",
+                ["Share of the two thousand draws", "Share", "Source"],
+                [f"<td>{esc(s['key'])}</td><td><strong>{s['value'] * 100:.1f}%</strong></td>"
+                 + src_cell(["fred_hpi_a", "fred_cpi"], "Bootstrap source series")
+                 for s in ECON["bootstrap"]["shares"]]
+                + [f"<td>{esc(ECON['bootstrap']['wins']['case'])}</td>"
+                   f"<td><strong>{ECON['bootstrap']['wins']['sell_wins_share'] * 100:.1f}%</strong></td>"
+                   + src_cell(["fred_hpi_a", "fred_cpi"], "Bootstrap source series")],
+                note=ECON["bootstrap"]["wins"]["note"])
+        + table("The lesser-of rule under the record's inflation paths",
+                ["Outcome across the draws", "Property A", "Property B", "Source"],
+                [("<td>Share of fifty years in which the inflation-adjusted base year value falls "
+                  "below the 2%-capped value, median draw</td>"
+                  f"<td>{ECON['lesser_of']['a']['share_years_indexed_below_cap_p50'] * 100:.1f}%</td>"
+                  f"<td>{ECON['lesser_of']['b']['share_years_indexed_below_cap_p50'] * 100:.1f}%</td>"
+                  + src_cell(["rtc51", "fred_cpi"], "Rule and price history")),
+                 ("<td>Total ad valorem tax difference over fifty years, median draw</td>"
+                  f"<td>{m(ECON['lesser_of']['a']['saving_p50'])}</td>"
+                  f"<td>{m(ECON['lesser_of']['b']['saving_p50'])}</td>"
+                  + src_cell(["rtc51", "fred_cpi"], "Rule and price history")),
+                 ("<td>Same, 95th-percentile draw (the low-inflation 2010s drawn repeatedly)</td>"
+                  f"<td>{m(ECON['lesser_of']['a']['saving_p95'])}</td>"
+                  f"<td>{m(ECON['lesser_of']['b']['saving_p95'])}</td>"
+                  + src_cell(["rtc51", "fred_cpi"], "Rule and price history"))],
+                note=ECON["lesser_of"]["note"] + " A saving here reduces the bill; it never makes "
+                     "holding the home better than selling on this site's numbers.")
+        + table("What inflation does to the fixed nominal thresholds by 2045",
+                ["Rule", "Amount today", "Rule for change", "Projected nominal in 2045",
+                 "Same amount in 2026 dollars", "Source"],
+                [f"<td>{esc(t['item'])}</td><td>{m(t['nominal_2026'])}</td><td>{esc(t['rule'])}</td>"
+                 f"<td>{m(t['nominal_2045'])}</td><td><strong>{m(t['real_2045'])}</strong></td>"
+                 + (src_cell(t["sources"], "Official rule") if t["sources"]
+                    else '<td class="src-cell"><span class="src-label">no official source</span></td>')
+                 for t in ECON["thresholds"]],
+                note="Computed at the modelled inflation rate of 2.5% a year and rounded to the nearest "
+                     "$10. The section 121 exclusion has been fixed since 1997; the Proposition 19 "
+                     "excluded amount is reset every second February from the FHFA California house "
+                     "price index, so it grows with house prices, not with the things the heir buys.")
         + table("What the record shows, in one table",
                 ["Fact", "Value", "Source"],
                 [(f"<td>{esc(a)}</td><td>{esc(b)}</td>" + src_cell(c, "Official source"))
@@ -1946,10 +2067,8 @@ def page_review() -> str:
          "Published by the City and County of San Francisco for fiscal year 2026-27",
          "None. This one is verified."),
         ("Property A water", f"{m(A['annual_costs']['water']['low'])} to {m(A['annual_costs']['water']['high'])} a year",
-         "Owner estimate",
-         "Read the bill and the provider's published tariff. One CPUC-regulated utility whose published "
-         "territory includes portions of the county publishes its approved 2026 tariff sheets; confirm the "
-         "provider on the bill before comparing."),
+         "Owner estimate. A CPUC-approved tariff for the area's water utility is now read and linked on the property page, and a discovery-path source is on the ledger; the provider printed on the parcel's own bill is still unconfirmed, and the owner's bills are unchecked against any tariff.",
+         "Confirm the provider on the bill, then compare twelve months of bills with the derived tariff range."),
         ("Property A electricity, net of solar", f"{m(A['annual_costs']['electricity']['low'])} to {m(A['annual_costs']['electricity']['high'])} a year",
          "Owner estimate", "Read twelve months of bills and the interconnection agreement."),
         ("Property B water", f"{m(B['annual_costs']['water']['low'])} to {m(B['annual_costs']['water']['high'])} a year",
@@ -2014,8 +2133,8 @@ def page_review() -> str:
          "Each is listed on the questions page. None is modelled."),
         ("The inheritance year is a range, not a date",
          "2040, 2045 and 2050 are all modelled. The plan should be revisited when the timing is known."),
-        ("The property tax lesser-of rule is not modelled",
-         "If house prices fall below the inflation-adjusted assessed value, the assessed value can be reduced. That is assessor-applied and would help the hold paths in a slump."),
+        ("The property tax lesser-of rule is modelled only under the drawn inflation paths",
+         "The economy page applies the section 51 rule along two thousand drawn inflation paths. In the median draw the 2% cap binds in every year; only paths dominated by the low-inflation 2010s produce a reduction, worth at most about $2,260 over fifty years on Property A. It is assessor-applied in practice."),
         ("The Proposition 19 shelter path after 2027 is a projection",
          "The real amount is set every second February from the California house price index and is not published in advance. Three percent a year is assumed and flagged."),
         ("A sheltered base is assumed to survive a later move-out",
@@ -2034,7 +2153,7 @@ def page_review() -> str:
         "Depreciation follows a simple rule": ["irs_p527"],
         "No mortgage, no 1031 exchange, no instalment sale, no gifting": [],
         "The inheritance year is a range, not a date": [],
-        "The property tax lesser-of rule is not modelled": ["rtc51", "boe_pub29"],
+        "The property tax lesser-of rule is modelled only under the drawn inflation paths": ["rtc51", "boe_pub29", "fred_cpi"],
         "The Proposition 19 shelter path after 2027 is a projection": ["boe_lta25009"],
         "A sheltered base is assumed to survive a later move-out": ["rtc63_2_eligibility", "boe_prop19"],
         "Every reassessment figure is conditional on the parent-and-child relationship": ["rtc63_2_eligibility"],
@@ -2057,9 +2176,9 @@ def page_review() -> str:
         ("Prior commits and pull-request diffs may contain finer figures",
          "Rounding to $10 applies to what this site publishes. It does not change what earlier commits contain.",
          "Older commits, pull-request diffs, forks and external copies are separate exposure surfaces. Nothing on this site can certify them erased."),
-        ("Two pull requests remain open, and both are board records",
-         "PR 65 and PR 66 recorded a publication blocker on 12 November 2026. The blocker they describe, the legacy Pages route serving the whole repository, was closed by later merges. Neither contains work this edition depends on.",
-         "They are left open rather than silently closed. Nothing on this site depends on them."),
+        ("Pull request records",
+         "PRs 62 and 70 were merged. PRs 65 and 66 recorded a live privacy-publication blocker on 12 November 2026; the blocker they describe, the legacy Pages route serving the whole repository, was closed by the restored configuration guard and audited live. Both were closed as superseded on 13 November 2026 with an explanatory comment, not silently.",
+         "The coordination board records the full disposition. Nothing on this site depends on them."),
         ("The site is published from the repository root by Jekyll",
          "The GitHub Pages source is set to the main branch at the repository root, with a configuration file excluding everything outside the published allowlist. A separate workflow also builds an allowlisted artifact.",
          "The publishing route should be confirmed live after every change. The exclusion list is the control that keeps the rest of the repository out of the site."),
