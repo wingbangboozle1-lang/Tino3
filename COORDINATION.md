@@ -9,7 +9,7 @@
 | O-1 Research and, where officially confirmable, close the four unconfirmed ledger items | **done** — results below | `arena/0dcaf9f7-tino3` | `assets/sources.json` (append only), `scripts/build.py` (affected row sections), `README.md`, `EXECUTIVE_SUMMARY.md` (generated counts) |
 | O-2 Reconcile `scripts/economy.py` / `assets/data/economy.json` with the current `scripts/model.py` and publish the module's unique outputs | **done** — results below | `arena/0dcaf9f7-tino3` | `scripts/economy.py`, `assets/data/economy.json`, `scripts/build.py` (economy page section), `assets/sources.json` (append only) |
 | O-3 Verify and disposition the stale privacy-blocker PRs #65 and #66 | **done** — both closed as superseded with explanatory comments; see below | `arena/0dcaf9f7-tino3` | `COORDINATION.md` (this section only); comments on PRs #65 and #66 |
-| O-4 Final integration: rebuild, every gate, PR to `main`, merge, confirm the Pages deploy, record results | **done** — this pull request; merge result recorded on the PR | `arena/0dcaf9f7-tino3` | `COORDINATION.md` (this section only) |
+| O-4 Final integration: rebuild, every gate, PR to `main`, merge, confirm the Pages deploy, record results | **done** — see Publication result below | `arena/0dcaf9f7-tino3` | `COORDINATION.md` (this section only) |
 
 ### O-1 result: the four unconfirmed ledger items
 
@@ -25,6 +25,13 @@
 ### O-3 result: PRs #65 and #66 dispositioned
 
 Their claim (12 November 2026, ~22:15 UTC) was that the live legacy Pages route served the whole repository — for example `/assets/privacy.json` — and that the Actions source could not be set (HTTP 403). Re-verified this session: the restored `_config.yml` guard excludes everything outside the 19-file public allowlist and `verify_legacy.py --config-only` fails closed on any bypass; the Pages API reports `build_type: legacy`, `source: main:/`, `status: built` with no error at the current main head; the live site was fetched and serves the dashboard with its privacy notice; all five local gates pass. The two PRs were closed as superseded with a comment recording what they flagged, what fixed it, what was re-verified and the two residuals that remain owner decisions (the 403 needs an administrator; public git history retains earlier, finer figures). The audit row on the Flagged for Review page was rewritten to record the closure; the parallel session had chosen to leave the PRs open, and this session's closure with an explanatory comment supersedes that choice — recorded here per the collision rule.
+
+### Publication result
+
+- **Merged PR:** https://github.com/wingbangboozle1-lang/Tino3/pull/85 — merged to `main` at 2026-11-13T12:13:09Z, merge commit `3babbc29e66ec1cd9f7f05ebeb0820bb9297b4a6`. PR check: `verify` pass (run 43423191163).
+- **Checks on the merge commit:** `Verify static site` run 43423312083 passed; `Deploy GitHub Pages` run 43423312214 completed; the legacy `pages build and deployment` run 43423310835 completed. PR #86 (board record only, merged 37 seconds later) re-ran all three on `main` at `480031a`, all success.
+- **Live checks:** the Pages API reports the site built with no error; the fetched live economy page shows the bootstrap distribution tables with the published figures, and the fetched live Property A page shows the water and sewer tariff table with its source links. Live site: https://wingbangboozle1-lang.github.io/Tino3/
+- **PRs #65 and #66** closed as superseded with explanatory comments; no open pull requests remain.
 
 ### Second collision: PR #84 (`arena/8e10089d-tino3`) landed while this section was being written
 
