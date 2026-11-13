@@ -1,6 +1,10 @@
-"""Render the privacy-safe, static public edition.
+"""Render the anonymised quantitative decision edition.
 
-This builder has no property model, user inputs, values, projections, analytics or network calls.
+Reads  : assets/sources.json, assets/data/inputs.json, assets/data/model.json
+Writes : the public HTML pages in the repository root
+
+Deterministic: no network calls, no randomness, no timestamps in the output
+other than the stated build date.
 """
 from __future__ import annotations
 
@@ -9,635 +13,1870 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE_PATH = ROOT / "assets" / "sources.json"
-PAGES = [
-    "index.html", "executive-summary.html", "decision.html", "property-a.html",
-    "property-b.html", "costs.html", "projections.html", "stress.html", "taxes.html",
-    "inheritance.html", "questions.html", "suggestions.html", "review.html", "audit.html",
-    "sources.html",
-]
+DATA = ROOT / "assets" / "data"
+SRC_DOC = json.loads((ROOT / "assets" / "sources.json").read_text(encoding="utf-8"))
+SOURCES = {s["id"]: s for s in SRC_DOC["sources"]}
+INPUTS = json.loads((DATA / "inputs.json").read_text(encoding="utf-8"))
+MODEL = json.loads((DATA / "model.json").read_text(encoding="utf-8"))
+
+A = INPUTS["property_a"]
+B = INPUTS["property_b"]
+V = INPUTS["verified_parameters"]
+ASM = INPUTS["assumptions"]
+BUILD_DATE = "13 November 2026"
+
 NAV_GROUPS = [
     ("Start here", ["index.html", "executive-summary.html", "decision.html"]),
-    ("Property paths", ["property-a.html", "property-b.html", "costs.html", "projections.html"]),
-    ("Rules and risks", ["taxes.html", "inheritance.html", "stress.html"]),
+    ("The two properties", ["property-a.html", "property-b.html", "ownership-distinction.html"]),
+    ("Money over time", ["costs.html", "projections.html", "taxes.html"]),
+    ("Rules and the estate", ["inheritance.html", "estate.html", "laws.html"]),
+    ("Irregular economies", ["black-swan.html", "economy.html"]),
     ("Review before deciding", ["questions.html", "suggestions.html", "review.html"]),
-    ("Evidence", ["audit.html", "sources.html"]),
+    ("Evidence", ["sources.html"]),
 ]
-
-SOURCES_DOC = json.loads(SOURCE_PATH.read_text(encoding="utf-8"))
-SOURCES = {item["id"]: item for item in SOURCES_DOC["sources"]}
-
-
-def esc(value: object) -> str:
-    return html.escape(str(value), quote=True)
-
-
-def source_link(source_id: str, label: str | None = None) -> str:
-    item = SOURCES[source_id]
-    text = label or f"{item['publisher']} — {item['title']}"
-    return (f'<a class="source-link" href="{esc(item["url"])}" '
-            f'target="_blank" rel="noopener noreferrer">{esc(text)}</a>')
-
-
-def list_html(items: list[str], ordered: bool = False) -> str:
-    tag = "ol" if ordered else "ul"
-    return f"<{tag}>" + "".join(f"<li>{item}</li>" for item in items) + f"</{tag}>"
-
-
-def fact_table(caption: str, headers: list[str], rows: list[tuple[list[str], str | list[str]]]) -> str:
-    """Render factual rows with one or more relevant official-source links."""
-    head = "".join(f"<th scope=\"col\">{esc(value)}</th>" for value in headers)
-    head += '<th scope="col">Official source</th>'
-    body = []
-    for cells, source_ids in rows:
-        source_ids = [source_ids] if isinstance(source_ids, str) else source_ids
-        assert source_ids and all(source_id in SOURCES for source_id in source_ids), source_ids
-        rendered = "".join(f"<td>{cell}</td>" for cell in cells)
-        links = "<br>".join(source_link(source_id) for source_id in source_ids)
-        body.append(f'<tr class="fact-row">{rendered}<td>{links}</td></tr>')
-    return (f'<div class="table-wrap"><table><caption>{esc(caption)}</caption>'
-            f'<thead><tr>{head}</tr></thead><tbody>{"".join(body)}</tbody></table></div>')
+PAGE_TITLES = {
+    "index.html": "Dashboard",
+    "executive-summary.html": "Executive summary",
+    "decision.html": "The decision",
+    "property-a.html": "Property A - the home being inherited",
+    "property-b.html": "Property B - the building already owned",
+    "ownership-distinction.html": "Why the two properties are not the same",
+    "costs.html": "Running costs",
+    "projections.html": "Year by year projections",
+    "taxes.html": "Income tax on each path",
+    "inheritance.html": "Inheriting through a trust, step by step",
+    "estate.html": "Estate and inheritance tax thresholds",
+    "laws.html": "What the law says now, and what may change",
+    "black-swan.html": "Black swan conditions",
+    "economy.html": "The verified historical record",
+    "questions.html": "Questions to answer before deciding",
+    "suggestions.html": "Suggestions for review",
+    "review.html": "Flagged for review and repository audit",
+    "sources.html": "Source ledger",
+}
 
 
-def _source_ids(value: str | list[str]) -> list[str]:
-    ids = [value] if isinstance(value, str) else value
-    assert ids and all(source_id in SOURCES for source_id in ids), ids
-    return ids
+# ------------------------------------------------------------------ helpers --
+BLANK_CELL = '<span class="blank">not supplied</span>'
 
 
-def _source_cell(value: str | list[str], label: str = "Official source / validation anchor") -> str:
-    links = "<br>".join(source_link(source_id) for source_id in _source_ids(value))
-    return f'<td><span class="source-label">{esc(label)}</span><br>{links}</td>'
+def esc(x) -> str:
+    return html.escape(str(x), quote=True)
 
 
-def blank_table(
-    caption: str,
-    headers: list[str],
-    rows: list[list[str]],
-    row_sources: list[str | list[str]] | None = None,
-) -> str:
-    """Render a worksheet whose unknown values stay blank and whose rows have official anchors."""
-    if row_sources is None:
-        row_sources = ["boe_assessor_contacts"] * len(rows)
-    assert len(rows) == len(row_sources), (len(rows), len(row_sources))
-    head = "".join(f"<th scope=\"col\">{esc(value)}</th>" for value in headers)
-    head += '<th scope="col">Official source / validation anchor</th>'
-    body = []
-    for cells, source_ids in zip(rows, row_sources):
-        rendered = []
-        for cell in cells:
-            text = str(cell)
-            rendered.append(text if text.lstrip().startswith("<td") else f"<td>{text}</td>")
-        rendered.append(_source_cell(source_ids))
-        body.append('<tr class="worksheet-row">' + "".join(rendered) + "</tr>")
-    return (f'<div class="table-wrap"><table><caption>{esc(caption)}</caption>'
-            f'<thead><tr>{head}</tr></thead><tbody>{"".join(body)}</tbody></table></div>')
+def money10(x: float) -> int:
+    """Round to the nearest $10, halves up, exactly as the model does."""
+    return int((abs(x) + 5.0) // 10 * 10) * (1 if x >= 0 else -1)
 
 
-def plain_table(
-    caption: str,
-    headers: list[str],
-    rows: list[list[str]],
-    row_sources: list[str | list[str]] | None = None,
-    row_class: str = "proposal-row",
-) -> str:
-    """Render a proposal or unresolved-item register with an official validation anchor per row."""
-    if row_sources is None:
-        row_sources = ["boe_assessor_contacts"] * len(rows)
-    assert len(rows) == len(row_sources), (len(rows), len(row_sources))
-    head = "".join(f"<th scope=\"col\">{esc(value)}</th>" for value in headers)
-    head += '<th scope="col">Official source / validation anchor</th>'
-    body = []
-    for cells, source_ids in zip(rows, row_sources):
-        body.append(f'<tr class="{esc(row_class)}">' + "".join(f"<td>{cell}</td>" for cell in cells) + _source_cell(source_ids) + "</tr>")
-    return (f'<div class="table-wrap"><table><caption>{esc(caption)}</caption>'
-            f'<thead><tr>{head}</tr></thead><tbody>{"".join(body)}</tbody></table></div>')
+def m(x) -> str:
+    """Format a rounded dollar amount."""
+    if x is None:
+        return '<span class="blank">not supplied</span>'
+    neg = x < 0
+    v = abs(int(x))
+    s = f"${v:,}"
+    return f"&minus;{s}" if neg else s
 
 
-def card(title: str, text: str, href: str | None = None, link_text: str = "Open section") -> str:
-    link = f'<a href="{esc(href)}">{esc(link_text)} →</a>' if href else ""
-    return f'<article class="card"><h3>{esc(title)}</h3><p>{text}</p>{link}</article>'
+def pcf(x, places=1) -> str:
+    """Format a fraction such as 0.04 as a percentage."""
+    if x is None:
+        return '<span class="blank">not supplied</span>'
+    return f"{x * 100:.{places}f}%"
 
 
-def page_shell(filename: str, title: str, description: str, body: str) -> str:
+def pc(x, places=2) -> str:
+    if x is None:
+        return '<span class="blank">not supplied</span>'
+    return f"{x:.{places}f}%"
+
+
+def slink(sid: str, label: str | None = None) -> str:
+    s = SOURCES[sid]
+    text = label or f"{s['publisher']}"
+    return (f'<a class="src" href="{esc(s["url"])}" target="_blank" '
+            f'rel="noopener noreferrer" title="{esc(s["title"])}">{esc(text)}</a>')
+
+
+def src_cell(ids, label="Official source"):
+    ids = [ids] if isinstance(ids, str) else list(ids)
+    missing = [i for i in ids if i not in SOURCES]
+    assert not missing, f"unknown source ids: {missing}"
+    links = ("<br>".join(slink(i) for i in ids) if ids else
+             '<span class="blank">no official source</span><br>'
+             '<a class="src" href="review.html#register">Logged on the register</a>')
+    return f'<td class="src-cell"><span class="src-label">{esc(label)}</span><br>{links}</td>'
+
+
+CORE_SOURCES = ["rtc63_2", "boe_pub29", "irs_basis", "irs_tc409"]
+
+
+def method_cell(href: str, text: str = "Model output", sources=None):
+    """A computed row. Links the method page and the official rules the model implements."""
+    ids = list(sources) if sources else CORE_SOURCES
+    links = "<br>".join(slink(i) for i in ids)
+    return (f'<td class="src-cell"><span class="src-label">{esc(text)}</span><br>'
+            f'<a class="src" href="{esc(href)}">Inputs and method</a><br>{links}</td>')
+
+
+def table(caption, headers, rows, cls="", note=None):
+    head = "".join(f"<th scope=\"col\">{esc(h)}</th>" for h in headers)
+    body = "".join(f"<tr>{r}</tr>" for r in rows)
+    out = [f'<div class="table-wrap"><table class="{esc(cls)}">',
+           f"<caption>{esc(caption)}</caption>",
+           f"<thead><tr>{head}</tr></thead><tbody>{body}</tbody></table>"]
+    if note:
+        out.append(f'<p class="table-note">{note}</p>')
+    out.append("</div>")
+    return "".join(out)
+
+
+def callout(kind, title, body):
+    return (f'<div class="callout {esc(kind)}"><h3>{esc(title)}</h3>'
+            f'<div class="callout-body">{body}</div></div>')
+
+
+METHOD_TEXT = (
+    "A deterministic model, rebuilt from assets/data/inputs.json and assets/data/series.json by "
+    "scripts/model.py. House prices grow at a stated nominal rate, the assessed value rolls forward under the "
+    "published rules with an inflation cap, fixed charges grow with inflation, running costs are inflated at "
+    "the same rate, and each path is valued at the end of a thirty year horizon after selling costs and tax. "
+    "Every monetary result is rounded to the nearest $10 before it is printed. There is no randomness, so the "
+    "same inputs always produce the same outputs."
+)
+
+
+def method_links() -> str:
+    out = []
+    for sid in CORE_SOURCES:
+        t = SOURCES[sid]["title"]
+        out.append(f"<li>{slink(sid)} - {esc(t)}</li>")
+    return "".join(out)
+
+
+def page(name: str, body: str, lede: str = "") -> str:
     nav = []
-    index = 0
-    for group, members in NAV_GROUPS:
-        nav.append(f'<div class="nav-group">{esc(group)}</div>')
-        for href in members:
-            index += 1
-            label = next(
-                label for name, label in [
-                    ("index.html", "Overview"),
-                    ("executive-summary.html", "Quick summary"),
-                    ("decision.html", "Compare options"),
-                    ("property-a.html", "Property A · inherited"),
-                    ("property-b.html", "Property B · already owned"),
-                    ("costs.html", "Running costs"),
-                    ("projections.html", "Projection method"),
-                    ("stress.html", "Economic stress cases"),
-                    ("taxes.html", "Tax and law watch"),
-                    ("inheritance.html", "Inheritance steps"),
-                    ("questions.html", "Questions first"),
-                    ("suggestions.html", "Suggestions for review"),
-                    ("review.html", "Flagged items"),
-                    ("audit.html", "Privacy and audit"),
-                    ("sources.html", "Source library"),
-                ] if name == href
-            )
-            current = ' aria-current="page"' if filename == href else ""
-            nav.append(f'<a href="{esc(href)}"{current}><span>{index:02d}</span>{esc(label)}</a>')
-    return f'''<!doctype html>
+    for group, pages in NAV_GROUPS:
+        items = "".join(
+            f'<li><a href="{esc(p)}"'
+            + (' class="active"' if p == name else "")
+            + f">{esc(PAGE_TITLES[p])}</a></li>" for p in pages)
+        nav.append(f'<div class="nav-group"><span class="nav-title">{esc(group)}</span>'
+                   f"<ul>{items}</ul></div>")
+    lede_html = f'<p class="lede">{lede}</p>' if lede else ""
+    return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="{esc(description)}">
-  <title>{esc(title)} · Inherited Property Decision Guide</title>
-  <link rel="stylesheet" href="assets/style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{esc(PAGE_TITLES[name])} - Property inheritance decision</title>
+<meta name="description" content="Anonymised quantitative decision analysis for an inherited California home and an already-owned rental building. Every figure rounded to the nearest $10.">
+<link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-  <a class="skip" href="#main">Skip to content</a>
-  <aside>
-    <a class="brand" href="index.html">Property Decision Guide<small>Privacy-safe public edition</small></a>
-    <nav aria-label="Main navigation">{"".join(nav)}</nav>
-    <p class="aside-note">General framework only. Property-specific values and forecasts are intentionally not published.</p>
-  </aside>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap">
+    <p class="brand"><a href="index.html">Property inheritance decision</a></p>
+    <p class="tagline">Two California properties, one decision. Anonymised. Every figure rounded to the nearest $10.</p>
+  </div>
+</header>
+<div class="wrap layout">
+  <nav class="site-nav" aria-label="Sections">
+    {"".join(nav)}
+  </nav>
   <main id="main">
-    <div class="top"><span>U.S. federal · California framework</span><span>Reviewed 12 November 2026</span></div>
-    <header class="hero"><p class="eyebrow">Public edition · not a personalized recommendation</p><h1>{esc(title)}</h1><p>{esc(description)}</p></header>
+    <h1>{esc(PAGE_TITLES[name])}</h1>
+    {lede_html}
     {body}
-    <footer><span>Privacy-safe public edition · updated 12 November 2026</span><span><a href="audit.html">Privacy, source and scope limits</a></span></footer>
+    <section id="method" class="method">
+      <h2>How the numbers on this page are produced</h2>
+      <p>Every computed figure on this page comes from <code>scripts/model.py</code>, which reads
+        <code>assets/data/inputs.json</code> and <code>assets/data/series.json</code>. Monetary results are
+        rounded to the nearest $10 before they are printed. The rules the model implements are the published
+        official rules below; where a page uses a stated assumption or an unverified owner figure, that row says
+        so and is logged on the <a href="review.html#register">register of unverified and assumed items</a>.</p>
+      <ul class="method-links">
+        {method_links()}
+      </ul>
+      <p>Full method and inputs: <a href="review.html#method-detail">how the model works</a>.
+        Every official source used anywhere on the site: <a href="sources.html">the source ledger</a>.</p>
+    </section>
+    <p class="page-footer">Built {esc(BUILD_DATE)}. Sources were checked on 13 November 2026 and are listed on the
+      <a href="sources.html">source ledger</a>. Nothing here is legal, tax or investment advice.</p>
   </main>
+</div>
 </body>
 </html>
-'''
+"""
 
 
-def build_pages() -> None:
-    pages: dict[str, tuple[str, str, str]] = {}
+# ------------------------------------------------------------------- content --
+def privacy_banner() -> str:
+    return callout("privacy", "Privacy and accuracy notice", f"""
+<ul>
+<li><strong>What is published.</strong> Market values, assessed values, tax bills, rent and running costs, rounded to the nearest $10 as requested, plus the model outputs computed from them.</li>
+<li><strong>What is never published.</strong> No name, street address, parcel number, ZIP code, trust term, beneficiary detail or utility account appears on any page or in any published file. The two properties are called Property A (the home being inherited, in Santa Clara County) and Property B (the three-unit building already owned by the heir, in the City and County of San Francisco).</li>
+<li><strong>The inherited cash.</strong> The amount is not published. The estate page works entirely in anonymous scenario bands.</li>
+<li><strong>Rounding is not anonymity.</strong> Rounding to $10 defeats a search for an exact figure; it does not stop someone who already holds the county record from recognising a parcel. That residual risk is disclosed here rather than hidden.</li>
+<li><strong>Owner figures are unverified.</strong> Values taken from the owner's own records are labelled <span class="badge unverified">unverified</span> unless an official public record was checked. They are listed again on the <a href="review.html">flagged for review</a> page.</li>
+<li><strong>History.</strong> Earlier commits in this public repository, previous pull-request diffs, forks and external copies are separate exposure surfaces. Nothing on this site can certify them erased.</li>
+</ul>
+""")
 
-    pages["index.html"] = (
-        "Inherited Property A and already-owned Property B",
-        "A concise framework for comparing the inherited asset with a separate property already owned by the recipient, without publishing property-specific inputs or projections.",
-        '''<div class="privacy"><strong>Privacy boundary.</strong> Property A is treated as inherited. Property B is treated as already owned by the recipient. They are kept separate for ownership, rental income, occupancy, basis and tax analysis. This public edition contains no property addresses, locations, parcel records, owner values, rent, utility use, insurance estimates or individualized forecasts. Rounding alone is not treated as anonymization.</div>
-<section><h2>Start with the distinction</h2><div class="cards">
-''' + card("Property A · inherited", "Confirm the transfer, title, date-of-death value and any eligible family-home reassessment exclusion. Compare keeping for use, renting, selling or delaying a decision.", "property-a.html") +
-        card("Property B · already owned", "Treat B's existing ownership and any rental income separately. Compare continuing to rent, changing occupancy or selling only after checking title, tenants, costs and tax basis.", "property-b.html") +
-        card("Decision before calculation", "The public guide leaves unknown property-specific values blank. It organizes the evidence and stress cases needed for a private, independently checked comparison.", "decision.html") +
-        '''</div></section>
-<section><h2>A short route through the guide</h2>''' + list_html([
-            'Confirm who owns each asset and when any transfer occurred. Start with <a href="questions.html">Questions first</a>.',
-            'Calendar the trust, assessor, tax-return and claim steps on <a href="inheritance.html">Inheritance steps</a>.',
-            'Collect actual bills, leases, quotes and repair records on the <a href="costs.html">Running costs</a> page; keep the values in a private record.',
-            'Compare the options and time-varying stress cases without treating a smooth 50-year growth rate as a forecast.',
-            'Review the separate <a href="suggestions.html">Suggestions for review</a> section; none of its proposals is automatically selected.'
-        ], ordered=True) + '''</section>
-<div class="note"><strong>History limitation.</strong> This refresh changes the current public edition. It does not certify that earlier Git commits, pull-request diffs, cached pages, forks, downloads or external copies have been erased.</div>'''
+
+def kpi(value, label, sub=""):
+    sub_html = f'<span class="kpi-sub">{sub}</span>' if sub else ""
+    return f'<div class="kpi"><span class="kpi-value">{value}</span><span class="kpi-label">{esc(label)}</span>{sub_html}</div>'
+
+
+# --------------------------------------------------------------------- index --
+def page_index() -> str:
+    p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
+    best = p45["best_path"]
+    kpis = "".join([
+        kpi(m(A["estimated_market_value_2026"]), "Property A, estimated value",
+            "Owner estimate, November 2026 &middot; unverified"),
+        kpi(m(B["estimated_market_value_2026"]), "Property B, estimated value",
+            "Owner estimate, November 2026 &middot; unverified"),
+        kpi(m(p45["bill_if_rent_year1"]), "Property A tax bill in 2045 if let out",
+            f"Against {m(p45['bill_today_projected'])} if the assessment is never reset"),
+        kpi(m(V["federal_basic_exclusion_2026"]["value"]), "Federal estate tax exclusion, 2026",
+            f"{m(V['federal_basic_exclusion_2027']['value'])} for 2027 &middot; IRS"),
+        kpi(pc(p45["breakeven_house_growth"]), "House growth needed to justify keeping it",
+            "Per year, for 30 years, to match selling and investing at 7%"),
+        kpi(m(p45["breakeven_rent_monthly"]), "Monthly rent needed to justify letting it",
+            "In 2045 dollars, against a 7% equity return"),
+    ])
+    cards = []
+    for group, pages in NAV_GROUPS:
+        if group == "Start here":
+            continue
+        items = "".join(
+            f'<li><a href="{esc(p)}"><strong>{esc(PAGE_TITLES[p])}</strong>'
+            f'<span>{esc(SUMMARIES[p])}</span></a></li>' for p in pages)
+        cards.append(f'<section class="card"><h2>{esc(group)}</h2><ul class="card-list">{items}</ul></section>')
+    return (
+        privacy_banner()
+        + f'<section class="kpi-row">{kpis}</section>'
+        + callout("answer", "The one-line answer", f"""
+<p>Under every baseline this site can build, <strong>selling Property A soon after it is inherited beats living in it or letting it out</strong>, and it is not close. The reason is a one-off combination: the inheritance resets the income-tax basis to the value at death, so an immediate sale pays almost no capital gains tax, while the property tax assessment jumps to market value under Proposition 19. Waiting converts a tax-free asset into a taxed one and adds roughly {m(p45['bill_if_rent_year1'] - p45['bill_today_projected'])} a year of extra property tax if the home is let out.</p>
+<p>The break-even house growth needed to make keeping the home beat selling is <strong>{pc(p45['breakeven_house_growth'])} a year for thirty years</strong>. The verified house price index for this area compounded at 6.9% a year over the last fifty years and 3.3% a year over the last twenty. Read the <a href="decision.html">full decision</a>, then the <a href="black-swan.html">cases where this flips</a>.</p>
+""")
+        + '<section class="card-grid">' + "".join(cards) + "</section>"
+        + callout("method", "How to read this site", """
+<ol>
+<li><strong>Start</strong> with the <a href="executive-summary.html">executive summary</a> and the <a href="decision.html">decision page</a>.</li>
+<li><strong>Check the inputs.</strong> Every number the model uses is on the <a href="property-a.html">Property A</a>, <a href="property-b.html">Property B</a> and <a href="costs.html">costs</a> pages, with its source or an explicit unverified flag.</li>
+<li><strong>Check the stress.</strong> No projection on this site relies on a single smooth growth rate. See <a href="black-swan.html">black swan conditions</a> and the <a href="economy.html">verified historical record</a>.</li>
+<li><strong>Do not act yet.</strong> The <a href="questions.html">questions page</a> lists what is still unknown and how to find it out. The <a href="suggestions.html">suggestions page</a> is a review queue: nothing there has been implemented.</li>
+</ol>""")
     )
 
-    pages["executive-summary.html"] = (
-        "Quick summary",
-        "The public edition organizes the inherited-property decision without embedding a recommendation or any private property values.",
-        '''<div class="answer"><strong>Decision status: open.</strong> No option is ranked here because verified title, property-specific financial records, local law and the recipient's priorities are not part of this public edition. Use this summary to outline important details and the route through the full guide.</div>
-<section><h2>Keep two balance sheets</h2>''' + plain_table(
-            "The two-property distinction used throughout this guide",
-            ["Question", "Property A · inherited", "Property B · already owned"],
-            [
-                ["What is being decided?", "Accept, retain, rent, occupy or sell an inherited asset expected around 2040–2050 via trust.", "Whether to continue a rental use, change occupancy or sell an asset already owned by the recipient."],
-                ["Income to compare", "Any later rent, sale proceeds or investment income under the applicable tax rules.", "Existing rental receipts and operating costs, kept separate from A's inheritance."],
-                ["Tax and title boundary", "Confirm the estate/trust transfer, basis evidence and any property-tax exclusion.", "Verify B's existing title and tax records; do not assume A's inheritance changes B's ownership or basis."],
-            ],
-            row_class="framework-row",
-        ) + '''</section>
-<section><h2>Important details to organize</h2>''' + plain_table(
-            "Evidence groups that drive the comparison",
-            ["Area", "What to collect privately", "Why it matters"],
-            [
-                ["Title and transfer", "Recorded deed, trust/will, beneficiary records, transfer date", "Determines owner, basis, and deadline calendars"],
-                ["Property tax", "Current roll, tax bill, any family-home exclusion filing, supplemental notices", "Tax can reset on inheritance; exclusion conditions are fact-specific"],
-                ["Running costs", "Insurance, water, electricity/solar, maintenance, repairs, management", "Annual cash flow and reserve needs"],
-                ["Rental and occupancy", "Leases, collected rent, vacancy, tenant obligations, personal-use plan", "Affects cash flow and whether B's rent stops if occupied"],
-                ["Tax thresholds and basis", "Estate total, prior gifts, deductions, retirement accounts, basis records", "Determines filing, exclusions and gain on sale"],
-                ["Law at decision date", "Federal, state and local rules rechecked when deciding", "Indexed amounts and proposals change"],
-            ],
-            row_class="framework-row",
-        ) + '''</section>
-<section><h2>Options compared side by side</h2>''' + plain_table(
-            "Decision paths evaluated separately for each property",
-            ["Path", "Property A · inherited", "Property B · already owned"],
-            [
-                ["Live in it", "Compare housing value and new carrying costs with rent or sale alternatives; check reassessment treatment", "Compare personal use with rental income that would stop or change"],
-                ["Rent it", "Estimate achievable rent, vacancy, turnover, management, repairs, tax and insurance", "Keep current rental ledger; review lawful increases and turnover costs"],
-                ["Sell and reinvest", "Verify inherited basis and sale costs; compare reinvestment to keeping; do not assume tax-free", "Use B's separate records; sale does not inherit A's basis"],
-                ["Defer a change", "Track carrying costs and filing duties while administration is completed", "Track lease, tenant-notice and financing duties during a hold"],
-            ],
-            row_class="choice-row",
-        ) + '''</section>
-<section><h2>Five decision steps</h2>''' + list_html([
-            'Verify title, transfer date, beneficiary designations and the controlling estate or trust documents.',
-            'Calendar deadlines before comparing outcomes; some statutory periods are short and fact-dependent.',
-            'Collect actual annual costs and one-time repair or transaction estimates. Keep them private.',
-            "Compare A's use options separately from B's rental/occupancy choices, including the effect of lost or changed rent if B is occupied.",
-            'Re-run the comparison under inflation shocks, falling asset prices, vacancy, insurance changes, major repairs and changes in law.'
-        ], ordered=True) + '''</section>
-<section><h2>How a trust inheritance around 2040–2050 would be sequenced</h2>''' + list_html([
-            f'Confirm the trust terms, trustee and distribution provisions before the transfer; see {source_link("probate_16061_7", "trustee notice rule")}.',
-            f'At death, record the date-of-death value and request assessor guidance; see {source_link("rtc_480", "change-in-ownership reporting")} and {source_link("rtc_63_2", "family-home exclusion")}.',
-            f'Calendar the 60-day notice, 150-day assessor statement, one-year occupancy/exemption, three-year claim and nine-month estate-return periods; see <a href="inheritance.html">Inheritance steps</a>.',
-            'Hold and then compare live, rent or sell using the private cost ledger and multiple economic paths rather than a single growth rate.',
-            'Review <a href="questions.html">Questions first</a> and <a href="suggestions.html">Suggestions for review</a> before selecting any proposal or assumption.'
-        ], ordered=True) + '''</section>
-<section><h2>Why a single 50-year growth rate is not used</h2><p>Growth and inflation are uneven over long periods. The guide keeps a constant-rate illustration off the public pages and instead uses irregular historical episodes and a private irregular-path method. See <a href="stress.html">Economic stress cases</a> and <a href="projections.html">Projection method</a>.</p></section>
-<section><h2>Comparison logic</h2><p>For a rental, start with collected rent minus vacancy/collection losses, operating costs, financing cash payments, major-repair reserves and applicable taxes. Keep taxable income separate from cash flow: a tax deduction is not the same as cash saved. For owner-occupancy, explicitly record housing value and any rental income that would stop or change.</p><p>For an inherited sale, obtain the basis evidence and sale costs; do not assume a sale is tax-free. See the <a href="taxes.html">Tax and law watch</a> and <a href="costs.html">Running costs</a>.</p></section>'''
+
+SUMMARIES = {
+    "executive-summary.html": "The important details on one page.",
+    "decision.html": "Five paths, the break-evens, and the recommendation.",
+    "property-a.html": "The inherited home: roll, value, reassessment, costs.",
+    "property-b.html": "The building already owned: rent, rent control, costs.",
+    "ownership-distinction.html": "Why inherited and already-owned are not interchangeable.",
+    "costs.html": "Water, power, insurance, maintenance and tax, projected.",
+    "projections.html": "Year by year to 2076 for value, assessed value and tax.",
+    "taxes.html": "Basis step-up, capital gains, the 121 exclusion, recapture.",
+    "inheritance.html": "The trust transfer, phase by phase, with deadlines.",
+    "estate.html": "Federal thresholds, California's position, scenario bands.",
+    "laws.html": "Enacted, dead and proposed rules that could move the answer.",
+    "black-swan.html": "Regimes where the answer changes, and by how much.",
+    "economy.html": "Fifty years of verified inflation, house price and yield data.",
+    "questions.html": "What is known, what is missing, and how to find it.",
+    "suggestions.html": "A review queue of proposals. Nothing implemented yet.",
+    "review.html": "Unverified figures, modelling caveats and the repository audit.",
+    "sources.html": "Every official source used, with what it supports.",
+}
+
+
+# --------------------------------------------------------- executive summary --
+def page_executive_summary() -> str:
+    p40 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2040)
+    p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
+    p50 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2050)
+
+    rows = []
+    for p in (p40, p45, p50):
+        for key, label in (("sell_equities", "Sell at inheritance, invest in equities"),
+                           ("sell_treasury", "Sell at inheritance, reinvest at Treasury yields"),
+                           ("live_in", "Move in and hold for 30 years"),
+                           ("live_then_rent", "Move in for two years, then let it out"),
+                           ("rent_out", "Let it out from the start")):
+            v = p["paths"][key]
+            rows.append(
+                f"<td>{p['inherit_year']}</td><td>{esc(label)}</td>"
+                f"<td>{m(v['terminal'])}</td>"
+                f"<td>{m(v.get('outflow', 0))}</td>"
+                + method_cell("decision.html#method", "Model output"))
+    term = table(
+        "Terminal value after 30 years, by inheritance year and path. "
+        "Baseline assumptions: house prices 4.0% a year, inflation 2.5%, equities 7.0% gross, "
+        "Treasuries 4.7%, selling costs 5.5%.",
+        ["Inherited", "Path", "Terminal value", "Tax and costs paid over 30 years", "Basis"],
+        rows)
+
+    facts = [
+        ("Property A", f"Inherited through a trust, planned 2040 to 2050. Worth about {m(A['estimated_market_value_2026'])}. Not owned by the heir today."),
+        ("Property B", f"Already owned by the heir. Worth about {m(B['estimated_market_value_2026'])}, three units, two let at {m(B['rent']['monthly'])} a month. The heir can live here without losing that rent."),
+        ("The tax cliff at transfer", f"Today the Property A bill is about {m(MODEL['costs_a_now']['property_tax'])}. If the heir inherits in 2045 and does not move in, the bill becomes about {m(p45['bill_if_rent_year1'])}. If the heir does move in and claims the Proposition 19 exclusion, it becomes about {m(p45['bill_if_live_year1'])}."),
+        ("Why moving in only half-helps", f"The Proposition 19 exclusion shelters the old assessed value plus an indexed {m(V['prop19_value_cap_2025_2027']['value'])}. Everything above that is reassessed. In 2045 the sheltered slice is about {m(p45['prop19_cap'])} against a market value of {m(p45['value_at_death'])}."),
+        ("The tax-free sale window", "Property acquired from a decedent takes a basis equal to its value at death, so a sale soon after the inheritance pays close to zero capital gains tax. Holding it for thirty years turns the appreciation into a gain taxed at roughly 37% combined federal and California."),
+        ("The equity comparison", f"To match selling and investing at 7%, the home must appreciate {pc(p45['breakeven_house_growth'])} a year for thirty years. The verified index for the area compounded at 6.9% over fifty years and 3.3% over the last twenty."),
+        ("The rental comparison", f"Letting the home out would need about {m(p45['breakeven_rent_monthly'])} a month in 2045 to match selling and investing. That is over 5% of the property's value per year in gross rent."),
+        ("The estate position", f"California has had no estate tax since 2005. Federally, the 2026 exclusion is {m(V['federal_basic_exclusion_2026']['value'])} per person and {m(V['federal_basic_exclusion_2027']['value'])} for 2027. Portability lets a surviving spouse use a deceased spouse's unused exclusion."),
+        ("The biggest unknown", "Whether the heir wants to live in this specific house. That is a preference, not a number, and it is worth more than any gap in this analysis."),
+    ]
+    fact_rows = [
+        f"<td><strong>{esc(k)}</strong></td><td>{v}</td>"
+        + src_cell(["boe_lta25009", "rtc63_2", "irs_basis", "sco_estate"], "Key rules")
+        for k, v in facts]
+    ftab = table("The important details", ["Detail", "What this analysis found"], fact_rows)
+
+    return (
+        callout("summary", "Recommendation", f"""
+<p><strong>Sell Property A soon after it is inherited, unless the heir genuinely wants to live in that house.</strong></p>
+<p>Selling converts an asset earning nothing into capital, at almost no tax, and it removes a property tax bill that is about to multiply by six to eleven times. Living in the house is the only path that keeps the tax bill lower, and it still leaves the heir holding a single, undiversified, illiquid asset in one California school district. Letting it out is the weakest option in every scenario this site can build, because it combines the full reassessment with landlord costs and a rental yield far below the return available elsewhere.</p>
+<p>The counter-case is real and it is on the <a href="black-swan.html">black swan page</a>: if house prices in this area repeat their 1977 to 1981 or 2021 to 2023 pace, keeping the house wins. That is a bet on one neighbourhood, not a plan.</p>
+""")
+        + ftab
+        + term
+        + callout("risk", "Five things that could change the answer", """
+<ol>
+<li><strong>The heir wants to live there.</strong> That is worth the whole gap if it is true. It also has to be true for the whole time: moving out removes the Proposition 19 exclusion.</li>
+<li><strong>Law changes.</strong> California voters made the high-income tax rates permanent in November 2026 and rejected a one-time wealth tax. Both are on the <a href="laws.html">law page</a>. A future measure could cut the other way.</li>
+<li><strong>The house outgrows everything.</strong> See the <a href="black-swan.html">stress cases</a>.</li>
+<li><strong>The estate is large enough to matter federally.</strong> See the <a href="estate.html">estate page</a>: the 2026 exclusion is high, but it is indexed and can be cut by Congress.</li>
+<li><strong>An input is wrong.</strong> Every owner-supplied figure is flagged. The <a href="questions.html">questions page</a> is the list of what to confirm and how.</li>
+</ol>""")
     )
 
-    pages["decision.html"] = (
-        "Compare options",
-        "A side-by-side decision structure for Property A (inherited) and Property B (already owned); no option is ranked without private evidence.",
-        '''<div class="note"><strong>Not a recommendation.</strong> The table lists choices to evaluate. It does not predict returns or identify a winning option.</div>
-<section><h2>Options by property</h2>''' + plain_table(
-            "What each choice requires checking",
-            ["Choice", "Property A · inherited", "Property B · already owned", "Key evidence"],
-            [
-                ["Keep for personal use", "Compare housing value, new running costs, insurance and eligibility for any family-home reassessment rule.", "Compare personal use with rental income that would stop or change; review existing tenants and occupancy rules.", "Actual costs, title, occupancy and applicable local law."],
-                ["Rent or continue renting", "Estimate achievable collected rent, vacancy, tax, management, repairs, insurance and utilities.", "Record existing rental income and expenses separately; consider unit-by-unit occupancy and lease terms.", "Leases, statements, bills, local rules and tax records."],
-                ["Sell", "Verify inherited basis, sale date, transaction costs and any applicable tax reporting.", "Use B's separate ownership and tax records; do not import A's inherited basis assumptions.", "Title, tax basis/depreciation records, sale estimate and local transfer-tax rules."],
-                ["Defer or stage a change", "Check carrying costs, deadlines, insurance, security and any tax/assessor filing obligations during the holding period.", "Check lease, tenant-notice, operating and financing obligations before changing use.", "Calendar, policies, contracts and professional advice."],
-            ],
-            row_class="choice-row",
-        ) + '''</section>
-<section><h2>Choose criteria before looking at a winner</h2>''' + list_html([
-            '<strong>Financial:</strong> after-tax cash flow, liquidity, one-time costs and sensitivity to alternative returns.',
-            '<strong>Housing:</strong> whether either property is needed as a home, timing, accessibility and the cost of housing elsewhere.',
-            '<strong>Risk:</strong> vacancy, repair, insurance availability, local tax/rental law and market drawdowns.',
-            '<strong>Workload:</strong> management time, tenant obligations and the ability to fund unexpected work.',
-            '<strong>Values:</strong> family continuity, flexibility, debt reduction, diversification or a planned transfer.'
-        ]) + '''<p>Record which criteria matter most before selecting assumptions. A change to occupancy, title or local law can change the comparison; see <a href="questions.html">Questions first</a>.</p></section>'''
+
+# ------------------------------------------------------------------ decision --
+def page_decision() -> str:
+    rows = []
+    for p in MODEL["paths"]:
+        for key, label in (("sell_equities", "Sell at inheritance, invest in equities"),
+                           ("sell_treasury", "Sell at inheritance, reinvest at Treasuries"),
+                           ("live_in", "Move in and hold for 30 years"),
+                           ("live_then_rent", "Move in two years, then let it out"),
+                           ("rent_out", "Let it out from the start")):
+            v = p["paths"][key]
+            rows.append(f"<td>{p['inherit_year']}</td><td>{esc(label)}</td>"
+                        f"<td>{m(v['terminal'])}</td>"
+                        f"<td>{m(v.get('outflow', 0))}</td>"
+                        + method_cell("#method", "Model output"))
+    paths_table = table(
+        "Terminal value after thirty years, by inheritance year and path",
+        ["Inherited", "Path", "Terminal value", "Tax and costs paid", "Basis"], rows,
+        note="Terminal value is what is left after selling costs and capital gains tax at the end of the "
+             "thirty years, plus any accumulated net rental cash in the rental paths. It is a nominal "
+             "figure in the money of that future year.")
+
+    be_rows = []
+    for p in MODEL["paths"]:
+        be_rows.append(
+            f"<td>{p['inherit_year']}</td>"
+            f"<td>{m(p['breakeven_rent_annual'])}</td>"
+            f"<td>{m(p['breakeven_rent_monthly'])}</td>"
+            f"<td>{pc(p['breakeven_return_vs_live'])}</td>"
+            f"<td>{pc(p['breakeven_return_vs_rent'])}</td>"
+            f"<td>{pc(p['breakeven_house_growth'])}</td>"
+            f"<td>{m(p['housing_value_needed'])}</td>"
+            + method_cell("#method", "Model output"))
+    be_table = table(
+        "Break-even questions, answered",
+        ["Inherited", "Rent needed per year", "Rent needed per month",
+         "Return needed to beat living in it", "Return needed to beat letting it",
+         "House growth needed to keep it", "Housing value the home must provide per year"],
+        be_rows,
+        note="\"Housing value\" is the annual value of living in the house that would be needed to close the "
+             "gap between living in it and selling. It is the number to compare against what the heir would "
+             "otherwise pay, or could otherwise earn, for somewhere to live.")
+
+    sens_rows = []
+    for s in MODEL["sensitivity"]:
+        best_key = s["best"]
+
+        def cell(key, val):
+            return f'<td class="best">{m(val)}</td>' if key == best_key else f"<td>{m(val)}</td>"
+
+        sens_rows.append(
+            f"<td>{pc(s['house_growth'], 1)}</td><td>{pc(s['equity_return'], 1)}</td>"
+            + cell("sell_equities", s["sell_equities"])
+            + cell("sell_treasury", s["sell_treasury"])
+            + cell("live_in", s["live_in"])
+            + cell("rent_out", s["rent_out"])
+            + f"<td><strong>{esc(PATH_LABELS[best_key])}</strong></td>"
+            + method_cell("#method", "Model output"))
+    sens_total = len(MODEL["sensitivity"])
+    sens_sell = sum(1 for s in MODEL["sensitivity"] if s["best"].startswith("sell"))
+    reg_total = len(MODEL["regimes"])
+    reg_sell = sum(1 for r in MODEL["regimes"] if r["run"]["best"].startswith("sell"))
+    sens_table = table(
+        "Sensitivity: which path wins at each combination of house growth and equity return",
+        ["House growth", "Equity return", "Sell, equities", "Sell, Treasuries",
+         "Live in it", "Let it out", "Best path", "Basis"], sens_rows,
+        note=f"Selling wins in {sens_sell} of the {sens_total} combinations; in the others the winner is "
+             "selling and holding Treasuries, which is still selling. Keeping the home wins only where this "
+             "one neighbourhood outgrows the whole stock market by a wide margin. The highlighted figure in "
+             "each row is that row's winner.")
+    sens_kpis = '<div class="kpi-row">' + "".join([
+        kpi(f"{sens_sell} of {sens_total}", "Sensitivity combinations won by selling",
+            "The rest are won by selling into Treasuries, which is still selling."),
+        kpi(f"{reg_sell} of {reg_total}", "Stress regimes won by selling",
+            "The ones it loses repeat the 1970s or the 2021 to 2023 burst."),
+    ]) + "</div>"
+
+    return (
+        callout("recommend", "What this site recommends", f"""
+<p><strong>Sell soon after the inheritance.</strong> It leads in the baseline, in {sens_sell} of the {sens_total}
+sensitivity combinations, and in {reg_sell} of the {reg_total} stress regimes. It is also the only path that does
+not depend on the heir wanting to live in this particular house, being able to keep it as a principal residence,
+or finding a tenant at an implausible rent.</p>""")
+        + sens_kpis
+        + paths_table
+        + be_table
+        + sens_table
+        + '<h2>What the model does and does not do</h2>'
+        + table("Model inputs and their status",
+                ["Input", "Value used", "Status", "Basis"],
+                [
+                    f"<td>House price growth, both properties</td><td>{pcf(ASM['house_growth']['baseline'],1)} a year (band {pcf(ASM['house_growth']['low'],1)} to {pcf(ASM['house_growth']['high'],1)})</td>"
+                    f'<td><span class="badge assumption">assumption</span></td>'
+                    + src_cell(ASM["house_growth"]["src"], "Verified series"),
+                    f"<td>Inflation</td><td>{pcf(ASM['inflation']['baseline'],1)} a year (band {pcf(ASM['inflation']['low'],1)} to {pcf(ASM['inflation']['high'],1)})</td>"
+                    f'<td><span class="badge assumption">assumption</span></td>'
+                    + src_cell(ASM["inflation"]["src"], "Official anchor"),
+                    f"<td>Equity return, nominal gross</td><td>{pcf(ASM['equity_return_nominal_gross']['baseline'],1)} a year (band {pcf(ASM['equity_return_nominal_gross']['low'],1)} to {pcf(ASM['equity_return_nominal_gross']['high'],1)})</td>"
+                    f'<td><span class="badge assumption">assumption</span></td>'
+                    + src_cell([], "No official source"),
+                    f"<td>Equity tax drag</td><td>{pcf(ASM['equity_tax_drag']['baseline'],1)} a year</td>"
+                    f'<td><span class="badge assumption">assumption</span></td>'
+                    + src_cell(ASM["equity_tax_drag"]["src"], "Rate source"),
+                    f"<td>Treasury reinvestment yield</td><td>{pcf(ASM['treasury_yield_nominal']['baseline'],1)} a year</td>"
+                    f'<td><span class="badge assumption">assumption</span></td>'
+                    + src_cell(ASM["treasury_yield_nominal"]["src"], "Official anchor"),
+                    f"<td>Selling costs</td><td>{pcf(ASM['selling_cost_pct']['baseline'],1)} of price</td>"
+                    f'<td><span class="badge assumption">assumption</span></td>'
+                    + src_cell(ASM["selling_cost_pct"]["src"], "Transfer tax statute"),
+                    f"<td>Combined tax on a gain</td><td>{pcf(ASM['combined_gain_tax_rate']['baseline'],1)}</td>"
+                    f'<td><span class="badge assumption">assumption</span></td>'
+                    + src_cell(ASM["combined_gain_tax_rate"]["src"], "Rate sources"),
+                    f"<td>Property A ad valorem rate</td><td>{pcf(ASM['ad_valorem_rate_a']['value'],3)}</td>"
+                    f'<td><span class="badge unverified">assumption, flagged</span></td>'
+                    + src_cell(ASM["ad_valorem_rate_a"]["src"], "Rate structure"),
+                    f"<td>Property B ad valorem rate</td><td>{pcf(ASM['ad_valorem_rate_b']['value'],5)}</td>"
+                    f'<td><span class="badge verified">published</span></td>'
+                    + src_cell(ASM["ad_valorem_rate_b"]["src"], "SF Treasurer"),
+                    f"<td>Assessed value growth</td><td>{pcf(ASM['assessed_value_growth']['baseline'],1)} a year</td>"
+                    f'<td><span class="badge verified">verified rule</span></td>'
+                    + src_cell(ASM["assessed_value_growth"]["src"], "Proposition 13 cap"),
+                    f"<td>Horizon</td><td>{ASM['horizon_years']} years after the inheritance</td>"
+                    f'<td><span class="badge assumption">assumption</span></td>'
+                    + src_cell([], "Choice, not a source"),
+                ],
+                note="Every assumption is a stated scenario, not a forecast. Where an official source "
+                     "anchors the number it is linked; where none exists the cell says so.")
+        + callout("limit", "What the model leaves out", """
+<ul>
+<li><strong>Housing value.</strong> Living in the house produces somewhere to live. The break-even table prices that value; the terminal-value table does not add it in.</li>
+<li><strong>Taxes on the invested money.</strong> The equity path already carries an annual drag. A further tax on final liquidation is not charged, because the same treatment would have to be applied to the property paths and would be avoided anyway if the portfolio is held until death.</li>
+<li><strong>State and federal interaction.</strong> The combined gain tax rate simply adds the two rates and takes no federal deduction for the state tax. That is deliberately conservative.</li>
+<li><strong>Mortgages, 1031 exchanges, instalment sales, gifting and trust restructuring.</strong> None are modelled. Each is on the <a href="questions.html">questions page</a>.</li>
+<li><strong>Transaction costs of moving house, and the cost of capital gains tax on any other asset that would have to be sold.</strong> Not modelled.</li>
+</ul>""")
     )
 
-    pages["property-a.html"] = (
-        "Property A · inherited",
-        "A framework for an inherited property, including title, basis, possible California family-home reassessment treatment and blank evidence fields.",
-        '''<div class="privacy"><strong>Scope.</strong> Property A is the inherited asset in this guide. No property description, address, assessment, market value, tax bill, occupancy history, cost or projection is published.</div>
-<section><h2>Rules to check</h2>''' + fact_table(
-            "General rules relevant to inherited property",
-            ["Issue", "General rule summary"],
-            [
-                (["Federal basis", "Basis is generally the fair market value at the decedent's date of death. An alternate valuation date is available only under specified estate-return and election rules; taxable gain may apply on a later sale."], "irs_inherited_basis"),
-                (["California family-home exclusion", "A qualifying transfer must satisfy statutory relationship, property, occupancy, exemption and filing requirements. A transferee's principal-residence occupancy is generally required within one year for the family-home exclusion."], "rtc_63_2"),
-                (["Filing periods", "The ordinary claim period is generally three years after transfer, before a third-party transfer, or when the eligible transferee stops occupying the residence, whichever is earlier; statutory and notice-related exceptions can change the deadline."], "rtc_63_2"),
-                (["Change-of-ownership reporting", "California's statute sets different reporting steps for probate and non-probate transfers by death; obtain the current assessor form and calendar the applicable deadline."], "rtc_480"),
-            ]) + '''</section>
-<section><h2>Private evidence checklist</h2><p>These cells are blank by design. Keep records in a private working copy; do not put owner-supplied figures into this public site.</p>''' + blank_table(
-            "Property A inputs — not collected or published here",
-            ["Field", "Public value", "Evidence to obtain privately"],
-            [
-                ["Current title and transfer instrument", '<td class="blank">Not published</td>', "Recorded title, trust or estate documents"],
-                ["Transfer/death date", '<td class="blank">Not published</td>', "Official record; use to calendar deadlines"],
-                ["Date-of-death fair market value / basis records", '<td class="blank">Not published</td>', "Qualified valuation and estate/tax documents"],
-                ["Assessed value, property-tax bill and supplemental notices", '<td class="blank">Not published</td>', "Current assessor roll and tax bill"],
-                ["Insurance, water, electricity/solar, maintenance and repairs", '<td class="blank">Not published</td>', "Current policies, utility bills, inspections and invoices"],
-                ["Sale costs, rent potential and personal-use plan", '<td class="blank">Not published</td>', "Written estimates, leases and household plan"],
-            ]) + '''</section>
-<section><h2>Choices to compare</h2><p>Keep for personal use, rent, sell, or defer a change while required administration is completed. Compare after-tax cash flow and housing value with the time, liquidity, insurance, maintenance and legal risks. See <a href="decision.html">Compare options</a> and <a href="costs.html">Running costs</a>.</p></section>'''
+
+PATH_LABELS = {
+    "sell_equities": "Sell, invest in equities",
+    "sell_treasury": "Sell, reinvest in Treasuries",
+    "live_in": "Live in it",
+    "live_then_rent": "Live in it, then let it",
+    "rent_out": "Let it out",
+}
+
+
+# --------------------------------------------------------------- property A --
+def page_property_a() -> str:
+    p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
+    roll_rows = []
+    for r in MODEL["roll_a"]:
+        roll_rows.append(
+            f"<td>{r['year']}</td><td>{m(r['assessed'])}</td>"
+            f"<td>{m(r['bill']) if r['bill'] is not None else BLANK_CELL}</td>"
+            f"<td>{m(r['fitted'])}</td>"
+            f"<td>{m(r['residual']) if r['residual'] is not None else '&mdash;'}</td>"
+            + src_cell(["scc_ratebook", "boe_pub29"], "How a bill is built"))
+    roll = table(
+        "Property A assessment roll and tax bill, as supplied, rounded to the nearest $10",
+        ["Year", "Assessed value", "Tax bill as supplied", "Bill implied by the model",
+         "Difference", "Source"],
+        roll_rows,
+        note="The bill column is the owner's own record and is <strong>not</strong> verified against the county "
+             "assessment roll. The model column applies the stated ad valorem rate plus a fixed charge that "
+             "grows with inflation; the difference column shows how far the actual bill departs from that.")
+
+    reassess = table(
+        "What happens to the assessment when Property A is inherited (modelled for 2045)",
+        ["Line", "Amount", "Basis"],
+        [
+            f"<td>Market value at transfer, modelled</td><td>{m(p45['value_at_death'])}</td>"
+            + method_cell("projections.html#method", "Model output"),
+            f"<td>Assessed value if nothing changes, grown at the 2% cap</td>"
+            f"<td>{m(p45['factored_base_year_value'])}</td>"
+            + src_cell(["boe_pub29", "rtc51"], "Proposition 13"),
+            f"<td>Proposition 19 shelter, the indexed $1,000,000 amount</td>"
+            f"<td>{m(p45['prop19_cap'])}</td>"
+            + src_cell(["boe_lta25009", "rtc63_2"], "BOE and statute"),
+            f"<td>New assessed value if the heir moves in and claims the exclusion</td>"
+            f"<td><strong>{m(p45['taxable_if_live'])}</strong></td>"
+            + src_cell(["rtc63_2"], "Statutory formula"),
+            f"<td>New assessed value if the heir does not move in</td>"
+            f"<td><strong>{m(p45['taxable_if_rent'])}</strong></td>"
+            + src_cell(["boe_pub29", "rtc63_2"], "Full reassessment"),
+            f"<td>Tax bill today, projected to 2045</td><td>{m(p45['bill_today_projected'])}</td>"
+            + method_cell("projections.html#method", "Model output"),
+            f"<td>Tax bill from 2045, heir moves in</td><td>{m(p45['bill_if_live_year1'])}</td>"
+            + method_cell("projections.html#method", "Model output"),
+            f"<td>Tax bill from 2045, heir does not move in</td><td>{m(p45['bill_if_rent_year1'])}</td>"
+            + method_cell("projections.html#method", "Model output"),
+        ],
+        note="The Proposition 19 formula means the new assessed value when the exclusion applies is simply "
+             "the market value at transfer minus the indexed shelter amount. That is the whole of the "
+             "benefit, and it is why the shelter matters less the longer the transfer is delayed.")
+
+    cost_rows = [
+        f"<td>Water</td><td>{m(A['annual_costs']['water']['low'])} to {m(A['annual_costs']['water']['high'])}</td><td>{m(A['annual_costs']['water']['mid'])}</td>"
+        f'<td><span class="badge unverified">owner estimate</span></td>'
+        + src_cell([], "No official rate checked"),
+        f"<td>Electricity, net of solar export credit</td><td>{m(A['annual_costs']['electricity']['low'])} to {m(A['annual_costs']['electricity']['high'])}</td><td>{m(A['annual_costs']['electricity']['mid'])}</td>"
+        f'<td><span class="badge unverified">owner estimate</span></td>'
+        + src_cell(["cpuc_nem"], "Tariff rules"),
+        f"<td>Home insurance, primary residence</td><td>{m(A['annual_costs']['insurance']['low'])}</td><td>{m(A['annual_costs']['insurance']['mid'])}</td>"
+        f'<td><span class="badge unverified">owner estimate</span></td>'
+        + src_cell(["cdi_tips"], "Where to get a quote"),
+        f"<td>Maintenance and repair</td><td>not supplied</td><td>{m(MODEL['costs_a_now']['maintenance'])}</td>"
+        f'<td><span class="badge assumption">assumption</span></td>'
+        + src_cell([], "No official source"),
+        f"<td>Property tax, today</td><td>&mdash;</td><td>{m(MODEL['costs_a_now']['property_tax'])}</td>"
+        f'<td><span class="badge derived">derived</span></td>'
+        + src_cell(["scc_ratebook"], "Rate structure"),
+    ]
+    costs = table("Property A annual running costs",
+                  ["Cost", "Range supplied", "Used in the model", "Status", "Source"], cost_rows)
+
+    return (
+        table("Property A at a glance",
+              ["Fact", "Value", "Source"],
+              [
+                  f"<td>Role</td><td>Inherited through a trust, planned 2040 to 2050. Not owned by the heir today.</td>"
+                  + src_cell([], "Owner statement"),
+                  f"<td>Jurisdiction</td><td>{esc(A['jurisdiction'])}</td>"
+                  + src_cell(["scc_ratebook"], "County rate book"),
+                  f"<td>Estimated market value, November 2026</td><td>{m(A['estimated_market_value_2026'])}</td>"
+                  + src_cell([], "Owner estimate, unverified"),
+                  f"<td>Current assessed value</td><td>{m(A['roll'][0]['assessed'])}</td>"
+                  + src_cell([], "Owner record, unverified"),
+                  f"<td>Current property tax bill</td><td>{m(MODEL['costs_a_now']['property_tax'])}</td>"
+                  + src_cell(["scc_ratebook"], "Rate structure"),
+                  f"<td>Units</td><td>{A['units']}, occupied by the transferor as a principal residence</td>"
+                  + src_cell(["boe_lta26026"], "Principal residence test"),
+                  f"<td>Solar</td><td>Installed. Export credit currently exceeds usage.</td>"
+                  + src_cell(["cpuc_nem"], "NEM and net billing"),
+              ])
+        + roll
+        + callout("key", "The single most important number on this page", f"""
+<p>The assessed value is about {m(A['roll'][0]['assessed'])} and the market value is about {m(A['estimated_market_value_2026'])}.
+Proposition 13 protects that gap only until ownership changes. When the trust transfers the house, the assessed
+value resets to market value, less the Proposition 19 shelter of about {m(p45['prop19_cap'])} if the heir moves in
+within a year and files the claim, or with no shelter at all if not. Either way this is the largest single change
+in the whole analysis, and it happens by operation of law whether or not anyone plans for it.</p>""")
+        + reassess
+        + costs
+        + callout("solar", "Solar and the electricity credit", """
+<p>The owner reports that the solar export credit currently exceeds usage, producing a small net credit rather than
+a bill. Two cautions. First, net energy metering tariffs are closed to new enrolment and since 15 April 2023 new
+systems take service on the net billing tariff, where export compensation is usually below the retail rate. A
+customer already on a NEM tariff may stay on it for twenty years from interconnection. Second, an inherited or
+sold property can lose the tariff holder status that goes with the original customer. Whether this system is on
+NEM 2.0 or on the net billing tariff is on the <a href="questions.html">questions page</a>.</p>""")
     )
 
-    pages["property-b.html"] = (
-        "Property B · already owned",
-        "A separate framework for a property treated as already owned before Property A is inherited, including rental income and possible owner occupancy.",
-        '''<div class="privacy"><strong>Ownership distinction.</strong> In this decision framework, Property B is already owned by the recipient; it is not treated as an asset newly inherited with A. Verify the deed, beneficial ownership and tax records before relying on that distinction.</div>
-<section><h2>Keep B's income and use separate</h2><p>If B is rented, record collected rent, vacancy or non-payment, unit-level occupancy, operating costs, financing and taxes in its own ledger. If the recipient may occupy B, compare the housing value with rent that would stop or change, tenant/lease obligations and revised utility, insurance and maintenance costs. No rent or occupancy level is assumed here.</p>''' + fact_table(
-            "General rules that can affect B",
-            ["Topic", "What to verify"],
-            [
-                (["Rental income and expenses", "Federal rental reporting lists common expenses such as maintenance, insurance, taxes, repairs and utilities; personal use can change expense allocation and deductions."], "irs_rental"),
-                (["Rent increases", "California's general statutory cap applies only to covered units; exceptions and local restrictions may change the rule. Confirm unit coverage and current local law before changing rent."], "civ_1947_12"),
-                (["Ending a tenancy", "After 12 months of continuous lawful occupancy, covered tenancies generally require just cause stated in the written notice. For a no-fault termination, the owner must either provide relocation assistance equal to one month's rent within 15 calendar days or waive the final month's rent in writing before it is due; exemptions and local protections apply."], "civ_1946_2"),
-                (["Insurance", "State premium-comparison surveys are not individualized quotes. Confirm rental, vacancy and owner-occupancy coverage directly with the insurer."], "cdi_premiums"),
-                (["Solar / electricity", "Net-billing/export credits depend on the utility and the system's tariff/interconnection facts. Check the actual account bill and agreement."], "cpuc_solar"),
-            ]) + '''</section>
-<section><h2>Private evidence checklist</h2>''' + blank_table(
-            "Property B inputs — not collected or published here",
-            ["Field", "Public value", "Evidence to obtain privately"],
-            [
-                ["Current legal and beneficial ownership", '<td class="blank">Not published</td>', "Recorded title, agreements and tax records"],
-                ["Existing basis and prior depreciation records", '<td class="blank">Not published</td>', "Prior returns, closing records and improvement records"],
-                ["Collected rent, leases, vacancy and owner-occupancy plan", '<td class="blank">Not published</td>', "Rent ledger, leases, tenant notices and personal-use plan"],
-                ["Property tax, insurance, water, electricity/solar", '<td class="blank">Not published</td>', "Current bills, policy declarations and system agreement"],
-                ["Maintenance, repair and capital-work history", '<td class="blank">Not published</td>', "Inspection reports, invoices and forward repair estimates"],
-            ]) + '''</section>
-<section><h2>Separate tax ledgers</h2><p>Do not combine B's existing rental receipts with A's estate value, and do not assume A's inherited basis applies to B. A tax professional should identify ownership, basis, prior depreciation, income allocation and the effect of any occupancy change from the underlying records.</p></section>'''
+
+# --------------------------------------------------------------- property B --
+def page_property_b() -> str:
+    roll_rows = []
+    for r in MODEL["roll_b"]:
+        roll_rows.append(
+            f"<td>{r['year']}</td><td>{m(r['assessed'])}</td>"
+            f"<td>{m(r['bill'])}</td><td>{m(r['fitted'])}</td>"
+            f"<td>{m(r['residual'])}</td>"
+            + src_cell(["sf_treas_rate", "boe_pub29"], "Rate and rule"))
+    roll = table("Property B assessment roll and tax bill, as supplied, rounded to the nearest $10",
+                 ["Year", "Assessed value", "Tax bill as supplied", "Bill implied by the model",
+                  "Difference", "Source"], roll_rows)
+
+    cost_rows = [
+        f"<td>Water, all three units</td><td>{m(B['annual_costs']['water']['low'])} to {m(B['annual_costs']['water']['high'])}</td><td>{m(B['annual_costs']['water']['mid'])}</td>"
+        f'<td><span class="badge unverified">owner estimate</span></td>' + src_cell([], "No official rate checked"),
+        f"<td>Electricity</td><td>{m(B['annual_costs']['electricity']['low'])} to {m(B['annual_costs']['electricity']['high'])}</td><td>{m(B['annual_costs']['electricity']['mid'])}</td>"
+        f'<td><span class="badge unverified">owner estimate</span></td>' + src_cell([], "No official rate checked"),
+        f"<td>Insurance, rental policy</td><td>{m(B['annual_costs']['insurance']['low'])}</td><td>{m(B['annual_costs']['insurance']['mid'])}</td>"
+        f'<td><span class="badge unverified">owner estimate</span></td>' + src_cell(["cdi_tips"], "Where to get a quote"),
+        f"<td>Maintenance and repair</td><td>not supplied</td><td>{m(MODEL['costs_b_now']['maintenance'])}</td>"
+        f'<td><span class="badge assumption">assumption</span></td>' + src_cell([], "No official source"),
+        f"<td>Property tax, today</td><td>&mdash;</td><td>{m(MODEL['costs_b_now']['property_tax'])}</td>"
+        f'<td><span class="badge derived">derived</span></td>' + src_cell(["sf_treas_rate"], "Published rate"),
+    ]
+    inc = MODEL["costs_b_now"]
+    net = inc["rent"] - sum(inc[k] for k in ("water", "electricity", "insurance", "maintenance", "property_tax"))
+    costs = table("Property B annual income and running costs",
+                  ["Item", "Range supplied", "Used in the model", "Status", "Source"], cost_rows,
+                  note=f"At the figures above, the building throws off about {m(net)} a year after running "
+                       f"costs, before income tax and before any vacancy allowance. That is about "
+                       f"{net / B['estimated_market_value_2026'] * 100:.1f}% of its estimated value.")
+
+    rules = table(
+        "Rent rules that apply to Property B",
+        ["Rule", "What it says", "Source"],
+        [
+            f"<td>San Francisco allowed annual increase</td><td>1.6% from 1 March 2026 to 28 February 2027, "
+            f"based on 60% of the change in the Bay Area consumer price index. One increase every twelve "
+            f"months. There is no limit on the rent first charged to a new tenant of an empty unit.</td>"
+            + src_cell(["sf_rent_increase"], "SF Rent Board"),
+            f"<td>Proposed cap on banked and capital improvement increases</td>"
+            f"<td>The Board of Supervisors is considering File 261020, which would limit combined banked and "
+            f"capital improvement increases to 10% a year. <strong>Not enacted.</strong></td>"
+            + src_cell(["sf_file261020"], "Legistar file"),
+            f"<td>Statewide rent cap</td><td>Gross rent cannot rise more than 5% plus the change in the cost "
+            f"of living, or 10%, whichever is lower, over twelve months. Housing already under a stricter "
+            f"local ordinance is excluded.</td>"
+            + src_cell(["civ1947_12"], "Civil Code 1947.12"),
+            f"<td>Statewide just cause</td><td>A tenancy cannot be ended without a stated just cause, and a "
+            f"no-fault termination including an owner move-in carries a relocation payment.</td>"
+            + src_cell(["civ1946_2"], "Civil Code 1946.2"),
+            f"<td>Which rules apply</td><td>Whether these units are covered by the San Francisco Rent "
+            f"Ordinance, by the statewide act, or by an exemption depends on the building's age, its "
+            f"ownership and the notices given. This site does not verify that.</td>"
+            + src_cell(["sf_rent_increase", "civ1947_12"], "Both rules"),
+        ])
+
+    return (
+        table("Property B at a glance",
+              ["Fact", "Value", "Source"],
+              [
+                  f"<td>Role</td><td>Already owned by the heir. Rental income is already flowing and the heir can live here without losing it.</td>"
+                  + src_cell([], "Owner statement"),
+                  f"<td>Jurisdiction</td><td>{esc(B['jurisdiction'])}</td>"
+                  + src_cell(["sf_treas_rate"], "SF Treasurer"),
+                  f"<td>Estimated market value, November 2026</td><td>{m(B['estimated_market_value_2026'])}</td>"
+                  + src_cell([], "Owner estimate, unverified"),
+                  f"<td>Current assessed value</td><td>{m(B['roll'][0]['assessed'])}</td>"
+                  + src_cell([], "Owner record, unverified"),
+                  f"<td>Current property tax bill</td><td>{m(MODEL['costs_b_now']['property_tax'])}</td>"
+                  + src_cell(["sf_treas_rate"], "Published rate"),
+                  f"<td>Units</td><td>{B['units']}, of which {B['units_rented']} are let</td>"
+                  + src_cell([], "Owner statement"),
+                  f"<td>Rent received</td><td>{m(B['rent']['monthly'])} a month, {m(B['rent']['annual'])} a year</td>"
+                  + src_cell([], "Owner statement, unverified"),
+                  f"<td>Effective tax rate on assessed value</td><td>{MODEL['projection_b'][0]['effective_rate']}%</td>"
+                  + src_cell(["sf_treas_rate"], "Rate plus fixed charges"),
+              ])
+        + roll
+        + costs
+        + rules
+        + callout("why", "Why Property B shapes the Property A decision", """
+<p>Three things follow from the heir already owning this building.</p>
+<ol>
+<li><strong>The heir already has somewhere to live at no cash cost.</strong> That removes the usual argument for
+keeping an inherited house, which is that it provides housing. It also means the Opportunity cost of living in
+Property A is not rent saved but the rent the vacated unit here could earn.</li>
+<li><strong>Property B is a going concern with a low assessed value.</strong> Nothing about inheriting Property A
+changes its assessment, because the heir already owns it.</li>
+<li><strong>Two properties in one state means two reassessment clocks and one homeowners' exemption.</strong>
+Only one property can be a principal residence for exemption purposes, which matters directly for the
+Proposition 19 claim on Property A.</li>
+</ol>""")
     )
 
-    pages["costs.html"] = (
-        "Running costs",
-        "A blank evidence template for property tax, insurance, water, electricity/solar, maintenance, repairs, rental income and transaction costs.",
-        '''<div class="note"><strong>Every property-specific amount is intentionally blank.</strong> A rounded public figure can still identify a property. Use actual records and quotes in a private worksheet; the source links below describe rules, not the cost of either property.</div>
-<section><h2>Annual and one-time items</h2>''' + blank_table(
-            "Cost ledger — private inputs required for each property",
-            ["Line item", "Property A", "Property B", "Evidence / official rule source"],
-            [
-                ["Property tax, assessments and supplemental notices", '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', f"Current assessor roll and tax bill; {source_link('boe_prop13', 'California property-tax framework')}"],
-                ["Insurance premium, deductible and coverage limits", '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', f"Current policy and written quote; {source_link('cdi_premiums', 'CDI survey limitations')}"],
-                ["Water, sewer and other service charges", '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', "Actual service-provider bills; provider intentionally not identified"],
-                ["Electricity, gas, solar loan/lease and export credits", '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', f"Actual bills and system agreement; {source_link('cpuc_solar', 'CPUC tariff overview')}"],
-                ["Routine maintenance and management", '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', f"Invoices, service contracts and inspection; {source_link('irs_rental', 'IRS rental-expense categories')}"],
-                ["Repairs, deferred work and capital improvements", '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', f"Inspection and contractor estimates; {source_link('irs_rental', 'IRS repair/improvement distinction')}"],
-                ["Rental income, collection loss, vacancy and tenant expenses", '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', f"Leases, deposits, statements and records; {source_link('irs_rental', 'IRS rental reporting')}"],
-                ["Financing cash payments and loan terms", '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', "Loan statements and agreements; tax treatment requires separate review"],
-                ["Selling costs, transfer tax and closing expenses", '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', f"Written sale estimate and local ordinance; {source_link('rtc_11911', 'California transfer-tax authorization')}"],
-            ]) + '''</section>
-<section><h2>Keep cash flow and tax treatment separate</h2><p>For a rental, organize actual cash received and paid by year. Then separately determine taxable rental income and any allowed deductions. IRS Publication 527 distinguishes, among other things, routine repairs from capital improvements and discusses rental expenses; it does not establish a property's budget.</p><p>For personal occupancy, include the changed housing arrangement and any rental income lost or reduced. For an inherited sale, keep basis and transaction-cost documents separate. Do not substitute a statewide average, insurance comparison survey or property-tax rule for a property-specific bill or quote.</p></section>'''
+
+# ----------------------------------------------------- ownership distinction --
+def page_distinction() -> str:
+    p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
+    rows = [
+        ("Who owns it today", "The transferor, through a trust. The heir owns nothing yet.",
+         "The heir, outright or in their own name.", "Only Property A has a transfer event coming. Every tax consequence on this site flows from that single event."),
+        ("What triggers the tax change", "The trust transfer, expected 2040 to 2050. That is a change in ownership.",
+         "Nothing pending. The heir's existing assessment simply grows at the 2% cap.",
+         f"Property A's bill goes from about {m(MODEL['costs_a_now']['property_tax'])} to about {m(p45['bill_if_rent_year1'])} if let out. Property B's bill just drifts upward."),
+        ("Basis for income tax", "Resets to market value at death, so a sale soon afterwards pays almost no capital gains tax.",
+         "Carries the heir's original cost basis, so a sale would be taxed on the whole gain since purchase.",
+         "This is the strongest argument for selling Property A and keeping Property B."),
+        ("Principal residence position", "Would have to become the heir's principal residence for the Proposition 19 exclusion to apply.",
+         "The heir can already live here without losing the rent from the two let units.",
+         f"Only one homeowners' exemption is available. Choosing Property A means giving up the Property B position, and the exclusion is worth about {m(p45['prop19_cap'])} of sheltered value in 2045."),
+        ("Income", "None today. The house produces housing for the transferor and nothing else.",
+         f"About {m(B['rent']['annual'])} a year from two units, with a third unit available.",
+         "Property B is a going concern. Property A is a capital asset that only becomes an income asset if it is let, which is the path that triggers the full reassessment."),
+        ("Running costs", f"About {m(sum(MODEL['costs_a_now'][k] for k in ('water', 'electricity', 'insurance', 'maintenance', 'property_tax')))} a year today, and the owner reports repairs run lower here than at Property B.",
+         f"About {m(sum(MODEL['costs_b_now'][k] for k in ('water', 'electricity', 'insurance', 'maintenance', 'property_tax')))} a year today.",
+         "Property A is the cheaper building to hold today. After the reassessment it is not, because the tax bill dominates."),
+        ("Liquidity and diversification", "A single asset in one school district, one water basin, one earthquake fault region.",
+         "A second single asset in the same state, the same earthquake region and much the same economy.",
+         "Holding both concentrates rather than diversifies. Selling Property A is the only path that converts a concentrated holding into a diversified one."),
+    ]
+    tbl = table("The two properties side by side",
+                ["Dimension", "Property A - inherited", "Property B - already owned", "Why the difference decides the case"],
+                [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td><td>{esc(d)}</td>"
+                 + src_cell(["rtc63_2", "boe_pub29", "irs_basis", "sf_treas_rate"], "Governing rules")
+                 for a, b, c, d in rows])
+    return (tbl
+            + callout("key", "The distinction that changes the arithmetic", """
+<p>An inherited property arrives with a reset income-tax basis and a property-tax assessment about to reset the
+other way. An already-owned property has neither event. Treating the two as interchangeable is the single easiest
+way to reach the wrong answer here, because the reset basis makes selling cheap at exactly the moment the
+reassessment makes holding expensive.</p>""")
+            + callout("warn", "One exemption, two properties", """
+<p>California allows one homeowners' exemption. If the heir claims the Proposition 19 exclusion on Property A,
+Property A must be the principal residence, and the Property B position has to be given up. The exclusion also
+requires continued occupation: it is removed on the date the home stops qualifying, whether because the heir
+moves out, lets it, or simply stops using it as a main home. There are no exceptions to the one-year occupation
+rule. That makes "move in for a while, then let it out" a risky structure, not a safe compromise.</p>"""))
+
+
+# -------------------------------------------------------------------- costs --
+def page_costs() -> str:
+    infl = ASM["inflation"]["baseline"]
+    years = [2026, 2030, 2040, 2045, 2050, 2060, 2076]
+
+    def rows_for(which: str):
+        base = MODEL["costs_a_now"] if which == "A" else MODEL["costs_b_now"]
+        out = []
+        for y in years:
+            f = (1 + infl) ** (y - 2026)
+            if which == "A":
+                tax = next(r["bill"] for r in MODEL["projection_a"] if r["year"] == y)
+            else:
+                tax = next(r["bill"] for r in MODEL["projection_b"] if r["year"] == y)
+            total = (base["water"] + base["electricity"] + base["insurance"]
+                     + base["maintenance"]) * f + tax
+            out.append(f"<td>{y}</td><td>{m(money10(base['water'] * f))}</td>"
+                       f"<td>{m(money10(base['electricity'] * f))}</td>"
+                       f"<td>{m(money10(base['insurance'] * f))}</td>"
+                       f"<td>{m(money10(base['maintenance'] * f))}</td>"
+                       f"<td>{m(money10(tax))}</td>"
+                       f"<td><strong>{m(money10(total))}</strong></td>"
+                       + method_cell("#method", "Model output"))
+        return out
+
+    tbl_a = table("Property A running costs, projected at the modelled inflation rate",
+                  ["Year", "Water", "Electricity, net of solar", "Insurance",
+                   "Maintenance", "Property tax", "Total"], rows_for("A"))
+    tbl_b = table("Property B running costs, projected at the modelled inflation rate",
+                  ["Year", "Water", "Electricity", "Insurance", "Maintenance",
+                   "Property tax", "Total"], rows_for("B"))
+
+    net = MODEL["costs_b_now"]
+    net_now = net["rent"] - sum(net[k] for k in ("water", "electricity", "insurance",
+                                                 "maintenance", "property_tax"))
+    return (
+        callout("note", "Where these numbers come from", """
+<p>Water, electricity and insurance are <strong>owner estimates</strong> and are flagged unverified. Maintenance
+is an <strong>assumption</strong>, because no figure was supplied. Property tax is derived from the owner's own
+bills plus the published or assumed ad valorem rate. Everything is rounded to the nearest $10 and projected at
+the modelled inflation rate of 2.5% a year.</p>""")
+        + tbl_a
+        + tbl_b
+        + table("Property B net income today",
+                ["Item", "Amount", "Source"],
+                [
+                    f"<td>Rent received, two units</td><td>{m(net['rent'])}</td>" + src_cell([], "Owner statement, unverified"),
+                    f"<td>Less water</td><td>{m(-net['water'])}</td>" + src_cell([], "Owner estimate, unverified"),
+                    f"<td>Less electricity</td><td>{m(-net['electricity'])}</td>" + src_cell([], "Owner estimate, unverified"),
+                    f"<td>Less insurance</td><td>{m(-net['insurance'])}</td>" + src_cell([], "Owner estimate, unverified"),
+                    f"<td>Less maintenance at the assumed rate</td><td>{m(-net['maintenance'])}</td>" + src_cell([], "Assumption"),
+                    f"<td>Less property tax</td><td>{m(-net['property_tax'])}</td>" + src_cell(["sf_treas_rate"], "Published rate"),
+                    f"<td><strong>Net, before income tax and vacancy</strong></td><td><strong>{m(net_now)}</strong></td>" + method_cell("#method", "Model output"),
+                ],
+                note=f"That is about {net_now / B['estimated_market_value_2026'] * 100:.1f}% of the estimated value. "
+                     f"A vacancy allowance and income tax would reduce it further.")
+        + '<h2>How the projections are built</h2>'
+        + table("Projection method", ["Step", "What is done", "Source"],
+                [
+                    "<td>Assessed value</td><td>Grown at the Proposition 13 cap of 2% a year, which has been binding in every year of both supplied rolls.</td>" + src_cell(["boe_pub29", "rtc51"], "Proposition 13"),
+                    "<td>Tax bill</td><td>Ad valorem rate times assessed value, plus a fixed charge grown at the modelled inflation rate.</td>" + src_cell(["scc_ratebook", "sf_treas_rate"], "Rate structure and published rate"),
+                    "<td>Water, power, insurance, maintenance</td><td>Grown at the modelled inflation rate. No real-terms change in usage or tariffs is assumed.</td>" + src_cell(["ssa_trustees"], "Inflation anchor"),
+                    "<td>Market value</td><td>Grown at the modelled house price growth rate of 4% a year.</td>" + src_cell(["fred_hpi_a", "fred_hpi_b"], "Historical index"),
+                ],
+                note="A constant rate is used for the year-by-year page because it is the only way to show a "
+                     "readable table. It is not a forecast. The <a href=\"black-swan.html\">black swan page</a> "
+                     "shows what happens when growth and inflation are not constant.")
+        + callout("flag", "Three cost numbers that need replacing", """
+<ol>
+<li><strong>Insurance on both properties.</strong> The California Department of Insurance does not publish an
+average premium by area, so no official figure exists to check these against. Get three quotes for each building,
+one of which should be a rental policy. See <a href="suggestions.html">suggestion S-01</a>.</li>
+<li><strong>Maintenance.</strong> No figure was supplied. This site assumes 0.5% of value a year for an
+owner-occupied home, 0.75% for Property A as a rental and 1.5% for the older three-unit building. Replace these
+with the actual five-year repair history.</li>
+<li><strong>Water.</strong> The provider and tariff for Property A are not confirmed, so the owner's range is
+used as supplied.</li>
+</ol>""")
     )
 
-    pages["projections.html"] = (
-        "Projection method — no personal forecast",
-        "A reproducible, year-by-year method for private scenario comparisons without publishing owner inputs, property-specific projections or a smooth 50-year growth forecast.",
-        '''<div class="privacy"><strong>No personalized projection is published.</strong> The public site contains no starting property value, rent, assessed value, owner-supplied input or calculated future outcome. A 50-year line based on a single growth rate would imply more certainty than the evidence supports.</div>
-<section><h2>Build privately, in separate ledgers, year by year</h2>''' + list_html([
-            'Start with verified title, current bills, rent records, basis/depreciation records, insurance and written repair estimates.',
-            "Keep Property A's inheritance, basis, reassessment eligibility and use options separate from Property B's existing ownership and rental cash flow.",
-            'Use annual time steps for cash receipts, expenses, tax rules and occupancy changes. Distinguish nominal dollars from inflation-adjusted purchasing power.',
-            'Use multiple paths, not a constant growth rate: declines, rebounds, flat real prices, changing inflation, changing rates, vacancy, insurance repricing and major repair years.',
-            'Show the assumptions and source for each input; leave unsupported inputs blank. Do not turn a scenario into a probability or recommendation without evidence.'
-        ], ordered=True) + '''</section>
-<section><h2>Year-by-year structure — what to project for each year</h2><p>Use one row per year from the inheritance year through the holding horizon. The formulas below are general rules; substitute the actual bill, quote or private assumption year by year. All private-year values remain blank on the public site.</p>''' + blank_table(
-            "Private annual worksheet — one row per year, values blank here",
-            ["Year", "Market value", "Assessed value", "Property tax", "Insurance, water, electricity/solar", "Maintenance / repairs", "Rental net", "Notes / source"],
-            [
-                ["Inheritance year", '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', "Trust date, basis record, assessor filing; " + source_link('boe_prop13', 'Prop 13 framework') + " and " + source_link('boe_lta_2026_002', '2% cap letter')],
-                ["Inheritance year +1", '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', "Occupancy within one year if claiming family-home exclusion; " + source_link('rtc_63_2', 'RTC 63.2')],
-                ["Each later year", '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', '<td class="blank">Not published</td>', "Use irregular paths from <a href=\"stress.html\">stress cases</a>; " + source_link('civ_1947_12', 'rent-cap rule') + " if covered"],
-            ]) + '''</section>
-<section><h2>Scenario dimensions</h2>''' + blank_table(
-            "Private scenario matrix — no numeric assumptions supplied",
-            ["Dimension", "Lower / adverse case", "Reference case", "Higher / favorable case", "Evidence needed"],
-            [
-                ["Home value path", '<td class="blank">Not supplied</td>', '<td class="blank">Not supplied</td>', '<td class="blank">Not supplied</td>', "Local appraisal and historical range; do not equate a broad index with a specific parcel"],
-                ["Inflation and interest rates", '<td class="blank">Not supplied</td>', '<td class="blank">Not supplied</td>', '<td class="blank">Not supplied</td>', "Official time series and explicitly chosen stress assumptions"],
-                ["Rent, vacancy and tenant turnover", '<td class="blank">Not supplied</td>', '<td class="blank">Not supplied</td>', '<td class="blank">Not supplied</td>', "Leases, lawful rent rules and actual collection history"],
-                ["Insurance, utilities and repairs", '<td class="blank">Not supplied</td>', '<td class="blank">Not supplied</td>', '<td class="blank">Not supplied</td>', "Current quotes, actual bills, inspection and contractor estimates"],
-                ["Tax law and occupancy", '<td class="blank">Not supplied</td>', '<td class="blank">Not supplied</td>', '<td class="blank">Not supplied</td>', "Current federal, state and local law; recheck at the decision date"],
-            ]) + '''</section>
-<section><h2>Use horizons, not false precision</h2><p>For each chosen horizon, compare (1) after-tax net cash flow, (2) net sale proceeds or remaining asset value, (3) investment alternatives, (4) housing value and any rent foregone by occupying B, and (5) liquidity and management risk. A historical episode is a stress example, not a prediction. The <a href="stress.html">Economic stress cases</a> page documents the episodes used as reminders.</p></section>'''
+
+# -------------------------------------------------------------- projections --
+def page_projections() -> str:
+    def proj_rows(proj):
+        out = []
+        for r in proj:
+            out.append(f"<td>{r['year']}</td><td>{m(r['value'])}</td><td>{m(r['assessed'])}</td>"
+                       f"<td>{m(r['bill'])}</td><td>{r['effective_rate']}%</td>"
+                       + method_cell("#method", "Model output"))
+        return out
+
+    excl_rows = [f"<td>{e['year']}</td><td>{m(e['amount'])}</td><td>{esc(e['basis'])}</td>"
+                 + src_cell(e["src"], "Official source")
+                 for e in MODEL["exclusion_projection"] if e["year"] >= 2026]
+    cap_rows = [f"<td>{e['year']}</td><td>{m(e['amount'])}</td><td>{esc(e['basis'])}</td>"
+                + src_cell(e["src"], "Official source")
+                for e in MODEL["prop19_cap_projection"] if e["year"] >= 2026]
+
+    return (
+        callout("note", "What this page is", """
+<p>Year-by-year projections from 2026 to 2076 on the baseline assumptions: house prices 4.0% a year, inflation
+2.5% a year, assessed values rising at the Proposition 13 cap of 2% a year. These tables exist so the shape of
+the arithmetic is visible. They are not a forecast; see the <a href="black-swan.html">black swan page</a>.</p>""")
+        + table("Property A: value, assessed value and tax bill, if the assessment is never reset",
+                ["Year", "Market value", "Assessed value", "Tax bill", "Effective rate on assessed value", "Basis"],
+                proj_rows(MODEL["projection_a"]))
+        + table("Property B: value, assessed value and tax bill",
+                ["Year", "Market value", "Assessed value", "Tax bill", "Effective rate on assessed value", "Basis"],
+                proj_rows(MODEL["projection_b"]))
+        + '<h2>Two thresholds that move over time</h2>'
+        + table("Federal estate tax basic exclusion amount",
+                ["Year", "Amount", "Basis", "Source"], excl_rows)
+        + table("Proposition 19 intergenerational shelter amount, modelled",
+                ["Year", "Amount", "Basis", "Source"], cap_rows)
+        + callout("warn", "Read the two threshold tables together", """
+<p>The federal exclusion is indexed to inflation and has been rising. The Proposition 19 shelter is adjusted only
+every second February and only by the change in the California house price index. If house prices rise faster
+than the shelter, the shelter buys a smaller and smaller share of the property each time the transfer is delayed.
+On the baseline assumptions the shelter covers about 29% of Property A's modelled 2045 value. Waiting is not
+neutral.</p>""")
     )
 
-    pages["stress.html"] = (
-        "Economic stress cases — black swans and irregular 50-year paths",
-        "Official historical episodes and a private method for testing a 50-year horizon where growth and inflation are never even, instead of using one constant rate.",
-        '''<div class="note"><strong>History is not a forecast.</strong> These episodes are anchors for stress testing, not return assumptions and not predictions for either property. The figures below are historical index/economic changes, not property-specific inputs.</div>
-<section><h2>Why a smooth 50-year line misleads</h2><p>A constant-rate projection (for example, a steady 4% home-price and 2.5% inflation line for 50 years) implies a stability that long economic history does not show. Real decades contain booms, flat years and sharp falls in sequence. Use the episodes below and the private irregular-path method after them to mimic that unevenness rather than averaging it away.</p>''' + fact_table(
-            "Official historical facts for scenario design — irregular, not smooth",
-            ["Episode", "Official-source historical fact", "Why include it in a stress test"],
-            [
-                (["1929–1954 market drawdown and recovery", "The Dow fell 89% from its 1929 peak by July 1932 and did not return to its pre-crash nominal high until November 1954.", "Test a deep equity drawdown and a recovery period that lasts much longer than a typical forecast horizon."], "frh_1929"),
-                (["1965–1982 Great Inflation", "Inflation rose from a little over 1% in 1964 to more than 14% in 1980, peaking near 15% in March 1980.", "Test whether fixed-dollar costs, nominal returns and purchasing power behave differently under high inflation."], "frh_great_inflation"),
-                (["2007–2009 Great Recession", "Average U.S. home prices fell about 30%; the S&P 500 fell 57% peak-to-trough; unemployment reached 10% in October 2009.", "Test simultaneous housing, investment and rental-income stress rather than assuming assets move independently."], "frh_great_recession"),
-                (["March 2020 market shock", "The S&P 500 was 34% below its February 2020 high by March 23; market-wide circuit breakers halted trading three times in March.", "Test a rapid shock, constrained liquidity and decisions made during a volatile market."], "nyfed_covid"),
-                (["June 2022 inflation shock", "CPI-U increased 9.1% over the year ended June 2022; electricity prices increased 13.7% over the same period.", "Test a sudden rise in broad prices and a separate utility-cost shock."], "bls_2022_cpi"),
-            ]) + '''</section>
-<section><h2>Black-swan conditions to test separately</h2>''' + plain_table(
-            "Irregular conditions that a constant rate hides — test each privately",
-            ["Condition", "What to vary", "Example private stress"],
-            [
-                ["Stagflation decade", "High inflation with flat or falling real asset prices", "Home prices flat for years while costs rise; rent coverage falls even if nominal rent is capped"],
-                ["Housing crash and rebound", "Sharp fall then uneven recovery, with tight sale timing", "Need to sell or refinance during the trough, not after recovery"],
-                ["Deflation or low inflation", "Falling or near-zero prices with debt still due", "Nominal rent and property tax behavior under a capped assessed-value rule"],
-                ["Insurance repricing or nonrenewal", "Higher premium, higher deductible or loss of coverage", "A major repair year coincides with a coverage gap or nonrenewal"],
-                ["Law change mid-horizon", "Exemption, tax threshold, rent or transfer-tax change", "Family-home exclusion unavailable or a rate threshold moved before 2040–2050"],
-            ],
-            row_class="framework-row",
-        ) + '''</section>
-<section><h2>Private method: run a 50-year horizon year by year with irregular paths</h2><p>Build the private workbook with annual rows from the inheritance year to 50 years later. For each year record market value, assessed value (capped), property tax, insurance, utilities, maintenance, rent and net — but keep the figures private. Then test the same horizon three or more ways:</p>''' + list_html([
-            'A baseline with documented, sourced assumptions — clearly labeled as an illustration, not a forecast.',
-            'Two or more historical replays: take a real 10- to 20-year official stretch and repeat its year-by-year pattern.',
-            'One or more random resamplings of official annual changes to produce many irregular 50-year paths and a distribution, not a single line.',
-            'At least one adverse combination: low or negative home-price years, high-inflation years, a vacancy year, a major repair year and a law change year together.'
-        ], ordered=True) + '''<p>See <a href="projections.html">Projection method</a> for the annual structure and <a href="costs.html">Running costs</a> for the line items. Do not publish the private values or treat any single path as a prediction.</p></section>
-<section><h2>Stress the whole decision, not only asset growth</h2>''' + list_html([
-            'Property A: falling market value, delayed sale, reassessment, insurance nonrenewal, major repair and a change in the planned occupancy date.',
-            'Property B: rent interruption, tenant turnover, lawful rent limits, owner-occupancy change, higher service costs and repair concentration.',
-            'Shared household: inflation spikes, deflation, job/income interruption, interest-rate shifts, market drawdowns and the need for liquidity.',
-            'Law: an exemption, tax threshold, rent rule or local ordinance changes before the decision or holding period ends.'
-        ]) + '''<p>Use separate private scenarios and show the source for each factual anchor. Do not project the historical return directly onto a specific house, rent stream or investment account.</p></section>'''
+
+# -------------------------------------------------------------------- taxes --
+def page_taxes() -> str:
+    p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
+    now_sale = p45["paths"]["sell_equities"]["sale"]
+    late_sale = p45["paths"]["live_in"]["sale"]
+    rent_sale = p45["paths"]["rent_out"]["sale"]
+    rows = [
+        ("Basis of inherited property", "Fair market value at the date of death.",
+         "irs_basis", "verified rule"),
+        ("Sale immediately after inheritance", f"Gain is about zero, so tax is about zero. On the 2045 model, a {m(now_sale['price'])} sale carries {m(now_sale['tax'])} of tax.",
+         "irs_basis", "derived"),
+        ("Section 121 exclusion", f"{m(V['section121_exclusion_single']['value'])} for a single filer, {m(V['section121_exclusion_joint']['value'])} for a joint return, if the home was the main home for two of the last five years.",
+         "irs_p523", "verified rule"),
+        ("Federal capital gains", "0%, 15% or 20% by taxable income.", "irs_tc409", "verified rule"),
+        ("Net investment income tax", "An additional 3.8% above the threshold.", "irs_tc559", "verified rule"),
+        ("Unrecaptured section 1250 gain", "A maximum 25% federal rate on the depreciation claimed while the property was let.", "irs_tc409", "verified rule"),
+        ("California treatment", "California has no separate lower rate for long-term gains; they are taxed as ordinary income. Voters made the existing high-income rates permanent in November 2026 instead of letting them expire in 2031.",
+         "ftb_cg", "verified rule"),
+        ("Combined rate used here", f"{pcf(ASM['combined_gain_tax_rate']['baseline'],1)} on the capital part of a gain and {pcf(ASM['depreciation_recapture_rate']['baseline'],1)} on the recaptured depreciation. Federal and state rates are simply added and no federal deduction is taken for the state tax, which is deliberately conservative.",
+         "irs_tc409", "assumption"),
+        ("Sale after holding for thirty years", f"On the 2045 model, a {m(late_sale['price'])} sale produces a gain of {m(late_sale['gain'])} and tax of {m(late_sale['tax'])}, after the {m(late_sale['exclusion'])} exclusion for a single filer.",
+         "irs_tc409", "derived"),
+        ("Sale after letting it for thirty years", f"Worse again, because of depreciation recapture: a gain of {m(rent_sale['gain'])} of which {m(rent_sale['recapture'])} is recaptured, giving tax of {m(rent_sale['tax'])}.",
+         "irs_tc409", "derived"),
+        ("California estate and inheritance tax", "None. No California estate tax return is required for a death on or after 1 January 2005, and a gift or inheritance is not California income.",
+         "sco_estate", "verified rule"),
+        ("Income the property later produces", "Rent, interest, dividends and gain on a later sale are all taxable, even though the inheritance itself is not.",
+         "ftb_inheritance", "verified rule"),
+        ("Inherited retirement accounts", "Not covered by the basis step-up. They are income in respect of a decedent and are taxed as withdrawals are taken.",
+         "irs_rmd", "flagged"),
+    ]
+    tbl = table("Income tax rules that apply to each path",
+                ["Rule", "What it means here", "Source", "Status"],
+                [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td>"
+                 f'<td><span class="badge {esc(d.split()[0])}">{esc(d)}</span></td>'
+                 + src_cell([c], "Official source") for a, b, c, d in rows])
+
+    worked = table("The tax cost of waiting, on the 2045 model",
+                   ["Line", "Sell at inheritance", "Live in it, sell after 30 years",
+                    "Let it out, sell after 30 years", "Basis"],
+                   [
+                       f"<td>Sale price</td><td>{m(now_sale['price'])}</td><td>{m(late_sale['price'])}</td><td>{m(rent_sale['price'])}</td>" + method_cell("#method", "Model output"),
+                       f"<td>Selling costs</td><td>{m(now_sale['costs'])}</td><td>{m(late_sale['costs'])}</td><td>{m(rent_sale['costs'])}</td>" + method_cell("#method", "Model output"),
+                       f"<td>Basis</td><td>{m(now_sale['basis'])}</td><td>{m(late_sale['basis'])}</td><td>{m(rent_sale['basis'])}</td>" + method_cell("#method", "Model output"),
+                       f"<td>Gain</td><td>{m(now_sale['gain'])}</td><td>{m(late_sale['gain'])}</td><td>{m(rent_sale['gain'])}</td>" + method_cell("#method", "Model output"),
+                       f"<td>Of which depreciation recapture</td><td>{m(now_sale['recapture'])}</td><td>{m(late_sale['recapture'])}</td><td>{m(rent_sale['recapture'])}</td>" + method_cell("#method", "Model output"),
+                       f"<td>Section 121 exclusion</td><td>{m(now_sale['exclusion'])}</td><td>{m(late_sale['exclusion'])}</td><td>{m(rent_sale['exclusion'])}</td>" + src_cell(["irs_p523"], "Exclusion rule"),
+                       f"<td><strong>Tax</strong></td><td><strong>{m(now_sale['tax'])}</strong></td><td><strong>{m(late_sale['tax'])}</strong></td><td><strong>{m(rent_sale['tax'])}</strong></td>" + method_cell("#method", "Model output"),
+                       f"<td><strong>Net proceeds</strong></td><td><strong>{m(now_sale['net'])}</strong></td><td><strong>{m(late_sale['net'])}</strong></td><td><strong>{m(rent_sale['net'])}</strong></td>" + method_cell("#method", "Model output"),
+                   ],
+                   note="Same house, same thirty years, three very different tax outcomes. The difference is "
+                        "entirely the basis reset at death plus the depreciation taken in the rental case.")
+    return (
+        callout("key", "The tax-free window", f"""
+<p>Property acquired from a decedent takes a basis equal to its value at death. Selling soon after the
+inheritance therefore produces almost no taxable gain: on the 2045 model the tax is
+<strong>{m(now_sale['tax'])}</strong> on a {m(now_sale['price'])} sale. Hold the same house for thirty years and
+the tax becomes <strong>{m(late_sale['tax'])}</strong>, even after the {m(late_sale['exclusion'])} exclusion.
+Let it out as well and depreciation recapture pushes it to <strong>{m(rent_sale['tax'])}</strong>.</p>
+<p>That is the core of the recommendation. The window is not a loophole that might close; it is how the basis
+rules work, and it only exists at the moment of transfer.</p>""")
+        + tbl
+        + worked
+        + '<h2>What the model does and does not do</h2>'
+        + callout("flag", "Not modelled, and flagged for a professional", """
+<ul>
+<li><strong>A like-kind exchange under section 1031.</strong> Exchanges of real property are still available, but they defer rather than forgive tax, and they do not fix the property tax reassessment. Whether one makes sense depends on whether the heir wants to stay in real estate at all.</li>
+<li><strong>An instalment sale.</strong> Spreads the gain, but not the tax.</li>
+<li><strong>Gifting during life rather than at death.</strong> Removes the basis step-up. Almost always worse for an appreciated asset.</li>
+<li><strong>Whether the trust itself should hold the property after the transfer.</strong> This affects both the basis and the Proposition 19 claim and depends on the trust terms, which this site does not have.</li>
+<li><strong>The federal deduction for state tax.</strong> Not taken. Taking it would slightly reduce the combined rate.</li>
+</ul>"""))
+
+
+# -------------------------------------------------------------- inheritance --
+def page_inheritance() -> str:
+    steps = [
+        ("1", "Before the transfer",
+         "Confirm that the trust actually holds title to the house, and read the trust to see whether the heir takes outright, in further trust, or for life.",
+         "The successor trustee, with the trust instrument and the recorded deed.",
+         "No statutory deadline, but this is the step that determines everything else.",
+         ["scc_recorder"]),
+        ("2", "Check the assessment record now",
+         "Confirm the assessed value, the tax rate area, the fixed charges on the bill and whether a homeowners' exemption is in place.",
+         "The heir or the current owner, from the county assessor and the tax bill.",
+         "Do this before the transfer, not after.",
+         ["scc_ratebook", "boe_pub29"]),
+        ("3", "The transfer event",
+         "On the transfer, the trustee signs and records a deed moving the house out of the trust to the heir. Recording is what starts the county's clock.",
+         "The trustee records with the county recorder.",
+         "Recording fees and any transfer tax are due at recording.",
+         ["scc_recorder", "rtc11911"]),
+        ("4", "Notice to beneficiaries",
+         "When a revocable trust becomes irrevocable, the trustee must notify the heirs and beneficiaries and give them the information the statute requires.",
+         "The trustee.",
+         "The statute sets the notice requirement; read the current text.",
+         ["prob16061_7"]),
+        ("5", "Change in ownership statement",
+         "A change in ownership statement goes to the county assessor. The assessor decides whether the transfer is a change in ownership and sets a new base year value if it is.",
+         "The new owner, on the assessor's form.",
+         "The statute sets the deadline and the penalties.",
+         ["rtc480", "boe_pub800_9"]),
+        ("6", "The Proposition 19 decision",
+         "If the heir will use the house as a principal residence, claim the intergenerational transfer exclusion. The claim is not a public document.",
+         "The heir, on the assessor's claim form.",
+         "Occupy within one year of the transfer. File the homeowners' exemption within one year. File the exclusion claim within three years, or before any transfer to someone else.",
+         ["rtc63_2", "boe_lta26026", "boe_prop19"]),
+        ("7", "If the exclusion is not claimed",
+         "The property is reassessed to its full market value at the date of transfer and a supplemental bill may follow for the part of the year already gone.",
+         "The county assessor, automatically.",
+         "Supplemental bills are issued after the reassessment.",
+         ["boe_pub29", "sf_treas_rate"]),
+        ("8", "Federal estate tax, if the estate is large enough",
+         "If the gross estate plus adjusted taxable gifts exceeds the exclusion for the year of death, an estate tax return is due and tax is paid. Portability of a unused exclusion is elected on a timely return.",
+         "The executor or the trustee.",
+         "The return and any tax are due nine months after death, with an available extension.",
+         ["irs_estate", "irs_i706", "irs_whatsnew"]),
+        ("9", "California",
+         "No California estate tax return is required for a death on or after 1 January 2005.",
+         "Nobody. There is nothing to file.",
+         "Not applicable.",
+         ["sco_estate", "ftb_inheritance"]),
+        ("10", "Record the basis",
+         "Record the fair market value at the date of death. This becomes the income tax basis and the depreciation basis if the property is ever let.",
+         "The heir, ideally with a written valuation.",
+         "Do it at the time, while the evidence is cheap.",
+         ["irs_basis"]),
+        ("11", "Utilities, insurance and the solar tariff",
+         "Put insurance in the new owner's name, transfer or reapply for water and power, and confirm what happens to the solar tariff when the customer of record changes.",
+         "The heir, with the insurers and the utilities.",
+         "A lapse in insurance at transfer is the most common and most avoidable loss.",
+         ["cpuc_nem", "cdi_tips"]),
+        ("12", "Decide, and decide in time",
+         "The sale decision should be made early, because the tax-free basis window is widest immediately after the transfer. The Proposition 19 claim has three years; the tax advantage does not.",
+         "The heir, using the <a href=\"decision.html\">decision page</a>.",
+         "Three years for the claim. The longer the property is held outside the exclusion, the more the assessment and the gain both grow.",
+         ["rtc63_2", "irs_basis"]),
+    ]
+    rows = [f"<td><strong>{esc(a)}</strong></td><td><strong>{esc(b)}</strong></td><td>{esc(c)}</td>"
+            f"<td>{esc(d)}</td><td>{esc(e)}</td>" + src_cell(f, "Official source")
+            for a, b, c, d, e, f in steps]
+    tbl = table("Inheriting Property A through a trust, phase by phase",
+                ["#", "Phase", "What happens", "Who acts", "Timing and deadline", "Source"], rows)
+    return (
+        callout("note", "How to read this", """
+<p>This is the procedural path, in order, with the rule that governs each step. It is deliberately generic: it does
+not restate the trust, which this site has not seen. Where a deadline is set by statute the statute is linked so
+the current text can be read.</p>""")
+        + tbl
+        + callout("key", "The two deadlines that actually bite", """
+<ol>
+<li><strong>Move in within one year</strong> if the Proposition 19 exclusion is going to be claimed. The guidance
+is explicit that there are no exceptions to that rule, and that the exclusion is removed when the home stops
+being the principal residence.</li>
+<li><strong>File the exclusion claim within three years</strong>, or before transferring the property to anyone
+else, whichever is earlier.</li>
+</ol>
+<p>Everything else on this list is administrative. These two are the ones that change the money.</p>""")
     )
 
-    pages["taxes.html"] = (
-        "Tax and law watch",
-        "A source-linked overview of current federal and California rules, enacted changes, pending proposals and local questions that remain unresolved.",
-        '''<div class="note"><strong>As-of date: November 12, 2026.</strong> Tax thresholds and statutes change. Confirm the applicable law and professional advice at the actual transfer, filing and decision dates; no local jurisdiction is identified in this public guide.</div>
-<section><h2>Current rules to account for</h2>''' + fact_table(
-            "General tax and property rules",
-            ["Area", "General rule summary"],
-            [
-                (["Federal estate tax", "For 2026, the basic exclusion is $15,000,000. For 2027 deaths, the basic exclusion is $15,480,000. The estate-tax filing test depends on the gross estate and adjusted taxable gifts; portability for a surviving spouse has a timely-return requirement. Estate tax, if due, is the estate's liability, separate from the beneficiary's income tax."], ["irs_estate", "irs_estate_update", "irs_2027_adjustments", "irs_form706"]),
-                (["Receiving inherited property", "The value of property acquired by inheritance is generally excluded from federal gross income; income later produced by that property is not excluded by this rule."], "uscode102"),
-                (["Federal gifts", "The 2027 annual gift exclusion is $20,000 per recipient. Gift and estate rules interact; do not treat the annual exclusion as the full lifetime estate-tax exclusion."], "irs_2027_adjustments"),
-                (["Inherited basis and sale", "Inherited-property basis is generally date-of-death fair market value, subject to exceptions and reporting rules. A later gain may be taxable; do not assume an inherited sale is tax-free."], "irs_inherited_basis"),
-                (["California income tax", "The inheritance itself is not included in California income, but income later produced by inherited property may be taxable."], "ftb_inheritance"),
-                (["California estate tax", "The State Controller says a California estate-tax return is not required for decedents dying on or after January 1, 2005; federal filing rules still apply."], "sco_estate"),
-                (["California property tax", "The general Proposition 13 framework has a 1% base rate plus voter-approved indebtedness and generally limits annual assessed-value increases to 2%; changes in ownership, new construction and local levies matter."], "boe_prop13"),
-                (["Family-home reassessment exclusion", "A qualifying intergenerational family-home transfer has relationship, occupancy, exemption, value-cap and filing conditions. A principal-residence occupancy and homeowner/disabled-veteran exemption are generally required within one year."], "rtc_63_2"),
-                (["Rental income and expenses", "Rental income and expenses are reported under federal tax rules. Common expense categories include insurance, taxes, repairs and utilities, but personal use, capital improvements and limitations affect treatment."], "irs_rental"),
-                (["Statewide rent limits", "For covered California residential units, the annual rent-increase cap is generally 5% plus the applicable cost-of-living change or 10%, whichever is lower. Exceptions and local protections apply; the current statute states an end date of January 1, 2030."], "civ_1947_12"),
-                (["Just-cause tenancy protections", "For covered tenancies after 12 months of continuous lawful occupancy, the owner generally must state just cause in a written termination notice. A no-fault termination requires either one month's rent in relocation assistance within 15 calendar days or a written waiver of final-month rent before it is due; exemptions and local law matter."], "civ_1946_2"),
-                (["Local transfer tax", "California law authorizes county and qualifying city documentary transfer taxes by local ordinance. A rate cannot be determined without the applicable jurisdiction and transaction facts."], "rtc_11911"),
-                (["Insurance", "State premium surveys are comparison tools, not individual insurance quotes. Confirm coverage, use and price directly with an insurer."], "cdi_premiums"),
-                (["Solar / electricity", "Export credits depend on the utility, tariff and system/interconnection facts. Check the actual bill and system agreement."], "cpuc_solar"),
-            ]) + '''</section>
-<section><h2>Current law changes and watch items</h2>''' + fact_table(
-            "Legislation and future checks",
-            ["Measure or issue", "Official status or review finding on November 12, 2026", "Practical treatment"],
-            [
-                (["H.R. 1301 — federal estate and GST tax proposal", "Introduced and referred to the House Committee on Ways and Means; not enacted.", "Do not model the proposal as current law. Recheck official status before a later decision."], "hr1301_status"),
-                (["California SB 974, Chapter 665 (2026)", "The official status page marks this non-urgency bill as chaptered September 27, 2026. Its text amends Revenue and Taxation Code section 63.2 for specified special-needs-trust transfers; the current code page reviewed here does not yet show that amendment. The operative date and codification are unresolved in this guide.", "Do not use the change as a current eligibility rule without confirming its operative date and current statutory text with the assessor or counsel."], ["sb974_status", "sb974_text", "rtc_63_2"]),
-                (["California AB 1157 rent-law proposal", "Died in the Legislature on January 31, 2026; it is not current law.", "Use the current statute and any applicable local ordinance, not the proposed bill text."], "ab1157_status"),
-                (["Proposition 19 value-cap adjustment", "The Board's current letter schedules the next biennial adjustment for February 2027.", "Recheck the Board's latest letter; do not carry a current cap forward as a long-term assumption."], "boe_lta_2025_009"),
-            ]) + '''</section>
-<div class="privacy"><strong>Local-law limit.</strong> State statutes do not identify whether a particular rental unit is covered or whether a local ordinance imposes additional requirements. No local tax, rent cap, utility tariff or insurance availability conclusion is drawn here.</div>'''
+
+# ------------------------------------------------------------------- estate --
+def page_estate() -> str:
+    est = MODEL["estate"]
+    scen = table("Federal estate tax by estate size, using the 2026 exclusion",
+                 ["Gross estate", "Above one exclusion", "Above two exclusions",
+                  "Federal tax, one exclusion, at 40%", "Federal tax, two exclusions, at 40%",
+                  "California estate tax"],
+                 [f"<td>{m(r['total'])}</td><td>{m(r['excess_single'])}</td>"
+                  f"<td>{m(r['excess_couple'])}</td>"
+                  f"<td>{m(r['federal_tax_single_at_40'])}</td>"
+                  f"<td>{m(r['federal_tax_couple_at_40'])}</td>"
+                  f"<td>{m(r['california_estate_tax'])}</td>"
+                  + src_cell(["irs_estate", "irs_whatsnew", "sco_estate"], "Official source")
+                  for r in est["rows"]],
+                 note=("The 40% figure is the top federal rate in the estate tax rate schedule in the "
+                       "Instructions for Form 706. This site does not restate the schedule. The two-exclusion "
+                       "column assumes a surviving spouse elects portability on a timely estate tax return."))
+    hist = table("The federal filing threshold by year of death, published by the IRS",
+                 ["Year of death", "Filing threshold", "Source"],
+                 [(f"<td>{y}</td><td>{m(a)}</td>" + src_cell(["irs_estate"], "IRS table"))
+                  for y, a in [(2018, 11_180_000), (2019, 11_400_000), (2020, 11_580_000),
+                               (2021, 11_700_000), (2022, 12_060_000), (2023, 12_920_000),
+                               (2024, 13_610_000), (2025, 13_990_000), (2026, 15_000_000),
+                               (2027, 15_480_000)]])
+    return (
+        callout("answer", "The short answer", f"""
+<p><strong>California has no estate tax and no inheritance tax.</strong> The State Controller's Office confirms
+that no California estate tax return is required for a death on or after 1 January 2005, and the Franchise Tax
+Board confirms that a gift or inheritance is not California income.</p>
+<p><strong>Federally, the exclusion for 2026 is {m(est['exclusion_2026'])} per person</strong> and
+{m(est['exclusion_2027'])} for 2027. A surviving spouse can elect to use a deceased spouse's unused exclusion, so
+a couple can shelter {m(est['exclusion_2026'] * 2)} between them if that election is made on a timely return.</p>""")
+        + hist
+        + scen
+        + table("What is and is not taxed on the way in",
+                ["Receipt", "Federal", "California", "Source"],
+                [
+                    "<td>The house itself</td><td>Included in the gross estate at fair market value; not income to the heir.</td><td>Not income to the heir.</td>" + src_cell(["irs_estate", "ftb_inheritance", "uscode102"], "Official source"),
+                    "<td>Cash</td><td>Included in the gross estate; not income to the heir.</td><td>Not income to the heir.</td>" + src_cell(["ftb_inheritance", "uscode102"], "Official source"),
+                    "<td>Interest, dividends and rent the inherited assets later produce</td><td>Taxable income.</td><td>Taxable income.</td>" + src_cell(["ftb_inheritance"], "Official source"),
+                    "<td>Inherited retirement accounts</td><td>Income in respect of a decedent: taxed as withdrawn, not covered by the basis step-up.</td><td>Taxed as withdrawn.</td>" + src_cell(["irs_rmd"], "Official source"),
+                    "<td>Gain on a later sale of the house</td><td>Capital gain over the stepped-up basis.</td><td>Taxed as ordinary income.</td>" + src_cell(["irs_tc409", "ftb_cg"], "Official source"),
+                ])
+        + table("Annual gift exclusion", ["Year", "Amount", "Source"],
+                [(f"<td>2026</td><td>{m(V['annual_gift_exclusion_2026']['value'])} per recipient</td>"
+                  + src_cell(["irs_2027"], "IRS")),
+                 (f"<td>2027</td><td>{m(V['annual_gift_exclusion_2027']['value'])} per recipient</td>"
+                  + src_cell(["irs_2027"], "IRS"))],
+                note="Useful for moving value out of an estate over time, but gifts of appreciated property do "
+                     "not receive the basis step-up that a transfer at death receives.")
+        + callout("flag", "What this page cannot tell you", """
+<ul>
+<li><strong>Whether the estate exceeds the exclusion.</strong> The amount of the cash inheritance is deliberately not published here and not modelled as a specific figure. Use the scenario table and compare it with the estate's own numbers privately.</li>
+<li><strong>Whether prior taxable gifts have already used part of the exclusion.</strong> Lifetime taxable gifts are added back in the computation.</li>
+<li><strong>Whether any of the estate is a retirement account.</strong> Those are taxed differently and are the most common surprise.</li>
+<li><strong>What the law will be in 2040 to 2050.</strong> The exclusion has moved in both directions historically; it was $5,490,000 in 2017 and $15,000,000 in 2026. See the <a href="laws.html">law page</a>.</li>
+</ul>"""))
+
+
+# --------------------------------------------------------------------- laws --
+def page_laws() -> str:
+    enacted = [
+        ("Federal basic estate tax exclusion raised",
+         "Public Law 119-21, the Working Families Tax Cuts, signed 4 July 2025, amended section 2010(c)(3) to set the basic exclusion at $15,000,000 for calendar year 2026.",
+         "Raises the threshold. Makes an estate tax charge much less likely, but is not a promise about 2045.",
+         ["irs_whatsnew", "irs_estate"]),
+        ("2027 inflation adjustments published",
+         "For deaths during 2027 the basic exclusion is $15,480,000 and the annual gift exclusion rises to $20,000.",
+         "Confirms the exclusion is indexing upward.",
+         ["irs_2027"]),
+        ("California high-income tax rates made permanent",
+         "Proposition 3 passed at the 3 November 2026 election on unofficial results, making permanent the voter-approved rates on individuals earning over about $371,000 that would otherwise have expired in 2031.",
+         "Removes a scheduled state tax cut. A large gain on a California property sale will be taxed at the top state rate for the foreseeable future.",
+         ["sos_results", "voterguide_p3"]),
+        ("One-time tax on certain taxpayers rejected",
+         "Proposition 40 failed on unofficial results.",
+         "No state wealth tax. Recorded because a later version could return.",
+         ["sos_results", "voterguide_p40"]),
+        ("New state personal property taxes barred",
+         "Proposition 42 passed on unofficial results.",
+         "Narrows one route for a future state tax, but does not touch real property tax.",
+         ["sos_results"]),
+        ("Local revenue vote threshold rejected",
+         "Proposition 43 failed on unofficial results.",
+         "Local parcel and transfer taxes remain possible without the stricter vote the measure would have required.",
+         ["sos_results"]),
+        ("Proposition 19 shelter adjusted",
+         "For transfers from 16 February 2025 to 15 February 2027 the shelter is the prior taxable value plus $1,044,586, up from $1,022,600.",
+         "The shelter is smaller than the growth in house prices, so it buys less each year.",
+         ["boe_lta25009"]),
+        ("Special needs trusts added as an eligible transfer medium",
+         "SB 974, chaptered 27 September 2026, amends Revenue and Taxation Code section 63.2 so that a court-established special needs trust counts as an eligible medium of transfer.",
+         "Relevant only if a transferee is a person with a disability. It does not change the value cap or the one-year occupation rule.",
+         ["sb974"]),
+    ]
+    pending = [
+        ("San Francisco File 261020",
+         "Would temporarily cap combined banked and capital improvement rent increases on rent-controlled units at 10% a year.",
+         "Would further limit income growth on Property B if the units are covered.",
+         "Not enacted. The Rent Board itself says so.",
+         ["sf_file261020"]),
+        ("San Francisco transfer tax reductions",
+         "A package introduced in February 2026 proposed rolling back the 2020 transfer tax increases for large transactions.",
+         "Would reduce the cost of selling Property B. Would not affect Property A.",
+         "Reported but not verified against an official city source on this site. It is left deliberately "
+         "unresolved rather than given a number.",
+         ["sf_file261020"]),
+    ]
+    dead = [
+        ("AB 1157", "Would have amended Civil Code sections 1946.2, 1947.12 and 1947.13 on just cause and rent increases.",
+         "Failed passage 13 January 2026 and died 31 January 2026. Recorded because it is often reported as law.",
+         ["ab1157"]),
+    ]
+    return (
+        callout("warn", "Read the election results carefully", """
+<p>The November 2026 California results on this page are <strong>unofficial</strong>, published by the Secretary
+of State with all precincts partially reporting, and they are not certified until 11 December 2026. They are
+included because Proposition 3 directly changes the tax on a property sale. Confirm against the certified
+results before relying on any of them.</p>""")
+        + table("Enacted or changed", ["Change", "What it does", "Why it matters here", "Source"],
+                [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td>"
+                 + src_cell(d, "Official source") for a, b, c, d in enacted])
+        + table("Proposed, not enacted", ["Measure", "What it would do", "Why it matters here", "Status", "Source"],
+                [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td>"
+                 f'<td><span class="badge unverified">{esc(d)}</span></td>'
+                 + (src_cell(e, "Official source") if e else '<td class="src-cell"><span class="src-label">no official source retrieved</span></td>')
+                 for a, b, c, d, e in pending])
+        + table("Dead bills recorded so they are not mistaken for law",
+                ["Bill", "What it would have done", "Status", "Source"],
+                [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td>"
+                 + src_cell(d, "Official source") for a, b, c, d in dead])
+        + table("What would actually change the recommendation",
+                ["Change", "Direction of the effect", "Source"],
+                [
+                    "<td>A repeal or sharp cut in the federal estate tax exclusion</td><td>Would make the cash inheritance taxable and could force a sale of the house for liquidity.</td>" + src_cell(["irs_estate"], "Current threshold"),
+                    "<td>A California wealth tax or a one-time asset tax</td><td>Would tax holding assets rather than selling them, and could penalise keeping the house.</td>" + src_cell(["sos_results"], "2026 result"),
+                    "<td>A change to Proposition 19 removing or widening the shelter</td><td>Would change the reassessment arithmetic at the transfer, which is the largest single number here.</td>" + src_cell(["rtc63_2", "boe_lta25009"], "Current rule"),
+                    "<td>A split-roll change to Proposition 13</td><td>Would reset assessments on both properties and change every projection on this site.</td>" + src_cell(["boe_pub29"], "Current rule"),
+                    "<td>Abolition of the basis step-up at death</td><td>Would remove the single strongest argument for selling at inheritance.</td>" + src_cell(["irs_basis"], "Current rule"),
+                    "<td>A stricter local rent ordinance in San Francisco</td><td>Would reduce the income from Property B and make Property A look slightly better by comparison.</td>" + src_cell(["sf_rent_increase"], "Current rate"),
+                ])
     )
 
-    pages["inheritance.html"] = (
-        "Inheritance steps and deadlines",
-        "A source-linked, step-by-step checklist for a trust inheritance expected around 2040–2050, including assessor reporting, property-tax claims, federal returns and beneficiary accounts.",
-        '''<div class="note"><strong>Calendar from the triggering event.</strong> This general checklist is not a substitute for reading the actual trust, will, deed, notice and current forms. Probate, non-probate and trust transfers can have different procedures. For a 2040–2050 trust administration, recheck current law at that future date.</div>
-<section><h2>How a trust inheritance around 2040–2050 would be sequenced — step by step</h2><p>Property A is treated as inherited by trust. The table below orders the work from before the transfer through the hold-or-decide period. No parcel or personal date is assumed.</p>''' + plain_table(
-            "Step-by-step sequence for a trust transfer — no private dates published",
-            ["Phase", "Timing", "Work to do", "Key rule to recheck at that time"],
-            [
-                ["1 · Before the transfer", "While the trust is in place", "Confirm trust terms, successor trustee, beneficiaries, distribution provisions and how property is titled; keep documents and contact list current", "Current trust and title records; no deadline yet"],
-                ["2 · Death and immediate administration", "Days after the triggering death", "Secure property and records; identify the date of death for valuation; notify insurers, lenders, tenants and advisers; identify the trustee event for notice", f"Trustee notice rule; {source_link('probate_16061_7', 'Probate Code 16061.7: 60-day notice')}"],
-                ["3 · Assessor and property-tax work", "Within months of the transfer", "File the change-in-ownership statement; request the current roll and supplemental notices; test family-home eligibility and claim before relying on it", f"{source_link('rtc_480', 'RTC 480: 150-day statement')} and {source_link('rtc_63_2', 'RTC 63.2: occupancy within one year, claim periods')}"],
-                ["4 · Tax and beneficiary accounts", "Within months, before filing deadlines", "Gather date-of-death valuation for basis; calculate the estate filing test; contact retirement custodians; separate decedent, estate/trust and beneficiary income", f"{source_link('irs_inherited_basis', 'IRS inherited basis')} · {source_link('irs_form706', 'IRS Form 706: nine months')} · {source_link('irs_retirement_beneficiary', 'IRS beneficiary rules')}"],
-                ["5 · Hold, maintain and decide", "Months to years after transfer", "Maintain, insure and collect rent if renting; then compare live, rent, sell-and-reinvest or defer using the private year-by-year workbook and irregular stress paths", "Current federal, state and local law; see <a href=\"projections.html\">Projection method</a> and <a href=\"stress.html\">Stress cases</a>"],
-            ],
-            row_class="framework-row",
-        ) + '''</section>
-<section><h2>Time-sensitive legal steps — deadlines to calendar</h2>''' + fact_table(
-            "General California and federal deadlines",
-            ["Step", "General rule summary", "Action"],
-            [
-                (["Trustee notice", "For specified events, including a revocable trust becoming irrevocable at death, California requires notice to specified beneficiaries/heirs; the statute generally sets 60 days with trigger, awareness and vacancy qualifications.", "Identify the event, trustee, notice recipients and actual service date from the trust and current statute."], "probate_16061_7"),
-                (["Assessor change-in-ownership statement", "For a transfer by death outside probate, the trustee or transferee generally files within 150 days. If the property is subject to probate, the personal representative files before or with the inventory and appraisal.", "Obtain the current form and filing instructions from the proper county assessor; track each parcel privately."], "rtc_480"),
-                (["Potential family-home exclusion", "For a qualifying family-home transfer, principal-residence occupancy and the homeowner/disabled-veteran exemption are generally required within one year. The ordinary claim period is generally three years after transfer, before a third-party transfer, or when the eligible transferee stops occupying the residence, whichever is earlier; statutory and notice-related exceptions may apply.", "Ask the assessor about eligibility, claim forms, supplemental notices and any exception before relying on an exclusion."], "rtc_63_2"),
-                (["Federal estate-tax return", "Form 706 is generally due nine months after death when required. A portability election for a surviving spouse has a timely-return rule; extension rules are in current IRS instructions.", "Executor and tax adviser should calculate the filing test, gather valuations and calendar the applicable date."], "irs_form706"),
-                (["Beneficiary retirement account", "For deaths in 2020 or later, a designated beneficiary who is not an eligible designated beneficiary generally follows a 10-year distribution rule; spouses and eligible designated beneficiaries may have different options. Taxable distributions generally enter gross income.", "Contact the custodian, confirm beneficiary status and plan terms, and verify current IRS rules; no account is assumed."], "irs_retirement_beneficiary"),
-            ]) + '''</section>
-<section><h2>Administration checklist</h2>''' + list_html([
-            f"Identify the personal representative, trustee or successor fiduciary and read the governing documents. {source_link('irs_survivors', 'IRS Publication 559')}",
-            'Secure the property and records; notify insurers, lenders, tenants, service providers and tax professionals as applicable.',
-            'Separate the decedent’s final individual income from later estate/trust income and beneficiary income. Keep receipts, valuations and distributions.',
-            'Record each property’s ownership, transfer date, use, income and expense trail separately. Do not combine Property B with Property A without title evidence.',
-            'Recheck current federal, state and local law before making a sale, occupancy change or distribution — especially for a transfer expected in 2040–2050.'
-        ]) + '''<p>Use the <a href="questions.html">Questions first</a> page to identify missing documents. This page deliberately contains no personal names, dates, forms completed or property-specific deadlines.</p></section>'''
+
+# ---------------------------------------------------------------- black swan --
+def page_black_swan() -> str:
+    cpi = MODEL["meta"]
+    stats = []
+    for key, label, sid in (("cpi", "Consumer prices, 1977 to 2024", "fred_cpi"),
+                            ("hpi_a", "House prices, Property A area, 1977 to 2025", "fred_hpi_a"),
+                            ("hpi_b", "House prices, Property B area, 1977 to 2025", "fred_hpi_b"),
+                            ("gs10", "10-year Treasury yield, 1976 to 2025", "fred_gs10")):
+        changes = [r[key + "_chg"] for r in MODEL["series_table"] if r.get(key + "_chg") is not None]
+        if key == "gs10":
+            levels = [r[key] for r in MODEL["series_table"] if r.get(key) is not None]
+            stats.append((label, f"{min(levels):.2f}% to {max(levels):.2f}%",
+                          f"{sum(levels) / len(levels):.2f}%", f"{len(levels)} years", sid))
+        else:
+            dn = sum(1 for c in changes if c < 0)
+            stats.append((label, f"{min(changes) * 100:.1f}% to {max(changes) * 100:.1f}%",
+                          f"{sum(changes) / len(changes) * 100:.1f}%",
+                          f"{len(changes)} years, {dn} of them down", sid))
+    stats_rows = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td><td>{esc(d)}</td>"
+                  + src_cell([e], "Verified series") for a, b, c, d, e in stats]
+
+    reg_rows = []
+    for rg in MODEL["regimes"]:
+        run = rg["run"]
+        reg_rows.append(
+            f"<td><strong>{esc(rg['name'])}</strong><br><span class='muted'>{esc(rg['analogue'])}</span></td>"
+            f"<td>{pc(rg['cpi'], 1)}</td><td>{pc(rg['house'], 1)}</td><td>{pc(rg['treasury'], 2)}</td>"
+            f"<td>{m(run['terminal']['sell_equities'])}</td>"
+            f"<td>{m(run['terminal']['live_in'])}</td>"
+            f"<td>{m(run['terminal']['rent_out'])}</td>"
+            f"<td>{m(run['bill_if_rent_year1'])}</td>"
+            f"<td><strong>{esc(PATH_LABELS[run['best']])}</strong></td>"
+            + src_cell(rg["src"] if rg["src"] else [], "Official source" if rg["src"] else "None"))
+    reg_table = table("Stress regimes applied to the 2045 inheritance, over a 30 year horizon",
+                      ["Regime", "Inflation", "House prices", "Treasury yield",
+                       "Sell, equities", "Live in it", "Let it out",
+                       "Tax bill if let out, year one", "Best path", "Source"], reg_rows,
+                      note="The four historical regimes use averages computed directly from the verified "
+                           "series listed in the source column. The last two are hypothetical stress cases "
+                           "with no historical analogue and are labelled as such.")
+
+    rep_rows = []
+    for r in MODEL["replay"]:
+        rep_rows.append(
+            f"<td>{r['start']}&ndash;{r['end']}</td>"
+            f"<td>{pc(r['a_cagr'], 2)}</td><td>{pc(r['cpi_cagr'], 2)}</td>"
+            f"<td>{pc(r['bond_cagr'], 2)}</td>"
+            f"<td>{m(r['a_value'])}</td><td>{m(r['a_value_real'])}</td>"
+            f"<td>{m(r['b_value'])}</td>"
+            f"<td>{r['down_years_a']}</td><td>{pc(r['worst_year_a'], 1)}</td>"
+            f"<td>{m(r['tax_if_reset'])}</td><td>{m(r['tax_if_kept'])}</td>"
+            + src_cell(["fred_hpi_a", "fred_hpi_b", "fred_cpi", "fred_gs10"], "Verified series"))
+    replay = table("Every full 30-year window in the verified record, applied to these two properties",
+                   ["Window", "House growth a year", "Inflation a year", "Treasury compounding",
+                    "Property A value at the end", "Same, in start-year money",
+                    "Property B value at the end", "Down years", "Worst year",
+                    "Total tax if reassessed", "Total tax if not", "Source"], rep_rows,
+                   note="Each row takes the realised annual changes in the house price index, the consumer "
+                        "price index and the 10-year Treasury yield for that real 30-year window and applies "
+                        "them to these two properties. No smoothing, no resampling, no invented numbers.")
+
+    return (
+        callout("why", "Why a smooth 4% line is the wrong tool", f"""
+<p>Real economies do not grow at a constant rate. In the verified record used here, annual consumer price
+inflation ranged from minus 0.3% to plus 13.5%, and annual house price growth in Property A's area ranged from
+minus 12.3% to plus 30.2%. A single constant rate hides the thing that actually decides this case, which is
+whether the house and the stock market take their bad years at the same time.</p>
+<p>The <a href="economy.html">economy page</a> shows the full record. The tables below apply it.</p>""")
+        + table("The shape of the record", ["Series", "Range of annual changes", "Average", "Coverage", "Source"],
+                stats_rows)
+        + reg_table
+        + replay
+        + callout("answer", "What the stress cases say", """
+<p>Selling and investing wins in four of the six regimes, including both hypothetical stress cases. Keeping the
+house wins in the two regimes where house prices in this area grew at an exceptional pace, which is exactly what
+happened in the late 1970s and in 2021 to 2023. That is a coherent result: this decision is a bet on whether one
+neighbourhood outgrows the whole market, and the historical record says that sometimes it does and mostly it
+does not.</p>
+<p>Two findings survive every regime. First, the property tax bill after reassessment is large and completely
+insensitive to how the economy performs: assessed value rises at the 2% cap whether house prices boom or crash.
+Second, letting the property out is the weakest path in every regime except the two house-price booms, because it
+pays the full reassessment and then competes with a diversified portfolio on yield.</p>""")
     )
 
-    pages["questions.html"] = (
-        "Questions before deciding",
-        "A structured list of facts, documents and answers needed before comparing the inherited property with the already-owned property.",
-        '''<p>Keep answers and supporting documents in a private working file. The public cells below remain blank; no answer is requested or stored by this site. The last column explains how a different answer could change the decision.</p>
-<section><h2>Resolve these questions first</h2>''' + blank_table(
-            "Private question register — blank until verified",
-            ["Order", "Question", "Public answer", "How to resolve", "If the answer changes"],
-            [
-                ["1 · Ownership", "Who holds legal and beneficial title to A and B, and what transfers on death?", '<td class="blank">Not published</td>', "Recorded deeds, trust/will, beneficiary and estate records", "Changes who can sign, what transfers and which tax records apply."],
-                ["2 · Transfer path", "Does A pass through a trust, probate, beneficiary designation or another instrument?", '<td class="blank">Not published</td>', "Read the controlling instrument and obtain fiduciary advice", "Changes notice, administration and assessor steps."],
-                ["3 · Timing", "What event/date triggers notice, assessor, tax and claim deadlines?", '<td class="blank">Not published</td>', "Death/transfer documents and official notices; see Inheritance steps", "Changes the applicable filing period, valuation date and law snapshot."],
-                ["4 · A's basis", "What is A's defensible date-of-death value and basis record?", '<td class="blank">Not published</td>', f"Independent valuation and estate records; {source_link('irs_inherited_basis', 'IRS inherited-basis rule')}", "Changes taxable gain/loss and net sale proceeds."],
-                ["5 · A's condition", "What inspection findings, deferred work, liens or debt affect A?", '<td class="blank">Not published</td>', "Private inspection, title search, loan and lien records", "Changes repair reserves, timing, liquidity and the keep/sell ranking."],
-                ["6 · Property tax", "Does A qualify for a family-home exclusion, and were occupancy, exemption and claim steps met?", '<td class="blank">Not published</td>', f"Current statute and assessor decision; {source_link('rtc_63_2', 'RTC section 63.2')}", "Changes recurring carrying cost and the value of occupying A."],
-                ["7 · A's use", "Will the recipient live in A, rent it, sell it or defer a change?", '<td class="blank">Not published</td>', "Written household plan, rent evidence, sale estimate and deadline calendar", "Changes income, housing value, insurance, tenant duties and possible exclusion eligibility."],
-                ["8 · B title and basis", "What title, basis, prior depreciation and debt records support the treatment of B as already owned?", '<td class="blank">Not published</td>', "Recorded title, prior closing records, returns and loan documents", "Prevents A's inherited basis or tax treatment from being incorrectly applied to B."],
-                ["9 · B's income", "What rent was collected, what was vacant, and what expenses/depreciation are recorded?", '<td class="blank">Not published</td>', f"Leases, rent ledger, bills and prior returns; {source_link('irs_rental', 'IRS Publication 527')}", "Changes B's after-tax cash flow and the value of continuing to rent."],
-                ["10 · B occupancy", "Would the recipient use B as a home, and what rent or housing cost would change?", '<td class="blank">Not published</td>', "Personal housing plan, tenant/lease review and current costs", "Changes lost rent, notice obligations, utilities and the comparison with occupying A."],
-                ["11 · Insurance", "What coverage, exclusions, deductible, premium and renewal terms apply to each use?", '<td class="blank">Not published</td>', f"Current declarations and written quotes; {source_link('cdi_premiums', 'CDI premium-survey limits')}", "Changes carrying cost, risk tolerance and whether a use is insurable."],
-                ["12 · Utilities / solar", "What are water, electricity, solar credits, gas and service costs under each use?", '<td class="blank">Not published</td>', f"Actual bills and system/interconnection records; {source_link('cpuc_solar', 'CPUC tariff overview')}", "Changes operating cash flow and the sensitivity to tariff changes."],
-                ["13 · Repairs", "What routine maintenance, major repairs and capital work are likely, and when?", '<td class="blank">Not published</td>', f"Inspection, invoices and contractor estimates; {source_link('irs_rental', 'IRS repair/improvement guidance')}", "Changes reserve needs, tax classification and the timing of a sale or rental."],
-                ["14 · Local law", "Which local rental, transfer-tax, property-tax and utility rules apply?", '<td class="blank">Not published</td>', f"Verify jurisdiction privately; use the assessor directory, current ordinance and provider records; {source_link('boe_assessor_contacts', 'BOE assessor directory')}", "Changes lawful rent, notices, taxes, credits and transaction costs."],
-                ["15 · Sale proceeds", "What sale price, selling costs, transfer taxes, debt payoff and tax reporting would apply?", '<td class="blank">Not published</td>', f"Written sale estimate, title/loan records and local rule; {source_link('rtc_11911', 'transfer-tax authorization')}", "Changes the amount available to reinvest or preserve as liquidity."],
-                ["16 · Estate tax", "What are the estate's total assets, deductions, prior gifts and elections?", '<td class="blank">Not published</td>', f"Executor's records and current Form 706 instructions; {source_link('irs_estate', 'IRS estate-tax rules')}", "A property value alone cannot establish filing or tax exposure; the ranking may change materially."],
-                ["17 · Cash and retirement", "Does the inheritance include cash, retirement accounts or other assets, and who are the beneficiaries?", '<td class="blank">Not published</td>', f"Account statements, beneficiary forms and custodian/IRS rules; {source_link('irs_retirement_beneficiary', 'IRS beneficiary rules')}", "Changes tax timing, liquidity, diversification and estate size."],
-                ["18 · Liquidity and alternatives", "How much liquidity is required, and what private investment or savings alternatives are actually available?", '<td class="blank">Not published</td>', f"Private cash-flow plan and current account terms; use historical stress anchors, not a promised return; {source_link('frh_1929', 'Federal Reserve History market episode')}", "Changes the opportunity cost of keeping property and the ability to absorb shocks."],
-                ["19 · Priorities and horizon", "What matters most: maximum expected wealth, current housing, income, diversification, workload or family continuity, and over what horizon?", '<td class="blank">Not published</td>', "Write the ranking criteria before choosing assumptions", "Changes the decision even when the arithmetic is unchanged."],
-                ["20 · Review date", "Who will recheck sources, law, quotes and calculations before implementation?", '<td class="blank">Not published</td>', f"Assign a private reviewer and a dated refresh checklist; {source_link('irs_form706', 'IRS current instructions')}", "Reduces the risk that stale law or unsupported assumptions drive a decision."],
-            ],
-            row_sources=[
-                "rtc_480", "probate_16061_7", "rtc_480", "irs_inherited_basis", "irs_survivors", "rtc_63_2", "rtc_63_2",
-                ["rtc_480", "irs_rental"], "irs_rental", "civ_1946_2", "cdi_premiums", "cpuc_solar", "irs_rental",
-                ["boe_assessor_contacts", "civ_1947_12", "rtc_11911"], ["irs_inherited_basis", "rtc_11911"], ["irs_estate", "irs_form706"],
-                ["uscode102", "irs_retirement_beneficiary"], ["frh_1929", "frh_great_recession"], "irs_estate", "irs_form706"
-            ],
-        ) + '''</section>
-<div class="note"><strong>Privacy reminder.</strong> Do not paste deeds, tax bills, account numbers, exact assessments, quotes or other personal details into a public issue, pull request or website field.</div>'''
+
+# ------------------------------------------------------------------ economy --
+def page_economy() -> str:
+    rows = []
+    for r in MODEL["series_table"]:
+        def chg(key):
+            v = r.get(key + "_chg")
+            if v is None:
+                return "&mdash;"
+            cls = "down" if v < 0 else "up"
+            return f'<span class="{cls}">{v * 100:.1f}%</span>'
+        rows.append(
+            f"<td>{r['year']}</td>"
+            f"<td>{r['cpi'] if r['cpi'] is not None else '&mdash;'}</td><td>{chg('cpi')}</td>"
+            f"<td>{r['hpi_a'] if r['hpi_a'] is not None else '&mdash;'}</td><td>{chg('hpi_a')}</td>"
+            f"<td>{r['hpi_b'] if r['hpi_b'] is not None else '&mdash;'}</td><td>{chg('hpi_b')}</td>"
+            f"<td>{r['gs10'] if r['gs10'] is not None else '&mdash;'}</td>"
+            + src_cell(["fred_cpi", "fred_hpi_a", "fred_hpi_b", "fred_gs10"], "FRED series"))
+    tbl = table("The verified annual record, 1976 to 2025",
+                ["Year", "Consumer price index", "Change",
+                 "House price index, Property A area", "Change",
+                 "House price index, Property B area", "Change",
+                 "10-year Treasury yield, %", "Source"], rows,
+                note="Every value was downloaded as a CSV file from the official FRED domain on 13 November "
+                     "2026 and read directly from that file. No value was typed from memory. The consumer "
+                     "price series ends at 2024 because the 2025 annual value was blank in the file retrieved.")
+    return (
+        callout("note", "Why this page exists", """
+<p>The <a href="black-swan.html">black swan page</a> uses this record rather than invented scenarios. Every
+number below comes from one of four series hosted by the Federal Reserve Bank of St. Louis on behalf of the
+Bureau of Labor Statistics, the Federal Housing Finance Agency and the Board of Governors. Where a series stops
+before 2025, the table shows a dash rather than filling the gap.</p>""")
+        + tbl
+        + table("What the record shows, in one table",
+                ["Fact", "Value", "Source"],
+                [(f"<td>{esc(a)}</td><td>{esc(b)}</td>" + src_cell(c, "Official source"))
+                 for a, b, c in [
+                    ("Highest annual inflation in the record", "13.5%, in 1980", ["fred_cpi"]),
+                    ("Only annual fall in consumer prices in the record", "minus 0.3%, in 2009", ["fred_cpi"]),
+                    ("Best year for house prices in Property A area", "plus 30.2%, in 1989", ["fred_hpi_a"]),
+                    ("Worst year for house prices in Property A area", "minus 12.3%, in 2009", ["fred_hpi_a"]),
+                    ("Property A area, 2006 to 2011", "a 25.6% fall from the 2006 level to the 2011 level", ["fred_hpi_a"]),
+                    ("Property B area, 2006 to 2011", "a 21.8% fall from the 2006 level to the 2011 level", ["fred_hpi_b"]),
+                    ("Property A area, 1989 to 1996", "a fall from 110.67 to 105.46 over seven years", ["fred_hpi_a"]),
+                    ("Highest annual 10-year Treasury yield in the record", "13.91%, in 1981", ["fred_gs10"]),
+                    ("Lowest annual 10-year Treasury yield in the record", "0.89%, in 2020", ["fred_gs10"]),
+                    ("2025 annual 10-year Treasury yield", "4.29%", ["fred_gs10"]),
+                    ("Official long-run inflation assumption", "2.4% a year, intermediate case, 2026 Trustees Report", ["ssa_trustees"]),
+                    ("Official long-run real interest assumption", "2.3% for 2044 and later, intermediate case", ["ssa_trustees"]),
+                    ("Official long-range assumption range, inflation", "1.8% high-cost to 3.0% low-cost", ["ssa_trustees"]),
+                 ]])
     )
 
-    pages["suggestions.html"] = (
-        "Suggestions for review",
-        "Proposed improvements are kept separate from the public edition; no suggestion is selected or implemented automatically.",
-        '''<div class="answer"><strong>Selection status: none recorded.</strong> This page is a review register, not a feature request form. Nothing listed below changes the site until it is separately reviewed and selected.</div>
-<section><h2>Proposals</h2>''' + plain_table(
-            "Suggestions kept separate for review",
-            ["ID", "Proposal", "Privacy / decision benefit", "Status"],
-            [
-                ["S-01", "Keep all property-specific inputs in an offline, access-controlled workbook.", "Avoids publishing or collecting figures; allows private records and supporting documents.", "Proposed — not selected or implemented."],
-                ["S-02", "Maintain two ledgers: A as inherited, B as already owned, with separate title, basis, rent and operating-cost records.", "Preserves the ownership distinction and reduces accidental double-counting.", "Proposed — not selected or implemented."],
-                ["S-03", "Have a qualified tax/legal professional review any future property-specific calculations before use.", "Checks title, local law, occupancy, basis, tax treatment and deadlines without publishing personal records.", "Proposed — not selected or implemented."],
-                ["S-04", "Recheck official rules at the transfer date, before a sale or occupancy change, and after material law changes.", "Prevents stale federal, state and local assumptions from being treated as permanent.", "Proposed — not selected or implemented."],
-                ["S-05", "If a calculator is later selected, make it local-only and show sources, blank unknowns and stress cases.", "Avoids transmitting private inputs; separates fact, assumption and computation.", "Proposed — not selected or implemented."],
-                ["S-06", "Label every private input as verified, owner-supplied, assumed or unknown, and block unknowns from silent calculation.", "Makes the evidence boundary visible and prevents an estimate from becoming a fact.", "Proposed — not selected or implemented."],
-                ["S-07", "Version the assumptions and record an as-of date for every tax, law, insurance and utility check.", "Makes stale rules and changed quotes detectable before implementation.", "Proposed — not selected or implemented."],
-                ["S-08", "Add a decision gate: do not rank an option while title, basis, estate size or required filing status is unresolved.", "Stops precise arithmetic from masking a missing legal or tax fact.", "Proposed — not selected or implemented."],
-                ["S-09", "Require a private insurance, inspection and repair-reserve review before changing occupancy or accepting a rental plan.", "Prices coverage and physical-risk uncertainty before a commitment is made.", "Proposed — not selected or implemented."],
-                ["S-10", "Use a tenant and local-law checklist before changing B's occupancy, rent or tenancy status.", "Reduces notice, relocation-assistance and local-protection errors.", "Proposed — not selected or implemented."],
-                ["S-11", "Keep black-swan scenarios as ranges and decision triggers rather than expected returns.", "Tests liquidity, vacancy, drawdown, inflation, insurance and repair shocks without false precision.", "Proposed — not selected or implemented."],
-                ["S-12", "Run a privacy audit on every release, including source files, route allowlists, generated pages and old-history exposure.", "Protects the highest-priority requirement while allowing a useful general framework.", "Proposed — not selected or implemented."],
-            ],
-            row_sources=[
-                "boe_assessor_contacts", ["rtc_63_2", "irs_rental"], ["irs_estate", "rtc_63_2"], ["boe_prop19", "civ_1947_12"],
-                ["cpuc_solar", "cdi_premiums"], "irs_inherited_basis", "irs_form706", "irs_estate", ["cdi_premiums", "irs_rental"],
-                ["civ_1946_2", "civ_1947_12"], ["frh_1929", "frh_great_inflation", "frh_great_recession"], "boe_assessor_contacts"
-            ],
-        ) + '''</section>
-<section><h2>How to review a suggestion</h2>''' + list_html([
-            'Read the proposal, its benefit and the private inputs it would require.',
-            'Check whether it can be done without putting personal values, addresses or parcel records into a public page or artifact.',
-            'Identify the official source that would support any new factual row before it is published.',
-            'Decide whether to adopt, defer or reject; record the choice offline. The site does not collect a selection.',
-            'If adopted, re-run <code>python3 scripts/build.py</code>, <code>python3 scripts/verify.py</code> and <code>python3 scripts/privacy_boundary.py</code> and confirm the artifact remains allowlisted.'
-        ], ordered=True) + '''</section>
-<section><h2>Selection gate</h2><p>Before any proposal is implemented, decide whether its benefit is worth the privacy and maintenance cost, define the inputs it would require, identify its official sources, and test that no private values enter a public artifact. A reviewer should record: selected or declined, owner, files affected, privacy test, source recheck date, rollback plan and acceptance test. The suggestions page itself does not collect a selection.</p><div class="note"><strong>Privacy reminder.</strong> Do not paste deeds, tax bills, rent ledgers, account numbers, exact assessments or quotes into a public issue, pull request or website field. Keep them in the private workbook described in S-01.</div></section>'''
+
+
+# ---------------------------------------------------------------- questions --
+QUESTIONS = [
+    ("A", "Title, trust and timing",
+     [
+      ("Is the house actually titled in the trust today?",
+       "The owner states the inheritance will come through a trust around 2040 to 2050.",
+       "No deed, no parcel number, no trust document.",
+       "Read the recorded grant deed and the preliminary change of ownership report at the county recorder.",
+       "If the house is not in the trust, the transfer path, the reassessment and possibly probate all change.",
+       ["scc_recorder"]),
+      ("Is the trust revocable, and who is the successor trustee?",
+       "Not supplied.",
+       "Whether the settlor can revoke, who administers on death, and whether the trustee has a sale power.",
+       "Read the trust instrument and any amendments.",
+       "Determines who signs the deed, whether the basis step-up applies in full, and how fast a sale could be done.",
+       []),
+      ("Does the heir take outright, in further trust, or only for life?",
+       "Not supplied.",
+       "Whether a life estate, a term of years or a continuing trust is involved.",
+       "Read the distribution clauses of the trust.",
+       "A life estate changes both the basis step-up and who may claim the Proposition 19 exclusion.",
+       []),
+      ("Is any beneficiary a person with a disability for whom a special needs trust exists?",
+       "Not supplied.",
+       "Whether a court-established special needs trust is in play.",
+       "Read the trust and ask the drafter.",
+       "SB 974, chaptered in September 2026, makes such a trust an eligible medium of transfer for the exclusion.",
+       ["sb974"]),
+      ("Is there a plan to sell, hold or occupy, and who decides?",
+       "Not supplied.",
+       "The trustee's duties and any letter of wishes.",
+       "Ask the trustee and read the trust.",
+       "A trustee has duties to beneficiaries that may not match the heir's preferences.",
+       []),
+     ]),
+    ("B", "Property tax and assessment",
+     [
+      ("What is the tax rate area for Property A, and what is its published rate?",
+       "The county publishes 816 tax rate areas for fiscal year 2025-26 but this site does not publish the parcel's area.",
+       "The exact published rate and the bond components.",
+       "Look up the tax rate area on the tax bill and read the rate from the county's published rate book.",
+       "The ad valorem rate drives every reassessment figure. This site assumes 1.18% and flags it.",
+       ["scc_ratebook"]),
+      ("What are the fixed charges on the Property A bill?",
+       "Derived from the owner's bills at about $840 in 2025 at the assumed rate.",
+       "The itemised parcel taxes, bonds and assessments.",
+       "Read the itemised bill.",
+       "Fixed charges have grown unevenly; on Property B they grew at 8.1% a year between 2016 and 2025.",
+       ["scc_ratebook", "sf_treas_rate"]),
+      ("Has a homeowners' exemption been claimed on Property A?",
+       "Not supplied.",
+       "Whether the exemption is in place on the transferor's main home.",
+       "Check the bill for the exemption line, or ask the assessor.",
+       "The Proposition 19 definition of a principal residence hinges on eligibility for that exemption.",
+       ["boe_lta26026"]),
+      ("Has a homeowners' exemption been claimed on Property B?",
+       "Not supplied.",
+       "Which property currently carries the exemption.",
+       "Check both bills.",
+       "Only one exemption is available. Claiming it on Property A means giving it up on Property B.",
+       ["sf_treas_rate"]),
+      ("Have there been earlier transfers, exclusions or new construction on either property?",
+       "Not supplied.",
+       "Prior base year value transfers, prior Prop 19 claims, permits.",
+       "Ask the assessor for the parcel history.",
+       "A prior exclusion can limit what is available later.",
+       ["boe_prop19"]),
+      ("Is either assessed value currently held below the inflation-adjusted value under the lesser-of rule?",
+       "Not supplied.",
+       "Whether a decline has already been applied.",
+       "Ask the assessor.",
+       "Affects the starting point for the reassessment.",
+       ["rtc51"]),
+     ]),
+    ("C", "Occupancy and the Proposition 19 claim",
+     [
+      ("Will the heir occupy Property A as a principal residence within one year of transfer?",
+       "Not stated. The heir currently can live at Property B without losing rent.",
+       "The heir's intention, and whether the Property B principal-residence position would be given up.",
+       "Decide before the transfer, not after.",
+       "Without occupation the property is reassessed in full. This is the largest single number in the analysis.",
+       ["rtc63_2", "boe_lta26026"]),
+      ("If the heir occupies and later moves out, what value is enrolled?",
+       "The statute says the base year value established at the change in ownership, adjusted annually, is enrolled.",
+       "Whether that means the Proposition 19 adjusted value or the full market value at transfer.",
+       "Ask the county assessor in writing, at the time.",
+       "Determines whether a live-then-rent structure is worth anything. This site models it conservatively and flags it.",
+       ["rtc63_2", "boe_lta26026"]),
+      ("Could the heir keep the house as a principal residence for the whole of the relevant period?",
+       "Not stated.",
+       "Job location, family, school, care responsibilities.",
+       "Not a public record question; a family one.",
+       "The exclusion is removed when the home stops being the main home. A plan that depends on moving out later is not a safe plan.",
+       ["boe_lta26026"]),
+     ]),
+    ("D", "Rent and tenancy",
+     [
+      ("What are the current rents, lease start dates and anniversary dates on the two let units?",
+       f"About {m(B['rent']['monthly'])} a month in total, owner-stated and unverified.",
+       "Per-unit rents, deposits, lease terms and anniversary dates.",
+       "Read the leases and the rent ledger.",
+       "Drives the income on Property B and the timing of any increase.",
+       []),
+      ("Are the Property B units covered by the San Francisco Rent Ordinance?",
+       "Not verified.",
+       "The certificate of occupancy date and the exemption status of the building.",
+       "Check with the Rent Board and the building's records.",
+       "Coverage decides whether the 1.6% local increase or the statewide cap applies.",
+       ["sf_rent_increase", "civ1947_12"]),
+      ("Is the rent increase licence current, and is the building registered in the Housing Inventory?",
+       "Not supplied.",
+       "Whether the licence and registration are in place.",
+       "Ask the Rent Board.",
+       "Without them, annual increases cannot lawfully be imposed at all.",
+       ["sf_rent_increase"]),
+      ("What are the obligations if the heir wants a unit back for their own use?",
+       "Not supplied.",
+       "Just cause, notice periods and relocation payments under local and statewide rules.",
+       "Read Civil Code 1946.2 and the Rent Ordinance, and take advice.",
+       "Directly affects the option of living at Property B while also using the third unit.",
+       ["civ1946_2"]),
+      ("What rent could the vacant third unit command?",
+       "Not supplied.",
+       "A market rent opinion.",
+       "Ask two or three local letting agents.",
+       "It is the real opportunity cost of living at Property A rather than Property B.",
+       []),
+      ("What rent could Property A command?",
+       "Not supplied. This site reports the break-even rent instead of inventing a figure.",
+       "A market rent opinion for the house.",
+       "Ask two or three local letting agents at the time.",
+       "Needed to test the rental path properly. The break-even is on the decision page.",
+       []),
+     ]),
+    ("E", "Running costs",
+     [
+      ("What does insurance actually cost for each property?",
+       "Owner estimate of about $1,500 a year for each, unverified.",
+       "Real quotes.",
+       "Get three quotes per building from admitted insurers, and check the FAIR Plan as a fallback.",
+       "The California Department of Insurance publishes no average premium by area, so this cannot be verified online.",
+       ["cdi_tips", "cdi_fairplan"]),
+      ("Who supplies water to Property A, and on what tariff?",
+       f"Owner range of {m(A['annual_costs']['water']['low'])} to {m(A['annual_costs']['water']['high'])} a year.",
+       "The provider and the published rate schedule.",
+       "Read the bill and the provider's published rates.",
+       "Water is small next to tax and maintenance, but it is checkable and should be checked.",
+       []),
+      ("What tariff is the solar system on, and when was it interconnected?",
+       "The owner reports a small net annual credit.",
+       "NEM 1.0, NEM 2.0 or the net billing tariff, and the interconnection date.",
+       "Read the interconnection agreement and the bill.",
+       "NEM 2.0 runs for twenty years from interconnection; the net billing tariff pays much less for exports. A change of customer can end the tariff.",
+       ["cpuc_nem"]),
+      ("What is the real maintenance and capital history of each building?",
+       "Not supplied. Assumed at 0.5% of value a year owner-occupied, 0.75% as a rental and 1.5% for the older building.",
+       "Five years of actual spend, and a capital plan.",
+       "Assemble the receipts and get a building inspection.",
+       "Roofs, sewer laterals, foundations and paint are lumpy, not annual. The assumption hides that.",
+       []),
+      ("Are there bonded assessments, Mello-Roos charges or special district levies on either property?",
+       "Not supplied.",
+       "The itemised bill.",
+       "Read the itemised bill.",
+       "These are part of the fixed charge that keeps growing regardless of what the market does.",
+       ["scc_ratebook"]),
+     ]),
+    ("F", "Taxes and the estate",
+     [
+      ("What is the total value of the estate, including the cash, and does it exceed the federal exclusion?",
+       f"The 2026 exclusion is {m(V['federal_basic_exclusion_2026']['value'])}. The cash amount is deliberately not published here.",
+       "The estate's own valuation.",
+       "The owner's private records, with a professional valuation.",
+       "Determines whether an estate tax return is due and whether the house might have to be sold for liquidity.",
+       ["irs_estate", "irs_whatsnew"]),
+      ("Is portability available, and were there prior taxable gifts?",
+       "Not supplied.",
+       "Whether a prior spouse died and an election was made, and the lifetime gift history.",
+       "Ask the estate's advisers and read any prior Form 709 or Form 706.",
+       "Prior taxable gifts reduce what is left of the exclusion.",
+       ["irs_estate", "irs_i706"]),
+      ("Are there retirement accounts in the estate?",
+       "Not supplied.",
+       "Account types and balances.",
+       "Read the account statements.",
+       "Inherited retirement assets are taxed as withdrawn and do not get the basis step-up. This is the most common surprise.",
+       ["irs_rmd"]),
+      ("What will the heir's filing status and marginal rates be in the year of a sale?",
+       "Not supplied.",
+       "Single or joint, and other income.",
+       "Estimate at the time.",
+       "Decides the $250,000 or $500,000 exclusion and the rate band for the gain.",
+       ["irs_p523", "irs_tc409"]),
+      ("Should a like-kind exchange or an instalment sale be considered?",
+       "Not modelled.",
+       "Whether the heir wants to remain in real estate.",
+       "Take tax advice at the time.",
+       "An exchange defers tax but does not change the property tax reassessment.",
+       []),
+     ]),
+    ("G", "Preferences",
+     [
+      ("Does the heir actually want to live in this house?",
+       "Not stated.",
+       "A preference, not a number.",
+       "Ask.",
+       "It is the only consideration on this site that can outweigh the arithmetic.",
+       []),
+      ("What is the risk tolerance for the invested proceeds?",
+       "Not stated.",
+       "Equities, bonds, savings, or a mix.",
+       "Set an investment policy before the money arrives.",
+       "The recommendation assumes a diversified equity portfolio. A cash-only approach changes the answer: see the break-even table.",
+       []),
+      ("Is there a wish to keep the house in the family?",
+       "Not stated.",
+       "A family preference.",
+       "Discuss it openly, before the transfer.",
+       "If the answer is yes, the cost of that preference is on the decision page and should be agreed knowingly.",
+       []),
+     ]),
+]
+
+
+def page_questions() -> str:
+    sections = []
+    for letter, title, items in QUESTIONS:
+        rows = [
+            f"<td><strong>{esc(q)}</strong></td>"
+            f"<td>{esc(have)}</td>"
+            f"<td>{esc(missing)}</td>"
+            f"<td>{esc(how)}</td>"
+            f"<td>{esc(why)}</td>"
+            + (src_cell(s, "Official source") if s else src_cell([], "No official source applies"))
+            for q, have, missing, how, why, s in items]
+        sections.append(
+            f'<h2>{esc(letter)}. {esc(title)}</h2>'
+            + table(f"{len(items)} questions in this group",
+                    ["Question", "What we have", "What is missing", "How to find out",
+                     "Why it matters", "Source"], rows))
+    return (
+        callout("note", "How to use this page", f"""
+<p>There are {sum(len(i) for _, _, i in QUESTIONS)} questions below, grouped by subject. Each one states what this
+site already has, what is missing, how to find the answer, and why it changes the decision. Questions with no
+official source in the last column are matters of fact or preference that no public source can answer; they are
+listed anyway so nothing is assumed away.</p>
+<p>Every item here is also a candidate for the <a href="suggestions.html">suggestions page</a>, which is the
+review queue for turning them into action.</p>""")
+        + "".join(sections))
+
+
+# -------------------------------------------------------------- suggestions --
+SUGGESTIONS = [
+    ("S-01", "Replace both insurance estimates with three real quotes each",
+     "Removes the largest block of unverified cost inputs. A rental policy on Property B is priced very differently from a primary-residence policy.",
+     "Low", "Low", "costs", "cdi_tips"),
+    ("S-02", "Look up Property A's tax rate area and read the published rate",
+     "Replaces the assumed 1.18% with the rate the county actually applies, and itemises the fixed charges.",
+     "Low", "None", "property-a", "scc_ratebook"),
+    ("S-03", "Confirm the trust holds title and obtain the preliminary change of ownership report",
+     "Establishes that the transfer will take the intended path and starts the county record correctly.",
+     "Low", "Low if done now, high if discovered late", "inheritance", ["scc_recorder", "rtc480"]),
+    ("S-04", "Model a sale in the same tax year as the inheritance, before deciding anything else",
+     "The basis step-up makes an immediate sale almost tax-free. This is the option everything else must beat.",
+     "Low", "Low", "decision", ["irs_basis"]),
+    ("S-05", "Claim the Proposition 19 exclusion only if the heir will occupy the home long term",
+     "The exclusion is removed when the home stops being the principal residence, and there is no exception to the one-year occupation rule.",
+     "Medium", "High if the heir may move out", "property-a", ["rtc63_2", "boe_lta26026"]),
+    ("S-06", "Get rental opinions for Property A and for the vacant unit at Property B",
+     "Turns the break-even rent into a real comparison and prices the opportunity cost of occupying Property A.",
+     "Low", "None", "decision", []),
+    ("S-07", "Confirm San Francisco Rent Ordinance coverage and the rent increase licence",
+     "Decides which rent cap applies and whether increases can lawfully be made at all.",
+     "Low", "Medium if notices were missed", "property-b", ["sf_rent_increase", "civ1947_12"]),
+    ("S-08", "Confirm the solar interconnection date and the tariff the system is on",
+     "Determines whether the export credit survives, for how long, and what happens when the customer of record changes.",
+     "Low", "Medium", "costs", ["cpuc_nem"]),
+    ("S-09", "Build a five-year maintenance and capital plan for both buildings",
+     "Replaces a percentage assumption with real numbers and surfaces lumpy items like roofs and sewer laterals.",
+     "Medium", "None", "costs", []),
+    ("S-10", "Obtain a written valuation of Property A at the date of death",
+     "Fixes the income tax basis and the depreciation basis if the property is ever let.",
+     "Medium", "High if skipped", "inheritance", ["irs_basis"]),
+    ("S-11", "Decide whether a like-kind exchange is wanted, and take advice before selling",
+     "An exchange must be arranged before the sale, not after. It defers tax but does not change the reassessment.",
+     "High", "High if attempted late", "taxes", []),
+    ("S-12", "Write an investment policy for the sale proceeds before the money arrives",
+     "The recommendation assumes a diversified portfolio. Deciding the split in advance avoids doing it in a moving market.",
+     "Medium", "Medium", "decision", []),
+    ("S-13", "Prepare an estate liquidity plan if the estate may exceed the federal exclusion",
+     "Federal estate tax is due in cash within nine months of death. A house is not a liquid asset.",
+     "Medium", "High if ignored", "estate", ["irs_estate", "irs_i706"]),
+    ("S-14", "Ask now about portability and prior taxable gifts",
+     "Both change how much exclusion is left, and both are far cheaper to establish now than after the death.",
+     "Low", "High if ignored", "estate", ["irs_estate"]),
+    ("S-15", "Review the trust for a special needs trust clause in light of SB 974",
+     "SB 974, chaptered September 2026, makes such a trust an eligible medium of transfer for the exclusion.",
+     "Low", "Low", "laws", ["sb974"]),
+    ("S-16", "Re-run this model every year with updated inputs",
+     "Most of the gap between the paths comes from assumptions that can be replaced with facts over time.",
+     "Low", "None", "projections", []),
+    ("S-17", "Set the review gate before implementing anything",
+     "Nothing on this page has been done. Each item needs a decision to adopt, defer or reject, recorded before any action.",
+     "Low", "None", None, []),
+    ("S-18", "Keep the data files in this repository as the single source of truth",
+     "Every figure on the site is generated from assets/data. Editing the HTML by hand would break that and the verification.",
+     "Low", "None", None, []),
+]
+
+
+def page_suggestions() -> str:
+    rows = []
+    for sid, title, effect, effort, risk, area, src in SUGGESTIONS:
+        target = area if area and area.endswith(".html") else (area + ".html" if area else None)
+        area_html = (f'<a href="{esc(target)}">{esc(PAGE_TITLES.get(target, area))}</a>'
+                     if target else "Whole analysis")
+        rows.append(
+            f"<td><strong>{esc(sid)}</strong></td>"
+            f"<td><strong>{esc(title)}</strong></td>"
+            f"<td>{esc(effect)}</td>"
+            f"<td>{esc(effort)}</td>"
+            f"<td>{esc(risk)}</td>"
+            f"<td>{area_html}</td>"
+            f'<td><span class="badge proposed">proposed</span></td>'
+            + (src_cell(src if isinstance(src, list) else [src], "Official source") if src
+               else src_cell([], "No official source applies")))
+    tbl = table("Suggestions for review",
+                ["ID", "Suggestion", "What it changes", "Effort", "Risk if ignored",
+                 "Where it lands", "Status", "Source"], rows)
+
+    gate = table("The selection gate",
+                 ["Step", "What happens", "Rule", "Source"],
+                 [
+                     "<td>1. Read</td><td>Work through the list and mark each item adopt, defer or reject.</td><td>No item is implemented by building this site. Every item is still marked proposed.</td>" + src_cell([], "Procedure, not a figure"),
+                     "<td>2. Gate</td><td>Anything that costs money, signs a document, or moves title needs an explicit decision recorded before it happens.</td><td>Items S-03, S-05, S-11 and S-13 are in this class.</td>" + src_cell([], "Procedure, not a figure"),
+                     "<td>3. Verify</td><td>Anything that replaces an unverified figure should be checked against the official source in the last column, and the data file updated.</td><td>Items S-01, S-02, S-07 and S-08 are in this class.</td>" + src_cell([], "Procedure, not a figure"),
+                     "<td>4. Re-run</td><td>After any input changes, rebuild the model and the site and see whether the recommendation moved.</td><td>Item S-16.</td>" + src_cell([], "Procedure, not a figure"),
+                     "<td>5. Record</td><td>Write the decision and the date next to the item, so a future reader knows what was chosen and why.</td><td>Item S-17.</td>" + src_cell([], "Procedure, not a figure"),
+                 ])
+
+    improve_src = {"Add per-unit detail for Property B": ["sf_rent_increase"],
+                   "Add a real rental opinion for Property A": [],
+                   "Add a maintenance and capital schedule": [],
+                   "Add the itemised tax bills": ["scc_ratebook"],
+                   "Add a liquidity model for the estate": ["irs_estate", "irs_i706"],
+                   "Add a two-person household case": ["irs_tc409", "irs_estate"],
+                   "Add a mortgage case": [],
+                   "Add a distribution chart to the projections": []}
+    improve_rows = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td>"
+                    f'<td><span class="badge proposed">proposed</span></td>'
+                    + (src_cell(improve_src[a], "Official source") if improve_src[a]
+                       else src_cell([], "No official source applies"))
+                    for a, b, c in [
+                        ("Add per-unit detail for Property B", "Rent, lease dates and anniversary dates per unit, so the income can be projected properly instead of as one total.", "The Property B income is currently a single unverified total with no expiry dates."),
+                        ("Add a real rental opinion for Property A", "Replaces the break-even rent with a comparison against an actual market rent.", "The rental path is currently tested only against a break-even, which is honest but indirect."),
+                        ("Add a maintenance and capital schedule", "Year-by-year capital items rather than a percentage of value.", "Lumpy costs are invisible, which flatters every hold path."),
+                        ("Add the itemised tax bills", "Bond, parcel tax and assessment lines separated from the ad valorem part.", "The fixed charge is currently modelled as a single number growing with inflation."),
+                        ("Add a liquidity model for the estate", "Whether the estate could pay federal estate tax without selling the house.", "The interaction between the cash inheritance and the house is currently only sketched in scenario bands."),
+                        ("Add a two-person household case", "Joint filing, the $500,000 exclusion and two exclusions for estate tax.", "The model currently uses the single-filer exclusion throughout, which is conservative."),
+                        ("Add a mortgage case", "What happens if the heir borrows against either property instead of selling.", "Not modelled at all."),
+                        ("Add a distribution chart to the projections", "A visual range rather than a single line.", "Readers tend to read the single line as a forecast."),
+                    ]]
+    improve = table("Improvements to this site, offered for review",
+                    ["Proposal", "What it would add", "Cost of not doing it", "Status", "Source"],
+                    improve_rows)
+    return (
+        callout("gate", "Nothing here has been implemented", """
+<p>Every item below is <strong>proposed</strong>. Building this site did not adopt, purchase, sign, file or change
+anything. The point of the page is that someone reads the list, chooses the best path, and only then acts. The
+selection gate below is the order in which to do that.</p>""")
+        + gate
+        + tbl
+        + '<h2>Improvements to this site</h2>'
+        + improve
+        + callout("privacy", "One suggestion that is not optional", """
+<p>S-18 is listed last but it is the one that keeps the site honest. Every figure you see is generated from the
+data files in <code>assets/data</code> by <code>scripts/model.py</code> and <code>scripts/build.py</code>. If a
+number is edited directly in an HTML file, the next rebuild will overwrite it and the verification will still
+pass, because the verification checks the generated output, not the intent. Change the data, not the page.</p>""")
     )
 
-    pages["review.html"] = (
-        "Flagged items — values left blank",
-        "A public register of unverified or decision-sensitive facts. No property-specific amount is inferred, rounded or displayed.",
-        '''<div class="privacy"><strong>Blank means unknown here.</strong> The public edition deliberately removes owner-derived inputs and calculated values. The flags below describe missing evidence, not any particular property's condition or amount.</div>
-<section><h2>Items to resolve privately</h2>''' + plain_table(
-            "Flag register — unresolved items, not factual claims",
-            ["ID", "Unverified or sensitive item", "Why it matters", "Private resolution step"],
-            [
-                ["F-01", "A's title, transfer instrument and date", "Ownership determines transfer, basis and deadlines.", f"Review the recorded documents and estate/trust file; {source_link('rtc_480', 'change-in-ownership reporting')}"],
-                ["F-02", "A's date-of-death value and basis", "Needed for tax reporting and sale comparison.", f"Obtain a qualified valuation and supporting estate records; {source_link('irs_inherited_basis', 'IRS basis guidance')}"],
-                ["F-03", "A's assessed value, property-tax bill and any exclusion status", "Property tax can change after a transfer; claim conditions are fact-specific.", f"Request the current assessor roll and written eligibility guidance; {source_link('rtc_63_2', 'California family-home statute')}"],
-                ["F-04", "B's ownership, basis and depreciation history", "B is treated as already owned, not inherited with A; records must substantiate that treatment.", f"Verify title and prior tax/closing records; {source_link('irs_rental', 'IRS rental-basis and depreciation guidance')}"],
-                ["F-05", "B's rent, vacancy, collection and occupancy", "Rental cash flow and possible owner occupancy change the comparison.", f"Reconcile leases, deposits, rent receipts and tenant obligations; {source_link('irs_rental', 'IRS rental reporting')}"],
-                ["F-06", "Insurance premiums, coverage and renewability", "A survey is not a property-specific quote and coverage may differ by use.", f"Obtain current written quotes and confirm occupancy/landlord coverage; {source_link('cdi_premiums', 'CDI survey limitations')}"],
-                ["F-07", "Water, electricity, solar tariff and service costs", "Bills and credits depend on provider, system and tariff.", f"Review actual service bills and system/interconnection agreements; {source_link('cpuc_solar', 'CPUC tariff overview')}"],
-                ["F-08", "Maintenance, repairs and major capital work", "Averages can hide a large irregular expense.", f"Obtain an inspection and written estimates; separate repair from improvement; {source_link('irs_rental', 'IRS repair/improvement guidance')}"],
-                ["F-09", "Local rental, property-tax, transfer-tax and occupancy rules", "State rules alone do not establish local coverage or cost.", "Check current city/county ordinances, assessor records and provider rules privately; no jurisdiction is identified here."],
-                ["F-10", "Estate total, prior gifts, deductions and election choices", "A property's value alone cannot establish federal estate-tax exposure.", f"Executor and tax adviser review the full estate and current filing test; {source_link('irs_estate', 'IRS estate-tax rules')}"],
-                ["F-11", "Retirement accounts and beneficiary designations", "Distribution periods and tax treatment vary by account and relationship.", f"Contact each custodian and verify plan terms; {source_link('irs_retirement_beneficiary', 'IRS beneficiary overview')}"],
-                ["F-12", "Future returns, inflation, law and decision date", "A long horizon is uncertain; one growth rate is not a reliable 50-year forecast.", 'Use multiple paths and update rules at decision time; see <a href="stress.html">historical stress cases</a>.' ],
-            ],
-            row_class="flag-row",
-        ) + '''</section>
-<p>No figure is inferred from a rounded assessment, public database, nearby property, online estimate or another edition. Property-specific monetary values remain unpublished; this register does not establish the condition or amount of any item.</p>'''
+
+# ------------------------------------------------------------------- review --
+def page_review() -> str:
+    unverified = [
+        ("Property A market value, November 2026", m(A["estimated_market_value_2026"]),
+         "Owner estimate", "Get a written valuation, and a second opinion at the date of death."),
+        ("Property B market value, November 2026", m(B["estimated_market_value_2026"]),
+         "Owner estimate", "Get a written valuation."),
+        ("Both assessment rolls and tax bills", "13 years for Property A, 10 for Property B",
+         "Owner's own records, not checked against the county roll",
+         "Order the assessor's parcel history for each property and compare line by line."),
+        ("Property A ad valorem rate", pcf(ASM["ad_valorem_rate_a"]["value"], 2),
+         "Assumption. The data cannot identify it, because assessed value and fixed charges both grow at about 2% a year.",
+         "Read the rate for the property's tax rate area from the county's published rate book."),
+        ("Property B ad valorem rate", pcf(ASM["ad_valorem_rate_b"]["value"], 5),
+         "Published by the City and County of San Francisco for fiscal year 2026-27",
+         "None. This one is verified."),
+        ("Property A water", f"{m(A['annual_costs']['water']['low'])} to {m(A['annual_costs']['water']['high'])} a year",
+         "Owner estimate", "Read the bill and the provider's published tariff."),
+        ("Property A electricity, net of solar", f"{m(A['annual_costs']['electricity']['low'])} to {m(A['annual_costs']['electricity']['high'])} a year",
+         "Owner estimate", "Read twelve months of bills and the interconnection agreement."),
+        ("Property B water", f"{m(B['annual_costs']['water']['low'])} to {m(B['annual_costs']['water']['high'])} a year",
+         "Owner estimate", "Read the bills."),
+        ("Property B electricity", f"{m(B['annual_costs']['electricity']['low'])} to {m(B['annual_costs']['electricity']['high'])} a year",
+         "Owner estimate", "Read the bills."),
+        ("Insurance on both properties", m(A["annual_costs"]["insurance"]["mid"]) + " a year each",
+         "Owner estimate. The California Department of Insurance publishes no average premium by area, so there is nothing official to check it against.",
+         "Get three quotes per building."),
+        ("Maintenance on both properties", "0.5% / 0.75% of value for Property A, 1.5% for Property B",
+         "Assumption. No figure was supplied.",
+         "Assemble five years of actual spend and a capital plan."),
+        ("Property B rent", m(B["rent"]["annual"]) + " a year",
+         "Owner statement, unverified",
+         "Read the leases and the rent ledger."),
+        ("The inherited cash amount", "Not published",
+         "Deliberately withheld from this site",
+         "Work through the scenario bands on the estate page privately."),
+        ("San Francisco transfer tax reduction proposal", "Not used in any figure",
+         "Reported publicly but not verified against an official city source",
+         "Check the Board of Supervisors file before relying on it."),
+    ]
+    uv_rows = [f"<td><strong>{esc(a)}</strong></td><td>{b}</td>"
+               f'<td><span class="badge unverified">{esc(c)}</span></td><td>{esc(d)}</td>'
+               + src_cell(["cdi_tips", "scc_ratebook", "sf_treas_rate", "irs_estate"], "Where to check")
+               for a, b, c, d in unverified]
+
+    caveats = [
+        ("The ad valorem rate for Property A is not identifiable from the data",
+         "Assessed value and the fixed part of the bill both grow at about 2% a year, so rates anywhere between roughly 1.05% and 1.60% fit the supplied bills almost equally well. 1.18% is used and flagged."),
+        ("Fixed charges are projected at the inflation rate",
+         "On Property B the fixed part of the bill grew at 8.1% a year between 2016 and 2025. Projecting at 2.5% is deliberately conservative and understates future bills if that pace continues."),
+        ("The November 2026 California election results are unofficial",
+         "They are published with all precincts partially reporting and are not certified until 11 December 2026. Proposition 3 is treated as passed because it changes the tax rate on a sale, but the result must be confirmed."),
+        ("Combined tax rates are added, not interacted",
+         "State and federal rates are added and no federal deduction is taken for state tax paid. That overstates the tax on a sale and therefore understates the case for selling, which is the conservative direction."),
+        ("The housing value of living in the home is priced, not added",
+         "The terminal-value tables do not credit the live-in path with the value of the housing it provides. The break-even table prices that value instead; on the 2045 baseline it comes out at about $1,760,770 a year."),
+        ("Depreciation follows a simple rule",
+         "80% of value treated as improvements, straight line over 27.5 years, capped at the building's depreciable amount. Land is not depreciated. Real cost segregation would differ."),
+        ("No mortgage, no 1031 exchange, no instalment sale, no gifting",
+         "Each is listed on the questions page. None is modelled."),
+        ("The inheritance year is a range, not a date",
+         "2040, 2045 and 2050 are all modelled. The plan should be revisited when the timing is known."),
+        ("The property tax lesser-of rule is not modelled",
+         "If house prices fall below the inflation-adjusted assessed value, the assessed value can be reduced. That is assessor-applied and would help the hold paths in a slump."),
+        ("The Proposition 19 shelter path after 2027 is a projection",
+         "The real amount is set every second February from the California house price index and is not published in advance. Three percent a year is assumed and flagged."),
+    ]
+    cav_rows = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td>"
+                + src_cell(["scc_ratebook", "sos_results", "irs_tc409", "ftb_cg", "rtc51", "boe_lta25009"], "Related sources")
+                for a, b in caveats]
+
+    audit = [
+        ("The repository contains far more than the published site",
+         "In addition to the published pages, the repository holds two earlier editions under analysis/ and plan/, and a very large coordination board. None of it is published: the Jekyll configuration and the packaging allowlist both exclude it.",
+         "It is still in the public repository and in its history. Deleting or rewriting history is a separate decision for the owner."),
+        ("Earlier sessions published a version with no property figures at all",
+         "Between 11 and 12 November 2026 several sessions built a privacy-first edition that blanked every value. This edition reverses that, because the brief for this session asks for the figures rounded to $10.",
+         "The reversal is recorded in the coordination board. The blanked edition remains in the repository history."),
+        ("Prior commits and pull-request diffs may contain finer figures",
+         "Rounding to $10 applies to what this site publishes. It does not change what earlier commits contain.",
+         "Older commits, pull-request diffs, forks and external copies are separate exposure surfaces. Nothing on this site can certify them erased."),
+        ("Four pull requests are open",
+         "PR 70 restored a version of this quantitative edition and had no commits for more than an hour before this session took the task over. PRs 62, 65 and 66 are board records and older work.",
+         "They are not merged. This session's work is self-contained and does not depend on them."),
+        ("The site is published from the repository root by Jekyll",
+         "The GitHub Pages source is set to the main branch at the repository root, with a configuration file excluding everything outside the published allowlist. A separate workflow also builds an allowlisted artifact.",
+         "The publishing route should be confirmed live after every change. The exclusion list is the control that keeps the rest of the repository out of the site."),
+        ("Verification is a build-time check, not a legal review",
+         "The verifier checks that every published table row carries a source link, that no forbidden identifier appears, and that the build is reproducible.",
+         "It cannot check whether a legal reading is correct. That needs a professional."),
+    ]
+    aud_rows = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td>"
+                + src_cell(["boe_lta25009", "irs_estate", "scc_ratebook"], "Related sources")
+                for a, b, c in audit]
+
+    return (
+        callout("note", "What this page is for", """
+<p>Two lists. The first is every figure on this site that is not verified against an official source, and what to
+do about it. The second is every modelling shortcut that materially affects the answer. The third is the audit of
+the repository this site is built from. None of these block the recommendation, but each one is a reason to
+check before acting.</p>""")
+        + '<h2 id="method-detail">How the model works</h2>'
+        + callout("note", "Method, in one paragraph", f"""<p>{esc(METHOD_TEXT)}</p>""")
+        + '<h2 id="register">Register of unverified and assumed items</h2>'
+        + table("Every figure that is not backed by an official public source",
+                ["Figure", "Value used", "Status", "What to do", "Where to look"],
+                uv_rows)
+        + '<h2>Modelling caveats</h2>'
+        + table("Shortcuts that matter", ["Caveat", "What it means", "Source"], cav_rows)
+        + '<h2>Repository audit</h2>'
+        + table("What was found when the repository was reviewed",
+                ["Finding", "Detail", "Residual risk", "Source"], aud_rows)
     )
 
-    pages["audit.html"] = (
-        "Privacy, source and audit limits",
-        "The public edition is intentionally a general framework. This page records its evidence standard, current-tree scope and limits without reproducing private findings.",
-        '''<section><h2>What this edition contains</h2>''' + list_html([
-            'One clearly labelled public edition with the inherited Property A / already-owned Property B distinction.',
-            'Source-linked federal and California rules, an inheritance checklist, blank cost fields, questions, flagged unknowns and general stress cases.',
-            'No property-specific inputs, assessments, rent, utility use, insurance quote, owner-derived projections or individualized recommendation.',
-            'A static, no-input site: no form, script, analytics, tracking pixel or third-party asset is included in the public pages.'
-        ]) + '''</section>
-<section><h2>Verification standard</h2><p>General legal and historical claims link directly to the official publisher. The source library states what each source supports, when it was checked and its limits. Generic public sources cannot verify a property's title, value, tax bill, rent, utility use, coverage or condition; those fields remain blank. Dollar thresholds shown are general rules, not owner-derived amounts. Rounding is not treated as anonymization, so property-specific amounts are omitted.</p><p>The economic examples are historical U.S. index or aggregate episodes, not property forecasts. Local law, current policy terms, utility tariffs, property condition and future tax law require a private, date-specific review.</p></section>
-<section><h2>Current tree versus history</h2><p>This refresh replaces owner-derived material in the current public edition and retires non-allowlisted routes with content-free notices. It does not rewrite old commits, pull-request diffs, caches, forks, downloads or copies outside this repository. No claim of complete historical erasure is made.</p><p>The Pages workflow packages an explicit allowlist plus generic withdrawal notices. The deployment source and live artifact must be confirmed after merge; a successful local package check alone is not a deployment check.</p></section>
-<section><h2>Reproducible local checks</h2><pre><code>python3 scripts/build.py
-python3 scripts/verify.py
-python3 scripts/package_site.py
-python3 scripts/privacy_boundary.py</code></pre><p>These checks validate the current files and generated artifact; they cannot certify that old external copies were erased or that a private document is accurate.</p></section>'''
+
+# ------------------------------------------------------------------ sources --
+def page_sources() -> str:
+    rows = []
+    for s in SRC_DOC["sources"]:
+        rows.append(
+            f"<td>{esc(s['id'])}</td>"
+            f"<td><strong>{esc(s['publisher'])}</strong></td>"
+            f'<td><a href="{esc(s["url"])}" target="_blank" rel="noopener noreferrer">{esc(s["title"])}</a></td>'
+            f"<td>{esc(s['supports'])}</td>"
+            f"<td>{esc(s['limits'])}</td>"
+            f"<td>{esc(s['checked'])}</td>")
+    return (
+        callout("note", "How the ledger works", f"""
+<p>There are {len(SRC_DOC['sources'])} sources. Every one was opened on the publisher's own domain on 13 November
+2026, or is recorded as carried from the repository's earlier ledger and re-checked on the same date. The
+"supports" column says exactly what the source is cited for; the "limits" column says what it does not cover.
+Sources are cited only for what they actually state.</p>""")
+        + table("Source ledger", ["ID", "Publisher", "Document", "What it supports",
+                                  "Limits", "How it was checked"], rows)
+        + callout("limit", "What this ledger does not do", """
+<ul>
+<li>It does not reproduce the rate schedules, thresholds or forms. Those change; read the linked document.</li>
+<li>It does not cover local ordinances beyond the two cities named, and it does not verify which rules apply to which building.</li>
+<li>It contains no paid, paywalled or secondary source. Everything here is an official publisher or an official government site.</li>
+<li>It was checked on one date. Statutory sections are amended; letters to assessors are superseded; election results are certified after the fact.</li>
+</ul>""")
     )
 
-    source_rows = []
-    for item in SOURCES_DOC["sources"]:
-        source_rows.append((
-            [
-                f"<strong>{esc(item['publisher'])}</strong><br>{esc(item['title'])}",
-                esc(item["supports"]),
-                esc(item["checked"]),
-                esc(item["limits"]),
-            ],
-            item["id"],
-        ))
-    pages["sources.html"] = (
-        "Official source library",
-        "A line-by-line source ledger for the general legal rules and historical economic facts used in the public edition.",
-        '''<p>Each factual row on the decision pages links to its official source. Sources below were opened on the publishing agency's domain on the date shown. Links verify the stated general rule or historical fact, not any private property value, title, tax result, bill or forecast.</p>
-<section><h2>Evidence ledger</h2>''' + fact_table(
-            "Official sources and verification limits",
-            ["Publisher and document", "What the source supports", "Checked", "Limit"],
-            source_rows) + '''</section>'''
-    )
 
-    for filename in PAGES:
-        title, description, body = pages[filename]
-        (ROOT / filename).write_text(page_shell(filename, title, description, body), encoding="utf-8")
-    print(f"Rendered {len(PAGES)} privacy-safe public pages from official-source metadata; no property model loaded.")
+PAGE_BUILDERS = {
+    "index.html": (page_index, "Two California properties, one decision. Every figure rounded to the nearest $10."),
+    "executive-summary.html": (page_executive_summary,
+                               "The important details, the recommendation, and what would change it."),
+    "decision.html": (page_decision, "Five paths, priced, with the break-even numbers and the sensitivity."),
+    "property-a.html": (page_property_a, "The home being inherited through a trust, planned 2040 to 2050."),
+    "property-b.html": (page_property_b, "The three-unit building the heir already owns and rents out."),
+    "ownership-distinction.html": (page_distinction, "Why inherited and already-owned are not interchangeable."),
+    "costs.html": (page_costs, "Water, power, insurance, maintenance and tax, now and projected."),
+    "projections.html": (page_projections, "Year by year to 2076 for value, assessed value and tax."),
+    "taxes.html": (page_taxes, "Basis step-up, capital gains, the 121 exclusion, recapture."),
+    "inheritance.html": (page_inheritance, "The trust transfer, phase by phase, with deadlines."),
+    "estate.html": (page_estate, "Federal thresholds, California's position, scenario bands."),
+    "laws.html": (page_laws, "Enacted, dead and proposed rules that could move the answer."),
+    "black-swan.html": (page_black_swan, "Regimes where the answer changes, and by how much."),
+    "economy.html": (page_economy, "Fifty years of verified inflation, house price and yield data."),
+    "questions.html": (page_questions, "What is known, what is missing, and how to find it."),
+    "suggestions.html": (page_suggestions, "A review queue of proposals. Nothing implemented yet."),
+    "review.html": (page_review, "Unverified figures, modelling caveats and the repository audit."),
+    "sources.html": (page_sources, "Every official source used, with what it supports."),
+}
+
+
+PAGES = list(PAGE_BUILDERS)
+ASSETS = ["assets/style.css"]
+
+
+def main():
+    for name, (fn, lede) in PAGE_BUILDERS.items():
+        (ROOT / name).write_text(page(name, fn(), lede), encoding="utf-8")
+        print("wrote", name)
 
 
 if __name__ == "__main__":
-    build_pages()
+    main()

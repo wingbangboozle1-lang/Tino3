@@ -1,322 +1,475 @@
 {
-  "as_of": "2026-11-12",
-  "edition": "Privacy-safe public decision guide",
-  "scope": "Official sources for general U.S. federal and California rules, public historical economic episodes, and agency guidance. This ledger does not validate any private property value, title, rent, bill, quote, occupancy history, or forecast.",
+  "as_of": "2026-11-13",
+  "edition": "Anonymised quantitative decision edition",
+  "scope": "Official sources for the federal and California rules, the local tax rates, the rent rules, the utility and solar rules and the historical economic series used on this site. The ledger does not validate any private property value, title, rent, bill, quote, occupancy history or forecast. Owner-supplied figures are published rounded to the nearest $10 and are labelled as unverified where no official public record was checked.",
   "sources": [
     {
       "id": "irs_estate",
       "publisher": "Internal Revenue Service",
       "title": "Estate tax",
       "url": "https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax",
-      "checked": "Opened on the publisher's official domain on 2026-11-12.",
-      "supports": "Federal gross-estate accounting uses fair market value; the 2026 filing-threshold table; certain deductions; and the surviving-spouse portability election on a timely filed estate return.",
-      "limits": "A filing threshold is not a complete tax calculation. Prior taxable gifts, deductions, elections, ownership and other rules can change the result."
+      "checked": "Opened on the publisher's official domain on 2026-11-13.",
+      "supports": "The federal gross estate is measured at fair market value at date of death; the filing threshold by year of death (2026: $15,000,000); the surviving-spouse portability election on a timely filed estate return.",
+      "limits": "A filing threshold is not a complete tax computation. Prior taxable gifts, deductions, elections, ownership form and later law can change the result."
     },
     {
-      "id": "irs_estate_update",
+      "id": "irs_whatsnew",
       "publisher": "Internal Revenue Service",
-      "title": "What's new — Estate and gift tax",
+      "title": "What's new - Estate and gift tax",
       "url": "https://www.irs.gov/businesses/small-businesses-self-employed/whats-new-estate-and-gift-tax",
-      "checked": "Opened on the publisher's official domain on 2026-11-12.",
-      "supports": "The IRS identifies Public Law 119-21 as setting the 2026 federal basic estate-tax exclusion at $15,000,000 and lists current estate-and-gift-tax updates.",
-      "limits": "The 2026 amount is year-specific and is not a forecast of later law."
+      "checked": "Opened on the publisher's official domain on 2026-11-13.",
+      "supports": "Public Law 119-21 (the Working Families Tax Cuts, signed 4 July 2025) amended section 2010(c)(3) by increasing the basic exclusion amount to $15,000,000 for calendar year 2026.",
+      "limits": "The 2026 amount is year-specific. The page is not a forecast of later law."
     },
     {
-      "id": "irs_2027_adjustments",
+      "id": "irs_2027",
       "publisher": "Internal Revenue Service",
-      "title": "Tax inflation adjustments for tax year 2027",
+      "title": "IRS releases tax inflation adjustments for tax year 2027 (IR-2026-133, 5 November 2026)",
       "url": "https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts",
-      "checked": "Opened on the publisher's official domain on 2026-11-12.",
-      "supports": "For 2027 deaths, the federal basic estate-tax exclusion is $15,480,000; the annual gift exclusion is $20,000 per recipient.",
-      "limits": "These are indexed statutory amounts, not a forecast for any later year."
+      "checked": "Opened on the publisher's official domain on 2026-11-13.",
+      "supports": "For decedents dying during 2027 the basic exclusion amount is $15,480,000; the annual gift exclusion for 2027 is $20,000 per recipient (up from $19,000 for 2026); the 2027 standard deduction is $33,200 for married filing jointly; the top marginal income rate remains 37%.",
+      "limits": "These are indexed statutory amounts for one year, not a forecast for later years."
     },
     {
-      "id": "irs_inherited_basis",
+      "id": "irs_basis",
       "publisher": "Internal Revenue Service",
-      "title": "Gifts and inheritances: inherited property basis and sale",
+      "title": "Gifts and inheritances - inherited property basis and sale",
       "url": "https://www.irs.gov/faqs/interest-dividends-other-types-of-income/gifts-inheritances/gifts-inheritances",
-      "checked": "Opened on the publisher's official domain on 2026-11-12.",
-      "supports": "Inherited-property basis is generally fair market value at the decedent's date of death; an alternate valuation date requires an estate return and election; gain may be taxable; certain basis reporting must be consistent with final estate-tax values.",
-      "limits": "The FAQ describes general federal rules and exceptions. It cannot establish the basis of a specific asset."
+      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+      "supports": "Property acquired from a decedent generally takes a basis equal to its fair market value at the date of death, so gain on an immediate resale is normally near zero.",
+      "limits": "Special rules apply to community property, to property acquired by gift within one year of death, to income in respect of a decedent and to certain trusts. This is not an exhaustive basis analysis."
     },
     {
-      "id": "irs_form706",
+      "id": "irs_tc409",
       "publisher": "Internal Revenue Service",
-      "title": "Instructions for Form 706",
-      "url": "https://www.irs.gov/instructions/i706",
-      "checked": "Opened the current July 2026 instructions on 2026-11-12; reviewed the filing-deadline and portability sections.",
-      "supports": "The executor's Form 706 reporting, filing and payment instructions, including the general nine-month deadline and portability election requirements.",
-      "limits": "The applicable filing requirement and any extension or election depend on the facts and current instructions."
+      "title": "Topic no. 409, Capital gains and losses",
+      "url": "https://www.irs.gov/taxtopics/tc409",
+      "checked": "Opened on the publisher's official domain on 2026-11-13.",
+      "supports": "Net capital gain rates of 0%, 15% and 20% by taxable income; 25% maximum rate on unrecaptured section 1250 gain from section 1250 real property; 28% maximum for collectibles and certain small-business stock; the $3,000 annual limit on deducting excess capital losses.",
+      "limits": "The page shows 2025 taxable-income thresholds. Thresholds are indexed and change each year."
     },
     {
-      "id": "irs_rental",
+      "id": "irs_p523",
       "publisher": "Internal Revenue Service",
-      "title": "Publication 527: Residential Rental Property",
+      "title": "Publication 523 (2025), Selling Your Home",
+      "url": "https://www.irs.gov/publications/p523",
+      "checked": "Opened on the publisher's official domain on 2026-11-13.",
+      "supports": "The ownership and residence tests, the look-back rule and the exceptions for the exclusion of gain on the sale of a main home; separate treatment for the part of a home used for business or rental and for nonqualified use after 2008.",
+      "limits": "Dollar limits and worksheets must be read in the current-year publication."
+    },
+    {
+      "id": "irs_tc559",
+      "publisher": "Internal Revenue Service",
+      "title": "Topic no. 559, Net investment income tax",
+      "url": "https://www.irs.gov/taxtopics/tc559",
+      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+      "supports": "The 3.8% net investment income tax applies to individuals with net investment income above the statutory threshold amounts.",
+      "limits": "Threshold amounts and the definition of net investment income are not restated on this site; verify against the current-year topic."
+    },
+    {
+      "id": "irs_p527",
+      "publisher": "Internal Revenue Service",
+      "title": "Publication 527, Residential Rental Property",
       "url": "https://www.irs.gov/publications/p527",
-      "checked": "Opened the 2025 publication on 2026-11-12; reviewed the rental-income and rental-expense sections in the current IRS text.",
-      "supports": "Rental income reporting and common rental expenses, including maintenance, insurance, taxes, management, repairs and utilities; personal use and improvement-versus-repair distinctions.",
-      "limits": "Tax treatment depends on use, ownership, records and applicable limitations. This publication does not estimate operating costs."
+      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+      "supports": "Rental income and expenses, depreciation of residential rental property, and the treatment of property converted between personal and rental use.",
+      "limits": "Depreciation lives, conventions and recapture rules must be read in the current-year publication."
     },
     {
-      "id": "irs_survivors",
+      "id": "irs_i706",
       "publisher": "Internal Revenue Service",
-      "title": "Publication 559: Survivors, Executors, and Administrators",
-      "url": "https://www.irs.gov/publications/p559",
-      "checked": "Opened the 2025 IRS publication page and its contents on 2026-11-12; used as a general administration checklist reference.",
-      "supports": "General federal tax administration for decedents, personal representatives, estates and beneficiaries.",
-      "limits": "A checklist, not individualized tax or legal advice; no specific filing rule is attributed to this reference in the guide."
-    },
-    {
-      "id": "irs_retirement_beneficiary",
-      "publisher": "Internal Revenue Service",
-      "title": "Retirement topics: beneficiary",
-      "url": "https://www.irs.gov/retirement-plans/plan-participant-employee/retirement-topics-beneficiary",
-      "checked": "Opened on the publisher's official domain on 2026-11-12; reviewed the current beneficiary distribution sections.",
-      "supports": "For deaths in 2020 or later, a designated beneficiary who is not an eligible designated beneficiary generally follows a 10-year distribution rule; eligible designated beneficiaries and spouses can have different options. Taxable distributions generally enter the recipient's gross income.",
-      "limits": "Distribution timing depends on the owner's death date, account, beneficiary category, plan terms and current IRS rules. No account or beneficiary facts are assumed."
-    },
-    {
-      "id": "uscode102",
-      "publisher": "U.S. Government Publishing Office (GovInfo)",
-      "title": "26 U.S.C. 102: gifts and inheritances (United States Code, 2022 edition)",
-      "url": "https://www.govinfo.gov/content/pkg/USCODE-2022-title26/html/USCODE-2022-title26-subtitleA-chap1-subchapB-partIII-sec102.htm",
-      "checked": "Opened on the publisher's official domain on 2026-11-12; read the full section text.",
-      "supports": "Subsection (a) excludes the value of property acquired by gift, bequest, devise or inheritance from gross income; subsection (b) does not exclude income generated by that property.",
-      "limits": "This is a general federal income-tax rule; it does not decide estate tax, inherited basis, sale gain, state tax or the treatment of a particular estate or trust. Confirm current law and facts."
-    },
-    {
-      "id": "ftb_inheritance",
-      "publisher": "California Franchise Tax Board",
-      "title": "Gifts and inheritance",
-      "url": "https://www.ftb.ca.gov/file/personal/income-types/gifts-and-inheritance.html",
-      "checked": "Opened on the publisher's official domain on 2026-11-12.",
-      "supports": "California does not include the gift or inheritance itself in the recipient's income; later income produced by inherited property may be taxable.",
-      "limits": "A particular sale, rental, trust or beneficiary may have additional reporting rules."
+      "title": "Instructions for Form 706, United States Estate (and Generation-Skipping Transfer) Tax Return",
+      "url": "https://www.irs.gov/instructions/i706",
+      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+      "supports": "The estate tax rate schedule, the unified credit computation, the portability election and the valuation-date rules.",
+      "limits": "This site does not restate the rate schedule; the instructions are the controlling document."
     },
     {
       "id": "sco_estate",
       "publisher": "California State Controller's Office",
-      "title": "California estate tax",
+      "title": "California Estate Tax",
       "url": "https://www.sco.ca.gov/ardtax_estate_tax.html",
-      "checked": "Opened on the publisher's official domain on 2026-11-12.",
-      "supports": "The Controller states that a California estate-tax return is not required for decedents dying on or after January 1, 2005.",
-      "limits": "This does not remove federal filing obligations or other state tax questions."
+      "checked": "Opened on the publisher's official domain on 2026-11-13.",
+      "supports": "For decedents dying on or after 1 January 2005 there is no longer a requirement to file a California estate tax return; the California generation-skipping transfer tax does not apply after 31 December 2004.",
+      "limits": "Pre-1982 inheritance and gift tax and 1982-2004 filing duties are outside this decision and are not covered."
     },
     {
-      "id": "rtc_63_2",
-      "publisher": "California Legislative Information",
-      "title": "Revenue and Taxation Code section 63.2",
-      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=63.2",
-      "checked": "Opened the current statute on the publisher's official domain on 2026-11-12.",
-      "supports": "California's intergenerational family-home/farm exclusion, eligibility definitions, transferee occupancy and exemption requirements, filing periods, and specified disaster-related provisions.",
-      "limits": "Eligibility depends on relationship, property type, use, value, timing, claims and exceptions. Obtain assessor-specific guidance."
+      "id": "ftb_inheritance",
+      "publisher": "California Franchise Tax Board",
+      "title": "Gifts and inheritance - Personal income types",
+      "url": "https://www.ftb.ca.gov/file/personal/income-types/gifts-and-inheritance.html",
+      "checked": "Opened on the publisher's official domain on 2026-11-13.",
+      "supports": "A gift or inheritance is not included in California income; income the inherited property later produces (interest, dividends, rent, gain on a real property sale) is taxable.",
+      "limits": "Page last updated 24 September 2025. Federal treatment and California treatment can differ for the same receipt."
+    },
+    {
+      "id": "ftb_cg",
+      "publisher": "California Franchise Tax Board",
+      "title": "Capital gains and losses",
+      "url": "https://www.ftb.ca.gov/file/personal/income-types/capital-gains-and-losses.html",
+      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+      "supports": "California does not have a separate lower rate for long-term capital gains; gains are taxed as ordinary income under the California rate schedules.",
+      "limits": "Rates and brackets must be read from the current-year schedules."
+    },
+    {
+      "id": "ftb_rates",
+      "publisher": "California Franchise Tax Board",
+      "title": "2025 California tax rate schedules (Form 540)",
+      "url": "https://www.ftb.ca.gov/forms/2025/2025-540-tax-rate-schedules.pdf",
+      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+      "supports": "The California marginal rate structure used to price a gain on sale.",
+      "limits": "This is the 2025 form. Later-year schedules must be used for a later-year sale."
     },
     {
       "id": "boe_prop19",
       "publisher": "California State Board of Equalization",
-      "title": "Proposition 19 overview and comparison charts",
+      "title": "Proposition 19 - The Home Protection for Seniors, Severely Disabled, Families, and Victims of Wildfire or Natural Disasters Act",
       "url": "https://www.boe.ca.gov/prop19/",
-      "checked": "Opened on the publisher's official domain on 2026-11-12.",
-      "supports": "The Board's overview of intergenerational exclusions, qualifying principal residences, filing periods and the biennially adjusted value cap.",
-      "limits": "The Board describes the page as general summary information; the statute and assessor's determination control."
+      "checked": "Opened on the publisher's official domain on 2026-11-13.",
+      "supports": "The comparison between former Proposition 58/193 and current Proposition 19, including: the exclusion now applies only to a principal residence or family home; the value limit is the current taxable value plus $1,000,000 as biennially adjusted; the homeowners' exemption must be filed within one year of transfer and the exclusion claim within three years.",
+      "limits": "The BOE states this is general summary information and not official legal guidance."
     },
     {
-      "id": "boe_lta_2025_009",
+      "id": "boe_lta25009",
       "publisher": "California State Board of Equalization",
-      "title": "Letter to Assessors 2025/009: intergenerational transfer value-cap adjustment",
+      "title": "Letter to Assessors No. 2025/009 - Intergenerational Transfer Exclusion, adjustment of the $1 million amount",
       "url": "https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf",
-      "checked": "Opened on the publisher's official domain on 2026-11-12.",
-      "supports": "The statutory amount in the Proposition 19 family-home/farm value cap is adjusted every other year; the next adjustment after the 2025–2027 period is scheduled for February 2027.",
-      "limits": "Do not use an old rounded amount for an eligibility decision; check the current Board letter and the statute."
+      "checked": "Opened on the publisher's official domain on 2026-11-13.",
+      "supports": "For transfers occurring 16 February 2025 through 15 February 2027 the value cap is the property's factored base year value plus $1,044,586. Earlier amounts: $1,000,000 (16 Feb 2021 - 15 Feb 2023) and $1,022,600 (16 Feb 2023 - 15 Feb 2025). The next adjustment occurs in February 2027.",
+      "limits": "The amount is adjusted every second February by the change in the FHFA California House Price Index, so a 2040-2050 transfer will use a different, currently unpublished amount."
     },
     {
-      "id": "boe_lta_2026_026",
+      "id": "boe_lta26026",
       "publisher": "California State Board of Equalization",
-      "title": "Letter to Assessors 2026/026: Proposition 19 intergenerational transfer FAQs",
+      "title": "Letter to Assessors No. 2026/026 - Proposition 19 Intergenerational Transfer Exclusion, Frequently Asked Questions and Answers",
       "url": "https://www.boe.ca.gov/proptaxes/pdf/lta26026.pdf",
-      "checked": "Opened on the publisher's official domain on 2026-11-12; occupancy and filing sections reviewed.",
-      "supports": "Current Board guidance on family-home definitions, one-year occupancy, continued eligibility and claim-filing rules.",
-      "limits": "Fact-specific assessor guidance; not a substitute for the controlling statute or a property-specific determination."
+      "checked": "Opened on the publisher's official domain on 2026-11-13.",
+      "supports": "Definitions under Revenue and Taxation Code section 63.2; the requirement that the transfer be of the transferor's principal residence and become the transferee's principal residence within one year of the transfer, with no exceptions; removal of the exclusion when the home ceases to qualify and enrolment of the base year value established at the change in ownership, adjusted annually; transfers through a trust are covered; only the unit occupied as a principal residence qualifies in a multi-unit property.",
+      "limits": "Guidance, not a legal determination. County assessors apply the rule to the facts."
     },
     {
-      "id": "boe_prop13",
+      "id": "rtc63_2",
+      "publisher": "California Legislative Information",
+      "title": "Revenue and Taxation Code section 63.2",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=63.2",
+      "checked": "Opened on the publisher's official domain on 2026-11-13.",
+      "supports": "The statutory text of the intergenerational transfer exclusion: the one-year principal-residence requirement, the homeowners'/disabled veterans' exemption filing requirement, removal of the exclusion when the exemption is lost, the claim-filing requirement, the confidentiality of the claim, and the new taxable value formula (existing taxable value plus the fair market value above the existing taxable value plus $1,000,000).",
+      "limits": "Section 63.2 was amended by SB 974 (Chapter 665, Statutes of 2026); read the current text."
+    },
+    {
+      "id": "boe_pub29",
       "publisher": "California State Board of Equalization",
-      "title": "California Property Tax: An Overview, Publication 29",
+      "title": "Publication 29, Property Taxpayers' Guide",
       "url": "https://boe.ca.gov/proptaxes/pdf/pub29.pdf",
-      "checked": "Opened on the publisher's official domain on 2026-11-12.",
-      "supports": "General California property-tax framework: a 1% base rate plus voter-approved indebtedness, change-in-ownership/new-construction reassessment rules, and the general 2% annual assessed-value limit.",
-      "limits": "The publication warns that law may change; the tax bill also reflects local levies and parcel-specific assessments."
+      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+      "supports": "Proposition 13: the 1% general tax rate limit, the base year value concept and the annual inflation adjustment not exceeding 2%.",
+      "limits": "General guidance; a specific bill is governed by the county assessment roll."
     },
     {
-      "id": "boe_lta_2026_002",
+      "id": "boe_lta26002",
       "publisher": "California State Board of Equalization",
-      "title": "Letter to Assessors 2026/002: 2026–27 California CPI factor",
+      "title": "Letter to Assessors No. 2026/002 - 2026-27 inflation adjustment",
       "url": "https://boe.ca.gov/proptaxes/pdf/lta26002.pdf",
-      "checked": "Opened on the publisher's official domain on 2026-11-12.",
-      "supports": "The 2026 assessment-roll inflation factor is 1.02, reflecting the statutory 2% cap for that roll year.",
-      "limits": "A statewide factor does not determine a specific property's assessed value or bill."
+      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+      "supports": "The California Consumer Price Index change used to set the 2026-27 inflation adjustment to assessed values.",
+      "limits": "The adjustment is set annually and can be below 2% in a low-inflation year."
     },
     {
-      "id": "rtc_480",
+      "id": "rtc51",
       "publisher": "California Legislative Information",
-      "title": "Revenue and Taxation Code section 480: change-in-ownership statements",
-      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=480.",
-      "checked": "Opened the current statute on the publisher's official domain on 2026-11-12.",
-      "supports": "For a real-property transfer by death outside probate, the trustee or transferee generally files a change-in-ownership statement within 150 days; for property subject to probate, the personal representative files before or with the inventory and appraisal.",
-      "limits": "The filing route, property scope and applicable deadlines depend on the estate and current law."
+      "title": "Revenue and Taxation Code section 51",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=51",
+      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+      "supports": "The statutory basis for the annual inflation adjustment to base year value and the lesser-of rule that can reduce a value below the inflation-adjusted amount.",
+      "limits": "The lesser-of rule is assessor-applied; a decline does not automatically reset the base year value."
     },
     {
-      "id": "boe_death_reporting",
-      "publisher": "California State Board of Equalization",
-      "title": "Death of a real-property owner: reporting requirements, Publication 800-9",
-      "url": "https://www.boe.ca.gov/pdf/pub800-9.pdf",
-      "checked": "Opened on the publisher's official domain on 2026-11-12.",
-      "supports": "Board guidance on the death-related change-in-ownership statement, assessor notification and separate claims that may be needed for an exclusion.",
-      "limits": "Use the current form and directions from the assessor for the county where the property is assessed."
+      "id": "scc_ratebook",
+      "publisher": "County of Santa Clara, Controller-Treasurer / Department of Finance",
+      "title": "Compilation of Tax Rates & Information, Fiscal Year 2025-2026",
+      "url": "https://files.santaclaracounty.gov/exjcpb1531/2025-11/tax-rate-book-2025-2026.pdf",
+      "checked": "Opened on the publisher's official domain on 2026-11-13.",
+      "supports": "By law the tax rate is limited to 1% of assessed value plus amounts required for voter-approved bond indebtedness; assessed value increases each year by the change in the California CPI or 2%, whichever is less; the county had 816 tax rate areas in fiscal year 2025-26; secured tax instalment and delinquency dates.",
+      "limits": "The book runs to 185 pages of tax rate areas. This site does not publish the property's tax rate area, so the exact published rate for the parcel is left to the owner to read from the book and is flagged for review."
     },
     {
-      "id": "probate_16061_7",
+      "id": "sf_treas_rate",
+      "publisher": "City and County of San Francisco, Treasurer and Tax Collector",
+      "title": "Secured Property Taxes",
+      "url": "https://sftreasurer.org/property/secured-property-taxes",
+      "checked": "Opened on the publisher's official domain on 2026-11-13.",
+      "supports": "The secured property tax rate for fiscal year 2026-27 is 1.18162182%; a supplemental assessment is issued after a change in ownership on the difference between the new value and the prior value; instalment and delinquency dates.",
+      "limits": "The ad valorem rate is one part of the bill. San Francisco bills also carry voter-approved parcel taxes, bonds and other fixed charges, which is why the total bill is a larger share of assessed value than the rate alone suggests."
+    },
+    {
+      "id": "sf_rent_increase",
+      "publisher": "City and County of San Francisco, Rent Board",
+      "title": "Learn about rent increases in San Francisco",
+      "url": "https://www.sf.gov/learn-about-rent-increases-san-francisco",
+      "checked": "Opened on the publisher's official domain on 2026-11-13.",
+      "supports": "The allowed rent increase is 1.6% effective 1 March 2026 through 28 February 2027, based on 60% of the increase in the Bay Area CPI; one increase every 12 months; there is no limit on the initial rent for an empty rent-controlled unit; banked increases; 30-day and 90-day notice rules; a rent increase licence is required.",
+      "limits": "Applies to units covered by the San Francisco Rent Ordinance. Coverage depends on the building, its age and its exemption status, which this site does not verify."
+    },
+    {
+      "id": "sf_file261020",
+      "publisher": "City and County of San Francisco, Board of Supervisors",
+      "title": "File No. 261020 - proposed limitation on combined banked and capital improvement rent increases",
+      "url": "https://sfgov.legistar.com/LegislationDetail.aspx?ID=8217304&GUID=7EDA4662-EBFB-4AF5-962F-C669B64AA770",
+      "checked": "Referenced from the official San Francisco Rent Board page, posted 9 November 2026, and opened on the official legistar domain on 2026-11-13.",
+      "supports": "As currently proposed the legislation would temporarily limit the combined amount of banked rent increases and capital improvement rent increases on rent-controlled units to 10% per year, applying to banked increases noticed on or after 15 September 2026 and capital improvement petitions filed on or after that date.",
+      "limits": "The Rent Board states plainly: this legislation has not been enacted and is subject to change. Do not treat it as law."
+    },
+    {
+      "id": "civ1947_12",
       "publisher": "California Legislative Information",
-      "title": "Probate Code section 16061.7: trustee notification",
-      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PROB&sectionNum=16061.7",
-      "checked": "Opened the current statute on the publisher's official domain on 2026-11-12.",
-      "supports": "Specified trust events require notice to specified beneficiaries and heirs; the statute generally sets a 60-day service period with trigger, awareness and trustee-vacancy qualifications.",
-      "limits": "The statute's event and recipient conditions must be checked against the actual trust and facts."
-    },
-    {
-      "id": "civ_1947_12",
-      "publisher": "California Legislative Information",
-      "title": "Civil Code section 1947.12: statewide rent limits and exceptions",
+      "title": "Civil Code section 1947.12 - statewide rent cap (Tenant Protection Act of 2019)",
       "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1947.12",
-      "checked": "Opened the current statute on the publisher's official domain on 2026-11-12.",
-      "supports": "For covered units, the statewide annual rent increase ceiling is generally 5% plus the applicable cost-of-living change, or 10%, whichever is lower; exceptions and local rules matter. The statute currently states an end date of January 1, 2030.",
-      "limits": "Coverage and permitted increases are unit- and jurisdiction-specific; verify current law and local ordinances."
+      "checked": "Opened on the publisher's official domain on 2026-11-13.",
+      "supports": "Over any 12-month period gross rent may not be increased more than 5% plus the change in the cost of living, or 10%, whichever is lower, of the lowest gross rent charged in the prior 12 months; not more than two increases in any 12-month period; the initial rent for a new tenancy is not capped; exemptions including housing with a certificate of occupancy issued within the previous 15 years and certain separately alienable single-family homes and condominiums where the owner is not a REIT, corporation or certain LLC and gives the required notice; housing already subject to a stricter local rent control ordinance is excluded.",
+      "limits": "Whether a specific building and unit are exempt depends on facts this site does not verify."
     },
     {
-      "id": "civ_1946_2",
+      "id": "civ1946_2",
       "publisher": "California Legislative Information",
-      "title": "Civil Code section 1946.2: just cause to terminate a residential tenancy",
+      "title": "Civil Code section 1946.2 - just cause for termination of tenancy",
       "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1946.2",
-      "checked": "Opened on the publisher's official domain on 2026-11-12; reviewed the continuous-occupancy, no-fault assistance and exemption provisions.",
-      "supports": "After 12 months of continuous lawful occupancy, covered tenancies generally require just cause stated in the written termination notice. For a no-fault termination, the owner must either provide relocation assistance equal to one month's rent within 15 calendar days or waive the final month's rent in writing before it is due.",
-      "limits": "The statute lists exemptions and detailed notice conditions; occupancy history and property facts determine coverage. Local law may add protections. This summary does not establish coverage of either property or validate a specific notice."
+      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+      "supports": "At-fault and no-fault just cause grounds and the relocation-assistance requirement for a no-fault termination, including an owner move-in.",
+      "limits": "Local ordinances can add stricter requirements. This site does not restate the notice or payment amounts."
     },
     {
-      "id": "rtc_11911",
+      "id": "sb974",
       "publisher": "California Legislative Information",
-      "title": "Revenue and Taxation Code section 11911: documentary transfer tax authorization",
-      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=11911.",
-      "checked": "Opened the current statute on the publisher's official domain on 2026-11-12.",
-      "supports": "California counties and qualifying cities may impose documentary transfer taxes under local ordinance; actual local charges require the applicable ordinance and transaction facts.",
-      "limits": "No county or city rate is assumed in this guide."
-    },
-    {
-      "id": "boe_assessor_contacts",
-      "publisher": "California State Board of Equalization",
-      "title": "Listing of county assessors and tax officials",
-      "url": "https://www.boe.ca.gov/proptaxes/countycontacts.htm",
-      "checked": "Opened on the publisher's official domain on 2026-11-12.",
-      "supports": "The Board's statewide directory lists the offices responsible for property assessment and tax administration by county.",
-      "limits": "This directory does not identify the jurisdiction of either property in this guide; no local assessor or contact is selected."
-    },
-    {
-      "id": "sb974_status",
-      "publisher": "California Legislative Information",
-      "title": "SB 974 (2025–2026): status and chapter information",
+      "title": "SB-974, Property taxation: change in ownership: generational transfers: special needs trusts (Chapter 665, Statutes of 2026)",
       "url": "https://leginfo.legislature.ca.gov/faces/billStatusClient.xhtml?bill_id=202520260SB974",
-      "checked": "Opened the official bill-status page on 2026-11-12; it records Chapter 665, Statutes of 2026, and labels the bill non-urgency.",
-      "supports": "SB 974 was approved and chaptered on September 27, 2026, as Chapter 665, Statutes of 2026.",
-      "limits": "The status page alone does not establish the operative date or current codification; those remain unresolved here."
+      "checked": "Opened on the publisher's official domain on 2026-11-13.",
+      "supports": "Introduced 4 February 2026, approved by the Governor and chaptered 27 September 2026. Amends Revenue and Taxation Code section 63.2 so that a court-established special needs trust must be considered an eligible medium of transfer for the intergenerational transfer exclusion.",
+      "limits": "Relevant only if a transferee is a person with a disability for whom a special needs trust has been established. It does not change the value cap or the occupancy requirement."
     },
     {
-      "id": "sb974_text",
+      "id": "ab1157",
       "publisher": "California Legislative Information",
-      "title": "Chaptered text of SB 974",
-      "url": "https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202520260SB974",
-      "checked": "Opened the chaptered text on the publisher's official domain on 2026-11-12; compared its section 63.2 amendment with the current code page.",
-      "supports": "The chaptered bill amends Revenue and Taxation Code section 63.2, including its definition of an eligible transfer medium for specified special-needs trusts.",
-      "limits": "The current code page reviewed here does not yet show this amendment. The guide does not treat it as a current eligibility rule; verify the operative date and codification before relying on it."
-    },
-    {
-      "id": "ab1157_status",
-      "publisher": "California Legislative Information",
-      "title": "AB 1157 (2025–2026): status",
+      "title": "AB-1157, Tenancy: just cause termination: rent increases (2025-2026)",
       "url": "https://leginfo.legislature.ca.gov/faces/billStatusClient.xhtml?bill_id=202520260AB1157",
-      "checked": "Opened on the publisher's official domain on 2026-11-12.",
-      "supports": "AB 1157, a proposal concerning tenancy and rent increases, died in the Legislature on January 31, 2026; it is not current law.",
-      "limits": "The status of a bill is not a prediction about future sessions."
+      "checked": "Opened on the publisher's official domain on 2026-11-13.",
+      "supports": "Status: died in the Assembly. The bill would have amended Civil Code sections 1946.2, 1947.12 and 1947.13. It failed passage on 13 January 2026 and died on 31 January 2026.",
+      "limits": "A dead bill. It is recorded here because it is frequently mis-reported as law; it is not law."
     },
     {
-      "id": "hr1301_status",
-      "publisher": "U.S. Congress",
-      "title": "H.R. 1301 (119th Congress): Death Tax Repeal Act",
-      "url": "https://www.congress.gov/bill/119th-congress/house-bill/1301",
-      "checked": "Opened on Congress.gov on 2026-11-12.",
-      "supports": "As of the review date, H.R. 1301 is an introduced proposal referred to the House Committee on Ways and Means; it has not become law.",
-      "limits": "Do not apply proposed bill text to a current tax calculation. Recheck bill status before a decision."
+      "id": "sos_measures",
+      "publisher": "California Secretary of State",
+      "title": "Qualified Statewide Ballot Measures",
+      "url": "https://www.sos.ca.gov/elections/ballot-measures/qualified-ballot-measures",
+      "checked": "Opened on the publisher's official domain on 2026-11-13.",
+      "supports": "The fourteen measures qualified for the 3 November 2026 statewide general election, and the measures already qualified for 2028.",
+      "limits": "The list is limited to statewide measures. Local measures are not listed."
     },
     {
-      "id": "cdi_premiums",
-      "publisher": "California Department of Insurance",
-      "title": "Compare insurance premiums",
-      "url": "https://www.insurance.ca.gov/01-consumers/105-type/9-compare-prem/",
-      "checked": "Opened on the publisher's official domain on 2026-11-12.",
-      "supports": "The Department's premium surveys are comparison tools, not individual quotes, and may omit companies or property-specific discounts and surcharges.",
-      "limits": "Only a current insurer quote and policy review can establish a specific premium or coverage."
+      "id": "sos_results",
+      "publisher": "California Secretary of State",
+      "title": "State Ballot Measures - Statewide Results, 2026 General Election",
+      "url": "https://electionresults.sos.ca.gov/returns/ballot-measures",
+      "checked": "Opened on the publisher's official domain on 2026-11-13.",
+      "supports": "Unofficial results as of 12 November 2026 with 23,860 of 23,860 precincts partially reporting; results will be certified by 11 December 2026. Proposition 3 (extension of the existing tax on high incomes) yes 60.7%; Proposition 40 (one-time tax on certain taxpayers) no 52.4%; Proposition 42 (no new state personal property taxes) yes 51.4%; Proposition 43 (limit on local revenue votes) no 57.5%; Proposition 41 (spending-limit audits) no 55.1%; Proposition 37 (middle-income buyer loans) yes 62.4%.",
+      "limits": "These are unofficial results. They change during the canvass and are not final until certified on 11 December 2026. Treat every figure as provisional."
     },
     {
-      "id": "cpuc_solar",
+      "id": "voterguide_p3",
+      "publisher": "California Secretary of State, Official Voter Information Guide",
+      "title": "Proposition 3 - Provides Permanent Funding for Schools and Health Care by Extending Existing Tax on High Incomes",
+      "url": "https://voterguide.sos.ca.gov/propositions/3/index.htm",
+      "checked": "Opened on the publisher's official domain on 2026-11-13.",
+      "supports": "Makes permanent the existing voter-approved tax rates for individuals earning over $371,000 (adjusted annually for inflation), which would otherwise expire in 2031; fiscal impact maintains $5 billion to $15 billion of annual state income tax revenue; the revenue is allocated to public education.",
+      "limits": "Rates and thresholds are those in the existing statute; read the current-year Franchise Tax Board schedules for the exact brackets."
+    },
+    {
+      "id": "voterguide_p40",
+      "publisher": "California Secretary of State, Official Voter Information Guide",
+      "title": "Proposition 40 - Imposes One-Time Tax on Certain Taxpayers",
+      "url": "https://voterguide.sos.ca.gov/propositions/40/index.htm",
+      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+      "supports": "The official title and summary of the proposed one-time tax on certain taxpayers, which appears to have been defeated at the 3 November 2026 election.",
+      "limits": "Defeated on unofficial results. Not law. Recorded because a future version could return to the ballot and would change the cash-inheritance arithmetic."
+    },
+    {
+      "id": "cpuc_nem",
       "publisher": "California Public Utilities Commission",
-      "title": "Net energy metering and net billing",
+      "title": "Net Energy Metering and Net Billing",
       "url": "https://www.cpuc.ca.gov/industries-and-topics/electrical-energy/demand-side-management/customer-generation/net-energy-metering-and-net-billing",
-      "checked": "Opened on the publisher's official domain on 2026-11-12.",
-      "supports": "For covered investor-owned-utility territories, export-credit and billing arrangements vary by tariff; the net-billing tariff began for new applications in 2023, while earlier net-energy-metering tariffs are closed to new enrollment.",
-      "limits": "A system's utility, application/interconnection date and tariff must be confirmed from its records and current bill."
+      "checked": "Opened on the publisher's official domain on 2026-11-13.",
+      "supports": "NEM tariffs are closed to new enrolment; customers applying since 15 April 2023 take service on the net billing tariff under D.22-12-056, where export compensation is usually below the retail rate; NEM 2.0 participants may remain on that tariff for 20 years from the date of interconnection under D.14-03-041; the NBT has a nine-year legacy period and does not apply to customers moving from a previous NEM tariff; non-bypassable charges and the basis for net surplus compensation.",
+      "limits": "The tariff that applies to a given system depends on its interconnection date, which this site does not verify. Export credit values change over time."
     },
     {
-      "id": "frh_1929",
-      "publisher": "Federal Reserve History",
-      "title": "Stock Market Crash of 1929",
-      "url": "https://www.federalreservehistory.org/essays/stock-market-crash-of-1929",
-      "checked": "Opened on the publisher's official domain on 2026-11-12.",
-      "supports": "The Dow Jones Industrial Average was 89% below its 1929 peak by July 1932 and did not regain its prior nominal high until 1954.",
-      "limits": "This is a historical equity-index episode, not a forecast or a property-specific return."
+      "id": "cdi_tips",
+      "publisher": "California Department of Insurance",
+      "title": "Top 10 Tips for Finding Residential Insurance",
+      "url": "https://www.insurance.ca.gov/01-consumers/105-type/5-residential/Top10Tips_FindingResidentialIns.cfm",
+      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+      "supports": "The Department's official consumer guidance on obtaining homeowners and residential insurance in California.",
+      "limits": "The Department does not publish an official average premium for a ZIP code or a city. Every insurance figure on this site is an owner estimate and is flagged as unverified."
+    },
+    {
+      "id": "cdi_fairplan",
+      "publisher": "California Department of Insurance",
+      "title": "FAIR Plan - California's insurer of last resort",
+      "url": "https://www.insurance.ca.gov/0400-news/0100-press-releases/2019/release089-19.cfm",
+      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+      "supports": "The FAIR Plan is the state's insurer of last resort for property owners unable to obtain coverage in the voluntary market.",
+      "limits": "A FAIR Plan policy is more limited than a standard homeowners policy; a difference-in-conditions wrap is normally needed."
+    },
+    {
+      "id": "fred_cpi",
+      "publisher": "Federal Reserve Bank of St. Louis (data: U.S. Bureau of Labor Statistics)",
+      "title": "Consumer Price Index for All Urban Consumers: All Items in U.S. City Average, annual (CPIAUCSL)",
+      "url": "https://fred.stlouisfed.org/series/CPIAUCSL",
+      "checked": "Series downloaded as CSV from the official FRED domain on 2026-11-13 by this session; annual averages 1975 to 2024 read directly from that file.",
+      "supports": "The annual inflation series used on the economy and black-swan pages, including the 13.50% annual average for 1980 and the 0.32% decline for 2009.",
+      "limits": "This is a national index. The California CPI that governs Proposition 13 assessments is a different series and can move differently."
+    },
+    {
+      "id": "fred_hpi_a",
+      "publisher": "Federal Reserve Bank of St. Louis (data: U.S. Federal Housing Finance Agency)",
+      "title": "All-Transactions House Price Index, annual, for the metropolitan area containing Property A (ATNHPIUS41940Q)",
+      "url": "https://fred.stlouisfed.org/series/ATNHPIUS41940Q",
+      "checked": "Series downloaded as CSV from the official FRED domain on 2026-11-13 by this session; annual averages 1976 to 2025 read directly from that file.",
+      "supports": "The house price history for Property A's area: a 30.19% annual rise in 1989, a 12.32% fall in 2009, and a 25.6% fall from the 2006 level to the 2011 level.",
+      "limits": "A metropolitan-area index is not an appraisal of one house. A specific house can move very differently."
+    },
+    {
+      "id": "fred_hpi_b",
+      "publisher": "Federal Reserve Bank of St. Louis (data: U.S. Federal Housing Finance Agency)",
+      "title": "All-Transactions House Price Index, annual, for the metropolitan area containing Property B (ATNHPIUS41884Q)",
+      "url": "https://fred.stlouisfed.org/series/ATNHPIUS41884Q",
+      "checked": "Series downloaded as CSV from the official FRED domain on 2026-11-13 by this session; annual averages 1976 to 2025 read directly from that file.",
+      "supports": "The house price history for Property B's area: a 21.8% fall from the 2006 level to the 2011 level, and a 2.5% fall from 2018 to 2020.",
+      "limits": "A metropolitan-area index is not an appraisal of one building, and a rent-controlled building's value depends on its rents."
+    },
+    {
+      "id": "fred_gs10",
+      "publisher": "Federal Reserve Bank of St. Louis (data: Board of Governors of the Federal Reserve System)",
+      "title": "Market Yield on U.S. Treasury Securities at 10-Year Constant Maturity, annual (GS10)",
+      "url": "https://fred.stlouisfed.org/series/GS10",
+      "checked": "Series downloaded as CSV from the official FRED domain on 2026-11-13 by this session; annual averages 1975 to 2025 read directly from that file.",
+      "supports": "The long-term interest rate history used for the reinvestment comparison, including the 13.91% annual average for 1981, the 0.89% average for 2020 and the 4.29% average for 2025.",
+      "limits": "A historical yield is not a forecast. Reinvestment risk means the realised return on a rolling bond ladder differs from the starting yield."
+    },
+    {
+      "id": "ssa_trustees",
+      "publisher": "Social Security Administration",
+      "title": "2026 OASDI Trustees Report, Assumptions about the Future",
+      "url": "https://www.ssa.gov/oact/tr/2026/II_C_assump.html",
+      "checked": "Opened on the publisher's official domain on 2026-11-13.",
+      "supports": "Official long-range economic assumptions: intermediate CPI-W change 2.4% a year, low-cost 3.0%, high-cost 1.8%; the intermediate annual trust fund new-issue real interest rate for 2044 and later is 2.3% (low-cost 2.8%, high-cost 1.8%), giving an intermediate nominal yield near 4.7%.",
+      "limits": "These are Trust Fund assumptions for a 75-year social insurance projection, not an investment forecast. The Trustees do not publish an equity return assumption here, so the equity return used on this site is a stated scenario, not an official number."
     },
     {
       "id": "frh_great_inflation",
-      "publisher": "Federal Reserve History",
-      "title": "The Great Inflation, 1965–1982",
+      "publisher": "Federal Reserve History (Federal Reserve System)",
+      "title": "The Great Inflation, 1965-1982",
       "url": "https://www.federalreservehistory.org/essays/great-inflation",
-      "checked": "Opened on the publisher's official domain on 2026-11-12.",
-      "supports": "U.S. CPI inflation rose from a little over 1% in 1964 to more than 14% in 1980, with a peak near 15% in March 1980.",
-      "limits": "The historical CPI episode does not predict future inflation or the cost of a specific property."
+      "checked": "Opened on the publisher's official domain on 2026-11-13.",
+      "supports": "The inflation episode ran from 1965 to 1982, involved four recessions and two severe energy shortages, and reached more than 14 percent in 1980; it ended with a sustained policy change.",
+      "limits": "Narrative history. The numeric series used on this site are taken from the BLS/FRED series, not from this essay."
     },
     {
       "id": "frh_great_recession",
-      "publisher": "Federal Reserve History",
-      "title": "The Great Recession, December 2007–June 2009",
+      "publisher": "Federal Reserve History (Federal Reserve System)",
+      "title": "The Great Recession of 2007-09",
       "url": "https://www.federalreservehistory.org/essays/great-recession-of-200709",
-      "checked": "Opened on the publisher's official domain on 2026-11-12.",
-      "supports": "The account reports a roughly 30% average U.S. home-price decline, a 57% S&P 500 peak-to-trough fall, and unemployment peaking at 10% in October 2009.",
-      "limits": "The source is a historical snapshot (some statistics are based on data available in 2013); national averages are not local property values or guaranteed future outcomes."
+      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+      "supports": "The 2007-09 recession and the housing collapse as a modern analogue for a simultaneous fall in house prices and asset prices.",
+      "limits": "Narrative history. The numeric series used on this site are taken from the FHFA/FRED series, not from this essay."
+    },
+    {
+      "id": "frh_1929",
+      "publisher": "Federal Reserve History (Federal Reserve System)",
+      "title": "Stock Market Crash of 1929",
+      "url": "https://www.federalreservehistory.org/essays/stock-market-crash-of-1929",
+      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+      "supports": "The 1929 crash as the reference episode for a severe, prolonged equity decline.",
+      "limits": "Narrative history. The 1929 episode predates the FRED series used on this site and no numeric claim from it is modelled."
     },
     {
       "id": "nyfed_covid",
-      "publisher": "Federal Reserve Bank of New York",
-      "title": "The COVID-19 pandemic and the Fed's response",
+      "publisher": "Federal Reserve Bank of New York, Liberty Street Economics",
+      "title": "The COVID-19 Pandemic and the Fed's Response",
       "url": "https://libertystreeteconomics.newyorkfed.org/2020/04/the-covid-19-pandemic-and-the-feds-response/",
-      "checked": "Opened on the publisher's official domain on 2026-11-12.",
-      "supports": "The S&P 500 was 34% below its February 2020 high by March 23, 2020; market-wide circuit breakers halted trading three times that month.",
-      "limits": "This is a market stress example, not a forecast or a property-specific valuation."
+      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+      "supports": "The 2020 shock and the policy response, used as the reference episode for a fast, policy-driven reversal.",
+      "limits": "Narrative commentary. The numeric series used on this site are taken from the BLS/FRED series."
     },
     {
-      "id": "bls_2022_cpi",
-      "publisher": "U.S. Bureau of Labor Statistics",
-      "title": "Consumer prices up 9.1% over the year ended June 2022",
-      "url": "https://www.bls.gov/opub/ted/2022/consumer-prices-up-9-1-percent-over-the-year-ended-june-2022-largest-increase-in-40-years.htm",
-      "checked": "Opened on the publisher's official domain on 2026-11-12.",
-      "supports": "The CPI-U rose 9.1% over the twelve months ended June 2022; the same release reports a 13.7% increase in electricity prices over that period.",
-      "limits": "Historical national CPI categories are not a property-specific bill forecast."
+      "id": "rtc11911",
+      "publisher": "California Legislative Information",
+      "title": "Revenue and Taxation Code section 11911 - county documentary transfer tax rate",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=11911",
+      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+      "supports": "The county documentary transfer tax rate authorised by state law, used here for the sale-cost estimate on Property A.",
+      "limits": "A city may add its own transfer tax on top of the county tax. Whether the city of Property A does so is flagged for review and is not verified on this site."
+    },
+    {
+      "id": "scc_recorder",
+      "publisher": "County of Santa Clara, Clerk-Recorder",
+      "title": "Recording real estate documents",
+      "url": "https://clerkrecorder.santaclaracounty.gov/recording-documents/recording-real-estate",
+      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+      "supports": "The official county route for recording a deed or a trust transfer deed and for confirming the recording fees and any transfer tax due.",
+      "limits": "Fee schedules change; confirm with the Recorder at the time of transfer."
+    },
+    {
+      "id": "sf_recorder_fees",
+      "publisher": "City and County of San Francisco, Assessor-Recorder",
+      "title": "Fees to record a document in San Francisco",
+      "url": "https://www.sf.gov/reports--march-2024--fees-record-document-san-francisco",
+      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+      "supports": "The official San Francisco recording fee schedule, used for the transfer-cost estimate on Property B.",
+      "limits": "The schedule is dated March 2024 and fees change. San Francisco also has a separate tiered real property transfer tax whose rates this site does not publish because no official current rate table was retrieved."
+    },
+    {
+      "id": "prob16061_7",
+      "publisher": "California Legislative Information",
+      "title": "Probate Code section 16061.7 - notice to heirs and beneficiaries on a revocable trust becoming irrevocable",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PROB&sectionNum=16061.7",
+      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+      "supports": "The trustee's duty to notify heirs and beneficiaries when a revocable trust becomes irrevocable, and the contents of that notice, used in the step-by-step inheritance page.",
+      "limits": "Timing and service rules must be read from the current statute."
+    },
+    {
+      "id": "rtc480",
+      "publisher": "California Legislative Information",
+      "title": "Revenue and Taxation Code section 480 - change in ownership statement",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=480",
+      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+      "supports": "The requirement to file a change in ownership statement with the county assessor after a transfer, used in the step-by-step inheritance page.",
+      "limits": "Deadlines and penalties must be read from the current statute."
+    },
+    {
+      "id": "boe_pub800_9",
+      "publisher": "California State Board of Equalization",
+      "title": "Publication 800-9, Taxpayers' Guide to the Death of a Real Property Owner",
+      "url": "https://www.boe.ca.gov/pdf/pub800-9.pdf",
+      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+      "supports": "What happens to a property tax assessment when a real property owner dies, and the forms and deadlines involved.",
+      "limits": "General guidance; county practice varies."
+    },
+    {
+      "id": "irs_rmd",
+      "publisher": "Internal Revenue Service",
+      "title": "Retirement plan and IRA required minimum distributions FAQs",
+      "url": "https://www.irs.gov/retirement-plans/retirement-plan-and-ira-required-minimum-distributions-faqs",
+      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+      "supports": "Distribution rules for inherited retirement accounts, which matter because inherited retirement assets are income in respect of a decedent and are not covered by the basis step-up.",
+      "limits": "The 10-year rule and its exceptions are fact-specific; this site does not restate them."
+    },
+    {
+      "id": "uscode102",
+      "publisher": "U.S. Government Publishing Office (GovInfo)",
+      "title": "26 U.S.C. section 102 - gifts and inheritances excluded from gross income",
+      "url": "https://www.govinfo.gov/content/pkg/USCODE-2022-title26/html/USCODE-2022-title26-subtitleA-chap1-subchapB-partIII-sec102.htm",
+      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+      "supports": "Gross income does not include the value of property acquired by gift, bequest, devise or inheritance.",
+      "limits": "Section 102 excludes the receipt; it does not exclude later income from the property, and income in respect of a decedent is taxed under other provisions."
     }
   ]
 }

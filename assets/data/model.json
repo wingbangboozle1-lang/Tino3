@@ -1,3077 +1,3051 @@
 {
- "inputs": {
-  "a_value": 3100000,
-  "a_av_2026": 550540,
-  "a_av_2025": 539740,
-  "a_bill_2025": 7210,
-  "a_water": 1500,
-  "a_electric": -180,
-  "a_ins_guess": 1500,
-  "b_value": 1800000,
-  "b_av_2025": 114250,
-  "b_bill_2025": 2440,
-  "b_rent_mo": 7150,
-  "b_water": 4380,
-  "b_electric": 600,
-  "b_ins_guess": 1500
+ "meta": {
+  "built": "2026-11-13",
+  "rounding": "nearest $10",
+  "horizon_years": 30,
+  "deterministic": true,
+  "inflation_assumption": 0.025,
+  "house_growth_assumption": 0.04,
+  "equity_assumption": 0.07,
+  "equity_drag": 0.007,
+  "treasury_assumption": 0.047,
+  "selling_cost": 0.055,
+  "gain_tax_rate": 0.371,
+  "recapture_rate": 0.411
  },
- "verified": {
-  "prop19_amount": 1044590,
-  "fed_excl_2026": 15000000,
-  "fed_excl_2027": 15480000,
-  "rate_b_2026": 0.0118162182,
-  "rate_b_2025": 0.0118268325,
-  "rate_a_low": 0.011258,
-  "rate_a_high": 0.012409,
-  "treasury_10y": 0.0488,
-  "state_rent_base": 0.05,
-  "state_rent_max": 0.1
+ "fit": {
+  "a": {
+   "rate": 0.0118,
+   "fixed_base": 841.068,
+   "base_year": 2025,
+   "implied_fixed_first": 774.342,
+   "implied_fixed_last": 841.068,
+   "implied_fixed_growth": 0.007543,
+   "worst_year": 2016,
+   "worst_delta": 356.322998,
+   "max_abs_residual": 356.322998,
+   "n": 12,
+   "identification_note": "The rate is not fitted from the data. Assessed value and the fixed part of the bill both grow at about 2% a year, so the data cannot separate them: any rate in a wide band fits almost equally well. The rate is therefore taken from published law or stated as an assumption."
+  },
+  "b": {
+   "rate": 0.011816,
+   "fixed_base": 1089.997071,
+   "base_year": 2025,
+   "implied_fixed_first": 539.025971,
+   "implied_fixed_last": 1089.997071,
+   "implied_fixed_growth": 0.081383,
+   "worst_year": 2016,
+   "worst_delta": -333.765598,
+   "max_abs_residual": 333.765598,
+   "n": 10,
+   "identification_note": "The rate is not fitted from the data. Assessed value and the fixed part of the bill both grow at about 2% a year, so the data cannot separate them: any rate in a wide band fits almost equally well. The rate is therefore taken from published law or stated as an assumption."
+  }
  },
- "fixed": {
-  "a": 840,
-  "b": 1090
- },
- "rates": {
-  "t_gain": 0.361,
-  "t_recap": 0.411,
-  "sell_cost": 0.0511,
-  "rent_ctrl": 0.015
- },
- "assumptions": [
+ "roll_a": [
   {
-   "id": "g",
-   "item": "House price growth, both properties",
-   "value": "3% / 4% / 5% a year",
-   "reason": "Scenario band. The official index for each area rose 5.3% to 5.7% a year since 1995 but was flat to slightly down over the last four quarters, so the base case sits below the long-run rate.",
+   "year": 2026,
+   "assessed": 550540,
+   "bill": null,
+   "fitted": 7360,
+   "residual": null
+  },
+  {
+   "year": 2025,
+   "assessed": 539740,
+   "bill": 7210,
+   "fitted": 7210,
+   "residual": 0
+  },
+  {
+   "year": 2024,
+   "assessed": 529160,
+   "bill": 7000,
+   "fitted": 7060,
+   "residual": -60
+  },
+  {
+   "year": 2023,
+   "assessed": 518790,
+   "bill": 6920,
+   "fitted": 6920,
+   "residual": 0
+  },
+  {
+   "year": 2022,
+   "assessed": 508610,
+   "bill": 6760,
+   "fitted": 6780,
+   "residual": -20
+  },
+  {
+   "year": 2021,
+   "assessed": 498640,
+   "bill": 6660,
+   "fitted": 6650,
+   "residual": 10
+  },
+  {
+   "year": 2020,
+   "assessed": 493530,
+   "bill": 6570,
+   "fitted": 6570,
+   "residual": 0
+  },
+  {
+   "year": 2019,
+   "assessed": 483850,
+   "bill": 6570,
+   "fitted": 6430,
+   "residual": 140
+  },
+  {
+   "year": 2018,
+   "assessed": 474370,
+   "bill": 6380,
+   "fitted": 6310,
+   "residual": 70
+  },
+  {
+   "year": 2017,
+   "assessed": 465070,
+   "bill": 6380,
+   "fitted": 6180,
+   "residual": 200
+  },
+  {
+   "year": 2016,
+   "assessed": 455950,
+   "bill": 6410,
+   "fitted": 6050,
+   "residual": 360
+  },
+  {
+   "year": 2015,
+   "assessed": 449100,
+   "bill": 6130,
+   "fitted": 5960,
+   "residual": 170
+  },
+  {
+   "year": 2014,
+   "assessed": 440310,
+   "bill": 5970,
+   "fitted": 5840,
+   "residual": 130
+  }
+ ],
+ "roll_b": [
+  {
+   "year": 2025,
+   "assessed": 114250,
+   "bill": 2440,
+   "fitted": 2440,
+   "residual": 0
+  },
+  {
+   "year": 2024,
+   "assessed": 112010,
+   "bill": 2320,
+   "fitted": 2390,
+   "residual": -70
+  },
+  {
+   "year": 2023,
+   "assessed": 109810,
+   "bill": 2180,
+   "fitted": 2340,
+   "residual": -160
+  },
+  {
+   "year": 2022,
+   "assessed": 107660,
+   "bill": 2110,
+   "fitted": 2280,
+   "residual": -170
+  },
+  {
+   "year": 2021,
+   "assessed": 105600,
+   "bill": 2070,
+   "fitted": 2240,
+   "residual": -170
+  },
+  {
+   "year": 2020,
+   "assessed": 104510,
+   "bill": 2200,
+   "fitted": 2200,
+   "residual": 0
+  },
+  {
+   "year": 2019,
+   "assessed": 102470,
+   "bill": 2130,
+   "fitted": 2150,
+   "residual": -20
+  },
+  {
+   "year": 2018,
+   "assessed": 100460,
+   "bill": 2060,
+   "fitted": 2100,
+   "residual": -40
+  },
+  {
+   "year": 2017,
+   "assessed": 98490,
+   "bill": 1740,
+   "fitted": 2060,
+   "residual": -320
+  },
+  {
+   "year": 2016,
+   "assessed": 96560,
+   "bill": 1680,
+   "fitted": 2010,
+   "residual": -330
+  }
+ ],
+ "projection_a": [
+  {
+   "year": 2026,
+   "value": 3100000,
+   "assessed": 550540,
+   "bill": 7360,
+   "effective_rate": 1.337
+  },
+  {
+   "year": 2027,
+   "value": 3224000,
+   "assessed": 561550,
+   "bill": 7510,
+   "effective_rate": 1.337
+  },
+  {
+   "year": 2028,
+   "value": 3352960,
+   "assessed": 572780,
+   "bill": 7660,
+   "effective_rate": 1.338
+  },
+  {
+   "year": 2029,
+   "value": 3487080,
+   "assessed": 584240,
+   "bill": 7820,
+   "effective_rate": 1.339
+  },
+  {
+   "year": 2030,
+   "value": 3626560,
+   "assessed": 595920,
+   "bill": 7980,
+   "effective_rate": 1.34
+  },
+  {
+   "year": 2031,
+   "value": 3771620,
+   "assessed": 607840,
+   "bill": 8150,
+   "effective_rate": 1.34
+  },
+  {
+   "year": 2032,
+   "value": 3922490,
+   "assessed": 620000,
+   "bill": 8320,
+   "effective_rate": 1.341
+  },
+  {
+   "year": 2033,
+   "value": 4079390,
+   "assessed": 632400,
+   "bill": 8490,
+   "effective_rate": 1.342
+  },
+  {
+   "year": 2034,
+   "value": 4242560,
+   "assessed": 645050,
+   "bill": 8660,
+   "effective_rate": 1.343
+  },
+  {
+   "year": 2035,
+   "value": 4412270,
+   "assessed": 657950,
+   "bill": 8840,
+   "effective_rate": 1.344
+  },
+  {
+   "year": 2036,
+   "value": 4588760,
+   "assessed": 671110,
+   "bill": 9020,
+   "effective_rate": 1.344
+  },
+  {
+   "year": 2037,
+   "value": 4772310,
+   "assessed": 684530,
+   "bill": 9210,
+   "effective_rate": 1.345
+  },
+  {
+   "year": 2038,
+   "value": 4963200,
+   "assessed": 698220,
+   "bill": 9400,
+   "effective_rate": 1.346
+  },
+  {
+   "year": 2039,
+   "value": 5161730,
+   "assessed": 712180,
+   "bill": 9590,
+   "effective_rate": 1.347
+  },
+  {
+   "year": 2040,
+   "value": 5368200,
+   "assessed": 726430,
+   "bill": 9790,
+   "effective_rate": 1.348
+  },
+  {
+   "year": 2041,
+   "value": 5582920,
+   "assessed": 740950,
+   "bill": 9990,
+   "effective_rate": 1.349
+  },
+  {
+   "year": 2042,
+   "value": 5806240,
+   "assessed": 755770,
+   "bill": 10200,
+   "effective_rate": 1.349
+  },
+  {
+   "year": 2043,
+   "value": 6038490,
+   "assessed": 770890,
+   "bill": 10410,
+   "effective_rate": 1.35
+  },
+  {
+   "year": 2044,
+   "value": 6280030,
+   "assessed": 786310,
+   "bill": 10620,
+   "effective_rate": 1.351
+  },
+  {
+   "year": 2045,
+   "value": 6531230,
+   "assessed": 802030,
+   "bill": 10840,
+   "effective_rate": 1.352
+  },
+  {
+   "year": 2046,
+   "value": 6792480,
+   "assessed": 818070,
+   "bill": 11070,
+   "effective_rate": 1.353
+  },
+  {
+   "year": 2047,
+   "value": 7064180,
+   "assessed": 834430,
+   "bill": 11290,
+   "effective_rate": 1.354
+  },
+  {
+   "year": 2048,
+   "value": 7346750,
+   "assessed": 851120,
+   "bill": 11530,
+   "effective_rate": 1.354
+  },
+  {
+   "year": 2049,
+   "value": 7640620,
+   "assessed": 868150,
+   "bill": 11770,
+   "effective_rate": 1.355
+  },
+  {
+   "year": 2050,
+   "value": 7946240,
+   "assessed": 885510,
+   "bill": 12010,
+   "effective_rate": 1.356
+  },
+  {
+   "year": 2051,
+   "value": 8264090,
+   "assessed": 903220,
+   "bill": 12260,
+   "effective_rate": 1.357
+  },
+  {
+   "year": 2052,
+   "value": 8594660,
+   "assessed": 921280,
+   "bill": 12510,
+   "effective_rate": 1.358
+  },
+  {
+   "year": 2053,
+   "value": 8938440,
+   "assessed": 939710,
+   "bill": 12770,
+   "effective_rate": 1.359
+  },
+  {
+   "year": 2054,
+   "value": 9295980,
+   "assessed": 958500,
+   "bill": 13030,
+   "effective_rate": 1.36
+  },
+  {
+   "year": 2055,
+   "value": 9667820,
+   "assessed": 977670,
+   "bill": 13300,
+   "effective_rate": 1.36
+  },
+  {
+   "year": 2056,
+   "value": 10054530,
+   "assessed": 997230,
+   "bill": 13580,
+   "effective_rate": 1.361
+  },
+  {
+   "year": 2057,
+   "value": 10456710,
+   "assessed": 1017170,
+   "bill": 13860,
+   "effective_rate": 1.362
+  },
+  {
+   "year": 2058,
+   "value": 10874980,
+   "assessed": 1037510,
+   "bill": 14140,
+   "effective_rate": 1.363
+  },
+  {
+   "year": 2059,
+   "value": 11309980,
+   "assessed": 1058270,
+   "bill": 14430,
+   "effective_rate": 1.364
+  },
+  {
+   "year": 2060,
+   "value": 11762380,
+   "assessed": 1079430,
+   "bill": 14730,
+   "effective_rate": 1.365
+  },
+  {
+   "year": 2061,
+   "value": 12232880,
+   "assessed": 1101020,
+   "bill": 15040,
+   "effective_rate": 1.366
+  },
+  {
+   "year": 2062,
+   "value": 12722190,
+   "assessed": 1123040,
+   "bill": 15350,
+   "effective_rate": 1.367
+  },
+  {
+   "year": 2063,
+   "value": 13231080,
+   "assessed": 1145500,
+   "bill": 15670,
+   "effective_rate": 1.368
+  },
+  {
+   "year": 2064,
+   "value": 13760320,
+   "assessed": 1168410,
+   "bill": 15990,
+   "effective_rate": 1.369
+  },
+  {
+   "year": 2065,
+   "value": 14310730,
+   "assessed": 1191780,
+   "bill": 16320,
+   "effective_rate": 1.369
+  },
+  {
+   "year": 2066,
+   "value": 14883160,
+   "assessed": 1215610,
+   "bill": 16660,
+   "effective_rate": 1.37
+  },
+  {
+   "year": 2067,
+   "value": 15478490,
+   "assessed": 1239930,
+   "bill": 17000,
+   "effective_rate": 1.371
+  },
+  {
+   "year": 2068,
+   "value": 16097630,
+   "assessed": 1264720,
+   "bill": 17360,
+   "effective_rate": 1.372
+  },
+  {
+   "year": 2069,
+   "value": 16741540,
+   "assessed": 1290020,
+   "bill": 17710,
+   "effective_rate": 1.373
+  },
+  {
+   "year": 2070,
+   "value": 17411200,
+   "assessed": 1315820,
+   "bill": 18080,
+   "effective_rate": 1.374
+  },
+  {
+   "year": 2071,
+   "value": 18107640,
+   "assessed": 1342140,
+   "bill": 18460,
+   "effective_rate": 1.375
+  },
+  {
+   "year": 2072,
+   "value": 18831950,
+   "assessed": 1368980,
+   "bill": 18840,
+   "effective_rate": 1.376
+  },
+  {
+   "year": 2073,
+   "value": 19585230,
+   "assessed": 1396360,
+   "bill": 19230,
+   "effective_rate": 1.377
+  },
+  {
+   "year": 2074,
+   "value": 20368640,
+   "assessed": 1424290,
+   "bill": 19630,
+   "effective_rate": 1.378
+  },
+  {
+   "year": 2075,
+   "value": 21183380,
+   "assessed": 1452770,
+   "bill": 20030,
+   "effective_rate": 1.379
+  },
+  {
+   "year": 2076,
+   "value": 22030720,
+   "assessed": 1481830,
+   "bill": 20450,
+   "effective_rate": 1.38
+  }
+ ],
+ "projection_b": [
+  {
+   "year": 2026,
+   "value": 1800000,
+   "assessed": 114250,
+   "bill": 2470,
+   "effective_rate": 2.16
+  },
+  {
+   "year": 2027,
+   "value": 1872000,
+   "assessed": 116540,
+   "bill": 2520,
+   "effective_rate": 2.164
+  },
+  {
+   "year": 2028,
+   "value": 1946880,
+   "assessed": 118870,
+   "bill": 2580,
+   "effective_rate": 2.169
+  },
+  {
+   "year": 2029,
+   "value": 2024760,
+   "assessed": 121240,
+   "bill": 2640,
+   "effective_rate": 2.174
+  },
+  {
+   "year": 2030,
+   "value": 2105750,
+   "assessed": 123670,
+   "bill": 2690,
+   "effective_rate": 2.179
+  },
+  {
+   "year": 2031,
+   "value": 2189980,
+   "assessed": 126140,
+   "bill": 2750,
+   "effective_rate": 2.184
+  },
+  {
+   "year": 2032,
+   "value": 2277570,
+   "assessed": 128660,
+   "bill": 2820,
+   "effective_rate": 2.189
+  },
+  {
+   "year": 2033,
+   "value": 2368680,
+   "assessed": 131240,
+   "bill": 2880,
+   "effective_rate": 2.194
+  },
+  {
+   "year": 2034,
+   "value": 2463420,
+   "assessed": 133860,
+   "bill": 2940,
+   "effective_rate": 2.199
+  },
+  {
+   "year": 2035,
+   "value": 2561960,
+   "assessed": 136540,
+   "bill": 3010,
+   "effective_rate": 2.204
+  },
+  {
+   "year": 2036,
+   "value": 2664440,
+   "assessed": 139270,
+   "bill": 3080,
+   "effective_rate": 2.209
+  },
+  {
+   "year": 2037,
+   "value": 2771020,
+   "assessed": 142060,
+   "bill": 3140,
+   "effective_rate": 2.214
+  },
+  {
+   "year": 2038,
+   "value": 2881860,
+   "assessed": 144900,
+   "bill": 3210,
+   "effective_rate": 2.219
+  },
+  {
+   "year": 2039,
+   "value": 2997130,
+   "assessed": 147790,
+   "bill": 3290,
+   "effective_rate": 2.224
+  },
+  {
+   "year": 2040,
+   "value": 3117020,
+   "assessed": 150750,
+   "bill": 3360,
+   "effective_rate": 2.229
+  },
+  {
+   "year": 2041,
+   "value": 3241700,
+   "assessed": 153770,
+   "bill": 3440,
+   "effective_rate": 2.234
+  },
+  {
+   "year": 2042,
+   "value": 3371370,
+   "assessed": 156840,
+   "bill": 3510,
+   "effective_rate": 2.239
+  },
+  {
+   "year": 2043,
+   "value": 3506220,
+   "assessed": 159980,
+   "bill": 3590,
+   "effective_rate": 2.244
+  },
+  {
+   "year": 2044,
+   "value": 3646470,
+   "assessed": 163180,
+   "bill": 3670,
+   "effective_rate": 2.249
+  },
+  {
+   "year": 2045,
+   "value": 3792330,
+   "assessed": 166440,
+   "bill": 3750,
+   "effective_rate": 2.255
+  },
+  {
+   "year": 2046,
+   "value": 3944020,
+   "assessed": 169770,
+   "bill": 3840,
+   "effective_rate": 2.26
+  },
+  {
+   "year": 2047,
+   "value": 4101780,
+   "assessed": 173160,
+   "bill": 3920,
+   "effective_rate": 2.265
+  },
+  {
+   "year": 2048,
+   "value": 4265850,
+   "assessed": 176630,
+   "bill": 4010,
+   "effective_rate": 2.271
+  },
+  {
+   "year": 2049,
+   "value": 4436490,
+   "assessed": 180160,
+   "bill": 4100,
+   "effective_rate": 2.276
+  },
+  {
+   "year": 2050,
+   "value": 4613950,
+   "assessed": 183760,
+   "bill": 4190,
+   "effective_rate": 2.281
+  },
+  {
+   "year": 2051,
+   "value": 4798510,
+   "assessed": 187440,
+   "bill": 4290,
+   "effective_rate": 2.287
+  },
+  {
+   "year": 2052,
+   "value": 4990450,
+   "assessed": 191190,
+   "bill": 4380,
+   "effective_rate": 2.292
+  },
+  {
+   "year": 2053,
+   "value": 5190060,
+   "assessed": 195010,
+   "bill": 4480,
+   "effective_rate": 2.298
+  },
+  {
+   "year": 2054,
+   "value": 5397670,
+   "assessed": 198910,
+   "bill": 4580,
+   "effective_rate": 2.303
+  },
+  {
+   "year": 2055,
+   "value": 5613570,
+   "assessed": 202890,
+   "bill": 4680,
+   "effective_rate": 2.309
+  },
+  {
+   "year": 2056,
+   "value": 5838120,
+   "assessed": 206950,
+   "bill": 4790,
+   "effective_rate": 2.314
+  },
+  {
+   "year": 2057,
+   "value": 6071640,
+   "assessed": 211090,
+   "bill": 4900,
+   "effective_rate": 2.32
+  },
+  {
+   "year": 2058,
+   "value": 6314510,
+   "assessed": 215310,
+   "bill": 5010,
+   "effective_rate": 2.325
+  },
+  {
+   "year": 2059,
+   "value": 6567090,
+   "assessed": 219610,
+   "bill": 5120,
+   "effective_rate": 2.331
+  },
+  {
+   "year": 2060,
+   "value": 6829770,
+   "assessed": 224010,
+   "bill": 5230,
+   "effective_rate": 2.336
+  },
+  {
+   "year": 2061,
+   "value": 7102960,
+   "assessed": 228490,
+   "bill": 5350,
+   "effective_rate": 2.342
+  },
+  {
+   "year": 2062,
+   "value": 7387080,
+   "assessed": 233060,
+   "bill": 5470,
+   "effective_rate": 2.348
+  },
+  {
+   "year": 2063,
+   "value": 7682560,
+   "assessed": 237720,
+   "bill": 5590,
+   "effective_rate": 2.353
+  },
+  {
+   "year": 2064,
+   "value": 7989860,
+   "assessed": 242470,
+   "bill": 5720,
+   "effective_rate": 2.359
+  },
+  {
+   "year": 2065,
+   "value": 8309460,
+   "assessed": 247320,
+   "bill": 5850,
+   "effective_rate": 2.365
+  },
+  {
+   "year": 2066,
+   "value": 8641840,
+   "assessed": 252270,
+   "bill": 5980,
+   "effective_rate": 2.371
+  },
+  {
+   "year": 2067,
+   "value": 8987510,
+   "assessed": 257310,
+   "bill": 6120,
+   "effective_rate": 2.377
+  },
+  {
+   "year": 2068,
+   "value": 9347010,
+   "assessed": 262460,
+   "bill": 6250,
+   "effective_rate": 2.382
+  },
+  {
+   "year": 2069,
+   "value": 9720890,
+   "assessed": 267710,
+   "bill": 6390,
+   "effective_rate": 2.388
+  },
+  {
+   "year": 2070,
+   "value": 10109730,
+   "assessed": 273060,
+   "bill": 6540,
+   "effective_rate": 2.394
+  },
+  {
+   "year": 2071,
+   "value": 10514120,
+   "assessed": 278520,
+   "bill": 6690,
+   "effective_rate": 2.4
+  },
+  {
+   "year": 2072,
+   "value": 10934680,
+   "assessed": 284100,
+   "bill": 6840,
+   "effective_rate": 2.406
+  },
+  {
+   "year": 2073,
+   "value": 11372070,
+   "assessed": 289780,
+   "bill": 6990,
+   "effective_rate": 2.412
+  },
+  {
+   "year": 2074,
+   "value": 11826950,
+   "assessed": 295570,
+   "bill": 7150,
+   "effective_rate": 2.418
+  },
+  {
+   "year": 2075,
+   "value": 12300030,
+   "assessed": 301480,
+   "bill": 7310,
+   "effective_rate": 2.424
+  },
+  {
+   "year": 2076,
+   "value": 12792030,
+   "assessed": 307510,
+   "bill": 7470,
+   "effective_rate": 2.43
+  }
+ ],
+ "paths": [
+  {
+   "inherit_year": 2040,
+   "value_at_death": 5368200,
+   "factored_base_year_value": 726430,
+   "prop19_cap": 1627430,
+   "prop19_excess": 3014340,
+   "taxable_if_live": 3740770,
+   "taxable_if_rent": 5368200,
+   "bill_today_projected": 9790,
+   "bill_if_live_year1": 45910,
+   "bill_if_rent_year1": 65110,
+   "terminal_price": 17411200,
+   "paths": {
+    "sell_equities": {
+     "terminal": 31714550,
+     "outflow": 0,
+     "start": 5072950,
+     "sale": {
+      "price": 5368200,
+      "costs": 295250,
+      "basis": 5368200,
+      "gain": 0,
+      "recapture": 0,
+      "exclusion": 0,
+      "tax": 0,
+      "net": 5072950
+     }
+    },
+    "sell_treasury": {
+     "terminal": 20121530,
+     "outflow": 0,
+     "start": 5072950,
+     "sale": {
+      "price": 5368200,
+      "costs": 295250,
+      "basis": 5368200,
+      "gain": 0,
+      "recapture": 0,
+      "exclusion": 0,
+      "tax": 0,
+      "net": 5072950
+     }
+    },
+    "live_in": {
+     "terminal": 12433650,
+     "outflow": 3170370,
+     "tax_total": 1868170,
+     "cost_total": 1302200,
+     "sale": {
+      "price": 17411200,
+      "costs": 957620,
+      "basis": 5368200,
+      "gain": 11085380,
+      "recapture": 0,
+      "exclusion": 250000,
+      "tax": 4019930,
+      "net": 12433650
+     }
+    },
+    "rent_out": {
+     "terminal": 10575840,
+     "outflow": 4538620,
+     "tax_total": 2647230,
+     "cost_total": 1891390,
+     "depreciation": 4294560,
+     "sale": {
+      "price": 17411200,
+      "costs": 957620,
+      "basis": 1073640,
+      "gain": 15379940,
+      "recapture": 4294560,
+      "exclusion": 0,
+      "tax": 5877740,
+      "net": 10575840
+     }
+    },
+    "live_then_rent": {
+     "terminal": 10668590,
+     "outflow": 4503570,
+     "tax_total": 2612180,
+     "cost_total": 1891390,
+     "depreciation": 4294560,
+     "sale": {
+      "price": 17411200,
+      "costs": 957620,
+      "basis": 1073640,
+      "gain": 15379940,
+      "recapture": 4294560,
+      "exclusion": 250000,
+      "tax": 5784990,
+      "net": 10668590
+     }
+    }
+   },
+   "breakeven_rent_annual": 298050,
+   "breakeven_rent_monthly": 24840,
+   "breakeven_return_vs_live": 3.03,
+   "breakeven_return_vs_rent": 2.48,
+   "housing_value_needed": 1445990,
+   "breakeven_house_growth": 7.72,
+   "best_path": "sell_equities"
+  },
+  {
+   "inherit_year": 2045,
+   "value_at_death": 6531230,
+   "factored_base_year_value": 802030,
+   "prop19_cap": 1886640,
+   "prop19_excess": 3842560,
+   "taxable_if_live": 4644590,
+   "taxable_if_rent": 6531230,
+   "bill_today_projected": 10840,
+   "bill_if_live_year1": 57060,
+   "bill_if_rent_year1": 79330,
+   "terminal_price": 21183380,
+   "paths": {
+    "sell_equities": {
+     "terminal": 38585540,
+     "outflow": 0,
+     "start": 6172010,
+     "sale": {
+      "price": 6531230,
+      "costs": 359220,
+      "basis": 6531230,
+      "gain": 0,
+      "recapture": 0,
+      "exclusion": 0,
+      "tax": 0,
+      "net": 6172010
+     }
+    },
+    "sell_treasury": {
+     "terminal": 24480880,
+     "outflow": 0,
+     "start": 6172010,
+     "sale": {
+      "price": 6531230,
+      "costs": 359220,
+      "basis": 6531230,
+      "gain": 0,
+      "recapture": 0,
+      "exclusion": 0,
+      "tax": 0,
+      "net": 6172010
+     }
+    },
+    "live_in": {
+     "terminal": 15107350,
+     "outflow": 3880030,
+     "tax_total": 2322530,
+     "cost_total": 1557500,
+     "sale": {
+      "price": 21183380,
+      "costs": 1165090,
+      "basis": 6531230,
+      "gain": 13487060,
+      "recapture": 0,
+      "exclusion": 250000,
+      "tax": 4910950,
+      "net": 15107350
+     }
+    },
+    "rent_out": {
+     "terminal": 12867130,
+     "outflow": 5500020,
+     "tax_total": 3225670,
+     "cost_total": 2274350,
+     "depreciation": 5224990,
+     "sale": {
+      "price": 21183380,
+      "costs": 1165090,
+      "basis": 1306250,
+      "gain": 18712050,
+      "recapture": 5224990,
+      "exclusion": 0,
+      "tax": 7151170,
+      "net": 12867130
+     }
+    },
+    "live_then_rent": {
+     "terminal": 12959880,
+     "outflow": 5459830,
+     "tax_total": 3185490,
+     "cost_total": 2274350,
+     "depreciation": 5224990,
+     "sale": {
+      "price": 21183380,
+      "costs": 1165090,
+      "basis": 1306250,
+      "gain": 18712050,
+      "recapture": 5224990,
+      "exclusion": 250000,
+      "tax": 7058420,
+      "net": 12959880
+     }
+    }
+   },
+   "breakeven_rent_annual": 362120,
+   "breakeven_rent_monthly": 30180,
+   "breakeven_return_vs_live": 3.03,
+   "breakeven_return_vs_rent": 2.48,
+   "housing_value_needed": 1760770,
+   "breakeven_house_growth": 7.72,
+   "best_path": "sell_equities"
+  },
+  {
+   "inherit_year": 2050,
+   "value_at_death": 7946240,
+   "factored_base_year_value": 885510,
+   "prop19_cap": 2187130,
+   "prop19_excess": 4873600,
+   "taxable_if_live": 5759110,
+   "taxable_if_rent": 7946240,
+   "bill_today_projected": 12010,
+   "bill_if_live_year1": 70850,
+   "bill_if_rent_year1": 96660,
+   "terminal_price": 25772820,
+   "paths": {
+    "sell_equities": {
+     "terminal": 46945240,
+     "outflow": 0,
+     "start": 7509200,
+     "sale": {
+      "price": 7946240,
+      "costs": 437040,
+      "basis": 7946240,
+      "gain": 0,
+      "recapture": 0,
+      "exclusion": 0,
+      "tax": 0,
+      "net": 7509200
+     }
+    },
+    "sell_treasury": {
+     "terminal": 29784760,
+     "outflow": 0,
+     "start": 7509200,
+     "sale": {
+      "price": 7946240,
+      "costs": 437040,
+      "basis": 7946240,
+      "gain": 0,
+      "recapture": 0,
+      "exclusion": 0,
+      "tax": 0,
+      "net": 7509200
+     }
+    },
+    "live_in": {
+     "terminal": 18360300,
+     "outflow": 4751940,
+     "tax_total": 2883820,
+     "cost_total": 1868110,
+     "sale": {
+      "price": 25772820,
+      "costs": 1417510,
+      "basis": 7946240,
+      "gain": 16409080,
+      "recapture": 0,
+      "exclusion": 250000,
+      "tax": 5995020,
+      "net": 18360300
+     }
+    },
+    "rent_out": {
+     "terminal": 15654830,
+     "outflow": 6671080,
+     "tax_total": 3930810,
+     "cost_total": 2740270,
+     "depreciation": 6356990,
+     "sale": {
+      "price": 25772820,
+      "costs": 1417510,
+      "basis": 1589250,
+      "gain": 22766070,
+      "recapture": 6356990,
+      "exclusion": 0,
+      "tax": 8700490,
+      "net": 15654830
+     }
+    },
+    "live_then_rent": {
+     "terminal": 15747580,
+     "outflow": 6625070,
+     "tax_total": 3884810,
+     "cost_total": 2740270,
+     "depreciation": 6356990,
+     "sale": {
+      "price": 25772820,
+      "costs": 1417510,
+      "basis": 1589250,
+      "gain": 22766070,
+      "recapture": 6356990,
+      "exclusion": 250000,
+      "tax": 8607740,
+      "net": 15747580
+     }
+    }
+   },
+   "breakeven_rent_annual": 440110,
+   "breakeven_rent_monthly": 36680,
+   "breakeven_return_vs_live": 3.03,
+   "breakeven_return_vs_rent": 2.48,
+   "housing_value_needed": 2143760,
+   "breakeven_house_growth": 7.72,
+   "best_path": "sell_equities"
+  }
+ ],
+ "regimes": [
+  {
+   "key": "stagflation",
+   "name": "Great Inflation repeat",
+   "analogue": "1965-1982, described by the Federal Reserve as the defining macroeconomic period of the second half of the twentieth century",
+   "src": [
+    "frh_great_inflation",
+    "fred_cpi",
+    "fred_gs10",
+    "fred_hpi_a"
+   ],
+   "derived": true,
+   "cpi": 9.8,
+   "house": 18.9,
+   "treasury": 10.13,
+   "window": "1977-1981 averages computed from the verified series",
+   "run": {
+    "terminal": {
+     "sell_equities": 491186780,
+     "sell_treasury": 1420423720,
+     "live_in": 8930221310,
+     "rent_out": 8902791700,
+     "live_then_rent": 8902884450
+    },
+    "terminal_real": {
+     "sell_equities": 29728740,
+     "sell_treasury": 85970160,
+     "live_in": 540495420,
+     "rent_out": 538835260,
+     "live_then_rent": 538840880
+    },
+    "outflow": {
+     "sell_equities": 0,
+     "sell_treasury": 0,
+     "live_in": 106603680,
+     "rent_out": 140428850,
+     "live_then_rent": 140454620
+    },
+    "value_at_death": 83141320,
+    "bill_if_live_year1": 967750,
+    "bill_if_rent_year1": 990010,
+    "best": "live_in"
+   }
+  },
+  {
+   "key": "slump",
+   "name": "A long house price slump",
+   "analogue": "1989-1996 in Property A's metropolitan area",
    "src": [
     "fred_hpi_a",
-    "fred_hpi_b"
-   ]
+    "fred_hpi_b",
+    "fred_cpi"
+   ],
+   "derived": true,
+   "cpi": 3.4,
+   "house": -0.2,
+   "treasury": 7.06,
+   "window": "1990-1996 averages computed from the verified series",
+   "run": {
+    "terminal": {
+     "sell_equities": 17630790,
+     "sell_treasury": 21831870,
+     "live_in": 2655770,
+     "rent_out": 1809560,
+     "live_then_rent": 1809560
+    },
+    "terminal_real": {
+     "sell_equities": 6466300,
+     "sell_treasury": 8007090,
+     "live_in": 974030,
+     "rent_out": 663680,
+     "live_then_rent": 663680
+    },
+    "outflow": {
+     "sell_equities": 0,
+     "sell_treasury": 0,
+     "live_in": 1562980,
+     "rent_out": 2844990,
+     "live_then_rent": 2806660
+    },
+    "value_at_death": 2984300,
+    "bill_if_live_year1": 15640,
+    "bill_if_rent_year1": 37900,
+    "best": "sell_treasury"
+   }
   },
   {
-   "id": "inflation",
-   "item": "General inflation, used for costs",
-   "value": "2.5% a year",
-   "reason": "Scenario. The 2% assessment cap has been binding in every year since 2022 because the California CPI ran above 2%.",
+   "key": "crash",
+   "name": "A financial crisis crash",
+   "analogue": "2007-2011",
    "src": [
-    "boe_lta26002"
-   ]
+    "fred_hpi_a",
+    "fred_hpi_b",
+    "fred_gs10",
+    "frh_great_recession"
+   ],
+   "derived": true,
+   "cpi": 2.2,
+   "house": -5.6,
+   "treasury": 3.51,
+   "window": "2007-2011 averages computed from the verified series",
+   "run": {
+    "terminal": {
+     "sell_equities": 6127160,
+     "sell_treasury": 2758870,
+     "live_in": 173950,
+     "rent_out": 173950,
+     "live_then_rent": 173950
+    },
+    "terminal_real": {
+     "sell_equities": 3189570,
+     "sell_treasury": 1436170,
+     "live_in": 90550,
+     "rent_out": 90550,
+     "live_then_rent": 90550
+    },
+    "outflow": {
+     "sell_equities": 0,
+     "sell_treasury": 0,
+     "live_in": 808240,
+     "rent_out": 1029320,
+     "live_then_rent": 1028010
+    },
+    "value_at_death": 1037120,
+    "bill_if_live_year1": 11590,
+    "bill_if_rent_year1": 14370,
+    "best": "sell_equities"
+   }
   },
   {
-   "id": "rate_a",
-   "item": "Ad valorem tax rate, Property A",
-   "value": "1.18%",
-   "reason": "The owner's bill does not show the tax rate area, so the rate cannot be read off the county table. 1.18% sits inside the verified county range of 1.126% to 1.241%.",
+   "key": "burst",
+   "name": "A fast inflation burst then a rate shock",
+   "analogue": "2021-2023",
    "src": [
-    "cnty_a_rates"
-   ]
+    "fred_cpi",
+    "fred_gs10",
+    "nyfed_covid"
+   ],
+   "derived": true,
+   "cpi": 5.6,
+   "house": 8.3,
+   "treasury": 2.78,
+   "window": "2021-2023 averages computed from the verified series",
+   "run": {
+    "terminal": {
+     "sell_equities": 83316680,
+     "sell_treasury": 30338380,
+     "live_in": 96997240,
+     "rent_out": 92267520,
+     "live_then_rent": 92360270
+    },
+    "terminal_real": {
+     "sell_equities": 16248540,
+     "sell_treasury": 5916640,
+     "live_in": 18916550,
+     "rent_out": 17994150,
+     "live_then_rent": 18012240
+    },
+    "outflow": {
+     "sell_equities": 0,
+     "sell_treasury": 0,
+     "live_in": 11555190,
+     "rent_out": 15057030,
+     "live_then_rent": 15026930
+    },
+    "value_at_death": 14102700,
+    "bill_if_live_year1": 148250,
+    "bill_if_rent_year1": 170510,
+    "best": "live_in"
+   }
   },
   {
-   "id": "fixed",
-   "item": "Fixed charges on each tax bill",
-   "value": "about $830 (A) and $1,100 (B) a year, rising with inflation",
-   "reason": "The part of each bill that the percentage rate does not explain. Fixed charges do not grow when the assessed value is reset.",
+   "key": "flat",
+   "name": "House prices flat for the whole horizon",
+   "analogue": "None. A stress case, not a historical analogue.",
+   "src": [],
+   "derived": false,
+   "cpi": 2.5,
+   "house": 0.0,
+   "treasury": 4.7,
+   "window": "Hypothetical",
+   "run": {
+    "terminal": {
+     "sell_equities": 18314350,
+     "sell_treasury": 11619670,
+     "live_in": 2929500,
+     "rent_out": 1980300,
+     "live_then_rent": 1980300
+    },
+    "terminal_real": {
+     "sell_equities": 8731230,
+     "sell_treasury": 5539590,
+     "live_in": 1396620,
+     "rent_out": 944090,
+     "live_then_rent": 944090
+    },
+    "outflow": {
+     "sell_equities": 0,
+     "sell_treasury": 0,
+     "live_in": 1484280,
+     "rent_out": 2727670,
+     "live_then_rent": 2687490
+    },
+    "value_at_death": 3100000,
+    "bill_if_live_year1": 16580,
+    "bill_if_rent_year1": 38840,
+    "best": "sell_equities"
+   }
+  },
+  {
+   "key": "deflation",
+   "name": "Low inflation and falling nominal house prices",
+   "analogue": "None. A stress case, not a historical analogue.",
+   "src": [],
+   "derived": false,
+   "cpi": 0.5,
+   "house": -1.0,
+   "treasury": 2.0,
+   "window": "Hypothetical",
+   "run": {
+    "terminal": {
+     "sell_equities": 15130730,
+     "sell_treasury": 4383970,
+     "live_in": 1790270,
+     "rent_out": 1264990,
+     "live_then_rent": 1264990
+    },
+    "terminal_real": {
+     "sell_equities": 13028010,
+     "sell_treasury": 3774730,
+     "live_in": 1541480,
+     "rent_out": 1089190,
+     "live_then_rent": 1089190
+    },
+    "outflow": {
+     "sell_equities": 0,
+     "sell_treasury": 0,
+     "live_in": 937490,
+     "rent_out": 1986250,
+     "live_then_rent": 1946650
+    },
+    "value_at_death": 2561120,
+    "bill_if_live_year1": 10990,
+    "bill_if_rent_year1": 31740,
+    "best": "sell_equities"
+   }
+  }
+ ],
+ "replay": [
+  {
+   "start": 1977,
+   "end": 2006,
+   "a_value": 45809180,
+   "a_value_real": 12939470,
+   "b_value": 25344920,
+   "b_value_real": 7159040,
+   "cpi_multiple": 3.54,
+   "cpi_cagr": 4.3,
+   "a_cagr": 9.39,
+   "bond_multiple": 9.16,
+   "bond_cagr": 7.66,
+   "down_years_a": 5,
+   "worst_year_a": -5.1,
+   "best_year_a": 30.2,
+   "tax_if_reset": 1521830,
+   "tax_if_kept": 301390
+  },
+  {
+   "start": 1978,
+   "end": 2007,
+   "a_value": 34905660,
+   "a_value_real": 10204670,
+   "b_value": 20360580,
+   "b_value_real": 5952410,
+   "cpi_multiple": 3.42,
+   "cpi_cagr": 4.18,
+   "a_cagr": 8.41,
+   "bond_multiple": 8.93,
+   "bond_cagr": 7.57,
+   "down_years_a": 6,
+   "worst_year_a": -5.1,
+   "best_year_a": 30.2,
+   "tax_if_reset": 1521830,
+   "tax_if_kept": 301390
+  },
+  {
+   "start": 1979,
+   "end": 2008,
+   "a_value": 26921830,
+   "a_value_real": 8159820,
+   "b_value": 16465020,
+   "b_value_real": 4990430,
+   "cpi_multiple": 3.3,
+   "cpi_cagr": 4.06,
+   "a_cagr": 7.47,
+   "bond_multiple": 8.54,
+   "bond_cagr": 7.41,
+   "down_years_a": 7,
+   "worst_year_a": -11.4,
+   "best_year_a": 30.2,
+   "tax_if_reset": 1521830,
+   "tax_if_kept": 301390
+  },
+  {
+   "start": 1980,
+   "end": 2009,
+   "a_value": 20046890,
+   "a_value_real": 6781460,
+   "b_value": 12408260,
+   "b_value_real": 4197460,
+   "cpi_multiple": 2.96,
+   "cpi_cagr": 3.68,
+   "a_cagr": 6.42,
+   "bond_multiple": 8.05,
+   "bond_cagr": 7.2,
+   "down_years_a": 8,
+   "worst_year_a": -12.3,
+   "best_year_a": 30.2,
+   "tax_if_reset": 1521830,
+   "tax_if_kept": 301390
+  },
+  {
+   "start": 1981,
+   "end": 2010,
+   "a_value": 16475710,
+   "a_value_real": 6224060,
+   "b_value": 10145160,
+   "b_value_real": 3832560,
+   "cpi_multiple": 2.65,
+   "cpi_cagr": 3.3,
+   "a_cagr": 5.73,
+   "bond_multiple": 7.46,
+   "bond_cagr": 6.93,
+   "down_years_a": 8,
+   "worst_year_a": -12.3,
+   "best_year_a": 30.2,
+   "tax_if_reset": 1521830,
+   "tax_if_kept": 301390
+  },
+  {
+   "start": 1982,
+   "end": 2011,
+   "a_value": 14425090,
+   "a_value_real": 5831850,
+   "b_value": 9444710,
+   "b_value_real": 3818350,
+   "cpi_multiple": 2.47,
+   "cpi_cagr": 3.06,
+   "a_cagr": 5.26,
+   "bond_multiple": 6.73,
+   "bond_cagr": 6.56,
+   "down_years_a": 9,
+   "worst_year_a": -12.3,
+   "best_year_a": 30.2,
+   "tax_if_reset": 1521830,
+   "tax_if_kept": 301390
+  },
+  {
+   "start": 1983,
+   "end": 2012,
+   "a_value": 15632680,
+   "a_value_real": 6573000,
+   "b_value": 10370330,
+   "b_value_real": 4360370,
+   "cpi_multiple": 2.38,
+   "cpi_cagr": 2.93,
+   "a_cagr": 5.54,
+   "bond_multiple": 6.06,
+   "bond_cagr": 6.19,
+   "down_years_a": 8,
+   "worst_year_a": -12.3,
+   "best_year_a": 30.2,
+   "tax_if_reset": 1521830,
+   "tax_if_kept": 301390
+  },
+  {
+   "start": 1984,
+   "end": 2013,
+   "a_value": 16531540,
+   "a_value_real": 7066950,
+   "b_value": 10288010,
+   "b_value_real": 4397950,
+   "cpi_multiple": 2.34,
+   "cpi_cagr": 2.87,
+   "a_cagr": 5.74,
+   "bond_multiple": 5.58,
+   "bond_cagr": 5.9,
+   "down_years_a": 8,
+   "worst_year_a": -12.3,
+   "best_year_a": 30.2,
+   "tax_if_reset": 1521830,
+   "tax_if_kept": 301390
+  },
+  {
+   "start": 1985,
+   "end": 2014,
+   "a_value": 17473090,
+   "a_value_real": 7671800,
+   "b_value": 11114030,
+   "b_value_real": 4879770,
+   "cpi_multiple": 2.28,
+   "cpi_cagr": 2.78,
+   "a_cagr": 5.93,
+   "bond_multiple": 5.09,
+   "bond_cagr": 5.58,
+   "down_years_a": 8,
+   "worst_year_a": -12.3,
+   "best_year_a": 30.2,
+   "tax_if_reset": 1521830,
+   "tax_if_kept": 301390
+  },
+  {
+   "start": 1986,
+   "end": 2015,
+   "a_value": 17838070,
+   "a_value_real": 8098570,
+   "b_value": 11497960,
+   "b_value_real": 5220130,
+   "cpi_multiple": 2.2,
+   "cpi_cagr": 2.67,
+   "a_cagr": 6.01,
+   "bond_multiple": 4.7,
+   "bond_cagr": 5.3,
+   "down_years_a": 8,
+   "worst_year_a": -12.3,
+   "best_year_a": 30.2,
+   "tax_if_reset": 1521830,
+   "tax_if_kept": 301390
+  },
+  {
+   "start": 1987,
+   "end": 2016,
+   "a_value": 17948320,
+   "a_value_real": 8203110,
+   "b_value": 11264630,
+   "b_value_real": 5148390,
+   "cpi_multiple": 2.19,
+   "cpi_cagr": 2.64,
+   "a_cagr": 6.03,
+   "bond_multiple": 4.45,
+   "bond_cagr": 5.1,
+   "down_years_a": 8,
+   "worst_year_a": -12.3,
+   "best_year_a": 30.2,
+   "tax_if_reset": 1521830,
+   "tax_if_kept": 301390
+  },
+  {
+   "start": 1988,
+   "end": 2017,
+   "a_value": 17215910,
+   "a_value_real": 7979820,
+   "b_value": 10070640,
+   "b_value_real": 4667880,
+   "cpi_multiple": 2.16,
+   "cpi_cagr": 2.6,
+   "a_cagr": 5.88,
+   "bond_multiple": 4.2,
+   "bond_cagr": 4.9,
+   "down_years_a": 8,
+   "worst_year_a": -12.3,
+   "best_year_a": 30.2,
+   "tax_if_reset": 1521830,
+   "tax_if_kept": 301390
+  },
+  {
+   "start": 1989,
+   "end": 2018,
+   "a_value": 15951640,
+   "a_value_real": 7513660,
+   "b_value": 8902270,
+   "b_value_real": 4193220,
+   "cpi_multiple": 2.12,
+   "cpi_cagr": 2.54,
+   "a_cagr": 5.61,
+   "bond_multiple": 3.97,
+   "bond_cagr": 4.7,
+   "down_years_a": 8,
+   "worst_year_a": -12.3,
+   "best_year_a": 30.2,
+   "tax_if_reset": 1521830,
+   "tax_if_kept": 301390
+  },
+  {
+   "start": 1990,
+   "end": 2019,
+   "a_value": 12116520,
+   "a_value_real": 5874160,
+   "b_value": 7320630,
+   "b_value_real": 3549080,
+   "cpi_multiple": 2.06,
+   "cpi_cagr": 2.44,
+   "a_cagr": 4.65,
+   "bond_multiple": 3.74,
+   "bond_cagr": 4.49,
+   "down_years_a": 9,
+   "worst_year_a": -12.3,
+   "best_year_a": 26.9,
+   "tax_if_reset": 1521830,
+   "tax_if_kept": 301390
+  },
+  {
+   "start": 1991,
+   "end": 2020,
+   "a_value": 11693280,
+   "a_value_real": 5902200,
+   "b_value": 6882690,
+   "b_value_real": 3474050,
+   "cpi_multiple": 1.98,
+   "cpi_cagr": 2.31,
+   "a_cagr": 4.52,
+   "bond_multiple": 3.47,
+   "bond_cagr": 4.24,
+   "down_years_a": 10,
+   "worst_year_a": -12.3,
+   "best_year_a": 26.9,
+   "tax_if_reset": 1521830,
+   "tax_if_kept": 301390
+  },
+  {
+   "start": 1992,
+   "end": 2021,
+   "a_value": 12938130,
+   "a_value_real": 6501560,
+   "b_value": 7319150,
+   "b_value_real": 3677950,
+   "cpi_multiple": 1.99,
+   "cpi_cagr": 2.32,
+   "a_cagr": 4.88,
+   "bond_multiple": 3.27,
+   "bond_cagr": 4.02,
+   "down_years_a": 9,
+   "worst_year_a": -12.3,
+   "best_year_a": 26.9,
+   "tax_if_reset": 1521830,
+   "tax_if_kept": 301390
+  },
+  {
+   "start": 1993,
+   "end": 2022,
+   "a_value": 15080120,
+   "a_value_real": 7230600,
+   "b_value": 8360840,
+   "b_value_real": 4008850,
+   "cpi_multiple": 2.09,
+   "cpi_cagr": 2.48,
+   "a_cagr": 5.41,
+   "bond_multiple": 3.14,
+   "bond_cagr": 3.89,
+   "down_years_a": 8,
+   "worst_year_a": -12.3,
+   "best_year_a": 26.9,
+   "tax_if_reset": 1521830,
+   "tax_if_kept": 301390
+  },
+  {
+   "start": 1994,
+   "end": 2023,
+   "a_value": 16026320,
+   "a_value_real": 7598890,
+   "b_value": 8589910,
+   "b_value_real": 4072910,
+   "cpi_multiple": 2.11,
+   "cpi_cagr": 2.52,
+   "a_cagr": 5.63,
+   "bond_multiple": 3.09,
+   "bond_cagr": 3.83,
+   "down_years_a": 7,
+   "worst_year_a": -12.3,
+   "best_year_a": 26.9,
+   "tax_if_reset": 1521830,
+   "tax_if_kept": 301390
+  },
+  {
+   "start": 1995,
+   "end": 2024,
+   "a_value": 17217440,
+   "a_value_real": 8135390,
+   "b_value": 9109110,
+   "b_value_real": 4304130,
+   "cpi_multiple": 2.12,
+   "cpi_cagr": 2.53,
+   "a_cagr": 5.88,
+   "bond_multiple": 3.0,
+   "bond_cagr": 3.73,
+   "down_years_a": 6,
+   "worst_year_a": -12.3,
+   "best_year_a": 26.9,
+   "tax_if_reset": 1521830,
+   "tax_if_kept": 301390
+  }
+ ],
+ "estate": {
+  "exclusion_2026": 15000000,
+  "exclusion_2027": 15480000,
+  "rows": [
+   {
+    "total": 5000000,
+    "excess_single": 0,
+    "excess_couple": 0,
+    "federal_tax_single_at_40": 0,
+    "federal_tax_couple_at_40": 0,
+    "california_estate_tax": 0
+   },
+   {
+    "total": 10000000,
+    "excess_single": 0,
+    "excess_couple": 0,
+    "federal_tax_single_at_40": 0,
+    "federal_tax_couple_at_40": 0,
+    "california_estate_tax": 0
+   },
+   {
+    "total": 15000000,
+    "excess_single": 0,
+    "excess_couple": 0,
+    "federal_tax_single_at_40": 0,
+    "federal_tax_couple_at_40": 0,
+    "california_estate_tax": 0
+   },
+   {
+    "total": 20000000,
+    "excess_single": 5000000,
+    "excess_couple": 0,
+    "federal_tax_single_at_40": 2000000,
+    "federal_tax_couple_at_40": 0,
+    "california_estate_tax": 0
+   },
+   {
+    "total": 25000000,
+    "excess_single": 10000000,
+    "excess_couple": 0,
+    "federal_tax_single_at_40": 4000000,
+    "federal_tax_couple_at_40": 0,
+    "california_estate_tax": 0
+   },
+   {
+    "total": 30000000,
+    "excess_single": 15000000,
+    "excess_couple": 0,
+    "federal_tax_single_at_40": 6000000,
+    "federal_tax_couple_at_40": 0,
+    "california_estate_tax": 0
+   },
+   {
+    "total": 40000000,
+    "excess_single": 25000000,
+    "excess_couple": 10000000,
+    "federal_tax_single_at_40": 10000000,
+    "federal_tax_couple_at_40": 4000000,
+    "california_estate_tax": 0
+   },
+   {
+    "total": 50000000,
+    "excess_single": 35000000,
+    "excess_couple": 20000000,
+    "federal_tax_single_at_40": 14000000,
+    "federal_tax_couple_at_40": 8000000,
+    "california_estate_tax": 0
+   }
+  ]
+ },
+ "exclusion_projection": [
+  {
+   "year": 2026,
+   "amount": 15000000,
+   "basis": "Published by the IRS in the filing-threshold table",
    "src": [
-    "cnty_a_rates",
-    "cityb_rate"
+    "irs_estate"
    ]
   },
   {
-   "id": "cap_growth",
-   "item": "Growth of the Proposition 19 amount",
-   "value": "one year of house price growth, every second year",
-   "reason": "Follows the adjustment rule as written: one year's index change, applied every other February.",
+   "year": 2027,
+   "amount": 15480000,
+   "basis": "Published by the IRS (IR-2026-133, 5 November 2026)",
+   "src": [
+    "irs_2027"
+   ]
+  },
+  {
+   "year": 2028,
+   "amount": 15867000,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  {
+   "year": 2029,
+   "amount": 16263670,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  {
+   "year": 2030,
+   "amount": 16670270,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  {
+   "year": 2031,
+   "amount": 17087020,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  {
+   "year": 2032,
+   "amount": 17514200,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  {
+   "year": 2033,
+   "amount": 17952050,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  {
+   "year": 2034,
+   "amount": 18400860,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  {
+   "year": 2035,
+   "amount": 18860880,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  {
+   "year": 2036,
+   "amount": 19332400,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  {
+   "year": 2037,
+   "amount": 19815710,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  {
+   "year": 2038,
+   "amount": 20311100,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  {
+   "year": 2039,
+   "amount": 20818880,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  {
+   "year": 2040,
+   "amount": 21339350,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  {
+   "year": 2041,
+   "amount": 21872830,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  {
+   "year": 2042,
+   "amount": 22419660,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  {
+   "year": 2043,
+   "amount": 22980150,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  {
+   "year": 2044,
+   "amount": 23554650,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  {
+   "year": 2045,
+   "amount": 24143520,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  {
+   "year": 2046,
+   "amount": 24747100,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  {
+   "year": 2047,
+   "amount": 25365780,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  {
+   "year": 2048,
+   "amount": 25999930,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  {
+   "year": 2049,
+   "amount": 26649930,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  {
+   "year": 2050,
+   "amount": 27316170,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  {
+   "year": 2051,
+   "amount": 27999080,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  {
+   "year": 2052,
+   "amount": 28699050,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  {
+   "year": 2053,
+   "amount": 29416530,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  {
+   "year": 2054,
+   "amount": 30151940,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  },
+  {
+   "year": 2055,
+   "amount": 30905740,
+   "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+   "src": [
+    "ssa_trustees"
+   ]
+  }
+ ],
+ "prop19_cap_projection": [
+  {
+   "year": 2026,
+   "amount": 1044586,
+   "basis": "Published for transfers 16 February 2025 to 15 February 2027",
    "src": [
     "boe_lta25009"
    ]
   },
   {
-   "id": "stock_return",
-   "item": "Stock index fund, total return",
-   "value": "7.0% a year, of which 1.5% is dividends",
-   "reason": "Scenario, not a forecast. One recent official 12-month figure for an S&P 500 index fund is 12.09%; a long-run official average could not be read in this session.",
-   "src": [
-    "tsp_returns"
-   ]
-  },
-  {
-   "id": "treasury",
-   "item": "Treasury alternative",
-   "value": "4.88% a year",
-   "reason": "The 10-year Treasury par yield on 9 November 2026, held constant.",
-   "src": [
-    "treasury_cmt"
-   ]
-  },
-  {
-   "id": "rent_a",
-   "item": "Market rent, Property A",
-   "value": "$6,500 a month in 2026, rising 3% a year",
-   "reason": "Scenario. No official rent figure for this home could be verified; see Flagged for Review. The break-even rent is reported so the conclusion does not rest on this number.",
-   "src": [
-    "hud_fmr"
-   ]
-  },
-  {
-   "id": "vacancy",
-   "item": "Vacancy and turnover allowance",
-   "value": "5% of rent",
-   "reason": "Scenario.",
-   "src": [
-    "irs_p527"
-   ]
-  },
-  {
-   "id": "unit3",
-   "item": "Rent for the third unit of Property B when the family moves out",
-   "value": "$3,580 a month in 2026",
-   "reason": "Set equal to the average of the two rented units. A new tenancy may start at any rent, then rises with the capped increase.",
-   "src": [
-    "cityb_rent"
-   ]
-  },
-  {
-   "id": "rent_ctrl",
-   "item": "Rent growth for sitting tenants in Property B",
-   "value": "1.5% a year",
-   "reason": "60% of the assumed 2.5% inflation, which is the published formula. The current allowed increase is 1.6%.",
-   "src": [
-    "cityb_rent"
-   ]
-  },
-  {
-   "id": "state_rent",
-   "item": "Rent growth if the local ordinance does NOT cover Property B",
-   "value": "7.5% a year, to a 10% ceiling",
-   "reason": "The statewide cap is 5% plus the change in the cost of living, or 10%, whichever is lower. With 2.5% inflation that is 7.5%. It applies only where the local ordinance does not; the coverage question is open.",
-   "src": [
-    "civ1947_12"
-   ]
-  },
-  {
-   "id": "building",
-   "item": "Share of value that is building, not land",
-   "value": "30% (A) and 40% (B)",
-   "reason": "Scenario. Only the building is depreciated. The assessor's land and improvement split was not supplied.",
-   "src": [
-    "irs_p527"
-   ]
-  },
-  {
-   "id": "maint",
-   "item": "Maintenance and repairs",
-   "value": "$9,300 a year (A) and $10,800 a year (B) in 2026, rising with inflation",
-   "reason": "Scenario: 1.0% of building value for A and 1.5% for B. The owner states that A costs less to maintain than B.",
-   "src": [
-    "irs_p527"
-   ]
-  },
-  {
-   "id": "sale_cost",
-   "item": "Cost of selling Property A",
-   "value": "5.11% of the price",
-   "reason": "5.0% scenario allowance for agents, escrow, title and preparation, plus the verified 0.11% county transfer tax.",
-   "src": [
-    "rtc11911",
-    "cnty_a_recorder"
-   ]
-  },
-  {
-   "id": "t_ord",
-   "item": "Tax on rental income and on rental losses used",
-   "value": "33.3%",
-   "reason": "Scenario household: 24% federal plus 9.3% California. Losses are assumed usable against Property B's rental income.",
-   "src": [
-    "irs_p925",
-    "ftb_rates"
-   ]
-  },
-  {
-   "id": "t_gain",
-   "item": "Tax on a large one-time gain",
-   "value": "36.1%",
-   "reason": "20% federal, 3.8% net investment income tax and 12.3% California. Depreciation taken is taxed at 41.1%.",
-   "src": [
-    "irs_tc409",
-    "irs_tc559",
-    "ftb_cg"
-   ]
-  },
-  {
-   "id": "t_div",
-   "item": "Tax on dividends and on Treasury interest",
-   "value": "28.1% and 27.8%",
-   "reason": "15% + 3.8% + 9.3% on dividends. Treasury interest is free of state tax under 31 U.S.C. 3124, verified on 11 November 2026, so it carries federal tax only.",
-   "src": [
-    "irs_tc409",
-    "irs_tc559",
-    "uscode3124"
-   ]
-  },
-  {
-   "id": "home_excl",
-   "item": "Home-sale exclusion if the family lives in A",
-   "value": "$500,000",
-   "reason": "Joint return. It is $250,000 on a single return.",
-   "src": [
-    "irs_tc701"
-   ]
-  },
-  {
-   "id": "fed_excl_index",
-   "item": "Federal estate exclusion after 2027",
-   "value": "2.5% a year",
-   "reason": "Scenario. The amount is indexed by law; the future index is unknown.",
-   "src": [
-    "irs_rp2532",
-    "irs_2027"
-   ]
-  },
-  {
-   "id": "hold_years",
-   "item": "Comparison period",
-   "value": "10 years after the inheritance",
-   "reason": "Every option is cashed out at the end and all taxes are paid, so the options are compared on the same footing.",
-   "src": [
-    "irs_basis"
-   ]
-  }
- ],
- "proj_a": [
-  {
-   "year": 2026,
-   "value_low": 3100000,
-   "value_base": 3100000,
-   "value_high": 3100000,
-   "assessed": 550540,
-   "property_tax": 7340,
-   "insurance": 1500,
-   "water": 1500,
-   "electricity": -180,
-   "maintenance": 9300,
-   "total_cost": 19460
-  },
-  {
    "year": 2027,
-   "value_low": 3193000,
-   "value_base": 3224000,
-   "value_high": 3255000,
-   "assessed": 561550,
-   "property_tax": 7490,
-   "insurance": 1540,
-   "water": 1540,
-   "electricity": -180,
-   "maintenance": 9530,
-   "total_cost": 19920
+   "amount": 1075920,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2028,
-   "value_low": 3288790,
-   "value_base": 3352960,
-   "value_high": 3417750,
-   "assessed": 572780,
-   "property_tax": 7640,
-   "insurance": 1580,
-   "water": 1580,
-   "electricity": -180,
-   "maintenance": 9770,
-   "total_cost": 20390
+   "amount": 1108200,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2029,
-   "value_low": 3387450,
-   "value_base": 3487080,
-   "value_high": 3588640,
-   "assessed": 584240,
-   "property_tax": 7800,
-   "insurance": 1620,
-   "water": 1620,
-   "electricity": -180,
-   "maintenance": 10020,
-   "total_cost": 20880
+   "amount": 1141450,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2030,
-   "value_low": 3489080,
-   "value_base": 3626560,
-   "value_high": 3768070,
-   "assessed": 595920,
-   "property_tax": 7960,
-   "insurance": 1660,
-   "water": 1660,
-   "electricity": -180,
-   "maintenance": 10270,
-   "total_cost": 21370
+   "amount": 1175690,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2031,
-   "value_low": 3593750,
-   "value_base": 3771620,
-   "value_high": 3956470,
-   "assessed": 607840,
-   "property_tax": 8120,
-   "insurance": 1700,
-   "water": 1700,
-   "electricity": -180,
-   "maintenance": 10520,
-   "total_cost": 21860
+   "amount": 1210960,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2032,
-   "value_low": 3701560,
-   "value_base": 3922490,
-   "value_high": 4154300,
-   "assessed": 620000,
-   "property_tax": 8290,
-   "insurance": 1740,
-   "water": 1740,
-   "electricity": -180,
-   "maintenance": 10790,
-   "total_cost": 22380
+   "amount": 1247290,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2033,
-   "value_low": 3812610,
-   "value_base": 4079390,
-   "value_high": 4362010,
-   "assessed": 632400,
-   "property_tax": 8460,
-   "insurance": 1780,
-   "water": 1780,
-   "electricity": -180,
-   "maintenance": 11050,
-   "total_cost": 22890
+   "amount": 1284710,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2034,
-   "value_low": 3926990,
-   "value_base": 4242560,
-   "value_high": 4580110,
-   "assessed": 645050,
-   "property_tax": 8630,
-   "insurance": 1830,
-   "water": 1830,
-   "electricity": -180,
-   "maintenance": 11330,
-   "total_cost": 23440
+   "amount": 1323250,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2035,
-   "value_low": 4044800,
-   "value_base": 4412270,
-   "value_high": 4809120,
-   "assessed": 657950,
-   "property_tax": 8810,
-   "insurance": 1870,
-   "water": 1870,
-   "electricity": -180,
-   "maintenance": 11610,
-   "total_cost": 23980
+   "amount": 1362950,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2036,
-   "value_low": 4166140,
-   "value_base": 4588760,
-   "value_high": 5049570,
-   "assessed": 671110,
-   "property_tax": 8990,
-   "insurance": 1920,
-   "water": 1920,
-   "electricity": -180,
-   "maintenance": 11900,
-   "total_cost": 24550
+   "amount": 1403840,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2037,
-   "value_low": 4291120,
-   "value_base": 4772310,
-   "value_high": 5302050,
-   "assessed": 684530,
-   "property_tax": 9180,
-   "insurance": 1970,
-   "water": 1970,
-   "electricity": -180,
-   "maintenance": 12200,
-   "total_cost": 25140
+   "amount": 1445950,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2038,
-   "value_low": 4419860,
-   "value_base": 4963200,
-   "value_high": 5567150,
-   "assessed": 698220,
-   "property_tax": 9370,
-   "insurance": 2020,
-   "water": 2020,
-   "electricity": -180,
-   "maintenance": 12510,
-   "total_cost": 25740
+   "amount": 1489330,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2039,
-   "value_low": 4552450,
-   "value_base": 5161730,
-   "value_high": 5845510,
-   "assessed": 712180,
-   "property_tax": 9560,
-   "insurance": 2070,
-   "water": 2070,
-   "electricity": -180,
-   "maintenance": 12820,
-   "total_cost": 26340
+   "amount": 1534010,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2040,
-   "value_low": 4689030,
-   "value_base": 5368200,
-   "value_high": 6137790,
-   "assessed": 726430,
-   "property_tax": 9760,
-   "insurance": 2120,
-   "water": 2120,
-   "electricity": -180,
-   "maintenance": 13140,
-   "total_cost": 26960
+   "amount": 1580030,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2041,
-   "value_low": 4829700,
-   "value_base": 5582920,
-   "value_high": 6444680,
-   "assessed": 740950,
-   "property_tax": 9960,
-   "insurance": 2170,
-   "water": 2170,
-   "electricity": -180,
-   "maintenance": 13470,
-   "total_cost": 27590
+   "amount": 1627430,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2042,
-   "value_low": 4974590,
-   "value_base": 5806240,
-   "value_high": 6766910,
-   "assessed": 755770,
-   "property_tax": 10170,
-   "insurance": 2230,
-   "water": 2230,
-   "electricity": -180,
-   "maintenance": 13810,
-   "total_cost": 28260
+   "amount": 1676250,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2043,
-   "value_low": 5123830,
-   "value_base": 6038490,
-   "value_high": 7105260,
-   "assessed": 770890,
-   "property_tax": 10370,
-   "insurance": 2280,
-   "water": 2280,
-   "electricity": -180,
-   "maintenance": 14150,
-   "total_cost": 28900
+   "amount": 1726540,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2044,
-   "value_low": 5277540,
-   "value_base": 6280030,
-   "value_high": 7460520,
-   "assessed": 786310,
-   "property_tax": 10590,
-   "insurance": 2340,
-   "water": 2340,
-   "electricity": -180,
-   "maintenance": 14500,
-   "total_cost": 29590
+   "amount": 1778340,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2045,
-   "value_low": 5435870,
-   "value_base": 6531230,
-   "value_high": 7833550,
-   "assessed": 802030,
-   "property_tax": 10810,
-   "insurance": 2400,
-   "water": 2400,
-   "electricity": -180,
-   "maintenance": 14870,
-   "total_cost": 30300
+   "amount": 1831690,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2046,
-   "value_low": 5598940,
-   "value_base": 6792480,
-   "value_high": 8225220,
-   "assessed": 818070,
-   "property_tax": 11030,
-   "insurance": 2460,
-   "water": 2460,
-   "electricity": -180,
-   "maintenance": 15240,
-   "total_cost": 31010
+   "amount": 1886640,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2047,
-   "value_low": 5766910,
-   "value_base": 7064180,
-   "value_high": 8636480,
-   "assessed": 834430,
-   "property_tax": 11260,
-   "insurance": 2520,
-   "water": 2520,
-   "electricity": -180,
-   "maintenance": 15620,
-   "total_cost": 31740
+   "amount": 1943240,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2048,
-   "value_low": 5939920,
-   "value_base": 7346750,
-   "value_high": 9068310,
-   "assessed": 851120,
-   "property_tax": 11490,
-   "insurance": 2580,
-   "water": 2580,
-   "electricity": -180,
-   "maintenance": 16010,
-   "total_cost": 32480
+   "amount": 2001530,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2049,
-   "value_low": 6118120,
-   "value_base": 7640620,
-   "value_high": 9521720,
-   "assessed": 868150,
-   "property_tax": 11730,
-   "insurance": 2650,
-   "water": 2650,
-   "electricity": -180,
-   "maintenance": 16410,
-   "total_cost": 33260
+   "amount": 2061580,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2050,
-   "value_low": 6301660,
-   "value_base": 7946240,
-   "value_high": 9997810,
-   "assessed": 885510,
-   "property_tax": 11970,
-   "insurance": 2710,
-   "water": 2710,
-   "electricity": -180,
-   "maintenance": 16820,
-   "total_cost": 34030
+   "amount": 2123430,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2051,
-   "value_low": 6490710,
-   "value_base": 8264090,
-   "value_high": 10497700,
-   "assessed": 903220,
-   "property_tax": 12220,
-   "insurance": 2780,
-   "water": 2780,
-   "electricity": -180,
-   "maintenance": 17240,
-   "total_cost": 34840
+   "amount": 2187130,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2052,
-   "value_low": 6685430,
-   "value_base": 8594660,
-   "value_high": 11022590,
-   "assessed": 921280,
-   "property_tax": 12470,
-   "insurance": 2850,
-   "water": 2850,
-   "electricity": -180,
-   "maintenance": 17670,
-   "total_cost": 35660
+   "amount": 2252750,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2053,
-   "value_low": 6886000,
-   "value_base": 8938440,
-   "value_high": 11573710,
-   "assessed": 939710,
-   "property_tax": 12720,
-   "insurance": 2920,
-   "water": 2920,
-   "electricity": -180,
-   "maintenance": 18110,
-   "total_cost": 36490
+   "amount": 2320330,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2054,
-   "value_low": 7092580,
-   "value_base": 9295980,
-   "value_high": 12152400,
-   "assessed": 958500,
-   "property_tax": 12990,
-   "insurance": 2990,
-   "water": 2990,
-   "electricity": -180,
-   "maintenance": 18570,
-   "total_cost": 37360
+   "amount": 2389940,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
+   ]
   },
   {
    "year": 2055,
-   "value_low": 7305350,
-   "value_base": 9667820,
-   "value_high": 12760020,
-   "assessed": 977670,
-   "property_tax": 13260,
-   "insurance": 3070,
-   "water": 3070,
-   "electricity": -180,
-   "maintenance": 19030,
-   "total_cost": 38250
-  },
-  {
-   "year": 2056,
-   "value_low": 7524510,
-   "value_base": 10054530,
-   "value_high": 13398020,
-   "assessed": 997230,
-   "property_tax": 13530,
-   "insurance": 3150,
-   "water": 3150,
-   "electricity": -180,
-   "maintenance": 19510,
-   "total_cost": 39160
-  },
-  {
-   "year": 2057,
-   "value_low": 7750250,
-   "value_base": 10456710,
-   "value_high": 14067920,
-   "assessed": 1017170,
-   "property_tax": 13810,
-   "insurance": 3230,
-   "water": 3230,
-   "electricity": -180,
-   "maintenance": 20000,
-   "total_cost": 40090
-  },
-  {
-   "year": 2058,
-   "value_low": 7982760,
-   "value_base": 10874980,
-   "value_high": 14771320,
-   "assessed": 1037510,
-   "property_tax": 14090,
-   "insurance": 3310,
-   "water": 3310,
-   "electricity": -180,
-   "maintenance": 20490,
-   "total_cost": 41020
-  },
-  {
-   "year": 2059,
-   "value_low": 8222240,
-   "value_base": 11309980,
-   "value_high": 15509880,
-   "assessed": 1058270,
-   "property_tax": 14380,
-   "insurance": 3390,
-   "water": 3390,
-   "electricity": -180,
-   "maintenance": 21010,
-   "total_cost": 41990
-  },
-  {
-   "year": 2060,
-   "value_low": 8468910,
-   "value_base": 11762380,
-   "value_high": 16285380,
-   "assessed": 1079430,
-   "property_tax": 14680,
-   "insurance": 3470,
-   "water": 3470,
-   "electricity": -180,
-   "maintenance": 21530,
-   "total_cost": 42970
-  }
- ],
- "proj_b": [
-  {
-   "year": 2026,
-   "value_low": 1800000,
-   "value_base": 1800000,
-   "value_high": 1800000,
-   "assessed": 116540,
-   "property_tax": 2490,
-   "rent": 85800,
-   "vacancy": 4290,
-   "insurance": 1500,
-   "water": 4380,
-   "electricity": 600,
-   "maintenance": 10800,
-   "net_income": 61740
-  },
-  {
-   "year": 2027,
-   "value_low": 1854000,
-   "value_base": 1872000,
-   "value_high": 1890000,
-   "assessed": 118870,
-   "property_tax": 2550,
-   "rent": 87090,
-   "vacancy": 4350,
-   "insurance": 1540,
-   "water": 4490,
-   "electricity": 620,
-   "maintenance": 11070,
-   "net_income": 62470
-  },
-  {
-   "year": 2028,
-   "value_low": 1909620,
-   "value_base": 1946880,
-   "value_high": 1984500,
-   "assessed": 121240,
-   "property_tax": 2610,
-   "rent": 88390,
-   "vacancy": 4420,
-   "insurance": 1580,
-   "water": 4600,
-   "electricity": 630,
-   "maintenance": 11350,
-   "net_income": 63200
-  },
-  {
-   "year": 2029,
-   "value_low": 1966910,
-   "value_base": 2024760,
-   "value_high": 2083730,
-   "assessed": 123670,
-   "property_tax": 2660,
-   "rent": 89720,
-   "vacancy": 4490,
-   "insurance": 1620,
-   "water": 4720,
-   "electricity": 650,
-   "maintenance": 11630,
-   "net_income": 63950
-  },
-  {
-   "year": 2030,
-   "value_low": 2025920,
-   "value_base": 2105750,
-   "value_high": 2187910,
-   "assessed": 126140,
-   "property_tax": 2720,
-   "rent": 91060,
-   "vacancy": 4550,
-   "insurance": 1660,
-   "water": 4830,
-   "electricity": 660,
-   "maintenance": 11920,
-   "net_income": 64720
-  },
-  {
-   "year": 2031,
-   "value_low": 2086690,
-   "value_base": 2189980,
-   "value_high": 2297310,
-   "assessed": 128660,
-   "property_tax": 2780,
-   "rent": 92430,
-   "vacancy": 4620,
-   "insurance": 1700,
-   "water": 4960,
-   "electricity": 680,
-   "maintenance": 12220,
-   "net_income": 65470
-  },
-  {
-   "year": 2032,
-   "value_low": 2149290,
-   "value_base": 2277570,
-   "value_high": 2412170,
-   "assessed": 131240,
-   "property_tax": 2850,
-   "rent": 93820,
-   "vacancy": 4690,
-   "insurance": 1740,
-   "water": 5080,
-   "electricity": 700,
-   "maintenance": 12520,
-   "net_income": 66240
-  },
-  {
-   "year": 2033,
-   "value_low": 2213770,
-   "value_base": 2368680,
-   "value_high": 2532780,
-   "assessed": 133860,
-   "property_tax": 2910,
-   "rent": 95220,
-   "vacancy": 4760,
-   "insurance": 1780,
-   "water": 5210,
-   "electricity": 710,
-   "maintenance": 12840,
-   "net_income": 67010
-  },
-  {
-   "year": 2034,
-   "value_low": 2280190,
-   "value_base": 2463420,
-   "value_high": 2659420,
-   "assessed": 136540,
-   "property_tax": 2970,
-   "rent": 96650,
-   "vacancy": 4830,
-   "insurance": 1830,
-   "water": 5340,
-   "electricity": 730,
-   "maintenance": 13160,
-   "net_income": 67790
-  },
-  {
-   "year": 2035,
-   "value_low": 2348590,
-   "value_base": 2561960,
-   "value_high": 2792390,
-   "assessed": 139270,
-   "property_tax": 3040,
-   "rent": 98100,
-   "vacancy": 4910,
-   "insurance": 1870,
-   "water": 5470,
-   "electricity": 750,
-   "maintenance": 13490,
-   "net_income": 68570
-  },
-  {
-   "year": 2036,
-   "value_low": 2419050,
-   "value_base": 2664440,
-   "value_high": 2932010,
-   "assessed": 142060,
-   "property_tax": 3110,
-   "rent": 99570,
-   "vacancy": 4980,
-   "insurance": 1920,
-   "water": 5610,
-   "electricity": 770,
-   "maintenance": 13820,
-   "net_income": 69360
-  },
-  {
-   "year": 2037,
-   "value_low": 2491620,
-   "value_base": 2771020,
-   "value_high": 3078610,
-   "assessed": 144900,
-   "property_tax": 3180,
-   "rent": 101070,
-   "vacancy": 5050,
-   "insurance": 1970,
-   "water": 5750,
-   "electricity": 790,
-   "maintenance": 14170,
-   "net_income": 70160
-  },
-  {
-   "year": 2038,
-   "value_low": 2566370,
-   "value_base": 2881860,
-   "value_high": 3232540,
-   "assessed": 147790,
-   "property_tax": 3250,
-   "rent": 102580,
-   "vacancy": 5130,
-   "insurance": 2020,
-   "water": 5890,
-   "electricity": 810,
-   "maintenance": 14520,
-   "net_income": 70960
-  },
-  {
-   "year": 2039,
-   "value_low": 2643360,
-   "value_base": 2997130,
-   "value_high": 3394170,
-   "assessed": 150750,
-   "property_tax": 3320,
-   "rent": 104120,
-   "vacancy": 5210,
-   "insurance": 2070,
-   "water": 6040,
-   "electricity": 830,
-   "maintenance": 14890,
-   "net_income": 71760
-  },
-  {
-   "year": 2040,
-   "value_low": 2722660,
-   "value_base": 3117020,
-   "value_high": 3563880,
-   "assessed": 153770,
-   "property_tax": 3400,
-   "rent": 105680,
-   "vacancy": 5280,
-   "insurance": 2120,
-   "water": 6190,
-   "electricity": 850,
-   "maintenance": 15260,
-   "net_income": 72580
-  },
-  {
-   "year": 2041,
-   "value_low": 2804340,
-   "value_base": 3241700,
-   "value_high": 3742070,
-   "assessed": 156840,
-   "property_tax": 3470,
-   "rent": 107270,
-   "vacancy": 5360,
-   "insurance": 2170,
-   "water": 6340,
-   "electricity": 870,
-   "maintenance": 15640,
-   "net_income": 73420
-  },
-  {
-   "year": 2042,
-   "value_low": 2888470,
-   "value_base": 3371370,
-   "value_high": 3929170,
-   "assessed": 159980,
-   "property_tax": 3550,
-   "rent": 108880,
-   "vacancy": 5440,
-   "insurance": 2230,
-   "water": 6500,
-   "electricity": 890,
-   "maintenance": 16030,
-   "net_income": 74240
-  },
-  {
-   "year": 2043,
-   "value_low": 2975130,
-   "value_base": 3506220,
-   "value_high": 4125630,
-   "assessed": 163180,
-   "property_tax": 3630,
-   "rent": 110510,
-   "vacancy": 5530,
-   "insurance": 2280,
-   "water": 6660,
-   "electricity": 910,
-   "maintenance": 16430,
-   "net_income": 75070
-  },
-  {
-   "year": 2044,
-   "value_low": 3064380,
-   "value_base": 3646470,
-   "value_high": 4331910,
-   "assessed": 166440,
-   "property_tax": 3710,
-   "rent": 112170,
-   "vacancy": 5610,
-   "insurance": 2340,
-   "water": 6830,
-   "electricity": 940,
-   "maintenance": 16840,
-   "net_income": 75900
-  },
-  {
-   "year": 2045,
-   "value_low": 3156310,
-   "value_base": 3792330,
-   "value_high": 4548510,
-   "assessed": 169770,
-   "property_tax": 3790,
-   "rent": 113850,
-   "vacancy": 5690,
-   "insurance": 2400,
-   "water": 7000,
-   "electricity": 960,
-   "maintenance": 17270,
-   "net_income": 76740
-  },
-  {
-   "year": 2046,
-   "value_low": 3251000,
-   "value_base": 3944020,
-   "value_high": 4775940,
-   "assessed": 173160,
-   "property_tax": 3880,
-   "rent": 115560,
-   "vacancy": 5780,
-   "insurance": 2460,
-   "water": 7180,
-   "electricity": 980,
-   "maintenance": 17700,
-   "net_income": 77580
-  },
-  {
-   "year": 2047,
-   "value_low": 3348530,
-   "value_base": 4101780,
-   "value_high": 5014730,
-   "assessed": 176630,
-   "property_tax": 3960,
-   "rent": 117290,
-   "vacancy": 5860,
-   "insurance": 2520,
-   "water": 7360,
-   "electricity": 1010,
-   "maintenance": 18140,
-   "net_income": 78440
-  },
-  {
-   "year": 2048,
-   "value_low": 3448990,
-   "value_base": 4265850,
-   "value_high": 5265470,
-   "assessed": 180160,
-   "property_tax": 4050,
-   "rent": 119050,
-   "vacancy": 5950,
-   "insurance": 2580,
-   "water": 7540,
-   "electricity": 1030,
-   "maintenance": 18590,
-   "net_income": 79310
-  },
-  {
-   "year": 2049,
-   "value_low": 3552460,
-   "value_base": 4436490,
-   "value_high": 5528740,
-   "assessed": 183760,
-   "property_tax": 4140,
-   "rent": 120840,
-   "vacancy": 6040,
-   "insurance": 2650,
-   "water": 7730,
-   "electricity": 1060,
-   "maintenance": 19060,
-   "net_income": 80160
-  },
-  {
-   "year": 2050,
-   "value_low": 3659030,
-   "value_base": 4613950,
-   "value_high": 5805180,
-   "assessed": 187440,
-   "property_tax": 4240,
-   "rent": 122650,
-   "vacancy": 6130,
-   "insurance": 2710,
-   "water": 7920,
-   "electricity": 1090,
-   "maintenance": 19530,
-   "net_income": 81030
-  },
-  {
-   "year": 2051,
-   "value_low": 3768800,
-   "value_base": 4798510,
-   "value_high": 6095440,
-   "assessed": 191190,
-   "property_tax": 4330,
-   "rent": 124490,
-   "vacancy": 6220,
-   "insurance": 2780,
-   "water": 8120,
-   "electricity": 1110,
-   "maintenance": 20020,
-   "net_income": 81910
-  },
-  {
-   "year": 2052,
-   "value_low": 3881860,
-   "value_base": 4990450,
-   "value_high": 6400210,
-   "assessed": 195010,
-   "property_tax": 4430,
-   "rent": 126360,
-   "vacancy": 6320,
-   "insurance": 2850,
-   "water": 8320,
-   "electricity": 1140,
-   "maintenance": 20520,
-   "net_income": 82780
-  },
-  {
-   "year": 2053,
-   "value_low": 3998320,
-   "value_base": 5190060,
-   "value_high": 6720220,
-   "assessed": 198910,
-   "property_tax": 4530,
-   "rent": 128250,
-   "vacancy": 6410,
-   "insurance": 2920,
-   "water": 8530,
-   "electricity": 1170,
-   "maintenance": 21040,
-   "net_income": 83650
-  },
-  {
-   "year": 2054,
-   "value_low": 4118270,
-   "value_base": 5397670,
-   "value_high": 7056230,
-   "assessed": 202890,
-   "property_tax": 4630,
-   "rent": 130180,
-   "vacancy": 6510,
-   "insurance": 2990,
-   "water": 8740,
-   "electricity": 1200,
-   "maintenance": 21560,
-   "net_income": 84550
-  },
-  {
-   "year": 2055,
-   "value_low": 4241820,
-   "value_base": 5613570,
-   "value_high": 7409040,
-   "assessed": 206950,
-   "property_tax": 4730,
-   "rent": 132130,
-   "vacancy": 6610,
-   "insurance": 3070,
-   "water": 8960,
-   "electricity": 1230,
-   "maintenance": 22100,
-   "net_income": 85430
-  },
-  {
-   "year": 2056,
-   "value_low": 4369070,
-   "value_base": 5838120,
-   "value_high": 7779500,
-   "assessed": 211090,
-   "property_tax": 4840,
-   "rent": 134110,
-   "vacancy": 6710,
-   "insurance": 3150,
-   "water": 9190,
-   "electricity": 1260,
-   "maintenance": 22650,
-   "net_income": 86310
-  },
-  {
-   "year": 2057,
-   "value_low": 4500140,
-   "value_base": 6071640,
-   "value_high": 8168470,
-   "assessed": 215310,
-   "property_tax": 4950,
-   "rent": 136120,
-   "vacancy": 6810,
-   "insurance": 3230,
-   "water": 9420,
-   "electricity": 1290,
-   "maintenance": 23220,
-   "net_income": 87200
-  },
-  {
-   "year": 2058,
-   "value_low": 4635150,
-   "value_base": 6314510,
-   "value_high": 8576890,
-   "assessed": 219610,
-   "property_tax": 5060,
-   "rent": 138170,
-   "vacancy": 6910,
-   "insurance": 3310,
-   "water": 9650,
-   "electricity": 1320,
-   "maintenance": 23800,
-   "net_income": 88120
-  },
-  {
-   "year": 2059,
-   "value_low": 4774200,
-   "value_base": 6567090,
-   "value_high": 9005740,
-   "assessed": 224010,
-   "property_tax": 5170,
-   "rent": 140240,
-   "vacancy": 7010,
-   "insurance": 3390,
-   "water": 9890,
-   "electricity": 1360,
-   "maintenance": 24400,
-   "net_income": 89020
-  },
-  {
-   "year": 2060,
-   "value_low": 4917430,
-   "value_base": 6829770,
-   "value_high": 9456030,
-   "assessed": 228490,
-   "property_tax": 5290,
-   "rent": 142340,
-   "vacancy": 7120,
-   "insurance": 3470,
-   "water": 10140,
-   "electricity": 1390,
-   "maintenance": 25010,
-   "net_income": 89920
-  }
- ],
- "after": [
-  {
-   "year": 2040,
-   "fmv": 5368200,
-   "base": 726430,
-   "amount": 1374600,
-   "live": 3993590,
-   "rent": 5368200,
-   "saving": 16220,
-   "rows": [
-    {
-     "year": 2040,
-     "value": 5368200,
-     "assessed_unchanged": 726430,
-     "tax_unchanged": 9760,
-     "assessed_live": 3993590,
-     "tax_live": 48310,
-     "assessed_rent": 5368200,
-     "tax_rent": 64530
-    },
-    {
-     "year": 2041,
-     "value": 5582920,
-     "assessed_unchanged": 740950,
-     "tax_unchanged": 9960,
-     "assessed_live": 4073460,
-     "tax_live": 49280,
-     "assessed_rent": 5475560,
-     "tax_rent": 65830
-    },
-    {
-     "year": 2042,
-     "value": 5806240,
-     "assessed_unchanged": 755770,
-     "tax_unchanged": 10170,
-     "assessed_live": 4154930,
-     "tax_live": 50280,
-     "assessed_rent": 5585070,
-     "tax_rent": 67150
-    },
-    {
-     "year": 2043,
-     "value": 6038490,
-     "assessed_unchanged": 770890,
-     "tax_unchanged": 10370,
-     "assessed_live": 4238030,
-     "tax_live": 51290,
-     "assessed_rent": 5696770,
-     "tax_rent": 68500
-    },
-    {
-     "year": 2044,
-     "value": 6280030,
-     "assessed_unchanged": 786310,
-     "tax_unchanged": 10590,
-     "assessed_live": 4322790,
-     "tax_live": 52320,
-     "assessed_rent": 5810710,
-     "tax_rent": 69880
-    },
-    {
-     "year": 2045,
-     "value": 6531230,
-     "assessed_unchanged": 802030,
-     "tax_unchanged": 10810,
-     "assessed_live": 4409250,
-     "tax_live": 53370,
-     "assessed_rent": 5926920,
-     "tax_rent": 71280
-    },
-    {
-     "year": 2046,
-     "value": 6792480,
-     "assessed_unchanged": 818070,
-     "tax_unchanged": 11030,
-     "assessed_live": 4497430,
-     "tax_live": 54450,
-     "assessed_rent": 6045460,
-     "tax_rent": 72710
-    },
-    {
-     "year": 2047,
-     "value": 7064180,
-     "assessed_unchanged": 834430,
-     "tax_unchanged": 11260,
-     "assessed_live": 4587380,
-     "tax_live": 55540,
-     "assessed_rent": 6166370,
-     "tax_rent": 74170
-    },
-    {
-     "year": 2048,
-     "value": 7346750,
-     "assessed_unchanged": 851120,
-     "tax_unchanged": 11490,
-     "assessed_live": 4679130,
-     "tax_live": 56660,
-     "assessed_rent": 6289700,
-     "tax_rent": 75660
-    },
-    {
-     "year": 2049,
-     "value": 7640620,
-     "assessed_unchanged": 868150,
-     "tax_unchanged": 11730,
-     "assessed_live": 4772710,
-     "tax_live": 57800,
-     "assessed_rent": 6415490,
-     "tax_rent": 77190
-    },
-    {
-     "year": 2050,
-     "value": 7946240,
-     "assessed_unchanged": 885510,
-     "tax_unchanged": 11970,
-     "assessed_live": 4868170,
-     "tax_live": 58960,
-     "assessed_rent": 6543800,
-     "tax_rent": 78740
-    }
-   ]
-  },
-  {
-   "year": 2045,
-   "fmv": 6531230,
-   "base": 802030,
-   "amount": 1546240,
-   "live": 4984990,
-   "rent": 6531230,
-   "saving": 18250,
-   "rows": [
-    {
-     "year": 2045,
-     "value": 6531230,
-     "assessed_unchanged": 802030,
-     "tax_unchanged": 10810,
-     "assessed_live": 4984990,
-     "tax_live": 60170,
-     "assessed_rent": 6531230,
-     "tax_rent": 78410
-    },
-    {
-     "year": 2046,
-     "value": 6792480,
-     "assessed_unchanged": 818070,
-     "tax_unchanged": 11030,
-     "assessed_live": 5084690,
-     "tax_live": 61380,
-     "assessed_rent": 6661860,
-     "tax_rent": 79990
-    },
-    {
-     "year": 2047,
-     "value": 7064180,
-     "assessed_unchanged": 834430,
-     "tax_unchanged": 11260,
-     "assessed_live": 5186380,
-     "tax_live": 62610,
-     "assessed_rent": 6795090,
-     "tax_rent": 81590
-    },
-    {
-     "year": 2048,
-     "value": 7346750,
-     "assessed_unchanged": 851120,
-     "tax_unchanged": 11490,
-     "assessed_live": 5290110,
-     "tax_live": 63870,
-     "assessed_rent": 6931000,
-     "tax_rent": 83230
-    },
-    {
-     "year": 2049,
-     "value": 7640620,
-     "assessed_unchanged": 868150,
-     "tax_unchanged": 11730,
-     "assessed_live": 5395910,
-     "tax_live": 65150,
-     "assessed_rent": 7069620,
-     "tax_rent": 84900
-    },
-    {
-     "year": 2050,
-     "value": 7946240,
-     "assessed_unchanged": 885510,
-     "tax_unchanged": 11970,
-     "assessed_live": 5503830,
-     "tax_live": 66460,
-     "assessed_rent": 7211010,
-     "tax_rent": 86610
-    },
-    {
-     "year": 2051,
-     "value": 8264090,
-     "assessed_unchanged": 903220,
-     "tax_unchanged": 12220,
-     "assessed_live": 5613910,
-     "tax_live": 67800,
-     "assessed_rent": 7355230,
-     "tax_rent": 88350
-    },
-    {
-     "year": 2052,
-     "value": 8594660,
-     "assessed_unchanged": 921280,
-     "tax_unchanged": 12470,
-     "assessed_live": 5726190,
-     "tax_live": 69170,
-     "assessed_rent": 7502330,
-     "tax_rent": 90120
-    },
-    {
-     "year": 2053,
-     "value": 8938440,
-     "assessed_unchanged": 939710,
-     "tax_unchanged": 12720,
-     "assessed_live": 5840710,
-     "tax_live": 70560,
-     "assessed_rent": 7652380,
-     "tax_rent": 91930
-    },
-    {
-     "year": 2054,
-     "value": 9295980,
-     "assessed_unchanged": 958500,
-     "tax_unchanged": 12990,
-     "assessed_live": 5957520,
-     "tax_live": 71980,
-     "assessed_rent": 7805430,
-     "tax_rent": 93780
-    },
-    {
-     "year": 2055,
-     "value": 9667820,
-     "assessed_unchanged": 977670,
-     "tax_unchanged": 13260,
-     "assessed_live": 6076670,
-     "tax_live": 73420,
-     "assessed_rent": 7961540,
-     "tax_rent": 95670
-    }
-   ]
-  },
-  {
-   "year": 2050,
-   "fmv": 7946240,
-   "base": 885510,
-   "amount": 1672420,
-   "live": 6273830,
-   "rent": 7946240,
-   "saving": 19730,
-   "rows": [
-    {
-     "year": 2050,
-     "value": 7946240,
-     "assessed_unchanged": 885510,
-     "tax_unchanged": 11970,
-     "assessed_live": 6273830,
-     "tax_live": 75550,
-     "assessed_rent": 7946240,
-     "tax_rent": 95280
-    },
-    {
-     "year": 2051,
-     "value": 8264090,
-     "assessed_unchanged": 903220,
-     "tax_unchanged": 12220,
-     "assessed_live": 6399300,
-     "tax_live": 77070,
-     "assessed_rent": 8105170,
-     "tax_rent": 97200
-    },
-    {
-     "year": 2052,
-     "value": 8594660,
-     "assessed_unchanged": 921280,
-     "tax_unchanged": 12470,
-     "assessed_live": 6527290,
-     "tax_live": 78620,
-     "assessed_rent": 8267270,
-     "tax_rent": 99150
-    },
-    {
-     "year": 2053,
-     "value": 8938440,
-     "assessed_unchanged": 939710,
-     "tax_unchanged": 12720,
-     "assessed_live": 6657840,
-     "tax_live": 80200,
-     "assessed_rent": 8432620,
-     "tax_rent": 101140
-    },
-    {
-     "year": 2054,
-     "value": 9295980,
-     "assessed_unchanged": 958500,
-     "tax_unchanged": 12990,
-     "assessed_live": 6790990,
-     "tax_live": 81810,
-     "assessed_rent": 8601270,
-     "tax_rent": 103170
-    },
-    {
-     "year": 2055,
-     "value": 9667820,
-     "assessed_unchanged": 977670,
-     "tax_unchanged": 13260,
-     "assessed_live": 6926810,
-     "tax_live": 83460,
-     "assessed_rent": 8773290,
-     "tax_rent": 105240
-    },
-    {
-     "year": 2056,
-     "value": 10054530,
-     "assessed_unchanged": 997230,
-     "tax_unchanged": 13530,
-     "assessed_live": 7065350,
-     "tax_live": 85130,
-     "assessed_rent": 8948760,
-     "tax_rent": 107360
-    },
-    {
-     "year": 2057,
-     "value": 10456710,
-     "assessed_unchanged": 1017170,
-     "tax_unchanged": 13810,
-     "assessed_live": 7206660,
-     "tax_live": 86840,
-     "assessed_rent": 9127740,
-     "tax_rent": 109510
-    },
-    {
-     "year": 2058,
-     "value": 10874980,
-     "assessed_unchanged": 1037510,
-     "tax_unchanged": 14090,
-     "assessed_live": 7350790,
-     "tax_live": 88590,
-     "assessed_rent": 9310290,
-     "tax_rent": 111710
-    },
-    {
-     "year": 2059,
-     "value": 11309980,
-     "assessed_unchanged": 1058270,
-     "tax_unchanged": 14380,
-     "assessed_live": 7497800,
-     "tax_live": 90370,
-     "assessed_rent": 9496500,
-     "tax_rent": 113960
-    },
-    {
-     "year": 2060,
-     "value": 11762380,
-     "assessed_unchanged": 1079430,
-     "tax_unchanged": 14680,
-     "assessed_live": 7647760,
-     "tax_live": 92190,
-     "assessed_rent": 9686430,
-     "tax_rent": 116240
-    }
+   "amount": 2461640,
+   "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+   "src": [
+    "boe_lta25009"
    ]
   }
  ],
- "decision": [
+ "sensitivity": [
   {
-   "year": 2040,
-   "g": 0.03,
-   "rows": [
-    {
-     "option": "sell_stock",
-     "name": "Sell A, buy a stock index fund",
-     "wealth": 7217380,
-     "wealth_today": 3990310,
-     "asset": 7217380,
-     "first_cash": 0,
-     "cash_total": 0,
-     "tax_first": 0,
-     "rent_first": 0,
-     "gap": 0,
-     "gap_today": 0
-    },
-    {
-     "option": "sell_treasury",
-     "name": "Sell A, buy Treasuries",
-     "wealth": 6290520,
-     "wealth_today": 3477880,
-     "asset": 6290520,
-     "first_cash": 0,
-     "cash_total": 0,
-     "tax_first": 0,
-     "rent_first": 0,
-     "gap": -926860,
-     "gap_today": -512440
-    },
-    {
-     "option": "rent",
-     "name": "Keep A and rent it out",
-     "wealth": 5924460,
-     "wealth_today": 3275490,
-     "asset": 5303490,
-     "first_cash": 43920,
-     "cash_total": 500360,
-     "tax_first": 56520,
-     "rent_first": 112080,
-     "gap": -1292920,
-     "gap_today": -714820
-    },
-    {
-     "option": "live",
-     "name": "Move into A",
-     "wealth": 5440060,
-     "wealth_today": 3007670,
-     "asset": 5694230,
-     "first_cash": -17380,
-     "cash_total": -205380,
-     "tax_first": 41360,
-     "rent_first": 0,
-     "gap": -1777320,
-     "gap_today": -982640
-    }
-   ],
-   "start": 4449420,
-   "r_eq": 4.96,
-   "live_cost_month": 14810,
-   "live_cost_month_today": 8190
+   "house_growth": 2.5,
+   "equity_return": 5.0,
+   "sell_equities": 16560620,
+   "sell_treasury": 18575810,
+   "live_in": 8110290,
+   "rent_out": 6388070,
+   "live_then_rent": 6480820,
+   "best": "sell_treasury"
   },
   {
-   "year": 2040,
-   "g": 0.04,
-   "rows": [
-    {
-     "option": "sell_stock",
-     "name": "Sell A, buy a stock index fund",
-     "wealth": 8262760,
-     "wealth_today": 4568280,
-     "asset": 8262760,
-     "first_cash": 0,
-     "cash_total": 0,
-     "tax_first": 0,
-     "rent_first": 0,
-     "gap": 0,
-     "gap_today": 0
-    },
-    {
-     "option": "sell_treasury",
-     "name": "Sell A, buy Treasuries",
-     "wealth": 7201660,
-     "wealth_today": 3981620,
-     "asset": 7201660,
-     "first_cash": 0,
-     "cash_total": 0,
-     "tax_first": 0,
-     "rent_first": 0,
-     "gap": -1061100,
-     "gap_today": -586660
-    },
-    {
-     "option": "rent",
-     "name": "Keep A and rent it out",
-     "wealth": 7094450,
-     "wealth_today": 3922350,
-     "asset": 6515410,
-     "first_cash": 41040,
-     "cash_total": 466500,
-     "tax_first": 64530,
-     "rent_first": 112080,
-     "gap": -1168310,
-     "gap_today": -645930
-    },
-    {
-     "option": "live",
-     "name": "Move into A",
-     "wealth": 6587610,
-     "wealth_today": 3642120,
-     "asset": 6936600,
-     "first_cash": -24340,
-     "cash_total": -281520,
-     "tax_first": 48310,
-     "rent_first": 0,
-     "gap": -1675160,
-     "gap_today": -926150
-    }
-   ],
-   "start": 5093880,
-   "r_eq": 4.96,
-   "live_cost_month": 13960,
-   "live_cost_month_today": 7720
+   "house_growth": 2.5,
+   "equity_return": 7.0,
+   "sell_equities": 29278260,
+   "sell_treasury": 18575810,
+   "live_in": 8110290,
+   "rent_out": 6388070,
+   "live_then_rent": 6480820,
+   "best": "sell_equities"
   },
   {
-   "year": 2040,
-   "g": 0.05,
-   "rows": [
-    {
-     "option": "sell_stock",
-     "name": "Sell A, buy a stock index fund",
-     "wealth": 9447320,
-     "wealth_today": 5223190,
-     "asset": 9447320,
-     "first_cash": 0,
-     "cash_total": 0,
-     "tax_first": 0,
-     "rent_first": 0,
-     "gap": 0,
-     "gap_today": 0
-    },
-    {
-     "option": "sell_treasury",
-     "name": "Sell A, buy Treasuries",
-     "wealth": 8234100,
-     "wealth_today": 4552430,
-     "asset": 8234100,
-     "first_cash": 0,
-     "cash_total": 0,
-     "tax_first": 0,
-     "rent_first": 0,
-     "gap": -1213220,
-     "gap_today": -670760
-    },
-    {
-     "option": "rent",
-     "name": "Keep A and rent it out",
-     "wealth": 8534230,
-     "wealth_today": 4718360,
-     "asset": 8002690,
-     "first_cash": 37780,
-     "cash_total": 428140,
-     "tax_first": 73610,
-     "rent_first": 112080,
-     "gap": -913100,
-     "gap_today": -504830
-    },
-    {
-     "option": "live",
-     "name": "Move into A",
-     "wealth": 8000880,
-     "wealth_today": 4423490,
-     "asset": 8458380,
-     "first_cash": -32290,
-     "cash_total": -368650,
-     "tax_first": 56270,
-     "rent_first": 0,
-     "gap": -1446440,
-     "gap_today": -799700
-    }
-   ],
-   "start": 5824150,
-   "r_eq": 4.96,
-   "live_cost_month": 12050,
-   "live_cost_month_today": 6660
+   "house_growth": 2.5,
+   "equity_return": 9.0,
+   "sell_equities": 51215460,
+   "sell_treasury": 18575810,
+   "live_in": 8110290,
+   "rent_out": 6388070,
+   "live_then_rent": 6480820,
+   "best": "sell_equities"
   },
   {
-   "year": 2045,
-   "g": 0.03,
-   "rows": [
-    {
-     "option": "sell_stock",
-     "name": "Sell A, buy a stock index fund",
-     "wealth": 8366920,
-     "wealth_today": 4088590,
-     "asset": 8366920,
-     "first_cash": 0,
-     "cash_total": 0,
-     "tax_first": 0,
-     "rent_first": 0,
-     "gap": 0,
-     "gap_today": 0
-    },
-    {
-     "option": "sell_treasury",
-     "name": "Sell A, buy Treasuries",
-     "wealth": 7292440,
-     "wealth_today": 3563530,
-     "asset": 7292440,
-     "first_cash": 0,
-     "cash_total": 0,
-     "tax_first": 0,
-     "rent_first": 0,
-     "gap": -1074480,
-     "gap_today": -525060
-    },
-    {
-     "option": "rent",
-     "name": "Keep A and rent it out",
-     "wealth": 6872330,
-     "wealth_today": 3358240,
-     "asset": 6148200,
-     "first_cash": 51220,
-     "cash_total": 583480,
-     "tax_first": 65490,
-     "rent_first": 129930,
-     "gap": -1494590,
-     "gap_today": -730350
-    },
-    {
-     "option": "live",
-     "name": "Move into A",
-     "wealth": 6270860,
-     "wealth_today": 3064320,
-     "asset": 6572430,
-     "first_cash": -20670,
-     "cash_total": -243630,
-     "tax_first": 48920,
-     "rent_first": 0,
-     "gap": -2096070,
-     "gap_today": -1024270
-    }
-   ],
-   "start": 5158100,
-   "r_eq": 4.96,
-   "live_cost_month": 17470,
-   "live_cost_month_today": 8540
+   "house_growth": 4.0,
+   "equity_return": 5.0,
+   "sell_equities": 21825080,
+   "sell_treasury": 24480880,
+   "live_in": 15107350,
+   "rent_out": 12867130,
+   "live_then_rent": 12959880,
+   "best": "sell_treasury"
   },
   {
-   "year": 2045,
-   "g": 0.04,
-   "rows": [
-    {
-     "option": "sell_stock",
-     "name": "Sell A, buy a stock index fund",
-     "wealth": 10052910,
-     "wealth_today": 4912470,
-     "asset": 10052910,
-     "first_cash": 0,
-     "cash_total": 0,
-     "tax_first": 0,
-     "rent_first": 0,
-     "gap": 0,
-     "gap_today": 0
-    },
-    {
-     "option": "sell_treasury",
-     "name": "Sell A, buy Treasuries",
-     "wealth": 8761920,
-     "wealth_today": 4281610,
-     "asset": 8761920,
-     "first_cash": 0,
-     "cash_total": 0,
-     "tax_first": 0,
-     "rent_first": 0,
-     "gap": -1291000,
-     "gap_today": -630860
-    },
-    {
-     "option": "rent",
-     "name": "Keep A and rent it out",
-     "wealth": 8583500,
-     "wealth_today": 4194430,
-     "asset": 7926990,
-     "first_cash": 46580,
-     "cash_total": 528880,
-     "tax_first": 78410,
-     "rent_first": 129930,
-     "gap": -1469410,
-     "gap_today": -718040
-    },
-    {
-     "option": "live",
-     "name": "Move into A",
-     "wealth": 7945420,
-     "wealth_today": 3882620,
-     "asset": 8400330,
-     "first_cash": -31920,
-     "cash_total": -366760,
-     "tax_first": 60170,
-     "rent_first": 0,
-     "gap": -2107490,
-     "gap_today": -1029850
-    }
-   ],
-   "start": 6197490,
-   "r_eq": 4.96,
-   "live_cost_month": 17560,
-   "live_cost_month_today": 8580
+   "house_growth": 4.0,
+   "equity_return": 7.0,
+   "sell_equities": 38585540,
+   "sell_treasury": 24480880,
+   "live_in": 15107350,
+   "rent_out": 12867130,
+   "live_then_rent": 12959880,
+   "best": "sell_equities"
   },
   {
-   "year": 2045,
-   "g": 0.05,
-   "rows": [
-    {
-     "option": "sell_stock",
-     "name": "Sell A, buy a stock index fund",
-     "wealth": 12057440,
-     "wealth_today": 5892000,
-     "asset": 12057440,
-     "first_cash": 0,
-     "cash_total": 0,
-     "tax_first": 0,
-     "rent_first": 0,
-     "gap": 0,
-     "gap_today": 0
-    },
-    {
-     "option": "sell_treasury",
-     "name": "Sell A, buy Treasuries",
-     "wealth": 10509020,
-     "wealth_today": 5135350,
-     "asset": 10509020,
-     "first_cash": 0,
-     "cash_total": 0,
-     "tax_first": 0,
-     "rent_first": 0,
-     "gap": -1548420,
-     "gap_today": -756650
-    },
-    {
-     "option": "rent",
-     "name": "Keep A and rent it out",
-     "wealth": 10789810,
-     "wealth_today": 5272560,
-     "asset": 10213680,
-     "first_cash": 41060,
-     "cash_total": 463950,
-     "tax_first": 93780,
-     "rent_first": 129930,
-     "gap": -1267630,
-     "gap_today": -619440
-    },
-    {
-     "option": "live",
-     "name": "Move into A",
-     "wealth": 10105930,
-     "wealth_today": 4938380,
-     "asset": 10745410,
-     "first_cash": -45450,
-     "cash_total": -514960,
-     "tax_first": 73700,
-     "rent_first": 0,
-     "gap": -1951510,
-     "gap_today": -953630
-    }
-   ],
-   "start": 7433250,
-   "r_eq": 4.96,
-   "live_cost_month": 16260,
-   "live_cost_month_today": 7950
+   "house_growth": 4.0,
+   "equity_return": 9.0,
+   "sell_equities": 67496350,
+   "sell_treasury": 24480880,
+   "live_in": 15107350,
+   "rent_out": 12867130,
+   "live_then_rent": 12959880,
+   "best": "sell_equities"
   },
   {
-   "year": 2050,
-   "g": 0.03,
-   "rows": [
-    {
-     "option": "sell_stock",
-     "name": "Sell A, buy a stock index fund",
-     "wealth": 9699560,
-     "wealth_today": 4189290,
-     "asset": 9699560,
-     "first_cash": 0,
-     "cash_total": 0,
-     "tax_first": 0,
-     "rent_first": 0,
-     "gap": 0,
-     "gap_today": 0
-    },
-    {
-     "option": "sell_treasury",
-     "name": "Sell A, buy Treasuries",
-     "wealth": 8453940,
-     "wealth_today": 3651300,
-     "asset": 8453940,
-     "first_cash": 0,
-     "cash_total": 0,
-     "tax_first": 0,
-     "rent_first": 0,
-     "gap": -1245620,
-     "gap_today": -537990
-    },
-    {
-     "option": "rent",
-     "name": "Keep A and rent it out",
-     "wealth": 7971730,
-     "wealth_today": 3443030,
-     "asset": 7127450,
-     "first_cash": 59720,
-     "cash_total": 680290,
-     "tax_first": 75880,
-     "rent_first": 150630,
-     "gap": -1727830,
-     "gap_today": -746260
-    },
-    {
-     "option": "live",
-     "name": "Move into A",
-     "wealth": 7226460,
-     "wealth_today": 3121150,
-     "asset": 7590500,
-     "first_cash": -25040,
-     "cash_total": -294010,
-     "tax_first": 58300,
-     "rent_first": 0,
-     "gap": -2473090,
-     "gap_today": -1068140
-    }
-   ],
-   "start": 5979650,
-   "r_eq": 4.96,
-   "live_cost_month": 20610,
-   "live_cost_month_today": 8900
+   "house_growth": 5.5,
+   "equity_return": 5.0,
+   "sell_equities": 28649650,
+   "sell_treasury": 32135910,
+   "live_in": 28672410,
+   "rent_out": 25760690,
+   "live_then_rent": 25853440,
+   "best": "sell_treasury"
   },
   {
-   "year": 2050,
-   "g": 0.04,
-   "rows": [
-    {
-     "option": "sell_stock",
-     "name": "Sell A, buy a stock index fund",
-     "wealth": 12230910,
-     "wealth_today": 5282590,
-     "asset": 12230910,
-     "first_cash": 0,
-     "cash_total": 0,
-     "tax_first": 0,
-     "rent_first": 0,
-     "gap": 0,
-     "gap_today": 0
-    },
-    {
-     "option": "sell_treasury",
-     "name": "Sell A, buy Treasuries",
-     "wealth": 10660210,
-     "wealth_today": 4604200,
-     "asset": 10660210,
-     "first_cash": 0,
-     "cash_total": 0,
-     "tax_first": 0,
-     "rent_first": 0,
-     "gap": -1570690,
-     "gap_today": -678390
-    },
-    {
-     "option": "rent",
-     "name": "Keep A and rent it out",
-     "wealth": 10387160,
-     "wealth_today": 4486270,
-     "asset": 9644400,
-     "first_cash": 52750,
-     "cash_total": 598300,
-     "tax_first": 95280,
-     "rent_first": 150630,
-     "gap": -1843750,
-     "gap_today": -796320
-    },
-    {
-     "option": "live",
-     "name": "Move into A",
-     "wealth": 9581980,
-     "wealth_today": 4138510,
-     "asset": 10181180,
-     "first_cash": -42280,
-     "cash_total": -482840,
-     "tax_first": 75550,
-     "rent_first": 0,
-     "gap": -2648930,
-     "gap_today": -1144090
-    }
-   ],
-   "start": 7540190,
-   "r_eq": 4.96,
-   "live_cost_month": 22070,
-   "live_cost_month_today": 9530
+   "house_growth": 5.5,
+   "equity_return": 7.0,
+   "sell_equities": 50651000,
+   "sell_treasury": 32135910,
+   "live_in": 28672410,
+   "rent_out": 25760690,
+   "live_then_rent": 25853440,
+   "best": "sell_equities"
   },
   {
-   "year": 2050,
-   "g": 0.05,
-   "rows": [
-    {
-     "option": "sell_stock",
-     "name": "Sell A, buy a stock index fund",
-     "wealth": 15388690,
-     "wealth_today": 6646460,
-     "asset": 15388690,
-     "first_cash": 0,
-     "cash_total": 0,
-     "tax_first": 0,
-     "rent_first": 0,
-     "gap": 0,
-     "gap_today": 0
-    },
-    {
-     "option": "sell_treasury",
-     "name": "Sell A, buy Treasuries",
-     "wealth": 13412470,
-     "wealth_today": 5792920,
-     "asset": 13412470,
-     "first_cash": 0,
-     "cash_total": 0,
-     "tax_first": 0,
-     "rent_first": 0,
-     "gap": -1976220,
-     "gap_today": -853540
-    },
-    {
-     "option": "rent",
-     "name": "Keep A and rent it out",
-     "wealth": 13651660,
-     "wealth_today": 5896220,
-     "asset": 13035540,
-     "first_cash": 44060,
-     "cash_total": 496030,
-     "tax_first": 119490,
-     "rent_first": 150630,
-     "gap": -1737030,
-     "gap_today": -750230
-    },
-    {
-     "option": "live",
-     "name": "Move into A",
-     "wealth": 12767730,
-     "wealth_today": 5514450,
-     "asset": 13664300,
-     "first_cash": -64090,
-     "cash_total": -721620,
-     "tax_first": 97360,
-     "rent_first": 0,
-     "gap": -2620960,
-     "gap_today": -1132010
-    }
-   ],
-   "start": 9486920,
-   "r_eq": 4.96,
-   "live_cost_month": 21840,
-   "live_cost_month_today": 9430
+   "house_growth": 5.5,
+   "equity_return": 9.0,
+   "sell_equities": 88602050,
+   "sell_treasury": 32135910,
+   "live_in": 28672410,
+   "rent_out": 25760690,
+   "live_then_rent": 25853440,
+   "best": "sell_equities"
   }
  ],
- "matrix": [
-  {
-   "g": 0.03,
-   "rs": 0.05,
-   "sell": 7266960,
-   "rent": 6826810,
-   "live": 6289600,
-   "winner": "Sell"
-  },
-  {
-   "g": 0.03,
-   "rs": 0.06,
-   "sell": 7793710,
-   "rent": 6848900,
-   "live": 6280500,
-   "winner": "Sell"
-  },
-  {
-   "g": 0.03,
-   "rs": 0.07,
-   "sell": 8366920,
-   "rent": 6872330,
-   "live": 6270860,
-   "winner": "Sell"
-  },
-  {
-   "g": 0.03,
-   "rs": 0.08,
-   "sell": 8990220,
-   "rent": 6897160,
-   "live": 6260630,
-   "winner": "Sell"
-  },
-  {
-   "g": 0.04,
-   "rs": 0.05,
-   "sell": 8731300,
-   "rent": 8542200,
-   "live": 7973940,
-   "winner": "Sell"
-  },
-  {
-   "g": 0.04,
-   "rs": 0.06,
-   "sell": 9364190,
-   "rent": 8562240,
-   "live": 7960100,
-   "winner": "Sell"
-  },
-  {
-   "g": 0.04,
-   "rs": 0.07,
-   "sell": 10052910,
-   "rent": 8583500,
-   "live": 7945420,
-   "winner": "Sell"
-  },
-  {
-   "g": 0.04,
-   "rs": 0.08,
-   "sell": 10801810,
-   "rent": 8606050,
-   "live": 7929860,
-   "winner": "Sell"
-  },
-  {
-   "g": 0.05,
-   "rs": 0.05,
-   "sell": 10472300,
-   "rent": 10753500,
-   "live": 10146230,
-   "winner": "Rent"
-  },
-  {
-   "g": 0.05,
-   "rs": 0.06,
-   "sell": 11231390,
-   "rent": 10771120,
-   "live": 10126680,
-   "winner": "Sell"
-  },
-  {
-   "g": 0.05,
-   "rs": 0.07,
-   "sell": 12057440,
-   "rent": 10789810,
-   "live": 10105930,
-   "winner": "Sell"
-  },
-  {
-   "g": 0.05,
-   "rs": 0.08,
-   "sell": 12955660,
-   "rent": 10809620,
-   "live": 10083940,
-   "winner": "Sell"
-  },
-  {
-   "g": 0.06,
-   "rs": 0.05,
-   "sell": 12538820,
-   "rent": 13600560,
-   "live": 12944700,
-   "winner": "Rent"
-  },
-  {
-   "g": 0.06,
-   "rs": 0.06,
-   "sell": 13447710,
-   "rent": 13615300,
-   "live": 12918290,
-   "winner": "Rent"
-  },
-  {
-   "g": 0.06,
-   "rs": 0.07,
-   "sell": 14436770,
-   "rent": 13630930,
-   "live": 12890270,
-   "winner": "Sell"
-  },
-  {
-   "g": 0.06,
-   "rs": 0.08,
-   "sell": 15512230,
-   "rent": 13647500,
-   "live": 12860570,
-   "winner": "Sell"
-  }
- ],
- "sens": [
-  {
-   "case": "Rent for A is $5,000 a month, not $6,500",
-   "sell_stock": 10052910,
-   "sell_treasury": 8761920,
-   "rent": 8299080,
-   "live": 7945420,
-   "rent_change": -284420,
-   "live_change": 0,
-   "winner": "Sell A, buy a stock index fund"
-  },
-  {
-   "case": "Rent for A is $8,000 a month, not $6,500",
-   "sell_stock": 10052910,
-   "sell_treasury": 8761920,
-   "rent": 8867930,
-   "live": 7945420,
-   "rent_change": 284420,
-   "live_change": 0,
-   "winner": "Sell A, buy a stock index fund"
-  },
-  {
-   "case": "Insurance costs three times the owner's guess",
-   "sell_stock": 10052910,
-   "sell_treasury": 8761920,
-   "rent": 8538960,
-   "live": 7878640,
-   "rent_change": -44540,
-   "live_change": -66780,
-   "winner": "Sell A, buy a stock index fund"
-  },
-  {
-   "case": "The pre-2021 exclusion is restored (proposal 25-0017)",
-   "sell_stock": 10052910,
-   "sell_treasury": 8761920,
-   "rent": 9198390,
-   "live": 8618490,
-   "rent_change": 614890,
-   "live_change": 673070,
-   "winner": "Sell A, buy a stock index fund"
-  },
-  {
-   "case": "Stocks return 4.0% a year instead of 7.0%",
-   "sell_stock": 8150150,
-   "sell_treasury": 8761920,
-   "rent": 8523320,
-   "live": 7986980,
-   "rent_change": -60180,
-   "live_change": 41560,
-   "winner": "Sell A, buy Treasuries"
-  },
-  {
-   "case": "Inflation runs 4.0% a year instead of 2.5%",
-   "sell_stock": 10052910,
-   "sell_treasury": 8761920,
-   "rent": 8513650,
-   "live": 7851630,
-   "rent_change": -69850,
-   "live_change": -93790,
-   "winner": "Sell A, buy a stock index fund"
-  },
-  {
-   "case": "House prices do not rise for ten years",
-   "sell_stock": 4771540,
-   "sell_treasury": 4158780,
-   "rent": 3670910,
-   "live": 2958070,
-   "rent_change": -4912590,
-   "live_change": -4987350,
-   "winner": "Sell A, buy a stock index fund"
-  }
- ],
- "breakeven": {
-  "stock_return": 4.7,
-  "house_growth": 7.0,
-  "house_growth_vs_treasury": 4.5,
-  "rent_month": 14250,
-  "rent_month_vs_treasury": 7440
+ "costs_a_now": {
+  "water": 1500,
+  "electricity": -180,
+  "insurance": 1500,
+  "maintenance": 15500,
+  "property_tax": 7360
  },
- "law": {
-  "year": 2045,
-  "tax_live_current": 60170,
-  "tax_rent_current": 78410,
-  "tax_restored": 10810
+ "costs_b_now": {
+  "water": 4380,
+  "electricity": 600,
+  "insurance": 1500,
+  "maintenance": 27000,
+  "property_tax": 2470,
+  "rent": 85800
  },
- "b_reset": [
+ "series_table": [
   {
-   "year": 2040,
-   "value": 3117020,
-   "assessed_keep": 153770,
-   "tax_keep": 3400,
-   "tax_reset": 38410,
-   "increase": 35010,
-   "rent": 105680,
-   "net_keep": 72590,
-   "net_reset": 37570
+   "year": 1975,
+   "cpi": 53.825,
+   "cpi_chg": null,
+   "hpi_a": null,
+   "hpi_a_chg": null,
+   "hpi_b": null,
+   "hpi_b_chg": null,
+   "gs10": 7.99,
+   "gs10_chg": null
   },
   {
-   "year": 2045,
-   "value": 3792330,
-   "assessed_keep": 169770,
-   "tax_keep": 3790,
-   "tax_reset": 46600,
-   "increase": 42800,
-   "rent": 113850,
-   "net_keep": 76740,
-   "net_reset": 33940
+   "year": 1976,
+   "cpi": 56.933,
+   "cpi_chg": 0.0577,
+   "hpi_a": 21.45,
+   "hpi_a_chg": null,
+   "hpi_b": 21.86,
+   "hpi_b_chg": null,
+   "gs10": 7.61,
+   "gs10_chg": -0.0476
   },
   {
-   "year": 2050,
-   "value": 4613950,
-   "assessed_keep": 187440,
-   "tax_keep": 4240,
-   "tax_reset": 56540,
-   "increase": 52300,
-   "rent": 122650,
-   "net_keep": 81030,
-   "net_reset": 28720
-  }
- ],
- "b_rentcap": {
-  "state_rate": 7.5,
-  "local_rate": 1.5,
-  "state_ceiling": 10.0,
-  "rows": [
-   {
-    "year": 2040,
-    "rent_local": 105680,
-    "rent_state": 236160,
-    "diff_first_year": 130480,
-    "ten_year_local": 1074560,
-    "ten_year_state": 3173920,
-    "ten_year_diff": 2099370
-   },
-   {
-    "year": 2045,
-    "rent_local": 113850,
-    "rent_state": 339040,
-    "diff_first_year": 225190,
-    "ten_year_local": 1157600,
-    "ten_year_state": 4556580,
-    "ten_year_diff": 3398970
-   },
-   {
-    "year": 2050,
-    "rent_local": 122650,
-    "rent_state": 486730,
-    "diff_first_year": 364080,
-    "ten_year_local": 1247070,
-    "ten_year_state": 6541560,
-    "ten_year_diff": 5294490
-   }
-  ]
- },
- "estate": [
-  {
-   "year": 2026,
-   "exclusion": 15000000,
-   "exclusion_couple": 30000000,
-   "status": "Verified",
-   "homes_low": 4900000,
-   "room_single_low": 10100000,
-   "room_couple_low": 25100000,
-   "homes_base": 4900000,
-   "room_single_base": 10100000,
-   "room_couple_base": 25100000,
-   "homes_high": 4900000,
-   "room_single_high": 10100000,
-   "room_couple_high": 25100000,
-   "room_single_half": 2600000
+   "year": 1977,
+   "cpi": 60.617,
+   "cpi_chg": 0.0647,
+   "hpi_a": 27.55,
+   "hpi_a_chg": 0.2844,
+   "hpi_b": 26.94,
+   "hpi_b_chg": 0.2324,
+   "gs10": 7.42,
+   "gs10_chg": -0.025
   },
   {
-   "year": 2027,
-   "exclusion": 15480000,
-   "exclusion_couple": 30960000,
-   "status": "Verified",
-   "homes_low": 5047000,
-   "room_single_low": 10433000,
-   "room_couple_low": 25913000,
-   "homes_base": 5096000,
-   "room_single_base": 10384000,
-   "room_couple_base": 25864000,
-   "homes_high": 5145000,
-   "room_single_high": 10335000,
-   "room_couple_high": 25815000,
-   "room_single_half": 2644000
+   "year": 1978,
+   "cpi": 65.242,
+   "cpi_chg": 0.0763,
+   "hpi_a": 31.66,
+   "hpi_a_chg": 0.1492,
+   "hpi_b": 30.36,
+   "hpi_b_chg": 0.1269,
+   "gs10": 8.41,
+   "gs10_chg": 0.1334
   },
   {
-   "year": 2030,
-   "exclusion": 16670270,
-   "exclusion_couple": 33340530,
-   "status": "Scenario",
-   "homes_low": 5514990,
-   "room_single_low": 11155270,
-   "room_couple_low": 27825540,
-   "homes_base": 5732310,
-   "room_single_base": 10937960,
-   "room_couple_base": 27608230,
-   "homes_high": 5955980,
-   "room_single_high": 10714290,
-   "room_couple_high": 27384550,
-   "room_single_half": 2602830
+   "year": 1979,
+   "cpi": 72.583,
+   "cpi_chg": 0.1125,
+   "hpi_a": 37.28,
+   "hpi_a_chg": 0.1775,
+   "hpi_b": 36.8,
+   "hpi_b_chg": 0.2121,
+   "gs10": 9.44,
+   "gs10_chg": 0.1225
   },
   {
-   "year": 2035,
-   "exclusion": 18860880,
-   "exclusion_couple": 37721750,
-   "status": "Scenario",
-   "homes_low": 6393390,
-   "room_single_low": 12467490,
-   "room_couple_low": 31328370,
-   "homes_base": 6974230,
-   "room_single_base": 11886650,
-   "room_couple_base": 30747530,
-   "homes_high": 7601510,
-   "room_single_high": 11259370,
-   "room_couple_high": 30120250,
-   "room_single_half": 2456210
+   "year": 1980,
+   "cpi": 82.383,
+   "cpi_chg": 0.135,
+   "hpi_a": 45.37,
+   "hpi_a_chg": 0.217,
+   "hpi_b": 44.2,
+   "hpi_b_chg": 0.2011,
+   "gs10": 11.46,
+   "gs10_chg": 0.214
   },
   {
-   "year": 2040,
-   "exclusion": 21339350,
-   "exclusion_couple": 42678700,
-   "status": "Scenario",
-   "homes_low": 7411690,
-   "room_single_low": 13927660,
-   "room_couple_low": 35267010,
-   "homes_base": 8485210,
-   "room_single_base": 12854140,
-   "room_couple_base": 34193490,
-   "homes_high": 9701660,
-   "room_single_high": 11637690,
-   "room_couple_high": 32977040,
-   "room_single_half": 2184460
+   "year": 1981,
+   "cpi": 90.933,
+   "cpi_chg": 0.1038,
+   "hpi_a": 50.7,
+   "hpi_a_chg": 0.1175,
+   "hpi_b": 45.9,
+   "hpi_b_chg": 0.0385,
+   "gs10": 13.91,
+   "gs10_chg": 0.2138
   },
   {
-   "year": 2045,
-   "exclusion": 24143520,
-   "exclusion_couple": 48287030,
-   "status": "Scenario",
-   "homes_low": 8592180,
-   "room_single_low": 15551340,
-   "room_couple_low": 39694850,
-   "homes_base": 10323560,
-   "room_single_base": 13819960,
-   "room_couple_base": 37963470,
-   "homes_high": 12382060,
-   "room_single_high": 11761460,
-   "room_couple_high": 35904980,
-   "room_single_half": 1748200
+   "year": 1982,
+   "cpi": 96.533,
+   "cpi_chg": 0.0616,
+   "hpi_a": 48.13,
+   "hpi_a_chg": -0.0507,
+   "hpi_b": 42.94,
+   "hpi_b_chg": -0.0645,
+   "gs10": 13.0,
+   "gs10_chg": -0.0654
   },
   {
-   "year": 2050,
-   "exclusion": 27316170,
-   "exclusion_couple": 54632350,
-   "status": "Scenario",
-   "homes_low": 9960690,
-   "room_single_low": 17355480,
-   "room_couple_low": 44671660,
-   "homes_base": 12560190,
-   "room_single_base": 14755980,
-   "room_couple_base": 42072160,
-   "homes_high": 15802990,
-   "room_single_high": 11513180,
-   "room_couple_high": 38829360,
-   "room_single_half": 1097900
-  }
- ],
- "tax_sens": {
-  "year": 2045,
-  "threshold": 1000000,
-  "base": 10052910,
-  "with_surcharge": 10016750,
-  "delta": -36170
- },
- "stress": [
-  {
-   "id": "S0",
-   "name": "Baseline (reference)",
-   "inflation": 2.5,
-   "house": 4.0,
-   "stocks": 7.0,
-   "treasury": 4.88,
-   "note": "The assumption register: 2.5% inflation, 4% house growth, stocks 7%, 10-year Treasury 4.88%.",
-   "deflate": 1.2801,
-   "sell_stock": 10052910,
-   "sell_stock_today": 7853320,
-   "sell_stock_gap": 0,
-   "sell_treasury": 8761920,
-   "sell_treasury_today": 6844800,
-   "sell_treasury_gap": -1291000,
-   "rent": 8583500,
-   "rent_today": 6705420,
-   "rent_gap": -1469410,
-   "live": 7945420,
-   "live_today": 6206950,
-   "live_gap": -2107490,
-   "winner": "Sell A, buy a stock index fund",
-   "winner_key": "sell_stock"
+   "year": 1983,
+   "cpi": 99.583,
+   "cpi_chg": 0.0316,
+   "hpi_a": 51.93,
+   "hpi_a_chg": 0.079,
+   "hpi_b": 49.22,
+   "hpi_b_chg": 0.1463,
+   "gs10": 11.11,
+   "gs10_chg": -0.1454
   },
   {
-   "id": "S1",
-   "name": "High inflation, flat real house (1970s analogue)",
-   "inflation": 6.0,
-   "house": 6.0,
-   "stocks": 4.0,
-   "treasury": 8.0,
-   "note": "CPI 12-month peaked at 14.8% in March 1980; inflation ran above 12% with unemployment above 7% in 1974.",
-   "deflate": 1.7908,
-   "sell_stock": 11704250,
-   "sell_stock_today": 6535590,
-   "sell_stock_gap": -3900790,
-   "sell_treasury": 15605040,
-   "sell_treasury_today": 8713770,
-   "sell_treasury_gap": 0,
-   "rent": 13396850,
-   "rent_today": 7480730,
-   "rent_gap": -2208190,
-   "live": 12703810,
-   "live_today": 7093740,
-   "live_gap": -2901230,
-   "winner": "Sell A, buy Treasuries",
-   "winner_key": "sell_treasury"
+   "year": 1984,
+   "cpi": 103.933,
+   "cpi_chg": 0.0437,
+   "hpi_a": 54.99,
+   "hpi_a_chg": 0.0589,
+   "hpi_b": 51.53,
+   "hpi_b_chg": 0.0469,
+   "gs10": 12.44,
+   "gs10_chg": 0.1197
   },
   {
-   "id": "S2",
-   "name": "Deflationary slump (1930s / Japan-adjacent)",
-   "inflation": 0.0,
-   "house": -1.0,
-   "stocks": 1.0,
-   "treasury": 1.0,
-   "note": "Japan's lost decades: falling prices and land values. DJIA fell 89% from 3 Sep 1929 to 8 Jul 1932.",
-   "deflate": 1.0,
-   "sell_stock": 2574560,
-   "sell_stock_today": 2574560,
-   "sell_stock_gap": -316320,
-   "sell_treasury": 2611530,
-   "sell_treasury_today": 2611530,
-   "sell_treasury_gap": -279350,
-   "rent": 2890880,
-   "rent_today": 2890880,
-   "rent_gap": 0,
-   "live": 2340630,
-   "live_today": 2340630,
-   "live_gap": -550250,
-   "winner": "Keep A and rent it out",
-   "winner_key": "rent"
+   "year": 1985,
+   "cpi": 107.6,
+   "cpi_chg": 0.0353,
+   "hpi_a": 59.28,
+   "hpi_a_chg": 0.078,
+   "hpi_b": 55.86,
+   "hpi_b_chg": 0.084,
+   "gs10": 10.62,
+   "gs10_chg": -0.1463
   },
   {
-   "id": "S3",
-   "name": "Lost decade for equities",
-   "inflation": 2.5,
-   "house": 3.0,
-   "stocks": 0.0,
-   "treasury": 3.0,
-   "note": "Stocks flat for ten years. The S&P 500's 2000s decade managed about zero nominal total return.",
-   "deflate": 1.2801,
-   "sell_stock": 4944760,
-   "sell_stock_today": 3862840,
-   "sell_stock_gap": -1776550,
-   "sell_treasury": 6390770,
-   "sell_treasury_today": 4992460,
-   "sell_treasury_gap": -330540,
-   "rent": 6721310,
-   "rent_today": 5250680,
-   "rent_gap": 0,
-   "live": 6333080,
-   "live_today": 4947390,
-   "live_gap": -388240,
-   "winner": "Keep A and rent it out",
-   "winner_key": "rent"
+   "year": 1986,
+   "cpi": 109.692,
+   "cpi_chg": 0.0194,
+   "hpi_a": 63.6,
+   "hpi_a_chg": 0.0729,
+   "hpi_b": 62.14,
+   "hpi_b_chg": 0.1124,
+   "gs10": 7.68,
+   "gs10_chg": -0.2768
   },
   {
-   "id": "S4",
-   "name": "Crash at the inheritance, then recovery (2008 analogue)",
-   "inflation": 2.0,
-   "house": "path",
-   "stocks": "path",
-   "treasury": 2.0,
-   "note": "Home prices fell about 30% from mid-2006 to mid-2009; the S&P 500 fell 57% from October 2007 to March 2009.",
-   "deflate": 1.219,
-   "sell_stock": 6833840,
-   "sell_stock_today": 5606130,
-   "sell_stock_gap": -319010,
-   "sell_treasury": 7152850,
-   "sell_treasury_today": 5867830,
-   "sell_treasury_gap": 0,
-   "rent": 6525830,
-   "rent_today": 5353460,
-   "rent_gap": -627020,
-   "live": 5888400,
-   "live_today": 4830540,
-   "live_gap": -1264450,
-   "winner": "Sell A, buy Treasuries",
-   "winner_key": "sell_treasury"
+   "year": 1987,
+   "cpi": 113.617,
+   "cpi_chg": 0.0358,
+   "hpi_a": 69.32,
+   "hpi_a_chg": 0.0899,
+   "hpi_b": 72.73,
+   "hpi_b_chg": 0.1704,
+   "gs10": 8.38,
+   "gs10_chg": 0.0911
   },
   {
-   "id": "S5",
-   "name": "Rate shock (10-year Treasury near double today)",
-   "inflation": 5.5,
-   "house": 2.5,
-   "stocks": 5.0,
-   "treasury": 8.5,
-   "note": "The 10-year Treasury yielded 15.84% on 30 September 1981; 9.99% in June 2023; 4.88% in November 2026.",
-   "deflate": 1.7081,
-   "sell_stock": 6625200,
-   "sell_stock_today": 3878590,
-   "sell_stock_gap": -1905880,
-   "sell_treasury": 8531070,
-   "sell_treasury_today": 4994350,
-   "sell_treasury_gap": 0,
-   "rent": 5962450,
-   "rent_today": 3490600,
-   "rent_gap": -2568620,
-   "live": 5377330,
-   "live_today": 3148050,
-   "live_gap": -3153750,
-   "winner": "Sell A, buy Treasuries",
-   "winner_key": "sell_treasury"
+   "year": 1988,
+   "cpi": 118.275,
+   "cpi_chg": 0.041,
+   "hpi_a": 82.23,
+   "hpi_a_chg": 0.1862,
+   "hpi_b": 89.7,
+   "hpi_b_chg": 0.2333,
+   "gs10": 8.85,
+   "gs10_chg": 0.0561
   },
   {
-   "id": "S6",
-   "name": "Boom",
-   "inflation": 3.0,
-   "house": 6.0,
-   "stocks": 9.0,
-   "treasury": 5.5,
-   "note": "Houses and stocks both strong; inflation modestly above target.",
-   "deflate": 1.3439,
-   "sell_stock": 16680790,
-   "sell_stock_today": 12412070,
-   "sell_stock_gap": 0,
-   "sell_treasury": 13137590,
-   "sell_treasury_today": 9775600,
-   "sell_treasury_gap": -3543200,
-   "rent": 13642930,
-   "rent_today": 10151620,
-   "rent_gap": -3037860,
-   "live": 12800000,
-   "live_today": 9524400,
-   "live_gap": -3880790,
-   "winner": "Sell A, buy a stock index fund",
-   "winner_key": "sell_stock"
-  }
- ],
- "stress_extras": {
-  "exclusion_real": [
-   {
-    "year": 2040,
-    "inflation": "2.5%",
-    "home_sale_single": 176930,
-    "home_sale_joint": 353860
-   },
-   {
-    "year": 2040,
-    "inflation": "5.0%",
-    "home_sale_single": 126270,
-    "home_sale_joint": 252530
-   },
-   {
-    "year": 2040,
-    "inflation": "8.0%",
-    "home_sale_single": 85120,
-    "home_sale_joint": 170230
-   },
-   {
-    "year": 2045,
-    "inflation": "2.5%",
-    "home_sale_single": 156380,
-    "home_sale_joint": 312760
-   },
-   {
-    "year": 2045,
-    "inflation": "5.0%",
-    "home_sale_single": 98930,
-    "home_sale_joint": 197870
-   },
-   {
-    "year": 2045,
-    "inflation": "8.0%",
-    "home_sale_single": 57930,
-    "home_sale_joint": 115860
-   },
-   {
-    "year": 2050,
-    "inflation": "2.5%",
-    "home_sale_single": 138220,
-    "home_sale_joint": 276440
-   },
-   {
-    "year": 2050,
-    "inflation": "5.0%",
-    "home_sale_single": 77520,
-    "home_sale_joint": 155030
-   },
-   {
-    "year": 2050,
-    "inflation": "8.0%",
-    "home_sale_single": 39420,
-    "home_sale_joint": 78850
-   }
-  ],
-  "purchasing_power": [
-   {
-    "inflation": "2.5%",
-    "2030": 0.91,
-    "2040": 0.71,
-    "2050": 0.55,
-    "2060": 0.43
-   },
-   {
-    "inflation": "5.0%",
-    "2030": 0.82,
-    "2040": 0.51,
-    "2050": 0.31,
-    "2060": 0.19
-   },
-   {
-    "inflation": "8.0%",
-    "2030": 0.74,
-    "2040": 0.34,
-    "2050": 0.16,
-    "2060": 0.07
-   }
-  ]
- },
- "stress_meta": {
-  "gfc_house": [
-   -0.12,
-   -0.08,
-   -0.03,
-   0.02,
-   0.035,
-   0.04,
-   0.04,
-   0.04,
-   0.04,
-   0.04
-  ],
-  "gfc_stock": [
-   -0.45,
-   0.06,
-   0.09,
-   0.09,
-   0.09,
-   0.09,
-   0.09,
-   0.09,
-   0.09,
-   0.09
-  ]
- },
- "now": {
-  "a": {
-   "year": 2026,
-   "value_low": 3100000,
-   "value_base": 3100000,
-   "value_high": 3100000,
-   "assessed": 550540,
-   "property_tax": 7340,
-   "insurance": 1500,
-   "water": 1500,
-   "electricity": -180,
-   "maintenance": 9300,
-   "total_cost": 19460
+   "year": 1989,
+   "cpi": 123.942,
+   "cpi_chg": 0.0479,
+   "hpi_a": 107.06,
+   "hpi_a_chg": 0.302,
+   "hpi_b": 108.63,
+   "hpi_b_chg": 0.211,
+   "gs10": 8.5,
+   "gs10_chg": -0.0395
   },
-  "b": {
-   "year": 2026,
-   "value_low": 1800000,
-   "value_base": 1800000,
-   "value_high": 1800000,
-   "assessed": 116540,
-   "property_tax": 2490,
-   "rent": 85800,
-   "vacancy": 4290,
-   "insurance": 1500,
-   "water": 4380,
-   "electricity": 600,
-   "maintenance": 10800,
-   "net_income": 61740
-  }
- },
- "roll_a": [
+  {
+   "year": 1990,
+   "cpi": 130.658,
+   "cpi_chg": 0.0542,
+   "hpi_a": 110.67,
+   "hpi_a_chg": 0.0337,
+   "hpi_b": 112.32,
+   "hpi_b_chg": 0.034,
+   "gs10": 8.55,
+   "gs10_chg": 0.0059
+  },
+  {
+   "year": 1991,
+   "cpi": 136.167,
+   "cpi_chg": 0.0422,
+   "hpi_a": 106.17,
+   "hpi_a_chg": -0.0407,
+   "hpi_b": 106.96,
+   "hpi_b_chg": -0.0477,
+   "gs10": 7.86,
+   "gs10_chg": -0.0807
+  },
+  {
+   "year": 1992,
+   "cpi": 140.308,
+   "cpi_chg": 0.0304,
+   "hpi_a": 104.84,
+   "hpi_a_chg": -0.0125,
+   "hpi_b": 105.1,
+   "hpi_b_chg": -0.0174,
+   "gs10": 7.01,
+   "gs10_chg": -0.1081
+  },
+  {
+   "year": 1993,
+   "cpi": 144.475,
+   "cpi_chg": 0.0297,
+   "hpi_a": 102.19,
+   "hpi_a_chg": -0.0253,
+   "hpi_b": 102.05,
+   "hpi_b_chg": -0.029,
+   "gs10": 5.87,
+   "gs10_chg": -0.1626
+  },
+  {
+   "year": 1994,
+   "cpi": 148.225,
+   "cpi_chg": 0.026,
+   "hpi_a": 100.16,
+   "hpi_a_chg": -0.0199,
+   "hpi_b": 100.14,
+   "hpi_b_chg": -0.0187,
+   "gs10": 7.08,
+   "gs10_chg": 0.2061
+  },
+  {
+   "year": 1995,
+   "cpi": 152.383,
+   "cpi_chg": 0.0281,
+   "hpi_a": 101.39,
+   "hpi_a_chg": 0.0123,
+   "hpi_b": 100.48,
+   "hpi_b_chg": 0.0034,
+   "gs10": 6.58,
+   "gs10_chg": -0.0706
+  },
+  {
+   "year": 1996,
+   "cpi": 156.858,
+   "cpi_chg": 0.0294,
+   "hpi_a": 105.46,
+   "hpi_a_chg": 0.0401,
+   "hpi_b": 101.83,
+   "hpi_b_chg": 0.0134,
+   "gs10": 6.44,
+   "gs10_chg": -0.0213
+  },
+  {
+   "year": 1997,
+   "cpi": 160.525,
+   "cpi_chg": 0.0234,
+   "hpi_a": 117.15,
+   "hpi_a_chg": 0.1108,
+   "hpi_b": 109.85,
+   "hpi_b_chg": 0.0788,
+   "gs10": 6.35,
+   "gs10_chg": -0.014
+  },
+  {
+   "year": 1998,
+   "cpi": 163.008,
+   "cpi_chg": 0.0155,
+   "hpi_a": 133.07,
+   "hpi_a_chg": 0.1359,
+   "hpi_b": 123.23,
+   "hpi_b_chg": 0.1218,
+   "gs10": 5.26,
+   "gs10_chg": -0.1717
+  },
+  {
+   "year": 1999,
+   "cpi": 166.583,
+   "cpi_chg": 0.0219,
+   "hpi_a": 148.53,
+   "hpi_a_chg": 0.1162,
+   "hpi_b": 140.02,
+   "hpi_b_chg": 0.1362,
+   "gs10": 5.64,
+   "gs10_chg": 0.0722
+  },
+  {
+   "year": 2000,
+   "cpi": 172.192,
+   "cpi_chg": 0.0337,
+   "hpi_a": 188.44,
+   "hpi_a_chg": 0.2687,
+   "hpi_b": 172.85,
+   "hpi_b_chg": 0.2345,
+   "gs10": 6.03,
+   "gs10_chg": 0.0691
+  },
+  {
+   "year": 2001,
+   "cpi": 177.042,
+   "cpi_chg": 0.0282,
+   "hpi_a": 210.46,
+   "hpi_a_chg": 0.1169,
+   "hpi_b": 193.25,
+   "hpi_b_chg": 0.118,
+   "gs10": 5.02,
+   "gs10_chg": -0.1675
+  },
+  {
+   "year": 2002,
+   "cpi": 179.867,
+   "cpi_chg": 0.016,
+   "hpi_a": 211.62,
+   "hpi_a_chg": 0.0055,
+   "hpi_b": 201.92,
+   "hpi_b_chg": 0.0449,
+   "gs10": 4.61,
+   "gs10_chg": -0.0817
+  },
+  {
+   "year": 2003,
+   "cpi": 184.0,
+   "cpi_chg": 0.023,
+   "hpi_a": 217.22,
+   "hpi_a_chg": 0.0265,
+   "hpi_b": 212.5,
+   "hpi_b_chg": 0.0524,
+   "gs10": 4.02,
+   "gs10_chg": -0.128
+  },
+  {
+   "year": 2004,
+   "cpi": 188.908,
+   "cpi_chg": 0.0267,
+   "hpi_a": 240.22,
+   "hpi_a_chg": 0.1059,
+   "hpi_b": 240.23,
+   "hpi_b_chg": 0.1305,
+   "gs10": 4.27,
+   "gs10_chg": 0.0622
+  },
+  {
+   "year": 2005,
+   "cpi": 195.267,
+   "cpi_chg": 0.0337,
+   "hpi_a": 290.39,
+   "hpi_a_chg": 0.2089,
+   "hpi_b": 286.36,
+   "hpi_b_chg": 0.192,
+   "gs10": 4.29,
+   "gs10_chg": 0.0047
+  },
+  {
+   "year": 2006,
+   "cpi": 201.558,
+   "cpi_chg": 0.0322,
+   "hpi_a": 316.97,
+   "hpi_a_chg": 0.0915,
+   "hpi_b": 307.8,
+   "hpi_b_chg": 0.0749,
+   "gs10": 4.79,
+   "gs10_chg": 0.1166
+  },
+  {
+   "year": 2007,
+   "cpi": 207.344,
+   "cpi_chg": 0.0287,
+   "hpi_a": 310.21,
+   "hpi_a_chg": -0.0213,
+   "hpi_b": 304.73,
+   "hpi_b_chg": -0.01,
+   "gs10": 4.63,
+   "gs10_chg": -0.0334
+  },
+  {
+   "year": 2008,
+   "cpi": 215.254,
+   "cpi_chg": 0.0381,
+   "hpi_a": 274.95,
+   "hpi_a_chg": -0.1137,
+   "hpi_b": 277.71,
+   "hpi_b_chg": -0.0887,
+   "gs10": 3.67,
+   "gs10_chg": -0.2073
+  },
+  {
+   "year": 2009,
+   "cpi": 214.565,
+   "cpi_chg": -0.0032,
+   "hpi_a": 241.08,
+   "hpi_a_chg": -0.1232,
+   "hpi_b": 253.68,
+   "hpi_b_chg": -0.0865,
+   "gs10": 3.26,
+   "gs10_chg": -0.1117
+  },
+  {
+   "year": 2010,
+   "cpi": 218.076,
+   "cpi_chg": 0.0164,
+   "hpi_a": 241.13,
+   "hpi_a_chg": 0.0002,
+   "hpi_b": 249.12,
+   "hpi_b_chg": -0.018,
+   "gs10": 3.21,
+   "gs10_chg": -0.0153
+  },
+  {
+   "year": 2011,
+   "cpi": 224.923,
+   "cpi_chg": 0.0314,
+   "hpi_a": 235.92,
+   "hpi_a_chg": -0.0216,
+   "hpi_b": 240.84,
+   "hpi_b_chg": -0.0332,
+   "gs10": 2.79,
+   "gs10_chg": -0.1308
+  },
+  {
+   "year": 2012,
+   "cpi": 229.586,
+   "cpi_chg": 0.0207,
+   "hpi_a": 242.71,
+   "hpi_a_chg": 0.0288,
+   "hpi_b": 247.39,
+   "hpi_b_chg": 0.0272,
+   "gs10": 1.8,
+   "gs10_chg": -0.3548
+  },
+  {
+   "year": 2013,
+   "cpi": 232.952,
+   "cpi_chg": 0.0147,
+   "hpi_a": 276.93,
+   "hpi_a_chg": 0.141,
+   "hpi_b": 281.32,
+   "hpi_b_chg": 0.1372,
+   "gs10": 2.35,
+   "gs10_chg": 0.3056
+  },
   {
    "year": 2014,
-   "bill": 5970,
-   "assessed": 440310,
-   "bill_pct": null,
-   "assessed_pct": null,
-   "factor": null,
-   "match": null
+   "cpi": 236.715,
+   "cpi_chg": 0.0162,
+   "hpi_a": 309.95,
+   "hpi_a_chg": 0.1192,
+   "hpi_b": 318.17,
+   "hpi_b_chg": 0.131,
+   "gs10": 2.54,
+   "gs10_chg": 0.0809
   },
   {
    "year": 2015,
-   "bill": 6130,
-   "assessed": 449100,
-   "bill_pct": 2.68,
-   "assessed_pct": 2.0,
-   "factor": 1.998,
-   "match": true
+   "cpi": 237.002,
+   "cpi_chg": 0.0012,
+   "hpi_a": 341.11,
+   "hpi_a_chg": 0.1005,
+   "hpi_b": 356.82,
+   "hpi_b_chg": 0.1215,
+   "gs10": 2.14,
+   "gs10_chg": -0.1575
   },
   {
    "year": 2016,
-   "bill": 6410,
-   "assessed": 455950,
-   "bill_pct": 4.57,
-   "assessed_pct": 1.53,
-   "factor": 1.525,
-   "match": true
+   "cpi": 240.005,
+   "cpi_chg": 0.0127,
+   "hpi_a": 368.23,
+   "hpi_a_chg": 0.0795,
+   "hpi_b": 388.88,
+   "hpi_b_chg": 0.0898,
+   "gs10": 1.84,
+   "gs10_chg": -0.1402
   },
   {
    "year": 2017,
-   "bill": 6380,
-   "assessed": 465070,
-   "bill_pct": -0.47,
-   "assessed_pct": 2.0,
-   "factor": 2.0,
-   "match": true
+   "cpi": 245.121,
+   "cpi_chg": 0.0213,
+   "hpi_a": 384.97,
+   "hpi_a_chg": 0.0455,
+   "hpi_b": 406.91,
+   "hpi_b_chg": 0.0464,
+   "gs10": 2.33,
+   "gs10_chg": 0.2663
   },
   {
    "year": 2018,
-   "bill": 6380,
-   "assessed": 474370,
-   "bill_pct": 0.0,
-   "assessed_pct": 2.0,
-   "factor": 2.0,
-   "match": true
+   "cpi": 251.1,
+   "cpi_chg": 0.0244,
+   "hpi_a": 423.13,
+   "hpi_a_chg": 0.0991,
+   "hpi_b": 443.63,
+   "hpi_b_chg": 0.0902,
+   "gs10": 2.91,
+   "gs10_chg": 0.2489
   },
   {
    "year": 2019,
-   "bill": 6570,
-   "assessed": 483850,
-   "bill_pct": 2.98,
-   "assessed_pct": 2.0,
-   "factor": 2.0,
-   "match": true
+   "cpi": 255.653,
+   "cpi_chg": 0.0181,
+   "hpi_a": 418.45,
+   "hpi_a_chg": -0.0111,
+   "hpi_b": 441.8,
+   "hpi_b_chg": -0.0041,
+   "gs10": 2.14,
+   "gs10_chg": -0.2646
   },
   {
    "year": 2020,
-   "bill": 6570,
-   "assessed": 493530,
-   "bill_pct": 0.0,
-   "assessed_pct": 2.0,
-   "factor": 2.0,
-   "match": true
+   "cpi": 258.856,
+   "cpi_chg": 0.0125,
+   "hpi_a": 417.45,
+   "hpi_a_chg": -0.0024,
+   "hpi_b": 429.48,
+   "hpi_b_chg": -0.0279,
+   "gs10": 0.89,
+   "gs10_chg": -0.5841
   },
   {
    "year": 2021,
-   "bill": 6660,
-   "assessed": 498640,
-   "bill_pct": 1.37,
-   "assessed_pct": 1.04,
-   "factor": 1.036,
-   "match": true
+   "cpi": 270.973,
+   "cpi_chg": 0.0468,
+   "hpi_a": 443.11,
+   "hpi_a_chg": 0.0615,
+   "hpi_b": 434.92,
+   "hpi_b_chg": 0.0127,
+   "gs10": 1.44,
+   "gs10_chg": 0.618
   },
   {
    "year": 2022,
-   "bill": 6760,
-   "assessed": 508610,
-   "bill_pct": 1.5,
-   "assessed_pct": 2.0,
-   "factor": 2.0,
-   "match": true
+   "cpi": 292.626,
+   "cpi_chg": 0.0799,
+   "hpi_a": 510.0,
+   "hpi_a_chg": 0.151,
+   "hpi_b": 488.18,
+   "hpi_b_chg": 0.1225,
+   "gs10": 2.95,
+   "gs10_chg": 1.0486
   },
   {
    "year": 2023,
-   "bill": 6920,
-   "assessed": 518790,
-   "bill_pct": 2.37,
-   "assessed_pct": 2.0,
-   "factor": 2.0,
-   "match": true
+   "cpi": 304.703,
+   "cpi_chg": 0.0413,
+   "hpi_a": 528.3,
+   "hpi_a_chg": 0.0359,
+   "hpi_b": 487.0,
+   "hpi_b_chg": -0.0024,
+   "gs10": 3.96,
+   "gs10_chg": 0.3424
   },
   {
    "year": 2024,
-   "bill": 7000,
-   "assessed": 529160,
-   "bill_pct": 1.16,
-   "assessed_pct": 2.0,
-   "factor": 2.0,
-   "match": true
+   "cpi": 313.698,
+   "cpi_chg": 0.0295,
+   "hpi_a": 556.29,
+   "hpi_a_chg": 0.053,
+   "hpi_b": 506.77,
+   "hpi_b_chg": 0.0406,
+   "gs10": 4.21,
+   "gs10_chg": 0.0631
   },
   {
    "year": 2025,
-   "bill": 7210,
-   "assessed": 539740,
-   "bill_pct": 3.0,
-   "assessed_pct": 2.0,
-   "factor": 2.0,
-   "match": true
-  },
-  {
-   "year": 2026,
-   "bill": null,
-   "assessed": 550540,
-   "bill_pct": null,
-   "assessed_pct": 2.0,
-   "factor": 2.0,
-   "match": true
+   "cpi": null,
+   "cpi_chg": null,
+   "hpi_a": 560.14,
+   "hpi_a_chg": 0.0069,
+   "hpi_b": 510.79,
+   "hpi_b_chg": 0.0079,
+   "gs10": 4.29,
+   "gs10_chg": 0.019
   }
- ],
- "roll_b": [
-  {
-   "year": 2016,
-   "bill": 1680,
-   "assessed": 96560,
-   "bill_pct": null,
-   "assessed_pct": null,
-   "factor": null,
-   "match": null
-  },
-  {
-   "year": 2017,
-   "bill": 1740,
-   "assessed": 98490,
-   "bill_pct": 3.57,
-   "assessed_pct": 2.0,
-   "factor": 2.0,
-   "match": true
-  },
-  {
-   "year": 2018,
-   "bill": 2060,
-   "assessed": 100460,
-   "bill_pct": 18.39,
-   "assessed_pct": 2.0,
-   "factor": 2.0,
-   "match": true
-  },
-  {
-   "year": 2019,
-   "bill": 2130,
-   "assessed": 102470,
-   "bill_pct": 3.4,
-   "assessed_pct": 2.0,
-   "factor": 2.0,
-   "match": true
-  },
-  {
-   "year": 2020,
-   "bill": 2200,
-   "assessed": 104510,
-   "bill_pct": 3.29,
-   "assessed_pct": 1.99,
-   "factor": 2.0,
-   "match": true
-  },
-  {
-   "year": 2021,
-   "bill": 2070,
-   "assessed": 105600,
-   "bill_pct": -5.91,
-   "assessed_pct": 1.04,
-   "factor": 1.0,
-   "match": false
-  },
-  {
-   "year": 2022,
-   "bill": 2110,
-   "assessed": 107660,
-   "bill_pct": 1.93,
-   "assessed_pct": 1.95,
-   "factor": 2.0,
-   "match": false
-  },
-  {
-   "year": 2023,
-   "bill": 2180,
-   "assessed": 109810,
-   "bill_pct": 3.32,
-   "assessed_pct": 2.0,
-   "factor": 2.0,
-   "match": true
-  },
-  {
-   "year": 2024,
-   "bill": 2320,
-   "assessed": 112010,
-   "bill_pct": 6.42,
-   "assessed_pct": 2.0,
-   "factor": 2.0,
-   "match": true
-  },
-  {
-   "year": 2025,
-   "bill": 2440,
-   "assessed": 114250,
-   "bill_pct": 5.17,
-   "assessed_pct": 2.0,
-   "factor": 2.0,
-   "match": true
-  }
- ],
- "privacy": {
-  "tier": 1,
-  "roll_round": 10,
-  "description": "roll values to the nearest $10"
- }
+ ]
 }
