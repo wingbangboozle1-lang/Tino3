@@ -8,15 +8,16 @@ the building the beneficiary already owns. Owner figures are rounded to the near
 
 ## What is published
 
-Sixteen static HTML pages (`*.html` in the repository root), one stylesheet, one source ledger
-(`assets/sources.json`), one privacy setting (`assets/privacy.json`), the economy data file
-(`assets/data/economy.json`) and the downloadable tables in `assets/data/` (`decision.csv`, `model.json`,
-`property_a.csv`, `property_b.csv`). Nothing else is published.
+Eighteen static HTML pages (`*.html` in the repository root), one stylesheet, one source ledger and the
+downloadable tables in `assets/data/`. Nothing else is published.
 
-Pages: overview, executive summary, decision analysis, year-by-year projections, year-by-year economy,
-black-swan conditions and history, stress tests, Property A, Property B, tax/thresholds/law watch,
-inheritance steps, suggestions for review, questions before deciding, flagged for review, independent
-verification and the source library.
+Pages, in navigation order: **Start here** — dashboard, executive summary, the decision.
+**The two properties** — Property A (inherited), Property B (already owned), why the two are not the same.
+**Money over time** — running costs, year-by-year projections, income tax on each path.
+**Rules and the estate** — inheriting through a trust step by step, estate and inheritance tax thresholds,
+what the law says and what may change. **Irregular economies** — black-swan conditions and the verified
+historical record. **Review before deciding** — questions to answer, suggestions for review, flagged for
+review and the repository audit. **Evidence** — the source ledger.
 
 ## Publication path (read before changing anything)
 
@@ -47,7 +48,7 @@ No third-party Python packages are used.
 ## Evidence standard
 
 Every rule, threshold and rate on the site was read on the publishing agency's own domain between
-10 and 13 November 2026 and is linked from the row that uses it; `assets/sources.json` (86 entries)
+10 and 13 November 2026 and is linked from the row that uses it; `assets/sources.json` (107 entries)
 records what each document verifies and how it was checked. A factual table row with no link to an
 official publisher fails the build, and so does a name, street address, postal code, parcel number,
 e-mail address or a dollar figure that is not a multiple of $10. Anything that could not be verified
@@ -71,6 +72,64 @@ costs the brief asks to be researched. It corrected three statements and two def
   stress tests"; they are merged into one row carrying both findings.
 - **Page count (C-19).** The overview reported "This edition · 1 pages": the count was read from a
   dictionary that is still empty when that page's body is built. It is now a named constant.
+
+## Seventh verification pass of 13 November 2026
+
+Every source behind the highest-consequence claims was re-opened and compared with the
+published text. Four defects were found and fixed, and one input question was opened and
+closed.
+
+- **V7-1, the eligibility gate was missing (most serious).** Revenue and Taxation Code
+  section 63.2 excludes a transfer from change of ownership only where it is **between
+  parents and their children**, or between grandparents and grandchildren whose parent has
+  died. Nothing on the site said so. Every Proposition 19 figure was therefore presented
+  as unconditional when it is conditional on a fact about the family that this site has
+  never been told. The gate is now on the dashboard, the executive summary, the decision
+  page, the step-by-step page and the questions page, it is the first question on the
+  register (A-1), and it has its own suggestion (S-19) and caveat.
+- **V7-2, the letting paths credited no rent.** `run_paths` charged every landlord cost to
+  the rental paths and credited none of the rent, which made them structurally unable to
+  win. Rent is now an input, named `property_a.rent_income_annual`, and it is deliberately
+  **empty**: no official source publishes a market rent for a specific home, so no figure
+  is invented. The letting paths therefore still carry zero rent, but the page now says so
+  in a dedicated callout, the recommendation is worded as a floor rather than a comparison,
+  and S-20 maps the route to replacing it.
+- **V7-3, the review page's "where to check" column was the same four links on every row.**
+  Each row now names the publisher that actually holds that record.
+- **V7-4, the trust steps overstated the transfer tax.** Step 3 said no city transfer tax
+  applies to Property A. That is true, but for the wrong reason: RTC section 11930 exempts a
+  deed where property passes by reason of death or by inter vivos gift outright or in trust,
+  so the county documentary transfer tax does not reach it either. The step now says that and
+  links the statute.
+- **A stale audit statement.** The flagged page still described `analysis/` and `plan/` as
+  present in the tree and named four open pull requests. Both directories were removed on
+  13 November and two board-record pull requests remain open. Corrected.
+- **Two statements about insurance were wrong in opposite directions.** One said the
+  Department of Insurance publishes no average premium by area, while the site elsewhere
+  publishes the statewide average. It does publish a statewide average and an online
+  homeowners premium survey, but not an average for a postal area. Reworded to say that.
+- **A blank that was not blank.** An earlier pass left the city transfer-tax band above
+  $10,000,000 as "not published". It is published on the city's own fee page. Both remaining
+  bands are now on the taxes page.
+- **A taxable-base reading that was left open.** Section 63.2(a)(1)(C) says the base year
+  value established at the change in ownership, adjusted annually, is enrolled when the
+  transferee stops being eligible for the homeowners' exemption. The site had listed this as
+  an open question while quietly modelling the favourable reading. It now states the
+  statutory reading, says the live-then-rent path depends on it, and adds S-21 to get the
+  assessor's written answer.
+- **Two routes that were not documented.** The step-by-step page now names the small-estate
+  procedures and probate as the alternatives if the trust is not the route, with the effect
+  on timing and cost.
+
+Verification performed with the sources re-opened on 13 November 2026: LTA 2025/009
+(Proposition 19 cap amounts), the full text of RTC sections 51, 63.2 and 11930, the IRS
+estate tax page and the 2027 inflation release, the SSA 2026 Trustees assumptions table,
+the FTB gifts and inheritance page, the Secretary of State's uncertified results, the San
+Francisco Treasurer's secured rate and the city's recorder fee and transfer-tax schedule.
+An independent reconciliation script recomputed 70 published relationships from the inputs:
+the shelter amount, the roll arithmetic, the sale-at-death tax, both investment terminals,
+the rental terminal as sale proceeds plus accumulated rent, the sensitivity and stress
+counts printed in the prose, the estate arithmetic and the $10 rounding rule. All 70 passed.
 
 Research added in this pass:
 

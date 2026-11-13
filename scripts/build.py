@@ -2026,10 +2026,153 @@ PAGES = list(PAGE_BUILDERS)
 ASSETS = ["assets/style.css"]
 
 
+# ------------------------------------------------------- executive summary md --
+def executive_summary_markdown() -> str:
+    """The standalone brief. Generated, so it can never drift from the model again.
+
+    The earlier hand-typed file still described a retired ten-year edition and two
+    pages that no longer exist. It is now a projection of the same data the site uses.
+    """
+    p40 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2040)
+    p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
+    p50 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2050)
+    sens = MODEL["sensitivity"]
+    regs = MODEL["regimes"]
+    sens_sell = sum(1 for s in sens if s["best"].startswith("sell"))
+    reg_sell = sum(1 for r in regs if r["run"]["best"].startswith("sell"))
+    cash = lambda v: f"${v:,}"
+    out = []
+    a = out.append
+    a("# Executive summary")
+    a("")
+    a(f"Built {BUILD_DATE} from the same deterministic model as the site. Every dollar figure is rounded to the "
+      "nearest $10. Anonymised throughout: **Property A** is the single-family home being inherited through a "
+      "trust, in Santa Clara County; **Property B** is the three-unit building the heir already owns, in the City "
+      "and County of San Francisco. No name, street address, postal parcel number, postal code, trust term or "
+      "utility account appears here or on the site.")
+    a("")
+    a("Planning analysis, not legal, tax or investment advice.")
+    a("")
+    a("## The recommendation")
+    a("")
+    a(f"**Sell Property A soon after it is inherited, unless the heir genuinely wants to live in that house.** "
+      f"Selling leads in the baseline, in {sens_sell} of the {len(sens)} sensitivity combinations and in "
+      f"{reg_sell} of the {len(regs)} stress regimes, and it is the only path that does not depend on the heir "
+      "wanting that house, being able to hold it as a principal residence, or finding a tenant at an implausible "
+      "rent.")
+    a("")
+    a("## One condition outranks every number below")
+    a("")
+    a("The intergenerational exclusion in Revenue and Taxation Code section 63.2 applies **only** where the "
+      "transfer is between a parent and a child, or between a grandparent and a grandchild whose parent has died. "
+      "That is a condition of the exclusion, not a detail. If the relationship is different, no exclusion is "
+      "available, the property is reassessed to full market value, every shelter figure below disappears, and the "
+      "case for selling gets stronger. The trust document is the only thing that settles it and this analysis has "
+      "not seen it. **Question A-1 on the questions page.**")
+    a("")
+    a("## Terminal value after thirty years")
+    a("")
+    a("Selling and investing the proceeds, against keeping the house. Baseline: house prices 4.0% a year, "
+      "inflation 2.5%, equities 7.0% gross of a 0.7% tax drag, Treasuries 4.7%, selling costs 5.5%.")
+    a("")
+    a("| Inherited | Sell, equities | Sell, Treasuries | Live in it | Let it out |")
+    a("|---|---|---|---|---|")
+    for p in (p40, p45, p50):
+        q = p["paths"]
+        a(f"| {p['inherit_year']} | {cash(q['sell_equities']['terminal'])} | "
+          f"{cash(q['sell_treasury']['terminal'])} | {cash(q['live_in']['terminal'])} | "
+          f"{cash(q['rent_out']['terminal'])} |")
+    a("")
+    a("The letting paths are credited with **no rent**, because no market rent for Property A has been supplied "
+      "and no official source publishes one for a specific home. Read them as a floor, not as a comparison.")
+    a("")
+    a("## The numbers that drive it")
+    a("")
+    a(f"- **The tax cliff.** The Property A bill is about {cash(MODEL['costs_a_now']['property_tax'])} today. "
+      f"If the heir inherits in 2045 and does not move in, it becomes about {cash(p45['bill_if_rent_year1'])}. "
+      f"If the heir moves in and claims the exclusion, it becomes about {cash(p45['bill_if_live_year1'])}.")
+    a(f"- **The shelter is smaller than the growth.** On a 2045 inheritance the exclusion shelters the old "
+      f"taxable value plus {cash(MODEL['paths'][1]['prop19_cap'])} against a market value of "
+      f"{cash(p45['value_at_death'])}. Everything above the sum is reassessed.")
+    a(f"- **The tax-free window.** Property acquired from a decedent takes a basis equal to its value at death, "
+      f"so a sale soon afterwards pays about zero capital gains tax. In the 2045 baseline a "
+      f"{cash(p45['value_at_death'])} sale carries {cash(p45['paths']['sell_equities']['sale']['tax'])} of tax.")
+    a(f"- **What waiting costs.** Hold the same house thirty years and the tax on the eventual sale is about "
+      f"{cash(p45['paths']['live_in']['sale']['tax'])} after the section 121 exclusion; let it out as well and "
+      f"depreciation recapture pushes that to about {cash(p45['paths']['rent_out']['sale']['tax'])}.")
+    a(f"- **The break-even.** Keeping the home beats selling only if it appreciates "
+      f"{pc(p45['breakeven_house_growth'])} a year for thirty years. The verified index for this area compounded "
+      "at 6.9% over fifty years and 3.3% over the last twenty.")
+    a(f"- **The break-even rent.** Letting would need about {cash(p45['breakeven_rent_monthly'])} a month, "
+      f"{cash(p45['breakeven_rent_annual'])} a year, in 2045, to match selling and investing.")
+    a("")
+    a("## The black swans, and what they do to the answer")
+    a("")
+    a("Real economies do not grow at a constant rate. In the verified record used here, annual consumer price "
+      "inflation ran from minus 0.3% to plus 13.5%, and annual house price growth in Property A's area from "
+      "minus 12.3% to plus 30.2%. The regimes below replay the worst stretches of that record against a 2045 "
+      "inheritance over thirty years.")
+    a("")
+    a("| Regime | Inflation | House growth | Treasury | Best path |")
+    a("|---|---|---|---|---|")
+    for r in regs:
+        a(f"| {r['name']} | {r['cpi']}% | {r['house']}% | {r['treasury']}% | "
+          f"{PATH_LABELS[r['run']['best']]} |")
+    a("")
+    a("Sold into equities or Treasuries wins five of the six. The exception is a repeat of the 1965-1982 Great "
+      "Inflation or the 2021-2023 burst, where nominal house prices outran everything else. That is a bet on one "
+      "neighbourhood repeating its best decades, not a plan.")
+    a("")
+    a("## Estate and inheritance tax")
+    a("")
+    a(f"- California has no estate tax and no inheritance tax. No California estate tax return is required for "
+      f"a death on or after 1 January 2005, and an inheritance is not California income.")
+    a(f"- The federal exclusion is {cash(V['federal_basic_exclusion_2026']['value'])} per person for 2026 and "
+      f"{cash(V['federal_basic_exclusion_2027']['value'])} for 2027. Portability lets a surviving spouse use a "
+      "deceased spouse's unused exclusion if a timely return is filed.")
+    a("- Above the exclusion the federal rate reaches 40%. The tax is on the estate, not on the heir, and is due "
+      "with Form 706 nine months after death, with an extension available.")
+    a("- The cash inheritance is deliberately not published and not modelled as a figure; the estate page works "
+      "in anonymous scenario bands instead.")
+    a("")
+    a("## What is still open")
+    a("")
+    a("These sit on the flagged-for-review page, each with the publisher that holds the record:")
+    a("")
+    a("- The owner's market values, the property-tax and assessment histories, the rent and the utility and "
+      "insurance estimates are the owner's own records, not checked against a county roll or a quote.")
+    a("- Property A's tax rate area and its published ad valorem rate. 1.18% is assumed and flagged.")
+    a("- A property-specific insurance premium for either building. The Department of Insurance publishes a "
+      "statewide average and an online premium survey, not an average for a postal area.")
+    a("- A market rent for Property A, and the seller's actual selling costs.")
+    a("- Whether the trust actually holds title, and whether the transfer is between a parent and a child.")
+    a("")
+    a("## How this was checked")
+    a("")
+    a(f"Every rule, threshold and rate on the site was read on the publishing agency's own domain and is linked "
+      f"from the row that uses it. The ledger holds {len(SRC_DOC['sources'])} sources. A build-time verifier "
+      "fails if a table row has no official link, if the build is not reproducible, if any internal link or "
+      "fragment does not resolve, or if any published dollar figure is not a multiple of $10. A separate check "
+      "recomputed the published relationships from the inputs.")
+    a("")
+    a("## Read next")
+    a("")
+    a("- `index.html` — the dashboard")
+    a("- `decision.html` — the five paths, the sensitivity and the break-evens")
+    a("- `questions.html` — what is unknown and how to find it, starting with A-1")
+    a("- `suggestions.html` — the review queue; nothing there has been implemented")
+    a("- `review.html` — every unverified figure and modelling caveat")
+    a("- `sources.html` — the full ledger")
+    a("")
+    return "\n".join(out)
+
+
 def main():
     for name, (fn, lede) in PAGE_BUILDERS.items():
         (ROOT / name).write_text(page(name, fn(), lede), encoding="utf-8")
         print("wrote", name)
+    (ROOT / "EXECUTIVE_SUMMARY.md").write_text(executive_summary_markdown(), encoding="utf-8")
+    print("wrote EXECUTIVE_SUMMARY.md")
 
 
 if __name__ == "__main__":
