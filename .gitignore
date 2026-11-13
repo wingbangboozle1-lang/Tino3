@@ -1,9 +1,7 @@
 private/
 __pycache__/
-*.py[cod]
 node_modules/
 
 _site/
-_legacy_site/
-.jekyll-cache/
 internal/
+*.py[cod]

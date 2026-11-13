@@ -81,7 +81,8 @@ def check_output(destination: Path) -> None:
             continue
         failures.extend(privacy_boundary.check_identifiers(text, name))
         failures.extend(privacy_boundary.check_identifiers(name, f"path {name}"))
-        failures.extend(privacy_boundary.check_money(text, name))
+        money_problems, _scaled = privacy_boundary.check_money(text, name)
+        failures.extend(money_problems)
         if name.endswith(".html"):
             if privacy_boundary.FORBIDDEN_ELEMENTS.search(text):
                 failures.append(f"{name}: interactive or remote-code element")

@@ -35,6 +35,31 @@ LEGACY_URLS = [
     "decision-suite/decision-analysis.html", "decision-suite/inheritance-process.html",
     "decision-suite/flagged-for-review.html", "decision-suite/sources-ledger.html",
     "decision-suite/assets/app.js", "decision-suite/assets/style.css",
+    # Two earlier editions were published from these directories. The files are no
+    # longer tracked here, but the previous deployment still answers on the URLs, so
+    # the routes are withdrawn explicitly rather than left to return an old figure.
+    "plan/index.html", "plan/summary.html", "plan/properties.html", "plan/projections.html",
+    "plan/decision.html", "plan/taxes.html", "plan/steps.html", "plan/laws.html",
+    "plan/flagged.html", "plan/sources.html", "plan/assets/style.css",
+    "plan/data/model.json", "plan/data/sources.json", "plan/data/projection_a.csv",
+    "plan/data/projection_b.csv", "plan/data/decisions.csv", "plan/data/headroom.csv",
+    "plan/data/cash_cases.csv", "plan/tools/model.py", "plan/tools/build.py",
+    "plan/tools/sources.py", "plan/tools/verify.py",
+    "analysis/index.html", "analysis/executive-summary.html",
+    "analysis/ownership-distinction.html", "analysis/properties.html",
+    "analysis/projections.html", "analysis/black-swan.html", "analysis/decision.html",
+    "analysis/taxes-estate.html", "analysis/inheritance-steps.html",
+    "analysis/repo-audit.html", "analysis/flagged.html", "analysis/sources.html",
+    "analysis/assets/style.css", "analysis/data/model.json", "analysis/data/sources.json",
+    "analysis/data/projections_50yr.csv", "analysis/data/historical_replay_50yr.csv",
+    "analysis/data/ownership_distinction.csv", "analysis/data/decision_matrix.csv",
+    "analysis/data/black_swan_regimes.csv", "analysis/tools/sources.py",
+    "analysis/tools/model.py", "analysis/tools/build.py", "analysis/tools/verify.py",
+    # Pages this edition retired when it replaced the previous one. No route is ever
+    # published under a place name, so the two former property-named pages are not
+    # recreated here; the whole artifact replaces the previous deployment anyway.
+    "audit.html", "black-swans.html", "stress.html",
+    "data/sf_rental_pl.csv", "data/sources.csv",
 ]
 
 
