@@ -2205,7 +2205,24 @@ HTTP 403 for this repository and remains the cleaner long-term fix.
 |---|---|---|---|
 | V7-1 Seventh independent verification pass: re-open the official sources behind the highest-consequence claims, line by line | done | `arena/6c643763-tino3` | no shared file; results recorded in this section |
 | V7-2 Fix defects found by V7-1 | done | `arena/6c643763-tino3` | `scripts/build.py`, `scripts/model.py`, `scripts/verify.py`, `assets/data/inputs.json` (one new empty input), `assets/sources.json` (two additions), regenerated root `*.html`, `README.md`, `EXECUTIVE_SUMMARY.md` |
-| V7-3 Pull request to `main`, merge, confirm the Pages deploy | in progress | `arena/6c643763-tino3` | `COORDINATION.md` (this section only) |
+| V7-3 Pull request to `main`, merge, confirm the Pages deploy | done — PR #80 merged at 2026-11-13T11:55:17Z, Pages built at 11:55:41Z with no error, live pages checked | `arena/6c643763-tino3` | `COORDINATION.md` (this section only) |
+
+**Pull request:** https://github.com/wingbangboozle1-lang/Tino3/pull/80
+**Merge result:** MERGED at 2026-11-13T11:55:17Z, merge commit `02646f1`, into `main`.
+**Branch:** `arena/6c643763-tino3`, merged as a true merge commit, so no other session's history is lost.
+**Checks:** `Verify static site` pass (18s and 22s on the two runs); `Deploy GitHub Pages` built at
+11:55:41Z with `error.message: null` on commit `02646f1`.
+**Live checks** against https://wingbangboozle1-lang.github.io/Tino3/ after the deploy: the dashboard,
+`decision.html` and `review.html` all serve the new text. `decision.html` carries the eligibility gate as its
+first callout ("First gate: is the transfer between a parent and a child?"), the "9 of 9" and "4 of 6"
+counters, and the source links to the full text of RTC 63.2 and the BOE Proposition 19 page. `review.html`
+opens "Three lists", and every register row now carries its own publisher rather than the same four links.
+
+Two further merge rounds were needed before it would merge cleanly: PR #79 and then PR #81 landed on `main`
+while #80 was open, both from `arena/1c788435-tino3`, which had independently made the row-specific
+"where to check" fix. Both were resolved as merges, not rebases, and both are recorded above. PR #81's new
+assertion in `page_review()` caught two of this session's caveats missing a source decision, which is the
+assertion working as intended; the decisions were added rather than the assertion removed.
 
 ### Defects found by V7-1 and fixed by V7-2
 
