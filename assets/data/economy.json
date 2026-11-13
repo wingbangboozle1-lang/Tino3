@@ -158,15 +158,6 @@
     "irs_estate",
     "irs_2027"
    ]
-  },
-  {
-   "item": "State and local tax deduction cap",
-   "nominal_2026": 10000,
-   "rule": "Fixed by statute; not indexed. Not modelled on this site.",
-   "nominal_2045": 10000,
-   "real_2045": 6260,
-   "note": "Listed for completeness; the model takes no federal deduction for state tax.",
-   "sources": []
   }
  ]
 }

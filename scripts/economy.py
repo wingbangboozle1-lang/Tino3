@@ -280,7 +280,6 @@ def build() -> dict:
     excl121 = V["section121_exclusion_joint"]["value"]
     prop19_cap = V["prop19_value_cap_2025_2027"]["value"]
     fed = V["federal_basic_exclusion_2026"]["value"]
-    salt = 10_000
     prop19_nominal_2045 = prop19_cap * (1 + G) ** 10   # adjusted every second February, 2027 to 2045
     thresholds = [
         {"item": "Section 121 home-sale exclusion, joint",
@@ -301,11 +300,6 @@ def build() -> dict:
          "note": "Holds roughly constant in real terms if indexation tracks inflation; a change "
                  "of statute could cut it, which the estate page treats as the main risk.",
          "sources": ["irs_estate", "irs_2027"]},
-        {"item": "State and local tax deduction cap",
-         "nominal_2026": money10(salt), "rule": "Fixed by statute; not indexed. Not modelled on this site.",
-         "nominal_2045": money10(salt), "real_2045": money10(salt / y19),
-         "note": "Listed for completeness; the model takes no federal deduction for state tax.",
-         "sources": []},
     ]
 
     return {
