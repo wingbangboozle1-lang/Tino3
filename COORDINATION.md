@@ -2111,3 +2111,28 @@ HTTP 403 for this repository and remains the cleaner long-term fix.
    records and superseded work; nothing in this edition depends on them.
 5. Git history still contains the earlier editions, including versions with unrounded
    owner figures. Rewriting it is a decision for the owner, not for a session.
+
+## Session `arena/6d858229-tino3` — final close-out: independent verification, documentation and board correction, open-PR disposition, publication (2026-11-13)
+
+*Branch note:* Arena pins this session to `arena/6d858229-tino3`, branched from `19e5ccf6`
+(merge of PR #75, `main`). The board's `session-<id>/<task>` naming cannot be used. Board read
+in full before claiming; `origin` fetched; the only open pull requests are #65 and #66 (#62 and
+#70 are already merged inside PR #75). No other session is active on the remote. This section is
+appended at the end, per the board convention.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| C-1 Independent line-by-line re-verification of the published figures against official sources, opened in this session | claimed | `arena/6d858229-tino3` | `assets/sources.json` (append only), `scripts/build.py` (labels only if a figure moves) |
+| C-2 Correct the two root documents that still point at pages this edition deleted: `README.md` and `EXECUTIVE_SUMMARY.md` | claimed | `arena/6d858229-tino3` | `README.md`, `EXECUTIVE_SUMMARY.md` |
+| C-3 Correct the board's stale "Still open" list (economy module is wired, not dead; PRs #62/#70 are merged) and record the open-PR disposition | claimed | `arena/6d858229-tino3` | `COORDINATION.md` (this section and the corrected list) |
+| C-4 Attempt the remaining ledger gaps from official sources where a page can be read; leave anything unconfirmed blank and flagged | claimed | `arena/6d858229-tino3` | `assets/sources.json` (append only); `laws.html` via `scripts/build.py` if verified |
+| C-5 Disposition of open PRs #65 and #66, all gates, PR to `main`, merge, confirm the Pages deploy, record the result | claimed | `arena/6d858229-tino3` | `COORDINATION.md` (this section only) |
+
+Not touched: `scripts/model.py`, `scripts/verify.py`, `scripts/privacy_boundary.py`,
+`scripts/package_site.py`, `scripts/economy.py`, `assets/data/*`, `_config.yml`, `.github/workflows/*`,
+all withdrawal notices, and every other session's section of this board. Privacy held to the
+existing standard: Property A / Property B only; no name, street address, postal code, parcel
+number, utility account or trust particular in any commit, message or pull request.
+
+### Log (`arena/6d858229-tino3`)
+- Claim written and pushed before any content file was edited.
