@@ -12,6 +12,19 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: python scripts/verify.py
-      - run: python plan/tools/verify.py
-      - run: python analysis/tools/verify.py
+      - name: Rebuild, verify sources, links and privacy
+        run: |
+          python scripts/build.py
+          python scripts/verify.py
+          python scripts/privacy_boundary.py
+          python scripts/package_site.py
+          git diff --exit-code -- '*.html' assets/data || (echo "::error::generated pages are stale; run scripts/build.py" && exit 1)
+      - name: Check the legacy source boundary
+        run: python scripts/verify_legacy.py --config-only
+      - name: Build the legacy Jekyll publication (the live publisher)
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_legacy_site
+      - name: Audit actual Jekyll output
+        run: python scripts/verify_legacy.py --site _legacy_site

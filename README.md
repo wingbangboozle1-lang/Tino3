@@ -1,127 +1,52 @@
-# Inheritance Atlas
+# Inheritance decision dashboard (Tino3)
 
-A privacy-first decision dashboard for a trust inheritance expected between 2040 and 2050: one residence to
-inherit, one three-unit building already held and partly rented, and enough inherited cash to matter for
-federal estate tax.
+A privacy-first decision dashboard for a home expected to be inherited through a trust between 2040 and 2050,
+with a second, already-owned multi-unit building kept in view. Property A is the inherited home; Property B is
+the building the beneficiary already owns. Owner figures are rounded to the nearest $10 at the owner's instruction.
 
 **Live site:** https://wingbangboozle1-lang.github.io/Tino3/
 
-## What this repository publishes
+## What is published
 
-Sixteen static pages, one stylesheet, one source ledger, one privacy setting, the economy data file and three CSV downloads, plus the separate cross-check edition under `plan/` — nothing else. The published
-artifact is an allowlist built by `scripts/package_site.py`; every path an earlier edition published is
-replaced by a content-free withdrawal notice, so a stale URL cannot return an old figure.
+Sixteen static HTML pages (`*.html` in the repository root), one stylesheet, one source ledger
+(`assets/sources.json`), one privacy setting (`assets/privacy.json`), the economy data file
+(`assets/data/economy.json`) and the downloadable tables in `assets/data/` (`decision.csv`, `model.json`,
+`property_a.csv`, `property_b.csv`). Nothing else is published.
 
-| Page | Contents |
-|---|---|
-| `index.html` | Dashboard: recommendation, decision snapshot, and a grouped index of the site |
-| `executive-summary.html` | The decision, five numbers, what would change it |
-| `property-a.html` | The residence to inherit: inputs, the full 2014–2026 tax and assessment history against the published state factors, what the inheritance does to the assessed value |
-| `property-b.html` | The rental: inputs, the 2016–2025 tax and assessment history, tax-bill breakdown, rent rules, reassessment exposure if it is in the same estate |
-| `taxes.html` | Federal, California and local rules, verified; what the heir receives and what is still taxed; pending law changes |
-| `projections.html` | Year-by-year value, assessed value, tax and running costs, 2026–2060, and the ten years after an inheritance |
-| `economy.html` | The year-by-year economy: 49 years of official annual data for consumer prices, both areas' house prices, the 10-year yield and the NASDAQ; 2,000 resampled fifty-year paths; the decision re-run on each of the 40 real ten-year stretches; adversarial paths; the lesser-of assessment rule in a crash |
-| `decision.html` | Sell vs rent vs move in for 2040/2045/2050, break-evens, sensitivities, the assumption register |
-| `stress.html` | Black swans, part 2: verified 1929, Great Inflation, oil-shock, dot-com, Great Recession and COVID episodes re-run against the 2045 inheritance; the playbook |
-| `black-swans.html` | Black swans, part 1: baseline anchors (Fed, SSA, CBO), fifty years of official state inflation data, fixed-amount erosion, and the single-input stress cases |
-| `inheritance.html` | Statutory timeline after the death, with deadlines |
-| `review.html` | 34 flagged items (unverified values left blank, owner questions, record irregularities, the publishing-source finding, the Treasury anchor) and four privacy disclosures |
-| `audit.html` | Independent verification: twelve corrections to the first quantitative edition, repository review |
-| `suggestions.html` | Four paths and 23 suggestions with effort, privacy cost and status; four decision gates; the privacy-precision choice |
-| `questions.html` | 39 questions with status: what is settled and linked to its publisher, what is missing, the step that closes it, and what changes if the answer differs |
-| `sources.html` | 83 official sources, what each one supports and how each was checked |
+Pages: overview, executive summary, decision analysis, year-by-year projections, year-by-year economy,
+black-swan conditions and history, stress tests, Property A, Property B, tax/thresholds/law watch,
+inheritance steps, suggestions for review, questions before deciding, flagged for review, independent
+verification and the source library.
 
-## How the site is organised
+## Publication path (read before changing anything)
 
-The menu is grouped into six sections: **The decision** (overview, executive summary, decision analysis,
-year-by-year projections, year-by-year economy),
-**Black swans** (conditions and history, stress tests — one section in two parts), **The properties**
-(A, B), **Tax and process** (tax and law watch, inheritance steps), **Decide next** (suggestions for review, questions before deciding) and **Evidence** (flagged items,
-independent verification, source library).
+* The live Pages source is the `main` branch root (`build_type: legacy`). GitHub's Jekyll publisher serves every
+  tracked file that `_config.yml` does not exclude. `_config.yml` is generated by `scripts/verify_legacy.py`
+  and must not be edited by hand; `.nojekyll` must not be present in the repository because it disables those
+  exclusions.
+* `scripts/package_site.py` builds `_site/` from the allowlist and writes content-free withdrawal notices at
+  every retired path. The `pages.yml` workflow deploys that artifact.
+* Earlier cross-check (`plan/`) and 50-year (`analysis/`) editions were built from unrounded owner figures.
+  They were removed from the working tree on this branch, and their routes are answered with withdrawal notices.
 
-Three editions of the same analysis sit in this repository. They use separate models, so their figures
-differ and must not be mixed: the sixteen pages in the menu (the edition to act on), the independent
-cross-check at `/plan/`, and the 50-year and ownership suite at `/analysis/`. The overview page says
-which one a reader is looking at.
+## Verification
 
-## Privacy rules enforced in code
-
-- No names, street addresses, postal codes, parcel numbers, utility account numbers or unrounded figures in
-  any published file. `scripts/verify.py` fails the build if a postal-code pattern, a city name, an e-mail
-  address, a street address or an amount that is not a multiple of $10 appears in a page or a data file.
-- Assessment-roll values and tax bills are published at a precision the owner chooses in
-  `assets/privacy.json`: tier 1, the setting in force since 12 November 2026, is the nearest $10; tier 2 is
-  the nearest $1,000; tier 3 the nearest $10,000. Percentage changes in the roll tables are computed before
-  rounding, so they are identical at every tier. The setting is committed, so the build and the checks
-  reproduce the same pages. What tier 1 does and does not protect is stated on every page and on
-  `review.html`; changing it is `python3 scripts/privacy_tier.py 2` (or 3) followed by a rebuild.
-- Properties appear only as Property A and Property B; jurisdictions are described generically, with
-  the official rate documents cited.
-- Residual risk is disclosed rather than hidden: the two owner-supplied market values and the monthly rent are
-already multiples of $10, so rounding does not disguise them. The review page says so, and SG-14 puts the choice
-between bands, a coarser rounding or withdrawal to the owner.
-
-## Verification standard
-
-Every rule on the site was retrieved from the publishing agency's own domain between 10 and 12 November 2026 (see the source library for the session that opened each document) and linked
-from the row that uses it. Two independent passes re-checked the edition on 11 November 2026; the third pass re-opened thirteen ledger entries on the publishers' sites, recomputed
-every projection row from the model's own formulas (all agreed to the nearest $10), closed one open flag with 31 U.S.C. 3124 (Treasury interest is exempt from state tax) and corrected a
-stale source count. It found no wrong figure. What it did not do is listed on `audit.html`. `assets/sources.json` records what each document verifies. A fourth pass on 12 November 2026 added the two rules the brief asks about that the edition had never covered (an inheritance is not income to the heir; what happens to an inherited retirement account) and removed two source badges that pointed at an unrelated IRS page. A further pass the same day re-opened fifteen publisher pages, confirmed every published figure, and added one finding: the 1% California tax above $1,000,000 of taxable income (RTC 17043) is not in the 12.3% rate used in the model, so it is published as a sensitivity (the 2045 stock result falls by $36,170 and the ranking holds). Anything that could not
-be verified is left blank or published on the Flagged for Review page — never inferred.
-
-The integrating pass on 12 November 2026 (this repository's current state) did the following, in addition to re-running all gates: (i) merged the open year-by-year economy pull request (PR #62), which had been built on the same base; (ii) found and repaired a defect in that pull request's renderer that built `taxes.html` from the economy page's body, leaving the published tax page a duplicate of the economy page — the tax page now renders its own content, and the rebuilt page differs from what the pull request would have published; (iii) re-opened the key federal and state publisher pages in this session (IRS estate tax and the 2027 release IR-2026-133, the inherited-basis FAQ, 26 U.S.C. 102, the Proposition 19 page and Letters 2025/009 and 2026/002, RTC 63.2, RTC 480, RTC 13301, RTC 17043, Civil Code 1947.12, the State Controller, the LAO analysis and SOS Memorandum 26138, the CDI FAIR Plan release, the Treasury daily yield curve, both local government pages) and confirmed the published figures; (iv) recorded two new findings as flags: FL-34 (GitHub Pages serves this site from the `main` branch root — `build_type=legacy` — and the integration token cannot switch it to the Actions artifact, HTTP 403; owner action required) and FL-35 (the model's 4.88% Treasury anchor is the 9 November print; the curve read on 12 November 2026 is 5.10%, moving the Treasuries outcome by about $135,000 with no change in the ranking); (v) renumbered the rent-cap flag FL-32 to FL-33 to close a duplicate identifier. The economy page's five official series and the 2,000-path bootstrap were produced by the economy session itself from the publishers' exports on 12 November 2026 and were spot-checked, not independently recomputed, by this pass.
-
-## Build
+The CI workflow `verify.yml` runs, in order:
 
 ```bash
-python3 scripts/model.py        # writes assets/data/model.json and the CSV downloads
-python3 scripts/economy.py      # writes assets/data/economy.json from the model's own constants
-python3 scripts/build.py        # renders the sixteen pages
-python3 scripts/verify.py       # reproducible-build, citation, link, privacy and rounding checks
-python3 scripts/package_site.py # writes the _site artifact (allowlist + withdrawal notices)
-
-python3 scripts/privacy_tier.py 3   # optional: raise the roll-value precision, then rebuild
+python3 scripts/build.py                 # render the pages from the data and the ledger
+python3 scripts/verify.py                # reproducibility, official-host links, local links, privacy patterns, $10 rounding
+python3 scripts/privacy_boundary.py      # allowlist and withdrawal-notice boundary
+python3 scripts/package_site.py          # build the Actions artifact
+python3 scripts/verify_legacy.py --config-only
+python3 scripts/verify_legacy.py --site _legacy_site   # after the real Jekyll build in CI
 ```
 
-`verify.py` re-runs the model and the renderer and fails if any published byte changes, so a stale committed
-page cannot survive CI. It also fails on any factual table row that does not link to an official publisher
-(rows that record a choice must link to their reasoning), and on any ledger entry that does not say how it
-was checked.
-
-## Data
-
-`assets/sources.json` — source ledger (83 entries, each with the words relied on and how it was checked).
-`assets/privacy.json` — the published precision for assessment-roll values and tax bills.
-`assets/data/model.json` — every figure on the site.
-`assets/data/property_a.csv`, `property_b.csv`, `decision.csv` — the same numbers for offline work.
+No third-party Python packages are used.
 
 ## Limits
 
-This is a planning model, not an appraisal, a title report, a tax return or legal advice. Insurance premiums,
-future market values, future statutory thresholds and county parcel facts are not verifiable from public
-sources today and are flagged as unverified.
-
-## Coordination
-
-`COORDINATION.md` is the shared task board for parallel sessions, including the handoff log, the privacy
-remediation record and the deployment result. The integrating session of 12 November 2026 claimed the
-restoration of the quantitative dashboard, the merge of PR #62 and the publication there before editing
-anything. Two facts worth stating plainly: (1) on 12 November 2026 PR #64 replaced this site with a
-general-only framework that published no property figures at all; the owner's brief for the integrating
-session re-states the instruction to publish the rounded analysis, so the quantitative edition is what you
-see now. The general-framework text lives in this repository's history (and the general rules remain on every
-page); (2) GitHub Pages still reports the site as built from the `main` branch root (FL-34), so the served
-site today is the artifact built by `.github/workflows/pages.yml`, verified by fetching retired routes after
-the deploy — but that arrangement rests on the current deployment, not on the Pages setting.
-
-## Independent cross-check (`plan/`)
-
-`plan/` is a second, self-contained edition published at `/plan/`. It answers the same question with a separate
-model that uses only owner-provided figures and figures read on official pages, and reports break-evens where an
-input cannot be verified. It reconciles its results with the main edition on `plan/flagged.html`.
-
-```
-python plan/tools/model.py     # writes plan/data/*.json, *.csv
-python plan/tools/build.py     # renders plan/*.html
-python plan/tools/verify.py    # reproducibility, citations, links, privacy patterns, $10 rounding
-```
+This is planning analysis, not legal, tax or investment advice. Rules, indexed amounts and bill status can change;
+each official source is linked from the page that uses it. Values that could not be confirmed from an official
+source are left blank and flagged on the Flagged for Review page. Git history, pull-request diffs, forks and
+external copies of earlier commits are not erased by this change.
