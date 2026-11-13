@@ -21,7 +21,9 @@ The previously completed integration already contains the requested dashboard, p
 ### Publication result
 
 - PR: pending creation after this completion note is committed.
-- Merge and deployment: pending PR checks and merge.
+- **Merged PR:** https://github.com/wingbangboozle1-lang/Tino3/pull/76 — merged to `main` at 2026-11-13T11:44:54Z; merge commit `378b58601b5aae3cbd65ab83eef360d011214ae9`.
+- **Checks:** PR verification passed; post-merge `Verify static site` run https://github.com/wingbangboozle1-lang/Tino3/actions/runs/43419520226 passed, including the real Jekyll build and output audit. Post-merge `Deploy GitHub Pages` run https://github.com/wingbangboozle1-lang/Tino3/actions/runs/43419520394 completed successfully.
+- **Publication check:** GitHub Pages is configured for `main:/`; the Actions deployment and repository-root legacy publisher both completed successfully. The docs changed in this PR are excluded from the public website. Live site: https://wingbangboozle1-lang.github.io/Tino3/.
 Privacy rule (12 November 2026, owner's current brief): public pages use generic Property A / Property B placeholders for the two homes. No personal names, street addresses, postal codes, parcel numbers, account numbers, utility accounts or trust particulars ever appear. The owner has instructed that the owner-supplied figures (market values, the property-tax and assessment roll history, the rent, the utility and insurance estimates) be published rounded to the nearest $10, so the decision analysis carries clear numbers; `assets/privacy.json` tier 1 holds that choice. Rounding to $10 removes an exact search match; it does not defeat a reader who already holds the county record, and every page says so. Any figure that cannot be confirmed from an official source is left blank and flagged, never inferred. Historical repository commits, pull-request diffs, caches, forks, downloads and external copies are not certified erased.
 
 
