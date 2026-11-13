@@ -2015,8 +2015,25 @@ def page_review() -> str:
         ("Every reassessment figure is conditional on the parent-and-child relationship",
          "Section 63.2 excludes only transfers between parents and their children, or grandparents and grandchildren where the middle generation has died. Every shelter, live-in and rental figure on this site assumes that condition holds. The trust document is the only thing that confirms it and this site has not seen it."),
     ]
+    # Each caveat links only to the official source that bears on it; a caveat that is a planning
+    # statement rather than a rule says so and links to the register.
+    CAV_WHERE = {
+        "The ad valorem rate for Property A is not identifiable from the data": ["scc_ratebook", "boe_lta26002"],
+        "Fixed charges are projected at the inflation rate": ["sf_treas_rate", "bls_cpi"],
+        "The November 2026 California election results are unofficial": ["sos_results", "voterguide_p3"],
+        "Combined tax rates are added, not interacted": ["irs_tc409", "ftb_cg"],
+        "The housing value of living in the home is priced, not added": [],
+        "Depreciation follows a simple rule": ["irs_p527"],
+        "No mortgage, no 1031 exchange, no instalment sale, no gifting": [],
+        "The inheritance year is a range, not a date": [],
+        "The property tax lesser-of rule is not modelled": ["rtc51", "boe_pub29"],
+        "The Proposition 19 shelter path after 2027 is a projection": ["boe_lta25009"],
+        "A sheltered base is assumed to survive a later move-out": ["rtc63_2_eligibility", "boe_prop19"],
+        "Every reassessment figure is conditional on the parent-and-child relationship": ["rtc63_2_eligibility"],
+    }
+    assert set(CAV_WHERE) == {a for a, _ in caveats}, "every caveat needs a source decision"
     cav_rows = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td>"
-                + src_cell(["scc_ratebook", "sos_results", "irs_tc409", "ftb_cg", "rtc51", "boe_lta25009"], "Related sources")
+                + src_cell(CAV_WHERE[a], "Related sources")
                 for a, b in caveats]
 
     audit = [

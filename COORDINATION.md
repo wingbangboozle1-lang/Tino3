@@ -70,6 +70,21 @@ Not touched: `assets/sources.json` (the ledger already carries every source used
 
 **Pull request:** https://github.com/wingbangboozle1-lang/Tino3/pull/79 (`arena/1c788435-tino3` into `main`, opened 13 November 2026). Merge result, Pages deployment and the live checks are recorded in the entry that closes this session, below.
 
+## Session `arena/1c788435-tino3` — C-1 closed: PR #79 merged and live, follow-up PR for caveat sources
+
+**PR #79** (`arena/1c788435-tino3` into `main`): https://github.com/wingbangboozle1-lang/Tino3/pull/79
+- Merged 13 November 2026, 11:50:36 UTC, merge commit `743b26b`.
+- Checks on the merge commit: `Verify static site` success; `Deploy GitHub Pages` success; `pages build and deployment` success. Pages build `1366078598` status `built`, `build_type: legacy`, source `main:/`.
+- Live check: `https://wingbangboozle1-lang.github.io/Tino3/review.html?v=743b26b` shows the seven-row register "Irregularities in the owner's rolls and bills"; `laws.html?v=743b26b` shows the unofficial Proposition 3 wording. The un-parameterised `review.html` URL returned the previous build from the CDN when first checked; the parameterised URL is the current build.
+
+**Follow-up, PR for this entry.** The "Modelling caveats" table on the Flagged for Review page attached the same six publishers to every caveat (for example, the election-results link against the depreciation caveat). Each caveat now links only to the official source that bears on it; a caveat that is a planning statement says so and links to the register. Gates on the change: `verify.py` PASS, `privacy_boundary.py` PASS, `package_site.py` PASS, `verify_legacy.py --config-only` PASS. Only `review.html` and `scripts/build.py` changed.
+
+**Open, not changed (recorded so the next session can take them):**
+
+- The "Key rules" column on the executive summary and the "Related sources" rows on several other pages still repeat the same four or five publishers on every row (the BOE 2025/009 letter against the rent-to-value row, for example). The row claims are in the model and the text, so the links are relevant only in part. A per-row source map, as now used on the review page, is the fix. It is not done here.
+- Two IRS links in the ledger were not re-opened in this session: `irs_2027` (404 on the URL tried) and the Pub. 527 depreciation link.
+- A shared-branch note: on the remote, this branch briefly carried three COORDINATION-only commits from `arena/3aa41939-tino3` (`afe5de3`, `a858287`, `c6b876a`), which were already on `main` through PR #78. They were kept as history (a plain merge of `main`), not rewritten.
+
 ## Session `arena/25fdb181-tino3` — integration, publication-safety fix and merge · 2026-11-13
 
 *Branch note:* Arena pins this session to `arena/25fdb181-tino3` (base `b4b7c20`, `main`). The `session-<id>/<task>` naming cannot be used. No other branch was created, switched to or pushed.
