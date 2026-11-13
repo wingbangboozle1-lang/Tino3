@@ -9,7 +9,6 @@ exclude:
   - assets/data
   - assets/privacy.json
   - assets/sources.json
-  - black-swans.html
   - COORDINATION.md
   - EXECUTIVE_SUMMARY.md
   - README.md

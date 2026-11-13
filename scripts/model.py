@@ -1,621 +1,742 @@
-#!/usr/bin/env python3
-"""Planning model for the inherited-home decision (second, independently verified edition).
+"""Deterministic model for the anonymised quantitative decision edition.
 
-What this file guarantees
-  * Every dollar figure written out is rounded to the nearest $10.
-  * No name, address, ZIP code, parcel number or city name appears here.
-  * Assessment-roll values and tax bills are public records. They are published at the precision
-    chosen by the owner in assets/privacy.json. Tier 1 is the owner's instruction of
-    12 November 2026: every roll value and bill to the nearest $10. Tier 2 rounds them to the
-    nearest $1,000 and tier 3 to the nearest $10,000. The tier is part of the data, so the build
-    is reproducible at whatever tier the owner has chosen, and the site states the tier in use.
-  * Every assumption has an id, a value, a reason and an official reference (see ASSUMPTIONS).
+Reads  : assets/data/inputs.json, assets/data/series.json
+Writes : assets/data/model.json
 
-Output: assets/data/model.json and three CSV files, consumed by scripts/build.py.
+No network access. No randomness. Every published dollar figure is rounded to
+the nearest $10 with money10(); every percentage with pct().
 """
 from __future__ import annotations
-import csv
+
 import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "assets" / "data"
-CONFIG = ROOT / "assets" / "privacy.json"
+DATA = ROOT / "assets" / "data"
+INPUTS = json.loads((DATA / "inputs.json").read_text(encoding="utf-8"))
+SERIES = json.loads((DATA / "series.json").read_text(encoding="utf-8"))
 
-TIER_NAME = {1: "roll values to the nearest $10", 2: "roll values to the nearest $1,000",
-             3: "roll values to the nearest $10,000"}
-TIER_ROUND = {1: 10, 2: 1_000, 3: 10_000}
-_cfg = json.loads(CONFIG.read_text(encoding="utf-8"))
-TIER = int(_cfg["tier"])
-if TIER not in TIER_ROUND:
-    raise SystemExit(f"assets/privacy.json: tier must be 1, 2 or 3, not {TIER!r}")
-ROLL_ROUND = TIER_ROUND[TIER]
+A = INPUTS["property_a"]
+B = INPUTS["property_b"]
+V = INPUTS["verified_parameters"]
+ASM = INPUTS["assumptions"]
 
-
-def r10(x: float) -> int:
-    return int(round(float(x) / 10.0) * 10)
+INFL = ASM["inflation"]["baseline"]
 
 
-def roll(x: float) -> int:
-    """A roll value at the owner's chosen precision. Never finer than $10."""
-    return int(round(float(x) / ROLL_ROUND) * ROLL_ROUND)
+# ---------------------------------------------------------------- rounding ---
+def money10(x: float) -> int:
+    """Round to the nearest $10, halves up, as the owner instructed."""
+    return int((abs(x) + 5.0) // 10 * 10) * (1 if x >= 0 else -1)
 
 
-# ---------------------------------------------------------------------------------------------
-# Owner-supplied records (not independently verified), entered at the owner's chosen precision.
-# Percentage changes are computed from these figures, so they stay the same at every tier.
-# ---------------------------------------------------------------------------------------------
-ROLL_A = {                                   # (tax bill, tax assessment) by year, owner's records
-    2014: (5_970, 440_310), 2015: (6_130, 449_100), 2016: (6_410, 455_950), 2017: (6_380, 465_070),
-    2018: (6_380, 474_370), 2019: (6_570, 483_850), 2020: (6_570, 493_530), 2021: (6_660, 498_640),
-    2022: (6_760, 508_610), 2023: (6_920, 518_790), 2024: (7_000, 529_160), 2025: (7_210, 539_740),
-    2026: (None, 550_540),                   # the 2026 bill was not supplied
-}
-ROLL_B = {
-    2016: (1_680, 96_560), 2017: (1_740, 98_490), 2018: (2_060, 100_460), 2019: (2_130, 102_470),
-    2020: (2_200, 104_510), 2021: (2_070, 105_600), 2022: (2_110, 107_660), 2023: (2_180, 109_810),
-    2024: (2_320, 112_010), 2025: (2_440, 114_250),
-}
-IN = {
-    "a_value": 3_100_000,     # owner estimate, November 2026
-    "a_av_2026": roll(ROLL_A[2026][1]),
-    "a_av_2025": roll(ROLL_A[2025][1]),
-    "a_bill_2025": roll(ROLL_A[2025][0]),
-    "a_water": 1_500,         # $100-$150 a month; midpoint
-    "a_electric": -180,       # solar: owner reports a $10-$20 monthly credit; midpoint
-    "a_ins_guess": 1_500,     # owner's guess, no quote
-    "b_value": 1_800_000,     # owner estimate, November 2026
-    "b_av_2025": roll(ROLL_B[2025][1]),
-    "b_bill_2025": roll(ROLL_B[2025][0]),
-    "b_rent_mo": 7_150,       # two rented units, combined
-    "b_water": 4_380,         # $330-$400 a month for the building; midpoint
-    "b_electric": 600,        # $30-$70 a month; midpoint
-    "b_ins_guess": 1_500,     # owner's guess, no quote
-}
-
-# The annual inflation factor the Board of Equalization published for each year, used to check the
-# owner's record against the 2% cap. None means the factor was not read for that year.
-STATE_FACTOR_A = {2015: 1.998, 2016: 1.525, 2017: 2.0, 2018: 2.0, 2019: 2.0, 2020: 2.0,
-                  2021: 1.036, 2022: 2.0, 2023: 2.0, 2024: 2.0, 2025: 2.0, 2026: 2.0}
-STATE_FACTOR_B = {2017: 2.0, 2018: 2.0, 2019: 2.0, 2020: 2.0, 2021: 1.0, 2022: 2.0, 2023: 2.0,
-                  2024: 2.0, 2025: 2.0}
-
-# ---------------------------------------------------------------------------------------------
-# Verified figures (source ids refer to assets/sources.json)
-# ---------------------------------------------------------------------------------------------
-V = {
-    "fed_excl_2026": 15_000_000,      # irs_estate
-    "fed_excl_2027": 15_480_000,      # irs_2027
-    "prop19_amount": 1_044_586,       # boe_lta25009 (shown rounded to $10)
-    "prop13_cap": 0.02,               # boe_lta26002
-    "rate_b_2026": 0.0118162182,      # cityb_rate   (fiscal year 2026-27)
-    "rate_b_2025": 0.0118268325,      # cityb_res447 (fiscal year 2025-26)
-    "rate_a_low": 0.011258, "rate_a_high": 0.012409,   # cnty_a_rates (range across tax rate areas)
-    "county_transfer_tax": 0.0011,    # rtc11911
-    "treasury_10y": 0.0488,           # treasury_cmt, 9 Nov 2026
-    "state_rent_base": 0.05,          # civ1947_12(a)(1): 5% plus the change in the cost of living ...
-    "state_rent_max": 0.10,           # civ1947_12(a)(1): ... or 10%, whichever is lower
-    "rent_cap_share_of_cpi": 0.60,    # cityb_rent
-    "depreciation_years": 27.5,       # irs_p527
-    "fed_gain": 0.20, "fed_recapture": 0.25, "niit": 0.038, "ca_top": 0.123,  # irs_tc409, irs_tc559, ftb_rates
-    "home_sale_exclusion_joint": 500_000, "home_sale_exclusion_single": 250_000,  # irs_tc701
-}
-
-# ---------------------------------------------------------------------------------------------
-# Assumptions (scenario inputs, not facts). Each is shown on the site with its reason.
-# ---------------------------------------------------------------------------------------------
-A = {
-    "g": 0.04, "g_low": 0.03, "g_high": 0.05,
-    "inflation": 0.025,
-    "rate_a": 0.0118,
-    "stock_return": 0.07, "stock_dividend": 0.015,
-    "rent_a_mo": 6_500, "rent_growth": 0.03,
-    "vacancy": 0.05,
-    "unit3_rent_mo": 3_580,
-    "building_share_a": 0.30, "building_share_b": 0.40,
-    "maint_a": 9_300, "maint_b": 10_800,
-    "sale_cost": 0.05,
-    "t_ord": 0.333, "t_div": 0.281, "t_treasury": 0.278,
-    "fed_excl_index": 0.025,
-    "hold_years": 10,
-    "years": [2040, 2045, 2050],
-}
-T_GAIN = V["fed_gain"] + V["niit"] + V["ca_top"]            # 36.1%
-T_RECAP = V["fed_recapture"] + V["niit"] + V["ca_top"]      # 41.1%
-SELL_COST = A["sale_cost"] + V["county_transfer_tax"]       # 5.11%
-RENT_CTRL = V["rent_cap_share_of_cpi"] * A["inflation"]      # 1.5%
-
-# Fixed charges on each bill = bill minus (rate x assessed value); they do not scale with value.
-FIXED_A = r10(IN["a_bill_2025"] - A["rate_a"] * IN["a_av_2025"])          # about $830
-FIXED_B = r10(IN["b_bill_2025"] - V["rate_b_2025"] * IN["b_av_2025"])     # about $1,100
-
-ASSUMPTIONS = [
-    ("g", "House price growth, both properties", "3% / 4% / 5% a year", "Scenario band. The official index for each area rose 5.3% to 5.7% a year since 1995 but was flat to slightly down over the last four quarters, so the base case sits below the long-run rate.", ["fred_hpi_a", "fred_hpi_b"]),
-    ("inflation", "General inflation, used for costs", "2.5% a year", "Scenario. The 2% assessment cap has been binding in every year since 2022 because the California CPI ran above 2%.", ["boe_lta26002"]),
-    ("rate_a", "Ad valorem tax rate, Property A", "1.18%", "The owner's bill does not show the tax rate area, so the rate cannot be read off the county table. 1.18% sits inside the verified county range of 1.126% to 1.241%.", ["cnty_a_rates"]),
-    ("fixed", "Fixed charges on each tax bill", "about $830 (A) and $1,100 (B) a year, rising with inflation", "The part of each bill that the percentage rate does not explain. Fixed charges do not grow when the assessed value is reset.", ["cnty_a_rates", "cityb_rate"]),
-    ("cap_growth", "Growth of the Proposition 19 amount", "one year of house price growth, every second year", "Follows the adjustment rule as written: one year's index change, applied every other February.", ["boe_lta25009"]),
-    ("stock_return", "Stock index fund, total return", "7.0% a year, of which 1.5% is dividends", "Scenario, not a forecast. One recent official 12-month figure for an S&P 500 index fund is 12.09%; a long-run official average could not be read in this session.", ["tsp_returns"]),
-    ("treasury", "Treasury alternative", "4.88% a year", "The 10-year Treasury par yield on 9 November 2026, held constant.", ["treasury_cmt"]),
-    ("rent_a", "Market rent, Property A", "$6,500 a month in 2026, rising 3% a year", "Scenario. No official rent figure for this home could be verified; see Flagged for Review. The break-even rent is reported so the conclusion does not rest on this number.", ["hud_fmr"]),
-    ("vacancy", "Vacancy and turnover allowance", "5% of rent", "Scenario.", ["irs_p527"]),
-    ("unit3", "Rent for the third unit of Property B when the family moves out", "$3,580 a month in 2026", "Set equal to the average of the two rented units. A new tenancy may start at any rent, then rises with the capped increase.", ["cityb_rent"]),
-    ("rent_ctrl", "Rent growth for sitting tenants in Property B", "1.5% a year", "60% of the assumed 2.5% inflation, which is the published formula. The current allowed increase is 1.6%.", ["cityb_rent"]),
-    ("state_rent", "Rent growth if the local ordinance does NOT cover Property B", "7.5% a year, to a 10% ceiling", "The statewide cap is 5% plus the change in the cost of living, or 10%, whichever is lower. With 2.5% inflation that is 7.5%. It applies only where the local ordinance does not; the coverage question is open.", ["civ1947_12"]),
-    ("building", "Share of value that is building, not land", "30% (A) and 40% (B)", "Scenario. Only the building is depreciated. The assessor's land and improvement split was not supplied.", ["irs_p527"]),
-    ("maint", "Maintenance and repairs", "$9,300 a year (A) and $10,800 a year (B) in 2026, rising with inflation", "Scenario: 1.0% of building value for A and 1.5% for B. The owner states that A costs less to maintain than B.", ["irs_p527"]),
-    ("sale_cost", "Cost of selling Property A", "5.11% of the price", "5.0% scenario allowance for agents, escrow, title and preparation, plus the verified 0.11% county transfer tax.", ["rtc11911", "cnty_a_recorder"]),
-    ("t_ord", "Tax on rental income and on rental losses used", "33.3%", "Scenario household: 24% federal plus 9.3% California. Losses are assumed usable against Property B's rental income.", ["irs_p925", "ftb_rates"]),
-    ("t_gain", "Tax on a large one-time gain", "36.1%", "20% federal, 3.8% net investment income tax and 12.3% California. Depreciation taken is taxed at 41.1%.", ["irs_tc409", "irs_tc559", "ftb_cg"]),
-    ("t_div", "Tax on dividends and on Treasury interest", "28.1% and 27.8%", "15% + 3.8% + 9.3% on dividends. Treasury interest is free of state tax under 31 U.S.C. 3124, verified on 11 November 2026, so it carries federal tax only.", ["irs_tc409", "irs_tc559", "uscode3124"]),
-    ("home_excl", "Home-sale exclusion if the family lives in A", "$500,000", "Joint return. It is $250,000 on a single return.", ["irs_tc701"]),
-    ("fed_excl_index", "Federal estate exclusion after 2027", "2.5% a year", "Scenario. The amount is indexed by law; the future index is unknown.", ["irs_rp2532", "irs_2027"]),
-    ("hold_years", "Comparison period", "10 years after the inheritance", "Every option is cashed out at the end and all taxes are paid, so the options are compared on the same footing.", ["irs_basis"]),
-]
+def pct(x: float, places: int = 2) -> float:
+    return round(x * 100.0, places)
 
 
-# ---------------------------------------------------------------------------------------------
-# Building blocks
-# ---------------------------------------------------------------------------------------------
-def infl(year, base=2026, rate=None):
-    r = A["inflation"] if rate is None else rate
-    return (1 + r) ** (year - base)
+# ------------------------------------------------------------ tax bill fit ---
+def _diagnose(rows, rate: float, infl: float):
+    """Split a bill into ad valorem and fixed parts at a chosen rate."""
+    base_year = max(int(r["year"]) for r in rows if r.get("bill"))
+    implied = []
+    for r in rows:
+        if not r.get("bill"):
+            continue
+        implied.append((int(r["year"]),
+                        float(r["bill"]) - rate * float(r["assessed"])))
+    implied.sort()
+    fixed_base = implied[-1][1]
+    residuals = []
+    worst_year, worst_delta = None, 0.0
+    for y, fx in implied:
+        pred = rate * float(next(r["assessed"] for r in rows if int(r["year"]) == y)) \
+            + fixed_base * (1 + infl) ** (y - base_year)
+        actual = float(next(r["bill"] for r in rows if int(r["year"]) == y))
+        delta = actual - pred
+        residuals.append(delta)
+        if abs(delta) > abs(worst_delta):
+            worst_year, worst_delta = y, delta
+    span = implied[-1][0] - implied[0][0]
+    growth = ((implied[-1][1] / implied[0][1]) ** (1 / span) - 1) if span and implied[0][1] > 0 else 0.0
+    return {
+        "rate": rate,
+        "fixed_base": fixed_base,
+        "base_year": base_year,
+        "implied_fixed_first": implied[0][1],
+        "implied_fixed_last": implied[-1][1],
+        "implied_fixed_growth": growth,
+        "worst_year": worst_year,
+        "worst_delta": worst_delta,
+        "max_abs_residual": max(abs(d) for d in residuals),
+        "n": len(implied),
+        "identification_note": "The rate is not fitted from the data. Assessed value and the fixed part of the bill both grow at about 2% a year, so the data cannot separate them: any rate in a wide band fits almost equally well. The rate is therefore taken from published law or stated as an assumption.",
+    }
 
 
-def a_value(year, g):
-    return IN["a_value"] * (1 + g) ** (year - 2026)
+def fit_bill(rows: list[dict], rate: float, infl: float = INFL):
+    return _diagnose(rows, rate, infl)
 
 
-def b_value(year, g):
-    return IN["b_value"] * (1 + g) ** (year - 2026)
+def bill_for(assessed: float, fit: dict, year: int, infl: float = INFL) -> float:
+    return fit["rate"] * assessed + fit["fixed_base"] * (1 + infl) ** (year - fit["base_year"])
 
 
-def a_base(year):
-    """Property A's assessed value if nothing changes: +2% a year."""
-    return IN["a_av_2026"] * (1 + V["prop13_cap"]) ** (year - 2026)
+# --------------------------------------------------------------- projection --
+def project_roll(rows: list[dict], value_2026: float, g: float, infl: float,
+                 cap: float, horizon: int, fit: dict) -> list[dict]:
+    start_year = max(int(r["year"]) for r in rows)
+    av = float([r["assessed"] for r in rows if int(r["year"]) == start_year][0])
+    out = []
+    for k in range(0, horizon + 1):
+        year = 2026 + k
+        value = value_2026 * (1 + g) ** k
+        bill = bill_for(av, fit, year, infl)
+        out.append({
+            "year": year,
+            "value": money10(value),
+            "assessed": money10(av),
+            "bill": money10(bill),
+            "effective_rate": round(bill / av * 100.0, 3) if av else None,
+        })
+        av *= (1 + cap)
+    return out
 
 
-def b_base(year):
-    return IN["b_av_2025"] * (1 + V["prop13_cap"]) ** (year - 2025)
+def roll_table(rows: list[dict], fit: dict, infl: float = INFL) -> list[dict]:
+    """The owner's roll with the fitted bill beside the actual bill."""
+    out = []
+    have = [r for r in rows if r.get("bill")]
+    for r in rows:
+        y = int(r["year"])
+        fitted = bill_for(float(r["assessed"]), fit, y, infl) if have else None
+        out.append({
+            "year": y,
+            "assessed": money10(r["assessed"]),
+            "bill": money10(r["bill"]) if r.get("bill") else None,
+            "fitted": money10(fitted) if fitted is not None else None,
+            "residual": money10(r["bill"] - fitted) if r.get("bill") and fitted is not None else None,
+        })
+    return out
 
 
-def prop19_amount(year, g):
-    """One year's house price change, applied every second February from 2027."""
-    n = 0 if year < 2027 else (year - 2027) // 2 + 1
-    return V["prop19_amount"] * (1 + g) ** n
+# ------------------------------------------------------------------ paths ----
+def sale_proceeds(price: float, basis: float, sell_pct: float, gain_rate: float,
+                  recapture_rate: float, depreciation: float, exclusion: float = 0.0):
+    costs = price * sell_pct
+    net_before_tax = price - costs
+    total_gain = max(0.0, net_before_tax - basis)
+    recapture = min(depreciation, total_gain)
+    capital = max(0.0, total_gain - recapture)
+    taxable_capital = max(0.0, capital - exclusion)
+    tax = taxable_capital * gain_rate + recapture * recapture_rate
+    return {
+        "price": money10(price),
+        "costs": money10(costs),
+        "basis": money10(basis),
+        "gain": money10(total_gain),
+        "recapture": money10(recapture),
+        "exclusion": money10(exclusion),
+        "tax": money10(tax),
+        "net": money10(net_before_tax - tax),
+    }
 
 
-def tax_a(assessed, year, rate=None):
-    return assessed * A["rate_a"] + FIXED_A * infl(year, rate=rate)
+def carrying_costs(value: float, cost_base: float, maint_pct: float, infl: float,
+                   horizon: int, start_mult: float = 1.0) -> float:
+    tot = 0.0
+    for j in range(horizon):
+        tot += (cost_base * start_mult + maint_pct * value) * (1 + infl) ** j
+    return tot
 
 
-def tax_b(assessed, year, rate=None):
-    return assessed * V["rate_b_2026"] + FIXED_B * infl(year, 2025, rate=rate)
+def tax_path(start_av: float, fit: dict, start_year: int, infl: float,
+             horizon: int, cap: float = 0.02) -> float:
+    av = start_av
+    tot = 0.0
+    for j in range(horizon):
+        tot += bill_for(av, fit, start_year + j, infl)
+        av *= (1 + cap)
+    return tot
 
 
-def stock_after_tax(p0, n, rs=None):
-    rs = A["stock_return"] if rs is None else rs
-    p = basis = p0
-    for i in range(n):
-        r = rs[i] if isinstance(rs, (list, tuple)) else rs
-        div = p * A["stock_dividend"]
-        tax = div * A["t_div"]
-        p = p * (1 + r) - tax
-        basis += div - tax
-    return p - max(0.0, p - basis) * T_GAIN
+def run_paths(inherit_year: int, g: float, infl: float, eq: float, drag: float,
+              tsy: float, cap_growth: float, sell_pct: float, horizon: int,
+              gain_rate: float, rec_rate: float, exclusion: float,
+              fixed_growth: float, fit_a: dict, cost_a_base: float,
+              maint_live: float, maint_rent: float) -> dict:
+    k = inherit_year - 2026
+    value_at_death = A["estimated_market_value_2026"] * (1 + g) ** k
+    byv = A["roll"][0]["assessed"] * (1 + 0.02) ** k
+    cap = V["prop19_value_cap_2025_2027"]["value"] * (1 + cap_growth) ** (inherit_year - 2025)
+    # With the exclusion: new taxable value = prior taxable value
+    #                     + (market value - prior taxable value - cap)
+    taxable_live = byv + max(0.0, value_at_death - (byv + cap))
+    taxable_rent = value_at_death
+
+    fit_T = dict(fit_a)
+    fit_T["fixed_base"] = fit_a["fixed_base"] * (1 + fixed_growth) ** (inherit_year - fit_a["base_year"])
+
+    terminal_price = value_at_death * (1 + g) ** horizon
+
+    # Path 1 and 2: sell at inheritance, invest
+    sale = sale_proceeds(value_at_death, value_at_death, sell_pct, gain_rate, rec_rate, 0.0)
+    inv_eq = sale["net"] * (1 + eq - drag) ** horizon
+    inv_ts = sale["net"] * (1 + tsy) ** horizon
+
+    # Path 3: live in it for the whole horizon, then sell
+    tax_live = tax_path(taxable_live, fit_T, inherit_year, infl, horizon)
+    cost_live = carrying_costs(value_at_death, cost_a_base, maint_live, infl, horizon)
+    live = sale_proceeds(terminal_price, value_at_death, sell_pct, gain_rate, rec_rate,
+                         0.0, exclusion)
+
+    # Path 4: let it out from the start, then sell
+    tax_rent = tax_path(taxable_rent, fit_T, inherit_year, infl, horizon)
+    cost_rent = carrying_costs(value_at_death, cost_a_base, maint_rent, infl, horizon)
+    deprec = min(0.8 * value_at_death, 0.8 * value_at_death / 27.5 * horizon)
+    rent_sale = sale_proceeds(terminal_price, value_at_death - deprec, sell_pct,
+                              gain_rate, rec_rate, deprec)
+
+    # Path 5: live in it for two years, then let it out for the rest
+    tax_h1 = tax_path(taxable_live, fit_T, inherit_year, infl, 2)
+    fit_T2 = dict(fit_T)
+    fit_T2["fixed_base"] = fit_T["fixed_base"] * (1 + fixed_growth) ** 2
+    av_after = taxable_rent * 1.02 ** 2
+    tax_h2 = tax_path(av_after, fit_T2, inherit_year + 2, infl, horizon - 2)
+    cost_h = carrying_costs(value_at_death, cost_a_base, maint_rent, infl, horizon)
+    deprec_h = min(0.8 * value_at_death,
+                   0.8 * value_at_death / 27.5 * (horizon - 2))
+    hybrid_sale = sale_proceeds(terminal_price, value_at_death - deprec_h, sell_pct,
+                                gain_rate, rec_rate, deprec_h, exclusion)
+
+    return {
+        "inherit_year": inherit_year,
+        "value_at_death": money10(value_at_death),
+        "factored_base_year_value": money10(byv),
+        "prop19_cap": money10(cap),
+        "prop19_excess": money10(max(0.0, value_at_death - (byv + cap))),
+        "taxable_if_live": money10(taxable_live),
+        "taxable_if_rent": money10(taxable_rent),
+        "bill_today_projected": money10(bill_for(byv, fit_a, inherit_year, infl)),
+        "bill_if_live_year1": money10(bill_for(taxable_live, fit_T, inherit_year, infl)),
+        "bill_if_rent_year1": money10(bill_for(taxable_rent, fit_T, inherit_year, infl)),
+        "terminal_price": money10(terminal_price),
+        "paths": {
+            "sell_equities": {"terminal": money10(inv_eq), "outflow": 0,
+                              "start": sale["net"], "sale": sale},
+            "sell_treasury": {"terminal": money10(inv_ts), "outflow": 0,
+                              "start": sale["net"], "sale": sale},
+            "live_in": {"terminal": money10(live["net"]),
+                        "outflow": money10(tax_live + cost_live),
+                        "tax_total": money10(tax_live),
+                        "cost_total": money10(cost_live), "sale": live},
+            "rent_out": {"terminal": money10(rent_sale["net"]),
+                         "outflow": money10(tax_rent + cost_rent),
+                         "tax_total": money10(tax_rent),
+                         "cost_total": money10(cost_rent),
+                         "depreciation": money10(deprec), "sale": rent_sale},
+            "live_then_rent": {"terminal": money10(hybrid_sale["net"]),
+                               "outflow": money10(tax_h1 + tax_h2 + cost_h),
+                               "tax_total": money10(tax_h1 + tax_h2),
+                               "cost_total": money10(cost_h),
+                               "depreciation": money10(deprec_h),
+                               "sale": hybrid_sale},
+        },
+    }
 
 
-def treasury_after_tax(p0, n):
-    return p0 * (1 + V["treasury_10y"] * (1 - A["t_treasury"])) ** n
+def annuity(present: float, rate: float, years: int) -> float:
+    if rate <= 0:
+        return present / years
+    return present * rate / (1 - (1 + rate) ** (-years))
 
 
-def stock_after_tax_surcharge(p0, n, rs=None, threshold=1_000_000, extra=0.01):
-    """The stock path with California's 1% additional tax above $1,000,000 of taxable income.
+def breakeven_rent(inherit_year: int, g: float, infl: float, eq: float, drag: float,
+                   cap_growth: float, sell_pct: float, horizon: int, gain_rate: float,
+                   rec_rate: float, fixed_growth: float, fit_a: dict,
+                   cost_a_base: float, maint_rent: float, target: float):
+    """Initial annual rent that makes letting the house out match the target."""
+    k = inherit_year - 2026
+    value_at_death = A["estimated_market_value_2026"] * (1 + g) ** k
+    fit_T = dict(fit_a)
+    fit_T["fixed_base"] = fit_a["fixed_base"] * (1 + fixed_growth) ** (inherit_year - fit_a["base_year"])
 
-    Revenue and Taxation Code section 17043 imposes 1% on the portion of taxable income above
-    $1,000,000, in addition to the graduated rates. The 12.3% top bracket used in T_GAIN is the
-    schedule rate only, so this function adds the surcharge to the taxable gain at the end. It
-    applies the surcharge to the gain alone, which understates taxable income if other income
-    pushes the total higher; the published figure is therefore a lower bound on that tax.
-    """
-    rs = A["stock_return"] if rs is None else rs
-    p = basis = p0
-    for i in range(n):
-        r = rs[i] if isinstance(rs, (list, tuple)) else rs
-        div = p * A["stock_dividend"]
-        tax = div * A["t_div"]
-        p = p * (1 + r) - tax
-        basis += div - tax
-    gain = max(0.0, p - basis)
-    return p - gain * T_GAIN - max(0.0, gain - threshold) * extra
+    def rent_terminal(r0: float) -> float:
+        cash = 0.0
+        av = value_at_death
+        for j in range(horizon):
+            net = (r0 * (1 + infl) ** j
+                   - (cost_a_base + maint_rent * value_at_death) * (1 + infl) ** j
+                   - bill_for(av, fit_T, inherit_year + j, infl))
+            cash += net * (1 + eq - drag) ** (horizon - 1 - j)
+            av *= 1.02
+        deprec = min(0.8 * value_at_death, 0.8 * value_at_death / 27.5 * horizon)
+        price = value_at_death * (1 + g) ** horizon
+        s = sale_proceeds(price, value_at_death - deprec, sell_pct, gain_rate, rec_rate, deprec)
+        return cash + s["net"]
 
-
-def reassess(year, g, law="current"):
-    """Assessed value of Property A in the year of inheritance under each use."""
-    fmv, base, amt = a_value(year, g), a_base(year), prop19_amount(year, g)
-    live = base + max(0.0, fmv - base - amt) if law == "current" else base
-    rent = fmv if law == "current" else base
-    return {"fmv": fmv, "base": base, "amount": amt, "live": live, "rent": rent}
-
-
-def _terminal_growth(g, g_path, n):
-    if g_path is not None:
-        mult = 1.0
-        for x in g_path:
-            mult *= 1 + x
-        return mult
-    return (1 + g) ** n
-
-
-def run(option, year, g, law="current", rs=None, rent_mo=None, ins_mult=1.0, n=None,
-        infl_rate=None, g_path=None, rs_path=None):
-    """Wealth from Property A and the third unit of Property B, n years after inheriting.
-
-    g is the house price growth used to anchor market value at the inheritance year. g_path, when given,
-    is a list of n annual growth rates applied after the inheritance instead of g (used for crash
-    analogues). rs_path, when given, is a list of n annual stock total returns instead of rs.
-    infl_rate, when given, overrides the inflation rate for costs, fixed charges and the rent cap
-    (used by the black-swan inflation stress case).
-    """
-    n = n or A["hold_years"]
-    rs = rs_path if rs_path is not None else (A["stock_return"] if rs is None else rs)
-    rent_mo = A["rent_a_mo"] if rent_mo is None else rent_mo
-    rent_ctrl = V["rent_cap_share_of_cpi"] * (A["inflation"] if infl_rate is None else infl_rate)
-    rz = reassess(year, g, law)
-    fmv = rz["fmv"]
-    start = fmv * (1 - SELL_COST)
-    stock_end = stock_after_tax(start, n, rs)
-    r_eq = (stock_end / start) ** (1 / n) - 1          # after-tax return used for all cash flows
-    flows = []
-    if option == "sell_stock":
-        return {"wealth": stock_end, "first_cash": 0.0, "cash_total": 0.0, "asset": stock_end, "tax_first": 0.0, "r_eq": r_eq}
-    if option == "sell_treasury":
-        w = treasury_after_tax(start, n)
-        return {"wealth": w, "first_cash": 0.0, "cash_total": 0.0, "asset": w, "tax_first": 0.0, "r_eq": r_eq}
-    dep = A["building_share_a"] * fmv / V["depreciation_years"]
-    tax_first = rent_first = 0.0
-    for t in range(n):
-        y = year + t
-        ins = IN["a_ins_guess"] * ins_mult * infl(y, rate=infl_rate)
-        maint = A["maint_a"] * infl(y, rate=infl_rate)
-        if option == "live":
-            ptax = tax_a(rz["live"] * (1 + V["prop13_cap"]) ** t, y, rate=infl_rate)
-            unit3 = (A["unit3_rent_mo"] * 12 * (1 + A["rent_growth"]) ** (year - 2026)
-                     * (1 + rent_ctrl) ** t * (1 - A["vacancy"]) * (1 - A["t_ord"]))
-            cf = unit3 - (ptax + ins + maint + IN["a_water"] * infl(y, rate=infl_rate) + IN["a_electric"])
-        else:
-            ptax = tax_a(rz["rent"] * (1 + V["prop13_cap"]) ** t, y, rate=infl_rate)
-            rent = rent_mo * 12 * (1 + A["rent_growth"]) ** (y - 2026) * (1 - A["vacancy"])
-            noi = rent - ptax - ins - maint
-            cf = noi - A["t_ord"] * (noi - dep)
-            if t == 0:
-                rent_first = rent
-        if t == 0:
-            tax_first = ptax
-        flows.append(cf)
-    fv = sum(cf * (1 + r_eq) ** (n - 1 - t) for t, cf in enumerate(flows))
-    net_sale = fmv * _terminal_growth(g, g_path, n) * (1 - SELL_COST)
-    if option == "live":
-        gain_tax = T_GAIN * max(0.0, net_sale - fmv - V["home_sale_exclusion_joint"])
-    else:
-        d = dep * n
-        gain_tax = T_RECAP * d + T_GAIN * max(0.0, net_sale - fmv)
-    asset = net_sale - gain_tax
-    return {"wealth": asset + fv, "first_cash": flows[0], "cash_total": sum(flows), "asset": asset,
-            "tax_first": tax_first, "r_eq": r_eq, "rent_first": rent_first}
-
-
-def bisect(f, lo, hi):
-    for _ in range(70):
+    lo, hi = 0.0, 3_000_000.0
+    for _ in range(200):
         mid = (lo + hi) / 2
-        if f(mid) < 0:
+        if rent_terminal(mid) < target:
             lo = mid
         else:
             hi = mid
-    return (lo + hi) / 2
+    return money10((lo + hi) / 2)
 
 
-OPTIONS = [("sell_stock", "Sell A, buy a stock index fund"), ("sell_treasury", "Sell A, buy Treasuries"),
-           ("rent", "Keep A and rent it out"), ("live", "Move into A")]
-
-# ---------------------------------------------------------------------------------------------
-# Black-swan stress tests (2026-11-11). Anchored to an inheritance in 2045 at the baseline price
-# path; each scenario swaps the post-inheritance world. All are scenario arithmetic, not forecasts.
-# Verified historical analogues (see assets/sources.json: bls_cpi_2022, bls_mlr100, bls_btn2021,
-# fedhist_1929, fedhist_greatinflation, fedhist_greatrecession, nyfed_covid, fred_ussthpi,
-# fred_nasdaqcom, fred_dgs10): Great Depression (DJIA -89% 1929-1932), Great Inflation (CPI +14.8%
-# 12-month to March 1980), 1973-76 (12.3% Dec 1974), 2000-2002 dot-com (NASDAQ -78%), Great
-# Recession (S&P 500 -57%, home prices ~-30%), COVID-19 (S&P 500 -34% Feb-Mar 2020).
-# ---------------------------------------------------------------------------------------------
-GFC_HOUSE_PATH = [-0.12, -0.08, -0.03, 0.02, 0.035, 0.040, 0.040, 0.040, 0.040, 0.040]   # cumulative about flat, trough -19%
-GFC_STOCK_PATH = [-0.45, 0.06, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09]             # crash then recovery
-
-SCENARIOS = [
-    ("S0", "Baseline (reference)", 0.025, 0.040, 0.070, 0.0488, None, None,
-     "The assumption register: 2.5% inflation, 4% house growth, stocks 7%, 10-year Treasury 4.88%."),
-    ("S1", "High inflation, flat real house (1970s analogue)", 0.060, 0.060, 0.040, 0.080, None, None,
-     "CPI 12-month peaked at 14.8% in March 1980; inflation ran above 12% with unemployment above 7% in 1974."),
-    ("S2", "Deflationary slump (1930s / Japan-adjacent)", 0.000, -0.010, 0.010, 0.010, None, None,
-     "Japan's lost decades: falling prices and land values. DJIA fell 89% from 3 Sep 1929 to 8 Jul 1932."),
-    ("S3", "Lost decade for equities", 0.025, 0.030, 0.000, 0.030, None, None,
-     "Stocks flat for ten years. The S&P 500's 2000s decade managed about zero nominal total return."),
-    ("S4", "Crash at the inheritance, then recovery (2008 analogue)", 0.020, 0.040, 0.070, 0.020, GFC_HOUSE_PATH, GFC_STOCK_PATH,
-     "Home prices fell about 30% from mid-2006 to mid-2009; the S&P 500 fell 57% from October 2007 to March 2009."),
-    ("S5", "Rate shock (10-year Treasury near double today)", 0.055, 0.025, 0.050, 0.085, None, None,
-     "The 10-year Treasury yielded 15.84% on 30 September 1981; 9.99% in June 2023; 4.88% in November 2026."),
-    ("S6", "Boom", 0.030, 0.060, 0.090, 0.055, None, None,
-     "Houses and stocks both strong; inflation modestly above target."),
-]
+def breakeven_return(inherit_year: int, g: float, cap_growth: float, sell_pct: float,
+                     horizon: int, gain_rate: float, rec_rate: float, target: float):
+    k = inherit_year - 2026
+    value_at_death = A["estimated_market_value_2026"] * (1 + g) ** k
+    sale = sale_proceeds(value_at_death, value_at_death, sell_pct, gain_rate, rec_rate, 0.0)
+    lo, hi = 0.0, 0.60
+    for _ in range(300):
+        mid = (lo + hi) / 2
+        if sale["net"] * (1 + mid) ** horizon < target:
+            lo = mid
+        else:
+            hi = mid
+    return round((lo + hi) / 2 * 100.0, 2)
 
 
-def _stress_begin(inflation, treasury):
-    global RENT_CTRL
-    saved = (A["inflation"], V["treasury_10y"], RENT_CTRL)
-    A["inflation"], V["treasury_10y"] = inflation, treasury
-    RENT_CTRL = V["rent_cap_share_of_cpi"] * inflation
-    return saved
+def sensitivity(target_year: int):
+    """Terminal value of each path across a growth/return grid."""
+    rows = []
+    for g in (ASM["house_growth"]["low"], ASM["house_growth"]["baseline"],
+              ASM["house_growth"]["high"]):
+        for eq in (ASM["equity_return_nominal_gross"]["low"],
+                   ASM["equity_return_nominal_gross"]["baseline"],
+                   ASM["equity_return_nominal_gross"]["high"]):
+            res = run_paths(
+                inherit_year=target_year, g=g, infl=ASM["inflation"]["baseline"],
+                eq=eq, drag=ASM["equity_tax_drag"]["baseline"],
+                tsy=ASM["treasury_yield_nominal"]["baseline"],
+                cap_growth=ASM["prop19_cap_growth"]["baseline"],
+                sell_pct=ASM["selling_cost_pct"]["baseline"],
+                horizon=ASM["horizon_years"],
+                gain_rate=ASM["combined_gain_tax_rate"]["baseline"],
+                rec_rate=ASM["depreciation_recapture_rate"]["baseline"],
+                exclusion=V["section121_exclusion_single"]["value"],
+                fixed_growth=INFL,
+                fit_a=FIT_A,
+                cost_a_base=COST_A_BASE,
+                maint_live=A["annual_costs"]["maintenance_pct_owner_occupied"]["value"],
+                maint_rent=A["annual_costs"]["maintenance_pct_rental"]["value"])
+            terms = {k: v["terminal"] for k, v in res["paths"].items()}
+            best = max(terms, key=terms.get)
+            rows.append({"house_growth": pct(g, 1), "equity_return": pct(eq, 1),
+                         **{k: v for k, v in terms.items()}, "best": best})
+    return rows
 
 
-def _stress_end(saved):
-    global RENT_CTRL
-    A["inflation"], V["treasury_10y"], RENT_CTRL = saved
+def breakeven_house_growth(inherit_year: int, eq: float, drag: float, cap_growth: float,
+                           sell_pct: float, horizon: int, gain_rate: float,
+                           rec_rate: float, exclusion: float, maint_live: float):
+    """House growth at which living in the home matches selling and investing."""
+    def live_gap(g: float) -> float:
+        res = run_paths(inherit_year=inherit_year, g=g, infl=ASM["inflation"]["baseline"],
+                        eq=eq, drag=drag, tsy=ASM["treasury_yield_nominal"]["baseline"],
+                        cap_growth=cap_growth, sell_pct=sell_pct, horizon=horizon,
+                        gain_rate=gain_rate, rec_rate=rec_rate, exclusion=exclusion,
+                        fixed_growth=ASM["fixed_charge_growth"]["baseline"], fit_a=FIT_A,
+                        cost_a_base=COST_A_BASE, maint_live=maint_live,
+                        maint_rent=A["annual_costs"]["maintenance_pct_rental"]["value"])
+        return res["paths"]["live_in"]["terminal"] - res["paths"]["sell_equities"]["terminal"]
+    lo, hi = 0.0, 0.30
+    if live_gap(hi) < 0:
+        return None
+    for _ in range(200):
+        mid = (lo + hi) / 2
+        if live_gap(mid) < 0:
+            lo = mid
+        else:
+            hi = mid
+    return round((lo + hi) / 2 * 100.0, 2)
 
 
-def stress(year=2045):
-    n = A["hold_years"]
-    out = []
-    for sid, name, inflation, g, rs, treasury, g_path, rs_path, note in SCENARIOS:
-        saved = _stress_begin(inflation, treasury)
-        try:
-            kw = {"g_path": g_path, "rs_path": rs_path}
-            res = {k: run(k, year, g, rs=None if rs_path else rs, **kw) for k, _ in OPTIONS}
-            best = max(res[k]["wealth"] for k in res)
-            deflate = (1 + inflation) ** n
-            row = {"id": sid, "name": name, "inflation": P_pct(inflation), "house": (P_pct(g) if g_path is None else "path"),
-                   "stocks": (P_pct(rs) if rs_path is None else "path"),
-                   "treasury": P_pct(treasury), "note": note, "deflate": round(deflate, 4)}
-            for k, _ in OPTIONS:
-                row[k] = r10(res[k]["wealth"])
-                row[k + "_today"] = r10(res[k]["wealth"] / deflate)
-                row[k + "_gap"] = r10(res[k]["wealth"] - best)
-            row["winner"] = dict(OPTIONS)[max(res, key=lambda k: res[k]["wealth"])]
-            row["winner_key"] = max(res, key=lambda k: res[k]["wealth"])
-            out.append(row)
-        finally:
-            _stress_end(saved)
+
+# --------------------------------------------------------------- replays ----
+def growth_path(values: dict, first: int, last: int) -> dict:
+    out = {}
+    for y in range(first, last + 1):
+        a, b = str(y - 1), str(y)
+        if a in values and b in values and values[a]:
+            out[y] = values[b] / values[a] - 1.0
     return out
 
 
-def P_pct(x):
-    return round(x * 100, 2)
+def historical_replay(span: int = 30):
+    """Replay every full window of the real record."""
+    cpi_v = SERIES["cpi"]["values"]
+    hpi_a = SERIES["hpi_a"]["values"]
+    hpi_b = SERIES["hpi_b"]["values"]
+    gs10 = SERIES["gs10"]["values"]
+    rows = []
+    first = max(int(min(cpi_v)), int(min(hpi_a)) + 1)
+    last = min(int(max(cpi_v)), int(max(hpi_a)), int(max(gs10)))
+    for start in range(first, last - span + 2):
+        end = start + span - 1
+        if str(end) not in cpi_v or str(end) not in hpi_a or str(end) not in gs10:
+            continue
+        cpi_g = growth_path(cpi_v, start, end)
+        hpi_g = growth_path(hpi_a, start, end)
+        hpi_gb = growth_path(hpi_b, start, end)
+        gs = {y: gs10[str(y)] / 100.0 for y in range(start, end + 1) if str(y) in gs10}
+        if len(cpi_g) < span - 1 or len(hpi_g) < span - 1 or len(gs) < span - 1:
+            continue
+        val = A["estimated_market_value_2026"]
+        for y in range(start, end + 1):
+            if y in hpi_g:
+                val *= (1 + hpi_g[y])
+        val_b = B["estimated_market_value_2026"]
+        for y in range(start, end + 1):
+            if y in hpi_gb:
+                val_b *= (1 + hpi_gb[y])
+        cpi_mult = 1.0
+        for y in range(start, end + 1):
+            if y in cpi_g:
+                cpi_mult *= (1 + cpi_g[y])
+        bond_mult = 1.0
+        for y in range(start, end + 1):
+            if y in gs:
+                bond_mult *= (1 + gs[y])
+        # property tax bill on the inherited home if it had been reassessed at
+        # the start of the window and held for the whole window
+        av = A["estimated_market_value_2026"]
+        tax_reset = 0.0
+        for y in range(start, end + 1):
+            tax_reset += bill_for(av, FIT_A, 2026 + (y - start), INFL)
+            av *= 1.02
+        av2 = A["roll"][0]["assessed"]
+        tax_kept = 0.0
+        for y in range(start, end + 1):
+            tax_kept += bill_for(av2, FIT_A, 2026 + (y - start), INFL)
+            av2 *= 1.02
+        rows.append({
+            "start": start, "end": end,
+            "a_value": money10(val),
+            "a_value_real": money10(val / cpi_mult),
+            "b_value": money10(val_b),
+            "b_value_real": money10(val_b / cpi_mult),
+            "cpi_multiple": round(cpi_mult, 2),
+            "cpi_cagr": round(cpi_mult ** (1 / span) * 100 - 100, 2),
+            "a_cagr": round((val / A["estimated_market_value_2026"]) ** (1 / span) * 100 - 100, 2),
+            "bond_multiple": round(bond_mult, 2),
+            "bond_cagr": round(bond_mult ** (1 / span) * 100 - 100, 2),
+            "down_years_a": sum(1 for y in hpi_g.values() if y < 0),
+            "worst_year_a": pct(min(hpi_g.values()), 1),
+            "best_year_a": pct(max(hpi_g.values()), 1),
+            "tax_if_reset": money10(tax_reset),
+            "tax_if_kept": money10(tax_kept),
+        })
+    return rows
 
 
-BASE_YEAR = 2026
+def regime_stress():
+    cpi_v = SERIES["cpi"]["values"]
+    hpi_a = SERIES["hpi_a"]["values"]
+    gs10_v = SERIES["gs10"]["values"]
+
+    def avg_growth(series, a, b):
+        g = growth_path(series, a, b)
+        vals = list(g.values())
+        return sum(vals) / len(vals) if vals else 0.0
+
+    def avg_level(series, a, b):
+        vals = [series[str(y)] for y in range(a, b + 1) if str(y) in series]
+        return sum(vals) / len(vals) if vals else 0.0
+
+    regimes = [
+        {
+            "key": "stagflation",
+            "name": "Great Inflation repeat",
+            "analogue": "1965-1982, described by the Federal Reserve as the defining macroeconomic period of the second half of the twentieth century",
+            "src": ["frh_great_inflation", "fred_cpi", "fred_gs10", "fred_hpi_a"],
+            "derived": True,
+            "cpi": pct(avg_growth(cpi_v, 1977, 1981), 1),
+            "house": pct(avg_growth(hpi_a, 1977, 1981), 1),
+            "treasury": round(avg_level(gs10_v, 1977, 1981), 2),
+            "window": "1977-1981 averages computed from the verified series",
+        },
+        {
+            "key": "slump",
+            "name": "A long house price slump",
+            "analogue": "1989-1996 in Property A's metropolitan area",
+            "src": ["fred_hpi_a", "fred_hpi_b", "fred_cpi"],
+            "derived": True,
+            "cpi": pct(avg_growth(cpi_v, 1990, 1996), 1),
+            "house": pct(avg_growth(hpi_a, 1990, 1996), 1),
+            "treasury": round(avg_level(gs10_v, 1990, 1996), 2),
+            "window": "1990-1996 averages computed from the verified series",
+        },
+        {
+            "key": "crash",
+            "name": "A financial crisis crash",
+            "analogue": "2007-2011",
+            "src": ["fred_hpi_a", "fred_hpi_b", "fred_gs10", "frh_great_recession"],
+            "derived": True,
+            "cpi": pct(avg_growth(cpi_v, 2007, 2011), 1),
+            "house": pct(avg_growth(hpi_a, 2007, 2011), 1),
+            "treasury": round(avg_level(gs10_v, 2007, 2011), 2),
+            "window": "2007-2011 averages computed from the verified series",
+        },
+        {
+            "key": "burst",
+            "name": "A fast inflation burst then a rate shock",
+            "analogue": "2021-2023",
+            "src": ["fred_cpi", "fred_gs10", "nyfed_covid"],
+            "derived": True,
+            "cpi": pct(avg_growth(cpi_v, 2021, 2023), 1),
+            "house": pct(avg_growth(hpi_a, 2021, 2023), 1),
+            "treasury": round(avg_level(gs10_v, 2021, 2023), 2),
+            "window": "2021-2023 averages computed from the verified series",
+        },
+        {
+            "key": "flat",
+            "name": "House prices flat for the whole horizon",
+            "analogue": "None. A stress case, not a historical analogue.",
+            "src": [],
+            "derived": False,
+            "cpi": 2.5, "house": 0.0, "treasury": 4.7,
+            "window": "Hypothetical",
+        },
+        {
+            "key": "deflation",
+            "name": "Low inflation and falling nominal house prices",
+            "analogue": "None. A stress case, not a historical analogue.",
+            "src": [],
+            "derived": False,
+            "cpi": 0.5, "house": -1.0, "treasury": 2.0,
+            "window": "Hypothetical",
+        },
+    ]
+    return regimes
 
 
-def stress_extras():
-    """Fixed nominal amounts that do not rise with inflation, and purchasing power of $1."""
-    out = {"exclusion_real": [], "purchasing_power": []}
-    for yy in (2040, 2045, 2050):
-        for tag, i in (("2.5%", 0.025), ("5.0%", 0.05), ("8.0%", 0.08)):
-            out["exclusion_real"].append({"year": yy, "inflation": tag,
-                                          "home_sale_single": r10(250_000 / (1 + i) ** (yy - BASE_YEAR)),
-                                          "home_sale_joint": r10(500_000 / (1 + i) ** (yy - BASE_YEAR))})
-    for i in (0.025, 0.05, 0.08):
-        row = {"inflation": f"{i * 100:.1f}%"}
-        for yy in (2030, 2040, 2050, 2060):
-            row[str(yy)] = round(1 / (1 + i) ** (yy - BASE_YEAR), 2)
-        out["purchasing_power"].append(row)
-    return out
-
-
-
-def build():
-    g = A["g"]
-    n = A["hold_years"]
-    d = {"inputs": {k: v for k, v in IN.items()}, "verified": {}, "fixed": {"a": FIXED_A, "b": FIXED_B},
-         "rates": {"t_gain": T_GAIN, "t_recap": T_RECAP, "sell_cost": SELL_COST, "rent_ctrl": RENT_CTRL},
-         "assumptions": [{"id": i, "item": a, "value": b, "reason": c, "src": s} for i, a, b, c, s in ASSUMPTIONS]}
-    d["verified"] = {"prop19_amount": r10(V["prop19_amount"]), "fed_excl_2026": V["fed_excl_2026"],
-                     "fed_excl_2027": V["fed_excl_2027"], "rate_b_2026": V["rate_b_2026"], "rate_b_2025": V["rate_b_2025"],
-                     "rate_a_low": V["rate_a_low"], "rate_a_high": V["rate_a_high"], "treasury_10y": V["treasury_10y"],
-                     "state_rent_base": V["state_rent_base"], "state_rent_max": V["state_rent_max"]}
-
-    # Year-by-year, nothing changes (no death, no sale): 2026-2060
-    d["proj_a"], d["proj_b"] = [], []
-    for y in range(2026, 2061):
-        av = a_base(y)
-        row = {"year": y, "value_low": r10(a_value(y, 0.03)), "value_base": r10(a_value(y, 0.04)),
-               "value_high": r10(a_value(y, 0.05)), "assessed": r10(av), "property_tax": r10(tax_a(av, y)),
-               "insurance": r10(IN["a_ins_guess"] * infl(y)), "water": r10(IN["a_water"] * infl(y)),
-               "electricity": IN["a_electric"], "maintenance": r10(A["maint_a"] * infl(y))}
-        row["total_cost"] = row["property_tax"] + row["insurance"] + row["water"] + row["electricity"] + row["maintenance"]
-        d["proj_a"].append(row)
-        bv = b_base(y)
-        rent = IN["b_rent_mo"] * 12 * (1 + RENT_CTRL) ** (y - 2026)
-        rb = {"year": y, "value_low": r10(b_value(y, 0.03)), "value_base": r10(b_value(y, 0.04)),
-              "value_high": r10(b_value(y, 0.05)), "assessed": r10(bv), "property_tax": r10(tax_b(bv, y)),
-              "rent": r10(rent), "vacancy": r10(rent * A["vacancy"]), "insurance": r10(IN["b_ins_guess"] * infl(y)),
-              "water": r10(IN["b_water"] * infl(y)), "electricity": r10(IN["b_electric"] * infl(y)),
-              "maintenance": r10(A["maint_b"] * infl(y))}
-        rb["net_income"] = (rb["rent"] - rb["vacancy"] - rb["property_tax"] - rb["insurance"] - rb["water"]
-                            - rb["electricity"] - rb["maintenance"])
-        d["proj_b"].append(rb)
-
-    # Property A after the inheritance: assessed value and tax, by use
-    d["after"] = []
-    for y0 in A["years"]:
-        rz = reassess(y0, g)
-        rows = []
-        for t in range(n + 1):
-            y = y0 + t
-            f = (1 + V["prop13_cap"]) ** t
-            rows.append({"year": y, "value": r10(a_value(y, g)),
-                         "assessed_unchanged": r10(a_base(y)), "tax_unchanged": r10(tax_a(a_base(y), y)),
-                         "assessed_live": r10(rz["live"] * f), "tax_live": r10(tax_a(rz["live"] * f, y)),
-                         "assessed_rent": r10(rz["rent"] * f), "tax_rent": r10(tax_a(rz["rent"] * f, y))})
-        d["after"].append({"year": y0, "fmv": r10(rz["fmv"]), "base": r10(rz["base"]), "amount": r10(rz["amount"]),
-                           "live": r10(rz["live"]), "rent": r10(rz["rent"]),
-                           "saving": r10(tax_a(rz["rent"], y0) - tax_a(rz["live"], y0)), "rows": rows})
-
-    # Decision tables
-    d["decision"] = []
-    for y0 in A["years"]:
-        for gg in (0.03, 0.04, 0.05):
-            res = {k: run(k, y0, gg) for k, _ in OPTIONS}
-            best = max(v["wealth"] for v in res.values())
-            deflate = infl(y0 + n)
-            rows = []
-            for k, name in OPTIONS:
-                v = res[k]
-                rows.append({"option": k, "name": name, "wealth": r10(v["wealth"]), "wealth_today": r10(v["wealth"] / deflate),
-                             "asset": r10(v["asset"]), "first_cash": r10(v["first_cash"]), "cash_total": r10(v["cash_total"]),
-                             "tax_first": r10(v["tax_first"]), "rent_first": r10(v.get("rent_first", 0.0)), "gap": r10(v["wealth"] - best),
-                             "gap_today": r10((v["wealth"] - best) / deflate)})
-            live_cost = (max(res[k]["wealth"] for k in ("sell_stock", "sell_treasury", "rent")) - res["live"]["wealth"]) / (12 * n)
-            d["decision"].append({"year": y0, "g": gg, "rows": rows, "start": r10(a_value(y0, gg) * (1 - SELL_COST)),
-                                  "r_eq": round(res["live"]["r_eq"] * 100, 2),
-                                  "live_cost_month": r10(live_cost), "live_cost_month_today": r10(live_cost / deflate)})
-
-    # Sensitivities for the middle year
-    y0 = 2045
-    d["matrix"] = []
-    for gg in (0.03, 0.04, 0.05, 0.06):
-        for rs in (0.05, 0.06, 0.07, 0.08):
-            w = {k: run(k, y0, gg, rs=rs)["wealth"] for k in ("sell_stock", "rent", "live")}
-            best = max(w, key=w.get)
-            d["matrix"].append({"g": gg, "rs": rs, "sell": r10(w["sell_stock"]), "rent": r10(w["rent"]), "live": r10(w["live"]),
-                                "winner": {"sell_stock": "Sell", "rent": "Rent", "live": "Live"}[best]})
-    base = {k: run(k, y0, g)["wealth"] for k, _ in OPTIONS}
-    d["sens"] = []
-    for label, kw in (("Rent for A is $5,000 a month, not $6,500", {"rent_mo": 5_000}),
-                      ("Rent for A is $8,000 a month, not $6,500", {"rent_mo": 8_000}),
-                      ("Insurance costs three times the owner's guess", {"ins_mult": 3.0}),
-                      ("The pre-2021 exclusion is restored (proposal 25-0017)", {"law": "restored"}),
-                      # Black-swan stress cases (session arena/d2fd135b-tino3): each changes one input
-                      # and leaves every other assumption exactly as the base case.
-                      ("Stocks return 4.0% a year instead of 7.0%", {"rs": 0.04}),
-                      ("Inflation runs 4.0% a year instead of 2.5%", {"infl_rate": 0.04}),
-                      ("House prices do not rise for ten years", {"g": 0.0})):
-        w = {k: run(k, y0, **{"g": g, **kw})["wealth"] for k, _ in OPTIONS}
-        best = max(w, key=w.get)
-        d["sens"].append({"case": label, "sell_stock": r10(w["sell_stock"]), "sell_treasury": r10(w["sell_treasury"]),
-                          "rent": r10(w["rent"]), "live": r10(w["live"]), "rent_change": r10(w["rent"] - base["rent"]),
-                          "live_change": r10(w["live"] - base["live"]), "winner": dict(OPTIONS)[best]})
-    d["breakeven"] = {
-        "stock_return": round(bisect(lambda r: run("sell_stock", y0, g, rs=r)["wealth"] - run("rent", y0, g, rs=r)["wealth"], 0.0, 0.2) * 100, 1),
-        "house_growth": round(bisect(lambda x: run("rent", y0, x)["wealth"] - run("sell_stock", y0, x)["wealth"], 0.0, 0.2) * 100, 1),
-        "house_growth_vs_treasury": round(bisect(lambda x: run("rent", y0, x)["wealth"] - run("sell_treasury", y0, x)["wealth"], 0.0, 0.2) * 100, 1),
-        "rent_month": r10(bisect(lambda m: run("rent", y0, g, rent_mo=m)["wealth"] - base["sell_stock"], 1_000, 60_000)),
-        "rent_month_vs_treasury": r10(bisect(lambda m: run("rent", y0, g, rent_mo=m)["wealth"] - base["sell_treasury"], 1_000, 60_000)),
+def run_regime(regime: dict, horizon: int):
+    g = regime["house"] / 100.0
+    infl = regime["cpi"] / 100.0
+    tsy = regime["treasury"] / 100.0
+    res = run_paths(
+        inherit_year=2045, g=g, infl=infl,
+        eq=ASM["equity_return_nominal_gross"]["baseline"],
+        drag=ASM["equity_tax_drag"]["baseline"], tsy=tsy,
+        cap_growth=ASM["prop19_cap_growth"]["baseline"],
+        sell_pct=ASM["selling_cost_pct"]["baseline"], horizon=horizon,
+        gain_rate=ASM["combined_gain_tax_rate"]["baseline"],
+        rec_rate=ASM["depreciation_recapture_rate"]["baseline"],
+        exclusion=V["section121_exclusion_single"]["value"],
+        fixed_growth=ASM["fixed_charge_growth"]["baseline"], fit_a=FIT_A, cost_a_base=COST_A_BASE,
+        maint_live=A["annual_costs"]["maintenance_pct_owner_occupied"]["value"],
+        maint_rent=A["annual_costs"]["maintenance_pct_rental"]["value"])
+    cpi_mult = (1 + infl) ** horizon
+    return {
+        "terminal": {k: v["terminal"] for k, v in res["paths"].items()},
+        "terminal_real": {k: money10(v["terminal"] / cpi_mult) for k, v in res["paths"].items()},
+        "outflow": {k: v.get("outflow", 0) for k, v in res["paths"].items()},
+        "value_at_death": res["value_at_death"],
+        "bill_if_live_year1": res["bill_if_live_year1"],
+        "bill_if_rent_year1": res["bill_if_rent_year1"],
+        "best": max(res["paths"], key=lambda k: res["paths"][k]["terminal"]),
     }
-    rz = reassess(y0, g)
-    restored = reassess(y0, g, "restored")
-    d["law"] = {"year": y0, "tax_live_current": r10(tax_a(rz["live"], y0)), "tax_rent_current": r10(tax_a(rz["rent"], y0)),
-                "tax_restored": r10(tax_a(restored["live"], y0))}
 
-    # Property B if it passes in the same estate
-    d["b_reset"] = []
-    for yy in A["years"]:
-        fmv = b_value(yy, g)
-        keep, reset = tax_b(b_base(yy), yy), tax_b(fmv, yy)
-        rent = IN["b_rent_mo"] * 12 * (1 + RENT_CTRL) ** (yy - 2026)
-        costs = (IN["b_ins_guess"] + IN["b_water"] + IN["b_electric"] + A["maint_b"]) * infl(yy) + rent * A["vacancy"]
-        d["b_reset"].append({"year": yy, "value": r10(fmv), "assessed_keep": r10(b_base(yy)), "tax_keep": r10(keep),
-                             "tax_reset": r10(reset), "increase": r10(reset - keep), "rent": r10(rent),
-                             "net_keep": r10(rent - costs - keep), "net_reset": r10(rent - costs - reset)})
 
-    # Which rent cap governs Property B. The base case uses the local ordinance (60% of the price
-    # index). Civil Code 1947.12(d)(3) makes the statewide cap inapplicable where a local ordinance
-    # restricts increases to LESS than the state formula - so the local cap governs only if the
-    # building is covered. If it is not, 1947.12(a)(1) applies: 5% plus the change in the cost of
-    # living, or 10%, whichever is lower. Coverage is open, so both paths are published.
-    state_cap = min(V["state_rent_base"] + A["inflation"], V["state_rent_max"])
-    d["b_rentcap"] = {"state_rate": round(state_cap * 100, 2), "local_rate": round(RENT_CTRL * 100, 2),
-                      "state_ceiling": round(V["state_rent_max"] * 100, 1), "rows": []}
-    for yy in A["years"]:
-        local = IN["b_rent_mo"] * 12 * (1 + RENT_CTRL) ** (yy - 2026)
-        state = IN["b_rent_mo"] * 12 * (1 + state_cap) ** (yy - 2026)
-        lv = sum(IN["b_rent_mo"] * 12 * (1 + RENT_CTRL) ** (yy + t - 2026) * (1 - A["vacancy"]) for t in range(10))
-        sv = sum(IN["b_rent_mo"] * 12 * (1 + state_cap) ** (yy + t - 2026) * (1 - A["vacancy"]) for t in range(10))
-        d["b_rentcap"]["rows"].append({"year": yy, "rent_local": r10(local), "rent_state": r10(state),
-                                       "diff_first_year": r10(state - local),
-                                       "ten_year_local": r10(lv), "ten_year_state": r10(sv),
-                                       "ten_year_diff": r10(sv - lv)})
+# ------------------------------------------------------------ estate tax ----
+def estate_scenarios():
+    excl_2026 = V["federal_basic_exclusion_2026"]["value"]
+    rows = []
+    for total in [5_000_000, 10_000_000, 15_000_000, 20_000_000, 25_000_000,
+                  30_000_000, 40_000_000, 50_000_000]:
+        t_single = max(0, total - excl_2026)
+        t_couple = max(0, total - 2 * excl_2026)
+        rows.append({
+            "total": money10(total),
+            "excess_single": money10(t_single),
+            "excess_couple": money10(t_couple),
+            "federal_tax_single_at_40": money10(t_single * 0.40),
+            "federal_tax_couple_at_40": money10(t_couple * 0.40),
+            "california_estate_tax": 0,
+        })
+    return {"exclusion_2026": excl_2026,
+            "exclusion_2027": V["federal_basic_exclusion_2027"]["value"],
+            "rows": rows}
 
-    # Federal estate tax headroom
-    d["estate"] = []
-    for yy in (2026, 2027, 2030, 2035, 2040, 2045, 2050):
-        ex = V["fed_excl_2026"] if yy == 2026 else V["fed_excl_2027"] * (1 + A["fed_excl_index"]) ** (yy - 2027)
-        row = {"year": yy, "exclusion": r10(ex), "exclusion_couple": r10(2 * ex),
-               "status": "Verified" if yy <= 2027 else "Scenario"}
-        for tag, gg in (("low", 0.03), ("base", 0.04), ("high", 0.05)):
-            re_ = a_value(yy, gg) + b_value(yy, gg)
-            row[f"homes_{tag}"] = r10(re_)
-            row[f"room_single_{tag}"] = r10(ex - re_)
-            row[f"room_couple_{tag}"] = r10(2 * ex - re_)
-        row["room_single_half"] = r10(ex / 2 - a_value(yy, g) - b_value(yy, g))
-        d["estate"].append(row)
 
-    # California 1% additional tax above $1,000,000 (RTC 17043), which the 12.3% assumption omits.
-    start45 = a_value(2045, g) * (1 - SELL_COST)
-    base45 = stock_after_tax(start45, n)
-    sur45 = stock_after_tax_surcharge(start45, n)
-    assert abs(base45 - run("sell_stock", 2045, g)["wealth"]) < 0.01, "surcharge check drifted from run()"
-    d["tax_sens"] = {"year": 2045, "threshold": 1_000_000, "base": r10(base45),
-                     "with_surcharge": r10(sur45), "delta": r10(sur45 - base45)}
+def exclusion_projection():
+    rows = [{"year": 2026, "amount": V["federal_basic_exclusion_2026"]["value"],
+             "basis": "Published by the IRS in the filing-threshold table",
+             "src": ["irs_estate"]}]
+    rows.append({"year": 2027, "amount": V["federal_basic_exclusion_2027"]["value"],
+                 "basis": "Published by the IRS (IR-2026-133, 5 November 2026)",
+                 "src": ["irs_2027"]})
+    amount = float(V["federal_basic_exclusion_2027"]["value"])
+    for y in range(2028, 2056):
+        amount *= (1 + INFL)
+        rows.append({"year": y, "amount": money10(amount),
+                     "basis": "Mechanical indexation at the modelled inflation rate. Not law and not a forecast.",
+                     "src": ["ssa_trustees"]})
+    return rows
 
-    # Black-swan stress tests (2045 inheritance; post-inheritance world swapped)
-    d["stress"] = stress(2045)
-    d["stress_extras"] = stress_extras()
-    d["stress_meta"] = {"gfc_house": GFC_HOUSE_PATH, "gfc_stock": GFC_STOCK_PATH}
 
-    # Current-year costs, side by side
-    pa, pb = d["proj_a"][0], d["proj_b"][0]
-    d["now"] = {"a": pa, "b": pb}
+def prop19_cap_projection():
+    rows = [{"year": 2026, "amount": V["prop19_value_cap_2025_2027"]["value"],
+             "basis": "Published for transfers 16 February 2025 to 15 February 2027",
+             "src": ["boe_lta25009"]}]
+    cap = float(V["prop19_value_cap_2025_2027"]["value"])
+    for y in range(2027, 2056):
+        cap *= (1 + ASM["prop19_cap_growth"]["baseline"])
+        rows.append({"year": y, "amount": money10(cap),
+                     "basis": "Modelled indexation at the assumed rate. The real amount is set every second February from the California House Price Index and is not published in advance.",
+                     "src": ["boe_lta25009"]})
+    return rows
 
-    # ------------------------------------------------------------------------------------------
-    # Roll history at the owner's chosen precision. Year-over-year changes are computed from the
-    # owner's figures before rounding, so they stay exact at every tier; the dollar columns are
-    # rounded. "factor" is the state inflation factor for the year and "match" says whether the
-    # owner's record follows it within one basis point.
-    # ------------------------------------------------------------------------------------------
-    def history(hist, factors):
-        rows, prev = [], None
-        for y in sorted(hist):
-            bill, av = hist[y]
-            bill_pct = None if (bill is None or prev is None or not prev[0]) else 100.0 * (bill / prev[0] - 1)
-            av_pct = None if prev is None else 100.0 * (av / prev[1] - 1)
-            factor = factors.get(y)
-            rows.append({"year": y, "bill": (roll(bill) if bill is not None else None),
-                         "assessed": roll(av), "bill_pct": None if bill_pct is None else round(bill_pct, 2),
-                         "assessed_pct": None if av_pct is None else round(av_pct, 2),
-                         "factor": factor,
-                         "match": None if (factor is None or av_pct is None) else abs(av_pct - factor) <= 0.01})
-            prev = (bill, av)
-        return rows
 
-    d["roll_a"] = history(ROLL_A, STATE_FACTOR_A)
-    d["roll_b"] = history(ROLL_B, STATE_FACTOR_B)
-    d["privacy"] = {"tier": TIER, "roll_round": ROLL_ROUND, "description": TIER_NAME[TIER]}
+# ------------------------------------------------------------------ main ----
+FIT_A = fit_bill(A["roll"], ASM["ad_valorem_rate_a"]["value"])
+FIT_B = fit_bill(B["roll"], ASM["ad_valorem_rate_b"]["value"])
+COST_A_BASE = (A["annual_costs"]["water"]["mid"] + A["annual_costs"]["electricity"]["mid"]
+               + A["annual_costs"]["insurance"]["mid"])
+COST_B_BASE = (B["annual_costs"]["water"]["mid"] + B["annual_costs"]["electricity"]["mid"]
+               + B["annual_costs"]["insurance"]["mid"])
 
-    OUT.mkdir(parents=True, exist_ok=True)
 
-    def dump(name, rows):
-        with (OUT / name).open("w", newline="", encoding="utf-8") as f:
-            w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
-            w.writeheader()
-            w.writerows(rows)
-    dump("property_a.csv", d["proj_a"])
-    dump("property_b.csv", d["proj_b"])
-    dump("decision.csv", [{"inheritance_year": b["year"], "house_growth": b["g"], **r} for b in d["decision"] for r in b["rows"]])
-    (OUT / "model.json").write_text(json.dumps(d, indent=1) + "\n", encoding="utf-8")
-    return d
+def main() -> dict:
+    horizon = ASM["horizon_years"]
+    g = ASM["house_growth"]["baseline"]
+    infl = ASM["inflation"]["baseline"]
+    eq = ASM["equity_return_nominal_gross"]["baseline"]
+    drag = ASM["equity_tax_drag"]["baseline"]
+    tsy = ASM["treasury_yield_nominal"]["baseline"]
+    cap_growth = ASM["prop19_cap_growth"]["baseline"]
+    sell_pct = ASM["selling_cost_pct"]["baseline"]
+    gain_rate = ASM["combined_gain_tax_rate"]["baseline"]
+    rec_rate = ASM["depreciation_recapture_rate"]["baseline"]
+    maint_live = A["annual_costs"]["maintenance_pct_owner_occupied"]["value"]
+    maint_rent = A["annual_costs"]["maintenance_pct_rental"]["value"]
+
+    out = {
+        "meta": {"built": "2026-11-13", "rounding": "nearest $10",
+                 "horizon_years": horizon, "deterministic": True,
+                 "inflation_assumption": infl, "house_growth_assumption": g,
+                 "equity_assumption": eq, "equity_drag": drag,
+                 "treasury_assumption": tsy, "selling_cost": sell_pct,
+                 "gain_tax_rate": gain_rate, "recapture_rate": rec_rate},
+        "fit": {
+            "a": {k: (v if not isinstance(v, float) else round(v, 6))
+                  for k, v in FIT_A.items()},
+            "b": {k: (v if not isinstance(v, float) else round(v, 6))
+                  for k, v in FIT_B.items()},
+        },
+        "roll_a": roll_table(A["roll"], FIT_A),
+        "roll_b": roll_table(B["roll"], FIT_B),
+        "projection_a": project_roll(A["roll"], A["estimated_market_value_2026"],
+                                     g, infl, 0.02, 50, FIT_A),
+        "projection_b": project_roll(B["roll"], B["estimated_market_value_2026"],
+                                     g, infl, 0.02, 50, FIT_B),
+        "paths": [],
+        "regimes": [],
+        "replay": historical_replay(30),
+        "estate": estate_scenarios(),
+        "exclusion_projection": exclusion_projection(),
+        "prop19_cap_projection": prop19_cap_projection(),
+        "sensitivity": sensitivity(2045),
+        "costs_a_now": {
+            "water": money10(A["annual_costs"]["water"]["mid"]),
+            "electricity": money10(A["annual_costs"]["electricity"]["mid"]),
+            "insurance": money10(A["annual_costs"]["insurance"]["mid"]),
+            "maintenance": money10(maint_live * A["estimated_market_value_2026"]),
+            "property_tax": money10(bill_for(A["roll"][0]["assessed"], FIT_A, 2026, infl)),
+        },
+        "costs_b_now": {
+            "water": money10(B["annual_costs"]["water"]["mid"]),
+            "electricity": money10(B["annual_costs"]["electricity"]["mid"]),
+            "insurance": money10(B["annual_costs"]["insurance"]["mid"]),
+            "maintenance": money10(B["annual_costs"]["maintenance_pct"]["value"]
+                                   * B["estimated_market_value_2026"]),
+            "property_tax": money10(bill_for(B["roll"][0]["assessed"], FIT_B, 2026, infl)),
+            "rent": money10(B["rent"]["annual"]),
+        },
+        "series_table": build_series_table(),
+    }
+
+    for year in ASM["inheritance_years"]:
+        res = run_paths(inherit_year=year, g=g, infl=infl, eq=eq, drag=drag, tsy=tsy,
+                        cap_growth=cap_growth, sell_pct=sell_pct, horizon=horizon,
+                        gain_rate=gain_rate, rec_rate=rec_rate,
+                        exclusion=V["section121_exclusion_single"]["value"],
+                        fixed_growth=ASM["fixed_charge_growth"]["baseline"], fit_a=FIT_A, cost_a_base=COST_A_BASE,
+                        maint_live=maint_live, maint_rent=maint_rent)
+        t_eq = res["paths"]["sell_equities"]["terminal"]
+        res["breakeven_rent_annual"] = breakeven_rent(
+            year, g, infl, eq, drag, cap_growth, sell_pct, horizon, gain_rate,
+            rec_rate, infl, FIT_A, COST_A_BASE, maint_rent, t_eq)
+        res["breakeven_rent_monthly"] = money10(res["breakeven_rent_annual"] / 12)
+        res["breakeven_return_vs_live"] = breakeven_return(
+            year, g, cap_growth, sell_pct, horizon, gain_rate, rec_rate,
+            res["paths"]["live_in"]["terminal"])
+        res["breakeven_return_vs_rent"] = breakeven_return(
+            year, g, cap_growth, sell_pct, horizon, gain_rate, rec_rate,
+            res["paths"]["rent_out"]["terminal"])
+        res["housing_value_needed"] = money10(annuity(
+            t_eq - res["paths"]["live_in"]["terminal"], eq - drag, horizon))
+        res["breakeven_house_growth"] = breakeven_house_growth(
+            year, eq, drag, cap_growth, sell_pct, horizon, gain_rate, rec_rate,
+            V["section121_exclusion_single"]["value"], maint_live)
+        res["best_path"] = max(res["paths"], key=lambda k: res["paths"][k]["terminal"])
+        out["paths"].append(res)
+
+    for regime in regime_stress():
+        out["regimes"].append({**regime, "run": run_regime(regime, horizon)})
+
+    (DATA / "model.json").write_text(json.dumps(out, indent=1), encoding="utf-8")
+    return out
+
+
+def build_series_table():
+    years = sorted(set(list(SERIES["cpi"]["values"]) + list(SERIES["hpi_a"]["values"])
+                       + list(SERIES["hpi_b"]["values"]) + list(SERIES["gs10"]["values"])))
+    rows = []
+    prev = {}
+    for y in years:
+        row = {"year": int(y)}
+        for key, blk in (("cpi", SERIES["cpi"]), ("hpi_a", SERIES["hpi_a"]),
+                         ("hpi_b", SERIES["hpi_b"]), ("gs10", SERIES["gs10"])):
+            val = blk["values"].get(y)
+            row[key] = val
+            if val is not None and key in prev and prev[key]:
+                row[key + "_chg"] = round(val / prev[key] - 1, 4)
+            else:
+                row[key + "_chg"] = None
+            if val is not None:
+                prev[key] = val
+        rows.append(row)
+    return rows
 
 
 if __name__ == "__main__":
-    m = build()
-    for b in m["decision"]:
-        if b["g"] == 0.04:
-            print(b["year"], [(r["option"], r["wealth"]) for r in b["rows"]], "live costs/month today", b["live_cost_month_today"])
-    print("break-even", m["breakeven"], "fixed", m["fixed"])
+    m = main()
+    print("fit A:", {k: (round(v, 5) if isinstance(v, float) else v) for k, v in m["fit"]["a"].items()})
+    print("fit B:", {k: (round(v, 5) if isinstance(v, float) else v) for k, v in m["fit"]["b"].items()})
+    print("costs A:", m["costs_a_now"])
+    print("costs B:", m["costs_b_now"])
+    for p in m["paths"]:
+        print("==== inherit", p["inherit_year"], "value", p["value_at_death"],
+              "byv", p["factored_base_year_value"], "cap", p["prop19_cap"])
+        print("   bill today(proj)", p["bill_today_projected"],
+              "| live", p["bill_if_live_year1"], "| rent", p["bill_if_rent_year1"])
+        for k, v in p["paths"].items():
+            print("   ", k, "terminal", v["terminal"], "outflow", v.get("outflow"))
+        print("   breakeven rent/yr", p["breakeven_rent_annual"],
+              "| monthly", p["breakeven_rent_monthly"])
+        print("   breakeven return vs live", p["breakeven_return_vs_live"],
+              "| vs rent", p["breakeven_return_vs_rent"])
+        print("   housing value needed/yr", p["housing_value_needed"],
+              "| best", p["best_path"])
+    print("replay rows:", len(m["replay"]))
+    for r in m["replay"][:3]:
+        print("  ", r)
+    for rg in m["regimes"]:
+        print("  regime", rg["key"], rg["cpi"], rg["house"], rg["treasury"], "best", rg["run"]["best"])
+    print("sensitivity:")
+    for s in m["sensitivity"]:
+        print("  ", s)
