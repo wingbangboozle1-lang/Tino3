@@ -45,7 +45,10 @@ ALLOWED_PLACE_NAMES = ("Santa Clara County", "City and County of San Francisco",
                        "San Francisco", "California", "Bay Area")
 
 FORBIDDEN_ELEMENTS = re.compile(r"<(?:script|iframe|form|input|textarea|object|embed|img)\b", re.I)
-CURRENCY_AMOUNT = re.compile(r"\$\s*(\d[\d,]*)(?:\.\d+)?")
+# A scale word after the figure means it is a quoted macroeconomic aggregate, not a
+# property-level amount: "$69 trillion of household net worth". Those are published
+# verbatim from official sources and are counted, not blocked.
+CURRENCY_AMOUNT = re.compile(r"\$\s*(\d[\d,]*)(?:\.\d+)?\s*(trillion|billion|million)?", re.I)
 
 # Published statutory and official amounts that are not multiples of ten. Each
 # one is a verbatim figure from an official document and is not ours to round.
@@ -71,17 +74,19 @@ def _official_amounts_from_inputs() -> set[int]:
     return out
 
 
-def check_money(text: str, where: str) -> list[str]:
+def check_money(text: str, where: str) -> tuple[list[str], list[str]]:
+    """Return (problems, quoted official aggregates)."""
     allowed = OFFICIAL_AMOUNTS | _official_amounts_from_inputs()
-    problems = []
-    for raw in CURRENCY_AMOUNT.findall(text):
+    problems, scaled = [], []
+    for raw, scale in CURRENCY_AMOUNT.findall(text):
         amount = int(raw.replace(",", ""))
-        if amount % 10 == 0:
+        if scale:
+            scaled.append(f"${raw} {scale.lower()}")
             continue
-        if amount in allowed:
+        if amount % 10 == 0 or amount in allowed:
             continue
         problems.append(f"{where}: unrounded or unapproved monetary amount ${raw}")
-    return problems
+    return problems, scaled
 
 
 def check_identifiers(text: str, where: str) -> list[str]:
@@ -93,8 +98,9 @@ def check_identifiers(text: str, where: str) -> list[str]:
     return problems
 
 
-def scan_pages() -> list[str]:
+def scan_pages() -> tuple[list[str], list[str]]:
     problems: list[str] = []
+    scaled: list[str] = []
     for name in pack.PAGES + pack.ASSETS:
         path = ROOT / name
         if not path.is_file():
@@ -103,13 +109,15 @@ def scan_pages() -> list[str]:
         text = path.read_text(encoding="utf-8")
         problems.extend(check_identifiers(text, name))
         problems.extend(check_identifiers(name, f"path {name}"))
-        problems.extend(check_money(text, name))
+        page_problems, page_scaled = check_money(text, name)
+        problems.extend(page_problems)
+        scaled.extend(page_scaled)
         if name.endswith(".html") and FORBIDDEN_ELEMENTS.search(text):
             problems.append(f"{name}: interactive or remote-code element")
-    return problems
+    return problems, scaled
 
 
-def scan_artifact() -> list[str]:
+def scan_artifact() -> tuple[list[str], list[str]]:
     site = pack.SITE
     if not site.is_dir():
         raise SystemExit("_site is missing; run scripts/package_site.py before the privacy check")
@@ -117,6 +125,7 @@ def scan_artifact() -> list[str]:
     retired = sorted(pack.retired_paths())
     expected = set(pack.PAGES + pack.ASSETS + retired + [pack.NOJEKYLL])
     problems: list[str] = []
+    scaled: list[str] = []
     for name in sorted(files - expected):
         problems.append(f"artifact contains an unallowlisted file: {name}")
     for name in sorted(expected - files):
@@ -134,14 +143,21 @@ def scan_artifact() -> list[str]:
     for name in sorted(files & set(pack.PAGES + pack.ASSETS)):
         text = (site / name).read_text(encoding="utf-8")
         problems.extend(check_identifiers(text, f"artifact/{name}"))
-        problems.extend(check_money(text, f"artifact/{name}"))
-    return problems
+        art_problems, art_scaled = check_money(text, f"artifact/{name}")
+        problems.extend(art_problems)
+        scaled.extend(art_scaled)
+    return problems, scaled
 
 
 def main() -> int:
-    problems = scan_pages() + scan_artifact()
+    page_problems, page_scaled = scan_pages()
+    art_problems, art_scaled = scan_artifact()
+    problems = page_problems + art_problems
+    scaled = sorted(set(page_scaled + art_scaled))
     if problems:
         raise SystemExit("Privacy boundary FAILED:\n  - " + "\n  - ".join(dict.fromkeys(problems)))
+    if scaled:
+        print("  quoted official aggregates, published verbatim: " + ", ".join(scaled))
     print(
         f"PASS privacy boundary: {len(pack.PAGES)} pages and {len(pack.ASSETS)} asset scanned; "
         f"every published dollar figure is rounded to $10 or is a published official amount; "

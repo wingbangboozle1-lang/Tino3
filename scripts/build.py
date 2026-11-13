@@ -795,11 +795,21 @@ bills plus the published or assumed ad valorem rate. Everything is rounded to th
 the modelled inflation rate of 2.5% a year.</p>""")
         + tbl_a
         + tbl_b
+        + callout("note", "What an insurance benchmark does and does not tell you", f"""
+<p>The California Department of Insurance publishes average written premiums from its Residential Property
+Insurance Report. The statewide average for an owner-occupied homeowners policy was about <strong>$1,070</strong>
+in experience year 2017. Both properties here are carried at {m(MODEL['costs_a_now']['insurance'])} a year,
+which is an <strong>owner estimate</strong> and is flagged unverified.</p>
+<p>The benchmark is statewide and across all amounts of insurance. It is <strong>not</strong> a premium for
+either building, and it must not be read as one: a three-unit rental in the city and a single-family home in the
+county are priced on entirely different bases. It is published here only so the owner estimate can be seen
+against something official, which is the most this source can support. A property-specific premium remains
+blank until it is quoted.</p>""")
         + table("Property B net income today",
                 ["Item", "Amount", "Source"],
                 [
                     f"<td>Rent received, two units</td><td>{m(net['rent'])}</td>" + src_cell([], "Owner statement, unverified"),
-                    f"<td>Less water</td><td>{m(-net['water'])}</td>" + src_cell([], "Owner estimate, unverified"),
+                    f"<td>Less water</td><td>{m(-net['water'])}</td>" + src_cell(["sfpuc_rates"], "Owner estimate; city schedule"),
                     f"<td>Less electricity</td><td>{m(-net['electricity'])}</td>" + src_cell([], "Owner estimate, unverified"),
                     f"<td>Less insurance</td><td>{m(-net['insurance'])}</td>" + src_cell([], "Owner estimate, unverified"),
                     f"<td>Less maintenance at the assumed rate</td><td>{m(-net['maintenance'])}</td>" + src_cell([], "Assumption"),
@@ -938,9 +948,26 @@ Let it out as well and depreciation recapture pushes it to <strong>{m(rent_sale[
 rules work, and it only exists at the moment of transfer.</p>""")
         + tbl
         + worked
+        + '<h2>Transfer tax if Property B is sold</h2>'
+        + table("City transfer tax on a sale of Property B",
+                ["Price band", "Rate", "Note", "Source"],
+                [f"<td>{esc(a)}</td><td>{esc(b)}</td><td>{esc(c)}</td>"
+                 + src_cell(["cityb_transfer"], "City fee schedule")
+                 for a, b, c in [
+                     ("Up to $250,000", "0.5%", "Lowest band."),
+                     ("Above $250,000 and below $1,000,000", "0.68%", "Applies to the whole price, not just the excess."),
+                     ("$1,000,000 to under $5,000,000", "0.75%", "The band Property B is in today."),
+                     ("$5,000,000 to under $10,000,000", "2.25%", "Crossing $5,000,000 triples the rate on the entire price."),
+                     ("$10,000,000 and above", "Not published here",
+                      "The schedule the city publishes does not set out the top band in the table this site read, so it is left blank rather than inferred."),
+                 ]],
+                note="The rate applies to the entire consideration, so a sale that crosses a threshold is not "
+                     "taxed band by band. This matters for Property B only; Property A is in the county, and "
+                     "no city transfer tax is charged there.")
         + '<h2>What the model does and does not do</h2>'
         + callout("flag", "Not modelled, and flagged for a professional", """
 <ul>
+<li><strong>The additional 1% California tax above $1,000,000 of income.</strong> Revenue and Taxation Code section 17043 adds 1% to taxable income above $1,000,000. A large gain in the year of a sale can push income over that line, which would raise the effective state rate used here. It is not modelled.</li>
 <li><strong>A like-kind exchange under section 1031.</strong> Exchanges of real property are still available, but they defer rather than forgive tax, and they do not fix the property tax reassessment. Whether one makes sense depends on whether the heir wants to stay in real estate at all.</li>
 <li><strong>An instalment sale.</strong> Spreads the gain, but not the tax.</li>
 <li><strong>Gifting during life rather than at death.</strong> Removes the basis step-up. Almost always worse for an appreciated asset.</li>
@@ -965,7 +992,7 @@ def page_inheritance() -> str:
         ("3", "The transfer event",
          "On the transfer, the trustee signs and records a deed moving the house out of the trust to the heir. Recording is what starts the county's clock.",
          "The trustee records with the county recorder.",
-         "Recording fees and any transfer tax are due at recording.",
+         "Recording fees are due at recording. Property A is in the county, not the city, so no city transfer tax applies to it.",
          ["scc_recorder", "rtc11911"]),
         ("4", "Notice to beneficiaries",
          "When a revocable trust becomes irrevocable, the trustee must notify the heirs and beneficiaries and give them the information the statute requires.",
@@ -1013,8 +1040,10 @@ def page_inheritance() -> str:
          "Three years for the claim. The longer the property is held outside the exclusion, the more the assessment and the gain both grow.",
          ["rtc63_2", "irs_basis"]),
     ]
+    # Only the "who acts" column is allowed to carry markup: it needs a link to the
+    # decision page. Every other column is escaped so nothing else can inject markup.
     rows = [f"<td><strong>{esc(a)}</strong></td><td><strong>{esc(b)}</strong></td><td>{esc(c)}</td>"
-            f"<td>{esc(d)}</td><td>{esc(e)}</td>" + src_cell(f, "Official source")
+            f"<td>{d}</td><td>{esc(e)}</td>" + src_cell(f, "Official source")
             for a, b, c, d, e, f in steps]
     tbl = table("Inheriting Property A through a trust, phase by phase",
                 ["#", "Phase", "What happens", "Who acts", "Timing and deadline", "Source"], rows)
@@ -1458,7 +1487,9 @@ QUESTIONS = [
       ("What does insurance actually cost for each property?",
        "Owner estimate of about $1,500 a year for each, unverified.",
        "Real quotes.",
-       "Get three quotes per building from admitted insurers, and check the FAIR Plan as a fallback.",
+       "Get three quotes per building from admitted insurers, and check the FAIR Plan as a fallback. The "
+       "FAIR Plan is the state's insurer of last resort and is not limited to a bare fire policy: it also "
+       "offers a comprehensive homeowners form. Treat it as a fallback, not as a comparable quote.",
        "The California Department of Insurance publishes no average premium by area, so this cannot be verified online.",
        ["cdi_tips", "cdi_fairplan"]),
       ("Who supplies water to Property A, and on what tariff?",

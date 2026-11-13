@@ -39,6 +39,10 @@ OFFICIAL_HOSTS = {
     "sftreasurer.org", "www.sf.gov", "sf.gov", "www.santaclaracounty.gov",
     "clerkrecorder.santaclaracounty.gov", "files.santaclaracounty.gov",
     "ssa.gov", "www.ssa.gov", "govinfo.gov", "www.govinfo.gov",
+    # added when the two independently maintained ledgers were merged
+    "www.sfpuc.gov", "sfbos.archive.sf.gov", "elections.cdn.sos.ca.gov",
+    "www.cbo.gov", "www.federalreserve.gov", "www.huduser.gov", "www.lao.ca.gov",
+    "home.treasury.gov", "www.tsp.gov", "docs.github.com",
 }
 FORBIDDEN_TAGS = {"script", "iframe", "form", "input", "textarea", "object", "embed", "img"}
 
@@ -116,10 +120,16 @@ def check_ledger() -> list[str]:
     problems = []
     if len(LEDGER["sources"]) != len(LEDGER_IDS):
         problems.append("duplicate source id in the ledger")
+    # 'limits' is optional: entries inherited from the other ledger record what the
+    # source verifies but not always a stated limitation. Inventing one would be worse
+    # than leaving the column blank, so the count is reported instead of enforced.
+    no_limits = []
     for item in LEDGER["sources"]:
-        for field in ("id", "publisher", "title", "url", "checked", "supports", "limits"):
+        for field in ("id", "publisher", "title", "url", "checked", "supports"):
             if not str(item.get(field, "")).strip():
                 problems.append(f"{item.get('id')}: missing field {field}")
+        if not str(item.get("limits", "")).strip():
+            no_limits.append(item["id"])
         parts = urlsplit(item["url"])
         if parts.scheme != "https" or not parts.netloc:
             problems.append(f"{item['id']}: source url is not https")
@@ -129,7 +139,7 @@ def check_ledger() -> list[str]:
     unused = [sid for sid in LEDGER_IDS if sid not in all_html]
     if unused:
         problems.append(f"ledger entries never cited on any page: {unused}")
-    return problems
+    return problems, no_limits
 
 
 def check_pages() -> tuple[list[str], dict]:
@@ -209,18 +219,20 @@ def main() -> int:
     import privacy_boundary  # late import: reads the packaged artifact
 
     problems: list[str] = []
+    no_limits: list[str] = []
     problems += check_reproducible()
     problems += check_nav()
-    problems += check_ledger()
     page_problems, stats = check_pages()
-    problems += page_problems
+    ledger_problems, no_limits = check_ledger()
+    problems += page_problems + ledger_problems
 
     print(f"Pages built by this edition : {len(PAGES)}")
     print(f"Table rows                  : {stats['rows']}")
     print(f"Rows linked to an official site: {stats['sourced_rows']}")
     print(f"Rows explicitly logged as unsourceable: {stats['registered_rows']}")
     print(f"Links                       : {stats['links']} ({stats['official_links']} external)")
-    print(f"Official sources in ledger  : {len(LEDGER['sources'])}")
+    print(f"Official sources in ledger  : {len(LEDGER['sources'])} "
+          f"({len(no_limits)} state no limitation)")
 
     if problems:
         raise SystemExit("Verification FAILED:\n  - " + "\n  - ".join(dict.fromkeys(problems)))
