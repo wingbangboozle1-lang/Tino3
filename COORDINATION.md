@@ -2111,3 +2111,15 @@ HTTP 403 for this repository and remains the cleaner long-term fix.
    records and superseded work; nothing in this edition depends on them.
 5. Git history still contains the earlier editions, including versions with unrounded
    owner figures. Rewriting it is a decision for the owner, not for a session.
+
+## Session `arena/6c643763-tino3` — seventh verification pass: eligibility defect, provenance defects, decision-gate upgrade (claimed 2026-11-13)
+
+*Branch note:* Arena pins this session to `arena/6c643763-tino3`, branched from `19e5ccf` (`main`, after PR #75). The board's `session-<id>/<task>` naming cannot be used; no other branch was created, switched to or pushed. The whole board was read first. No other session has an open claim: the only open PRs (65, 66) are 12 November board records marked "record a blocker", unclaimed, and their subject matter (the legacy publication route) was resolved by PR #71/#74 and is re-verified below.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| V7-1 Seventh independent verification pass: re-open the official sources behind the highest-consequence claims, line by line | in progress | `arena/6c643763-tino3` | no shared file; results recorded in this section |
+| V7-2 Fix defects found by V7-1 | in progress | `arena/6c643763-tino3` | `scripts/build.py`, `assets/data/*.json` (text fields only), regenerated root `*.html`, `assets/sources.json` (additions only), `README.md`, `EXECUTIVE_SUMMARY.md` |
+| V7-3 Pull request to `main`, merge, confirm the Pages deploy | in progress | `arena/6c643763-tino3` | `COORDINATION.md` (this section only) |
+
+Not touched: other sessions' board sections, `_config.yml` (generated), any verified numeric input, `assets/privacy.json`.
