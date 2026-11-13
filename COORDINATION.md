@@ -68,7 +68,7 @@ Not touched: `assets/sources.json` (the ledger already carries every source used
 - Earlier commits in this public repository still contain the unrounded owner figures. Rewriting history is the owner's decision.
 - `EXECUTIVE_SUMMARY.md` (the short summary from PR #76) was not changed.
 
-**PR and merge:** recorded in the entry below once the pull request exists.
+**Pull request:** https://github.com/wingbangboozle1-lang/Tino3/pull/79 (`arena/1c788435-tino3` into `main`, opened 13 November 2026). Merge result, Pages deployment and the live checks are recorded in the entry that closes this session, below.
 
 ## Session `arena/25fdb181-tino3` — integration, publication-safety fix and merge · 2026-11-13
 
