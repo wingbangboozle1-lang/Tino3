@@ -30,7 +30,7 @@ NAV_GROUPS = [
     ("The two properties", ["property-a.html", "property-b.html", "ownership-distinction.html"]),
     ("Money over time", ["costs.html", "projections.html", "taxes.html"]),
     ("Rules and the estate", ["inheritance.html", "estate.html", "laws.html"]),
-    ("Irregular economies", ["black-swan.html", "economy.html"]),
+    ("Black swan economics", ["black-swan.html", "economy.html"]),
     ("Review before deciding", ["questions.html", "suggestions.html", "review.html"]),
     ("Evidence", ["sources.html"]),
 ]
@@ -390,7 +390,7 @@ def page_executive_summary() -> str:
         + callout("risk", "Five things that could change the answer", """
 <ol>
 <li><strong>The heir wants to live there.</strong> That is worth the whole gap if it is true. It also has to be true for the whole time: moving out removes the Proposition 19 exclusion.</li>
-<li><strong>Law changes.</strong> California voters made the high-income tax rates permanent in November 2026 and rejected a one-time wealth tax. Both are on the <a href="laws.html">law page</a>. A future measure could cut the other way.</li>
+<li><strong>Law changes.</strong> On unofficial results as of 12 November 2026, California voters approved Proposition 3, which makes the high-income tax rates permanent (60.7% yes), and rejected Proposition 40, the one-time billionaire tax (52.4% no). Certification is due by 11 December 2026. Both are on the <a href="laws.html">law page</a>. A future measure could cut the other way.</li>
 <li><strong>The house outgrows everything.</strong> See the <a href="black-swan.html">stress cases</a>.</li>
 <li><strong>The estate is large enough to matter federally.</strong> See the <a href="estate.html">estate page</a>: the 2026 exclusion is high, but it is indexed and can be cut by Congress.</li>
 <li><strong>An input is wrong.</strong> Every owner-supplied figure is flagged. The <a href="questions.html">questions page</a> is the list of what to confirm and how.</li>
@@ -1213,20 +1213,24 @@ def page_laws() -> str:
          "For deaths during 2027 the basic exclusion is $15,480,000 and the annual gift exclusion rises to $20,000.",
          "Confirms the exclusion is indexing upward.",
          ["irs_2027"]),
-        ("California high-income tax rates made permanent",
-         "Proposition 3 passed at the 3 November 2026 election on unofficial results, making permanent the voter-approved rates on individuals earning over about $371,000 that would otherwise have expired in 2031.",
+        ("California high-income tax rates: Proposition 3 (unofficial)",
+         "Proposition 3 is approved on unofficial results (60.7% yes as of 12 November 2026). It makes permanent the voter-approved rates on individuals earning over $371,000, adjusted for inflation, that would otherwise expire in 2031.",
          "Removes a scheduled state tax cut. A large gain on a California property sale will be taxed at the top state rate for the foreseeable future.",
          ["sos_results", "voterguide_p3"]),
         ("One-time tax on certain taxpayers rejected",
-         "Proposition 40 failed on unofficial results.",
+         "Proposition 40 failed on unofficial results (52.4% no as of 12 November 2026).",
          "No state wealth tax. Recorded because a later version could return.",
          ["sos_results", "voterguide_p40"]),
+        ("Countermeasure to Proposition 40 rejected",
+         "Proposition 41 failed on unofficial results (55.1% no as of 12 November 2026). It would have prohibited new state taxes that exclude revenues from the state spending limit.",
+         "Its failure removes one of the two measures that could have voided the one-time tax if both had passed.",
+         ["sos_results", "voterguide_p40"]),
         ("New state personal property taxes barred",
-         "Proposition 42 passed on unofficial results.",
+         "Proposition 42 is leading on unofficial results (51.4% yes as of 12 November 2026).",
          "Narrows one route for a future state tax, but does not touch real property tax.",
          ["sos_results"]),
         ("Local revenue vote threshold rejected",
-         "Proposition 43 failed on unofficial results.",
+         "Proposition 43 failed on unofficial results (57.5% no as of 12 November 2026).",
          "Local parcel and transfer taxes remain possible without the stricter vote the measure would have required.",
          ["sos_results"]),
         ("Proposition 19 shelter adjusted",
@@ -1832,6 +1836,95 @@ pass, because the verification checks the generated output, not the intent. Chan
 
 
 # ------------------------------------------------------------------- review --
+FACTOR_BY_ROLL_YEAR = {  # BOE Letter to Assessors 2026/002: factor for the fiscal year starting in that year
+    2015: 1.01998, 2016: 1.01525, 2017: 1.02, 2018: 1.02, 2019: 1.02, 2020: 1.02,
+    2021: 1.01036, 2022: 1.02, 2023: 1.02, 2024: 1.02, 2025: 1.02, 2026: 1.02,
+}
+
+
+def irregularity_section() -> str:
+    """The owner's roll and bill history, checked against the official factors and the bill structure.
+
+    Every figure is the model's copy of the owner's figures, rounded to the nearest $10. None has
+    been checked against the county roll, so each item is a question to answer, not a finding of error.
+    """
+    ra = {r["year"]: r for r in MODEL["roll_a"]}
+    rb = {r["year"]: r for r in MODEL["roll_b"]}
+
+    def chg(a, b):
+        return (b / a - 1) * 100
+
+    def sgn(x):
+        return f"{x:+.1f}%".replace("-", "&minus;")
+
+    # Every assessed-value change, compared with the official factor for that year.
+    checks = []
+    for label, roll in (("Property A", ra), ("Property B", rb)):
+        for y in sorted(roll):
+            if y - 1 in roll and y in FACTOR_BY_ROLL_YEAR:
+                expect = money10(roll[y - 1]["assessed"] * FACTOR_BY_ROLL_YEAR[y])
+                checks.append((label, y, roll[y]["assessed"], expect, roll[y]["assessed"] - expect))
+    off = [c for c in checks if abs(c[4]) > 10]
+    assert [(c[0], c[1]) for c in off] == [("Property B", 2022)], off
+
+    b17, b18 = rb[2017]["bill"], rb[2018]["bill"]
+    b20, b21 = rb[2020]["bill"], rb[2021]["bill"]
+    b21a, b22a = rb[2021]["assessed"], rb[2022]["assessed"]
+    b22_expect = money10(b21a * 1.02)
+    a16_bill, a17_bill = ra[2016]["bill"], ra[2017]["bill"]
+    rate_2026_27 = 0.0118162182  # Property B secured rate for FY 2026-27 (sf_treas_rate)
+    b25_bill, b25_av = rb[2025]["bill"], rb[2025]["assessed"]
+    b25_rate_part = money10(b25_av * rate_2026_27)
+    chg_2021 = chg(rb[2020]["assessed"], rb[2021]["assessed"])
+    assess_part_2021 = b20 * chg_2021 / 100
+    fall_2021 = money10((b20 - b21) + assess_part_2021)
+
+    rows = [
+        (f"<td><strong>Property B assessed value, 2022 roll</strong></td>"
+         f"<td>{m(b22a)}, up {chg(b21a, b22a):.2f}% on {m(b21a)}.</td>"
+         f"<td>The 2022-23 factor was 1.02, so the roll should be about {m(b22_expect)}. The roll is {m(b22_expect - b22a)} lower.</td>"
+         "<td>Ask the assessor for the roll entry. A reduction recorded on the roll (for example for a decline in value) would explain it. A transcription error would not.</td>"
+         + src_cell(["boe_lta26002"], "Official factor")),
+        (f"<td><strong>2021 change labelled +1%, both rolls</strong></td>"
+         f"<td>Property A rises {chg(ra[2020]['assessed'], ra[2021]['assessed']):.2f}% ({m(ra[2020]['assessed'])} to {m(ra[2021]['assessed'])}). Property B rises {chg_2021:.2f}%.</td>"
+         "<td>The 2021-22 factor was 1.01036, which is 1.04%. The figures agree with the official factor, so the label is the error.</td>"
+         "<td>Correct the label in the owner's table. The figures need no change.</td>"
+         + src_cell(["boe_lta26002"], "Official factor")),
+        (f"<td><strong>Property A bill falls in 2017</strong></td>"
+         f"<td>Bill falls from {m(a16_bill)} to {m(a17_bill)} ({sgn(chg(a16_bill, a17_bill))}) while assessed value rises {chg(ra[2016]['assessed'], ra[2017]['assessed']):.2f}%.</td>"
+         "<td>The bill is an ad valorem part (rate times assessed value) plus fixed and direct charges. A rising assessed value raises the first part, so a fall needs another charge to have dropped by more.</td>"
+         "<td>Compare the 2016 and 2017 itemised bills.</td>"
+         + src_cell(["scc_ratebook"], "Tax rate book")),
+        (f"<td><strong>Property A bill repeated</strong></td>"
+         f"<td>The same bill in 2017 and 2018 ({m(ra[2018]['bill'])}), and in 2019 and 2020 ({m(ra[2020]['bill'])}). Assessed value rose 2.00% in both 2018 and 2020.</td>"
+         "<td>The ad valorem part rises with assessed value, so an identical bill needs an offsetting change in another charge. A figure copied forward from the year before is also possible.</td>"
+         "<td>Check the 2018 and 2020 bills against the figures in the owner's table.</td>"
+         + src_cell(["scc_ratebook"], "Tax rate book")),
+        (f"<td><strong>Property B bill rises 18.4% in 2018</strong></td>"
+         f"<td>Bill rises from {m(b17)} to {m(b18)} ({sgn(chg(b17, b18))}) while assessed value rises 2.00%.</td>"
+         f"<td>Even if the whole 2017 bill had risen with assessed value, the rise would be about {m(money10(b17 * 0.02))}. About {m(money10((b18 - b17) - b17 * 0.02))} came from other charges.</td>"
+         "<td>Read the itemised 2017 and 2018 bills for direct assessments, bond levies and special taxes.</td>"
+         + src_cell(["sf_treas_rate"], "Treasurer and Tax Collector")),
+        (f"<td><strong>Property B bill falls 5.9% in 2021</strong></td>"
+         f"<td>Bill falls from {m(b20)} to {m(b21)} ({sgn(chg(b20, b21))}) while assessed value rises {chg_2021:.2f}%.</td>"
+         f"<td>At most about {m(money10(assess_part_2021))} of the change can come from assessed value. Other charges therefore fell by at least {m(fall_2021)}.</td>"
+         "<td>Read the itemised 2020 and 2021 bills.</td>"
+         + src_cell(["sf_treas_rate"], "Treasurer and Tax Collector")),
+        (f"<td><strong>Property B bill against the published rate</strong></td>"
+         f"<td>The 2025 bill is {m(b25_bill)} on {m(b25_av)} of assessed value: {b25_bill / b25_av * 100:.2f}% of assessed value.</td>"
+         f"<td>The FY 2026-27 secured rate of 1.18162182%, applied to the same value, gives about {m(b25_rate_part)}. The other {m(money10(b25_bill - b25_rate_part))} a year comes from charges outside that rate.</td>"
+         "<td>Read the itemised 2025 bill. Identify each direct assessment, bond levy and special tax, and whether each continues.</td>"
+         + src_cell(["sf_treas_rate"], "Treasurer and Tax Collector")),
+    ]
+    head_note = (f"Assessed-value changes checked against the official factor for each year: {len(checks)} changes, "
+                 f"of which {len(checks) - len(off)} match within $10. The exception is Property B in 2022. "
+                 "Every figure is the owner's, rounded to $10, and none has been checked against the county roll.")
+    return ('<h2 id="irregularities">Irregularities in the owner\'s rolls and bills</h2>'
+            + table("Items for the owner to check. These are questions, not findings of error.",
+                    ["Item", "What the figures show", "What the official table or rule says", "What to do", "Source"],
+                    rows, note=head_note))
+
+
 def page_review() -> str:
     unverified = [
         ("Property A market value, November 2026", m(A["estimated_market_value_2026"]),
@@ -1871,27 +1964,30 @@ def page_review() -> str:
          "Reported publicly but not verified against an official city source",
          "Check the Board of Supervisors file before relying on it."),
     ]
-    # Each row names the publisher that actually holds the record for that item. The
-    # earlier build gave every row the same four links, which told the reader nothing.
-    where_to_check = {
-        "Property A market value, November 2026": ["scc_ratebook"],
-        "Property B market value, November 2026": ["sf_treas_rate"],
-        "Both assessment rolls and tax bills": ["scc_ratebook", "sf_treas_rate"],
-        "Property A ad valorem rate": ["scc_ratebook", "boe_pub29"],
+    # Each row points only at the official source that actually bears on it. A row with no
+    # matching official source says so, and links to the register, rather than borrowing a
+    # publisher that does not cover the figure.
+    UV_WHERE = {
+        "Property A market value, November 2026": [],
+        "Property B market value, November 2026": [],
+        "Both assessment rolls and tax bills": ["scc_ratebook", "sf_treas_rate", "boe_lta26002"],
+        "Property A ad valorem rate": ["scc_ratebook"],
         "Property B ad valorem rate": ["sf_treas_rate"],
         "Property A water": [],
         "Property A electricity, net of solar": ["cpuc_nem"],
-        "Insurance on both properties": ["cdi_tips", "cdi_homeowners_avg"],
+        "Property B water": ["sfpuc_rates"],
+        "Property B electricity": [],
+        "Insurance on both properties": ["cdi_homeowners_avg"],
         "Maintenance on both properties": [],
-        "Property B rent": ["cityb_rent"],
-        "San Francisco transfer tax reduction proposal": ["sf_file261020"],
+        "Property B rent": ["sf_rent_increase"],
+        "The inherited cash amount": [],
+        "San Francisco transfer tax reduction proposal": [],
     }
-    uv_rows = []
-    for a, b, c, d in unverified:
-        ids = where_to_check.get(a, [])
-        uv_rows.append(f"<td><strong>{esc(a)}</strong></td><td>{b}</td>"
-                       f'<td><span class="badge unverified">{esc(c)}</span></td><td>{esc(d)}</td>'
-                       + src_cell(ids, "Where to check"))
+    assert set(UV_WHERE) == {a for a, _, _, _ in unverified}, "every unverified row needs a source decision"
+    uv_rows = [f"<td><strong>{esc(a)}</strong></td><td>{b}</td>"
+               f'<td><span class="badge unverified">{esc(c)}</span></td><td>{esc(d)}</td>'
+               + src_cell(UV_WHERE[a], "Where to check")
+               for a, b, c, d in unverified]
 
     caveats = [
         ("The ad valorem rate for Property A is not identifiable from the data",
@@ -1899,7 +1995,7 @@ def page_review() -> str:
         ("Fixed charges are projected at the inflation rate",
          "On Property B the fixed part of the bill grew at 8.1% a year between 2016 and 2025. Projecting at 2.5% is deliberately conservative and understates future bills if that pace continues."),
         ("The November 2026 California election results are unofficial",
-         "They are published with all precincts partially reporting and are not certified until 11 December 2026. Proposition 3 is treated as passed because it changes the tax rate on a sale, but the result must be confirmed."),
+         "They are published with all precincts partially reporting and are not certified until 11 December 2026. Proposition 3 is treated as approved (60.7% yes on unofficial results as of 12 November 2026) because it changes the tax rate on a sale, but the result must be confirmed at certification."),
         ("Combined tax rates are added, not interacted",
          "State and federal rates are added and no federal deduction is taken for state tax paid. That overstates the tax on a sale and therefore understates the case for selling, which is the conservative direction."),
         ("The housing value of living in the home is priced, not added",
@@ -1962,6 +2058,7 @@ each one is a reason to check before acting.</p>""")
         + table("Every figure that is not backed by an official public source",
                 ["Figure", "Value used", "Status", "What to do", "Where to look"],
                 uv_rows)
+        + irregularity_section()
         + '<h2>Modelling caveats</h2>'
         + table("Shortcuts that matter", ["Caveat", "What it means", "Source"], cav_rows)
         + '<h2>Repository audit</h2>'
@@ -2024,6 +2121,7 @@ PAGE_BUILDERS = {
 
 PAGES = list(PAGE_BUILDERS)
 ASSETS = ["assets/style.css"]
+
 
 
 # ------------------------------------------------------- executive summary md --
@@ -2167,10 +2265,37 @@ def executive_summary_markdown() -> str:
     return "\n".join(out)
 
 
+def write_data_files() -> None:
+    """Write the downloadable tables from assets/data/model.json on every build.
+
+    They were once hand-kept copies that drifted from the published figures (the maintenance and
+    bill columns disagreed with the costs page). They are now generated, so they cannot disagree.
+    """
+    def dollars(v, name):
+        assert isinstance(v, (int, float)) and v % 10 == 0, (name, v)
+        return str(int(v))
+
+    for key, fname in (("projection_a", "property_a.csv"), ("projection_b", "property_b.csv")):
+        lines = ["year,value,assessed,property_tax,effective_rate_percent"]
+        for r in MODEL[key]:
+            lines.append(",".join([str(r["year"]), dollars(r["value"], fname), dollars(r["assessed"], fname),
+                                   dollars(r["bill"], fname), f"{r['effective_rate']:.3f}"]))
+        (DATA / fname).write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+    lines = ["inheritance_year,house_growth_percent,equity_return_percent,sell_equities,sell_treasury,"
+             "live_in,rent_out,live_then_rent,best"]
+    for s in MODEL["sensitivity"]:
+        cols = [dollars(s[k], "decision.csv") for k in ("sell_equities", "sell_treasury", "live_in", "rent_out", "live_then_rent")]
+        lines.append(",".join(["2045", f"{s['house_growth']}", f"{s['equity_return']}"] + cols + [s["best"]]))
+    (DATA / "decision.csv").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    print("wrote data files: property_a.csv, property_b.csv, decision.csv")
+
+
 def main():
     for name, (fn, lede) in PAGE_BUILDERS.items():
         (ROOT / name).write_text(page(name, fn(), lede), encoding="utf-8")
         print("wrote", name)
+    write_data_files()
     (ROOT / "EXECUTIVE_SUMMARY.md").write_text(executive_summary_markdown(), encoding="utf-8")
     print("wrote EXECUTIVE_SUMMARY.md")
 
