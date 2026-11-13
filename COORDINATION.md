@@ -1827,3 +1827,54 @@ Residual-risk disclosure: rounding to $10 does not defeat re-identification by a
 | T-6 PR to `main`, merge, Pages deploy confirmation, board record | in progress | `arena/33a8d086-tino3` | `COORDINATION.md` (this section only), `.github/workflows/*` only if a step is required |
 
 Not in scope: `plan/**`, `analysis/**` (left in the repository but excluded from the published artifact); no edit to files another live session has claimed.
+
+
+## Session arena/33a8d086-tino3 - progress update (T-4 complete, T-5 done)
+
+**Files touched this session (this branch only):** `scripts/build.py`, `scripts/verify.py`,
+`scripts/privacy_boundary.py`, `scripts/verify_legacy.py`, `assets/style.css`, `_config.yml`,
+plus the 18 generated root pages and the regenerated `assets/data/model.json`.
+**Deleted:** `audit.html`, `black-swans.html`, `stress.html`, `assets/privacy.json`,
+`scripts/privacy_tier.py` (all superseded; nothing links to them now).
+
+### What was done
+- T-4 finished. `python3 scripts/build.py` exits 0 and writes all 18 pages:
+  index, executive-summary, decision, property-a, property-b, ownership-distinction,
+  costs, projections, taxes, inheritance, estate, laws, black-swan, economy,
+  questions, suggestions, review, sources.
+- T-5 finished. The two pre-existing verifiers contradicted the $10-rounding
+  requirement. They were rewritten, not the rounding:
+  - `privacy_boundary.py` now enforces what is mechanical: no identifier and no
+    unrounded money. A figure is allowed if it is a multiple of ten or is a
+    verbatim official amount (the set is read out of `assets/data/inputs.json`,
+    so a new official amount has to be declared as one).
+  - `verify.py` checks build reproducibility, page structure, one official source
+    link per table row, link/fragment resolution, an https host allowlist, and
+    ledger completeness, then packages the artifact and re-runs the privacy check.
+  - `verify_legacy.py` was rewritten against the new modules.
+
+### Copy bugs found and fixed while verifying
+- Percentages were printed as `0.1%` in the decision assumptions table: the format
+  helper takes a percentage but was being handed a fraction. Added `pcf()`.
+- Negative costs in the Property B net income table rendered as `&minus;$4,380`
+  from a hand-built sign, producing a double negative in the model text. Fixed.
+- Projected cost rows were printed unrounded. Now rounded to the nearest $10.
+- The sensitivity note said "five of the nine combinations". The model says nine
+  of nine. The counts are now computed from the model rather than typed in.
+- A dead `cls = ' class="best"' if True else ""` line meant no winning cell was
+  ever highlighted. The winner in each sensitivity row is now marked.
+
+### Verification results
+- `python3 scripts/verify.py` -> exit 0. 18 pages, 631 table rows (581 linked to an
+  official source, 50 explicitly logged on the register as unsourceable),
+  2,351 links all resolving, 2,164 external links on approved official hosts,
+  52 ledger entries, every entry cited at least once.
+- `python3 scripts/verify_legacy.py --config-only` -> exit 0.
+- Every published dollar figure is a multiple of ten or a published official amount.
+
+### Still open (carried, not blocking)
+- T-2 ledger items: SF real-property transfer-tax tiers (no sf.gov source found,
+  so the laws page says so instead of guessing), San Jose Water Company tariff,
+  Cupertino Sanitary District sewer rates, Santa Clara TRA tables beyond page 1,
+  Probate Code 16061.7, Civil Code 1946.2, BOE LTA 2026/002.
+- T-6: pull request, merge, Pages deploy confirmation, and this record.
