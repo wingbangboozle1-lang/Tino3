@@ -1,112 +1,138 @@
-"""Build the published artifact.
+"""Build the deployable site from an explicit public-edition allowlist.
 
-Publication is an allowlist, not a copy of the repository. Only the pages, stylesheet and data
-files named below can reach the deployed site. Every path that an older edition published is
-overwritten with a content-free withdrawal notice, so a request for a stale URL cannot return
-an old figure.
+Only the privacy-safe pages and stylesheet are copied verbatim. Every other tracked path is
+replaced in the artifact with a generic withdrawal notice, including the old model/data,
+secondary editions, repository tools and source documents. The working tree remains available
+for audit; Git history and copies outside this artifact are not erased.
 """
 from __future__ import annotations
+
 import shutil
-from pathlib import Path
+import subprocess
+from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "_site"
 
-PAGES = ["index.html", "executive-summary.html", "questions.html", "suggestions.html", "economy.html",
-         "property-a.html", "property-b.html", "taxes.html", "projections.html", "decision.html",
-         "stress.html", "black-swans.html", "inheritance.html", "review.html", "audit.html",
-         "sources.html"]
-ASSETS = ["assets/style.css", "assets/sources.json", "assets/privacy.json", "assets/data/economy.json",
-          "assets/data/model.json", "assets/data/property_a.csv",
-          "assets/data/property_b.csv", "assets/data/decision.csv",
-          ]
+from build import PAGES  # noqa: E402
 
-# Earlier cross-check (plan/) and 50-year suite (analysis/) editions were built from unrounded
-# owner figures. They are no longer in the working tree and are never copied; their routes are
-# answered with withdrawal notices below.
-WITHDRAWN_EDITION_PATHS = [
+ASSETS = ["assets/style.css"]
+NOJEKYLL = ".nojekyll"
+LEGACY_URLS = [
+    "black-swans.html", "decision-analysis.html", "flagged.html", "flagged-review.html",
+    "inheritance-process.html", "inheritance-steps.html", "methodology.html", "properties.html",
+    "sources-verification.html", "taxes-estate.html", "script.js", "style.css",
+    "assets/app.js", "assets/js/app.js", "assets/css/style.css",
+    "pages/costs.html", "pages/decision-analysis.html", "pages/executive-summary.html",
+    "pages/flagged.html", "pages/inheritance-tax.html", "pages/methodology.html",
+    "pages/process.html", "pages/properties.html", "pages/sources.html",
+    "data/costs.json", "data/properties.json", "data/summary.json", "data/tax.json",
+    "data/sources.json", "data/projections.csv", "data/sell_and_reinvest.csv",
+    "data/estate_threshold.csv", "data/inheritance_scenarios.csv", "data/sources.csv",
+    "decision-suite/index.html", "decision-suite/executive-summary.html",
+    "decision-suite/property-a.html", "decision-suite/property-b.html",
+    "decision-suite/taxes-and-laws.html", "decision-suite/projections.html",
+    "decision-suite/decision-analysis.html", "decision-suite/inheritance-process.html",
+    "decision-suite/flagged-for-review.html", "decision-suite/sources-ledger.html",
+    "decision-suite/assets/app.js", "decision-suite/assets/style.css",
+    # Two earlier editions were published from these directories. The files are no
+    # longer tracked here, but the previous deployment still answers on the URLs, so
+    # the routes are withdrawn explicitly rather than left to return an old figure.
     "plan/index.html", "plan/summary.html", "plan/properties.html", "plan/projections.html",
-    "plan/decision.html", "plan/taxes.html", "plan/steps.html", "plan/laws.html", "plan/flagged.html",
-    "plan/sources.html", "plan/assets/style.css", "plan/data/model.json", "plan/data/sources.json",
-    "plan/data/projection_a.csv", "plan/data/projection_b.csv", "plan/data/decisions.csv",
-    "plan/data/headroom.csv", "plan/data/cash_cases.csv", "plan/tools/model.py", "plan/tools/build.py",
+    "plan/decision.html", "plan/taxes.html", "plan/steps.html", "plan/laws.html",
+    "plan/flagged.html", "plan/sources.html", "plan/assets/style.css",
+    "plan/data/model.json", "plan/data/sources.json", "plan/data/projection_a.csv",
+    "plan/data/projection_b.csv", "plan/data/decisions.csv", "plan/data/headroom.csv",
+    "plan/data/cash_cases.csv", "plan/tools/model.py", "plan/tools/build.py",
     "plan/tools/sources.py", "plan/tools/verify.py",
-    "analysis/index.html", "analysis/executive-summary.html", "analysis/ownership-distinction.html",
-    "analysis/properties.html", "analysis/projections.html", "analysis/black-swan.html",
-    "analysis/decision.html", "analysis/taxes-estate.html", "analysis/inheritance-steps.html",
+    "analysis/index.html", "analysis/executive-summary.html",
+    "analysis/ownership-distinction.html", "analysis/properties.html",
+    "analysis/projections.html", "analysis/black-swan.html", "analysis/decision.html",
+    "analysis/taxes-estate.html", "analysis/inheritance-steps.html",
     "analysis/repo-audit.html", "analysis/flagged.html", "analysis/sources.html",
     "analysis/assets/style.css", "analysis/data/model.json", "analysis/data/sources.json",
     "analysis/data/projections_50yr.csv", "analysis/data/historical_replay_50yr.csv",
     "analysis/data/ownership_distinction.csv", "analysis/data/decision_matrix.csv",
-    "analysis/data/black_swan_regimes.csv", "analysis/tools/sources.py", "analysis/tools/model.py",
-    "analysis/tools/build.py", "analysis/tools/verify.py",
+    "analysis/data/black_swan_regimes.csv", "analysis/tools/sources.py",
+    "analysis/tools/model.py", "analysis/tools/build.py", "analysis/tools/verify.py",
+    # Pages this edition retired when it replaced the previous one. No route is ever
+    # published under a place name, so the two former property-named pages are not
+    # recreated here; the whole artifact replaces the previous deployment anyway.
+    "audit.html", "black-swans.html", "stress.html",
+    "data/sf_rental_pl.csv", "data/sources.csv",
 ]
 
-# Paths that earlier editions published. They are withdrawn even though the files no longer
-# exist in the repository, because the previous deployment still answers on those URLs.
-RETIRED = WITHDRAWN_EDITION_PATHS + """cupertino.html san-francisco.html costs.html decision-analysis.html flagged.html
-flagged-review.html inheritance-process.html inheritance-steps.html methodology.html properties.html
-sources-verification.html taxes-estate.html script.js assets/app.js assets/js/app.js
-assets/css/style.css style.css pages/costs.html pages/decision-analysis.html
-pages/executive-summary.html pages/flagged.html pages/inheritance-tax.html pages/methodology.html
-pages/process.html pages/properties.html pages/sources.html data/costs.json data/properties.json
-data/summary.json data/tax.json data/sources.json data/projections.csv data/sell_and_reinvest.csv
-data/sf_rental_pl.csv data/estate_threshold.csv data/inheritance_scenarios.csv data/sources.csv
-decision-suite/index.html decision-suite/executive-summary.html decision-suite/property-a.html
-decision-suite/property-b.html decision-suite/taxes-and-laws.html decision-suite/projections.html
-decision-suite/decision-analysis.html decision-suite/inheritance-process.html
-decision-suite/flagged-for-review.html decision-suite/sources-ledger.html
-decision-suite/assets/app.js decision-suite/assets/style.css""".split()
-RETIRED = list(dict.fromkeys(RETIRED))
 
-NOTICE_HTML = ('<!doctype html><html lang="en"><meta charset="utf-8"><meta name="robots" content="noindex">'
-               '<title>Publication withdrawn</title><h1>Earlier publication withdrawn</h1>'
-               '<p>Unverified property data is no longer published here. Use the reviewed planning edition.</p>'
-               '<a href="{prefix}index.html">Open the reviewed edition</a></html>')
+def tracked_paths() -> list[str]:
+    return subprocess.check_output(["git", "ls-files"], cwd=ROOT, text=True).splitlines()
 
 
-def write_notice(rel: Path) -> None:
-    dest = SITE / rel
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    prefix = "../" if rel.parts and rel.parts[0] in {"pages", "data", "decision-suite", "assets"} else ""
+def retired_paths() -> list[str]:
+    """Return every legacy URL plus every tracked path outside the publication allowlist."""
+    allowed = set(PAGES + ASSETS + [NOJEKYLL])
+    paths = set(LEGACY_URLS)
+    paths.update(name for name in tracked_paths() if name not in allowed)
+    paths.difference_update(allowed)
+    return sorted(paths)
+
+
+def notice_content(rel: PurePosixPath) -> str:
+    """Return a content-free notice tailored to the route's file type."""
     if rel.suffix == ".html":
-        dest.write_text(NOTICE_HTML.format(prefix=prefix), encoding="utf-8")
-    elif rel.suffix == ".json":
-        dest.write_text('{"status":"withdrawn","reason":"privacy and verification review"}\n', encoding="utf-8")
-    elif rel.suffix == ".csv":
-        dest.write_text("status\nwithdrawn\n", encoding="utf-8")
-    else:
-        dest.write_text("/* Earlier publication withdrawn for privacy review. */\n", encoding="utf-8")
+        prefix = "../" * len(rel.parts[:-1])
+        return (
+            '<!doctype html><html lang="en"><head><meta charset="utf-8">'
+            '<meta name="viewport" content="width=device-width, initial-scale=1">'
+            '<meta name="robots" content="noindex"><title>Publication retired</title></head>'
+            '<body><main><h1>Earlier publication retired</h1>'
+            '<p>This route no longer contains the earlier edition.</p>'
+            f'<p><a href="{prefix}index.html">Open the current public edition</a></p>'
+            '</main></body></html>\n'
+        )
+    if rel.suffix == ".json":
+        return '{"status":"PUBLICATION_WITHDRAWN"}\n'
+    if rel.suffix == ".csv":
+        return "status\nPUBLICATION_WITHDRAWN\n"
+    if rel.suffix == ".py":
+        return '"""PUBLICATION_WITHDRAWN: source route retired."""\n'
+    if rel.suffix in {".js", ".css"}:
+        return "/* PUBLICATION_WITHDRAWN */\n"
+    return "PUBLICATION_WITHDRAWN\n"
+
+
+def write_notice(rel: PurePosixPath) -> None:
+    destination = SITE.joinpath(*rel.parts)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text(notice_content(rel), encoding="utf-8")
 
 
 def main() -> None:
     if SITE.exists():
         shutil.rmtree(SITE)
 
-    for name in PAGES + ASSETS:                      # allowlist only
-        src = ROOT / name
-        if not src.exists():
+    for name in PAGES + ASSETS:
+        source = ROOT / name
+        if not source.is_file():
             raise SystemExit(f"allowlisted file missing: {name}")
-        dest = SITE / name
-        dest.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(src, dest)
-    (SITE / ".nojekyll").touch()
+        destination = SITE / name
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source, destination)
 
-    notices = 0
-    for rel_str in RETIRED:                          # withdraw every retired path
-        rel = Path(rel_str)
-        if (SITE / rel).exists():
-            continue
-        write_notice(rel)
-        notices += 1
+    retired = retired_paths()
+    for name in retired:
+        write_notice(PurePosixPath(name))
 
-    published = sorted(str(p.relative_to(SITE)) for p in SITE.rglob("*") if p.is_file())
-    allowed = set(PAGES) | set(ASSETS) | {".nojekyll"}
-    unexpected = [p for p in published if p not in allowed and p not in RETIRED]
-    if unexpected:
-        raise SystemExit(f"non-allowlisted file in artifact: {unexpected}")
-    print(f"Packaged {len(PAGES)} pages and {len(ASSETS)} assets; "
-          f"{notices} withdrawal notices at retired paths; no legacy data copied.")
+    (SITE / NOJEKYLL).touch()
+    present = {str(path.relative_to(SITE)) for path in SITE.rglob("*") if path.is_file()}
+    allowed = set(PAGES + ASSETS + retired + [NOJEKYLL])
+    unexpected = sorted(present - allowed)
+    missing = sorted(allowed - present)
+    if unexpected or missing:
+        raise SystemExit(f"artifact boundary failed: unexpected={unexpected}, missing={missing}")
+    print(
+        f"Packaged {len(PAGES)} public pages, {len(ASSETS)} runtime asset and "
+        f"{len(retired)} content-free withdrawal routes."
+    )
 
 
 if __name__ == "__main__":

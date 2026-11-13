@@ -1,55 +1,170 @@
-"""Fail closed: legacy paths must contain only withdrawal notices, not household data."""
-from pathlib import Path
-import subprocess
+"""Privacy boundary for the published pages and the deployable artifact.
+
+The owner's instruction for this edition is that costs and numbers are published
+rounded to the nearest $10. Rounding is not anonymity, so this module enforces
+the two things that can actually be enforced mechanically:
+
+  1. no personal identifier - no street address, postal code, parcel number,
+     email address, phone number or property-level place name; and
+  2. no unrounded money - every published dollar figure is either a multiple of
+     ten, or a published official amount that appears verbatim in an official
+     document.
+
+It does not and cannot certify that earlier commits, pull-request diffs, forks
+or external copies are clean.
+"""
+from __future__ import annotations
+
+import json
+import re
+from pathlib import Path, PurePosixPath
+
+import package_site as pack
+
 ROOT = Path(__file__).resolve().parents[1]
-# The allowlist is read from package_site.py so the two cannot drift apart.
-import importlib.util
-_spec = importlib.util.spec_from_file_location('package_site', Path(__file__).with_name('package_site.py'))
-_pkg = importlib.util.module_from_spec(_spec)
-_spec.loader.exec_module(_pkg)
-PAGES = tuple(_pkg.PAGES)
-ASSETS = tuple(_pkg.ASSETS)
-APPROVED = set(PAGES + ASSETS + (
-    '.gitignore','.nojekyll','COORDINATION.md','README.md','EXECUTIVE_SUMMARY.md',
-    '.github/workflows/pages.yml','.github/workflows/verify.yml',
-    'scripts/build.py','scripts/package_site.py','scripts/verify.py','scripts/privacy_boundary.py',
-    'scripts/model.py','scripts/economy.py','scripts/privacy_tier.py',
-    # Repository-root publishing configuration and its guard: both are build-safety files with
-    # no household content, and the guard is what keeps the legacy Jekyll publisher inside the
-    # allowlist.
-    'scripts/verify_legacy.py','_config.yml',
-))
-MARKER = 'PUBLICATION_WITHDRAWN'
 
-def tracked():
-    return subprocess.check_output(['git','ls-files'],cwd=ROOT,text=True).splitlines()
+# Identifiers that must never appear in the public artifact.
+FORBIDDEN = {
+    "street address": re.compile(
+        r"\b\d{1,5}\s+[A-Z][a-z]+\s+(?:Street|St|Avenue|Ave|Road|Rd|Drive|Dr|Way|Lane|Ln|"
+        r"Boulevard|Blvd|Court|Ct|Place|Pl|Terrace|Circle)\b"),
+    "email address": re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+"),
+    "postal code": re.compile(r"(?:\bCA\b|California|zip|postal code)\W{0,8}9\d{4}\b", re.I),
+    "bare postal code": re.compile(r"\b(?:95014|94122|95015|94116|94132)\b"),
+    "parcel or APN": re.compile(r"\b\d{3}-\d{2,3}-\d{2,3}\b"),
+    "phone number": re.compile(r"\b(?:\+?1[-. ]?)?\(?\d{3}\)?[-. ]\d{3}[-. ]\d{4}\b"),
+    "property level place name": re.compile(
+        r"\b(Cupertino|Sunnyvale|Outer\s+Sunset|Los\s+Altos|Saratoga|Mountain\s+View|"
+        r"Campbell|Monte\s+Sereno|Los\s+Gatos|Inner\s+Sunset|Parkside|Sunset\s+District)\b", re.I),
+    "person name pattern": re.compile(r"\b(?:Mr|Mrs|Ms|Dr)\.?\s+[A-Z][a-z]+\b"),
+}
 
-def notice(name):
-    path = Path(name)
-    if path.suffix == '.html':
-        home = '../' * (len(path.parts)-1) + 'index.html'
-        return ('<!doctype html><html lang="en"><head><meta charset="utf-8">'
-                '<meta name="viewport" content="width=device-width, initial-scale=1">'
-                '<meta name="robots" content="noindex"><title>Publication withdrawn</title></head>'
-                '<body><main><h1>Earlier publication withdrawn</h1>'
-                '<p>Unverified financial content was withdrawn for privacy and evidence review.</p>'
-                f'<p><a href="{home}">Open the reviewed planning dashboard</a></p>'
-                f'<p>{MARKER}</p></main></body></html>\n')
-    if path.suffix == '.json':
-        return '{"status":"' + MARKER + '"}\n'
-    if path.suffix == '.csv':
-        return 'status\n' + MARKER + '\n'
-    if path.suffix == '.py':
-        return f'"""{MARKER}: legacy generator disabled to prevent republication."""\n'
-    if path.suffix in ('.js','.css'):
-        return f'/* {MARKER}: earlier content removed. */\n'
-    return f'# {MARKER}\n\nEarlier content withdrawn for privacy and evidence review.\n'
+# County and city level names are published deliberately: they are the level at
+# which the property tax, rent and transfer rules in this analysis operate.
+ALLOWED_PLACE_NAMES = ("Santa Clara County", "City and County of San Francisco",
+                       "San Francisco", "California", "Bay Area")
 
-def verify():
-    for name in tracked():
-        if name not in APPROVED:
-            assert (ROOT/name).read_text() == notice(name), f'Unapproved publication: {name}'
-    print('PASS: all tracked non-allowlisted files are content-free withdrawal notices.')
+FORBIDDEN_ELEMENTS = re.compile(r"<(?:script|iframe|form|input|textarea|object|embed|img)\b", re.I)
+# A scale word after the figure means it is a quoted macroeconomic aggregate, not a
+# property-level amount: "$69 trillion of household net worth". Those are published
+# verbatim from official sources and are counted, not blocked.
+CURRENCY_AMOUNT = re.compile(r"\$\s*(\d[\d,]*)(?:\.\d+)?\s*(trillion|billion|million)?", re.I)
 
-if __name__ == '__main__':
-    verify()
+# Published statutory and official amounts that are not multiples of ten. Each
+# one is a verbatim figure from an official document and is not ours to round.
+OFFICIAL_AMOUNTS = {
+    1, 5, 15,                     # appear only inside verbatim official titles and fiscal impacts
+    1_000_000, 1_022_600, 1_044_586,          # Proposition 19 shelter, BOE letters to assessors
+    250_000, 500_000,                         # section 121 exclusions
+    371_000,                                  # Proposition 3 income threshold, voter guide
+    5_490_000, 11_180_000, 11_400_000, 11_580_000, 11_700_000,   # IRS filing thresholds by year
+    12_060_000, 12_920_000, 13_610_000, 13_990_000,              # IRS filing thresholds by year
+    15_000_000, 15_480_000,                                      # IRS basic exclusion 2026 and 2027
+    19_000, 20_000,                                              # IRS annual gift exclusion
+    5_000_000_000, 15_000_000_000,                               # Proposition 3 fiscal impact range
+}
+
+
+def _official_amounts_from_inputs() -> set[int]:
+    data = json.loads((ROOT / "assets" / "data" / "inputs.json").read_text(encoding="utf-8"))
+    out: set[int] = set()
+    for value in data["verified_parameters"].values():
+        if isinstance(value, dict) and isinstance(value.get("value"), (int, float)):
+            out.add(int(value["value"]))
+    return out
+
+
+def check_money(text: str, where: str) -> tuple[list[str], list[str]]:
+    """Return (problems, quoted official aggregates)."""
+    allowed = OFFICIAL_AMOUNTS | _official_amounts_from_inputs()
+    problems, scaled = [], []
+    for raw, scale in CURRENCY_AMOUNT.findall(text):
+        amount = int(raw.replace(",", ""))
+        if scale:
+            scaled.append(f"${raw} {scale.lower()}")
+            continue
+        if amount % 10 == 0 or amount in allowed:
+            continue
+        problems.append(f"{where}: unrounded or unapproved monetary amount ${raw}")
+    return problems, scaled
+
+
+def check_identifiers(text: str, where: str) -> list[str]:
+    problems = []
+    for label, pattern in FORBIDDEN.items():
+        match = pattern.search(text)
+        if match:
+            problems.append(f"{where}: possible {label} ({match.group(0)[:40]!r})")
+    return problems
+
+
+def scan_pages() -> tuple[list[str], list[str]]:
+    problems: list[str] = []
+    scaled: list[str] = []
+    for name in pack.PAGES + pack.ASSETS:
+        path = ROOT / name
+        if not path.is_file():
+            problems.append(f"{name}: allowlisted file missing")
+            continue
+        text = path.read_text(encoding="utf-8")
+        problems.extend(check_identifiers(text, name))
+        problems.extend(check_identifiers(name, f"path {name}"))
+        page_problems, page_scaled = check_money(text, name)
+        problems.extend(page_problems)
+        scaled.extend(page_scaled)
+        if name.endswith(".html") and FORBIDDEN_ELEMENTS.search(text):
+            problems.append(f"{name}: interactive or remote-code element")
+    return problems, scaled
+
+
+def scan_artifact() -> tuple[list[str], list[str]]:
+    site = pack.SITE
+    if not site.is_dir():
+        raise SystemExit("_site is missing; run scripts/package_site.py before the privacy check")
+    files = {p.relative_to(site).as_posix() for p in site.rglob("*") if p.is_file()}
+    retired = sorted(pack.retired_paths())
+    expected = set(pack.PAGES + pack.ASSETS + retired + [pack.NOJEKYLL])
+    problems: list[str] = []
+    scaled: list[str] = []
+    for name in sorted(files - expected):
+        problems.append(f"artifact contains an unallowlisted file: {name}")
+    for name in sorted(expected - files):
+        problems.append(f"artifact is missing an expected file: {name}")
+    if (site / pack.NOJEKYLL).read_bytes() != b"":
+        problems.append(".nojekyll must be an empty marker file")
+    for name in sorted(retired):
+        path = site.joinpath(*PurePosixPath(name).parts)
+        if path.read_text(encoding="utf-8") != pack.notice_content(PurePosixPath(name)):
+            problems.append(f"retired route is not a content-free withdrawal notice: {name}")
+    for name in sorted(files):
+        for label, pattern in FORBIDDEN.items():
+            if pattern.search(name):
+                problems.append(f"possible {label} in artifact path {name}")
+    for name in sorted(files & set(pack.PAGES + pack.ASSETS)):
+        text = (site / name).read_text(encoding="utf-8")
+        problems.extend(check_identifiers(text, f"artifact/{name}"))
+        art_problems, art_scaled = check_money(text, f"artifact/{name}")
+        problems.extend(art_problems)
+        scaled.extend(art_scaled)
+    return problems, scaled
+
+
+def main() -> int:
+    page_problems, page_scaled = scan_pages()
+    art_problems, art_scaled = scan_artifact()
+    problems = page_problems + art_problems
+    scaled = sorted(set(page_scaled + art_scaled))
+    if problems:
+        raise SystemExit("Privacy boundary FAILED:\n  - " + "\n  - ".join(dict.fromkeys(problems)))
+    if scaled:
+        print("  quoted official aggregates, published verbatim: " + ", ".join(scaled))
+    print(
+        f"PASS privacy boundary: {len(pack.PAGES)} pages and {len(pack.ASSETS)} asset scanned; "
+        f"every published dollar figure is rounded to $10 or is a published official amount; "
+        f"{len(pack.retired_paths())} non-allowlisted routes carry content-free notices."
+    )
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

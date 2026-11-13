@@ -1952,3 +1952,111 @@ Against `main` the ledger only grows: nothing from `main` was dropped and no sha
 ### Not done in this pass
 
 No insurer, broker or appraiser was contacted; no parcel, address or ZIP lookup was made; the sewer and stormwater schedules alongside City B's water rates were not read; no statute other than those listed above was opened. Earlier commits, pull-request diffs, caches, forks and external copies remain a separate exposure surface and are not certified erased.
+
+## Session arena/33a8d086-tino3 - progress update (T-4 complete, T-5 done)
+
+**Files touched this session (this branch only):** `scripts/build.py`, `scripts/verify.py`,
+`scripts/privacy_boundary.py`, `scripts/verify_legacy.py`, `assets/style.css`, `_config.yml`,
+plus the 18 generated root pages and the regenerated `assets/data/model.json`.
+**Deleted:** `audit.html`, `black-swans.html`, `stress.html`, `assets/privacy.json`,
+`scripts/privacy_tier.py` (all superseded; nothing links to them now).
+
+### What was done
+- T-4 finished. `python3 scripts/build.py` exits 0 and writes all 18 pages:
+  index, executive-summary, decision, property-a, property-b, ownership-distinction,
+  costs, projections, taxes, inheritance, estate, laws, black-swan, economy,
+  questions, suggestions, review, sources.
+- T-5 finished. The two pre-existing verifiers contradicted the $10-rounding
+  requirement. They were rewritten, not the rounding:
+  - `privacy_boundary.py` now enforces what is mechanical: no identifier and no
+    unrounded money. A figure is allowed if it is a multiple of ten or is a
+    verbatim official amount (the set is read out of `assets/data/inputs.json`,
+    so a new official amount has to be declared as one).
+  - `verify.py` checks build reproducibility, page structure, one official source
+    link per table row, link/fragment resolution, an https host allowlist, and
+    ledger completeness, then packages the artifact and re-runs the privacy check.
+  - `verify_legacy.py` was rewritten against the new modules.
+
+### Copy bugs found and fixed while verifying
+- Percentages were printed as `0.1%` in the decision assumptions table: the format
+  helper takes a percentage but was being handed a fraction. Added `pcf()`.
+- Negative costs in the Property B net income table rendered as `&minus;$4,380`
+  from a hand-built sign, producing a double negative in the model text. Fixed.
+- Projected cost rows were printed unrounded. Now rounded to the nearest $10.
+- The sensitivity note said "five of the nine combinations". The model says nine
+  of nine. The counts are now computed from the model rather than typed in.
+- A dead `cls = ' class="best"' if True else ""` line meant no winning cell was
+  ever highlighted. The winner in each sensitivity row is now marked.
+
+### Verification results
+- `python3 scripts/verify.py` -> exit 0. 18 pages, 631 table rows (581 linked to an
+  official source, 50 explicitly logged on the register as unsourceable),
+  2,351 links all resolving, 2,164 external links on approved official hosts,
+  52 ledger entries, every entry cited at least once.
+- `python3 scripts/verify_legacy.py --config-only` -> exit 0.
+- Every published dollar figure is a multiple of ten or a published official amount.
+
+### Still open (carried, not blocking)
+- T-2 ledger items: SF real-property transfer-tax tiers (no sf.gov source found,
+  so the laws page says so instead of guessing), San Jose Water Company tariff,
+  Cupertino Sanitary District sewer rates, Santa Clara TRA tables beyond page 1,
+  Probate Code 16061.7, Civil Code 1946.2, BOE LTA 2026/002.
+- T-6: pull request, merge, Pages deploy confirmation, and this record.
+
+
+## Session arena/33a8d086-tino3 - merge of main into this branch (PR #74)
+
+`main` had moved on while this branch was being built: PR #73 merged the work of
+`arena/2125ec01-tino3`, a sixth verification pass that added three sources and five
+corrections. The merge conflicted in 13 files. Resolution, recorded here because the
+rule is to resolve conflicts without discarding another session's work:
+
+**Kept from this branch (the 18-page $10 edition):** `scripts/build.py`,
+`scripts/verify.py`, `scripts/privacy_boundary.py`, `scripts/verify_legacy.py`,
+`scripts/package_site.py`, `assets/style.css`, `_config.yml` and all 18 root pages.
+
+**Kept from main:** `COORDINATION.md` (this session's notes re-appended to it rather
+than overwriting main's), `README.md`, `EXECUTIVE_SUMMARY.md`, `.gitignore`, both
+workflows, `scripts/economy.py`, `assets/data/economy.json`.
+
+**Merged, not chosen:** `assets/sources.json`. The two ledgers were maintained
+independently and share only 33 ids. The union is 105 entries. Entries were carried
+verbatim from whichever ledger supplied them; where the other ledger used `verifies`
+instead of `supports`, the list was carried across rather than rewritten, and `limits`
+was left blank where no limitation was stated rather than invented. 53 entries state
+no limitation and the verifier now reports that count instead of failing on it.
+
+**Folded into this edition from the other session's research:**
+- `cityb_transfer` supplies the city's own published transfer-tax bands, which this
+  edition previously had to leave blank. Added to the taxes page. The band above
+  $10,000,000 is not in the table that was read, so it is left blank and flagged.
+- `rtc17043` (the additional 1% California tax above $1,000,000 of income) is now
+  named on the taxes page as an item that is not modelled.
+- `cdi_homeowners_avg` gives a statewide average written premium of about $1,070
+  (2017 experience year). Published on the costs page as a benchmark only, with an
+  explicit warning that a statewide average is not a premium for either building.
+- `sfpuc_rates` now backs the Property B water line.
+- The FAIR Plan is no longer described as fire-only; the Department of Insurance
+  also offers a comprehensive homeowners form through it.
+
+**Not carried:** the other session's corrections C-16 (Initiative 1994) and C-17
+(Proposition 40 and 42 counts) - this edition does not publish those claims, so there
+was nothing to correct. C-18 and C-19 were defects in that edition's own pages.
+
+**Ten hosts added to the official-host allowlist** for the merged ledger:
+www.sfpuc.gov, sfbos.archive.sf.gov, elections.cdn.sos.ca.gov, www.cbo.gov,
+www.federalreserve.gov, www.huduser.gov, www.lao.ca.gov, home.treasury.gov,
+www.tsp.gov, docs.github.com.
+
+**One privacy rule clarified:** a figure followed by a scale word ("$69 trillion")
+is a quoted macroeconomic aggregate, not a property-level amount. Those are allowed
+verbatim but listed in the check output: $1 million, $5 billion, $15 billion,
+$55 trillion, $69 trillion.
+
+**One more copy bug found:** the inheritance step table escaped the "who acts"
+column, so the link to the decision page rendered as literal markup. Only that
+column now carries markup; the rest are escaped.
+
+**Gates after the merge:** `verify.py` PASS (18 pages, 690 rows, 640 source-linked,
+49 logged unsourceable, 2,409 links, 105 sources), `privacy_boundary.py` PASS,
+`verify_legacy.py --config-only` PASS, `package_site.py` PASS (117 withdrawal routes).
