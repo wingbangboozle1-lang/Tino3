@@ -40,7 +40,7 @@ ALLOWED_HOSTS = {
     "www.cpuc.ca.gov", "cpuc.ca.gov", "www.insurance.ca.gov", "www.lao.ca.gov", "www.sos.ca.gov", "www.sco.ca.gov",
     "elections.cdn.sos.ca.gov",
     # local government (jurisdiction A and jurisdiction B)
-    "sfbos.archive.sf.gov", "sftreasurer.org", "www.sf.gov",
+    "sfbos.archive.sf.gov", "sftreasurer.org", "www.sf.gov", "www.sfpuc.gov", "sfpuc.gov",
     "clerkrecorder.santaclaracounty.gov", "files.santaclaracounty.gov",
     "electionresults.sos.ca.gov", "sfgov.legistar.com",
     # publication tooling (GitHub Pages documentation for the publishing-source rule)
