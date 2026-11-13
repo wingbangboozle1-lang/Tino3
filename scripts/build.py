@@ -1162,11 +1162,16 @@ def page_estate() -> str:
                        "column assumes a surviving spouse elects portability on a timely estate tax return."))
     hist = table("The federal filing threshold by year of death, published by the IRS",
                  ["Year of death", "Filing threshold", "Source"],
-                 [(f"<td>{y}</td><td>{m(a)}</td>" + src_cell(["irs_estate"], "IRS table"))
+                 [(f"<td>{y}</td><td>{m(a)}</td>"
+                   + (src_cell(["irs_estate"], "IRS table") if y <= 2026
+                      else src_cell(["irs_2027"], "IRS newsroom")))
                   for y, a in [(2018, 11_180_000), (2019, 11_400_000), (2020, 11_580_000),
                                (2021, 11_700_000), (2022, 12_060_000), (2023, 12_920_000),
                                (2024, 13_610_000), (2025, 13_990_000), (2026, 15_000_000),
-                               (2027, 15_480_000)]])
+                               (2027, 15_480_000)]],
+                 note="The IRS estate-tax page publishes the table through 2026. The 2027 line comes from "
+                      "the IRS inflation-adjustment release for tax year 2027, which states the basic "
+                      "exclusion for deaths during 2027 directly.")
     return (
         callout("answer", "The short answer", f"""
 <p><strong>California has no estate tax and no inheritance tax.</strong> The State Controller's Office confirms
@@ -1941,7 +1946,10 @@ def page_review() -> str:
          "Published by the City and County of San Francisco for fiscal year 2026-27",
          "None. This one is verified."),
         ("Property A water", f"{m(A['annual_costs']['water']['low'])} to {m(A['annual_costs']['water']['high'])} a year",
-         "Owner estimate", "Read the bill and the provider's published tariff."),
+         "Owner estimate",
+         "Read the bill and the provider's published tariff. One CPUC-regulated utility whose published "
+         "territory includes portions of the county publishes its approved 2026 tariff sheets; confirm the "
+         "provider on the bill before comparing."),
         ("Property A electricity, net of solar", f"{m(A['annual_costs']['electricity']['low'])} to {m(A['annual_costs']['electricity']['high'])} a year",
          "Owner estimate", "Read twelve months of bills and the interconnection agreement."),
         ("Property B water", f"{m(B['annual_costs']['water']['low'])} to {m(B['annual_costs']['water']['high'])} a year",
@@ -1973,7 +1981,7 @@ def page_review() -> str:
         "Both assessment rolls and tax bills": ["scc_ratebook", "sf_treas_rate", "boe_lta26002"],
         "Property A ad valorem rate": ["scc_ratebook"],
         "Property B ad valorem rate": ["sf_treas_rate"],
-        "Property A water": [],
+        "Property A water": ["sjwc_tariff"],
         "Property A electricity, net of solar": ["cpuc_nem"],
         "Property B water": ["sfpuc_rates"],
         "Property B electricity": [],
