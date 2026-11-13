@@ -13,7 +13,7 @@ APPROVED = set(PAGES + ASSETS + (
     '.gitignore','.nojekyll','COORDINATION.md','README.md','EXECUTIVE_SUMMARY.md',
     '.github/workflows/pages.yml','.github/workflows/verify.yml',
     'scripts/build.py','scripts/package_site.py','scripts/verify.py','scripts/privacy_boundary.py',
-    'scripts/model.py','scripts/economy.py','scripts/privacy_tier.py',
+    'scripts/model.py','scripts/economy.py','scripts/privacy_tier.py','scripts/verify_legacy.py','_config.yml',
 ))
 MARKER = 'PUBLICATION_WITHDRAWN'
 
