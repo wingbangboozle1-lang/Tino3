@@ -12,13 +12,21 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Rebuild, verify sources, links and privacy
+      - name: Rebuild the public pages from data and the source ledger
+        run: python scripts/build.py
+      - name: Verify sources, links, rounding and privacy
+        run: python scripts/verify.py
+      - name: Privacy boundary
+        run: python scripts/privacy_boundary.py
+      - name: Build the Actions artifact
+        run: python scripts/package_site.py
+      - name: Generated pages are not stale
         run: |
-          python scripts/build.py
-          python scripts/verify.py
-          python scripts/privacy_boundary.py
-          python scripts/package_site.py
-          git diff --exit-code -- '*.html' assets/data || (echo "::error::generated pages are stale; run scripts/build.py" && exit 1)
+          if ! git diff --quiet -- '*.html' assets/data; then
+            git --no-pager diff --stat -- '*.html' assets/data
+            echo "::error::committed generated pages differ from a fresh build; run scripts/build.py and commit"
+            exit 1
+          fi
       - name: Check the legacy source boundary
         run: python scripts/verify_legacy.py --config-only
       - name: Build the legacy Jekyll publication (the live publisher)
