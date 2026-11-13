@@ -1,0 +1,172 @@
+{
+ "meta": {
+  "built": "2026-11-13",
+  "deterministic": true,
+  "seed": 20261113,
+  "draws": 2000,
+  "block_years": 10,
+  "series_house": "ATNHPIUS41940Q",
+  "series_cpi": "CPIAUCSL",
+  "rounding": "nearest $10",
+  "method": "Seeded block bootstrap of the official FRED annual record; see the module docstring."
+ },
+ "bootstrap": {
+  "series": {
+   "house": "ATNHPIUS41940Q",
+   "house_span": "1976-2025",
+   "cpi": "CPIAUCSL",
+   "cpi_span": "1975-2024"
+  },
+  "blocks": 39,
+  "block_years": 10,
+  "draws": 2000,
+  "seed": 20261113,
+  "method": "Ten-year blocks are drawn with replacement from the complete windows where both the house price series and the consumer price series are present, so house and inflation history move together as they did in the record. The consumer price series ends before the house price series, which is why the count of blocks is smaller than the house record alone allows. Each draw is five blocks: fifty years.",
+  "rows": [
+   {
+    "key": "Property A value at the 2045 inheritance, nominal",
+    "unit": "money",
+    "p05": 8146820,
+    "p50": 18955740,
+    "p95": 43149320,
+    "constant": 6531230,
+    "note": "Constant case: the model's 4% a year."
+   },
+   {
+    "key": "Property A value in 2076, nominal",
+    "unit": "money",
+    "p05": 21678410,
+    "p50": 61767700,
+    "p95": 188446020,
+    "constant": 22030720,
+    "note": "Constant case: the model's 4% a year."
+   },
+   {
+    "key": "Property A value in 2076, in 2026 dollars",
+    "unit": "money",
+    "p05": 5988020,
+    "p50": 13605840,
+    "p95": 33426340,
+    "constant": 6409670,
+    "note": "Deflated by the same draw's consumer price path."
+   },
+   {
+    "key": "House growth per year over fifty years, nominal",
+    "unit": "pct",
+    "p05": 3.9664687925205935,
+    "p50": 6.166620829880931,
+    "p95": 8.561667120481719,
+    "constant": 4.0,
+    "note": "The constant model sits inside the band, not at its middle."
+   },
+   {
+    "key": "House growth per year over fifty years, real",
+    "unit": "pct",
+    "p05": 1.3254257576601778,
+    "p50": 3.0023838716006224,
+    "p95": 4.870789723072985,
+    "constant": 1.4634146341463428,
+    "note": "Growth after the same draw's inflation."
+   },
+   {
+    "key": "House growth per year, 2045 to 2075, nominal",
+    "unit": "pct",
+    "p05": 3.27317743686796,
+    "p50": 6.22155056877215,
+    "p95": 9.174297008156193,
+    "constant": 4.0,
+    "note": "The window the hold-versus-sell decision actually turns on."
+   }
+  ],
+  "shares": [
+   {
+    "key": "Draws where fifty-year nominal house growth is below the 4% constant",
+    "value": 0.0525
+   },
+   {
+    "key": "Draws where growth from 2045 is below the 7.72% break-even the decision page publishes",
+    "value": 0.7975
+   },
+   {
+    "key": "Draws where real house growth from 2045 is negative",
+    "value": 0.01
+   },
+   {
+    "key": "Draws where selling at 2045 and investing beats holding for 30 years",
+    "value": 0.475
+   }
+  ],
+  "wins": {
+   "case": "Sell at 2045 and invest at 6.30% net, against holding the house for 30 years",
+   "sell_wins_share": 0.475,
+   "draws": 2000,
+   "note": "A pure asset-price race, and nothing more: the sell path deducts selling costs and then earns the net equity return; the hold path earns only the house price path. Rents, property tax, insurance, maintenance and the housing that living in the home provides are excluded on BOTH sides, so this share says nothing on its own about the decision. The tax-aware comparison is the break-even share above: holding has to outgrow the published break-even rate, which the constant model derives from the full cost and tax structure."
+  }
+ },
+ "lesser_of": {
+  "rule": "Revenue and Taxation Code section 51: the taxable value is the lesser of the enrolled (Proposition 13-capped) value or the base year value adjusted for inflation. The assessor applies it when prices fall.",
+  "a": {
+   "share_years_indexed_below_cap_p50": 0.0,
+   "share_years_indexed_below_cap_p95": 0.28,
+   "saving_p05": 0,
+   "saving_p50": 0,
+   "saving_p95": 2830,
+   "rate": 0.0118,
+   "base": 550540
+  },
+  "b": {
+   "share_years_indexed_below_cap_p50": 0.0,
+   "saving_p05": 0,
+   "saving_p50": 0,
+   "saving_p95": 590,
+   "rate": 0.0118162182,
+   "base": 114250
+  },
+  "note": "Forward-looking only: the cap has bound in every supplied year, so the inflation-adjusted value is taken equal to the capped value at the start and the two are then grown apart by the drawn consumer prices and the 2% cap. Savings are the ad valorem part of the bill only; fixed charges do not scale with value."
+ },
+ "thresholds": [
+  {
+   "item": "Section 121 home-sale exclusion, joint",
+   "nominal_2026": 500000,
+   "rule": "Fixed by statute since 1997; not indexed.",
+   "nominal_2045": 500000,
+   "real_2045": 312760,
+   "note": "The same nominal dollars buy roughly a third less house.",
+   "sources": [
+    "irs_p523"
+   ]
+  },
+  {
+   "item": "Proposition 19 excluded amount on a family-home transfer",
+   "nominal_2026": 1044590,
+   "rule": "Adjusted every second February by the FHFA California house price index.",
+   "nominal_2045": 1546240,
+   "real_2045": 967220,
+   "note": "Modelled at the baseline house-growth rate. The real amount is published by the board every second February and is not knowable in advance.",
+   "sources": [
+    "boe_lta25009"
+   ]
+  },
+  {
+   "item": "Federal estate tax basic exclusion",
+   "nominal_2026": 15000000,
+   "rule": "Indexed to inflation by law from 2026.",
+   "nominal_2045": 23979750,
+   "real_2045": 15000000,
+   "note": "Holds roughly constant in real terms if indexation tracks inflation; a change of statute could cut it, which the estate page treats as the main risk.",
+   "sources": [
+    "irs_estate",
+    "irs_2027"
+   ]
+  },
+  {
+   "item": "State and local tax deduction cap",
+   "nominal_2026": 10000,
+   "rule": "Fixed by statute; not indexed. Not modelled on this site.",
+   "nominal_2045": 10000,
+   "real_2045": 6260,
+   "note": "Listed for completeness; the model takes no federal deduction for state tax.",
+   "sources": []
+  }
+ ]
+}
