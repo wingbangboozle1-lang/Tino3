@@ -1,5 +1,15 @@
 # Coordination board
 
+## Session `arena/5c71d227-tino3` — documentation synchronization and end-to-end publication audit · 2026-11-13
+
+*Branch note:* Arena pins this session to `arena/5c71d227-tino3`, based on `main` at `19e5ccf6a83e94bc7dd0fc0e9d294af85768fa19`. The current branch is used; no branch was created or switched.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| D-1 Reconcile repository-facing documentation with the current published 18-page edition; run local publication/privacy checks and confirm the live Pages deployment | in progress | `arena/5c71d227-tino3` | `COORDINATION.md`, `README.md`, `EXECUTIVE_SUMMARY.md` |
+
+The previously completed integration already contains the requested dashboard, projections, questions, suggestions, official-source ledger and flagged-items page. This scoped follow-up is limited to correcting stale repository-facing documentation and independently checking the current build/deployment; it does not change property inputs, projections, or legal conclusions.
+
 Privacy rule (12 November 2026, owner's current brief): public pages use generic Property A / Property B placeholders for the two homes. No personal names, street addresses, postal codes, parcel numbers, account numbers, utility accounts or trust particulars ever appear. The owner has instructed that the owner-supplied figures (market values, the property-tax and assessment roll history, the rent, the utility and insurance estimates) be published rounded to the nearest $10, so the decision analysis carries clear numbers; `assets/privacy.json` tier 1 holds that choice. Rounding to $10 removes an exact search match; it does not defeat a reader who already holds the county record, and every page says so. Any figure that cannot be confirmed from an official source is left blank and flagged, never inferred. Historical repository commits, pull-request diffs, caches, forks, downloads and external copies are not certified erased.
 
 
