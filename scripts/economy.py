@@ -288,7 +288,7 @@ def build() -> dict:
          "note": "The same nominal dollars buy roughly a third less house.",
          "sources": ["irs_p523"]},
         {"item": "Proposition 19 excluded amount on a family-home transfer",
-         "nominal_2026": money10(prop19_cap),
+         "nominal_2026": prop19_cap,
          "rule": "Adjusted every second February by the FHFA California house price index.",
          "nominal_2045": money10(prop19_nominal_2045), "real_2045": money10(prop19_nominal_2045 / y19),
          "note": "Modelled at the baseline house-growth rate. The real amount is published by the "
