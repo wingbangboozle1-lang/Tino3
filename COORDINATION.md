@@ -1,5 +1,18 @@
 # Coordination board
 
+## Session `arena/0dcaf9f7-tino3` — open-item completion: ledger research, economy reconciliation, stale-PR disposition, final publication · claimed 2026-11-13
+
+*Branch note:* Arena pins this session to `arena/0dcaf9f7-tino3` (based on `main` at `19e5ccf`, fast-forwarded to `d977882`, the merge of PRs #77 and #78). The board's `session-<id>/<task>` naming cannot be used; no other branch is created, switched to or pushed. The whole board was read at session start; tasks below come from the "Still open" list left by `arena/33a8d086-tino3`.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| O-1 Research and, where officially confirmable, close the four unconfirmed ledger items: the San Jose Water Company tariff behind Property A's water figure, Cupertino Sanitary District rates, the Santa Clara County tax-rate book beyond page 1 (Cupertino-area rates, published only as area-level information, never the parcel's own rate area), and the transfer-tax band above $10,000,000 on the Property B city's official table | in progress | `arena/0dcaf9f7-tino3` | `assets/sources.json` (append only), `scripts/build.py` (the affected row sections), `README.md` and `EXECUTIVE_SUMMARY.md` only where ledger/row counts change |
+| O-2 Reconcile `scripts/economy.py` and `assets/data/economy.json` with the current `scripts/model.py`: the module is broken (`base.r10` no longer exists) and its tracked output is stale. Fix it against the current model API, regenerate, and publish its unique outputs (bootstrap distribution, ten-year-window decision re-runs, lesser-of binding, threshold erosion) on the economy page, or remove the files if their content is already subsumed | in progress | `arena/0dcaf9f7-tino3` | `scripts/economy.py`, `assets/data/economy.json`, `scripts/build.py` (economy page section only), `assets/sources.json` (append only), `README.md` and `EXECUTIVE_SUMMARY.md` counts |
+| O-3 Verify and disposition the stale privacy-blocker PRs #65 and #66: their claims predate the `_config.yml` guard restored on 2026-11-13 and the post-merge live audits. Re-verify the live deployment state from the Pages API and the fetched site, then close both with explanatory comments | in progress | `arena/0dcaf9f7-tino3` | `COORDINATION.md` (this section only); comments on PRs #65 and #66 |
+| O-4 Final integration for the above: rebuild, run every gate, re-verify combined output, pull request to `main`, merge, confirm the Pages deploy, record results | in progress | `arena/0dcaf9f7-tino3` | `COORDINATION.md` (this section only) |
+
+*Overlap note:* O-1 and O-2 both name `scripts/build.py`; they are the same session, so no inter-session conflict arises. `scripts/model.py`, `assets/data/inputs.json`, `assets/data/series.json` and `scripts/verify.py` are not touched. If a task ends up needing a file owned by another session's scope, the request will be logged here instead of edited.
+
 ## Session `arena/5c71d227-tino3` — documentation synchronization and end-to-end publication audit · 2026-11-13
 
 *Branch note:* Arena pins this session to `arena/5c71d227-tino3`, based on `main` at `19e5ccf6a83e94bc7dd0fc0e9d294af85768fa19`. The current branch is used; no branch was created or switched.
