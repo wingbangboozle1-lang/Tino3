@@ -11,11 +11,16 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.11'
       - name: Rebuild the public pages from data and the source ledger
         run: python scripts/build.py
       - name: Verify sources, links, rounding and privacy
-        run: python scripts/verify.py
+        run: |
+          set -o pipefail
+          if ! python scripts/verify.py 2>&1 | tee /tmp/verify.txt; then
+            while IFS= read -r line; do echo "::error title=verify.py::$line"; done < /tmp/verify.txt
+            exit 1
+          fi
       - name: Privacy boundary
         run: python scripts/privacy_boundary.py
       - name: Build the Actions artifact
