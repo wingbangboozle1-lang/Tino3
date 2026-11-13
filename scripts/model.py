@@ -163,7 +163,8 @@ def run_paths(inherit_year: int, g: float, infl: float, eq: float, drag: float,
               tsy: float, cap_growth: float, sell_pct: float, horizon: int,
               gain_rate: float, rec_rate: float, exclusion: float,
               fixed_growth: float, fit_a: dict, cost_a_base: float,
-              maint_live: float, maint_rent: float) -> dict:
+              maint_live: float, maint_rent: float,
+              rent_income: float | None = None) -> dict:
     k = inherit_year - 2026
     value_at_death = A["estimated_market_value_2026"] * (1 + g) ** k
     byv = A["roll"][0]["assessed"] * (1 + 0.02) ** k
@@ -189,12 +190,26 @@ def run_paths(inherit_year: int, g: float, infl: float, eq: float, drag: float,
     live = sale_proceeds(terminal_price, value_at_death, sell_pct, gain_rate, rec_rate,
                          0.0, exclusion)
 
+    # Rental income. The original model charged every landlord cost to the rental paths
+    # and credited none of the rent, which made them structurally incapable of winning.
+    # Rent is entered as an input (assets/data/inputs.json, property_a.rent_income_annual)
+    # and grown with the modelled inflation rate; it is accumulated at the equity
+    # after-tax rate, the same convention the break-even rent calculation already used.
+    rent0 = float(rent_income or 0.0)
+
+    def rent_accumulated(years: int) -> float:
+        tot = 0.0
+        for j in range(years):
+            tot += rent0 * (1 + infl) ** j * (1 + eq - drag) ** (years - 1 - j)
+        return tot
+
     # Path 4: let it out from the start, then sell
     tax_rent = tax_path(taxable_rent, fit_T, inherit_year, infl, horizon)
     cost_rent = carrying_costs(value_at_death, cost_a_base, maint_rent, infl, horizon)
     deprec = min(0.8 * value_at_death, 0.8 * value_at_death / 27.5 * horizon)
     rent_sale = sale_proceeds(terminal_price, value_at_death - deprec, sell_pct,
                               gain_rate, rec_rate, deprec)
+    rent_cash = rent_accumulated(horizon)
 
     # Path 5: live in it for two years, then let it out for the rest
     tax_h1 = tax_path(taxable_live, fit_T, inherit_year, infl, 2)
@@ -207,6 +222,7 @@ def run_paths(inherit_year: int, g: float, infl: float, eq: float, drag: float,
                    0.8 * value_at_death / 27.5 * (horizon - 2))
     hybrid_sale = sale_proceeds(terminal_price, value_at_death - deprec_h, sell_pct,
                                 gain_rate, rec_rate, deprec_h, exclusion)
+    hybrid_cash = rent_accumulated(horizon - 2)
 
     return {
         "inherit_year": inherit_year,
@@ -229,15 +245,17 @@ def run_paths(inherit_year: int, g: float, infl: float, eq: float, drag: float,
                         "outflow": money10(tax_live + cost_live),
                         "tax_total": money10(tax_live),
                         "cost_total": money10(cost_live), "sale": live},
-            "rent_out": {"terminal": money10(rent_sale["net"]),
+            "rent_out": {"terminal": money10(rent_sale["net"] + rent_cash),
                          "outflow": money10(tax_rent + cost_rent),
                          "tax_total": money10(tax_rent),
                          "cost_total": money10(cost_rent),
+                         "rent_income_total": money10(rent_cash),
                          "depreciation": money10(deprec), "sale": rent_sale},
-            "live_then_rent": {"terminal": money10(hybrid_sale["net"]),
+            "live_then_rent": {"terminal": money10(hybrid_sale["net"] + hybrid_cash),
                                "outflow": money10(tax_h1 + tax_h2 + cost_h),
                                "tax_total": money10(tax_h1 + tax_h2),
                                "cost_total": money10(cost_h),
+                               "rent_income_total": money10(hybrid_cash),
                                "depreciation": money10(deprec_h),
                                "sale": hybrid_sale},
         },
@@ -321,7 +339,8 @@ def sensitivity(target_year: int):
                 fit_a=FIT_A,
                 cost_a_base=COST_A_BASE,
                 maint_live=A["annual_costs"]["maintenance_pct_owner_occupied"]["value"],
-                maint_rent=A["annual_costs"]["maintenance_pct_rental"]["value"])
+                maint_rent=A["annual_costs"]["maintenance_pct_rental"]["value"],
+                rent_income=RENT_INCOME)
             terms = {k: v["terminal"] for k, v in res["paths"].items()}
             best = max(terms, key=terms.get)
             rows.append({"house_growth": pct(g, 1), "equity_return": pct(eq, 1),
@@ -340,7 +359,8 @@ def breakeven_house_growth(inherit_year: int, eq: float, drag: float, cap_growth
                         gain_rate=gain_rate, rec_rate=rec_rate, exclusion=exclusion,
                         fixed_growth=ASM["fixed_charge_growth"]["baseline"], fit_a=FIT_A,
                         cost_a_base=COST_A_BASE, maint_live=maint_live,
-                        maint_rent=A["annual_costs"]["maintenance_pct_rental"]["value"])
+                        maint_rent=A["annual_costs"]["maintenance_pct_rental"]["value"],
+                        rent_income=RENT_INCOME)
         return res["paths"]["live_in"]["terminal"] - res["paths"]["sell_equities"]["terminal"]
     lo, hi = 0.0, 0.30
     if live_gap(hi) < 0:
@@ -528,7 +548,8 @@ def run_regime(regime: dict, horizon: int):
         exclusion=V["section121_exclusion_single"]["value"],
         fixed_growth=ASM["fixed_charge_growth"]["baseline"], fit_a=FIT_A, cost_a_base=COST_A_BASE,
         maint_live=A["annual_costs"]["maintenance_pct_owner_occupied"]["value"],
-        maint_rent=A["annual_costs"]["maintenance_pct_rental"]["value"])
+        maint_rent=A["annual_costs"]["maintenance_pct_rental"]["value"],
+        rent_income=RENT_INCOME)
     cpi_mult = (1 + infl) ** horizon
     return {
         "terminal": {k: v["terminal"] for k, v in res["paths"].items()},
@@ -594,6 +615,11 @@ def prop19_cap_projection():
 # ------------------------------------------------------------------ main ----
 FIT_A = fit_bill(A["roll"], ASM["ad_valorem_rate_a"]["value"])
 FIT_B = fit_bill(B["roll"], ASM["ad_valorem_rate_b"]["value"])
+# Rent used in the letting paths. None unless the owner supplies a figure, so the site
+# never invents a market rent: with no rent the letting paths carry cost and no income,
+# which is the conservative case, and it is labelled as such everywhere it is shown.
+RENT_INCOME = A.get("rent_income_annual", {}).get("value") \
+    if isinstance(A.get("rent_income_annual"), dict) else None
 COST_A_BASE = (A["annual_costs"]["water"]["mid"] + A["annual_costs"]["electricity"]["mid"]
                + A["annual_costs"]["insurance"]["mid"])
 COST_B_BASE = (B["annual_costs"]["water"]["mid"] + B["annual_costs"]["electricity"]["mid"]
@@ -665,7 +691,8 @@ def main() -> dict:
                         gain_rate=gain_rate, rec_rate=rec_rate,
                         exclusion=V["section121_exclusion_single"]["value"],
                         fixed_growth=ASM["fixed_charge_growth"]["baseline"], fit_a=FIT_A, cost_a_base=COST_A_BASE,
-                        maint_live=maint_live, maint_rent=maint_rent)
+                        maint_live=maint_live, maint_rent=maint_rent,
+                        rent_income=RENT_INCOME)
         t_eq = res["paths"]["sell_equities"]["terminal"]
         res["breakeven_rent_annual"] = breakeven_rent(
             year, g, infl, eq, drag, cap_growth, sell_pct, horizon, gain_rate,
