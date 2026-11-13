@@ -2111,3 +2111,20 @@ HTTP 403 for this repository and remains the cleaner long-term fix.
    records and superseded work; nothing in this edition depends on them.
 5. Git history still contains the earlier editions, including versions with unrounded
    owner figures. Rewriting it is a decision for the owner, not for a session.
+
+
+## Session `arena/3aa41939-tino3` — final verification, owner-brief content, and publication (2026-11-13)
+
+*Branch note:* pinned to `arena/3aa41939-tino3`, branched from `19e5ccf`, which is also `main` and `origin/main`. This block is appended at the end of the file as the board convention requires.
+
+Scope: the owner's current brief — the anonymised quantitative inheritance decision analysis for Property A (inherited through a trust, planned 2040 to 2050) and Property B (already owned by the inheritor), figures rounded to the nearest $10, Property A/B placeholders, zero identifiers; executive summary; dedicated suggestions register; questions/information/answers register; separate black-swan economic conditions section; step-by-step inheritance steps; federal, state and local inheritance and property tax thresholds; law watch; year-by-year projections of value, assessed value and tax; live / rent / sell-and-reinvest decision analysis. The site must go live on GitHub Pages; PR to `main`, merged without waiting for approval, deploy confirmed, PR link and merge result recorded here.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| V-1 Claim and independent line-by-line review of the root edition; re-open official sources; flag irregularities | in progress | `arena/3aa41939-tino3` | root `*.html`, `scripts/build.py`, `scripts/model.py`, `assets/data/*`, `assets/sources.json`, `COORDINATION.md` (this section) |
+| V-2 Confirm the brief's figures are present and correct: Property A $3,100,000; Property B $1,800,000; rent $7,150/month; water and electricity ranges; insurance research; full tax and assessment history at $10 rounding; privacy placeholders only | in progress | `arena/3aa41939-tino3` | `assets/data/inputs.json`, `assets/data/property_a.csv`, `property_b.csv`, root `*.html` (regenerated via `scripts/build.py`) |
+| V-3 Refresh executive summary, suggestions register, questions register, black-swan section, inheritance steps, estate and thresholds pages against the verified sources | in progress | `arena/3aa41939-tino3` | `executive-summary.html`, `suggestions.html`, `questions.html`, `black-swan.html`, `inheritance.html`, `taxes.html`, `estate.html`, `laws.html`, `EXECUTIVE_SUMMARY.md` |
+| V-4 Run all gates locally (`scripts/build.py`, `scripts/verify.py`, `scripts/privacy_boundary.py`, `scripts/package_site.py`, `scripts/verify_legacy.py --config-only`); fix every failure | waiting | `arena/3aa41939-tino3` | scripts/* |
+| V-5 Open PR from `arena/3aa41939-tino3` to `main`; merge without waiting; confirm GitHub Pages deploys; record PR link, merge commit and deploy result here | waiting | `arena/3aa41939-tino3` | `COORDINATION.md` (this section); GitHub Pages deployment |
+
+Not touched: `scripts/economy.py`, `scripts/package_site.py`, `.github/workflows/*`, `analysis/**`, `plan/**` (absent from tree), withdrawal notices, every other session's board section. No name, street address, parcel number, ZIP code, utility account, trust particular or person's name appears in any commit, message or pull request of this session.
