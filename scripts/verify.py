@@ -40,7 +40,7 @@ ALLOWED_HOSTS = {
     "www.cpuc.ca.gov", "cpuc.ca.gov", "www.insurance.ca.gov", "www.lao.ca.gov", "www.sos.ca.gov", "www.sco.ca.gov",
     "elections.cdn.sos.ca.gov",
     # local government (jurisdiction A and jurisdiction B)
-    "REDACTED.archive.REDACTED", "REDACTED.org", "www.REDACTED",
+    "REDACTED.archive.REDACTED", "REDACTED.org", "www.REDACTED", "www.REDACTED.gov", "REDACTED.gov",
     "clerkrecorder.REDACTEDcounty.gov", "files.REDACTEDcounty.gov",
     "electionresults.sos.ca.gov", "REDACTED.legistar.com",
     # publication tooling (GitHub Pages documentation for the publishing-source rule)
