@@ -83,7 +83,21 @@ Not touched: `assets/sources.json` (the ledger already carries every source used
 
 - The "Key rules" column on the executive summary and the "Related sources" rows on several other pages still repeat the same four or five publishers on every row (the BOE 2025/009 letter against the rent-to-value row, for example). The row claims are in the model and the text, so the links are relevant only in part. A per-row source map, as now used on the review page, is the fix. It is not done here.
 - Two IRS links in the ledger were not re-opened in this session: `irs_2027` (404 on the URL tried) and the Pub. 527 depreciation link.
+- Repository-audit row 'Four pull requests are open' on the Flagged for Review page was out of date (PRs 62 and 70 are merged; 65 and 66 are open). Corrected in the follow-up PR for this entry. The audit table's 'Related sources' still repeats the same publishers on every row; the same per-row fix is open.
+- Open PR #80 belongs to another session (a Prop 19 parent-child gate change). It was not touched here and will need a rebase onto this branch's `scripts/build.py` changes when it is merged.
 - A shared-branch note: on the remote, this branch briefly carried three COORDINATION-only commits from `arena/3aa41939-tino3` (`afe5de3`, `a858287`, `c6b876a`), which were already on `main` through PR #78. They were kept as history (a plain merge of `main`), not rewritten.
+
+## Session `arena/1c788435-tino3` — C-1 closing record (merge results)
+
+| Pull request | Content | Result |
+|---|---|---|
+| #79 | Irregularity register; CSVs written from the model; Proposition wording (unofficial); row-specific links on the unverified register; navigation label | MERGED 2026-11-13 11:50:36 UTC, merge commit `743b26b`; checks success; Pages `built` |
+| #81 | Per-caveat official sources on the Flagged for Review page | MERGED 2026-11-13 11:53:07 UTC, merge commit `0936084`; verify pass; Pages `built` for that commit |
+| #82 | Corrected the out-of-date repository-audit row ("four pull requests are open") | Superseded: `main` already carried the corrected row from another session's merge (PR #80). Its only remaining change is this board record. |
+
+**Other session's work in the same window.** PR #80 (`arena/6c643763-tino3`, a seventh verification pass including a Proposition 19 parent-child eligibility gate) merged to `main` while this session's PR #82 was open. Its changes to `scripts/build.py` and `review.html` were kept as `main`'s version in the merge that carries this record. Nothing from PR #80 was overwritten.
+
+**Open pull requests after this session:** #65 and #66 (earlier board records, owner's decision).
 
 ## Session `arena/25fdb181-tino3` — integration, publication-safety fix and merge · 2026-11-13
 
