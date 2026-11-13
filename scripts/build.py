@@ -277,12 +277,11 @@ Renting the home out ends with {usd(RENT['wealth'])} and moving in ends with {us
 <div class="card"><div class="k">Every source</div><p><a href="sources.html">Source library</a>: each document, the words relied on, and how it was checked.</p></div>
 </div>
 </section>
-<section><h2>Three editions in one repository</h2>
-<p>This dashboard is one of three editions kept side by side. They answer the same question with separate models, so their figures differ; each page states which model it comes from. Do not mix a number from one edition with a table in another.</p>
+<section><h2>One edition on this site</h2>
+<p>Earlier cross-check and 50-year editions were built from unrounded owner figures. They are withdrawn from publication and their files are no longer in the working tree; the repository history still contains them. This site publishes only the pages in the menu.</p>
 <div class="cards">
 <div class="card win"><div class="k">This edition &middot; {len(PAGES) + 1} pages</div><p>The pages in the menu. One model, one source ledger of {len(SRC)} entries, re-checked line by line on 11 and 12 November 2026. Act on these numbers.</p></div>
-<div class="card"><div class="k">Cross-check &middot; 10 pages</div><p><a href="plan/index.html">A second model</a> built from official figures only, leaving unverifiable inputs blank and reporting break-evens instead. It reaches the same default: sell and keep Property B.</p></div>
-<div class="card"><div class="k">50-year suite &middot; 12 pages</div><p><a href="analysis/index.html">2026&ndash;2076 schedules</a>, a 1977&ndash;2026 state cycle replay with decline-in-value relief, a 60/40 Treasury barbell and the ownership-asymmetry tables.</p></div>
+<div class="card"><div class="k">Withdrawn editions</div><p>Earlier cross-check and 50-year suites are not published. Their figures are not comparable with this edition and should not be used.</p></div>
 </div></section>{PRIV}"""
 PAGES["index.html"] = page("index.html", "Overview", "Overview", "Sell, rent or move in?",
                            "A costed answer for a home expected to be inherited through a trust between 2040 and 2050, "
@@ -696,7 +695,7 @@ sug = [
  ("S-10", "Re-run the model once a year with the current Treasury yield and the published factors.",
   "The Treasury yield is the thinnest margin in the analysis: renting and Treasuries finish close together.", "One command, five minutes",
   "None.", DONE),
- ("S-11", "Retire the two cross-check editions, or label every figure with its edition on every page.",
+ ("S-11", "Keep the two withdrawn editions off the site unless each figure is re-verified and re-rounded for publication.",
   "Three editions with three models invite mixing numbers that were never meant to be compared.", "A decision, then an hour",
   "None.", CALL),
  ("S-12", "Deal with the repository history: rewrite it, or make the repository private.",
@@ -851,7 +850,7 @@ brk = [
  (["House price growth at which renting equals selling", P(BE["house_growth"] / 100), "The home must appreciate about as fast as stocks return. The local index averaged 5.7% a year since 1995."], "C", S("fred_hpi_a", asm=True)),
  (["Rent at which renting equals a stock fund", N(BE["rent_month"]), "A month, in 2026 dollars. The assumption is $6,500."], "C", S("hud_fmr", asm=True)),
  (["Rent at which renting equals Treasuries", N(BE["rent_month_vs_treasury"]), "A month, in 2026 dollars. Renting and Treasuries are close; a stock fund is not."], "C", S("treasury_cmt", asm=True)),
- (["House price growth at which renting equals Treasuries", P(BE["house_growth_vs_treasury"] / 100), "Above this, keeping the home as a rental beats selling into Treasuries. The cross-check edition puts this switch at about 4.9%."], "C", S("treasury_cmt", "fred_hpi_a", asm=True)),
+ (["House price growth at which renting equals Treasuries", P(BE["house_growth_vs_treasury"] / 100), "Above this, keeping the home as a rental beats selling into Treasuries."], "C", S("treasury_cmt", "fred_hpi_a", asm=True)),
 ]
 asm_rows = [([x["item"], x["value"], x["reason"]], "A", S(*x["src"])) for x in M["assumptions"]]
 body = f"""
@@ -1131,7 +1130,7 @@ These are stress tests, not forecasts.</p>
 <p>The pattern across the whole table: <strong>selling soon after the inheritance stays the first choice in every stress case tested.</strong>
 What changes is what you sell into. A lost decade for stocks (4.0% a year) moves the money from the stock fund to Treasuries, not back into the rental.
 The only thing that reverses the ranking is a set of conditions together, not any single shock: see the break-even points on the <a href="decision.html">decision page</a>.
-The independent <a href="plan/index.html">cross-check edition</a> reaches the same conclusion from official figures alone.</p></section>
+An earlier independent cross-check reached the same default, but it is withdrawn from publication and is not relied on here.</p></section>
 <section><h2>What is not modelled</h2><ul>
 <li><strong>Sequence risk inside the ten years.</strong> The model applies one average return a year. A crash in year one and a boom in year nine produce the same average but a different experience; Black Monday and 2008 show the size of single-year moves.</li>
 <li><strong>Insurance premiums.</strong> No official premium or quote could be confirmed; tripling the owner's guess does not change the ranking, and that test is on the decision page.</li>
@@ -1631,11 +1630,8 @@ was read, and no statute not named above was opened in this session.</p></sectio
 <p>One gap was found. The one-time-gain rate used in the model is 20% federal, 3.8% net investment income tax and 12.3% California, and 12.3% is the top bracket of the graduated schedule. Section 17043 of the Revenue and Taxation Code adds a further 1% on the portion of taxable income above $1,000,000. It is published as FL-31 and C-14, with the dollar effect as a sensitivity rather than a model change, so no previously published figure moves: applied to the gain alone, the 2045 stock result falls from $10,052,910 to $10,016,750, and the sale remains first. Other income would push more of the gain above the threshold, so the figure published is a lower bound on that tax.</p>
 <p>What this check did not do: it did not open the text of Proposition 19 or any local ordinance, contact an insurer, appraiser or broker, look up a parcel, or test the pages in a browser.</p></section>
 <section><h2>Repository review</h2><p>Findings from reading the repository itself. These are observations, not sourced facts.</p>{rlist}</section>
-<section><h2>How this edition relates to the cross-check</h2>
-<p>A separate <a href="plan/index.html">cross-check edition</a> was built by another session with its own model and its own source ledger. It leaves unverifiable inputs blank and reports break-evens.
-Both reach the same default: sell Property A in the first year and keep Property B. The cross-check compares selling with Treasuries only and finds that margin thin; this edition agrees
-(renting and Treasuries finish close together) and adds the stock index fund, which leads in every case tested at a 7% return.
-The cross-check's reconciliation table describes the edition that preceded this one; items it raised about the 2027 exclusion, the City B rate, the Treasury yield, rent growth and the failed initiative are adopted here.</p></section>
+<section><h2>Earlier editions</h2>
+<p>An earlier cross-check edition and a 50-year suite were built by other sessions. Both are withdrawn from publication because they carried unrounded owner figures. This edition does not depend on them, and no figure in it is taken from them.</p></section>
 <section><h2>What was not done</h2><ul>
 <li>No address, parcel or owner lookup was made in any public record.</li>
 <li>No insurer was contacted and no quote was obtained.</li>

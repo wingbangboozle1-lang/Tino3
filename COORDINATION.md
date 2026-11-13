@@ -2,6 +2,45 @@
 
 Privacy rule (12 November 2026, owner's current brief): public pages use generic Property A / Property B placeholders for the two homes. No personal names, street addresses, postal codes, parcel numbers, account numbers, utility accounts or trust particulars ever appear. The owner has instructed that the owner-supplied figures (market values, the property-tax and assessment roll history, the rent, the utility and insurance estimates) be published rounded to the nearest $10, so the decision analysis carries clear numbers; `assets/privacy.json` tier 1 holds that choice. Rounding to $10 removes an exact search match; it does not defeat a reader who already holds the county record, and every page says so. Any figure that cannot be confirmed from an official source is left blank and flagged, never inferred. Historical repository commits, pull-request diffs, caches, forks, downloads and external copies are not certified erased.
 
+
+## Session `arena/25fdb181-tino3` — integration, publication-safety fix and merge · 2026-11-13
+
+*Branch note:* Arena pins this session to `arena/25fdb181-tino3` (base `b4b7c20`, `main`). The `session-<id>/<task>` naming cannot be used. No other branch was created, switched to or pushed.
+
+**Handoff of PR #70 (`arena/b709c64d-tino3`, claim I-1..I-4).** PR #70 is open and its I-4 publication step is still "in progress". Its last commit is 22:27 UTC on 12 November 2026, more than eight hours before this session began, so the claim is treated as stale. Its full head `052db52` was merged into this branch with all commits preserved (merge commit on this branch; the unrelated-history merge is recorded in the log below). The owner brief content of that PR is kept. This session then fixed publication-safety defects that PR #70 would have introduced, listed below. PR #70 should be closed as superseded by this session's PR, not merged separately.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| I-25 Take over the stale I-claim, keep its content, fix publication defects, verify, open PR to `main`, merge, confirm Pages | in progress | `arena/25fdb181-tino3` | this section; `scripts/*`, `.github/workflows/*`, root pages via `scripts/build.py`, `README.md`, `_config.yml`, `analysis/` and `plan/` (removed from the tree) |
+
+### Defects found and fixed in this session
+
+1. **Publication path would have exposed the repository.** Pages is `build_type: legacy` from `main:/` and cannot be changed by this integration (`PUT /pages` returned HTTP 403, "Resource not accessible by integration"). PR #70 deleted `_config.yml` and added `.nojekyll`, which would make the legacy publisher serve every tracked file. Restored a generated `_config.yml` (`scripts/verify_legacy.py --write-config`) and removed `.nojekyll`.
+2. **Unrounded owner figures in legacy editions.** `analysis/data/model.json` contained `7207` (the owner's exact 2025 bill, not rounded to $10), and other legacy files held unrounded inputs. `analysis/` and `plan/` were removed from the working tree. Their history remains in Git.
+3. **Artifact copied the legacy suites.** `scripts/package_site.py` no longer copies `plan/` or `analysis/`; their routes are withdrawal notices.
+4. **Workflows ran verifiers for removed editions.** `pages.yml` and `verify.yml` now run the root build, the verifier, the privacy boundary, the artifact build, the legacy-source guard and the real Jekyll output audit (`actions/jekyll-build-pages`).
+5. **Stale links to withdrawn editions** on the overview, black-swan, decision and review pages replaced with withdrawal statements.
+6. **Verifier-tool drift.** `scripts/verify_legacy.py` was rewritten for this tree; the `main` version imported functions that no longer exist.
+
+### Independent verification performed by this session
+
+- Proposition 19 rule re-read at the BOE: `https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf` (LTA 2025/009). The $1,000,000 amount is adjusted every other February for the **California House Price Index** change, not CPI. $1,044,586 applies to transfers 16 Feb 2025 to 15 Feb 2027. The model's `reassess()` (taxable value = base + max(0, market − base − cap)) matches that rule, and the cap is grown by house-price growth every two years as the statute requires. No change was needed.
+- IRS estate-tax page re-opened: `https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax`. The 2026 filing threshold is $15,000,000.
+- Owner tables rounded to $10 (`assets/data/property_a.csv`, `property_b.csv`) were compared to the owner's source figures. Irregularities are flagged on the Flagged for Review page (repeated bills in consecutive years; SF 2018 +18.4% bill with a +2% assessment; SF 2021 −5.9% bill with a +1% assessment; SF 2022 assessment change below the 2% cap).
+- Privacy scan of the packaged artifact and of simulated Jekyll output: no ZIP codes, city names, addresses, e-mail addresses, parcel numbers or unrounded owner inputs in any published file. Root pages contain only $10-rounded owner figures.
+
+### Log
+
+- 2026-11-13 06:40 UTC — PR #70 head merged into this branch (`git merge --allow-unrelated-histories -X theirs origin/pr70`); tree then reset to match PR #70 exactly; checks run.
+- 2026-11-13 — Pages API checked: `build_type: legacy`, `source: main:/`. Attempt to set `build_type: workflow` refused with HTTP 403. The Pages source therefore remains the legacy publisher; the repository tree is the control.
+- 2026-11-13 — Legacy suites and `.nojekyll` removed; guard restored; workflows and README updated; local gates pass (`build.py`, `verify.py`, `privacy_boundary.py`, `package_site.py`, `verify_legacy.py --config-only`, and a simulated Jekyll output audit with 24 public files).
+
+### Not changed, and why
+
+- **Git history and repository visibility.** The repository is public (`isPrivate: false`). Earlier commits, the removed `analysis/` and `plan/` files, and the pull-request diffs still contain unrounded owner figures. Erasing them needs a history rewrite and force-push, or a visibility change, which this session does not do without the owner's decision. Recommended: the owner decides whether to make the repository private and whether to rewrite history.
+- **Pages source.** Switching to the Actions source needs `pages=write` permission, which this integration does not have. Until it is switched, the legacy publisher serves the root, and the `_config.yml` guard is the control that matters.
+- **Insurance premium, water, electricity credit, 2026 property-tax bill, Property A market value and market rent** remain owner-supplied or assumed and are flagged, not verified.
+
 ## Session `arena/b709c64d-tino3` — final integration: restore the anonymized quantitative dashboard (owner's current brief), fold in the open economy PR, verify, publish (2026-11-12)
 
 *Branch note:* Arena pins this session to `arena/b709c64d-tino3`, branched from `b23f405` (merge of PR #64). The board's `session-<id>/<task>` naming cannot be used. The whole board was read; `main` was fetched and read before any edit. This session acts as the final integration session the brief provides for: all other sessions' work is either merged or dispositioned below.
