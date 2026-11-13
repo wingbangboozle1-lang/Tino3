@@ -83,6 +83,8 @@ Not touched: `assets/sources.json` (the ledger already carries every source used
 
 - The "Key rules" column on the executive summary and the "Related sources" rows on several other pages still repeat the same four or five publishers on every row (the BOE 2025/009 letter against the rent-to-value row, for example). The row claims are in the model and the text, so the links are relevant only in part. A per-row source map, as now used on the review page, is the fix. It is not done here.
 - Two IRS links in the ledger were not re-opened in this session: `irs_2027` (404 on the URL tried) and the Pub. 527 depreciation link.
+- Repository-audit row 'Four pull requests are open' on the Flagged for Review page was out of date (PRs 62 and 70 are merged; 65 and 66 are open). Corrected in the follow-up PR for this entry. The audit table's 'Related sources' still repeats the same publishers on every row; the same per-row fix is open.
+- Open PR #80 belongs to another session (a Prop 19 parent-child gate change). It was not touched here and will need a rebase onto this branch's `scripts/build.py` changes when it is merged.
 - A shared-branch note: on the remote, this branch briefly carried three COORDINATION-only commits from `arena/3aa41939-tino3` (`afe5de3`, `a858287`, `c6b876a`), which were already on `main` through PR #78. They were kept as history (a plain merge of `main`), not rewritten.
 
 ## Session `arena/25fdb181-tino3` — integration, publication-safety fix and merge · 2026-11-13
