@@ -989,6 +989,7 @@
      "outflow": 4538620,
      "tax_total": 2647230,
      "cost_total": 1891390,
+     "rent_income_total": 0,
      "depreciation": 4294560,
      "sale": {
       "price": 17411200,
@@ -1006,6 +1007,7 @@
      "outflow": 4503570,
      "tax_total": 2612180,
      "cost_total": 1891390,
+     "rent_income_total": 0,
      "depreciation": 4294560,
      "sale": {
       "price": 17411200,
@@ -1091,6 +1093,7 @@
      "outflow": 5500020,
      "tax_total": 3225670,
      "cost_total": 2274350,
+     "rent_income_total": 0,
      "depreciation": 5224990,
      "sale": {
       "price": 21183380,
@@ -1108,6 +1111,7 @@
      "outflow": 5459830,
      "tax_total": 3185490,
      "cost_total": 2274350,
+     "rent_income_total": 0,
      "depreciation": 5224990,
      "sale": {
       "price": 21183380,
@@ -1193,6 +1197,7 @@
      "outflow": 6671080,
      "tax_total": 3930810,
      "cost_total": 2740270,
+     "rent_income_total": 0,
      "depreciation": 6356990,
      "sale": {
       "price": 25772820,
@@ -1210,6 +1215,7 @@
      "outflow": 6625070,
      "tax_total": 3884810,
      "cost_total": 2740270,
+     "rent_income_total": 0,
      "depreciation": 6356990,
      "sale": {
       "price": 25772820,

@@ -113,6 +113,12 @@ def check_reproducible() -> list[str]:
         actual = (ROOT / name).read_text(encoding="utf-8")
         if expected != actual:
             problems.append(f"{name}: file on disk differs from the builder output; run scripts/build.py")
+    # The standalone executive summary is generated too, so it cannot drift from the model
+    # the way the hand-typed one did.
+    expected_md = builder.executive_summary_markdown()
+    actual_md = (ROOT / "EXECUTIVE_SUMMARY.md").read_text(encoding="utf-8")
+    if expected_md != actual_md:
+        problems.append("EXECUTIVE_SUMMARY.md: file on disk differs from the builder output; run scripts/build.py")
     return problems
 
 

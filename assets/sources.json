@@ -1,1223 +1,1241 @@
 {
-  "as_of": "2026-11-13",
-  "edition": "Anonymised quantitative decision edition; every published figure rounded to the nearest $10.",
-  "scope": "Union of two independently maintained ledgers, merged on 13 November 2026. Entries kept verbatim from whichever ledger supplied them; where an entry had no 'supports' field its 'verifies' list was carried across, and 'limits' was filled from 'limit' or 'caveat' when present. Neither ledger was rewritten to match the other.",
-  "sources": [
-    {
-      "id": "ab1157",
-      "publisher": "California Legislative Information",
-      "title": "AB-1157, Tenancy: just cause termination: rent increases (2025-2026)",
-      "url": "https://leginfo.legislature.ca.gov/faces/billStatusClient.xhtml?bill_id=202520260AB1157",
-      "checked": "Opened on the publisher's official domain on 2026-11-13.",
-      "supports": "Status: died in the Assembly. The bill would have amended Civil Code sections 1946.2, 1947.12 and 1947.13. It failed passage on 13 January 2026 and died on 31 January 2026.",
-      "limits": "A dead bill. It is recorded here because it is frequently mis-reported as law; it is not law."
-    },
-    {
-      "publisher": "U.S. Bureau of Labor Statistics",
-      "title": "Beyond the Numbers 11(7) (Oct 2022): exploring price increases in 2021 and previous periods of inflation",
-      "url": "https://www.bls.gov/opub/btn/volume-11/exploring-price-increases-in-2021-and-previous-periods-of-inflation.htm",
-      "verifies": [
-        "High-inflation periods table (CPI 12-month peaks): 1973-76 at 12.3% (Dec 1974); 1977-82 at 14.8% (Mar 1980); 2005-08 at 5.6% (Jul 2008); 2021 at 7.0% (Dec 2021)"
-      ],
-      "quote": "1973-76 | 12.3 (Dec. 1974) ... 1977-82 | 14.8 (Mar. 1980) ... 2005-08 | 5.6 (Jul. 2008) ... 2021 | 7.0 (Dec. 2021)",
-      "checked": "opened on the publisher's site in this session (Table 2 read in full)",
-      "id": "bls_btn11",
-      "supports": "High-inflation periods table (CPI 12-month peaks): 1973-76 at 12.3% (Dec 1974); 1977-82 at 14.8% (Mar 1980); 2005-08 at 5.6% (Jul 2008); 2021 at 7.0% (Dec 2021)",
-      "limits": ""
-    },
-    {
-      "publisher": "Bureau of Labor Statistics",
-      "title": "Consumer Price Index summary, October 2026 (USDL-26-1685)",
-      "url": "https://www.bls.gov/news.release/cpi.nr0.htm",
-      "verifies": [
-        "CPI-U rose 0.4 percent seasonally adjusted in October 2026, after 0.6 percent in September and minus 0.4 percent in June 2026",
-        "BLS did not collect survey data for October 2025 because of a lapse in appropriations, so 12-month changes for October 2026 are not published for most series"
-      ],
-      "checked": "opened on the publisher's site on 11 November 2026",
-      "id": "bls_cpi",
-      "supports": "CPI-U rose 0.4 percent seasonally adjusted in October 2026, after 0.6 percent in September and minus 0.4 percent in June 2026 | BLS did not collect survey data for October 2025 because of a lapse in appropriations, so 12-month changes for October 2026 are not published for most series",
-      "limits": ""
-    },
-    {
-      "publisher": "Federal Reserve Bank of St. Louis (data: U.S. Bureau of Labor Statistics)",
-      "title": "Consumer Price Index for All Urban Consumers (CPIAUCSL), annual average, 1947-2025",
-      "url": "https://fred.stlouisfed.org/series/CPIAUCSL",
-      "verifies": [
-        "One annual consumer-price inflation rate for every year from 1977 to 2024, read from the publisher's CSV export (series CPIAUCSL, annual, average, percent change)",
-        "The publisher's percent-change export ends blank at 2025, so the 2025 rate used here is computed from the published annual index levels 321.962 and 313.698",
-        "The 2026 annual average is not published, so 2026 is excluded from the record used on this site"
-      ],
-      "quote": "1948-01-01,7.67221 ... 1977-01-01,6.46956 ... 1980-01-01,13.50172 ... 2009-01-01,-0.32036 ... 2022-01-01,7.99082 ... 2024-01-01,2.95211, with the 2025 row blank. Annual index levels in the same series: 2023-01-01,304.703; 2024-01-01,313.698; 2025-01-01,321.962.",
-      "checked": "CSV export opened on the publisher's own domain on 12 November 2026 (annual frequency, average, percent change from a year ago); the blank 2025 row was re-read from the same domain's level series and the 2.6345% rate computed here from the two published index levels",
-      "status": "read",
-      "id": "bls_cpi_annual",
-      "supports": "One annual consumer-price inflation rate for every year from 1977 to 2024, read from the publisher's CSV export (series CPIAUCSL, annual, average, percent change) | The publisher's percent-change export ends blank at 2025, so the 2025 rate used here is computed from the published annual index levels 321.962 and 313.698 | The 2026 annual average is not published, so 2026 is excluded from the record used on this site",
-      "limits": ""
-    },
-    {
-      "publisher": "U.S. Bureau of Labor Statistics",
-      "title": "Monthly Labor Review (Apr 2014): one hundred years of price change",
-      "url": "https://www.bls.gov/opub/mlr/2014/article/one-hundred-years-of-price-change-the-consumer-price-index-and-the-american-inflation-experience.htm",
-      "verifies": [
-        "Largest 12-month CPI increase in the 1968-1983 period: March 1979-March 1980, 14.8 percent",
-        "1913-1929 largest 12-month increase: June 1919-June 1920, 23.7 percent"
-      ],
-      "quote": "Largest 12-month increase: March 1979-March 1980, 14.8 percent",
-      "checked": "opened on the publisher's site in this session (full article; the 1968-83 summary appears in the article body)",
-      "id": "bls_mlr100",
-      "supports": "Largest 12-month CPI increase in the 1968-1983 period: March 1979-March 1980, 14.8 percent | 1913-1929 largest 12-month increase: June 1919-June 1920, 23.7 percent",
-      "limits": ""
-    },
-    {
-      "publisher": "U.S. Bureau of Labor Statistics",
-      "title": "The Economics Daily: consumer prices up 9.1 percent over the year ended June 2022 (July 2022)",
-      "url": "https://www.bls.gov/opub/ted/2022/consumer-prices-up-9-1-percent-over-the-year-ended-june-2022-largest-increase-in-40-years.htm",
-      "verifies": [
-        "CPI-U rose 9.1 percent over the 12 months ended June 2022, the largest 12-month increase since November 1981",
-        "June 2022 all-items index was 296.311 versus 271.696 in June 2021"
-      ],
-      "quote": "Over the 12 months ended June 2022, the Consumer Price Index for All Urban Consumers increased 9.1 percent. ... the largest 12-month increase since the 12-month period ending November 1981.",
-      "checked": "opened on the publisher's site in this session; 9.1 percent also read in the June 2022 CPI news release archive",
-      "id": "bls_ted2022",
-      "supports": "CPI-U rose 9.1 percent over the 12 months ended June 2022, the largest 12-month increase since November 1981 | June 2022 all-items index was 296.311 versus 271.696 in June 2021",
-      "limits": ""
-    },
-    {
-      "id": "boe_lta25009",
-      "publisher": "California State Board of Equalization",
-      "title": "Letter to Assessors No. 2025/009 - Intergenerational Transfer Exclusion, adjustment of the $1 million amount",
-      "url": "https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf",
-      "checked": "Opened on the publisher's official domain on 2026-11-13.",
-      "supports": "For transfers occurring 16 February 2025 through 15 February 2027 the value cap is the property's factored base year value plus $1,044,586. Earlier amounts: $1,000,000 (16 Feb 2021 - 15 Feb 2023) and $1,022,600 (16 Feb 2023 - 15 Feb 2025). The next adjustment occurs in February 2027.",
-      "limits": "The amount is adjusted every second February by the change in the FHFA California House Price Index, so a 2040-2050 transfer will use a different, currently unpublished amount."
-    },
-    {
-      "id": "boe_lta26002",
-      "publisher": "California State Board of Equalization",
-      "title": "Letter to Assessors No. 2026/002 - 2026-27 inflation adjustment",
-      "url": "https://boe.ca.gov/proptaxes/pdf/lta26002.pdf",
-      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
-      "supports": "The California Consumer Price Index change used to set the 2026-27 inflation adjustment to assessed values.",
-      "limits": "The adjustment is set annually and can be below 2% in a low-inflation year."
-    },
-    {
-      "id": "boe_lta26026",
-      "publisher": "California State Board of Equalization",
-      "title": "Letter to Assessors No. 2026/026 - Proposition 19 Intergenerational Transfer Exclusion, Frequently Asked Questions and Answers",
-      "url": "https://www.boe.ca.gov/proptaxes/pdf/lta26026.pdf",
-      "checked": "Opened on the publisher's official domain on 2026-11-13.",
-      "supports": "Definitions under Revenue and Taxation Code section 63.2; the requirement that the transfer be of the transferor's principal residence and become the transferee's principal residence within one year of the transfer, with no exceptions; removal of the exclusion when the home ceases to qualify and enrolment of the base year value established at the change in ownership, adjusted annually; transfers through a trust are covered; only the unit occupied as a principal residence qualifies in a multi-unit property.",
-      "limits": "Guidance, not a legal determination. County assessors apply the rule to the facts."
-    },
-    {
-      "id": "boe_prop19",
-      "publisher": "California State Board of Equalization",
-      "title": "Proposition 19 - The Home Protection for Seniors, Severely Disabled, Families, and Victims of Wildfire or Natural Disasters Act",
-      "url": "https://www.boe.ca.gov/prop19/",
-      "checked": "Opened on the publisher's official domain on 2026-11-13.",
-      "supports": "The comparison between former Proposition 58/193 and current Proposition 19, including: the exclusion now applies only to a principal residence or family home; the value limit is the current taxable value plus $1,000,000 as biennially adjusted; the homeowners' exemption must be filed within one year of transfer and the exclusion claim within three years.",
-      "limits": "The BOE states this is general summary information and not official legal guidance."
-    },
-    {
-      "id": "boe_pub29",
-      "publisher": "California State Board of Equalization",
-      "title": "Publication 29, Property Taxpayers' Guide",
-      "url": "https://boe.ca.gov/proptaxes/pdf/pub29.pdf",
-      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
-      "supports": "Proposition 13: the 1% general tax rate limit, the base year value concept and the annual inflation adjustment not exceeding 2%.",
-      "limits": "General guidance; a specific bill is governed by the county assessment roll."
-    },
-    {
-      "id": "boe_pub800_9",
-      "publisher": "California State Board of Equalization",
-      "title": "Publication 800-9, Taxpayers' Guide to the Death of a Real Property Owner",
-      "url": "https://www.boe.ca.gov/pdf/pub800-9.pdf",
-      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
-      "supports": "What happens to a property tax assessment when a real property owner dies, and the forms and deadlines involved.",
-      "limits": "General guidance; county practice varies."
-    },
-    {
-      "publisher": "Congressional Budget Office",
-      "title": "The Budget and Economic Outlook: 2026 to 2036",
-      "url": "https://www.cbo.gov/publication/62105",
-      "verifies": [
-        "Debt held by the public rises from 101 percent of GDP in 2026 to 120 percent in 2036 and reaches 175 percent of GDP by 2056",
-        "The deficit is 5.8 percent of GDP in 2026 and 6.7 percent in 2036; net outlays for interest rise to 6.9 percent of GDP by 2056",
-        "CBO projects inflation consistent with the Federal Reserve's 2 percent goal from 2027 through 2055",
-        "CBO estimates a two-thirds chance that debt is between 101 and 118 percent of GDP in 2036 under current law"
-      ],
-      "checked": "opened on the publisher's site on 11 November 2026 (projections-at-a-glance and budget chapters read)",
-      "id": "cbo_outlook",
-      "supports": "Debt held by the public rises from 101 percent of GDP in 2026 to 120 percent in 2036 and reaches 175 percent of GDP by 2056 | The deficit is 5.8 percent of GDP in 2026 and 6.7 percent in 2036; net outlays for interest rise to 6.9 percent of GDP by 2056 | CBO projects inflation consistent with the Federal Reserve's 2 percent goal from 2027 through 2055 | CBO estimates a two-thirds chance that debt is between 101 and 118 percent of GDP in 2036 under current law",
-      "limits": ""
-    },
-    {
-      "publisher": "California Department of Insurance",
-      "title": "Compare insurance premiums",
-      "url": "https://www.insurance.ca.gov/01-consumers/105-type/9-compare-prem/",
-      "verifies": [
-        "The Department surveys insurers and publishes a 2026 homeowners premium comparison tool",
-        "The survey results are not premium quotes; the Department cannot provide quotes"
-      ],
-      "quote": "The results of these surveys are not premium quotes. ... The California Department of Insurance is a regulatory agency and not an insurance agent. As such, we cannot provide actual quotes.",
-      "checked": "opened on the publisher's site on 11 November 2026 (third pass): the 2026 homeowners survey exists, the Department states it cannot provide quotes, and the results are not premium quotes",
-      "id": "cdi_compare",
-      "supports": "The Department surveys insurers and publishes a 2026 homeowners premium comparison tool | The survey results are not premium quotes; the Department cannot provide quotes",
-      "limits": ""
-    },
-    {
-      "id": "cdi_fairplan",
-      "publisher": "California Department of Insurance",
-      "title": "FAIR Plan - California's insurer of last resort",
-      "url": "https://www.insurance.ca.gov/0400-news/0100-press-releases/2019/release089-19.cfm",
-      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
-      "supports": "The FAIR Plan is the state's insurer of last resort for property owners unable to obtain coverage in the voluntary market.",
-      "limits": "A FAIR Plan policy is more limited than a standard homeowners policy; a difference-in-conditions wrap is normally needed."
-    },
-    {
-      "publisher": "California Department of Insurance",
-      "title": "Residential Property Insurance Report: Homeowners Multi-Peril data by experience year, 2001-2017",
-      "url": "https://www.insurance.ca.gov/0400-news/0200-studies-reports/0250-homeowners-study/upload/A-Homeowners-2_v1-2.pdf",
-      "verifies": [
-        "The statewide average written premium for an owner-occupied homeowners policy was about $1,070 in experience year 2017",
-        "The average is statewide and across all amounts of insurance; it is not a premium for any one home"
-      ],
-      "quote": "HOMEOWNERS POLICY FORM - OWNER OCCUPIED (ISO HO1, HO2, HO3, HO5, HO8 or Equivalent)",
-      "checked": "opened on the publisher's site on 13 November 2026: the 2001-2017 average written premium column was read; the figure is displayed rounded to the nearest $10",
-      "id": "cdi_homeowners_avg",
-      "supports": "The statewide average written premium for an owner-occupied homeowners policy was about $1,070 in experience year 2017 | The average is statewide and across all amounts of insurance; it is not a premium for any one home",
-      "limits": ""
-    },
-    {
-      "publisher": "California Department of Insurance",
-      "title": "Residential Property Insurance Report: Part I premium and exposure summary data, 2008-2023",
-      "url": "https://www.insurance.ca.gov/0400-news/0200-studies-reports/0250-homeowners-study/upload/A-Part-I-Data-Summary.xlsx",
-      "verifies": [
-        "Across 2008-2023 the statewide average written premium was about $1,180 for an owner-occupied homeowners policy",
-        "Across the same years it was about $600 for a tenant-occupied dwelling-fire policy, the form a landlord buys",
-        "The Department also publishes ZIP-code level experience data under Insurance Code section 929"
-      ],
-      "quote": "Policy Form | Year | Written Premium | Written Exposure | Average Written Premium - Homeowners Multi-Peril ... Dwelling-Fire (Tenant-Occupied)",
-      "checked": "opened on the publisher's site on 13 November 2026: the summary worksheet was read and both averages are displayed rounded to the nearest $10. The ZIP-code level file for these two properties was not opened, so no property-specific premium is published",
-      "id": "cdi_part1",
-      "supports": "Across 2008-2023 the statewide average written premium was about $1,180 for an owner-occupied homeowners policy | Across the same years it was about $600 for a tenant-occupied dwelling-fire policy, the form a landlord buys | The Department also publishes ZIP-code level experience data under Insurance Code section 929",
-      "limits": ""
-    },
-    {
-      "id": "cdi_tips",
-      "publisher": "California Department of Insurance",
-      "title": "Top 10 Tips for Finding Residential Insurance",
-      "url": "https://www.insurance.ca.gov/01-consumers/105-type/5-residential/Top10Tips_FindingResidentialIns.cfm",
-      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
-      "supports": "The Department's official consumer guidance on obtaining homeowners and residential insurance in California.",
-      "limits": "The Department does not publish an official average premium for a ZIP code or a city. Every insurance figure on this site is an owner estimate and is flagged as unverified."
-    },
-    {
-      "publisher": "City B Board of Supervisors",
-      "title": "Legislation File No. 261020: cap on banked and capital-improvement rent increases for rent-controlled units",
-      "url": "https://sfgov.legistar.com/LegislationDetail.aspx?ID=8217304&GUID=7EDA4662-EBFB-4AF5-962F-C669B64AA770",
-      "verifies": [
-        "File No. 261020, introduced 15 September 2026, is an ordinance amending the Administrative Code",
-        "It caps banked rent increases and capital-improvement rent increases on rent-controlled units at a combined 10% per year, for three years",
-        "Status as of 12 November 2026: pending in the Land Use and Transportation Committee; it has not been enacted"
-      ],
-      "quote": "Ordinance amending the Administrative Code to provide that banked rent increases and capital improvement rent increases for rent-controlled units may not increase a tenant's rent by more than a total of 10% per year, for the next three years.",
-      "checked": "legistar record opened 12 November 2026; status Pending Committee Action; introduced 9/15/2026; Youth Commission response received 10/7/2026",
-      "id": "cityb_261020",
-      "supports": "File No. 261020, introduced 15 September 2026, is an ordinance amending the Administrative Code | It caps banked rent increases and capital-improvement rent increases on rent-controlled units at a combined 10% per year, for three years | Status as of 12 November 2026: pending in the Land Use and Transportation Committee; it has not been enacted",
-      "limits": ""
-    },
-    {
-      "publisher": "City B Treasurer and Tax Collector",
-      "title": "Secured property taxes",
-      "url": "https://sftreasurer.org/property/secured-property-taxes",
-      "verifies": [
-        "The secured property tax rate for fiscal year 2026-27 is 1.18162182%",
-        "A change in ownership leads to a reappraisal and a supplemental bill",
-        "Late instalments carry a 10% penalty"
-      ],
-      "quote": "The secured property tax rate for Fiscal Year 2026-27 is 1.18162182%.",
-      "checked": "opened on the publisher's site on 11 November 2026 (third pass): fiscal year 2026-27 secured rate 1.18162182%, 10% penalties and supplemental assessments after a change in ownership",
-      "id": "cityb_rate",
-      "supports": "The secured property tax rate for fiscal year 2026-27 is 1.18162182% | A change in ownership leads to a reappraisal and a supplemental bill | Late instalments carry a 10% penalty",
-      "limits": ""
-    },
-    {
-      "publisher": "City B Rent Board",
-      "title": "Learn about rent increases",
-      "url": "https://www.sf.gov/learn-about-rent-increases-san-francisco",
-      "verifies": [
-        "The allowed annual increase for rent-controlled units is 1.6% from 1 March 2026 to 28 February 2027",
-        "It equals 60% of the regional CPI increase",
-        "Rent can be raised only once every 12 months and needs a rent increase licence",
-        "There is no limit on the first rent charged to a new tenant in a vacant covered unit"
-      ],
-      "quote": "Effective March 1, 2026, the allowed rent increase percentage is 1.6%. ... This amount is based on 60% of the increase in the Consumer Price Index for All Urban Consumers in the Bay Area. ... There is no limit on how much rent a landlord may first charge a tenant when renting an empty unit that is covered by rent control.",
-      "checked": "opened on the publisher's site on 11 November 2026 (third pass): 1.6% for 1 March 2026 to 28 February 2027, 60% of the regional CPI, and the notice of proposed File No. 261020 posted 9 November 2026",
-      "id": "cityb_rent",
-      "supports": "The allowed annual increase for rent-controlled units is 1.6% from 1 March 2026 to 28 February 2027 | It equals 60% of the regional CPI increase | Rent can be raised only once every 12 months and needs a rent increase licence | There is no limit on the first rent charged to a new tenant in a vacant covered unit",
-      "limits": ""
-    },
-    {
-      "publisher": "City B Rent Board",
-      "title": "The Rent Board fee",
-      "url": "https://www.sf.gov/rent-board-fee-link",
-      "verifies": [
-        "Owners pay an annual fee of about $60 per dwelling unit, due 1 March",
-        "It applies to units occupied by family members too unless an exemption is filed"
-      ],
-      "quote": "$59.00 per dwelling unit ... This includes single-family homes and condominiums, units built after 1979, vacant units, and units occupied by friends or family members.",
-      "checked": "official-domain search excerpt read in this session (full document not opened)",
-      "id": "cityb_rentfee",
-      "supports": "Owners pay an annual fee of about $60 per dwelling unit, due 1 March | It applies to units occupied by family members too unless an exemption is filed",
-      "limits": ""
-    },
-    {
-      "publisher": "City B Board of Supervisors",
-      "title": "Resolution 447-25: combined property tax rate, fiscal year 2025-26",
-      "url": "https://sfbos.archive.sf.gov/sites/default/files/r0447-25.pdf",
-      "verifies": [
-        "The fiscal year 2025-26 combined rate was 1.18268325%",
-        "The resolution passed on 30 September 2025"
-      ],
-      "quote": "the combined property tax rate ... shall therefore be $1.18268325 on each $100 valuation of said taxable property ... Date Passed: September 30, 2025",
-      "checked": "opened on the publisher's site in this session",
-      "id": "cityb_res447",
-      "supports": "The fiscal year 2025-26 combined rate was 1.18268325% | The resolution passed on 30 September 2025",
-      "limits": ""
-    },
-    {
-      "publisher": "City B Assessor-Recorder",
-      "title": "Fees to record a document: transfer tax rate table",
-      "url": "https://www.sf.gov/reports--march-2024--fees-record-document-san-francisco",
-      "verifies": [
-        "Transfer tax on a sale: 0.5% up to $250,000; 0.68% below $1,000,000; 0.75% from $1,000,000 to under $5,000,000; 2.25% from $5,000,000 to under $10,000,000",
-        "The rate applies to the entire price, so crossing $5,000,000 triples the tax"
-      ],
-      "quote": "$1,000,000 or more but less than $5,000,000 | $3.75 for each $500 or portion thereof ... $5,000,000 or more but less than $10,000,000 | $11.25 for each $500 or portion thereof",
-      "checked": "opened on the publisher's site in this session",
-      "id": "cityb_transfer",
-      "supports": "Transfer tax on a sale: 0.5% up to $250,000; 0.68% below $1,000,000; 0.75% from $1,000,000 to under $5,000,000; 2.25% from $5,000,000 to under $10,000,000 | The rate applies to the entire price, so crossing $5,000,000 triples the tax",
-      "limits": ""
-    },
-    {
-      "id": "civ1946_2",
-      "publisher": "California Legislative Information",
-      "title": "Civil Code section 1946.2 - just cause for termination of tenancy",
-      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1946.2",
-      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
-      "supports": "At-fault and no-fault just cause grounds and the relocation-assistance requirement for a no-fault termination, including an owner move-in.",
-      "limits": "Local ordinances can add stricter requirements. This site does not restate the notice or payment amounts."
-    },
-    {
-      "id": "civ1947_12",
-      "publisher": "California Legislative Information",
-      "title": "Civil Code section 1947.12 - statewide rent cap (Tenant Protection Act of 2019)",
-      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1947.12",
-      "checked": "Opened on the publisher's official domain on 2026-11-13.",
-      "supports": "Over any 12-month period gross rent may not be increased more than 5% plus the change in the cost of living, or 10%, whichever is lower, of the lowest gross rent charged in the prior 12 months; not more than two increases in any 12-month period; the initial rent for a new tenancy is not capped; exemptions including housing with a certificate of occupancy issued within the previous 15 years and certain separately alienable single-family homes and condominiums where the owner is not a REIT, corporation or certain LLC and gives the required notice; housing already subject to a stricter local rent control ordinance is excluded.",
-      "limits": "Whether a specific building and unit are exempt depends on facts this site does not verify."
-    },
-    {
-      "publisher": "County A Controller-Treasurer",
-      "title": "Compilation of Tax Rates and Information, fiscal year 2025-26",
-      "url": "https://files.santaclaracounty.gov/exjcpb1531/2025-11/tax-rate-book-2025-2026.pdf",
-      "verifies": [
-        "Total ad valorem rates in the excerpted tax rate areas run from 1.12580% to 1.24090%",
-        "First instalment is delinquent after 10 December and the second after 10 April"
-      ],
-      "quote": "1.12580 ... 1.14200 ... 1.15215 ... 1.15600 ... 1.15930 ... 1.16145 ... 1.16710 ... 1.19360 ... 1.21470 ... 1.24090 (totals by tax rate area, TAX RATES 2025/2026)",
-      "checked": "official-domain search excerpt read in this session (full document not opened)",
-      "id": "cnty_a_rates",
-      "supports": "Total ad valorem rates in the excerpted tax rate areas run from 1.12580% to 1.24090% | First instalment is delinquent after 10 December and the second after 10 April",
-      "limits": ""
-    },
-    {
-      "publisher": "County A Clerk-Recorder",
-      "title": "Recording real estate: documentary transfer tax",
-      "url": "https://clerkrecorder.santaclaracounty.gov/recording-documents/recording-real-estate",
-      "verifies": [
-        "County A charges the 0.11% documentary transfer tax on sales",
-        "Three named cities in the county add a city conveyance tax of 0.33%"
-      ],
-      "quote": "It is computed at a rate of $.55 per $500 or fractional portion of real property value ... Properties located within [three named cities] are taxable at a rate of $1.65 per $500.",
-      "checked": "official-domain search excerpt read in this session (full document not opened)",
-      "id": "cnty_a_recorder",
-      "supports": "County A charges the 0.11% documentary transfer tax on sales | Three named cities in the county add a city conveyance tax of 0.33%",
-      "limits": ""
-    },
-    {
-      "id": "cpuc_nem",
-      "publisher": "California Public Utilities Commission",
-      "title": "Net Energy Metering and Net Billing",
-      "url": "https://www.cpuc.ca.gov/industries-and-topics/electrical-energy/demand-side-management/customer-generation/net-energy-metering-and-net-billing",
-      "checked": "Opened on the publisher's official domain on 2026-11-13.",
-      "supports": "NEM tariffs are closed to new enrolment; customers applying since 15 April 2023 take service on the net billing tariff under D.22-12-056, where export compensation is usually below the retail rate; NEM 2.0 participants may remain on that tariff for 20 years from the date of interconnection under D.14-03-041; the NBT has a nine-year legacy period and does not apply to customers moving from a previous NEM tariff; non-bypassable charges and the basis for net surplus compensation.",
-      "limits": "The tariff that applies to a given system depends on its interconnection date, which this site does not verify. Export credit values change over time."
-    },
-    {
-      "publisher": "Board of Governors of the Federal Reserve System",
-      "title": "FAQ: Why does the Federal Reserve aim for inflation of 2 percent over the longer run?",
-      "url": "https://www.federalreserve.gov/faqs/economy_14400.htm",
-      "verifies": [
-        "The FOMC judges that inflation of 2 percent over the longer run, measured by the annual change in the PCE price index, is most consistent with the Federal Reserve's statutory mandate"
-      ],
-      "checked": "opened on the publisher's site on 11 November 2026",
-      "id": "fed_2goal",
-      "supports": "The FOMC judges that inflation of 2 percent over the longer run, measured by the annual change in the PCE price index, is most consistent with the Federal Reserve's statutory mandate",
-      "limits": ""
-    },
-    {
-      "publisher": "Board of Governors of the Federal Reserve System",
-      "title": "Monetary Policy Report to the Congress, 13 February 2001, section 2",
-      "url": "https://www.federalreserve.gov/boarddocs/hh/2001/february/ReportSection2.htm",
-      "verifies": [
-        "In 2000 the tech-heavy Nasdaq was down nearly 40 percent for the year while the broadest stock indexes fell more than 10 percent",
-        "Real GDP rose about 3.5 percent in 2000"
-      ],
-      "checked": "opened on the publisher's site on 11 November 2026 (household, labour, price and financial-market sections read)",
-      "id": "fed_mpr2001",
-      "supports": "In 2000 the tech-heavy Nasdaq was down nearly 40 percent for the year while the broadest stock indexes fell more than 10 percent | Real GDP rose about 3.5 percent in 2000",
-      "limits": ""
-    },
-    {
-      "publisher": "Federal Reserve History (Federal Reserve System)",
-      "title": "Essays: Stock Market Crash of 1929",
-      "url": "https://www.federalreservehistory.org/essays/stock-market-crash-of-1929",
-      "verifies": [
-        "DJIA peaked 381.17 on 3 September 1929; closed at 41.22 on 8 July 1932, 89 percent below its peak",
-        "The index did not regain its September 1929 high until 23 November 1954",
-        "Black Monday 28 Oct 1929 fell nearly 13 percent; Black Tuesday 29 Oct 1929 fell nearly 12 percent"
-      ],
-      "quote": "the index peaked on September 3, 1929, closing at 381.17. The index declined until July 8, 1932, when it closed at 41.22 ... The index did not reach the 1929 high again until November 23, 1954.",
-      "checked": "opened on the publisher's site in this session",
-      "id": "fedhist_1929",
-      "supports": "DJIA peaked 381.17 on 3 September 1929; closed at 41.22 on 8 July 1932, 89 percent below its peak | The index did not regain its September 1929 high until 23 November 1954 | Black Monday 28 Oct 1929 fell nearly 13 percent; Black Tuesday 29 Oct 1929 fell nearly 12 percent",
-      "limits": ""
-    },
-    {
-      "publisher": "Federal Reserve History (Federal Reserve System)",
-      "title": "Essays: The Great Inflation (1965-1982)",
-      "url": "https://www.federalreservehistory.org/essays/great-inflation",
-      "verifies": [
-        "Inflation measured a little more than 1 percent per year in 1964; reached more than 14 percent in 1980",
-        "Inflation peaked in March 1980 at close to 15 percent (CPI, 12-month change)",
-        "1974: inflation over 12 percent with unemployment above 7 percent",
-        "1983: 12-month inflation settled back to 0 to 5 percent"
-      ],
-      "quote": "In 1964, inflation measured a little more than 1 percent per year. ... Inflation began ratcheting upward in the mid-1960s and reached more than 14 percent in 1980.",
-      "checked": "opened on the publisher's site in this session (the 1974 stagflation detail is from the same essay, read as an official-domain search excerpt)",
-      "id": "fedhist_greatinflation",
-      "supports": "Inflation measured a little more than 1 percent per year in 1964; reached more than 14 percent in 1980 | Inflation peaked in March 1980 at close to 15 percent (CPI, 12-month change) | 1974: inflation over 12 percent with unemployment above 7 percent | 1983: 12-month inflation settled back to 0 to 5 percent",
-      "limits": ""
-    },
-    {
-      "publisher": "Federal Reserve History (Federal Reserve System)",
-      "title": "Essays: The Great Recession (December 2007 - June 2009)",
-      "url": "https://www.federalreservehistory.org/essays/great-recession-of-200709",
-      "verifies": [
-        "Real GDP fell 4.3 percent from its 2007Q4 peak to its 2009Q2 trough",
-        "Unemployment peaked at 10 percent in October 2009 (5 percent in December 2007)",
-        "Home prices fell approximately 30 percent on average from their mid-2006 peak to mid-2009",
-        "The S&P 500 fell 57 percent from its October 2007 peak to its March 2009 trough",
-        "Household and nonprofit net worth fell from approximately $69 trillion in 2007 to $55 trillion in 2009"
-      ],
-      "quote": "Real gross domestic product (GDP) fell 4.3 percent from its peak in 2007Q4 to its trough in 2009Q2 ... the S&P 500 index fell 57 percent from its October 2007 peak to its trough in March 2009.",
-      "checked": "opened on the publisher's site in this session",
-      "id": "fedhist_greatrecession",
-      "supports": "Real GDP fell 4.3 percent from its 2007Q4 peak to its 2009Q2 trough | Unemployment peaked at 10 percent in October 2009 (5 percent in December 2007) | Home prices fell approximately 30 percent on average from their mid-2006 peak to mid-2009 | The S&P 500 fell 57 percent from its October 2007 peak to its March 2009 trough | Household and nonprofit net worth fell from approximately $69 trillion in 2007 to $55 trillion in 2009",
-      "limits": ""
-    },
-    {
-      "publisher": "Federal Reserve Bank of St. Louis (data: Federal Housing Finance Agency)",
-      "title": "All-transactions house price index for California",
-      "url": "https://fred.stlouisfed.org/series/CASTHPI",
-      "verifies": [
-        "Index peak of 646.07 in 2006Q3 and trough of 380.93 in 2012Q1, a decline of 41 percent (computed from the published series)"
-      ],
-      "checked": "full CSV opened on the publisher's site on 11 November 2026",
-      "id": "fred_casthpi",
-      "supports": "Index peak of 646.07 in 2006Q3 and trough of 380.93 in 2012Q1, a decline of 41 percent (computed from the published series)",
-      "limits": ""
-    },
-    {
-      "id": "fred_cpi",
-      "publisher": "Federal Reserve Bank of St. Louis (data: U.S. Bureau of Labor Statistics)",
-      "title": "Consumer Price Index for All Urban Consumers: All Items in U.S. City Average, annual (CPIAUCSL)",
-      "url": "https://fred.stlouisfed.org/series/CPIAUCSL",
-      "checked": "Series downloaded as CSV from the official FRED domain on 2026-11-13 by this session; annual averages 1975 to 2024 read directly from that file.",
-      "supports": "The annual inflation series used on the economy and black-swan pages, including the 13.50% annual average for 1980 and the 0.32% decline for 2009.",
-      "limits": "This is a national index. The California CPI that governs Proposition 13 assessments is a different series and can move differently."
-    },
-    {
-      "publisher": "Federal Reserve Bank of St. Louis (data: Board of Governors of the Federal Reserve System)",
-      "title": "Market yield on US Treasury securities at 10-year constant maturity (DGS10), daily",
-      "url": "https://fred.stlouisfed.org/series/DGS10",
-      "verifies": [
-        "10-year Treasury par yield reached 15.84 percent on 30 September 1981",
-        "10-year Treasury par yield was 4.88 percent on 9 November 2026",
-        "0.52 percent on 4 August 2020"
-      ],
-      "checked": "opened in this session; values read from the series CSV and the series page The same series window was also read on 11 November 2026 for the 0.52 percent low of 4 August 2020 (CSV opened on the publisher's site on 11 November 2026 (dated window read))",
-      "id": "fred_dgs10",
-      "supports": "10-year Treasury par yield reached 15.84 percent on 30 September 1981 | 10-year Treasury par yield was 4.88 percent on 9 November 2026 | 0.52 percent on 4 August 2020",
-      "limits": ""
-    },
-    {
-      "publisher": "Federal Reserve Bank of St. Louis (data: Board of Governors)",
-      "title": "Federal funds effective rate (monthly)",
-      "url": "https://fred.stlouisfed.org/series/FEDFUNDS",
-      "verifies": [
-        "Monthly average peaked at 19.10 percent in June 1981",
-        "Monthly average ran between 0.07 and 0.22 percent from 2009 through 2015",
-        "Monthly average was 3.88 percent in October 2026"
-      ],
-      "checked": "CSV opened on the publisher's site on 11 November 2026 (windows 1954-1995, 2007-2016 and 2025-2026 read)",
-      "id": "fred_fedfunds",
-      "supports": "Monthly average peaked at 19.10 percent in June 1981 | Monthly average ran between 0.07 and 0.22 percent from 2009 through 2015 | Monthly average was 3.88 percent in October 2026",
-      "limits": ""
-    },
-    {
-      "id": "fred_gs10",
-      "publisher": "Federal Reserve Bank of St. Louis (data: Board of Governors of the Federal Reserve System)",
-      "title": "Market Yield on U.S. Treasury Securities at 10-Year Constant Maturity, annual (GS10)",
-      "url": "https://fred.stlouisfed.org/series/GS10",
-      "checked": "Series downloaded as CSV from the official FRED domain on 2026-11-13 by this session; annual averages 1975 to 2025 read directly from that file.",
-      "supports": "The long-term interest rate history used for the reinvestment comparison, including the 13.91% annual average for 1981, the 0.89% average for 2020 and the 4.29% average for 2025.",
-      "limits": "A historical yield is not a forecast. Reinvestment risk means the realised return on a rolling bond ladder differs from the starting yield."
-    },
-    {
-      "id": "fred_hpi_a",
-      "publisher": "Federal Reserve Bank of St. Louis (data: U.S. Federal Housing Finance Agency)",
-      "title": "All-Transactions House Price Index, annual, for the metropolitan area containing Property A (ATNHPIUS41940Q)",
-      "url": "https://fred.stlouisfed.org/series/ATNHPIUS41940Q",
-      "checked": "Series downloaded as CSV from the official FRED domain on 2026-11-13 by this session; annual averages 1976 to 2025 read directly from that file.",
-      "supports": "The house price history for Property A's area: a 30.19% annual rise in 1989, a 12.32% fall in 2009, and a 25.6% fall from the 2006 level to the 2011 level.",
-      "limits": "A metropolitan-area index is not an appraisal of one house. A specific house can move very differently."
-    },
-    {
-      "id": "fred_hpi_b",
-      "publisher": "Federal Reserve Bank of St. Louis (data: U.S. Federal Housing Finance Agency)",
-      "title": "All-Transactions House Price Index, annual, for the metropolitan area containing Property B (ATNHPIUS41884Q)",
-      "url": "https://fred.stlouisfed.org/series/ATNHPIUS41884Q",
-      "checked": "Series downloaded as CSV from the official FRED domain on 2026-11-13 by this session; annual averages 1976 to 2025 read directly from that file.",
-      "supports": "The house price history for Property B's area: a 21.8% fall from the 2006 level to the 2011 level, and a 2.5% fall from 2018 to 2020.",
-      "limits": "A metropolitan-area index is not an appraisal of one building, and a rent-controlled building's value depends on its rents."
-    },
-    {
-      "publisher": "Federal Reserve Bank of St. Louis (data: Freddie Mac)",
-      "title": "30-year fixed mortgage average (weekly)",
-      "url": "https://fred.stlouisfed.org/series/MORTGAGE30US",
-      "verifies": [
-        "18.63 percent in the week of 9 October 1981",
-        "7.79 percent in the week of 26 October 2023"
-      ],
-      "checked": "CSV opened on the publisher's site on 11 November 2026 (two dated windows read)",
-      "id": "fred_mortgage",
-      "supports": "18.63 percent in the week of 9 October 1981 | 7.79 percent in the week of 26 October 2023",
-      "limits": ""
-    },
-    {
-      "publisher": "Federal Reserve Bank of St. Louis (data: Nasdaq)",
-      "title": "NASDAQ Composite Index (NASDAQCOM), daily",
-      "url": "https://fred.stlouisfed.org/series/NASDAQCOM",
-      "verifies": [
-        "NASDAQ Composite closed at 5,048.62 on 10 March 2000 (the dot-com peak) and 1,114.11 on 9 October 2002, about -78 percent (read from the series CSV)"
-      ],
-      "quote": "2000-03-10,5048.620 ... 2002-10-09,1114.110",
-      "checked": "opened in this session; values read from the series CSV served by FRED (2000-03-10 and 2002-09-25 to 2002-10-15 windows)",
-      "id": "fred_nasdaqcom",
-      "supports": "NASDAQ Composite closed at 5,048.62 on 10 March 2000 (the dot-com peak) and 1,114.11 on 9 October 2002, about -78 percent (read from the series CSV)",
-      "limits": ""
-    },
-    {
-      "publisher": "Federal Reserve Bank of St. Louis (data: Bureau of Labor Statistics)",
-      "title": "Unemployment rate (monthly)",
-      "url": "https://fred.stlouisfed.org/series/UNRATE",
-      "verifies": [
-        "10.8 percent in November and December 1982",
-        "14.8 percent in April 2020",
-        "10.0 percent in October 2009"
-      ],
-      "checked": "CSV opened on the publisher's site on 11 November 2026 (three dated windows read)",
-      "id": "fred_unrate",
-      "supports": "10.8 percent in November and December 1982 | 14.8 percent in April 2020 | 10.0 percent in October 2009",
-      "limits": ""
-    },
-    {
-      "publisher": "Federal Reserve Bank of St. Louis (data: Federal Housing Finance Agency)",
-      "title": "All-Transactions House Price Index for the United States (USSTHPI), quarterly",
-      "url": "https://fred.stlouisfed.org/data/USSTHPI",
-      "verifies": [
-        "National house price index (1980Q1=100): 380.31 in Jan 2007 fell to 308.14 in Apr 2012, about -19 percent (computed from the series table)",
-        "Q2 2026 value 719.87; Q1 2026 712.20; Q4 2025 707.22"
-      ],
-      "quote": "Q2 2026: 719.87 | All-Transactions House Price Index for the United States ... Source: U.S. Federal Housing Finance Agency via FRED",
-      "checked": "opened on the publisher's site in this session; the peak-to-trough change is computed from the full series table read there",
-      "id": "fred_ussthpi",
-      "supports": "National house price index (1980Q1=100): 380.31 in Jan 2007 fell to 308.14 in Apr 2012, about -19 percent (computed from the series table) | Q2 2026 value 719.87; Q1 2026 712.20; Q4 2025 707.22",
-      "limits": ""
-    },
-    {
-      "publisher": "Federal Reserve Bank of St. Louis (data: Federal Housing Finance Agency)",
-      "title": "All-transactions house price index for the United States",
-      "url": "https://fred.stlouisfed.org/series/USSTHPI",
-      "verifies": [
-        "Index peak of 380.31 in 2007Q1 and trough of 308.14 in 2012Q2, a decline of 19 percent (computed from the published series)"
-      ],
-      "checked": "full CSV opened on the publisher's site on 11 November 2026",
-      "id": "fred_usthpi",
-      "supports": "Index peak of 380.31 in 2007Q1 and trough of 308.14 in 2012Q2, a decline of 19 percent (computed from the published series)",
-      "limits": ""
-    },
-    {
-      "id": "frh_1929",
-      "publisher": "Federal Reserve History (Federal Reserve System)",
-      "title": "Stock Market Crash of 1929",
-      "url": "https://www.federalreservehistory.org/essays/stock-market-crash-of-1929",
-      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
-      "supports": "The 1929 crash as the reference episode for a severe, prolonged equity decline.",
-      "limits": "Narrative history. The 1929 episode predates the FRED series used on this site and no numeric claim from it is modelled."
-    },
-    {
-      "publisher": "Federal Reserve History",
-      "title": "Stock Market Crash of 1987",
-      "url": "https://www.federalreservehistory.org/essays/stock-market-crash-of-1987",
-      "verifies": [
-        "The Dow Jones Industrial Average dropped 22.6 percent in a single trading session on 19 October 1987, the largest one-day percentage decline in history",
-        "The episode led to circuit-breaker rules that halt trading after large declines"
-      ],
-      "checked": "opened on the publisher's site on 11 November 2026",
-      "id": "frh_1987",
-      "supports": "The Dow Jones Industrial Average dropped 22.6 percent in a single trading session on 19 October 1987, the largest one-day percentage decline in history | The episode led to circuit-breaker rules that halt trading after large declines",
-      "limits": ""
-    },
-    {
-      "id": "frh_great_inflation",
-      "publisher": "Federal Reserve History (Federal Reserve System)",
-      "title": "The Great Inflation, 1965-1982",
-      "url": "https://www.federalreservehistory.org/essays/great-inflation",
-      "checked": "Opened on the publisher's official domain on 2026-11-13.",
-      "supports": "The inflation episode ran from 1965 to 1982, involved four recessions and two severe energy shortages, and reached more than 14 percent in 1980; it ended with a sustained policy change.",
-      "limits": "Narrative history. The numeric series used on this site are taken from the BLS/FRED series, not from this essay."
-    },
-    {
-      "id": "frh_great_recession",
-      "publisher": "Federal Reserve History (Federal Reserve System)",
-      "title": "The Great Recession of 2007-09",
-      "url": "https://www.federalreservehistory.org/essays/great-recession-of-200709",
-      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
-      "supports": "The 2007-09 recession and the housing collapse as a modern analogue for a simultaneous fall in house prices and asset prices.",
-      "limits": "Narrative history. The numeric series used on this site are taken from the FHFA/FRED series, not from this essay."
-    },
-    {
-      "publisher": "Federal Reserve History",
-      "title": "Oil Shock of 1973-74",
-      "url": "https://www.federalreservehistory.org/essays/oil-shock-of-1973-74",
-      "verifies": [
-        "Production cuts by Arab producers nearly quadrupled the price of oil between 1973 and January 1974",
-        "The shock complicated monetary policy and contributed to the inflation of the 1970s"
-      ],
-      "checked": "opened on the publisher's site on 11 November 2026",
-      "id": "frh_oil",
-      "supports": "Production cuts by Arab producers nearly quadrupled the price of oil between 1973 and January 1974 | The shock complicated monetary policy and contributed to the inflation of the 1970s",
-      "limits": ""
-    },
-    {
-      "publisher": "Federal Reserve History",
-      "title": "The Great Recession (December 2007-June 2009)",
-      "url": "https://www.federalreservehistory.org/essays/great-recession-of-200709",
-      "verifies": [
-        "Real GDP fell 4.3 percent from 2007Q4 to 2009Q2, the largest postwar decline",
-        "Unemployment rose from 5 percent in December 2007 to a peak of 10 percent in October 2009",
-        "The S&P 500 fell 57 percent from its October 2007 peak to its trough in March 2009",
-        "Home prices fell about 30 percent on average from mid-2006 to mid-2009",
-        "The federal funds rate was cut from 5.25 percent in September 2007 to a range of 0 to 0.25 percent in December 2008"
-      ],
-      "checked": "opened on the publisher's site on 11 November 2026",
-      "id": "frh_recession",
-      "supports": "Real GDP fell 4.3 percent from 2007Q4 to 2009Q2, the largest postwar decline | Unemployment rose from 5 percent in December 2007 to a peak of 10 percent in October 2009 | The S&P 500 fell 57 percent from its October 2007 peak to its trough in March 2009 | Home prices fell about 30 percent on average from mid-2006 to mid-2009 | The federal funds rate was cut from 5.25 percent in September 2007 to a range of 0 to 0.25 percent in December 2008",
-      "limits": ""
-    },
-    {
-      "id": "ftb_cg",
-      "publisher": "California Franchise Tax Board",
-      "title": "Capital gains and losses",
-      "url": "https://www.ftb.ca.gov/file/personal/income-types/capital-gains-and-losses.html",
-      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
-      "supports": "California does not have a separate lower rate for long-term capital gains; gains are taxed as ordinary income under the California rate schedules.",
-      "limits": "Rates and brackets must be read from the current-year schedules."
-    },
-    {
-      "id": "ftb_inheritance",
-      "publisher": "California Franchise Tax Board",
-      "title": "Gifts and inheritance - Personal income types",
-      "url": "https://www.ftb.ca.gov/file/personal/income-types/gifts-and-inheritance.html",
-      "checked": "Opened on the publisher's official domain on 2026-11-13.",
-      "supports": "A gift or inheritance is not included in California income; income the inherited property later produces (interest, dividends, rent, gain on a real property sale) is taxable.",
-      "limits": "Page last updated 24 September 2025. Federal treatment and California treatment can differ for the same receipt."
-    },
-    {
-      "id": "ftb_rates",
-      "publisher": "California Franchise Tax Board",
-      "title": "2025 California tax rate schedules (Form 540)",
-      "url": "https://www.ftb.ca.gov/forms/2025/2025-540-tax-rate-schedules.pdf",
-      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
-      "supports": "The California marginal rate structure used to price a gain on sale.",
-      "limits": "This is the 2025 form. Later-year schedules must be used for a later-year sale."
-    },
-    {
-      "publisher": "GitHub",
-      "title": "Configuring a publishing source for your GitHub Pages site",
-      "url": "https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site",
-      "verifies": [
-        "A Pages site publishes either from a branch root or from a GitHub Actions workflow artifact",
-        "The source is set in the repository Settings under Pages"
-      ],
-      "quote": "You can configure a GitHub Pages site to publish from a branch or from a GitHub Actions workflow.",
-      "checked": "documented behaviour; the API attempt on this repository on 12 November 2026 returned HTTP 403 Resource not accessible by integration",
-      "id": "gh_pages_docs",
-      "supports": "A Pages site publishes either from a branch root or from a GitHub Actions workflow artifact | The source is set in the repository Settings under Pages",
-      "limits": ""
-    },
-    {
-      "publisher": "Federal Reserve Bank of St. Louis (data: Board of Governors of the Federal Reserve System)",
-      "title": "10-Year Treasury Constant Maturity Rate (GS10), annual average, 1977-2025",
-      "url": "https://fred.stlouisfed.org/series/GS10",
-      "verifies": [
-        "The annual average 10-year Treasury yield for every year from 1977 to 2025, used as the return on a Treasury held for that year",
-        "The range is 0.89% (2020) to 13.91% (1981)"
-      ],
-      "quote": "1977-01-01,7.42 ... 1981-01-01,13.91 ... 2020-01-01,0.89 ... 2024-01-01,4.21 ... 2025-01-01,4.29",
-      "checked": "annual average of daily yields read from the publisher's CSV export on its own domain on 12 November 2026 (annual, average, level)",
-      "status": "read",
-      "id": "gs10_annual",
-      "supports": "The annual average 10-year Treasury yield for every year from 1977 to 2025, used as the return on a Treasury held for that year | The range is 0.89% (2020) to 13.91% (1981)",
-      "limits": ""
-    },
-    {
-      "publisher": "Federal Reserve Bank of St. Louis (data: Federal Housing Finance Agency)",
-      "title": "All-Transactions House Price Index, metropolitan area of Property A (ATNHPIUS41940Q), annual, percent change, 1977-2025",
-      "url": "https://fred.stlouisfed.org/series/ATNHPIUS41940Q",
-      "verifies": [
-        "One annual house-price change for every year from 1977 to 2025 for the metropolitan area containing Property A",
-        "Eleven of those years were falls; the largest falls were 12.3% (2009) and 11.4% (2008), and the largest rise was 30.2% (1989)"
-      ],
-      "quote": "1977-01-01,28.44154 ... 1989-01-01,30.19487 ... 2008-01-01,-11.36730 ... 2009-01-01,-12.31781 ... 2022-01-01,15.09501 ... 2025-01-01,0.69254. Series page: Index 1995:Q1=100, Q2 2026: 558.75, source U.S. Federal Housing Finance Agency.",
-      "checked": "series page opened on the publisher's domain on 12 November 2026 (title, units, source and the latest observation read); the annual percent-change values read from the same domain's CSV export (annual, average, percent change from a year ago)",
-      "status": "read",
-      "id": "hpi_a_annual",
-      "supports": "One annual house-price change for every year from 1977 to 2025 for the metropolitan area containing Property A | Eleven of those years were falls; the largest falls were 12.3% (2009) and 11.4% (2008), and the largest rise was 30.2% (1989)",
-      "limits": ""
-    },
-    {
-      "publisher": "Federal Reserve Bank of St. Louis (data: Federal Housing Finance Agency)",
-      "title": "All-Transactions House Price Index, metropolitan division of Property B (ATNHPIUS41884Q), annual, percent change, 1977-2025",
-      "url": "https://fred.stlouisfed.org/series/ATNHPIUS41884Q",
-      "verifies": [
-        "One annual house-price change for every year from 1977 to 2025 for the metropolitan division containing Property B",
-        "Thirteen of those years were falls; the largest were 8.9% (2008) and 8.7% (2009); the largest rise was 23.4% (2000)"
-      ],
-      "quote": "1977-01-01,23.23613 ... 2000-01-01,23.44088 ... 2008-01-01,-8.86612 ... 2009-01-01,-8.65201 ... 2025-01-01,0.79376. Series page: Index 1995:Q1=100, Q2 2026: 506.53, source U.S. Federal Housing Finance Agency.",
-      "checked": "series page opened on the publisher's domain on 12 November 2026 (title, units, source and the latest observation read); annual percent-change values read from the same domain's CSV export",
-      "status": "read",
-      "id": "hpi_b_annual",
-      "supports": "One annual house-price change for every year from 1977 to 2025 for the metropolitan division containing Property B | Thirteen of those years were falls; the largest were 8.9% (2008) and 8.7% (2009); the largest rise was 23.4% (2000)",
-      "limits": ""
-    },
-    {
-      "publisher": "U.S. Department of Housing and Urban Development",
-      "title": "Fair Market Rents",
-      "url": "https://www.huduser.gov/portal/datasets/fmr.html",
-      "verifies": [
-        "Fair Market Rents are defined as 40th-percentile gross rents for standard quality units (24 CFR 888.113); the FY2027 documentation system and the 1983-present history files exist",
-        "No area-specific rent value was retrieved or used in any figure"
-      ],
-      "quote": "",
-      "checked": "NOT verified for any figure: the dataset documentation was opened on the publisher's site on 11 November 2026; area-specific values were deliberately not retrieved, to protect location privacy.",
-      "id": "hud_fmr",
-      "supports": "Fair Market Rents are defined as 40th-percentile gross rents for standard quality units (24 CFR 888.113); the FY2027 documentation system and the 1983-present history files exist | No area-specific rent value was retrieved or used in any figure",
-      "limits": ""
-    },
-    {
-      "id": "irs_2027",
-      "publisher": "Internal Revenue Service",
-      "title": "IRS releases tax inflation adjustments for tax year 2027 (IR-2026-133, 5 November 2026)",
-      "url": "https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts",
-      "checked": "Opened on the publisher's official domain on 2026-11-13.",
-      "supports": "For decedents dying during 2027 the basic exclusion amount is $15,480,000; the annual gift exclusion for 2027 is $20,000 per recipient (up from $19,000 for 2026); the 2027 standard deduction is $33,200 for married filing jointly; the top marginal income rate remains 37%.",
-      "limits": "These are indexed statutory amounts for one year, not a forecast for later years."
-    },
-    {
-      "id": "irs_basis",
-      "publisher": "Internal Revenue Service",
-      "title": "Gifts and inheritances - inherited property basis and sale",
-      "url": "https://www.irs.gov/faqs/interest-dividends-other-types-of-income/gifts-inheritances/gifts-inheritances",
-      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
-      "supports": "Property acquired from a decedent generally takes a basis equal to its fair market value at the date of death, so gain on an immediate resale is normally near zero.",
-      "limits": "Special rules apply to community property, to property acquired by gift within one year of death, to income in respect of a decedent and to certain trusts. This is not an exhaustive basis analysis."
-    },
-    {
-      "id": "irs_estate",
-      "publisher": "Internal Revenue Service",
-      "title": "Estate tax",
-      "url": "https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax",
-      "checked": "Opened on the publisher's official domain on 2026-11-13.",
-      "supports": "The federal gross estate is measured at fair market value at date of death; the filing threshold by year of death (2026: $15,000,000); the surviving-spouse portability election on a timely filed estate return.",
-      "limits": "A filing threshold is not a complete tax computation. Prior taxable gifts, deductions, elections, ownership form and later law can change the result."
-    },
-    {
-      "id": "irs_i706",
-      "publisher": "Internal Revenue Service",
-      "title": "Instructions for Form 706, United States Estate (and Generation-Skipping Transfer) Tax Return",
-      "url": "https://www.irs.gov/instructions/i706",
-      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
-      "supports": "The estate tax rate schedule, the unified credit computation, the portability election and the valuation-date rules.",
-      "limits": "This site does not restate the rate schedule; the instructions are the controlling document."
-    },
-    {
-      "id": "irs_p523",
-      "publisher": "Internal Revenue Service",
-      "title": "Publication 523 (2025), Selling Your Home",
-      "url": "https://www.irs.gov/publications/p523",
-      "checked": "Opened on the publisher's official domain on 2026-11-13.",
-      "supports": "The ownership and residence tests, the look-back rule and the exceptions for the exclusion of gain on the sale of a main home; separate treatment for the part of a home used for business or rental and for nonqualified use after 2008.",
-      "limits": "Dollar limits and worksheets must be read in the current-year publication."
-    },
-    {
-      "id": "irs_p527",
-      "publisher": "Internal Revenue Service",
-      "title": "Publication 527, Residential Rental Property",
-      "url": "https://www.irs.gov/publications/p527",
-      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
-      "supports": "Rental income and expenses, depreciation of residential rental property, and the treatment of property converted between personal and rental use.",
-      "limits": "Depreciation lives, conventions and recapture rules must be read in the current-year publication."
-    },
-    {
-      "publisher": "Internal Revenue Service",
-      "title": "Publication 925 (2025), Passive Activity and At-Risk Rules",
-      "url": "https://www.irs.gov/pub/irs-pdf/p925.pdf",
-      "verifies": [
-        "Rental losses are passive and generally deductible only against passive income",
-        "A special allowance of up to $25,000 phases out above $100,000 of modified adjusted gross income"
-      ],
-      "quote": "The maximum special allowance of $25,000 ... is reduced by 50% of the amount of your modified adjusted gross income that is more than $100,000.",
-      "checked": "official-domain search excerpt read in this session (full document not opened)",
-      "id": "irs_p925",
-      "supports": "Rental losses are passive and generally deductible only against passive income | A special allowance of up to $25,000 phases out above $100,000 of modified adjusted gross income",
-      "limits": ""
-    },
-    {
-      "id": "irs_rmd",
-      "publisher": "Internal Revenue Service",
-      "title": "Retirement plan and IRA required minimum distributions FAQs",
-      "url": "https://www.irs.gov/retirement-plans/retirement-plan-and-ira-required-minimum-distributions-faqs",
-      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
-      "supports": "Distribution rules for inherited retirement accounts, which matter because inherited retirement assets are income in respect of a decedent and are not covered by the basis step-up.",
-      "limits": "The 10-year rule and its exceptions are fact-specific; this site does not restate them."
-    },
-    {
-      "publisher": "Internal Revenue Service",
-      "title": "Revenue Procedure 2025-32",
-      "url": "https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",
-      "verifies": [
-        "The basic exclusion amount is indexed for inflation for 2027 and later years"
-      ],
-      "quote": "The basic exclusion amount will be adjusted for inflation for calendar year 2027 and future years.",
-      "checked": "official-domain search excerpt read in this session (full document not opened)",
-      "id": "irs_rp2532",
-      "supports": "The basic exclusion amount is indexed for inflation for 2027 and later years",
-      "limits": ""
-    },
-    {
-      "publisher": "Internal Revenue Service",
-      "title": "Revenue Procedure 2026-35, section 3.44",
-      "url": "https://www.irs.gov/pub/irs-drop/rp-26-35.pdf",
-      "verifies": [
-        "For calendar year 2027 the basic exclusion amount under section 2010(c)(3) is $15,480,000"
-      ],
-      "quote": ".44 Basic Exclusion Amount for Estate Tax. For calendar year 2027, the basic exclusion amount under § 2010(c)(3) is $15,480,000.",
-      "checked": "official-domain search excerpt read in this session (full document not opened)",
-      "id": "irs_rp2635",
-      "supports": "For calendar year 2027 the basic exclusion amount under section 2010(c)(3) is $15,480,000",
-      "limits": ""
-    },
-    {
-      "publisher": "Internal Revenue Service",
-      "title": "Revenue Ruling 2023-2",
-      "url": "https://www.irs.gov/pub/irs-drop/rr-23-02.pdf",
-      "verifies": [
-        "Assets of an irrevocable grantor trust that are not included in the gross estate get no basis adjustment at death",
-        "Property the decedent placed in a trust that stayed revocable is treated as acquired from the decedent (section 1014(b)(2) and (3))"
-      ],
-      "quote": "the basis of Asset is not adjusted to its fair market value on the date of A's death under § 1014 because Asset was not acquired or passed from a decedent as defined in § 1014(b).",
-      "checked": "opened on the publisher's site in this session",
-      "id": "irs_rr2023_2",
-      "supports": "Assets of an irrevocable grantor trust that are not included in the gross estate get no basis adjustment at death | Property the decedent placed in a trust that stayed revocable is treated as acquired from the decedent (section 1014(b)(2) and (3))",
-      "limits": ""
-    },
-    {
-      "id": "irs_tc409",
-      "publisher": "Internal Revenue Service",
-      "title": "Topic no. 409, Capital gains and losses",
-      "url": "https://www.irs.gov/taxtopics/tc409",
-      "checked": "Opened on the publisher's official domain on 2026-11-13.",
-      "supports": "Net capital gain rates of 0%, 15% and 20% by taxable income; 25% maximum rate on unrecaptured section 1250 gain from section 1250 real property; 28% maximum for collectibles and certain small-business stock; the $3,000 annual limit on deducting excess capital losses.",
-      "limits": "The page shows 2025 taxable-income thresholds. Thresholds are indexed and change each year."
-    },
-    {
-      "id": "irs_tc559",
-      "publisher": "Internal Revenue Service",
-      "title": "Topic no. 559, Net investment income tax",
-      "url": "https://www.irs.gov/taxtopics/tc559",
-      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
-      "supports": "The 3.8% net investment income tax applies to individuals with net investment income above the statutory threshold amounts.",
-      "limits": "Threshold amounts and the definition of net investment income are not restated on this site; verify against the current-year topic."
-    },
-    {
-      "publisher": "Internal Revenue Service",
-      "title": "Topic no. 701, Sale of your home",
-      "url": "https://www.irs.gov/taxtopics/tc701",
-      "verifies": [
-        "Up to $250,000 of gain ($500,000 on a joint return) on a main home can be excluded",
-        "The owner must have owned and lived in the home for 2 of the 5 years before the sale"
-      ],
-      "quote": "you may qualify to exclude up to $250,000 of that gain from your income, or up to $500,000 of that gain if you file a joint return with your spouse.",
-      "checked": "opened on the publisher's site in this session",
-      "id": "irs_tc701",
-      "supports": "Up to $250,000 of gain ($500,000 on a joint return) on a main home can be excluded | The owner must have owned and lived in the home for 2 of the 5 years before the sale",
-      "limits": ""
-    },
-    {
-      "id": "irs_whatsnew",
-      "publisher": "Internal Revenue Service",
-      "title": "What's new - Estate and gift tax",
-      "url": "https://www.irs.gov/businesses/small-businesses-self-employed/whats-new-estate-and-gift-tax",
-      "checked": "Opened on the publisher's official domain on 2026-11-13.",
-      "supports": "Public Law 119-21 (the Working Families Tax Cuts, signed 4 July 2025) amended section 2010(c)(3) by increasing the basic exclusion amount to $15,000,000 for calendar year 2026.",
-      "limits": "The 2026 amount is year-specific. The page is not a forecast of later law."
-    },
-    {
-      "publisher": "California Legislative Analyst's Office",
-      "title": "Analysis of proposed initiative A.G. File No. 25-0017: property tax rules for inherited property",
-      "url": "https://www.lao.ca.gov/ballot/2025/250422.pdf",
-      "verifies": [
-        "The proposal would reverse most of Proposition 19's inheritance changes from 1 January 2027, including for transfers since 16 February 2021",
-        "Inherited primary homes would be fully excluded regardless of value",
-        "Other inherited property would be excluded on the first $1 million of combined value"
-      ],
-      "quote": "Beginning January 1, 2027, the measure reverses most of the major changes made by Proposition 19. The expanded special rules would apply to future property transfers. The rules would also apply to properties that have transferred since Proposition 19 took effect on February 16, 2021.",
-      "checked": "opened on the publisher's site in this session",
-      "id": "lao_250017",
-      "supports": "The proposal would reverse most of Proposition 19's inheritance changes from 1 January 2027, including for transfers since 16 February 2021 | Inherited primary homes would be fully excluded regardless of value | Other inherited property would be excluded on the first $1 million of combined value",
-      "limits": ""
-    },
-    {
-      "publisher": "Federal Reserve Bank of St. Louis (data: Nasdaq)",
-      "title": "NASDAQ Composite (NASDAQCOM), annual average, percent change, 1977-2025",
-      "url": "https://fred.stlouisfed.org/series/NASDAQCOM",
-      "verifies": [
-        "One annual index change for every year from 1977 to 2025, used as the equity return of that year",
-        "Nine of those years were falls; the largest were 46.2% (2001) and 24.3% (2002); the largest rise was 52.0% (1999)",
-        "The index change excludes dividends, so the model adds its own dividend assumption on top"
-      ],
-      "quote": "1977-01-01,9.80223 ... 1999-01-01,51.99372 ... 2001-01-01,-46.21639 ... 2002-01-01,-24.33737 ... 2025-01-01,18.86735. Series page: 2026-11-11 close 25,466.190, Index Feb 5, 1971=100.",
-      "checked": "series page and its CSV export opened on the publisher's domain on 12 November 2026; the export is an annual average of daily closes, so an intra-year peak or trough is averaged away",
-      "status": "read",
-      "id": "nasdaq_annual",
-      "supports": "One annual index change for every year from 1977 to 2025, used as the equity return of that year | Nine of those years were falls; the largest were 46.2% (2001) and 24.3% (2002); the largest rise was 52.0% (1999) | The index change excludes dividends, so the model adds its own dividend assumption on top",
-      "limits": ""
-    },
-    {
-      "id": "nyfed_covid",
-      "publisher": "Federal Reserve Bank of New York, Liberty Street Economics",
-      "title": "The COVID-19 Pandemic and the Fed's Response",
-      "url": "https://libertystreeteconomics.newyorkfed.org/2020/04/the-covid-19-pandemic-and-the-feds-response/",
-      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
-      "supports": "The 2020 shock and the policy response, used as the reference episode for a fast, policy-driven reversal.",
-      "limits": "Narrative commentary. The numeric series used on this site are taken from the BLS/FRED series."
-    },
-    {
-      "id": "prob16061_7",
-      "publisher": "California Legislative Information",
-      "title": "Probate Code section 16061.7 - notice to heirs and beneficiaries on a revocable trust becoming irrevocable",
-      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PROB&sectionNum=16061.7",
-      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
-      "supports": "The trustee's duty to notify heirs and beneficiaries when a revocable trust becomes irrevocable, and the contents of that notice, used in the step-by-step inheritance page.",
-      "limits": "Timing and service rules must be read from the current statute."
-    },
-    {
-      "id": "rtc11911",
-      "publisher": "California Legislative Information",
-      "title": "Revenue and Taxation Code section 11911 - county documentary transfer tax rate",
-      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=11911",
-      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
-      "supports": "The county documentary transfer tax rate authorised by state law, used here for the sale-cost estimate on Property A.",
-      "limits": "A city may add its own transfer tax on top of the county tax. Whether the city of Property A does so is flagged for review and is not verified on this site."
-    },
-    {
-      "publisher": "California Legislative Information",
-      "title": "Revenue and Taxation Code section 11930",
-      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=11930",
-      "verifies": [
-        "A transfer by gift or by reason of death, outright or in trust, is exempt from documentary transfer tax"
-      ],
-      "quote": "Any tax imposed pursuant to this part shall not apply to any deed ... if by reason of such inter vivos gift or by reason of the death of any person, such lands ... are transferred outright to, or in trust for the benefit of, any person or entity.",
-      "checked": "opened on the publisher's site in this session",
-      "id": "rtc11930",
-      "supports": "A transfer by gift or by reason of death, outright or in trust, is exempt from documentary transfer tax",
-      "limits": ""
-    },
-    {
-      "publisher": "California Legislative Information",
-      "title": "Revenue and Taxation Code section 13301",
-      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=13301",
-      "verifies": [
-        "Neither the state nor any city or county may impose a gift, inheritance or estate tax",
-        "The section was enacted by initiative, Proposition 6 of June 1982"
-      ],
-      "quote": "Neither the state nor any political subdivision of the state shall impose any gift, inheritance, succession, legacy, income, or estate tax, or any other tax, on gifts or on the estate or inheritance of any person or on or by reason of any transfer occurring by reason of a death.",
-      "checked": "opened on the publisher's site on 11 November 2026 (third pass): the state and every political subdivision are barred from gift, inheritance, estate or death-transfer taxes",
-      "id": "rtc13301",
-      "supports": "Neither the state nor any city or county may impose a gift, inheritance or estate tax | The section was enacted by initiative, Proposition 6 of June 1982",
-      "limits": ""
-    },
-    {
-      "publisher": "California Legislative Information",
-      "title": "Revenue and Taxation Code section 17043 (additional 1% tax above $1,000,000)",
-      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=17043",
-      "verifies": [
-        "For taxable years beginning on or after 1 January 2005 an additional tax of 1% applies to the portion of taxable income above $1,000,000",
-        "The additional tax is imposed in addition to any other taxes imposed by Part 10"
-      ],
-      "quote": "in addition to any other taxes imposed by this part, an additional tax shall be imposed at the rate of 1 percent on that portion of a taxpayer's taxable income in excess of one million dollars ($1,000,000).",
-      "checked": "opened on the publisher's site on 12 November 2026 (arena/593368ef-tino3): the 1% rate and the $1,000,000 threshold, added to the graduated rates; the published sensitivity applies it to the taxable gain alone, a lower bound",
-      "id": "rtc17043",
-      "supports": "For taxable years beginning on or after 1 January 2005 an additional tax of 1% applies to the portion of taxable income above $1,000,000 | The additional tax is imposed in addition to any other taxes imposed by Part 10",
-      "limits": ""
-    },
-    {
-      "id": "rtc480",
-      "publisher": "California Legislative Information",
-      "title": "Revenue and Taxation Code section 480 - change in ownership statement",
-      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=480",
-      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
-      "supports": "The requirement to file a change in ownership statement with the county assessor after a transfer, used in the step-by-step inheritance page.",
-      "limits": "Deadlines and penalties must be read from the current statute."
-    },
-    {
-      "id": "rtc51",
-      "publisher": "California Legislative Information",
-      "title": "Revenue and Taxation Code section 51",
-      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=51",
-      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
-      "supports": "The statutory basis for the annual inflation adjustment to base year value and the lesser-of rule that can reduce a value below the inflation-adjusted amount.",
-      "limits": "The lesser-of rule is assessor-applied; a decline does not automatically reset the base year value."
-    },
-    {
-      "id": "rtc63_2",
-      "publisher": "California Legislative Information",
-      "title": "Revenue and Taxation Code section 63.2",
-      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=63.2",
-      "checked": "Opened on the publisher's official domain on 2026-11-13.",
-      "supports": "The statutory text of the intergenerational transfer exclusion: the one-year principal-residence requirement, the homeowners'/disabled veterans' exemption filing requirement, removal of the exclusion when the exemption is lost, the claim-filing requirement, the confidentiality of the claim, and the new taxable value formula (existing taxable value plus the fair market value above the existing taxable value plus $1,000,000).",
-      "limits": "Section 63.2 was amended by SB 974 (Chapter 665, Statutes of 2026); read the current text."
-    },
-    {
-      "id": "sb974",
-      "publisher": "California Legislative Information",
-      "title": "SB-974, Property taxation: change in ownership: generational transfers: special needs trusts (Chapter 665, Statutes of 2026)",
-      "url": "https://leginfo.legislature.ca.gov/faces/billStatusClient.xhtml?bill_id=202520260SB974",
-      "checked": "Opened on the publisher's official domain on 2026-11-13.",
-      "supports": "Introduced 4 February 2026, approved by the Governor and chaptered 27 September 2026. Amends Revenue and Taxation Code section 63.2 so that a court-established special needs trust must be considered an eligible medium of transfer for the intergenerational transfer exclusion.",
-      "limits": "Relevant only if a transferee is a person with a disability for whom a special needs trust has been established. It does not change the value cap or the occupancy requirement."
-    },
-    {
-      "id": "scc_ratebook",
-      "publisher": "County of Santa Clara, Controller-Treasurer / Department of Finance",
-      "title": "Compilation of Tax Rates & Information, Fiscal Year 2025-2026",
-      "url": "https://files.santaclaracounty.gov/exjcpb1531/2025-11/tax-rate-book-2025-2026.pdf",
-      "checked": "Opened on the publisher's official domain on 2026-11-13.",
-      "supports": "By law the tax rate is limited to 1% of assessed value plus amounts required for voter-approved bond indebtedness; assessed value increases each year by the change in the California CPI or 2%, whichever is less; the county had 816 tax rate areas in fiscal year 2025-26; secured tax instalment and delinquency dates.",
-      "limits": "The book runs to 185 pages of tax rate areas. This site does not publish the property's tax rate area, so the exact published rate for the parcel is left to the owner to read from the book and is flagged for review."
-    },
-    {
-      "id": "scc_recorder",
-      "publisher": "County of Santa Clara, Clerk-Recorder",
-      "title": "Recording real estate documents",
-      "url": "https://clerkrecorder.santaclaracounty.gov/recording-documents/recording-real-estate",
-      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
-      "supports": "The official county route for recording a deed or a trust transfer deed and for confirming the recording fees and any transfer tax due.",
-      "limits": "Fee schedules change; confirm with the Recorder at the time of transfer."
-    },
-    {
-      "id": "sco_estate",
-      "publisher": "California State Controller's Office",
-      "title": "California Estate Tax",
-      "url": "https://www.sco.ca.gov/ardtax_estate_tax.html",
-      "checked": "Opened on the publisher's official domain on 2026-11-13.",
-      "supports": "For decedents dying on or after 1 January 2005 there is no longer a requirement to file a California estate tax return; the California generation-skipping transfer tax does not apply after 31 December 2004.",
-      "limits": "Pre-1982 inheritance and gift tax and 1982-2004 filing duties are outside this decision and are not covered."
-    },
-    {
-      "id": "sf_file261020",
-      "publisher": "City and County of San Francisco, Board of Supervisors",
-      "title": "File No. 261020 - proposed limitation on combined banked and capital improvement rent increases",
-      "url": "https://sfgov.legistar.com/LegislationDetail.aspx?ID=8217304&GUID=7EDA4662-EBFB-4AF5-962F-C669B64AA770",
-      "checked": "Referenced from the official San Francisco Rent Board page, posted 9 November 2026, and opened on the official legistar domain on 2026-11-13.",
-      "supports": "As currently proposed the legislation would temporarily limit the combined amount of banked rent increases and capital improvement rent increases on rent-controlled units to 10% per year, applying to banked increases noticed on or after 15 September 2026 and capital improvement petitions filed on or after that date.",
-      "limits": "The Rent Board states plainly: this legislation has not been enacted and is subject to change. Do not treat it as law."
-    },
-    {
-      "id": "sf_recorder_fees",
-      "publisher": "City and County of San Francisco, Assessor-Recorder",
-      "title": "Fees to record a document in San Francisco",
-      "url": "https://www.sf.gov/reports--march-2024--fees-record-document-san-francisco",
-      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
-      "supports": "The official San Francisco recording fee schedule, used for the transfer-cost estimate on Property B.",
-      "limits": "The schedule is dated March 2024 and fees change. San Francisco also has a separate tiered real property transfer tax whose rates this site does not publish because no official current rate table was retrieved."
-    },
-    {
-      "id": "sf_rent_increase",
-      "publisher": "City and County of San Francisco, Rent Board",
-      "title": "Learn about rent increases in San Francisco",
-      "url": "https://www.sf.gov/learn-about-rent-increases-san-francisco",
-      "checked": "Opened on the publisher's official domain on 2026-11-13.",
-      "supports": "The allowed rent increase is 1.6% effective 1 March 2026 through 28 February 2027, based on 60% of the increase in the Bay Area CPI; one increase every 12 months; there is no limit on the initial rent for an empty rent-controlled unit; banked increases; 30-day and 90-day notice rules; a rent increase licence is required.",
-      "limits": "Applies to units covered by the San Francisco Rent Ordinance. Coverage depends on the building, its age and its exemption status, which this site does not verify."
-    },
-    {
-      "id": "sf_treas_rate",
-      "publisher": "City and County of San Francisco, Treasurer and Tax Collector",
-      "title": "Secured Property Taxes",
-      "url": "https://sftreasurer.org/property/secured-property-taxes",
-      "checked": "Opened on the publisher's official domain on 2026-11-13.",
-      "supports": "The secured property tax rate for fiscal year 2026-27 is 1.18162182%; a supplemental assessment is issued after a change in ownership on the difference between the new value and the prior value; instalment and delinquency dates.",
-      "limits": "The ad valorem rate is one part of the bill. San Francisco bills also carry voter-approved parcel taxes, bonds and other fixed charges, which is why the total bill is a larger share of assessed value than the rate alone suggests."
-    },
-    {
-      "publisher": "City B water and sewer utility",
-      "title": "Rate schedules and fees for water and sewer service, fiscal years 2026-27 and 2027-28",
-      "url": "https://www.sfpuc.gov/sites/default/files/accounts-and-services/Rates_Schedule_Water_Sewer_2026-7.pdf",
-      "verifies": [
-        "Schedule W-1A sets the charges for single-family service: a fixed monthly service charge by meter size, then a two-tier volumetric charge",
-        "Schedule W-1B sets the charges for a building of two or more dwelling units: the same fixed monthly service charge, then a volumetric allowance of three units per dwelling unit per month at the lower tier and a higher tier after that",
-        "The commission approved two years of rates in April 2026; the FY 2026-27 rates apply from 1 July 2026 and the FY 2027-28 rates from 1 July 2027"
-      ],
-      "quote": "Schedule W-1B: Multi-Family Residential Service ... Applicable to multi-family accounts ... consisting of two or more dwelling units served through a separate meter or bank of meters",
-      "checked": "opened on the publisher's site on 13 November 2026: the FY 2026-27 and FY 2027-28 schedule was read, including schedules W-1A and W-1B and the note that the commission approved two years of rates in April 2026. Unit prices are shown on the property pages rounded to the nearest dollar; they are unit prices, not property amounts",
-      "id": "sfpuc_rates",
-      "supports": "Schedule W-1A sets the charges for single-family service: a fixed monthly service charge by meter size, then a two-tier volumetric charge | Schedule W-1B sets the charges for a building of two or more dwelling units: the same fixed monthly service charge, then a volumetric allowance of three units per dwelling unit per month at the lower tier and a higher tier after that | The commission approved two years of rates in April 2026; the FY 2026-27 rates apply from 1 July 2026 and the FY 2027-28 rates from 1 July 2027",
-      "limits": ""
-    },
-    {
-      "id": "sos_measures",
-      "publisher": "California Secretary of State",
-      "title": "Qualified Statewide Ballot Measures",
-      "url": "https://www.sos.ca.gov/elections/ballot-measures/qualified-ballot-measures",
-      "checked": "Opened on the publisher's official domain on 2026-11-13.",
-      "supports": "The fourteen measures qualified for the 3 November 2026 statewide general election, and the measures already qualified for 2028.",
-      "limits": "The list is limited to statewide measures. Local measures are not listed."
-    },
-    {
-      "publisher": "California Secretary of State",
-      "title": "County Clerk/Registrar of Voters Memorandum 26138 (18 May 2026)",
-      "url": "https://elections.cdn.sos.ca.gov/ccrov/2026/may/26138jh.pdf",
-      "verifies": [
-        "The initiative titled 'Repeals voter-enacted changes to property tax rules for transfers between family members' failed: the signatures filed were below the number required"
-      ],
-      "quote": "the total number of signatures for the hereinafter named initiative filed with all county elections officials is less than 100 percent of the number of qualified voters required to find the petition sufficient; therefore, the petition has failed.",
-      "checked": "opened on the publisher's site on 11 November 2026 (third pass): CC/ROV Memorandum 26138 of 18 May 2026 records that the petition FAILED for insufficient signatures",
-      "id": "sos_memo",
-      "supports": "The initiative titled 'Repeals voter-enacted changes to property tax rules for transfers between family members' failed: the signatures filed were below the number required",
-      "limits": ""
-    },
-    {
-      "id": "sos_results",
-      "publisher": "California Secretary of State",
-      "title": "State Ballot Measures - Statewide Results, 2026 General Election",
-      "url": "https://electionresults.sos.ca.gov/returns/ballot-measures",
-      "checked": "Opened on the publisher's official domain on 2026-11-13.",
-      "supports": "Unofficial results as of 12 November 2026 with 23,860 of 23,860 precincts partially reporting; results will be certified by 11 December 2026. Proposition 3 (extension of the existing tax on high incomes) yes 60.7%; Proposition 40 (one-time tax on certain taxpayers) no 52.4%; Proposition 42 (no new state personal property taxes) yes 51.4%; Proposition 43 (limit on local revenue votes) no 57.5%; Proposition 41 (spending-limit audits) no 55.1%; Proposition 37 (middle-income buyer loans) yes 62.4%.",
-      "limits": "These are unofficial results. They change during the canvass and are not final until certified on 11 December 2026. Treat every figure as provisional."
-    },
-    {
-      "id": "ssa_trustees",
-      "publisher": "Social Security Administration",
-      "title": "2026 OASDI Trustees Report, Assumptions about the Future",
-      "url": "https://www.ssa.gov/oact/tr/2026/II_C_assump.html",
-      "checked": "Opened on the publisher's official domain on 2026-11-13.",
-      "supports": "Official long-range economic assumptions: intermediate CPI-W change 2.4% a year, low-cost 3.0%, high-cost 1.8%; the intermediate annual trust fund new-issue real interest rate for 2044 and later is 2.3% (low-cost 2.8%, high-cost 1.8%), giving an intermediate nominal yield near 4.7%.",
-      "limits": "These are Trust Fund assumptions for a 75-year social insurance projection, not an investment forecast. The Trustees do not publish an equity return assumption here, so the equity return used on this site is a stated scenario, not an official number."
-    },
-    {
-      "publisher": "U.S. Department of the Treasury",
-      "title": "Daily Treasury par yield curve rates, November 2026",
-      "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value_month=202611",
-      "verifies": [
-        "On 9 November 2026 the par yields were 4.38% (1 year), 4.67% (5 years), 4.88% (10 years) and 5.26% (30 years)"
-      ],
-      "quote": "11/09/2026 | ... | 4.38 | 4.56 | 4.58 | 4.67 | 4.76 | 4.88 | 5.29 | 5.26",
-      "checked": "opened on the publisher's site in this session; re-checked on the publisher's site on 11 November 2026",
-      "id": "treasury_cmt",
-      "supports": "On 9 November 2026 the par yields were 4.38% (1 year), 4.67% (5 years), 4.88% (10 years) and 5.26% (30 years)",
-      "limits": ""
-    },
-    {
-      "publisher": "Federal Retirement Thrift Investment Board",
-      "title": "Thrift Savings Plan: rates of return",
-      "url": "https://www.tsp.gov/fund-performance/",
-      "verifies": [
-        "The C Fund, which tracks the S&P 500 index, returned 12.09% from November 2025 to October 2026",
-        "Its long-run average was not readable on the official page in this session"
-      ],
-      "quote": "C Fund ... Inception date: January 29, 1988 ... 12.09% ... S&P 500 C Fund Benchmark Index 12.11%",
-      "checked": "opened on the publisher's site in this session",
-      "id": "tsp_returns",
-      "supports": "The C Fund, which tracks the S&P 500 index, returned 12.09% from November 2025 to October 2026 | Its long-run average was not readable on the official page in this session",
-      "limits": ""
-    },
-    {
-      "id": "uscode102",
-      "publisher": "U.S. Government Publishing Office (GovInfo)",
-      "title": "26 U.S.C. section 102 - gifts and inheritances excluded from gross income",
-      "url": "https://www.govinfo.gov/content/pkg/USCODE-2022-title26/html/USCODE-2022-title26-subtitleA-chap1-subchapB-partIII-sec102.htm",
-      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
-      "supports": "Gross income does not include the value of property acquired by gift, bequest, devise or inheritance.",
-      "limits": "Section 102 excludes the receipt; it does not exclude later income from the property, and income in respect of a decedent is taxed under other provisions."
-    },
-    {
-      "publisher": "U.S. Government Publishing Office (GovInfo)",
-      "title": "31 U.S.C. 3124, Exemption from taxation (United States Code, 2023 edition)",
-      "url": "https://www.govinfo.gov/content/pkg/USCODE-2023-title31/html/USCODE-2023-title31-subtitleIII-chap31-subchapII-sec3124.htm",
-      "verifies": [
-        "Obligations of the United States Government, and the interest on them, are exempt from taxation by a State or political subdivision of a State",
-        "The exemption does not extend to an estate or inheritance tax, and it does not override the Internal Revenue Code for federal income tax",
-        "Gain or loss on disposing of Treasury obligations is decided under the Internal Revenue Code, not by the state-tax exemption"
-      ],
-      "quote": "(a) Stocks and obligations of the United States Government are exempt from taxation by a State or political subdivision of a State. ... (2) an estate or inheritance tax.",
-      "checked": "opened on the publisher's site on 11 November 2026: the full section text was read on govinfo.gov",
-      "id": "uscode3124",
-      "supports": "Obligations of the United States Government, and the interest on them, are exempt from taxation by a State or political subdivision of a State | The exemption does not extend to an estate or inheritance tax, and it does not override the Internal Revenue Code for federal income tax | Gain or loss on disposing of Treasury obligations is decided under the Internal Revenue Code, not by the state-tax exemption",
-      "limits": ""
-    },
-    {
-      "id": "voterguide_p3",
-      "publisher": "California Secretary of State, Official Voter Information Guide",
-      "title": "Proposition 3 - Provides Permanent Funding for Schools and Health Care by Extending Existing Tax on High Incomes",
-      "url": "https://voterguide.sos.ca.gov/propositions/3/index.htm",
-      "checked": "Opened on the publisher's official domain on 2026-11-13.",
-      "supports": "Makes permanent the existing voter-approved tax rates for individuals earning over $371,000 (adjusted annually for inflation), which would otherwise expire in 2031; fiscal impact maintains $5 billion to $15 billion of annual state income tax revenue; the revenue is allocated to public education.",
-      "limits": "Rates and thresholds are those in the existing statute; read the current-year Franchise Tax Board schedules for the exact brackets."
-    },
-    {
-      "id": "voterguide_p40",
-      "publisher": "California Secretary of State, Official Voter Information Guide",
-      "title": "Proposition 40 - Imposes One-Time Tax on Certain Taxpayers",
-      "url": "https://voterguide.sos.ca.gov/propositions/40/index.htm",
-      "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
-      "supports": "The official title and summary of the proposed one-time tax on certain taxpayers, which appears to have been defeated at the 3 November 2026 election.",
-      "limits": "Defeated on unofficial results. Not law. Recorded because a future version could return to the ballot and would change the cash-inheritance arithmetic."
-    }
-  ]
+ "as_of": "2026-11-13",
+ "edition": "Anonymised quantitative decision edition; every published figure rounded to the nearest $10.",
+ "scope": "Union of two independently maintained ledgers, merged on 13 November 2026. Entries kept verbatim from whichever ledger supplied them; where an entry had no 'supports' field its 'verifies' list was carried across, and 'limits' was filled from 'limit' or 'caveat' when present. Neither ledger was rewritten to match the other.",
+ "sources": [
+  {
+   "id": "ab1157",
+   "publisher": "California Legislative Information",
+   "title": "AB-1157, Tenancy: just cause termination: rent increases (2025-2026)",
+   "url": "https://leginfo.legislature.ca.gov/faces/billStatusClient.xhtml?bill_id=202520260AB1157",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "Status: died in the Assembly. The bill would have amended Civil Code sections 1946.2, 1947.12 and 1947.13. It failed passage on 13 January 2026 and died on 31 January 2026.",
+   "limits": "A dead bill. It is recorded here because it is frequently mis-reported as law; it is not law."
+  },
+  {
+   "publisher": "U.S. Bureau of Labor Statistics",
+   "title": "Beyond the Numbers 11(7) (Oct 2022): exploring price increases in 2021 and previous periods of inflation",
+   "url": "https://www.bls.gov/opub/btn/volume-11/exploring-price-increases-in-2021-and-previous-periods-of-inflation.htm",
+   "verifies": [
+    "High-inflation periods table (CPI 12-month peaks): 1973-76 at 12.3% (Dec 1974); 1977-82 at 14.8% (Mar 1980); 2005-08 at 5.6% (Jul 2008); 2021 at 7.0% (Dec 2021)"
+   ],
+   "quote": "1973-76 | 12.3 (Dec. 1974) ... 1977-82 | 14.8 (Mar. 1980) ... 2005-08 | 5.6 (Jul. 2008) ... 2021 | 7.0 (Dec. 2021)",
+   "checked": "opened on the publisher's site in this session (Table 2 read in full)",
+   "id": "bls_btn11",
+   "supports": "High-inflation periods table (CPI 12-month peaks): 1973-76 at 12.3% (Dec 1974); 1977-82 at 14.8% (Mar 1980); 2005-08 at 5.6% (Jul 2008); 2021 at 7.0% (Dec 2021)",
+   "limits": ""
+  },
+  {
+   "publisher": "Bureau of Labor Statistics",
+   "title": "Consumer Price Index summary, October 2026 (USDL-26-1685)",
+   "url": "https://www.bls.gov/news.release/cpi.nr0.htm",
+   "verifies": [
+    "CPI-U rose 0.4 percent seasonally adjusted in October 2026, after 0.6 percent in September and minus 0.4 percent in June 2026",
+    "BLS did not collect survey data for October 2025 because of a lapse in appropriations, so 12-month changes for October 2026 are not published for most series"
+   ],
+   "checked": "opened on the publisher's site on 11 November 2026",
+   "id": "bls_cpi",
+   "supports": "CPI-U rose 0.4 percent seasonally adjusted in October 2026, after 0.6 percent in September and minus 0.4 percent in June 2026 | BLS did not collect survey data for October 2025 because of a lapse in appropriations, so 12-month changes for October 2026 are not published for most series",
+   "limits": ""
+  },
+  {
+   "publisher": "Federal Reserve Bank of St. Louis (data: U.S. Bureau of Labor Statistics)",
+   "title": "Consumer Price Index for All Urban Consumers (CPIAUCSL), annual average, 1947-2025",
+   "url": "https://fred.stlouisfed.org/series/CPIAUCSL",
+   "verifies": [
+    "One annual consumer-price inflation rate for every year from 1977 to 2024, read from the publisher's CSV export (series CPIAUCSL, annual, average, percent change)",
+    "The publisher's percent-change export ends blank at 2025, so the 2025 rate used here is computed from the published annual index levels 321.962 and 313.698",
+    "The 2026 annual average is not published, so 2026 is excluded from the record used on this site"
+   ],
+   "quote": "1948-01-01,7.67221 ... 1977-01-01,6.46956 ... 1980-01-01,13.50172 ... 2009-01-01,-0.32036 ... 2022-01-01,7.99082 ... 2024-01-01,2.95211, with the 2025 row blank. Annual index levels in the same series: 2023-01-01,304.703; 2024-01-01,313.698; 2025-01-01,321.962.",
+   "checked": "CSV export opened on the publisher's own domain on 12 November 2026 (annual frequency, average, percent change from a year ago); the blank 2025 row was re-read from the same domain's level series and the 2.6345% rate computed here from the two published index levels",
+   "status": "read",
+   "id": "bls_cpi_annual",
+   "supports": "One annual consumer-price inflation rate for every year from 1977 to 2024, read from the publisher's CSV export (series CPIAUCSL, annual, average, percent change) | The publisher's percent-change export ends blank at 2025, so the 2025 rate used here is computed from the published annual index levels 321.962 and 313.698 | The 2026 annual average is not published, so 2026 is excluded from the record used on this site",
+   "limits": ""
+  },
+  {
+   "publisher": "U.S. Bureau of Labor Statistics",
+   "title": "Monthly Labor Review (Apr 2014): one hundred years of price change",
+   "url": "https://www.bls.gov/opub/mlr/2014/article/one-hundred-years-of-price-change-the-consumer-price-index-and-the-american-inflation-experience.htm",
+   "verifies": [
+    "Largest 12-month CPI increase in the 1968-1983 period: March 1979-March 1980, 14.8 percent",
+    "1913-1929 largest 12-month increase: June 1919-June 1920, 23.7 percent"
+   ],
+   "quote": "Largest 12-month increase: March 1979-March 1980, 14.8 percent",
+   "checked": "opened on the publisher's site in this session (full article; the 1968-83 summary appears in the article body)",
+   "id": "bls_mlr100",
+   "supports": "Largest 12-month CPI increase in the 1968-1983 period: March 1979-March 1980, 14.8 percent | 1913-1929 largest 12-month increase: June 1919-June 1920, 23.7 percent",
+   "limits": ""
+  },
+  {
+   "publisher": "U.S. Bureau of Labor Statistics",
+   "title": "The Economics Daily: consumer prices up 9.1 percent over the year ended June 2022 (July 2022)",
+   "url": "https://www.bls.gov/opub/ted/2022/consumer-prices-up-9-1-percent-over-the-year-ended-june-2022-largest-increase-in-40-years.htm",
+   "verifies": [
+    "CPI-U rose 9.1 percent over the 12 months ended June 2022, the largest 12-month increase since November 1981",
+    "June 2022 all-items index was 296.311 versus 271.696 in June 2021"
+   ],
+   "quote": "Over the 12 months ended June 2022, the Consumer Price Index for All Urban Consumers increased 9.1 percent. ... the largest 12-month increase since the 12-month period ending November 1981.",
+   "checked": "opened on the publisher's site in this session; 9.1 percent also read in the June 2022 CPI news release archive",
+   "id": "bls_ted2022",
+   "supports": "CPI-U rose 9.1 percent over the 12 months ended June 2022, the largest 12-month increase since November 1981 | June 2022 all-items index was 296.311 versus 271.696 in June 2021",
+   "limits": ""
+  },
+  {
+   "id": "boe_lta25009",
+   "publisher": "California State Board of Equalization",
+   "title": "Letter to Assessors No. 2025/009 - Intergenerational Transfer Exclusion, adjustment of the $1 million amount",
+   "url": "https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "For transfers occurring 16 February 2025 through 15 February 2027 the value cap is the property's factored base year value plus $1,044,586. Earlier amounts: $1,000,000 (16 Feb 2021 - 15 Feb 2023) and $1,022,600 (16 Feb 2023 - 15 Feb 2025). The next adjustment occurs in February 2027.",
+   "limits": "The amount is adjusted every second February by the change in the FHFA California House Price Index, so a 2040-2050 transfer will use a different, currently unpublished amount."
+  },
+  {
+   "id": "boe_lta26002",
+   "publisher": "California State Board of Equalization",
+   "title": "Letter to Assessors No. 2026/002 - 2026-27 inflation adjustment",
+   "url": "https://boe.ca.gov/proptaxes/pdf/lta26002.pdf",
+   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "supports": "The California Consumer Price Index change used to set the 2026-27 inflation adjustment to assessed values.",
+   "limits": "The adjustment is set annually and can be below 2% in a low-inflation year."
+  },
+  {
+   "id": "boe_lta26026",
+   "publisher": "California State Board of Equalization",
+   "title": "Letter to Assessors No. 2026/026 - Proposition 19 Intergenerational Transfer Exclusion, Frequently Asked Questions and Answers",
+   "url": "https://www.boe.ca.gov/proptaxes/pdf/lta26026.pdf",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "Definitions under Revenue and Taxation Code section 63.2; the requirement that the transfer be of the transferor's principal residence and become the transferee's principal residence within one year of the transfer, with no exceptions; removal of the exclusion when the home ceases to qualify and enrolment of the base year value established at the change in ownership, adjusted annually; transfers through a trust are covered; only the unit occupied as a principal residence qualifies in a multi-unit property.",
+   "limits": "Guidance, not a legal determination. County assessors apply the rule to the facts."
+  },
+  {
+   "id": "boe_prop19",
+   "publisher": "California State Board of Equalization",
+   "title": "Proposition 19 - The Home Protection for Seniors, Severely Disabled, Families, and Victims of Wildfire or Natural Disasters Act",
+   "url": "https://www.boe.ca.gov/prop19/",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "The comparison between former Proposition 58/193 and current Proposition 19, including: the exclusion now applies only to a principal residence or family home; the value limit is the current taxable value plus $1,000,000 as biennially adjusted; the homeowners' exemption must be filed within one year of transfer and the exclusion claim within three years.",
+   "limits": "The BOE states this is general summary information and not official legal guidance."
+  },
+  {
+   "id": "boe_pub29",
+   "publisher": "California State Board of Equalization",
+   "title": "Publication 29, Property Taxpayers' Guide",
+   "url": "https://boe.ca.gov/proptaxes/pdf/pub29.pdf",
+   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "supports": "Proposition 13: the 1% general tax rate limit, the base year value concept and the annual inflation adjustment not exceeding 2%.",
+   "limits": "General guidance; a specific bill is governed by the county assessment roll."
+  },
+  {
+   "id": "boe_pub800_9",
+   "publisher": "California State Board of Equalization",
+   "title": "Publication 800-9, Taxpayers' Guide to the Death of a Real Property Owner",
+   "url": "https://www.boe.ca.gov/pdf/pub800-9.pdf",
+   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "supports": "What happens to a property tax assessment when a real property owner dies, and the forms and deadlines involved.",
+   "limits": "General guidance; county practice varies."
+  },
+  {
+   "publisher": "Congressional Budget Office",
+   "title": "The Budget and Economic Outlook: 2026 to 2036",
+   "url": "https://www.cbo.gov/publication/62105",
+   "verifies": [
+    "Debt held by the public rises from 101 percent of GDP in 2026 to 120 percent in 2036 and reaches 175 percent of GDP by 2056",
+    "The deficit is 5.8 percent of GDP in 2026 and 6.7 percent in 2036; net outlays for interest rise to 6.9 percent of GDP by 2056",
+    "CBO projects inflation consistent with the Federal Reserve's 2 percent goal from 2027 through 2055",
+    "CBO estimates a two-thirds chance that debt is between 101 and 118 percent of GDP in 2036 under current law"
+   ],
+   "checked": "opened on the publisher's site on 11 November 2026 (projections-at-a-glance and budget chapters read)",
+   "id": "cbo_outlook",
+   "supports": "Debt held by the public rises from 101 percent of GDP in 2026 to 120 percent in 2036 and reaches 175 percent of GDP by 2056 | The deficit is 5.8 percent of GDP in 2026 and 6.7 percent in 2036; net outlays for interest rise to 6.9 percent of GDP by 2056 | CBO projects inflation consistent with the Federal Reserve's 2 percent goal from 2027 through 2055 | CBO estimates a two-thirds chance that debt is between 101 and 118 percent of GDP in 2036 under current law",
+   "limits": ""
+  },
+  {
+   "publisher": "California Department of Insurance",
+   "title": "Compare insurance premiums",
+   "url": "https://www.insurance.ca.gov/01-consumers/105-type/9-compare-prem/",
+   "verifies": [
+    "The Department surveys insurers and publishes a 2026 homeowners premium comparison tool",
+    "The survey results are not premium quotes; the Department cannot provide quotes"
+   ],
+   "quote": "The results of these surveys are not premium quotes. ... The California Department of Insurance is a regulatory agency and not an insurance agent. As such, we cannot provide actual quotes.",
+   "checked": "opened on the publisher's site on 11 November 2026 (third pass): the 2026 homeowners survey exists, the Department states it cannot provide quotes, and the results are not premium quotes",
+   "id": "cdi_compare",
+   "supports": "The Department surveys insurers and publishes a 2026 homeowners premium comparison tool | The survey results are not premium quotes; the Department cannot provide quotes",
+   "limits": ""
+  },
+  {
+   "id": "cdi_fairplan",
+   "publisher": "California Department of Insurance",
+   "title": "FAIR Plan - California's insurer of last resort",
+   "url": "https://www.insurance.ca.gov/0400-news/0100-press-releases/2019/release089-19.cfm",
+   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "supports": "The FAIR Plan is the state's insurer of last resort for property owners unable to obtain coverage in the voluntary market.",
+   "limits": "A FAIR Plan policy is more limited than a standard homeowners policy; a difference-in-conditions wrap is normally needed."
+  },
+  {
+   "publisher": "California Department of Insurance",
+   "title": "Residential Property Insurance Report: Homeowners Multi-Peril data by experience year, 2001-2017",
+   "url": "https://www.insurance.ca.gov/0400-news/0200-studies-reports/0250-homeowners-study/upload/A-Homeowners-2_v1-2.pdf",
+   "verifies": [
+    "The statewide average written premium for an owner-occupied homeowners policy was about $1,070 in experience year 2017",
+    "The average is statewide and across all amounts of insurance; it is not a premium for any one home"
+   ],
+   "quote": "HOMEOWNERS POLICY FORM - OWNER OCCUPIED (ISO HO1, HO2, HO3, HO5, HO8 or Equivalent)",
+   "checked": "opened on the publisher's site on 13 November 2026: the 2001-2017 average written premium column was read; the figure is displayed rounded to the nearest $10",
+   "id": "cdi_homeowners_avg",
+   "supports": "The statewide average written premium for an owner-occupied homeowners policy was about $1,070 in experience year 2017 | The average is statewide and across all amounts of insurance; it is not a premium for any one home",
+   "limits": ""
+  },
+  {
+   "publisher": "California Department of Insurance",
+   "title": "Residential Property Insurance Report: Part I premium and exposure summary data, 2008-2023",
+   "url": "https://www.insurance.ca.gov/0400-news/0200-studies-reports/0250-homeowners-study/upload/A-Part-I-Data-Summary.xlsx",
+   "verifies": [
+    "Across 2008-2023 the statewide average written premium was about $1,180 for an owner-occupied homeowners policy",
+    "Across the same years it was about $600 for a tenant-occupied dwelling-fire policy, the form a landlord buys",
+    "The Department also publishes ZIP-code level experience data under Insurance Code section 929"
+   ],
+   "quote": "Policy Form | Year | Written Premium | Written Exposure | Average Written Premium - Homeowners Multi-Peril ... Dwelling-Fire (Tenant-Occupied)",
+   "checked": "opened on the publisher's site on 13 November 2026: the summary worksheet was read and both averages are displayed rounded to the nearest $10. The ZIP-code level file for these two properties was not opened, so no property-specific premium is published",
+   "id": "cdi_part1",
+   "supports": "Across 2008-2023 the statewide average written premium was about $1,180 for an owner-occupied homeowners policy | Across the same years it was about $600 for a tenant-occupied dwelling-fire policy, the form a landlord buys | The Department also publishes ZIP-code level experience data under Insurance Code section 929",
+   "limits": ""
+  },
+  {
+   "id": "cdi_tips",
+   "publisher": "California Department of Insurance",
+   "title": "Top 10 Tips for Finding Residential Insurance",
+   "url": "https://www.insurance.ca.gov/01-consumers/105-type/5-residential/Top10Tips_FindingResidentialIns.cfm",
+   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "supports": "The Department's official consumer guidance on obtaining homeowners and residential insurance in California.",
+   "limits": "The Department does not publish an official average premium for a ZIP code or a city. Every insurance figure on this site is an owner estimate and is flagged as unverified."
+  },
+  {
+   "publisher": "City B Board of Supervisors",
+   "title": "Legislation File No. 261020: cap on banked and capital-improvement rent increases for rent-controlled units",
+   "url": "https://sfgov.legistar.com/LegislationDetail.aspx?ID=8217304&GUID=7EDA4662-EBFB-4AF5-962F-C669B64AA770",
+   "verifies": [
+    "File No. 261020, introduced 15 September 2026, is an ordinance amending the Administrative Code",
+    "It caps banked rent increases and capital-improvement rent increases on rent-controlled units at a combined 10% per year, for three years",
+    "Status as of 12 November 2026: pending in the Land Use and Transportation Committee; it has not been enacted"
+   ],
+   "quote": "Ordinance amending the Administrative Code to provide that banked rent increases and capital improvement rent increases for rent-controlled units may not increase a tenant's rent by more than a total of 10% per year, for the next three years.",
+   "checked": "legistar record opened 12 November 2026; status Pending Committee Action; introduced 9/15/2026; Youth Commission response received 10/7/2026",
+   "id": "cityb_261020",
+   "supports": "File No. 261020, introduced 15 September 2026, is an ordinance amending the Administrative Code | It caps banked rent increases and capital-improvement rent increases on rent-controlled units at a combined 10% per year, for three years | Status as of 12 November 2026: pending in the Land Use and Transportation Committee; it has not been enacted",
+   "limits": ""
+  },
+  {
+   "publisher": "City B Treasurer and Tax Collector",
+   "title": "Secured property taxes",
+   "url": "https://sftreasurer.org/property/secured-property-taxes",
+   "verifies": [
+    "The secured property tax rate for fiscal year 2026-27 is 1.18162182%",
+    "A change in ownership leads to a reappraisal and a supplemental bill",
+    "Late instalments carry a 10% penalty"
+   ],
+   "quote": "The secured property tax rate for Fiscal Year 2026-27 is 1.18162182%.",
+   "checked": "opened on the publisher's site on 11 November 2026 (third pass): fiscal year 2026-27 secured rate 1.18162182%, 10% penalties and supplemental assessments after a change in ownership",
+   "id": "cityb_rate",
+   "supports": "The secured property tax rate for fiscal year 2026-27 is 1.18162182% | A change in ownership leads to a reappraisal and a supplemental bill | Late instalments carry a 10% penalty",
+   "limits": ""
+  },
+  {
+   "publisher": "City B Rent Board",
+   "title": "Learn about rent increases",
+   "url": "https://www.sf.gov/learn-about-rent-increases-san-francisco",
+   "verifies": [
+    "The allowed annual increase for rent-controlled units is 1.6% from 1 March 2026 to 28 February 2027",
+    "It equals 60% of the regional CPI increase",
+    "Rent can be raised only once every 12 months and needs a rent increase licence",
+    "There is no limit on the first rent charged to a new tenant in a vacant covered unit"
+   ],
+   "quote": "Effective March 1, 2026, the allowed rent increase percentage is 1.6%. ... This amount is based on 60% of the increase in the Consumer Price Index for All Urban Consumers in the Bay Area. ... There is no limit on how much rent a landlord may first charge a tenant when renting an empty unit that is covered by rent control.",
+   "checked": "opened on the publisher's site on 11 November 2026 (third pass): 1.6% for 1 March 2026 to 28 February 2027, 60% of the regional CPI, and the notice of proposed File No. 261020 posted 9 November 2026",
+   "id": "cityb_rent",
+   "supports": "The allowed annual increase for rent-controlled units is 1.6% from 1 March 2026 to 28 February 2027 | It equals 60% of the regional CPI increase | Rent can be raised only once every 12 months and needs a rent increase licence | There is no limit on the first rent charged to a new tenant in a vacant covered unit",
+   "limits": ""
+  },
+  {
+   "publisher": "City B Rent Board",
+   "title": "The Rent Board fee",
+   "url": "https://www.sf.gov/rent-board-fee-link",
+   "verifies": [
+    "Owners pay an annual fee of about $60 per dwelling unit, due 1 March",
+    "It applies to units occupied by family members too unless an exemption is filed"
+   ],
+   "quote": "$59.00 per dwelling unit ... This includes single-family homes and condominiums, units built after 1979, vacant units, and units occupied by friends or family members.",
+   "checked": "official-domain search excerpt read in this session (full document not opened)",
+   "id": "cityb_rentfee",
+   "supports": "Owners pay an annual fee of about $60 per dwelling unit, due 1 March | It applies to units occupied by family members too unless an exemption is filed",
+   "limits": ""
+  },
+  {
+   "publisher": "City B Board of Supervisors",
+   "title": "Resolution 447-25: combined property tax rate, fiscal year 2025-26",
+   "url": "https://sfbos.archive.sf.gov/sites/default/files/r0447-25.pdf",
+   "verifies": [
+    "The fiscal year 2025-26 combined rate was 1.18268325%",
+    "The resolution passed on 30 September 2025"
+   ],
+   "quote": "the combined property tax rate ... shall therefore be $1.18268325 on each $100 valuation of said taxable property ... Date Passed: September 30, 2025",
+   "checked": "opened on the publisher's site in this session",
+   "id": "cityb_res447",
+   "supports": "The fiscal year 2025-26 combined rate was 1.18268325% | The resolution passed on 30 September 2025",
+   "limits": ""
+  },
+  {
+   "publisher": "City B Assessor-Recorder",
+   "title": "Fees to record a document: transfer tax rate table",
+   "url": "https://www.sf.gov/reports--march-2024--fees-record-document-san-francisco",
+   "verifies": [
+    "Transfer tax on a sale: 0.5% up to $250,000; 0.68% below $1,000,000; 0.75% from $1,000,000 to under $5,000,000; 2.25% from $5,000,000 to under $10,000,000",
+    "The rate applies to the entire price, so crossing $5,000,000 triples the tax"
+   ],
+   "quote": "$1,000,000 or more but less than $5,000,000 | $3.75 for each $500 or portion thereof ... $5,000,000 or more but less than $10,000,000 | $11.25 for each $500 or portion thereof",
+   "checked": "opened on the publisher's site in this session",
+   "id": "cityb_transfer",
+   "supports": "Transfer tax on a sale: 0.5% up to $250,000; 0.68% below $1,000,000; 0.75% from $1,000,000 to under $5,000,000; 2.25% from $5,000,000 to under $10,000,000 | The rate applies to the entire price, so crossing $5,000,000 triples the tax",
+   "limits": ""
+  },
+  {
+   "id": "civ1946_2",
+   "publisher": "California Legislative Information",
+   "title": "Civil Code section 1946.2 - just cause for termination of tenancy",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1946.2",
+   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "supports": "At-fault and no-fault just cause grounds and the relocation-assistance requirement for a no-fault termination, including an owner move-in.",
+   "limits": "Local ordinances can add stricter requirements. This site does not restate the notice or payment amounts."
+  },
+  {
+   "id": "civ1947_12",
+   "publisher": "California Legislative Information",
+   "title": "Civil Code section 1947.12 - statewide rent cap (Tenant Protection Act of 2019)",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1947.12",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "Over any 12-month period gross rent may not be increased more than 5% plus the change in the cost of living, or 10%, whichever is lower, of the lowest gross rent charged in the prior 12 months; not more than two increases in any 12-month period; the initial rent for a new tenancy is not capped; exemptions including housing with a certificate of occupancy issued within the previous 15 years and certain separately alienable single-family homes and condominiums where the owner is not a REIT, corporation or certain LLC and gives the required notice; housing already subject to a stricter local rent control ordinance is excluded.",
+   "limits": "Whether a specific building and unit are exempt depends on facts this site does not verify."
+  },
+  {
+   "publisher": "County A Controller-Treasurer",
+   "title": "Compilation of Tax Rates and Information, fiscal year 2025-26",
+   "url": "https://files.santaclaracounty.gov/exjcpb1531/2025-11/tax-rate-book-2025-2026.pdf",
+   "verifies": [
+    "Total ad valorem rates in the excerpted tax rate areas run from 1.12580% to 1.24090%",
+    "First instalment is delinquent after 10 December and the second after 10 April"
+   ],
+   "quote": "1.12580 ... 1.14200 ... 1.15215 ... 1.15600 ... 1.15930 ... 1.16145 ... 1.16710 ... 1.19360 ... 1.21470 ... 1.24090 (totals by tax rate area, TAX RATES 2025/2026)",
+   "checked": "official-domain search excerpt read in this session (full document not opened)",
+   "id": "cnty_a_rates",
+   "supports": "Total ad valorem rates in the excerpted tax rate areas run from 1.12580% to 1.24090% | First instalment is delinquent after 10 December and the second after 10 April",
+   "limits": ""
+  },
+  {
+   "publisher": "County A Clerk-Recorder",
+   "title": "Recording real estate: documentary transfer tax",
+   "url": "https://clerkrecorder.santaclaracounty.gov/recording-documents/recording-real-estate",
+   "verifies": [
+    "County A charges the 0.11% documentary transfer tax on sales",
+    "Three named cities in the county add a city conveyance tax of 0.33%"
+   ],
+   "quote": "It is computed at a rate of $.55 per $500 or fractional portion of real property value ... Properties located within [three named cities] are taxable at a rate of $1.65 per $500.",
+   "checked": "official-domain search excerpt read in this session (full document not opened)",
+   "id": "cnty_a_recorder",
+   "supports": "County A charges the 0.11% documentary transfer tax on sales | Three named cities in the county add a city conveyance tax of 0.33%",
+   "limits": ""
+  },
+  {
+   "id": "cpuc_nem",
+   "publisher": "California Public Utilities Commission",
+   "title": "Net Energy Metering and Net Billing",
+   "url": "https://www.cpuc.ca.gov/industries-and-topics/electrical-energy/demand-side-management/customer-generation/net-energy-metering-and-net-billing",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "NEM tariffs are closed to new enrolment; customers applying since 15 April 2023 take service on the net billing tariff under D.22-12-056, where export compensation is usually below the retail rate; NEM 2.0 participants may remain on that tariff for 20 years from the date of interconnection under D.14-03-041; the NBT has a nine-year legacy period and does not apply to customers moving from a previous NEM tariff; non-bypassable charges and the basis for net surplus compensation.",
+   "limits": "The tariff that applies to a given system depends on its interconnection date, which this site does not verify. Export credit values change over time."
+  },
+  {
+   "publisher": "Board of Governors of the Federal Reserve System",
+   "title": "FAQ: Why does the Federal Reserve aim for inflation of 2 percent over the longer run?",
+   "url": "https://www.federalreserve.gov/faqs/economy_14400.htm",
+   "verifies": [
+    "The FOMC judges that inflation of 2 percent over the longer run, measured by the annual change in the PCE price index, is most consistent with the Federal Reserve's statutory mandate"
+   ],
+   "checked": "opened on the publisher's site on 11 November 2026",
+   "id": "fed_2goal",
+   "supports": "The FOMC judges that inflation of 2 percent over the longer run, measured by the annual change in the PCE price index, is most consistent with the Federal Reserve's statutory mandate",
+   "limits": ""
+  },
+  {
+   "publisher": "Board of Governors of the Federal Reserve System",
+   "title": "Monetary Policy Report to the Congress, 13 February 2001, section 2",
+   "url": "https://www.federalreserve.gov/boarddocs/hh/2001/february/ReportSection2.htm",
+   "verifies": [
+    "In 2000 the tech-heavy Nasdaq was down nearly 40 percent for the year while the broadest stock indexes fell more than 10 percent",
+    "Real GDP rose about 3.5 percent in 2000"
+   ],
+   "checked": "opened on the publisher's site on 11 November 2026 (household, labour, price and financial-market sections read)",
+   "id": "fed_mpr2001",
+   "supports": "In 2000 the tech-heavy Nasdaq was down nearly 40 percent for the year while the broadest stock indexes fell more than 10 percent | Real GDP rose about 3.5 percent in 2000",
+   "limits": ""
+  },
+  {
+   "publisher": "Federal Reserve History (Federal Reserve System)",
+   "title": "Essays: Stock Market Crash of 1929",
+   "url": "https://www.federalreservehistory.org/essays/stock-market-crash-of-1929",
+   "verifies": [
+    "DJIA peaked 381.17 on 3 September 1929; closed at 41.22 on 8 July 1932, 89 percent below its peak",
+    "The index did not regain its September 1929 high until 23 November 1954",
+    "Black Monday 28 Oct 1929 fell nearly 13 percent; Black Tuesday 29 Oct 1929 fell nearly 12 percent"
+   ],
+   "quote": "the index peaked on September 3, 1929, closing at 381.17. The index declined until July 8, 1932, when it closed at 41.22 ... The index did not reach the 1929 high again until November 23, 1954.",
+   "checked": "opened on the publisher's site in this session",
+   "id": "fedhist_1929",
+   "supports": "DJIA peaked 381.17 on 3 September 1929; closed at 41.22 on 8 July 1932, 89 percent below its peak | The index did not regain its September 1929 high until 23 November 1954 | Black Monday 28 Oct 1929 fell nearly 13 percent; Black Tuesday 29 Oct 1929 fell nearly 12 percent",
+   "limits": ""
+  },
+  {
+   "publisher": "Federal Reserve History (Federal Reserve System)",
+   "title": "Essays: The Great Inflation (1965-1982)",
+   "url": "https://www.federalreservehistory.org/essays/great-inflation",
+   "verifies": [
+    "Inflation measured a little more than 1 percent per year in 1964; reached more than 14 percent in 1980",
+    "Inflation peaked in March 1980 at close to 15 percent (CPI, 12-month change)",
+    "1974: inflation over 12 percent with unemployment above 7 percent",
+    "1983: 12-month inflation settled back to 0 to 5 percent"
+   ],
+   "quote": "In 1964, inflation measured a little more than 1 percent per year. ... Inflation began ratcheting upward in the mid-1960s and reached more than 14 percent in 1980.",
+   "checked": "opened on the publisher's site in this session (the 1974 stagflation detail is from the same essay, read as an official-domain search excerpt)",
+   "id": "fedhist_greatinflation",
+   "supports": "Inflation measured a little more than 1 percent per year in 1964; reached more than 14 percent in 1980 | Inflation peaked in March 1980 at close to 15 percent (CPI, 12-month change) | 1974: inflation over 12 percent with unemployment above 7 percent | 1983: 12-month inflation settled back to 0 to 5 percent",
+   "limits": ""
+  },
+  {
+   "publisher": "Federal Reserve History (Federal Reserve System)",
+   "title": "Essays: The Great Recession (December 2007 - June 2009)",
+   "url": "https://www.federalreservehistory.org/essays/great-recession-of-200709",
+   "verifies": [
+    "Real GDP fell 4.3 percent from its 2007Q4 peak to its 2009Q2 trough",
+    "Unemployment peaked at 10 percent in October 2009 (5 percent in December 2007)",
+    "Home prices fell approximately 30 percent on average from their mid-2006 peak to mid-2009",
+    "The S&P 500 fell 57 percent from its October 2007 peak to its March 2009 trough",
+    "Household and nonprofit net worth fell from approximately $69 trillion in 2007 to $55 trillion in 2009"
+   ],
+   "quote": "Real gross domestic product (GDP) fell 4.3 percent from its peak in 2007Q4 to its trough in 2009Q2 ... the S&P 500 index fell 57 percent from its October 2007 peak to its trough in March 2009.",
+   "checked": "opened on the publisher's site in this session",
+   "id": "fedhist_greatrecession",
+   "supports": "Real GDP fell 4.3 percent from its 2007Q4 peak to its 2009Q2 trough | Unemployment peaked at 10 percent in October 2009 (5 percent in December 2007) | Home prices fell approximately 30 percent on average from their mid-2006 peak to mid-2009 | The S&P 500 fell 57 percent from its October 2007 peak to its March 2009 trough | Household and nonprofit net worth fell from approximately $69 trillion in 2007 to $55 trillion in 2009",
+   "limits": ""
+  },
+  {
+   "publisher": "Federal Reserve Bank of St. Louis (data: Federal Housing Finance Agency)",
+   "title": "All-transactions house price index for California",
+   "url": "https://fred.stlouisfed.org/series/CASTHPI",
+   "verifies": [
+    "Index peak of 646.07 in 2006Q3 and trough of 380.93 in 2012Q1, a decline of 41 percent (computed from the published series)"
+   ],
+   "checked": "full CSV opened on the publisher's site on 11 November 2026",
+   "id": "fred_casthpi",
+   "supports": "Index peak of 646.07 in 2006Q3 and trough of 380.93 in 2012Q1, a decline of 41 percent (computed from the published series)",
+   "limits": ""
+  },
+  {
+   "id": "fred_cpi",
+   "publisher": "Federal Reserve Bank of St. Louis (data: U.S. Bureau of Labor Statistics)",
+   "title": "Consumer Price Index for All Urban Consumers: All Items in U.S. City Average, annual (CPIAUCSL)",
+   "url": "https://fred.stlouisfed.org/series/CPIAUCSL",
+   "checked": "Series downloaded as CSV from the official FRED domain on 2026-11-13 by this session; annual averages 1975 to 2024 read directly from that file.",
+   "supports": "The annual inflation series used on the economy and black-swan pages, including the 13.50% annual average for 1980 and the 0.32% decline for 2009.",
+   "limits": "This is a national index. The California CPI that governs Proposition 13 assessments is a different series and can move differently."
+  },
+  {
+   "publisher": "Federal Reserve Bank of St. Louis (data: Board of Governors of the Federal Reserve System)",
+   "title": "Market yield on US Treasury securities at 10-year constant maturity (DGS10), daily",
+   "url": "https://fred.stlouisfed.org/series/DGS10",
+   "verifies": [
+    "10-year Treasury par yield reached 15.84 percent on 30 September 1981",
+    "10-year Treasury par yield was 4.88 percent on 9 November 2026",
+    "0.52 percent on 4 August 2020"
+   ],
+   "checked": "opened in this session; values read from the series CSV and the series page The same series window was also read on 11 November 2026 for the 0.52 percent low of 4 August 2020 (CSV opened on the publisher's site on 11 November 2026 (dated window read))",
+   "id": "fred_dgs10",
+   "supports": "10-year Treasury par yield reached 15.84 percent on 30 September 1981 | 10-year Treasury par yield was 4.88 percent on 9 November 2026 | 0.52 percent on 4 August 2020",
+   "limits": ""
+  },
+  {
+   "publisher": "Federal Reserve Bank of St. Louis (data: Board of Governors)",
+   "title": "Federal funds effective rate (monthly)",
+   "url": "https://fred.stlouisfed.org/series/FEDFUNDS",
+   "verifies": [
+    "Monthly average peaked at 19.10 percent in June 1981",
+    "Monthly average ran between 0.07 and 0.22 percent from 2009 through 2015",
+    "Monthly average was 3.88 percent in October 2026"
+   ],
+   "checked": "CSV opened on the publisher's site on 11 November 2026 (windows 1954-1995, 2007-2016 and 2025-2026 read)",
+   "id": "fred_fedfunds",
+   "supports": "Monthly average peaked at 19.10 percent in June 1981 | Monthly average ran between 0.07 and 0.22 percent from 2009 through 2015 | Monthly average was 3.88 percent in October 2026",
+   "limits": ""
+  },
+  {
+   "id": "fred_gs10",
+   "publisher": "Federal Reserve Bank of St. Louis (data: Board of Governors of the Federal Reserve System)",
+   "title": "Market Yield on U.S. Treasury Securities at 10-Year Constant Maturity, annual (GS10)",
+   "url": "https://fred.stlouisfed.org/series/GS10",
+   "checked": "Series downloaded as CSV from the official FRED domain on 2026-11-13 by this session; annual averages 1975 to 2025 read directly from that file.",
+   "supports": "The long-term interest rate history used for the reinvestment comparison, including the 13.91% annual average for 1981, the 0.89% average for 2020 and the 4.29% average for 2025.",
+   "limits": "A historical yield is not a forecast. Reinvestment risk means the realised return on a rolling bond ladder differs from the starting yield."
+  },
+  {
+   "id": "fred_hpi_a",
+   "publisher": "Federal Reserve Bank of St. Louis (data: U.S. Federal Housing Finance Agency)",
+   "title": "All-Transactions House Price Index, annual, for the metropolitan area containing Property A (ATNHPIUS41940Q)",
+   "url": "https://fred.stlouisfed.org/series/ATNHPIUS41940Q",
+   "checked": "Series downloaded as CSV from the official FRED domain on 2026-11-13 by this session; annual averages 1976 to 2025 read directly from that file.",
+   "supports": "The house price history for Property A's area: a 30.19% annual rise in 1989, a 12.32% fall in 2009, and a 25.6% fall from the 2006 level to the 2011 level.",
+   "limits": "A metropolitan-area index is not an appraisal of one house. A specific house can move very differently."
+  },
+  {
+   "id": "fred_hpi_b",
+   "publisher": "Federal Reserve Bank of St. Louis (data: U.S. Federal Housing Finance Agency)",
+   "title": "All-Transactions House Price Index, annual, for the metropolitan area containing Property B (ATNHPIUS41884Q)",
+   "url": "https://fred.stlouisfed.org/series/ATNHPIUS41884Q",
+   "checked": "Series downloaded as CSV from the official FRED domain on 2026-11-13 by this session; annual averages 1976 to 2025 read directly from that file.",
+   "supports": "The house price history for Property B's area: a 21.8% fall from the 2006 level to the 2011 level, and a 2.5% fall from 2018 to 2020.",
+   "limits": "A metropolitan-area index is not an appraisal of one building, and a rent-controlled building's value depends on its rents."
+  },
+  {
+   "publisher": "Federal Reserve Bank of St. Louis (data: Freddie Mac)",
+   "title": "30-year fixed mortgage average (weekly)",
+   "url": "https://fred.stlouisfed.org/series/MORTGAGE30US",
+   "verifies": [
+    "18.63 percent in the week of 9 October 1981",
+    "7.79 percent in the week of 26 October 2023"
+   ],
+   "checked": "CSV opened on the publisher's site on 11 November 2026 (two dated windows read)",
+   "id": "fred_mortgage",
+   "supports": "18.63 percent in the week of 9 October 1981 | 7.79 percent in the week of 26 October 2023",
+   "limits": ""
+  },
+  {
+   "publisher": "Federal Reserve Bank of St. Louis (data: Nasdaq)",
+   "title": "NASDAQ Composite Index (NASDAQCOM), daily",
+   "url": "https://fred.stlouisfed.org/series/NASDAQCOM",
+   "verifies": [
+    "NASDAQ Composite closed at 5,048.62 on 10 March 2000 (the dot-com peak) and 1,114.11 on 9 October 2002, about -78 percent (read from the series CSV)"
+   ],
+   "quote": "2000-03-10,5048.620 ... 2002-10-09,1114.110",
+   "checked": "opened in this session; values read from the series CSV served by FRED (2000-03-10 and 2002-09-25 to 2002-10-15 windows)",
+   "id": "fred_nasdaqcom",
+   "supports": "NASDAQ Composite closed at 5,048.62 on 10 March 2000 (the dot-com peak) and 1,114.11 on 9 October 2002, about -78 percent (read from the series CSV)",
+   "limits": ""
+  },
+  {
+   "publisher": "Federal Reserve Bank of St. Louis (data: Bureau of Labor Statistics)",
+   "title": "Unemployment rate (monthly)",
+   "url": "https://fred.stlouisfed.org/series/UNRATE",
+   "verifies": [
+    "10.8 percent in November and December 1982",
+    "14.8 percent in April 2020",
+    "10.0 percent in October 2009"
+   ],
+   "checked": "CSV opened on the publisher's site on 11 November 2026 (three dated windows read)",
+   "id": "fred_unrate",
+   "supports": "10.8 percent in November and December 1982 | 14.8 percent in April 2020 | 10.0 percent in October 2009",
+   "limits": ""
+  },
+  {
+   "publisher": "Federal Reserve Bank of St. Louis (data: Federal Housing Finance Agency)",
+   "title": "All-Transactions House Price Index for the United States (USSTHPI), quarterly",
+   "url": "https://fred.stlouisfed.org/data/USSTHPI",
+   "verifies": [
+    "National house price index (1980Q1=100): 380.31 in Jan 2007 fell to 308.14 in Apr 2012, about -19 percent (computed from the series table)",
+    "Q2 2026 value 719.87; Q1 2026 712.20; Q4 2025 707.22"
+   ],
+   "quote": "Q2 2026: 719.87 | All-Transactions House Price Index for the United States ... Source: U.S. Federal Housing Finance Agency via FRED",
+   "checked": "opened on the publisher's site in this session; the peak-to-trough change is computed from the full series table read there",
+   "id": "fred_ussthpi",
+   "supports": "National house price index (1980Q1=100): 380.31 in Jan 2007 fell to 308.14 in Apr 2012, about -19 percent (computed from the series table) | Q2 2026 value 719.87; Q1 2026 712.20; Q4 2025 707.22",
+   "limits": ""
+  },
+  {
+   "publisher": "Federal Reserve Bank of St. Louis (data: Federal Housing Finance Agency)",
+   "title": "All-transactions house price index for the United States",
+   "url": "https://fred.stlouisfed.org/series/USSTHPI",
+   "verifies": [
+    "Index peak of 380.31 in 2007Q1 and trough of 308.14 in 2012Q2, a decline of 19 percent (computed from the published series)"
+   ],
+   "checked": "full CSV opened on the publisher's site on 11 November 2026",
+   "id": "fred_usthpi",
+   "supports": "Index peak of 380.31 in 2007Q1 and trough of 308.14 in 2012Q2, a decline of 19 percent (computed from the published series)",
+   "limits": ""
+  },
+  {
+   "id": "frh_1929",
+   "publisher": "Federal Reserve History (Federal Reserve System)",
+   "title": "Stock Market Crash of 1929",
+   "url": "https://www.federalreservehistory.org/essays/stock-market-crash-of-1929",
+   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "supports": "The 1929 crash as the reference episode for a severe, prolonged equity decline.",
+   "limits": "Narrative history. The 1929 episode predates the FRED series used on this site and no numeric claim from it is modelled."
+  },
+  {
+   "publisher": "Federal Reserve History",
+   "title": "Stock Market Crash of 1987",
+   "url": "https://www.federalreservehistory.org/essays/stock-market-crash-of-1987",
+   "verifies": [
+    "The Dow Jones Industrial Average dropped 22.6 percent in a single trading session on 19 October 1987, the largest one-day percentage decline in history",
+    "The episode led to circuit-breaker rules that halt trading after large declines"
+   ],
+   "checked": "opened on the publisher's site on 11 November 2026",
+   "id": "frh_1987",
+   "supports": "The Dow Jones Industrial Average dropped 22.6 percent in a single trading session on 19 October 1987, the largest one-day percentage decline in history | The episode led to circuit-breaker rules that halt trading after large declines",
+   "limits": ""
+  },
+  {
+   "id": "frh_great_inflation",
+   "publisher": "Federal Reserve History (Federal Reserve System)",
+   "title": "The Great Inflation, 1965-1982",
+   "url": "https://www.federalreservehistory.org/essays/great-inflation",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "The inflation episode ran from 1965 to 1982, involved four recessions and two severe energy shortages, and reached more than 14 percent in 1980; it ended with a sustained policy change.",
+   "limits": "Narrative history. The numeric series used on this site are taken from the BLS/FRED series, not from this essay."
+  },
+  {
+   "id": "frh_great_recession",
+   "publisher": "Federal Reserve History (Federal Reserve System)",
+   "title": "The Great Recession of 2007-09",
+   "url": "https://www.federalreservehistory.org/essays/great-recession-of-200709",
+   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "supports": "The 2007-09 recession and the housing collapse as a modern analogue for a simultaneous fall in house prices and asset prices.",
+   "limits": "Narrative history. The numeric series used on this site are taken from the FHFA/FRED series, not from this essay."
+  },
+  {
+   "publisher": "Federal Reserve History",
+   "title": "Oil Shock of 1973-74",
+   "url": "https://www.federalreservehistory.org/essays/oil-shock-of-1973-74",
+   "verifies": [
+    "Production cuts by Arab producers nearly quadrupled the price of oil between 1973 and January 1974",
+    "The shock complicated monetary policy and contributed to the inflation of the 1970s"
+   ],
+   "checked": "opened on the publisher's site on 11 November 2026",
+   "id": "frh_oil",
+   "supports": "Production cuts by Arab producers nearly quadrupled the price of oil between 1973 and January 1974 | The shock complicated monetary policy and contributed to the inflation of the 1970s",
+   "limits": ""
+  },
+  {
+   "publisher": "Federal Reserve History",
+   "title": "The Great Recession (December 2007-June 2009)",
+   "url": "https://www.federalreservehistory.org/essays/great-recession-of-200709",
+   "verifies": [
+    "Real GDP fell 4.3 percent from 2007Q4 to 2009Q2, the largest postwar decline",
+    "Unemployment rose from 5 percent in December 2007 to a peak of 10 percent in October 2009",
+    "The S&P 500 fell 57 percent from its October 2007 peak to its trough in March 2009",
+    "Home prices fell about 30 percent on average from mid-2006 to mid-2009",
+    "The federal funds rate was cut from 5.25 percent in September 2007 to a range of 0 to 0.25 percent in December 2008"
+   ],
+   "checked": "opened on the publisher's site on 11 November 2026",
+   "id": "frh_recession",
+   "supports": "Real GDP fell 4.3 percent from 2007Q4 to 2009Q2, the largest postwar decline | Unemployment rose from 5 percent in December 2007 to a peak of 10 percent in October 2009 | The S&P 500 fell 57 percent from its October 2007 peak to its trough in March 2009 | Home prices fell about 30 percent on average from mid-2006 to mid-2009 | The federal funds rate was cut from 5.25 percent in September 2007 to a range of 0 to 0.25 percent in December 2008",
+   "limits": ""
+  },
+  {
+   "id": "ftb_cg",
+   "publisher": "California Franchise Tax Board",
+   "title": "Capital gains and losses",
+   "url": "https://www.ftb.ca.gov/file/personal/income-types/capital-gains-and-losses.html",
+   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "supports": "California does not have a separate lower rate for long-term capital gains; gains are taxed as ordinary income under the California rate schedules.",
+   "limits": "Rates and brackets must be read from the current-year schedules."
+  },
+  {
+   "id": "ftb_inheritance",
+   "publisher": "California Franchise Tax Board",
+   "title": "Gifts and inheritance - Personal income types",
+   "url": "https://www.ftb.ca.gov/file/personal/income-types/gifts-and-inheritance.html",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "A gift or inheritance is not included in California income; income the inherited property later produces (interest, dividends, rent, gain on a real property sale) is taxable.",
+   "limits": "Page last updated 24 September 2025. Federal treatment and California treatment can differ for the same receipt."
+  },
+  {
+   "id": "ftb_rates",
+   "publisher": "California Franchise Tax Board",
+   "title": "2025 California tax rate schedules (Form 540)",
+   "url": "https://www.ftb.ca.gov/forms/2025/2025-540-tax-rate-schedules.pdf",
+   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "supports": "The California marginal rate structure used to price a gain on sale.",
+   "limits": "This is the 2025 form. Later-year schedules must be used for a later-year sale."
+  },
+  {
+   "publisher": "GitHub",
+   "title": "Configuring a publishing source for your GitHub Pages site",
+   "url": "https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site",
+   "verifies": [
+    "A Pages site publishes either from a branch root or from a GitHub Actions workflow artifact",
+    "The source is set in the repository Settings under Pages"
+   ],
+   "quote": "You can configure a GitHub Pages site to publish from a branch or from a GitHub Actions workflow.",
+   "checked": "documented behaviour; the API attempt on this repository on 12 November 2026 returned HTTP 403 Resource not accessible by integration",
+   "id": "gh_pages_docs",
+   "supports": "A Pages site publishes either from a branch root or from a GitHub Actions workflow artifact | The source is set in the repository Settings under Pages",
+   "limits": ""
+  },
+  {
+   "publisher": "Federal Reserve Bank of St. Louis (data: Board of Governors of the Federal Reserve System)",
+   "title": "10-Year Treasury Constant Maturity Rate (GS10), annual average, 1977-2025",
+   "url": "https://fred.stlouisfed.org/series/GS10",
+   "verifies": [
+    "The annual average 10-year Treasury yield for every year from 1977 to 2025, used as the return on a Treasury held for that year",
+    "The range is 0.89% (2020) to 13.91% (1981)"
+   ],
+   "quote": "1977-01-01,7.42 ... 1981-01-01,13.91 ... 2020-01-01,0.89 ... 2024-01-01,4.21 ... 2025-01-01,4.29",
+   "checked": "annual average of daily yields read from the publisher's CSV export on its own domain on 12 November 2026 (annual, average, level)",
+   "status": "read",
+   "id": "gs10_annual",
+   "supports": "The annual average 10-year Treasury yield for every year from 1977 to 2025, used as the return on a Treasury held for that year | The range is 0.89% (2020) to 13.91% (1981)",
+   "limits": ""
+  },
+  {
+   "publisher": "Federal Reserve Bank of St. Louis (data: Federal Housing Finance Agency)",
+   "title": "All-Transactions House Price Index, metropolitan area of Property A (ATNHPIUS41940Q), annual, percent change, 1977-2025",
+   "url": "https://fred.stlouisfed.org/series/ATNHPIUS41940Q",
+   "verifies": [
+    "One annual house-price change for every year from 1977 to 2025 for the metropolitan area containing Property A",
+    "Eleven of those years were falls; the largest falls were 12.3% (2009) and 11.4% (2008), and the largest rise was 30.2% (1989)"
+   ],
+   "quote": "1977-01-01,28.44154 ... 1989-01-01,30.19487 ... 2008-01-01,-11.36730 ... 2009-01-01,-12.31781 ... 2022-01-01,15.09501 ... 2025-01-01,0.69254. Series page: Index 1995:Q1=100, Q2 2026: 558.75, source U.S. Federal Housing Finance Agency.",
+   "checked": "series page opened on the publisher's domain on 12 November 2026 (title, units, source and the latest observation read); the annual percent-change values read from the same domain's CSV export (annual, average, percent change from a year ago)",
+   "status": "read",
+   "id": "hpi_a_annual",
+   "supports": "One annual house-price change for every year from 1977 to 2025 for the metropolitan area containing Property A | Eleven of those years were falls; the largest falls were 12.3% (2009) and 11.4% (2008), and the largest rise was 30.2% (1989)",
+   "limits": ""
+  },
+  {
+   "publisher": "Federal Reserve Bank of St. Louis (data: Federal Housing Finance Agency)",
+   "title": "All-Transactions House Price Index, metropolitan division of Property B (ATNHPIUS41884Q), annual, percent change, 1977-2025",
+   "url": "https://fred.stlouisfed.org/series/ATNHPIUS41884Q",
+   "verifies": [
+    "One annual house-price change for every year from 1977 to 2025 for the metropolitan division containing Property B",
+    "Thirteen of those years were falls; the largest were 8.9% (2008) and 8.7% (2009); the largest rise was 23.4% (2000)"
+   ],
+   "quote": "1977-01-01,23.23613 ... 2000-01-01,23.44088 ... 2008-01-01,-8.86612 ... 2009-01-01,-8.65201 ... 2025-01-01,0.79376. Series page: Index 1995:Q1=100, Q2 2026: 506.53, source U.S. Federal Housing Finance Agency.",
+   "checked": "series page opened on the publisher's domain on 12 November 2026 (title, units, source and the latest observation read); annual percent-change values read from the same domain's CSV export",
+   "status": "read",
+   "id": "hpi_b_annual",
+   "supports": "One annual house-price change for every year from 1977 to 2025 for the metropolitan division containing Property B | Thirteen of those years were falls; the largest were 8.9% (2008) and 8.7% (2009); the largest rise was 23.4% (2000)",
+   "limits": ""
+  },
+  {
+   "publisher": "U.S. Department of Housing and Urban Development",
+   "title": "Fair Market Rents",
+   "url": "https://www.huduser.gov/portal/datasets/fmr.html",
+   "verifies": [
+    "Fair Market Rents are defined as 40th-percentile gross rents for standard quality units (24 CFR 888.113); the FY2027 documentation system and the 1983-present history files exist",
+    "No area-specific rent value was retrieved or used in any figure"
+   ],
+   "quote": "",
+   "checked": "NOT verified for any figure: the dataset documentation was opened on the publisher's site on 11 November 2026; area-specific values were deliberately not retrieved, to protect location privacy.",
+   "id": "hud_fmr",
+   "supports": "Fair Market Rents are defined as 40th-percentile gross rents for standard quality units (24 CFR 888.113); the FY2027 documentation system and the 1983-present history files exist | No area-specific rent value was retrieved or used in any figure",
+   "limits": ""
+  },
+  {
+   "id": "irs_2027",
+   "publisher": "Internal Revenue Service",
+   "title": "IRS releases tax inflation adjustments for tax year 2027 (IR-2026-133, 5 November 2026)",
+   "url": "https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "For decedents dying during 2027 the basic exclusion amount is $15,480,000; the annual gift exclusion for 2027 is $20,000 per recipient (up from $19,000 for 2026); the 2027 standard deduction is $33,200 for married filing jointly; the top marginal income rate remains 37%.",
+   "limits": "These are indexed statutory amounts for one year, not a forecast for later years."
+  },
+  {
+   "id": "irs_basis",
+   "publisher": "Internal Revenue Service",
+   "title": "Gifts and inheritances - inherited property basis and sale",
+   "url": "https://www.irs.gov/faqs/interest-dividends-other-types-of-income/gifts-inheritances/gifts-inheritances",
+   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "supports": "Property acquired from a decedent generally takes a basis equal to its fair market value at the date of death, so gain on an immediate resale is normally near zero.",
+   "limits": "Special rules apply to community property, to property acquired by gift within one year of death, to income in respect of a decedent and to certain trusts. This is not an exhaustive basis analysis."
+  },
+  {
+   "id": "irs_estate",
+   "publisher": "Internal Revenue Service",
+   "title": "Estate tax",
+   "url": "https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "The federal gross estate is measured at fair market value at date of death; the filing threshold by year of death (2026: $15,000,000); the surviving-spouse portability election on a timely filed estate return.",
+   "limits": "A filing threshold is not a complete tax computation. Prior taxable gifts, deductions, elections, ownership form and later law can change the result."
+  },
+  {
+   "id": "irs_i706",
+   "publisher": "Internal Revenue Service",
+   "title": "Instructions for Form 706, United States Estate (and Generation-Skipping Transfer) Tax Return",
+   "url": "https://www.irs.gov/instructions/i706",
+   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "supports": "The estate tax rate schedule, the unified credit computation, the portability election and the valuation-date rules.",
+   "limits": "This site does not restate the rate schedule; the instructions are the controlling document."
+  },
+  {
+   "id": "irs_p523",
+   "publisher": "Internal Revenue Service",
+   "title": "Publication 523 (2025), Selling Your Home",
+   "url": "https://www.irs.gov/publications/p523",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "The ownership and residence tests, the look-back rule and the exceptions for the exclusion of gain on the sale of a main home; separate treatment for the part of a home used for business or rental and for nonqualified use after 2008.",
+   "limits": "Dollar limits and worksheets must be read in the current-year publication."
+  },
+  {
+   "id": "irs_p527",
+   "publisher": "Internal Revenue Service",
+   "title": "Publication 527, Residential Rental Property",
+   "url": "https://www.irs.gov/publications/p527",
+   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "supports": "Rental income and expenses, depreciation of residential rental property, and the treatment of property converted between personal and rental use.",
+   "limits": "Depreciation lives, conventions and recapture rules must be read in the current-year publication."
+  },
+  {
+   "publisher": "Internal Revenue Service",
+   "title": "Publication 925 (2025), Passive Activity and At-Risk Rules",
+   "url": "https://www.irs.gov/pub/irs-pdf/p925.pdf",
+   "verifies": [
+    "Rental losses are passive and generally deductible only against passive income",
+    "A special allowance of up to $25,000 phases out above $100,000 of modified adjusted gross income"
+   ],
+   "quote": "The maximum special allowance of $25,000 ... is reduced by 50% of the amount of your modified adjusted gross income that is more than $100,000.",
+   "checked": "official-domain search excerpt read in this session (full document not opened)",
+   "id": "irs_p925",
+   "supports": "Rental losses are passive and generally deductible only against passive income | A special allowance of up to $25,000 phases out above $100,000 of modified adjusted gross income",
+   "limits": ""
+  },
+  {
+   "id": "irs_rmd",
+   "publisher": "Internal Revenue Service",
+   "title": "Retirement plan and IRA required minimum distributions FAQs",
+   "url": "https://www.irs.gov/retirement-plans/retirement-plan-and-ira-required-minimum-distributions-faqs",
+   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "supports": "Distribution rules for inherited retirement accounts, which matter because inherited retirement assets are income in respect of a decedent and are not covered by the basis step-up.",
+   "limits": "The 10-year rule and its exceptions are fact-specific; this site does not restate them."
+  },
+  {
+   "publisher": "Internal Revenue Service",
+   "title": "Revenue Procedure 2025-32",
+   "url": "https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",
+   "verifies": [
+    "The basic exclusion amount is indexed for inflation for 2027 and later years"
+   ],
+   "quote": "The basic exclusion amount will be adjusted for inflation for calendar year 2027 and future years.",
+   "checked": "official-domain search excerpt read in this session (full document not opened)",
+   "id": "irs_rp2532",
+   "supports": "The basic exclusion amount is indexed for inflation for 2027 and later years",
+   "limits": ""
+  },
+  {
+   "publisher": "Internal Revenue Service",
+   "title": "Revenue Procedure 2026-35, section 3.44",
+   "url": "https://www.irs.gov/pub/irs-drop/rp-26-35.pdf",
+   "verifies": [
+    "For calendar year 2027 the basic exclusion amount under section 2010(c)(3) is $15,480,000"
+   ],
+   "quote": ".44 Basic Exclusion Amount for Estate Tax. For calendar year 2027, the basic exclusion amount under § 2010(c)(3) is $15,480,000.",
+   "checked": "official-domain search excerpt read in this session (full document not opened)",
+   "id": "irs_rp2635",
+   "supports": "For calendar year 2027 the basic exclusion amount under section 2010(c)(3) is $15,480,000",
+   "limits": ""
+  },
+  {
+   "publisher": "Internal Revenue Service",
+   "title": "Revenue Ruling 2023-2",
+   "url": "https://www.irs.gov/pub/irs-drop/rr-23-02.pdf",
+   "verifies": [
+    "Assets of an irrevocable grantor trust that are not included in the gross estate get no basis adjustment at death",
+    "Property the decedent placed in a trust that stayed revocable is treated as acquired from the decedent (section 1014(b)(2) and (3))"
+   ],
+   "quote": "the basis of Asset is not adjusted to its fair market value on the date of A's death under § 1014 because Asset was not acquired or passed from a decedent as defined in § 1014(b).",
+   "checked": "opened on the publisher's site in this session",
+   "id": "irs_rr2023_2",
+   "supports": "Assets of an irrevocable grantor trust that are not included in the gross estate get no basis adjustment at death | Property the decedent placed in a trust that stayed revocable is treated as acquired from the decedent (section 1014(b)(2) and (3))",
+   "limits": ""
+  },
+  {
+   "id": "irs_tc409",
+   "publisher": "Internal Revenue Service",
+   "title": "Topic no. 409, Capital gains and losses",
+   "url": "https://www.irs.gov/taxtopics/tc409",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "Net capital gain rates of 0%, 15% and 20% by taxable income; 25% maximum rate on unrecaptured section 1250 gain from section 1250 real property; 28% maximum for collectibles and certain small-business stock; the $3,000 annual limit on deducting excess capital losses.",
+   "limits": "The page shows 2025 taxable-income thresholds. Thresholds are indexed and change each year."
+  },
+  {
+   "id": "irs_tc559",
+   "publisher": "Internal Revenue Service",
+   "title": "Topic no. 559, Net investment income tax",
+   "url": "https://www.irs.gov/taxtopics/tc559",
+   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "supports": "The 3.8% net investment income tax applies to individuals with net investment income above the statutory threshold amounts.",
+   "limits": "Threshold amounts and the definition of net investment income are not restated on this site; verify against the current-year topic."
+  },
+  {
+   "publisher": "Internal Revenue Service",
+   "title": "Topic no. 701, Sale of your home",
+   "url": "https://www.irs.gov/taxtopics/tc701",
+   "verifies": [
+    "Up to $250,000 of gain ($500,000 on a joint return) on a main home can be excluded",
+    "The owner must have owned and lived in the home for 2 of the 5 years before the sale"
+   ],
+   "quote": "you may qualify to exclude up to $250,000 of that gain from your income, or up to $500,000 of that gain if you file a joint return with your spouse.",
+   "checked": "opened on the publisher's site in this session",
+   "id": "irs_tc701",
+   "supports": "Up to $250,000 of gain ($500,000 on a joint return) on a main home can be excluded | The owner must have owned and lived in the home for 2 of the 5 years before the sale",
+   "limits": ""
+  },
+  {
+   "id": "irs_whatsnew",
+   "publisher": "Internal Revenue Service",
+   "title": "What's new - Estate and gift tax",
+   "url": "https://www.irs.gov/businesses/small-businesses-self-employed/whats-new-estate-and-gift-tax",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "Public Law 119-21 (the Working Families Tax Cuts, signed 4 July 2025) amended section 2010(c)(3) by increasing the basic exclusion amount to $15,000,000 for calendar year 2026.",
+   "limits": "The 2026 amount is year-specific. The page is not a forecast of later law."
+  },
+  {
+   "publisher": "California Legislative Analyst's Office",
+   "title": "Analysis of proposed initiative A.G. File No. 25-0017: property tax rules for inherited property",
+   "url": "https://www.lao.ca.gov/ballot/2025/250422.pdf",
+   "verifies": [
+    "The proposal would reverse most of Proposition 19's inheritance changes from 1 January 2027, including for transfers since 16 February 2021",
+    "Inherited primary homes would be fully excluded regardless of value",
+    "Other inherited property would be excluded on the first $1 million of combined value"
+   ],
+   "quote": "Beginning January 1, 2027, the measure reverses most of the major changes made by Proposition 19. The expanded special rules would apply to future property transfers. The rules would also apply to properties that have transferred since Proposition 19 took effect on February 16, 2021.",
+   "checked": "opened on the publisher's site in this session",
+   "id": "lao_250017",
+   "supports": "The proposal would reverse most of Proposition 19's inheritance changes from 1 January 2027, including for transfers since 16 February 2021 | Inherited primary homes would be fully excluded regardless of value | Other inherited property would be excluded on the first $1 million of combined value",
+   "limits": ""
+  },
+  {
+   "publisher": "Federal Reserve Bank of St. Louis (data: Nasdaq)",
+   "title": "NASDAQ Composite (NASDAQCOM), annual average, percent change, 1977-2025",
+   "url": "https://fred.stlouisfed.org/series/NASDAQCOM",
+   "verifies": [
+    "One annual index change for every year from 1977 to 2025, used as the equity return of that year",
+    "Nine of those years were falls; the largest were 46.2% (2001) and 24.3% (2002); the largest rise was 52.0% (1999)",
+    "The index change excludes dividends, so the model adds its own dividend assumption on top"
+   ],
+   "quote": "1977-01-01,9.80223 ... 1999-01-01,51.99372 ... 2001-01-01,-46.21639 ... 2002-01-01,-24.33737 ... 2025-01-01,18.86735. Series page: 2026-11-11 close 25,466.190, Index Feb 5, 1971=100.",
+   "checked": "series page and its CSV export opened on the publisher's domain on 12 November 2026; the export is an annual average of daily closes, so an intra-year peak or trough is averaged away",
+   "status": "read",
+   "id": "nasdaq_annual",
+   "supports": "One annual index change for every year from 1977 to 2025, used as the equity return of that year | Nine of those years were falls; the largest were 46.2% (2001) and 24.3% (2002); the largest rise was 52.0% (1999) | The index change excludes dividends, so the model adds its own dividend assumption on top",
+   "limits": ""
+  },
+  {
+   "id": "nyfed_covid",
+   "publisher": "Federal Reserve Bank of New York, Liberty Street Economics",
+   "title": "The COVID-19 Pandemic and the Fed's Response",
+   "url": "https://libertystreeteconomics.newyorkfed.org/2020/04/the-covid-19-pandemic-and-the-feds-response/",
+   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "supports": "The 2020 shock and the policy response, used as the reference episode for a fast, policy-driven reversal.",
+   "limits": "Narrative commentary. The numeric series used on this site are taken from the BLS/FRED series."
+  },
+  {
+   "id": "prob16061_7",
+   "publisher": "California Legislative Information",
+   "title": "Probate Code section 16061.7 - notice to heirs and beneficiaries on a revocable trust becoming irrevocable",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PROB&sectionNum=16061.7",
+   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "supports": "The trustee's duty to notify heirs and beneficiaries when a revocable trust becomes irrevocable, and the contents of that notice, used in the step-by-step inheritance page.",
+   "limits": "Timing and service rules must be read from the current statute."
+  },
+  {
+   "id": "rtc11911",
+   "publisher": "California Legislative Information",
+   "title": "Revenue and Taxation Code section 11911 - county documentary transfer tax rate",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=11911",
+   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "supports": "The county documentary transfer tax rate authorised by state law, used here for the sale-cost estimate on Property A.",
+   "limits": "A city may add its own transfer tax on top of the county tax. Whether the city of Property A does so is flagged for review and is not verified on this site."
+  },
+  {
+   "publisher": "California Legislative Information",
+   "title": "Revenue and Taxation Code section 11930",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=11930",
+   "verifies": [
+    "A transfer by gift or by reason of death, outright or in trust, is exempt from documentary transfer tax"
+   ],
+   "quote": "Any tax imposed pursuant to this part shall not apply to any deed ... if by reason of such inter vivos gift or by reason of the death of any person, such lands ... are transferred outright to, or in trust for the benefit of, any person or entity.",
+   "checked": "opened on the publisher's site in this session",
+   "id": "rtc11930",
+   "supports": "A transfer by gift or by reason of death, outright or in trust, is exempt from documentary transfer tax",
+   "limits": ""
+  },
+  {
+   "publisher": "California Legislative Information",
+   "title": "Revenue and Taxation Code section 13301",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=13301",
+   "verifies": [
+    "Neither the state nor any city or county may impose a gift, inheritance or estate tax",
+    "The section was enacted by initiative, Proposition 6 of June 1982"
+   ],
+   "quote": "Neither the state nor any political subdivision of the state shall impose any gift, inheritance, succession, legacy, income, or estate tax, or any other tax, on gifts or on the estate or inheritance of any person or on or by reason of any transfer occurring by reason of a death.",
+   "checked": "opened on the publisher's site on 11 November 2026 (third pass): the state and every political subdivision are barred from gift, inheritance, estate or death-transfer taxes",
+   "id": "rtc13301",
+   "supports": "Neither the state nor any city or county may impose a gift, inheritance or estate tax | The section was enacted by initiative, Proposition 6 of June 1982",
+   "limits": ""
+  },
+  {
+   "publisher": "California Legislative Information",
+   "title": "Revenue and Taxation Code section 17043 (additional 1% tax above $1,000,000)",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=17043",
+   "verifies": [
+    "For taxable years beginning on or after 1 January 2005 an additional tax of 1% applies to the portion of taxable income above $1,000,000",
+    "The additional tax is imposed in addition to any other taxes imposed by Part 10"
+   ],
+   "quote": "in addition to any other taxes imposed by this part, an additional tax shall be imposed at the rate of 1 percent on that portion of a taxpayer's taxable income in excess of one million dollars ($1,000,000).",
+   "checked": "opened on the publisher's site on 12 November 2026 (arena/593368ef-tino3): the 1% rate and the $1,000,000 threshold, added to the graduated rates; the published sensitivity applies it to the taxable gain alone, a lower bound",
+   "id": "rtc17043",
+   "supports": "For taxable years beginning on or after 1 January 2005 an additional tax of 1% applies to the portion of taxable income above $1,000,000 | The additional tax is imposed in addition to any other taxes imposed by Part 10",
+   "limits": ""
+  },
+  {
+   "id": "rtc480",
+   "publisher": "California Legislative Information",
+   "title": "Revenue and Taxation Code section 480 - change in ownership statement",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=480",
+   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "supports": "The requirement to file a change in ownership statement with the county assessor after a transfer, used in the step-by-step inheritance page.",
+   "limits": "Deadlines and penalties must be read from the current statute."
+  },
+  {
+   "id": "rtc51",
+   "publisher": "California Legislative Information",
+   "title": "Revenue and Taxation Code section 51",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=51",
+   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "supports": "The statutory basis for the annual inflation adjustment to base year value and the lesser-of rule that can reduce a value below the inflation-adjusted amount.",
+   "limits": "The lesser-of rule is assessor-applied; a decline does not automatically reset the base year value."
+  },
+  {
+   "id": "rtc63_2",
+   "publisher": "California Legislative Information",
+   "title": "Revenue and Taxation Code section 63.2",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=63.2",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "The statutory text of the intergenerational transfer exclusion: the one-year principal-residence requirement, the homeowners'/disabled veterans' exemption filing requirement, removal of the exclusion when the exemption is lost, the claim-filing requirement, the confidentiality of the claim, and the new taxable value formula (existing taxable value plus the fair market value above the existing taxable value plus $1,000,000).",
+   "limits": "Section 63.2 was amended by SB 974 (Chapter 665, Statutes of 2026); read the current text."
+  },
+  {
+   "id": "sb974",
+   "publisher": "California Legislative Information",
+   "title": "SB-974, Property taxation: change in ownership: generational transfers: special needs trusts (Chapter 665, Statutes of 2026)",
+   "url": "https://leginfo.legislature.ca.gov/faces/billStatusClient.xhtml?bill_id=202520260SB974",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "Introduced 4 February 2026, approved by the Governor and chaptered 27 September 2026. Amends Revenue and Taxation Code section 63.2 so that a court-established special needs trust must be considered an eligible medium of transfer for the intergenerational transfer exclusion.",
+   "limits": "Relevant only if a transferee is a person with a disability for whom a special needs trust has been established. It does not change the value cap or the occupancy requirement."
+  },
+  {
+   "id": "scc_ratebook",
+   "publisher": "County of Santa Clara, Controller-Treasurer / Department of Finance",
+   "title": "Compilation of Tax Rates & Information, Fiscal Year 2025-2026",
+   "url": "https://files.santaclaracounty.gov/exjcpb1531/2025-11/tax-rate-book-2025-2026.pdf",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "By law the tax rate is limited to 1% of assessed value plus amounts required for voter-approved bond indebtedness; assessed value increases each year by the change in the California CPI or 2%, whichever is less; the county had 816 tax rate areas in fiscal year 2025-26; secured tax instalment and delinquency dates.",
+   "limits": "The book runs to 185 pages of tax rate areas. This site does not publish the property's tax rate area, so the exact published rate for the parcel is left to the owner to read from the book and is flagged for review."
+  },
+  {
+   "id": "scc_recorder",
+   "publisher": "County of Santa Clara, Clerk-Recorder",
+   "title": "Recording real estate documents",
+   "url": "https://clerkrecorder.santaclaracounty.gov/recording-documents/recording-real-estate",
+   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "supports": "The official county route for recording a deed or a trust transfer deed and for confirming the recording fees and any transfer tax due.",
+   "limits": "Fee schedules change; confirm with the Recorder at the time of transfer."
+  },
+  {
+   "id": "sco_estate",
+   "publisher": "California State Controller's Office",
+   "title": "California Estate Tax",
+   "url": "https://www.sco.ca.gov/ardtax_estate_tax.html",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "For decedents dying on or after 1 January 2005 there is no longer a requirement to file a California estate tax return; the California generation-skipping transfer tax does not apply after 31 December 2004.",
+   "limits": "Pre-1982 inheritance and gift tax and 1982-2004 filing duties are outside this decision and are not covered."
+  },
+  {
+   "id": "sf_file261020",
+   "publisher": "City and County of San Francisco, Board of Supervisors",
+   "title": "File No. 261020 - proposed limitation on combined banked and capital improvement rent increases",
+   "url": "https://sfgov.legistar.com/LegislationDetail.aspx?ID=8217304&GUID=7EDA4662-EBFB-4AF5-962F-C669B64AA770",
+   "checked": "Referenced from the official San Francisco Rent Board page, posted 9 November 2026, and opened on the official legistar domain on 2026-11-13.",
+   "supports": "As currently proposed the legislation would temporarily limit the combined amount of banked rent increases and capital improvement rent increases on rent-controlled units to 10% per year, applying to banked increases noticed on or after 15 September 2026 and capital improvement petitions filed on or after that date.",
+   "limits": "The Rent Board states plainly: this legislation has not been enacted and is subject to change. Do not treat it as law."
+  },
+  {
+   "id": "sf_recorder_fees",
+   "publisher": "City and County of San Francisco, Assessor-Recorder",
+   "title": "Fees to record a document in San Francisco",
+   "url": "https://www.sf.gov/reports--march-2024--fees-record-document-san-francisco",
+   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "supports": "The official San Francisco recording fee schedule, used for the transfer-cost estimate on Property B.",
+   "limits": "The schedule is dated March 2024 and fees change. San Francisco also has a separate tiered real property transfer tax whose rates this site does not publish because no official current rate table was retrieved."
+  },
+  {
+   "id": "sf_rent_increase",
+   "publisher": "City and County of San Francisco, Rent Board",
+   "title": "Learn about rent increases in San Francisco",
+   "url": "https://www.sf.gov/learn-about-rent-increases-san-francisco",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "The allowed rent increase is 1.6% effective 1 March 2026 through 28 February 2027, based on 60% of the increase in the Bay Area CPI; one increase every 12 months; there is no limit on the initial rent for an empty rent-controlled unit; banked increases; 30-day and 90-day notice rules; a rent increase licence is required.",
+   "limits": "Applies to units covered by the San Francisco Rent Ordinance. Coverage depends on the building, its age and its exemption status, which this site does not verify."
+  },
+  {
+   "id": "sf_treas_rate",
+   "publisher": "City and County of San Francisco, Treasurer and Tax Collector",
+   "title": "Secured Property Taxes",
+   "url": "https://sftreasurer.org/property/secured-property-taxes",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "The secured property tax rate for fiscal year 2026-27 is 1.18162182%; a supplemental assessment is issued after a change in ownership on the difference between the new value and the prior value; instalment and delinquency dates.",
+   "limits": "The ad valorem rate is one part of the bill. San Francisco bills also carry voter-approved parcel taxes, bonds and other fixed charges, which is why the total bill is a larger share of assessed value than the rate alone suggests."
+  },
+  {
+   "publisher": "City B water and sewer utility",
+   "title": "Rate schedules and fees for water and sewer service, fiscal years 2026-27 and 2027-28",
+   "url": "https://www.sfpuc.gov/sites/default/files/accounts-and-services/Rates_Schedule_Water_Sewer_2026-7.pdf",
+   "verifies": [
+    "Schedule W-1A sets the charges for single-family service: a fixed monthly service charge by meter size, then a two-tier volumetric charge",
+    "Schedule W-1B sets the charges for a building of two or more dwelling units: the same fixed monthly service charge, then a volumetric allowance of three units per dwelling unit per month at the lower tier and a higher tier after that",
+    "The commission approved two years of rates in April 2026; the FY 2026-27 rates apply from 1 July 2026 and the FY 2027-28 rates from 1 July 2027"
+   ],
+   "quote": "Schedule W-1B: Multi-Family Residential Service ... Applicable to multi-family accounts ... consisting of two or more dwelling units served through a separate meter or bank of meters",
+   "checked": "opened on the publisher's site on 13 November 2026: the FY 2026-27 and FY 2027-28 schedule was read, including schedules W-1A and W-1B and the note that the commission approved two years of rates in April 2026. Unit prices are shown on the property pages rounded to the nearest dollar; they are unit prices, not property amounts",
+   "id": "sfpuc_rates",
+   "supports": "Schedule W-1A sets the charges for single-family service: a fixed monthly service charge by meter size, then a two-tier volumetric charge | Schedule W-1B sets the charges for a building of two or more dwelling units: the same fixed monthly service charge, then a volumetric allowance of three units per dwelling unit per month at the lower tier and a higher tier after that | The commission approved two years of rates in April 2026; the FY 2026-27 rates apply from 1 July 2026 and the FY 2027-28 rates from 1 July 2027",
+   "limits": ""
+  },
+  {
+   "id": "sos_measures",
+   "publisher": "California Secretary of State",
+   "title": "Qualified Statewide Ballot Measures",
+   "url": "https://www.sos.ca.gov/elections/ballot-measures/qualified-ballot-measures",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "The fourteen measures qualified for the 3 November 2026 statewide general election, and the measures already qualified for 2028.",
+   "limits": "The list is limited to statewide measures. Local measures are not listed."
+  },
+  {
+   "publisher": "California Secretary of State",
+   "title": "County Clerk/Registrar of Voters Memorandum 26138 (18 May 2026)",
+   "url": "https://elections.cdn.sos.ca.gov/ccrov/2026/may/26138jh.pdf",
+   "verifies": [
+    "The initiative titled 'Repeals voter-enacted changes to property tax rules for transfers between family members' failed: the signatures filed were below the number required"
+   ],
+   "quote": "the total number of signatures for the hereinafter named initiative filed with all county elections officials is less than 100 percent of the number of qualified voters required to find the petition sufficient; therefore, the petition has failed.",
+   "checked": "opened on the publisher's site on 11 November 2026 (third pass): CC/ROV Memorandum 26138 of 18 May 2026 records that the petition FAILED for insufficient signatures",
+   "id": "sos_memo",
+   "supports": "The initiative titled 'Repeals voter-enacted changes to property tax rules for transfers between family members' failed: the signatures filed were below the number required",
+   "limits": ""
+  },
+  {
+   "id": "sos_results",
+   "publisher": "California Secretary of State",
+   "title": "State Ballot Measures - Statewide Results, 2026 General Election",
+   "url": "https://electionresults.sos.ca.gov/returns/ballot-measures",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "Unofficial results as of 12 November 2026 with 23,860 of 23,860 precincts partially reporting; results will be certified by 11 December 2026. Proposition 3 (extension of the existing tax on high incomes) yes 60.7%; Proposition 40 (one-time tax on certain taxpayers) no 52.4%; Proposition 42 (no new state personal property taxes) yes 51.4%; Proposition 43 (limit on local revenue votes) no 57.5%; Proposition 41 (spending-limit audits) no 55.1%; Proposition 37 (middle-income buyer loans) yes 62.4%.",
+   "limits": "These are unofficial results. They change during the canvass and are not final until certified on 11 December 2026. Treat every figure as provisional."
+  },
+  {
+   "id": "ssa_trustees",
+   "publisher": "Social Security Administration",
+   "title": "2026 OASDI Trustees Report, Assumptions about the Future",
+   "url": "https://www.ssa.gov/oact/tr/2026/II_C_assump.html",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "Official long-range economic assumptions: intermediate CPI-W change 2.4% a year, low-cost 3.0%, high-cost 1.8%; the intermediate annual trust fund new-issue real interest rate for 2044 and later is 2.3% (low-cost 2.8%, high-cost 1.8%), giving an intermediate nominal yield near 4.7%.",
+   "limits": "These are Trust Fund assumptions for a 75-year social insurance projection, not an investment forecast. The Trustees do not publish an equity return assumption here, so the equity return used on this site is a stated scenario, not an official number."
+  },
+  {
+   "publisher": "U.S. Department of the Treasury",
+   "title": "Daily Treasury par yield curve rates, November 2026",
+   "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value_month=202611",
+   "verifies": [
+    "On 9 November 2026 the par yields were 4.38% (1 year), 4.67% (5 years), 4.88% (10 years) and 5.26% (30 years)"
+   ],
+   "quote": "11/09/2026 | ... | 4.38 | 4.56 | 4.58 | 4.67 | 4.76 | 4.88 | 5.29 | 5.26",
+   "checked": "opened on the publisher's site in this session; re-checked on the publisher's site on 11 November 2026",
+   "id": "treasury_cmt",
+   "supports": "On 9 November 2026 the par yields were 4.38% (1 year), 4.67% (5 years), 4.88% (10 years) and 5.26% (30 years)",
+   "limits": ""
+  },
+  {
+   "publisher": "Federal Retirement Thrift Investment Board",
+   "title": "Thrift Savings Plan: rates of return",
+   "url": "https://www.tsp.gov/fund-performance/",
+   "verifies": [
+    "The C Fund, which tracks the S&P 500 index, returned 12.09% from November 2025 to October 2026",
+    "Its long-run average was not readable on the official page in this session"
+   ],
+   "quote": "C Fund ... Inception date: January 29, 1988 ... 12.09% ... S&P 500 C Fund Benchmark Index 12.11%",
+   "checked": "opened on the publisher's site in this session",
+   "id": "tsp_returns",
+   "supports": "The C Fund, which tracks the S&P 500 index, returned 12.09% from November 2025 to October 2026 | Its long-run average was not readable on the official page in this session",
+   "limits": ""
+  },
+  {
+   "id": "uscode102",
+   "publisher": "U.S. Government Publishing Office (GovInfo)",
+   "title": "26 U.S.C. section 102 - gifts and inheritances excluded from gross income",
+   "url": "https://www.govinfo.gov/content/pkg/USCODE-2022-title26/html/USCODE-2022-title26-subtitleA-chap1-subchapB-partIII-sec102.htm",
+   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "supports": "Gross income does not include the value of property acquired by gift, bequest, devise or inheritance.",
+   "limits": "Section 102 excludes the receipt; it does not exclude later income from the property, and income in respect of a decedent is taxed under other provisions."
+  },
+  {
+   "publisher": "U.S. Government Publishing Office (GovInfo)",
+   "title": "31 U.S.C. 3124, Exemption from taxation (United States Code, 2023 edition)",
+   "url": "https://www.govinfo.gov/content/pkg/USCODE-2023-title31/html/USCODE-2023-title31-subtitleIII-chap31-subchapII-sec3124.htm",
+   "verifies": [
+    "Obligations of the United States Government, and the interest on them, are exempt from taxation by a State or political subdivision of a State",
+    "The exemption does not extend to an estate or inheritance tax, and it does not override the Internal Revenue Code for federal income tax",
+    "Gain or loss on disposing of Treasury obligations is decided under the Internal Revenue Code, not by the state-tax exemption"
+   ],
+   "quote": "(a) Stocks and obligations of the United States Government are exempt from taxation by a State or political subdivision of a State. ... (2) an estate or inheritance tax.",
+   "checked": "opened on the publisher's site on 11 November 2026: the full section text was read on govinfo.gov",
+   "id": "uscode3124",
+   "supports": "Obligations of the United States Government, and the interest on them, are exempt from taxation by a State or political subdivision of a State | The exemption does not extend to an estate or inheritance tax, and it does not override the Internal Revenue Code for federal income tax | Gain or loss on disposing of Treasury obligations is decided under the Internal Revenue Code, not by the state-tax exemption",
+   "limits": ""
+  },
+  {
+   "id": "voterguide_p3",
+   "publisher": "California Secretary of State, Official Voter Information Guide",
+   "title": "Proposition 3 - Provides Permanent Funding for Schools and Health Care by Extending Existing Tax on High Incomes",
+   "url": "https://voterguide.sos.ca.gov/propositions/3/index.htm",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "Makes permanent the existing voter-approved tax rates for individuals earning over $371,000 (adjusted annually for inflation), which would otherwise expire in 2031; fiscal impact maintains $5 billion to $15 billion of annual state income tax revenue; the revenue is allocated to public education.",
+   "limits": "Rates and thresholds are those in the existing statute; read the current-year Franchise Tax Board schedules for the exact brackets."
+  },
+  {
+   "id": "voterguide_p40",
+   "publisher": "California Secretary of State, Official Voter Information Guide",
+   "title": "Proposition 40 - Imposes One-Time Tax on Certain Taxpayers",
+   "url": "https://voterguide.sos.ca.gov/propositions/40/index.htm",
+   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "supports": "The official title and summary of the proposed one-time tax on certain taxpayers, which appears to have been defeated at the 3 November 2026 election.",
+   "limits": "Defeated on unofficial results. Not law. Recorded because a future version could return to the ballot and would change the cash-inheritance arithmetic."
+  },
+  {
+   "id": "rtc63_2_eligibility",
+   "publisher": "California Legislative Information",
+   "title": "Revenue and Taxation Code section 63.2, intergenerational transfer exclusion (full text)",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=63.2",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "Subdivision (a)(1) excludes only a purchase or transfer of a principal residence between parents and their children, or between grandparents and their grandchildren where every parent of the grandchild who qualifies as a child of the grandparent is deceased. Subdivision (e)(1) defines 'children' to include a stepchild, a son-in-law or daughter-in-law, a child adopted before age 18, and a foster child of a licensed foster parent where adoption was barred. Subdivision (e)(9) treats a transfer through an inter vivos or testamentary trust as a transfer. Subdivision (f)(1)(A) sets the three-year claim period, ending earlier on transfer to a third party or when the transferee stops occupying.",
+   "limits": "The statute states the conditions; it does not confirm any particular family's facts. Only the trust instrument and the deed can do that."
+  },
+  {
+   "id": "rtc11930_trust",
+   "publisher": "California Legislative Information",
+   "title": "Revenue and Taxation Code section 11930, documentary transfer tax exemptions",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=11930",
+   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "supports": "No documentary transfer tax is imposed on a deed or other writing where the property is transferred outright, or in trust for the benefit of any person or entity, by reason of an inter vivos gift or by reason of the death of any person.",
+   "limits": "States the exemption; it does not decide whether a particular trust distribution is a gift or a death transfer, which is a question for the county recorder and counsel."
+  }
+ ]
 }
