@@ -212,6 +212,18 @@ def run_paths(inherit_year: int, g: float, infl: float, eq: float, drag: float,
                               gain_rate, rec_rate, deprec)
     rent_cash = rent_accumulated(horizon)
 
+    # Path 6: phased investing - sell at inheritance, park the sale proceeds in short-term
+    # Treasuries for the parking period (24-36 months), then phase into equities for the
+    # remainder of the horizon. This is the crash-entry softener: it tests whether keeping the
+    # proceeds out of equities through the first market shock (1929/2008 style) and buying in
+    # afterwards improves the terminal value versus going fully into equities on day one.
+    phase_months = float(ASM["phased_investing_park_months"]["baseline"])
+    phase_years = phase_months / 12.0
+    invest_years = max(0.0, horizon - phase_years)
+    tsy_short = ASM["short_term_treasury_yield"]["baseline"]
+    parked = sale["net"] * (1 + tsy_short) ** phase_years
+    phase_terminal = parked * (1 + eq - drag) ** invest_years
+
     # Path 5: live in it for two years, then let it out for the rest
     tax_h1 = tax_path(taxable_live, fit_T, inherit_year, infl, 2)
     fit_T2 = dict(fit_T)
@@ -252,6 +264,10 @@ def run_paths(inherit_year: int, g: float, infl: float, eq: float, drag: float,
                          "cost_total": money10(cost_rent),
                          "rent_income_total": money10(rent_cash),
                          "depreciation": money10(deprec), "sale": rent_sale},
+            "sell_then_phase": {"terminal": money10(phase_terminal), "outflow": 0,
+                                "start": sale["net"], "sale": sale,
+                                "parked": money10(parked),
+                                "invest_years": invest_years},
             "live_then_rent": {"terminal": money10(hybrid_sale["net"] + hybrid_cash),
                                "outflow": money10(tax_h1 + tax_h2 + cost_h),
                                "tax_total": money10(tax_h1 + tax_h2),
@@ -478,6 +494,37 @@ def sensitivity(target_year: int):
             best = max(terms, key=terms.get)
             rows.append({"house_growth": pct(g, 1), "equity_return": pct(eq, 1),
                          **{k: v for k, v in terms.items()}, "best": best})
+    return rows
+
+
+def sensitivity_fine():
+    """Best path across a fine grid of house growth and equity return.
+
+    A what-if map: for each combination it prices every path at a 2045
+    inheritance and names the winner. Computed by the same model as the
+    published pages; no randomness, no invented inputs.
+    """
+    rows = []
+    for g in (i / 100.0 for i in range(0, 10)):
+        cells = []
+        for eq in (i / 100.0 for i in range(3, 11)):
+            res = run_paths(inherit_year=2045, g=g, infl=ASM["inflation"]["baseline"],
+                            eq=eq, drag=ASM["equity_tax_drag"]["baseline"],
+                            tsy=ASM["treasury_yield_nominal"]["baseline"],
+                            cap_growth=ASM["prop19_cap_growth"]["baseline"],
+                            sell_pct=ASM["selling_cost_pct"]["baseline"],
+                            horizon=ASM["horizon_years"],
+                            gain_rate=ASM["combined_gain_tax_rate"]["baseline"],
+                            rec_rate=ASM["depreciation_recapture_rate"]["baseline"],
+                            exclusion=V["section121_exclusion_single"]["value"],
+                            fixed_growth=INFL, fit_a=FIT_A, cost_a_base=COST_A_BASE,
+                            maint_live=A["annual_costs"]["maintenance_pct_owner_occupied"]["value"],
+                            maint_rent=A["annual_costs"]["maintenance_pct_rental"]["value"],
+                            rent_income=RENT_INCOME)
+            terms = {k: v["terminal"] for k, v in res["paths"].items()}
+            best = max(terms, key=terms.get)
+            cells.append({"eq": pct(eq, 0), "best": best})
+        rows.append({"g": pct(g, 0), "cells": cells})
     return rows
 
 
@@ -818,6 +865,7 @@ def main() -> dict:
         "exclusion_projection": exclusion_projection(),
         "prop19_cap_projection": prop19_cap_projection(),
         "sensitivity": sensitivity(2045),
+        "sensitivity_fine": sensitivity_fine(),
         "costs_a_now": {
             "water": money10(A["annual_costs"]["water"]["mid"]),
             "electricity": money10(A["annual_costs"]["electricity"]["mid"]),
