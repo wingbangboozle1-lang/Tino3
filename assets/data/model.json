@@ -1238,6 +1238,67 @@
    "best_path": "sell_equities"
   }
  ],
+ "phased": [
+  {
+   "terminal": 28151230,
+   "net_proceeds": 5072950,
+   "treasury_portion": 2205180,
+   "equity_portion": 25946060,
+   "park_months": 30,
+   "phase_months": 18,
+   "inherit_year": 2040
+  },
+  {
+   "terminal": 34250230,
+   "net_proceeds": 6172010,
+   "treasury_portion": 2682930,
+   "equity_portion": 31567300,
+   "park_months": 30,
+   "phase_months": 18,
+   "inherit_year": 2045
+  },
+  {
+   "terminal": 41670670,
+   "net_proceeds": 7509200,
+   "treasury_portion": 3264200,
+   "equity_portion": 38406470,
+   "park_months": 30,
+   "phase_months": 18,
+   "inherit_year": 2050
+  }
+ ],
+ "crash_entry": [
+  {
+   "net_proceeds": 5072950,
+   "lump_sum_equities": 5703120,
+   "phased_terminal": 27170570,
+   "phased_advantage": 21467450,
+   "crash_years": 3,
+   "park_months": 30,
+   "phase_months": 18,
+   "inherit_year": 2040
+  },
+  {
+   "net_proceeds": 6172010,
+   "lump_sum_equities": 6938710,
+   "phased_terminal": 33057100,
+   "phased_advantage": 26118400,
+   "crash_years": 3,
+   "park_months": 30,
+   "phase_months": 18,
+   "inherit_year": 2045
+  },
+  {
+   "net_proceeds": 7509200,
+   "lump_sum_equities": 8442000,
+   "phased_terminal": 40219050,
+   "phased_advantage": 31777050,
+   "crash_years": 3,
+   "park_months": 30,
+   "phase_months": 18,
+   "inherit_year": 2050
+  }
+ ],
  "regimes": [
   {
    "key": "stagflation",
@@ -1276,6 +1337,8 @@
      "rent_out": 140428850,
      "live_then_rent": 140454620
     },
+    "phased_terminal": 435999070,
+    "phased_net_proceeds": 78568550,
     "value_at_death": 83141320,
     "bill_if_live_year1": 967750,
     "bill_if_rent_year1": 990010,
@@ -1318,6 +1381,8 @@
      "rent_out": 2844990,
      "live_then_rent": 2806660
     },
+    "phased_terminal": 15649860,
+    "phased_net_proceeds": 2820160,
     "value_at_death": 2984300,
     "bill_if_live_year1": 15640,
     "bill_if_rent_year1": 37900,
@@ -1361,6 +1426,8 @@
      "rent_out": 1029320,
      "live_then_rent": 1028010
     },
+    "phased_terminal": 5438740,
+    "phased_net_proceeds": 980080,
     "value_at_death": 1037120,
     "bill_if_live_year1": 11590,
     "bill_if_rent_year1": 14370,
@@ -1403,6 +1470,8 @@
      "rent_out": 15057030,
      "live_then_rent": 15026930
     },
+    "phased_terminal": 73955560,
+    "phased_net_proceeds": 13327050,
     "value_at_death": 14102700,
     "bill_if_live_year1": 148250,
     "bill_if_rent_year1": 170510,
@@ -1441,6 +1510,8 @@
      "rent_out": 2727670,
      "live_then_rent": 2687490
     },
+    "phased_terminal": 16256620,
+    "phased_net_proceeds": 2929500,
     "value_at_death": 3100000,
     "bill_if_live_year1": 16580,
     "bill_if_rent_year1": 38840,
@@ -1479,6 +1550,8 @@
      "rent_out": 1986250,
      "live_then_rent": 1946650
     },
+    "phased_terminal": 13430710,
+    "phased_net_proceeds": 2420260,
     "value_at_death": 2561120,
     "bill_if_live_year1": 10990,
     "bill_if_rent_year1": 31740,
@@ -2393,6 +2466,7 @@
    "live_in": 8110290,
    "rent_out": 6388070,
    "live_then_rent": 6480820,
+   "sell_phased": 16455690,
    "best": "sell_treasury"
   },
   {
@@ -2403,6 +2477,7 @@
    "live_in": 8110290,
    "rent_out": 6388070,
    "live_then_rent": 6480820,
+   "sell_phased": 25988680,
    "best": "sell_equities"
   },
   {
@@ -2413,6 +2488,7 @@
    "live_in": 8110290,
    "rent_out": 6388070,
    "live_then_rent": 6480820,
+   "sell_phased": 41451880,
    "best": "sell_equities"
   },
   {
@@ -2423,6 +2499,7 @@
    "live_in": 15107350,
    "rent_out": 12867130,
    "live_then_rent": 12959880,
+   "sell_phased": 21686800,
    "best": "sell_treasury"
   },
   {
@@ -2433,6 +2510,7 @@
    "live_in": 15107350,
    "rent_out": 12867130,
    "live_then_rent": 12959880,
+   "sell_phased": 34250230,
    "best": "sell_equities"
   },
   {
@@ -2443,6 +2521,7 @@
    "live_in": 15107350,
    "rent_out": 12867130,
    "live_then_rent": 12959880,
+   "sell_phased": 54629040,
    "best": "sell_equities"
   },
   {
@@ -2453,6 +2532,7 @@
    "live_in": 28672410,
    "rent_out": 25760690,
    "live_then_rent": 25853440,
+   "sell_phased": 28468130,
    "best": "sell_treasury"
   },
   {
@@ -2463,6 +2543,7 @@
    "live_in": 28672410,
    "rent_out": 25760690,
    "live_then_rent": 25853440,
+   "sell_phased": 44960060,
    "best": "sell_equities"
   },
   {
@@ -2473,6 +2554,7 @@
    "live_in": 28672410,
    "rent_out": 25760690,
    "live_then_rent": 25853440,
+   "sell_phased": 71711200,
    "best": "sell_equities"
   }
  ],
