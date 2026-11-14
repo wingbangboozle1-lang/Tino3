@@ -2526,3 +2526,16 @@ Live-site checks against https://wingbangboozle1-lang.github.io/Tino3/ after the
 - The branch was then pushed with `--force-with-lease` because an earlier `git pull --rebase` failure had been masked by a pipeline and the un-rebased tip (`05b17a9`) still sat on the remote; `--force-with-lease` replaced it with the rebased history (`7e3548b`). Logged here because a plain push was rejected as non-fast-forward.
 
 **Publication result:** the site at https://wingbangboozle1-lang.github.io/Tino3/ serves the merged edition as of this record; the board record itself ships in the follow-up pull request that contains this section.
+
+## Session `arena/e9dca1bf-tino3` — new round: phased-investing test, what-if controls, timeline, glossary, attorney and CPA brief (claimed 2026-11-14)
+
+*Branch note:* Arena pins this session to `arena/e9dca1bf-tino3`, based on `main` at `0cf046b`. The board's `session-<id>/<task>` naming cannot be used; no other branch is created, switched to or pushed.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| E-1 Phased-investing test: 3-month and 2-year Treasury parking for 24, 30 and 36 months, then phased entry, replayed on the 2007–09 episode from official monthly FRED series; 1929 limited to verified anchors | claimed | `arena/e9dca1bf-tino3` | `assets/data/crash.json` (new), `scripts/model.py`, `scripts/crash_test.py` (new), `assets/sources.json` (append) |
+| E-2 What-if controls, mixed paths, reinvestment risk beside the headline, "what would change the answer" on the first screen | claimed | `arena/e9dca1bf-tino3` | `scripts/model.py`, `scripts/build.py` (index, decision, what-if sections) |
+| E-3 Timeline of deadlines, glossary, one-page Attorney and CPA briefing sheet, menu grouping | claimed | `arena/e9dca1bf-tino3` | `scripts/build.py` (new page builders, NAV_GROUPS), `assets/style.css` (print rules only) |
+| E-4 Gates and policy: a single hash-pinned inline script for the what-if page only, and the matching verifier exception | claimed | `arena/e9dca1bf-tino3` | `scripts/verify.py`, `scripts/privacy_boundary.py`, `scripts/verify_legacy.py`, `scripts/package_site.py`, `_config.yml` (generated) |
+| E-5 Suggestions, questions and Flagged-for-Review additions for this round; history-scrub request recorded as an owner decision | claimed | `arena/e9dca1bf-tino3` | `scripts/build.py` (suggestions, questions, review sections) |
+| E-6 Final integration: every gate, pull request to `main`, merge, Pages deploy check, record | pending | `arena/e9dca1bf-tino3` | `COORDINATION.md` (this section only) |
