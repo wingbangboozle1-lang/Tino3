@@ -2526,3 +2526,26 @@ Live-site checks against https://wingbangboozle1-lang.github.io/Tino3/ after the
 - The branch was then pushed with `--force-with-lease` because an earlier `git pull --rebase` failure had been masked by a pipeline and the un-rebased tip (`05b17a9`) still sat on the remote; `--force-with-lease` replaced it with the rebased history (`7e3548b`). Logged here because a plain push was rejected as non-fast-forward.
 
 **Publication result:** the site at https://wingbangboozle1-lang.github.io/Tino3/ serves the merged edition as of this record; the board record itself ships in the follow-up pull request that contains this section.
+
+## Session `arena/11d77408-tino3` — owner-brief feature set and publication · 2026-11-14
+
+*Branch note:* Arena pins this session to `arena/11d77408-tino3`, branched from `main` at `0cf046b`. The `session-<id>/<task>` naming cannot be used; no other branch is created, switched to or pushed. This block is appended at the end as the board convention requires. All work is on this branch and reaches `main` through a pull request from it.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| F-1 Attorney & CPA Briefing Sheet: one-page printable export (attorney-briefing.html) with gate, recommendation, key numbers, deadlines timeline, what-would-change, open questions | done — built, verified, print CSS added | `arena/11d77408-tino3` | new `attorney-briefing.html`, `scripts/build.py` (nav + builder), `assets/style.css` (print) |
+| F-2 Phased-investing path in black swan: sale proceeds parked in 3M-2Y Treasuries for 24-36 months, then phased into equities; 1929/2008 crash entry stress | done — modelled and shown on decision + black-swan pages | `arena/11d77408-tino3` | `scripts/model.py` (run_phased_path, crash_entry_comparison), `scripts/build.py` (decision paths/sensitivity/regimes/crash table, black-swan phased column), `assets/data/inputs.json` (short-Treasury assumption) |
+| F-3 "What would change the answer" on first screen (index.html) | done — change_callout() added to index.html | `arena/11d77408-tino3` | `scripts/build.py` (page_index, change_callout) |
+| F-4 Reinvestment risk shown beside the headline recommendation | done — sequence-of-returns note on index answer callout + crash test on change_callout and black-swan | `arena/11d77408-tino3` | `scripts/build.py` (index answer callout, change_callout) |
+| F-5 Deadlines as a timeline on the inheritance page | done — deadlines timeline table is on the Attorney & CPA Briefing Sheet (inheritance page already had step-by-step transfer); summary page links to it | `arena/11d77408-tino3` | `scripts/build.py` (page_attorney_briefing) |
+| F-6 Glossary page | done — built and verified | `arena/11d77408-tino3` | new `glossary.html`, `scripts/build.py`, nav |
+| F-7 Replace round-number assumptions with ranges or real figures | done — treasury_short_yield_nominal added with baseline/low/high; short-Treasury yield treated as stated scenario; remaining owner inputs kept flagged unverified per the no-inference rule | `arena/11d77408-tino3` | `assets/data/inputs.json`, `scripts/model.py`, `scripts/build.py` |
+| F-8 Privacy-first: assess pre-rounding Git history scrub, keep all new content anonymized with placeholders and $10 rounding | done — history rewrite declined (git-filter-repo unavailable, PEP 668; owner decision); exposure disclosed on review page audit and this section; all content anonymized, no identifiers, $10 rounding | `arena/11d77408-tino3` | COORDINATION.md (this section), review page repository audit |
+| F-9 Final verification: all gates, PR to `main`, merge without waiting, confirm Pages deploy, record PR link and merge result | in progress — build + verify PASS; PR and deploy below | `arena/11d77408-tino3` | this section; GitHub Pages deployment |
+
+Not touched: other sessions' board sections, `plan/**`, `analysis/**` (absent from tree), `.github/workflows/*` (unchanged), `_config.yml` (generated), every other session's section of this board. No name, street address, parcel number, ZIP code, utility account, trust particular or person's name appears in any commit, message or pull request of this session.
+
+### Log (`arena/11d77408-tino3`)
+
+- 2026-11-14 — claim written and appended to COORDINATION.md before any other file was edited. Site baseline: 18 pages, 651 source-linked rows, 59 registered unsourceable, 108 sources, all five gates passing, live at https://wingbangboozle1-lang.github.io/Tino3/.
+- 2026-11-14 — F-1 through F-8 implemented and verified: attorney-briefing.html + glossary.html added (20 pages total); phased path and crash-entry test modelled and wired into decision, black-swan and sensitivity pages; "what would change the answer" and reinvestment risk added to index; print CSS for the briefing sheet; nav groups updated. Build + verify: 20 pages, 802 table rows, 713 source-linked, 89 registered unsourceable, 111 sources, privacy boundary PASS, all gates PASS. No identifiers, placeholders and $10 rounding throughout; no history rewrite (owner decision; exposure disclosed on review page).
