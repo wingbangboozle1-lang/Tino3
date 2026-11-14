@@ -1006,6 +1006,23 @@
       "net": 10575840
      }
     },
+    "sell_then_phase": {
+     "terminal": 30026780,
+     "outflow": 0,
+     "start": 5072950,
+     "sale": {
+      "price": 5368200,
+      "costs": 295250,
+      "basis": 5368200,
+      "gain": 0,
+      "recapture": 0,
+      "exclusion": 0,
+      "tax": 0,
+      "net": 5072950
+     },
+     "parked": 5595560,
+     "invest_years": 27.5
+    },
     "live_then_rent": {
      "terminal": -562530,
      "outflow": 4503570,
@@ -1115,6 +1132,23 @@
       "net": 12867130
      }
     },
+    "sell_then_phase": {
+     "terminal": 36532110,
+     "outflow": 0,
+     "start": 6172010,
+     "sale": {
+      "price": 6531230,
+      "costs": 359220,
+      "basis": 6531230,
+      "gain": 0,
+      "recapture": 0,
+      "exclusion": 0,
+      "tax": 0,
+      "net": 6172010
+     },
+     "parked": 6807850,
+     "invest_years": 27.5
+    },
     "live_then_rent": {
      "terminal": -663190,
      "outflow": 5459830,
@@ -1223,6 +1257,23 @@
       "tax": 8700490,
       "net": 15654830
      }
+    },
+    "sell_then_phase": {
+     "terminal": 44446930,
+     "outflow": 0,
+     "start": 7509200,
+     "sale": {
+      "price": 7946240,
+      "costs": 437040,
+      "basis": 7946240,
+      "gain": 0,
+      "recapture": 0,
+      "exclusion": 0,
+      "tax": 0,
+      "net": 7509200
+     },
+     "parked": 8282800,
+     "invest_years": 27.5
     },
     "live_then_rent": {
      "terminal": -791270,
@@ -1336,6 +1387,7 @@
      "sell_treasury": 1420423720,
      "live_in": 8705773360,
      "rent_out": 8615051250,
+     "sell_then_phase": 465047010,
      "live_then_rent": 8615273160
     },
     "terminal_real": {
@@ -1343,6 +1395,7 @@
      "sell_treasury": 85970160,
      "live_in": 526910860,
      "rent_out": 521419970,
+     "sell_then_phase": 28146650,
      "live_then_rent": 521433400
     },
     "outflow": {
@@ -1350,6 +1403,7 @@
      "sell_treasury": 4572770,
      "live_in": 106603680,
      "rent_out": 140428850,
+     "sell_then_phase": 0,
      "live_then_rent": 140454620
     },
     "phased_terminal": 435999070,
@@ -1380,6 +1434,7 @@
      "sell_treasury": 21831870,
      "live_in": -1165290,
      "rent_out": -5217290,
+     "sell_then_phase": 16692520,
      "live_then_rent": -4975700
     },
     "terminal_real": {
@@ -1387,6 +1442,7 @@
      "sell_treasury": 8007090,
      "live_in": -427380,
      "rent_out": -1913500,
+     "sell_then_phase": 6122180,
      "live_then_rent": -1824900
     },
     "outflow": {
@@ -1394,6 +1450,7 @@
      "sell_treasury": 164140,
      "live_in": 1562980,
      "rent_out": 2844990,
+     "sell_then_phase": 0,
      "live_then_rent": 2806660
     },
     "phased_terminal": 15649860,
@@ -1425,6 +1482,7 @@
      "sell_treasury": 2758870,
      "live_in": -1873900,
      "rent_out": -2434230,
+     "sell_then_phase": 5801090,
      "live_then_rent": -2412400
     },
     "terminal_real": {
@@ -1432,6 +1490,7 @@
      "sell_treasury": 1436170,
      "live_in": -975480,
      "rent_out": -1267170,
+     "sell_then_phase": 3019830,
      "live_then_rent": -1255810
     },
     "outflow": {
@@ -1439,6 +1498,7 @@
      "sell_treasury": 57040,
      "live_in": 808240,
      "rent_out": 1029320,
+     "sell_then_phase": 0,
      "live_then_rent": 1028010
     },
     "phased_terminal": 5438740,
@@ -1469,6 +1529,7 @@
      "sell_treasury": 30338380,
      "live_in": 69677890,
      "rent_out": 56987770,
+     "sell_then_phase": 78882770,
      "live_then_rent": 57306200
     },
     "terminal_real": {
@@ -1476,6 +1537,7 @@
      "sell_treasury": 5916640,
      "live_in": 13588690,
      "rent_out": 11113840,
+     "sell_then_phase": 15383830,
      "live_then_rent": 11175940
     },
     "outflow": {
@@ -1483,6 +1545,7 @@
      "sell_treasury": 775650,
      "live_in": 11555190,
      "rent_out": 15057030,
+     "sell_then_phase": 0,
      "live_then_rent": 15026930
     },
     "phased_terminal": 73955560,
@@ -1509,6 +1572,7 @@
      "sell_treasury": 11619670,
      "live_in": -798600,
      "rent_out": -4893910,
+     "sell_then_phase": 17339700,
      "live_then_rent": -4648530
     },
     "terminal_real": {
@@ -1516,6 +1580,7 @@
      "sell_treasury": 5539590,
      "live_in": -380730,
      "rent_out": -2333140,
+     "sell_then_phase": 8266580,
      "live_then_rent": -2216150
     },
     "outflow": {
@@ -1523,6 +1588,7 @@
      "sell_treasury": 170500,
      "live_in": 1484280,
      "rent_out": 2727670,
+     "sell_then_phase": 0,
      "live_then_rent": 2687490
     },
     "phased_terminal": 16256620,
@@ -1549,6 +1615,7 @@
      "sell_treasury": 4383970,
      "live_in": -692020,
      "rent_out": -3922700,
+     "sell_then_phase": 14325510,
      "live_then_rent": -3689370
     },
     "terminal_real": {
@@ -1556,6 +1623,7 @@
      "sell_treasury": 3774730,
      "live_in": -595850,
      "rent_out": -3377560,
+     "sell_then_phase": 12334690,
      "live_then_rent": -3176660
     },
     "outflow": {
@@ -1563,6 +1631,7 @@
      "sell_treasury": 140860,
      "live_in": 937490,
      "rent_out": 1986250,
+     "sell_then_phase": 0,
      "live_then_rent": 1946650
     },
     "phased_terminal": 13430710,
@@ -2480,6 +2549,7 @@
    "sell_treasury": 18575810,
    "live_in": 3008200,
    "rent_out": -1373660,
+   "sell_then_phase": 16441790,
    "live_then_rent": -1139990,
    "sell_phased": 16455690,
    "best": "sell_treasury"
@@ -2491,6 +2561,7 @@
    "sell_treasury": 18575810,
    "live_in": 1106480,
    "rent_out": -4269050,
+   "sell_then_phase": 27720140,
    "live_then_rent": -3930910,
    "sell_phased": 25988680,
    "best": "sell_equities"
@@ -2502,6 +2573,7 @@
    "sell_treasury": 18575810,
    "live_in": -1684860,
    "rent_out": -8519390,
+   "sell_then_phase": 46282120,
    "live_then_rent": -8005290,
    "sell_phased": 41451880,
    "best": "sell_equities"
@@ -2513,6 +2585,7 @@
    "sell_treasury": 24480880,
    "live_in": 7981650,
    "rent_out": 2767020,
+   "sell_then_phase": 21668480,
    "live_then_rent": 3000700,
    "sell_phased": 21686800,
    "best": "sell_treasury"
@@ -2524,6 +2597,7 @@
    "sell_treasury": 24480880,
    "live_in": 5322760,
    "rent_out": -1001320,
+   "sell_then_phase": 36532110,
    "live_then_rent": -663190,
    "sell_phased": 34250230,
    "best": "sell_equities"
@@ -2535,6 +2609,7 @@
    "sell_treasury": 24480880,
    "live_in": 1419410,
    "rent_out": -6533290,
+   "sell_then_phase": 60994760,
    "live_then_rent": -6019190,
    "sell_phased": 54629040,
    "best": "sell_equities"
@@ -2546,6 +2621,7 @@
    "sell_treasury": 32135910,
    "live_in": 18923440,
    "rent_out": 12629260,
+   "sell_then_phase": 28444080,
    "live_then_rent": 12862930,
    "sell_phased": 28468130,
    "best": "sell_treasury"
@@ -2557,6 +2633,7 @@
    "sell_treasury": 32135910,
    "live_in": 15282990,
    "rent_out": 7729260,
+   "sell_then_phase": 47955480,
    "live_then_rent": 8067390,
    "sell_phased": 44960060,
    "best": "sell_equities"
@@ -2568,9 +2645,382 @@
    "sell_treasury": 32135910,
    "live_in": 9938100,
    "rent_out": 535870,
+   "sell_then_phase": 80067450,
    "live_then_rent": 1049960,
    "sell_phased": 71711200,
    "best": "sell_equities"
+  }
+ ],
+ "sensitivity_fine": [
+  {
+   "g": 0.0,
+   "cells": [
+    {
+     "eq": 3.0,
+     "best": "sell_treasury"
+    },
+    {
+     "eq": 4.0,
+     "best": "sell_treasury"
+    },
+    {
+     "eq": 5.0,
+     "best": "sell_treasury"
+    },
+    {
+     "eq": 6.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 7.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 8.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 9.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 10.0,
+     "best": "sell_equities"
+    }
+   ]
+  },
+  {
+   "g": 1.0,
+   "cells": [
+    {
+     "eq": 3.0,
+     "best": "sell_treasury"
+    },
+    {
+     "eq": 4.0,
+     "best": "sell_treasury"
+    },
+    {
+     "eq": 5.0,
+     "best": "sell_treasury"
+    },
+    {
+     "eq": 6.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 7.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 8.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 9.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 10.0,
+     "best": "sell_equities"
+    }
+   ]
+  },
+  {
+   "g": 2.0,
+   "cells": [
+    {
+     "eq": 3.0,
+     "best": "sell_treasury"
+    },
+    {
+     "eq": 4.0,
+     "best": "sell_treasury"
+    },
+    {
+     "eq": 5.0,
+     "best": "sell_treasury"
+    },
+    {
+     "eq": 6.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 7.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 8.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 9.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 10.0,
+     "best": "sell_equities"
+    }
+   ]
+  },
+  {
+   "g": 3.0,
+   "cells": [
+    {
+     "eq": 3.0,
+     "best": "sell_treasury"
+    },
+    {
+     "eq": 4.0,
+     "best": "sell_treasury"
+    },
+    {
+     "eq": 5.0,
+     "best": "sell_treasury"
+    },
+    {
+     "eq": 6.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 7.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 8.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 9.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 10.0,
+     "best": "sell_equities"
+    }
+   ]
+  },
+  {
+   "g": 4.0,
+   "cells": [
+    {
+     "eq": 3.0,
+     "best": "sell_treasury"
+    },
+    {
+     "eq": 4.0,
+     "best": "sell_treasury"
+    },
+    {
+     "eq": 5.0,
+     "best": "sell_treasury"
+    },
+    {
+     "eq": 6.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 7.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 8.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 9.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 10.0,
+     "best": "sell_equities"
+    }
+   ]
+  },
+  {
+   "g": 5.0,
+   "cells": [
+    {
+     "eq": 3.0,
+     "best": "sell_treasury"
+    },
+    {
+     "eq": 4.0,
+     "best": "sell_treasury"
+    },
+    {
+     "eq": 5.0,
+     "best": "sell_treasury"
+    },
+    {
+     "eq": 6.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 7.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 8.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 9.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 10.0,
+     "best": "sell_equities"
+    }
+   ]
+  },
+  {
+   "g": 6.0,
+   "cells": [
+    {
+     "eq": 3.0,
+     "best": "sell_treasury"
+    },
+    {
+     "eq": 4.0,
+     "best": "sell_treasury"
+    },
+    {
+     "eq": 5.0,
+     "best": "sell_treasury"
+    },
+    {
+     "eq": 6.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 7.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 8.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 9.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 10.0,
+     "best": "sell_equities"
+    }
+   ]
+  },
+  {
+   "g": 7.0,
+   "cells": [
+    {
+     "eq": 3.0,
+     "best": "live_in"
+    },
+    {
+     "eq": 4.0,
+     "best": "live_in"
+    },
+    {
+     "eq": 5.0,
+     "best": "sell_treasury"
+    },
+    {
+     "eq": 6.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 7.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 8.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 9.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 10.0,
+     "best": "sell_equities"
+    }
+   ]
+  },
+  {
+   "g": 8.0,
+   "cells": [
+    {
+     "eq": 3.0,
+     "best": "live_in"
+    },
+    {
+     "eq": 4.0,
+     "best": "live_in"
+    },
+    {
+     "eq": 5.0,
+     "best": "live_in"
+    },
+    {
+     "eq": 6.0,
+     "best": "live_in"
+    },
+    {
+     "eq": 7.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 8.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 9.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 10.0,
+     "best": "sell_equities"
+    }
+   ]
+  },
+  {
+   "g": 9.0,
+   "cells": [
+    {
+     "eq": 3.0,
+     "best": "live_in"
+    },
+    {
+     "eq": 4.0,
+     "best": "live_in"
+    },
+    {
+     "eq": 5.0,
+     "best": "live_in"
+    },
+    {
+     "eq": 6.0,
+     "best": "live_in"
+    },
+    {
+     "eq": 7.0,
+     "best": "live_in"
+    },
+    {
+     "eq": 8.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 9.0,
+     "best": "sell_equities"
+    },
+    {
+     "eq": 10.0,
+     "best": "sell_equities"
+    }
+   ]
   }
  ],
  "costs_a_now": {
