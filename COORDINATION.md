@@ -2527,6 +2527,38 @@ Live-site checks against https://wingbangboozle1-lang.github.io/Tino3/ after the
 
 **Publication result:** the site at https://wingbangboozle1-lang.github.io/Tino3/ serves the merged edition as of this record; the board record itself ships in the follow-up pull request that contains this section.
 
+## Session `arena/63c55cc5-tino3` — phased-investing stress analysis and print-ready adviser brief · claimed 2026-11-14
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| P-1 Add a transparent 24–36 month Treasury holding / phased-equity entry comparison to Black Swan, testing crash-at-entry and no-crash conditions without claiming synthetic paths are historical returns | in progress | `arena/63c55cc5-tino3` | `scripts/build.py`, `black-swan.html`, `review.html`, `assets/style.css`, `README.md` |
+| P-2 Add a one-page printable Attorney & CPA briefing export with privacy-safe placeholders, decision gates and official source links; expose a cited glossary from the grouped menu | in progress | `arena/63c55cc5-tino3` | `scripts/build.py`, `briefing.html`, `glossary.html`, `assets/style.css`, `README.md`, `scripts/package_site.py` (only if allowlist requires it) |
+
+Scope note: this is the Arena-pinned branch. No second branch/worktree will be created. Existing pages and analyses have been reviewed; this task does not alter the shared model input tables or source ledger. Existing repo policy excludes arbitrary scripts/forms from publication; the briefing must remain static and printable.
+
+### P-1 / P-2 result — completed 2026-11-14
+
+**P-1: phased investing.** The Black Swan page now compares immediate investment with 24- and 36-month Treasury parking followed by equal monthly equity purchases over 12 months. It presents both a no-shock opportunity-cost case and a synthetic crash-at-entry case, with differences against immediate investment. The calculation uses the existing 2045 modeled after-sale proceeds and the existing 6.3% net nominal equity baseline. The 4.7% Treasury rate is explicitly called a long-run 10-year-yield proxy, not a current 3M–2Y quote. The assumed -40%, +25%, +10% equity sequence is synthetic, not sourced historical performance. The 36-month case's coincidence with the end of that synthetic sequence is disclosed. The page states reinvestment risk and the missing source-verified S&P total-return data; the gap is also on Flagged for Review. Event context links to Federal Reserve History pages for the 1929 crash and the Great Recession; the yield anchor links the existing SSA Trustees and FRED 10-year-yield entries.
+
+**P-2: adviser brief and glossary.** Added `briefing.html`, a static print-formatted Attorney & CPA sheet with anonymized Property A / Property B labels, conditional model outcome, decision gates, missing evidence, action sequence and source links. Print CSS targets letter paper; print-preview pagination was not validated in a browser in this environment. Added `glossary.html` with official-source-linked definitions and linked it in the grouped Evidence menu. Updated the README page map/count.
+
+**Verification run:** `python3 scripts/build.py`; `python3 scripts/verify.py` (20 pages, 758 table rows, 700 official-source-linked, 58 explicitly registered unsourceable, 2,575 links, 111 ledger sources); `python3 scripts/privacy_boundary.py`; `python3 scripts/package_site.py`; `python3 scripts/verify_legacy.py --config-only`; `git diff --check` — all passed. No source-ledger entries added. The generated pages contain only Property A / Property B placeholders; the privacy scanner passed.
+
+**Residuals / review:** This is not a true 1929 or 2008 market backtest. Short-maturity Treasury yields in the planned 2040–2050 period cannot be known now; refresh from Treasury's official daily yield curve at decision time. A browser print-to-PDF visual check remains unperformed. Earlier precise values in public Git history and PR diffs remain an exposure risk; this branch is based on a shallow/grafted snapshot and the session does not rewrite `main` or other refs. The existing repository-audit / S-22 entry on `review.html` documents this. No names, street addresses, parcel IDs, ZIP codes, trust terms or account values were added to the public edition.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| P-1 Add a transparent 24–36 month Treasury holding / phased-equity entry comparison to Black Swan, testing crash-at-entry and no-crash conditions without claiming synthetic paths are historical returns | **done; historical data gap flagged** | `arena/63c55cc5-tino3` | `scripts/build.py`, `black-swan.html`, `review.html`, `assets/style.css`, `README.md` |
+| P-2 Add a one-page printable Attorney & CPA briefing export with privacy-safe placeholders, decision gates and official source links; expose a cited glossary from the grouped menu | **done; print pagination needs visual review** | `arena/63c55cc5-tino3` | `scripts/build.py`, `briefing.html`, `glossary.html`, `assets/style.css`, `README.md`, `scripts/package_site.py` (allowlist derived from generated pages) |
+
+### Publication record for P-1 / P-2
+
+- **PR #89:** https://github.com/wingbangboozle1-lang/Tino3/pull/89
+- **Merge:** merged to `main` at 2026-11-14T22:01:52Z; merge commit `a0429b670608d4c59824cd04efd3eb51229afe33`.
+- **Checks:** PR `Verify static site` passed. Post-merge runs all succeeded: `Verify static site` 43645904070, `Deploy GitHub Pages` 43645904068, and legacy `pages build and deployment` 43645903602.
+- **Pages:** GitHub Pages API reports `status: built`, source `main:/`, `build_type: legacy`, public URL `https://wingbangboozle1-lang.github.io/Tino3/`. Live fetches confirmed `briefing.html`, `glossary.html`, and `black-swan.html` serve the new content.
+- **Residual non-blocking notices:** CI reports upcoming Node.js 20 deprecation / `ubuntu-latest` image migration warnings; no build or deploy failures. The actual one-page paper pagination has not been rendered in a browser and remains a visual QA limitation, disclosed in this board and the PR.
+
 ## Session `arena/e9dca1bf-tino3` — new round: phased-investing test, what-if controls, timeline, glossary, attorney and CPA brief (claimed 2026-11-14)
 
 *Branch note:* Arena pins this session to `arena/e9dca1bf-tino3`, based on `main` at `0cf046b`. The board's `session-<id>/<task>` naming cannot be used; no other branch is created, switched to or pushed.
@@ -2539,3 +2571,25 @@ Live-site checks against https://wingbangboozle1-lang.github.io/Tino3/ after the
 | E-4 Gates and policy: a single hash-pinned inline script for the what-if page only, and the matching verifier exception | claimed | `arena/e9dca1bf-tino3` | `scripts/verify.py`, `scripts/privacy_boundary.py`, `scripts/verify_legacy.py`, `scripts/package_site.py`, `_config.yml` (generated) |
 | E-5 Suggestions, questions and Flagged-for-Review additions for this round; history-scrub request recorded as an owner decision | claimed | `arena/e9dca1bf-tino3` | `scripts/build.py` (suggestions, questions, review sections) |
 | E-6 Final integration: every gate, pull request to `main`, merge, Pages deploy check, record | pending | `arena/e9dca1bf-tino3` | `COORDINATION.md` (this section only) |
+
+### Results: `arena/e9dca1bf-tino3` (2026-11-14, after merging `origin/main` at `1710658`)
+
+**Overlap disclosure.** This session's claim (E-1 to E-6, committed 22:01:38 UTC) was made after session `arena/63c55cc5-tino3` had claimed P-1 and P-2 (committed 21:57:36 UTC). This session had not read those claims before its first commit. It then built overlapping briefing and glossary pages. On merging `origin/main`, the duplicates were withdrawn in favour of P-2's merged pages. Nothing from 63c55cc5 was edited except where a shared file needed both sides.
+
+| Task | Result | Files touched |
+|---|---|---|
+| E-1 Historical phased-entry test | **done.** Official monthly series for 1929 to 1934 (NBER Dow, NBER 3-to-6-month bill) and 2007 to 2010 (NASDAQ Composite monthly average, 3-month bill, 2-year note). Four ledger sources added. Parking yields disclosed; 1929 parking uses the 3-to-6-month series (no 2-year series located for 1929 to 1934). Monthly averages, not daily closes. | `assets/data/crash.json`, `assets/data/crash_1929.csv`, `assets/data/crash_2007.csv`, `scripts/crash_test.py`, `assets/sources.json` |
+| E-2 Mixed paths, reinvestment risk, first-screen change list | **partly done.** A mixed path (sale, then staged purchase) is replayed historically on `phased-entry.html`, with reinvestment risk beside each headline. "What would change the answer" is on the dashboard. **Not done:** the five-path decision model does not yet include the phased path; it is reported beside, not inside, the model. | `scripts/build.py`, `phased-entry.html` |
+| E-3 Timeline, glossary, briefing, menu | **timeline done** (`timeline.html`, under Rules and the estate). **Glossary and briefing withdrawn**: they duplicate P-2 (`glossary.html`, `briefing.html` from 63c55cc5, already on `main`). Print CSS not added; P-2's `print-brief` class is used instead. | `scripts/build.py`, `timeline.html` |
+| E-4 Gates and policy for interactive controls | **decision: no script.** What-if controls are static, precomputed scenario tables (the nine-combination house-growth by equity-return grid already on the decision page). No hash-pinned script was added, so `verify.py`, `privacy_boundary.py`, `verify_legacy.py`, `package_site.py` and `_config.yml` are unchanged. | none of the gate files |
+| E-5 Questions, suggestions, Flagged for Review | **done.** Questions group I (four rows on phased entry and the tests). Suggestions S-23 to S-25. A "New flags" callout on `review.html`. The pre-rounding history question is already S-22 (owner decision, not implementable from this clone). | `scripts/build.py` |
+| E-6 Integration | **pending** at the time of this note. See the final entry below. | `COORDINATION.md` |
+
+**Requests logged for other files.**
+- For `arena/63c55cc5-tino3` (owner of `black-swan.html`): the black-swan page's stress sequence is synthetic. A link to `phased-entry.html` (historical replay) would let readers compare them. Not edited from this session.
+
+**Open items, not done in this round.**
+- Replacing round-number inputs with ranges or real figures (insurance and water quotes are still owner estimates).
+- A broad-index total-return series for 2007 to 2010; the test uses NASDAQ monthly averages as a labelled proxy.
+- A 2-year Treasury series for 1929 to 1934; the 3-to-6-month substitute is disclosed.
+- The IRS Form 706 deadline rows are confirmed from a search snippet only; the instructions' body was not reached.
