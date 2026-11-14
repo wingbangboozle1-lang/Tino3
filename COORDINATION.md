@@ -2526,3 +2526,27 @@ Live-site checks against https://wingbangboozle1-lang.github.io/Tino3/ after the
 - The branch was then pushed with `--force-with-lease` because an earlier `git pull --rebase` failure had been masked by a pipeline and the un-rebased tip (`05b17a9`) still sat on the remote; `--force-with-lease` replaced it with the rebased history (`7e3548b`). Logged here because a plain push was rejected as non-fast-forward.
 
 **Publication result:** the site at https://wingbangboozle1-lang.github.io/Tino3/ serves the merged edition as of this record; the board record itself ships in the follow-up pull request that contains this section.
+
+## Session `arena/63c55cc5-tino3` — phased-investing stress analysis and print-ready adviser brief · claimed 2026-11-14
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| P-1 Add a transparent 24–36 month Treasury holding / phased-equity entry comparison to Black Swan, testing crash-at-entry and no-crash conditions without claiming synthetic paths are historical returns | in progress | `arena/63c55cc5-tino3` | `scripts/build.py`, `black-swan.html`, `review.html`, `assets/style.css`, `README.md` |
+| P-2 Add a one-page printable Attorney & CPA briefing export with privacy-safe placeholders, decision gates and official source links; expose a cited glossary from the grouped menu | in progress | `arena/63c55cc5-tino3` | `scripts/build.py`, `briefing.html`, `glossary.html`, `assets/style.css`, `README.md`, `scripts/package_site.py` (only if allowlist requires it) |
+
+Scope note: this is the Arena-pinned branch. No second branch/worktree will be created. Existing pages and analyses have been reviewed; this task does not alter the shared model input tables or source ledger. Existing repo policy excludes arbitrary scripts/forms from publication; the briefing must remain static and printable.
+
+### P-1 / P-2 result — completed 2026-11-14
+
+**P-1: phased investing.** The Black Swan page now compares immediate investment with 24- and 36-month Treasury parking followed by equal monthly equity purchases over 12 months. It presents both a no-shock opportunity-cost case and a synthetic crash-at-entry case, with differences against immediate investment. The calculation uses the existing 2045 modeled after-sale proceeds and the existing 6.3% net nominal equity baseline. The 4.7% Treasury rate is explicitly called a long-run 10-year-yield proxy, not a current 3M–2Y quote. The assumed -40%, +25%, +10% equity sequence is synthetic, not sourced historical performance. The 36-month case's coincidence with the end of that synthetic sequence is disclosed. The page states reinvestment risk and the missing source-verified S&P total-return data; the gap is also on Flagged for Review. Event context links to Federal Reserve History pages for the 1929 crash and the Great Recession; the yield anchor links the existing SSA Trustees and FRED 10-year-yield entries.
+
+**P-2: adviser brief and glossary.** Added `briefing.html`, a static print-formatted Attorney & CPA sheet with anonymized Property A / Property B labels, conditional model outcome, decision gates, missing evidence, action sequence and source links. Print CSS targets letter paper; print-preview pagination was not validated in a browser in this environment. Added `glossary.html` with official-source-linked definitions and linked it in the grouped Evidence menu. Updated the README page map/count.
+
+**Verification run:** `python3 scripts/build.py`; `python3 scripts/verify.py` (20 pages, 758 table rows, 700 official-source-linked, 58 explicitly registered unsourceable, 2,575 links, 111 ledger sources); `python3 scripts/privacy_boundary.py`; `python3 scripts/package_site.py`; `python3 scripts/verify_legacy.py --config-only`; `git diff --check` — all passed. No source-ledger entries added. The generated pages contain only Property A / Property B placeholders; the privacy scanner passed.
+
+**Residuals / review:** This is not a true 1929 or 2008 market backtest. Short-maturity Treasury yields in the planned 2040–2050 period cannot be known now; refresh from Treasury's official daily yield curve at decision time. A browser print-to-PDF visual check remains unperformed. Earlier precise values in public Git history and PR diffs remain an exposure risk; this branch is based on a shallow/grafted snapshot and the session does not rewrite `main` or other refs. The existing repository-audit / S-22 entry on `review.html` documents this. No names, street addresses, parcel IDs, ZIP codes, trust terms or account values were added to the public edition.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| P-1 Add a transparent 24–36 month Treasury holding / phased-equity entry comparison to Black Swan, testing crash-at-entry and no-crash conditions without claiming synthetic paths are historical returns | **done; historical data gap flagged** | `arena/63c55cc5-tino3` | `scripts/build.py`, `black-swan.html`, `review.html`, `assets/style.css`, `README.md` |
+| P-2 Add a one-page printable Attorney & CPA briefing export with privacy-safe placeholders, decision gates and official source links; expose a cited glossary from the grouped menu | **done; print pagination needs visual review** | `arena/63c55cc5-tino3` | `scripts/build.py`, `briefing.html`, `glossary.html`, `assets/style.css`, `README.md`, `scripts/package_site.py` (allowlist derived from generated pages) |
