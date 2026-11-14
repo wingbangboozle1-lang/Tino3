@@ -2526,3 +2526,15 @@ Live-site checks against https://wingbangboozle1-lang.github.io/Tino3/ after the
 - The branch was then pushed with `--force-with-lease` because an earlier `git pull --rebase` failure had been masked by a pipeline and the un-rebased tip (`05b17a9`) still sat on the remote; `--force-with-lease` replaced it with the rebased history (`7e3548b`). Logged here because a plain push was rejected as non-fast-forward.
 
 **Publication result:** the site at https://wingbangboozle1-lang.github.io/Tino3/ serves the merged edition as of this record; the board record itself ships in the follow-up pull request that contains this section.
+
+## Session `arena/9242b5f4-tino3` — phased Treasury-to-equity path, printable adviser brief, privacy-first final review (claimed 2026-11-14)
+
+*Branch note:* Arena pins this session to `arena/9242b5f4-tino3`, based on `main` at `0cf046bee0752b42a33e5f36a1cbc60a69220060`. The checkout is shallow, so this session will work only on the pinned branch and will not rewrite shared history or create/switch branches. The coordination board and current tree were read first. The previous recorded tasks are complete; no other active claim appears in the current board.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| N-1 Add a documented post-sale Treasury parking / phased equity-entry stress path (24/30/36-month waits) and compare its 1929/2008 entry-path behaviour without presenting a scenario as a forecast | **in progress** | `arena/9242b5f4-tino3` | `scripts/model.py`, `scripts/build.py`, `scripts/verify.py`, `assets/data/inputs.json`, `assets/data/series.json`, `assets/data/model.json`, `assets/data/economy.json`, `assets/sources.json`, regenerated `black-swan.html`, `decision.html`, `EXECUTIVE_SUMMARY.md`, and any navigation/config files needed for the page |
+| N-2 Add a concise one-page, print-ready Attorney & CPA Briefing Sheet with explicit unknowns and source-linked legal/tax deadlines; keep all identity data out | **in progress** | `arena/9242b5f4-tino3` | `scripts/build.py`, `scripts/verify.py`, `scripts/verify_legacy.py`, `scripts/package_site.py`, `scripts/privacy_boundary.py`, `assets/style.css`, `briefing.html`, `_config.yml`, regenerated navigation/pages, `README.md` |
+| N-3 Run the full local gates; investigate and document any privacy/history exposure without destructive history rewrite; open and merge a PR only if the published tree remains clean and builds | **in progress** | `arena/9242b5f4-tino3` | `COORDINATION.md` (this section only), generated public files in the N-1/N-2 scope, `README.md` |
+
+The implementation will reuse the existing source ledger and generated-page pipeline. New factual values must be checked against publisher/agency pages before publication; data gaps will remain blank or be labeled as scenario assumptions. No property address, postal code, name, parcel/account identifier, trust wording or newly discovered personal information is in scope for publication. Existing public Git history has a separately documented exposure; this claim does not authorize rewriting the default branch or risking the live Pages deployment.
