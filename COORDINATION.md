@@ -2526,3 +2526,16 @@ Live-site checks against https://wingbangboozle1-lang.github.io/Tino3/ after the
 - The branch was then pushed with `--force-with-lease` because an earlier `git pull --rebase` failure had been masked by a pipeline and the un-rebased tip (`05b17a9`) still sat on the remote; `--force-with-lease` replaced it with the rebased history (`7e3548b`). Logged here because a plain push was rejected as non-fast-forward.
 
 **Publication result:** the site at https://wingbangboozle1-lang.github.io/Tino3/ serves the merged edition as of this record; the board record itself ships in the follow-up pull request that contains this section.
+
+## Session `arena/ffe1a9ca-tino3` — phased investing and printable adviser brief · claimed 2026-11-14
+
+*Branch note:* Arena pins this session to `arena/ffe1a9ca-tino3`, based on `main` at `0cf046bee0752b42a33e5f36a1cbc60a69220060`. The board's suggested session branch name cannot be used; no branch is created or switched.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| F-1 Add an anonymised, deterministic short-Treasury parking and phased-equity path; compare 24/30/36-month staging against immediate equity entry during 1929- and 2008-analogue drawdowns, plus rising-market opportunity cost | in progress | `arena/ffe1a9ca-tino3` | `scripts/model.py`, `assets/data/model.json` (generated), `scripts/build.py`, `phased-investing.html` (generated), `assets/style.css` |
+| F-2 Create a one-page print-optimized attorney and CPA briefing sheet from verified model outputs, with placeholders and explicit missing-fact checklist | in progress | `arena/ffe1a9ca-tino3` | `scripts/build.py`, `attorney-cpa-brief.html` (generated), `assets/style.css` |
+| F-3 Add privacy-safe scenario-selection controls and navigation; keep all inputs local, no personal-data collection, no third-party scripts | in progress | `arena/ffe1a9ca-tino3` | `scripts/build.py`, `scripts/verify.py`, `scripts/package_site.py`, `assets/style.css` |
+| F-4 Rebuild, verify every new figure against the official ledger, run privacy and legacy-Pages gates, record known history exposure and publication handoff | in progress | `arena/ffe1a9ca-tino3` | `COORDINATION.md` (this section), generated page set |
+
+**Boundary:** no name, street address, parcel identifier, ZIP code, trust detail or personally identifying record is to be added. Older public Git history is not rewritten from this feature branch; the existing flagged history exposure remains an administrator/owner-level decision because a rewrite would change public repository history and disrupt every clone, fork and open PR. The public output will continue to state this residual risk plainly.
