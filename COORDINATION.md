@@ -2610,3 +2610,13 @@ Scope note: this is the Arena-pinned branch. No second branch/worktree will be c
 - **Not repaired:** earlier commits and PR diffs still contain the links. Scrubbing history needs the owner's decision, as already flagged.
 - **Branch history:** this branch was merged with `origin/main` (not rebased) because `main` had moved through PRs #89 and #90. Conflicts were resolved in favour of `main`'s generated code and content, with this fix re-applied on top. Logged here because a plain `git pull --rebase` had earlier dropped a merge-commit branch's work.
 - **Outstanding on this branch:** P-3 (glossary is already on `main` from PR #89), P-4 (what-if and first-screen answer) and the timeline remain open, along with a visual check of the brief's print layout.
+
+## Session `arena/1663e879-tino3` — independent integration, duplication, and privacy-risk audit · claimed 2026-11-14
+
+*Branch note:* Arena pins this session to `arena/1663e879-tino3`, based at `6413327` (`main`). No other branch or worktree will be created, switched to, or pushed.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| I-1 Read-only integration audit of the current public edition and newly open overlapping PRs; identify any source/method, duplication, or privacy risks without editing another session's claimed files | in progress | `arena/1663e879-tino3` | `COORDINATION.md` (this section only) |
+
+Scope note: PRs #92 and #94 appeared while this review was under way and both change the phased-investing, dashboard, timeline, adviser brief, and glossary areas. Their feature files remain owned by those sessions; this task is read-only apart from this coordination entry. The repository is public, so this audit will not copy any owner-provided identifiers or finer property-specific figures into the board.
