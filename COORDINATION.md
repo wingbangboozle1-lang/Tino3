@@ -2558,3 +2558,18 @@ Scope note: this is the Arena-pinned branch. No second branch/worktree will be c
 - **Checks:** PR `Verify static site` passed. Post-merge runs all succeeded: `Verify static site` 43645904070, `Deploy GitHub Pages` 43645904068, and legacy `pages build and deployment` 43645903602.
 - **Pages:** GitHub Pages API reports `status: built`, source `main:/`, `build_type: legacy`, public URL `https://wingbangboozle1-lang.github.io/Tino3/`. Live fetches confirmed `briefing.html`, `glossary.html`, and `black-swan.html` serve the new content.
 - **Residual non-blocking notices:** CI reports upcoming Node.js 20 deprecation / `ubuntu-latest` image migration warnings; no build or deploy failures. The actual one-page paper pagination has not been rendered in a browser and remains a visual QA limitation, disclosed in this board and the PR.
+
+## Session `arena/7445fa3c-tino3` — historical crash-entry test, first-screen decision gates, and privacy/print verification · claimed 2026-11-14
+
+*Branch note:* Arena pins this session to `arena/7445fa3c-tino3`. This branch was fast-forwarded from its supplied base `0cf046b` to current `main` at `a0429b6` by `git pull --rebase origin main`; no branch was created or switched to. The whole board was read first.
+
+**Coordination and handoff.** PR #89 (`arena/63c55cc5-tino3`) had just merged the first 24/36-month Treasury illustration, the printable briefing sheet, and the glossary. Those tasks are marked done above; this session will not duplicate them. The PR #88 claim (`arena/ba617728-tino3`) last committed 13 November 2026 at 12:27 UTC and remains open on a pre-#89 base, with no newer commit. Its scope overlaps the generator and source/data files. Under the board's 60-minute stale-claim rule, this session takes over *review and disposition only* of that unmerged work; it will not merge a change that removes already-published economy analysis or weakens privacy without a line-by-line check. Any unique verified rate research will be preserved or explicitly logged, not silently discarded.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| H-1 Add an official-source-linked 1929/2008 peak-to-trough entry-timing analysis for the 24/36-month Treasury wait and phased-equity path; do not claim it is a total-return backtest | in progress | `arena/7445fa3c-tino3` | `scripts/build.py`, generated `black-swan.html`, `review.html`, `scripts/verify.py` only if needed |
+| H-2 Put the decision-changing facts and reinvestment risk beside the dashboard headline; provide safe precomputed what-if selectors without collecting personal input or adding JavaScript/forms | in progress | `arena/7445fa3c-tino3` | `scripts/build.py`, generated `index.html` and `decision.html`, `assets/style.css` only if needed |
+| H-3 Independently check the merged briefing, glossary, current public privacy boundary and print-page pagination; record history-rewrite limitations without exposing identifiers | in progress | `arena/7445fa3c-tino3` | `scripts/build.py`, `assets/style.css`, generated `briefing.html`, `glossary.html`, `review.html`, `README.md` |
+| H-4 Rebuild and re-verify every published row/link and the real Jekyll boundary; final PR, merge and deployment confirmation | unclaimed until H-1–H-3 finish | `arena/7445fa3c-tino3` | `COORDINATION.md` (this section only), `README.md`, `EXECUTIVE_SUMMARY.md` as generated |
+
+**Scope guard:** No property address, ZIP code, parcel identifier, person name, trust term, account amount or other identifying material is to be added to public files. New crash analysis uses existing Federal Reserve History entries in `assets/sources.json`; short-term Treasury yields for 2040–2050 remain unknown and must not be inferred from a 10-year proxy.
