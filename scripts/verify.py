@@ -43,7 +43,6 @@ OFFICIAL_HOSTS = {
     "www.REDACTED.gov", "REDACTED.archive.REDACTED", "elections.cdn.sos.ca.gov",
     "www.cbo.gov", "www.federalreserve.gov", "www.huduser.gov", "www.lao.ca.gov",
     "home.treasury.gov", "www.tsp.gov", "docs.github.com",
-    # utility and sewer-district domains were removed: their names identify the property's area
 }
 FORBIDDEN_TAGS = {"script", "iframe", "form", "input", "textarea", "object", "embed", "img"}
 

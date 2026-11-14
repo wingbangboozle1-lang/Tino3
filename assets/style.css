@@ -313,48 +313,38 @@ code {
   .table-wrap { break-inside: avoid; }
 }
 
-/* ---- what-if controls (no script: the address names the case) ---- */
-.panel { display: none; }
-.panel:target, .panel.is-default { display: block; }
-body:has(.panel:target) .panel.is-default { display: none; }
-.panel-title { color: #555; margin: 0 0 .5rem; font-size: .92rem; }
-.controls { display: grid; gap: .35rem; margin: .5rem 0 1rem; }
-.ctrl-row { display: flex; flex-wrap: wrap; gap: .4rem .75rem; align-items: baseline; }
-.ctrl-label { font-weight: 600; min-width: 13rem; }
-.ctrl-opts a { display: inline-block; padding: .2rem .6rem; margin-right: .25rem; border: 1px solid #aab; border-radius: 999px; text-decoration: none; color: #223; background: #fff; }
-.ctrl-opts a:hover, .ctrl-opts a:focus { background: #eef; }
-.ctrl-opts a.current { background: #223; color: #fff; border-color: #223; }
+/* The one-page attorney/CPA export. Links remain visible in print; all identity fields are placeholders. */
+.brief-toolbar { padding: 8px 12px; border: 1px solid var(--line); background: #f7fbff; border-radius: 6px; }
+.brief-confidential { font-size: 13px; border-bottom: 2px solid var(--ink); padding-bottom: 5px; }
+.brief-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 18px; }
+.brief-grid section { break-inside: avoid; }
+.brief-grid h2 { margin: 10px 0 4px; font-size: 15px; }
+.brief-grid p, .brief-grid li { font-size: 12.5px; line-height: 1.38; }
+.brief-grid ol, .brief-grid ul { padding-left: 18px; margin: 4px 0; }
+.brief-footer { font-size: 11px; margin-top: 8px; border-top: 1px solid var(--line); padding-top: 5px; }
 
-/* ---- timeline ---- */
-ol.timeline { border-left: 3px solid #223; margin: .5rem 0 .75rem 0; padding: .25rem 0 .25rem 1.1rem; list-style: none; counter-reset: step; }
-ol.timeline li { position: relative; margin: .45rem 0; counter-increment: step; }
-ol.timeline li::before { content: counter(step); position: absolute; left: -1.55rem; top: 0; width: 1.4rem; height: 1.4rem; border-radius: 50%; background: #223; color: #fff; font-size: .75rem; text-align: center; line-height: 1.4rem; }
-
-/* ---- printable one-page brief ---- */
-.brief-body { background: #fff; color: #111; }
-.brief-bar { background: #eef; padding: .4rem .7rem; font-size: .9rem; }
-.brief-page { max-width: 7.6in; margin: 0 auto; padding: .3in .2in; font-size: 8.6pt; line-height: 1.25; }
-.brief-head h1 { font-size: 15pt; margin: 0 0 .15rem 0; }
-.brief-sub { margin: 0 0 .35rem 0; color: #333; }
-.brief-page h2 { font-size: 9.5pt; margin: .35rem 0 .15rem 0; border-bottom: 1px solid #889; padding-bottom: .05rem; }
-.brief-cols { display: grid; grid-template-columns: 1fr 1fr; gap: .25in; }
-.brief-page table { font-size: 8pt; width: 100%; border-collapse: collapse; }
-.brief-page th, .brief-page td { padding: .12rem .25rem; border-bottom: 1px solid #ccd; vertical-align: top; text-align: left; }
-.brief-page caption { display: none; }
-.brief-page .src-label, .brief-page .table-note, .brief-page .table-wrap .table-note { display: none; }
-.brief-page .src-cell a.src { font-size: 7pt; }
-.brief-list { margin: .1rem 0 0 1rem; padding: 0; }
-.brief-list li { margin: .12rem 0; }
-.brief-deadlines { margin: .1rem 0 .1rem 1rem; padding: 0; }
-.brief-deadlines li { margin: .12rem 0; }
-.brief-note { margin: .25rem 0 0 0; font-size: 8pt; }
-.brief-foot { font-size: 7pt; color: #555; margin-top: .3rem; }
-
+@page { size: letter; margin: 0.38in; }
 @media print {
-  @page { size: letter; margin: 0.35in; }
-  .no-print, .site-header, .site-nav, .method { display: none !important; }
-  .brief-page { padding: 0; max-width: none; }
-  .brief-body { font-size: 8pt; }
-  a { color: #111; text-decoration: none; }
-  .brief-page table { page-break-inside: avoid; }
+  body:has(.print-brief) { background: #fff; font-size: 9pt; line-height: 1.25; }
+  body:has(.print-brief) .site-header,
+  body:has(.print-brief) .site-nav,
+  body:has(.print-brief) .skip,
+  body:has(.print-brief) .method,
+  body:has(.print-brief) .page-footer,
+  body:has(.print-brief) .brief-toolbar { display: none !important; }
+  body:has(.print-brief) .layout { display: block; padding: 0; }
+  body:has(.print-brief) .wrap { max-width: none; padding: 0; }
+  body:has(.print-brief) main { width: 100%; }
+  body:has(.print-brief) main > h1 { font-size: 19pt; margin: 0 0 4px; }
+  body:has(.print-brief) .lede { font-size: 9pt; margin: 0 0 6px; }
+  body:has(.print-brief) .brief-confidential { font-size: 8pt; margin: 3px 0; }
+  body:has(.print-brief) .brief-grid { gap: 4px 12px; }
+  body:has(.print-brief) .brief-grid h2 { font-size: 10pt; margin: 5px 0 2px; padding: 0; }
+  body:has(.print-brief) .brief-grid p,
+  body:has(.print-brief) .brief-grid li { font-size: 7.4pt; line-height: 1.2; margin: 2px 0; }
+  body:has(.print-brief) .brief-grid ol,
+  body:has(.print-brief) .brief-grid ul { padding-left: 12px; }
+  body:has(.print-brief) .brief-footer { font-size: 7pt; margin-top: 4px; padding-top: 3px; }
+  body:has(.print-brief) a { color: #111; text-decoration: underline; }
+  body:has(.print-brief) a::after { content: none; }
 }
