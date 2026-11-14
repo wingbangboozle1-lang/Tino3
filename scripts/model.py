@@ -150,14 +150,30 @@ def carrying_costs(value: float, cost_base: float, maint_pct: float, infl: float
     return tot
 
 
+def annual_bills(start_av: float, fit: dict, start_year: int, infl: float,
+                 horizon: int, cap: float = 0.02) -> list:
+    """Year-by-year property tax bills, the assessed value rolling forward at the cap."""
+    av = start_av
+    out = []
+    for j in range(horizon):
+        out.append(bill_for(av, fit, start_year + j, infl))
+        av *= (1 + cap)
+    return out
+
+
 def tax_path(start_av: float, fit: dict, start_year: int, infl: float,
              horizon: int, cap: float = 0.02) -> float:
-    av = start_av
-    tot = 0.0
-    for j in range(horizon):
-        tot += bill_for(av, fit, start_year + j, infl)
-        av *= (1 + cap)
-    return tot
+    return sum(annual_bills(start_av, fit, start_year, infl, horizon, cap))
+
+
+def fv_stream(amounts: list, rate: float) -> float:
+    """Future value at the end of the horizon of year-end cash flows, compounded at rate.
+
+    Same convention as the rental cash in run_paths and the break-even rent: a cash flow in
+    year j (0-based) is compounded for the years that remain after it.
+    """
+    n = len(amounts)
+    return sum(a * (1 + rate) ** (n - 1 - j) for j, a in enumerate(amounts))
 
 
 def run_paths(inherit_year: int, g: float, infl: float, eq: float, drag: float,
@@ -185,11 +201,22 @@ def run_paths(inherit_year: int, g: float, infl: float, eq: float, drag: float,
     inv_eq = sale["net"] * (1 + eq - drag) ** horizon
     inv_ts = sale["net"] * (1 + tsy) ** horizon
 
+    # Carrying outflows (property tax and running costs) are real cash paid out of the
+    # heir's wealth on every path that keeps or lets the house. They are compounded at the
+    # same after-tax equity return as the sell paths, and deducted from the terminal value.
+    # Before this was done, the living and letting paths reported these costs but did not
+    # charge them, which overstated both paths and understated every break-even.
+    rate_fv = eq - drag
+
     # Path 3: live in it for the whole horizon, then sell
-    tax_live = tax_path(taxable_live, fit_T, inherit_year, infl, horizon)
+    bills_live = annual_bills(taxable_live, fit_T, inherit_year, infl, horizon)
+    tax_live = sum(bills_live)
     cost_live = carrying_costs(value_at_death, cost_a_base, maint_live, infl, horizon)
     live = sale_proceeds(terminal_price, value_at_death, sell_pct, gain_rate, rec_rate,
                          0.0, exclusion)
+    live_carry_fv = fv_stream(
+        [bills_live[j] + (cost_a_base + maint_live * value_at_death) * (1 + infl) ** j
+         for j in range(horizon)], rate_fv)
 
     # Rental income. The original model charged every landlord cost to the rental paths
     # and credited none of the rent, which made them structurally incapable of winning.
@@ -205,25 +232,39 @@ def run_paths(inherit_year: int, g: float, infl: float, eq: float, drag: float,
         return tot
 
     # Path 4: let it out from the start, then sell
-    tax_rent = tax_path(taxable_rent, fit_T, inherit_year, infl, horizon)
+    bills_rent = annual_bills(taxable_rent, fit_T, inherit_year, infl, horizon)
+    tax_rent = sum(bills_rent)
     cost_rent = carrying_costs(value_at_death, cost_a_base, maint_rent, infl, horizon)
     deprec = min(0.8 * value_at_death, 0.8 * value_at_death / 27.5 * horizon)
     rent_sale = sale_proceeds(terminal_price, value_at_death - deprec, sell_pct,
                               gain_rate, rec_rate, deprec)
     rent_cash = rent_accumulated(horizon)
+    # Net rental cash: gross rent less the same tax and running costs, compounded.
+    rent_carry_fv = fv_stream(
+        [rent0 * (1 + infl) ** j - bills_rent[j]
+         - (cost_a_base + maint_rent * value_at_death) * (1 + infl) ** j
+         for j in range(horizon)], rate_fv)
 
     # Path 5: live in it for two years, then let it out for the rest
-    tax_h1 = tax_path(taxable_live, fit_T, inherit_year, infl, 2)
+    bills_h1 = annual_bills(taxable_live, fit_T, inherit_year, infl, 2)
+    tax_h1 = sum(bills_h1)
     fit_T2 = dict(fit_T)
     fit_T2["fixed_base"] = fit_T["fixed_base"] * (1 + fixed_growth) ** 2
     av_after = taxable_rent * 1.02 ** 2
-    tax_h2 = tax_path(av_after, fit_T2, inherit_year + 2, infl, horizon - 2)
+    bills_h2 = annual_bills(av_after, fit_T2, inherit_year + 2, infl, horizon - 2)
+    tax_h2 = sum(bills_h2)
     cost_h = carrying_costs(value_at_death, cost_a_base, maint_rent, infl, horizon)
     deprec_h = min(0.8 * value_at_death,
                    0.8 * value_at_death / 27.5 * (horizon - 2))
     hybrid_sale = sale_proceeds(terminal_price, value_at_death - deprec_h, sell_pct,
                                 gain_rate, rec_rate, deprec_h, exclusion)
     hybrid_cash = rent_accumulated(horizon - 2)
+    # Net rental cash for the years let: gross rent (hybrid_cash, already compounded) less the
+    # tax and running costs of every year of the horizon, compounded at the same rate.
+    hybrid_out_fv = fv_stream(
+        [(bills_h1 + bills_h2)[j] + (cost_a_base + maint_rent * value_at_death) * (1 + infl) ** j
+         for j in range(horizon)], rate_fv)
+    hybrid_carry_fv = hybrid_cash - hybrid_out_fv
 
     return {
         "inherit_year": inherit_year,
@@ -238,22 +279,33 @@ def run_paths(inherit_year: int, g: float, infl: float, eq: float, drag: float,
         "bill_if_rent_year1": money10(bill_for(taxable_rent, fit_T, inherit_year, infl)),
         "terminal_price": money10(terminal_price),
         "paths": {
-            "sell_equities": {"terminal": money10(inv_eq), "outflow": 0,
+            # Sell paths: the only cost after inheritance is the sale itself, already netted
+            # from the proceeds. Its amount is reported as the cost paid.
+            "sell_equities": {"terminal": money10(inv_eq),
+                              "outflow": money10(sale["costs"] + sale["tax"]),
+                              "carry_fv": 0,
                               "start": sale["net"], "sale": sale},
-            "sell_treasury": {"terminal": money10(inv_ts), "outflow": 0,
+            "sell_treasury": {"terminal": money10(inv_ts),
+                              "outflow": money10(sale["costs"] + sale["tax"]),
+                              "carry_fv": 0,
                               "start": sale["net"], "sale": sale},
-            "live_in": {"terminal": money10(live["net"]),
+            # Holding paths: the terminal value is the sale net less the compounded future
+            # value of every year's property tax and running costs (carry_fv).
+            "live_in": {"terminal": money10(live["net"] - live_carry_fv),
                         "outflow": money10(tax_live + cost_live),
+                        "carry_fv": money10(live_carry_fv),
                         "tax_total": money10(tax_live),
                         "cost_total": money10(cost_live), "sale": live},
-            "rent_out": {"terminal": money10(rent_sale["net"] + rent_cash),
+            "rent_out": {"terminal": money10(rent_sale["net"] + rent_carry_fv),
                          "outflow": money10(tax_rent + cost_rent),
+                         "carry_fv": money10(rent_carry_fv),
                          "tax_total": money10(tax_rent),
                          "cost_total": money10(cost_rent),
                          "rent_income_total": money10(rent_cash),
                          "depreciation": money10(deprec), "sale": rent_sale},
-            "live_then_rent": {"terminal": money10(hybrid_sale["net"] + hybrid_cash),
+            "live_then_rent": {"terminal": money10(hybrid_sale["net"] + hybrid_carry_fv),
                                "outflow": money10(tax_h1 + tax_h2 + cost_h),
+                               "carry_fv": money10(hybrid_carry_fv),
                                "tax_total": money10(tax_h1 + tax_h2),
                                "cost_total": money10(cost_h),
                                "rent_income_total": money10(hybrid_cash),
@@ -380,10 +432,16 @@ def crash_entry_comparison(inherit_year: int, g: float, infl: float, eq: float, 
     }
 
 
-def annuity(present: float, rate: float, years: int) -> float:
+def annuity_fv(future_gap: float, rate: float, years: int) -> float:
+    """Level year-end payment whose future value after `years` equals `future_gap`.
+
+    The gap is already a future value (money at the end of the horizon), so the payment is
+    future_gap * r / ((1 + r)^n - 1). The present-value form r / (1 - (1+r)^-n) overstated it
+    by about (1 + r)^n and was retired here.
+    """
     if rate <= 0:
-        return present / years
-    return present * rate / (1 - (1 + rate) ** (-years))
+        return future_gap / years
+    return future_gap * rate / ((1 + rate) ** years - 1)
 
 
 def breakeven_rent(inherit_year: int, g: float, infl: float, eq: float, drag: float,
@@ -422,17 +480,18 @@ def breakeven_rent(inherit_year: int, g: float, infl: float, eq: float, drag: fl
 
 def breakeven_return(inherit_year: int, g: float, cap_growth: float, sell_pct: float,
                      horizon: int, gain_rate: float, rec_rate: float, target: float):
+    """Annual return that, earned on the sale proceeds, reaches `target` after the horizon.
+
+    Solved in closed form, so a negative figure is possible: it means the sale proceeds
+    would still reach the target if they lost that much every year. None means no return
+    can reach it (a non-positive target).
+    """
     k = inherit_year - 2026
     value_at_death = A["estimated_market_value_2026"] * (1 + g) ** k
     sale = sale_proceeds(value_at_death, value_at_death, sell_pct, gain_rate, rec_rate, 0.0)
-    lo, hi = 0.0, 0.60
-    for _ in range(300):
-        mid = (lo + hi) / 2
-        if sale["net"] * (1 + mid) ** horizon < target:
-            lo = mid
-        else:
-            hi = mid
-    return round((lo + hi) / 2 * 100.0, 2)
+    if target <= 0 or sale["net"] <= 0:
+        return None
+    return round(((target / sale["net"]) ** (1.0 / horizon) - 1.0) * 100.0, 2)
 
 
 def sensitivity(target_year: int):
@@ -856,7 +915,7 @@ def main() -> dict:
         res["breakeven_return_vs_rent"] = breakeven_return(
             year, g, cap_growth, sell_pct, horizon, gain_rate, rec_rate,
             res["paths"]["rent_out"]["terminal"])
-        res["housing_value_needed"] = money10(annuity(
+        res["housing_value_needed"] = money10(annuity_fv(
             t_eq - res["paths"]["live_in"]["terminal"], eq - drag, horizon))
         res["breakeven_house_growth"] = breakeven_house_growth(
             year, eq, drag, cap_growth, sell_pct, horizon, gain_rate, rec_rate,
