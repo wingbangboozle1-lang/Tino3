@@ -1,0 +1,634 @@
+{
+ "episodes": {
+  "control_2012": {
+   "cash": "3-month Treasury bill (FRED TB3MS)",
+   "index": "NASDAQ Composite, monthly average (FRED NASDAQCOM); proxy for a broad stock index",
+   "result": {
+    "cash": "tb3m",
+    "entry": "2012-01",
+    "entry_level": 2743.795,
+    "horizon_months": 96,
+    "strategies": {
+     "lump": {
+      "final_cash_share_pct": 0.0,
+      "label": "Lump sum on the entry month",
+      "max_drawdown_pct": 14.6,
+      "never_below_cost": true,
+      "recovered_at_month": null,
+      "terminal": 3365180,
+      "terminal_multiple": 3.365,
+      "worst_at_month": 0,
+      "worst_change_pct": 0.0,
+      "worst_value": 1000000
+     },
+     "phased_24": {
+      "final_cash_share_pct": 0.0,
+      "label": "Park 24 months, then buy over 12",
+      "max_drawdown_pct": 14.6,
+      "never_below_cost": false,
+      "recovered_at_month": 29,
+      "terminal": 2118600,
+      "terminal_multiple": 2.119,
+      "worst_at_month": 27,
+      "worst_change_pct": -0.4,
+      "worst_value": 996180
+     },
+     "phased_30": {
+      "final_cash_share_pct": 0.0,
+      "label": "Park 30 months, then buy over 12",
+      "max_drawdown_pct": 14.6,
+      "never_below_cost": false,
+      "recovered_at_month": 50,
+      "terminal": 1957760,
+      "terminal_multiple": 1.958,
+      "worst_at_month": 49,
+      "worst_change_pct": -5.4,
+      "worst_value": 946340
+     },
+     "phased_36": {
+      "final_cash_share_pct": 0.0,
+      "label": "Park 36 months, then buy over 12",
+      "max_drawdown_pct": 14.6,
+      "never_below_cost": false,
+      "recovered_at_month": 54,
+      "terminal": 1872610,
+      "terminal_multiple": 1.873,
+      "worst_at_month": 49,
+      "worst_change_pct": -9.5,
+      "worst_value": 905180
+     }
+    },
+    "window_first": "2012-01",
+    "window_last": "2020-01"
+   },
+   "title": "Control: entry in January 2012, when the market was not falling"
+  },
+  "crash_1929": {
+   "anchors": {
+    "peak_daily": 381.17,
+    "peak_date": "3 September 1929",
+    "recovery_date": "23 November 1954",
+    "trough_daily": 41.22,
+    "trough_date": "8 July 1932"
+   },
+   "cash": "3-to-6-month Treasury notes and certificates (NBER, via FRED)",
+   "index": "Dow Jones Industrial Average, monthly average (NBER, via FRED)",
+   "result": {
+    "cash": "cash_3to6m",
+    "entry": "1929-09",
+    "entry_level": 362.35,
+    "horizon_months": 96,
+    "strategies": {
+     "lump": {
+      "final_cash_share_pct": 0.0,
+      "label": "Lump sum on the entry month",
+      "max_drawdown_pct": 87.1,
+      "never_below_cost": false,
+      "recovered_at_month": null,
+      "terminal": 442250,
+      "terminal_multiple": 0.442,
+      "worst_at_month": 33,
+      "worst_change_pct": -87.1,
+      "worst_value": 129290
+     },
+     "phased_24": {
+      "final_cash_share_pct": 0.0,
+      "label": "Park 24 months, then buy over 12",
+      "max_drawdown_pct": 30.3,
+      "never_below_cost": false,
+      "recovered_at_month": 36,
+      "terminal": 2398430,
+      "terminal_multiple": 2.398,
+      "worst_at_month": 33,
+      "worst_change_pct": -27.3,
+      "worst_value": 726760
+     },
+     "phased_30": {
+      "final_cash_share_pct": 0.0,
+      "label": "Park 30 months, then buy over 12",
+      "max_drawdown_pct": 17.3,
+      "never_below_cost": false,
+      "recovered_at_month": 42,
+      "terminal": 2844080,
+      "terminal_multiple": 2.844,
+      "worst_at_month": 41,
+      "worst_change_pct": -2.1,
+      "worst_value": 978790
+     },
+     "phased_36": {
+      "final_cash_share_pct": 0.0,
+      "label": "Park 36 months, then buy over 12",
+      "max_drawdown_pct": 15.6,
+      "never_below_cost": false,
+      "recovered_at_month": 42,
+      "terminal": 2426690,
+      "terminal_multiple": 2.427,
+      "worst_at_month": 41,
+      "worst_change_pct": -0.2,
+      "worst_value": 997550
+     }
+    },
+    "window_first": "1929-09",
+    "window_last": "1937-09"
+   },
+   "title": "Entry at the September 1929 peak (monthly average)"
+  },
+  "crash_2007": {
+   "cash": "3-month Treasury bill (FRED TB3MS)",
+   "index": "NASDAQ Composite, monthly average (FRED NASDAQCOM); proxy for a broad stock index",
+   "result": {
+    "cash": "tb3m",
+    "entry": "2007-10",
+    "entry_level": 2780.416,
+    "horizon_months": 96,
+    "strategies": {
+     "lump": {
+      "final_cash_share_pct": 0.0,
+      "label": "Lump sum on the entry month",
+      "max_drawdown_pct": 48.5,
+      "never_below_cost": false,
+      "recovered_at_month": 40,
+      "terminal": 1754790,
+      "terminal_multiple": 1.755,
+      "worst_at_month": 17,
+      "worst_change_pct": -48.5,
+      "worst_value": 515110
+     },
+     "phased_24": {
+      "final_cash_share_pct": 0.0,
+      "label": "Park 24 months, then buy over 12",
+      "max_drawdown_pct": 11.0,
+      "never_below_cost": true,
+      "recovered_at_month": null,
+      "terminal": 2220060,
+      "terminal_multiple": 2.22,
+      "worst_at_month": 0,
+      "worst_change_pct": 0.0,
+      "worst_value": 1000000
+     },
+     "phased_30": {
+      "final_cash_share_pct": 0.0,
+      "label": "Park 30 months, then buy over 12",
+      "max_drawdown_pct": 11.0,
+      "never_below_cost": true,
+      "recovered_at_month": null,
+      "terminal": 2042900,
+      "terminal_multiple": 2.043,
+      "worst_at_month": 0,
+      "worst_change_pct": 0.0,
+      "worst_value": 1000000
+     },
+     "phased_36": {
+      "final_cash_share_pct": 0.0,
+      "label": "Park 36 months, then buy over 12",
+      "max_drawdown_pct": 9.1,
+      "never_below_cost": false,
+      "recovered_at_month": 48,
+      "terminal": 1882640,
+      "terminal_multiple": 1.883,
+      "worst_at_month": 46,
+      "worst_change_pct": -3.3,
+      "worst_value": 967100
+     }
+    },
+    "window_first": "2007-10",
+    "window_last": "2015-10"
+   },
+   "title": "Entry at the October 2007 peak (monthly average)"
+  },
+  "crash_2007_2y": {
+   "cash": "2-year Treasury note (FRED GS2)",
+   "index": "NASDAQ Composite, monthly average (FRED NASDAQCOM); proxy for a broad stock index",
+   "result": {
+    "cash": "gs2",
+    "entry": "2007-10",
+    "entry_level": 2780.416,
+    "horizon_months": 96,
+    "strategies": {
+     "lump": {
+      "final_cash_share_pct": 0.0,
+      "label": "Lump sum on the entry month",
+      "max_drawdown_pct": 48.5,
+      "never_below_cost": false,
+      "recovered_at_month": 40,
+      "terminal": 1754790,
+      "terminal_multiple": 1.755,
+      "worst_at_month": 17,
+      "worst_change_pct": -48.5,
+      "worst_value": 515110
+     },
+     "phased_24": {
+      "final_cash_share_pct": 0.0,
+      "label": "Park 24 months, then buy over 12",
+      "max_drawdown_pct": 11.0,
+      "never_below_cost": true,
+      "recovered_at_month": null,
+      "terminal": 2256300,
+      "terminal_multiple": 2.256,
+      "worst_at_month": 0,
+      "worst_change_pct": 0.0,
+      "worst_value": 1000000
+     },
+     "phased_30": {
+      "final_cash_share_pct": 0.0,
+      "label": "Park 30 months, then buy over 12",
+      "max_drawdown_pct": 11.0,
+      "never_below_cost": true,
+      "recovered_at_month": null,
+      "terminal": 2082280,
+      "terminal_multiple": 2.082,
+      "worst_at_month": 0,
+      "worst_change_pct": 0.0,
+      "worst_value": 1000000
+     },
+     "phased_36": {
+      "final_cash_share_pct": 0.0,
+      "label": "Park 36 months, then buy over 12",
+      "max_drawdown_pct": 9.1,
+      "never_below_cost": false,
+      "recovered_at_month": 48,
+      "terminal": 1923520,
+      "terminal_multiple": 1.924,
+      "worst_at_month": 46,
+      "worst_change_pct": -1.2,
+      "worst_value": 988090
+     }
+    },
+    "window_first": "2007-10",
+    "window_last": "2015-10"
+   },
+   "title": "Entry at the October 2007 peak, parked in 2-year Treasuries"
+  },
+  "sweep_1929": {
+   "cash": "3-to-6-month Treasury notes and certificates (NBER, via FRED)",
+   "index": "Dow Jones Industrial Average, monthly average (NBER, via FRED)",
+   "result": {
+    "lump_worst_pct_range": [
+     -87.1,
+     -79.5
+    ],
+    "rows": [
+     {
+      "entry": "1929-01",
+      "lump_terminal": 593330,
+      "lump_worst_pct": -84.8,
+      "phased_24_beats_lump": true,
+      "phased_24_terminal": 1502290,
+      "phased_24_worst_pct": -61.4,
+      "phased_30_beats_lump": true,
+      "phased_30_terminal": 2440800,
+      "phased_30_worst_pct": -37.3,
+      "phased_36_beats_lump": true,
+      "phased_36_terminal": 3188090,
+      "phased_36_worst_pct": -5.7
+     },
+     {
+      "entry": "1929-02",
+      "lump_terminal": 609710,
+      "lump_worst_pct": -84.8,
+      "phased_24_beats_lump": true,
+      "phased_24_terminal": 1661850,
+      "phased_24_worst_pct": -58.7,
+      "phased_30_beats_lump": true,
+      "phased_30_terminal": 2753780,
+      "phased_30_worst_pct": -31.4,
+      "phased_36_beats_lump": true,
+      "phased_36_terminal": 3342280,
+      "phased_36_worst_pct": -2.4
+     },
+     {
+      "entry": "1929-03",
+      "lump_terminal": 605800,
+      "lump_worst_pct": -84.8,
+      "phased_24_beats_lump": true,
+      "phased_24_terminal": 1765630,
+      "phased_24_worst_pct": -55.8,
+      "phased_30_beats_lump": true,
+      "phased_30_terminal": 2867550,
+      "phased_30_worst_pct": -25.6,
+      "phased_36_beats_lump": true,
+      "phased_36_terminal": 3400370,
+      "phased_36_worst_pct": 0.0
+     },
+     {
+      "entry": "1929-04",
+      "lump_terminal": 574550,
+      "lump_worst_pct": -84.8,
+      "phased_24_beats_lump": true,
+      "phased_24_terminal": 1779020,
+      "phased_24_worst_pct": -53.1,
+      "phased_30_beats_lump": true,
+      "phased_30_terminal": 2803910,
+      "phased_30_worst_pct": -20.4,
+      "phased_36_beats_lump": true,
+      "phased_36_terminal": 3296420,
+      "phased_36_worst_pct": 0.0
+     },
+     {
+      "entry": "1929-05",
+      "lump_terminal": 554070,
+      "lump_worst_pct": -84.9,
+      "phased_24_beats_lump": true,
+      "phased_24_terminal": 1858370,
+      "phased_24_worst_pct": -49.4,
+      "phased_30_beats_lump": true,
+      "phased_30_terminal": 2783000,
+      "phased_30_worst_pct": -16.0,
+      "phased_36_beats_lump": true,
+      "phased_36_terminal": 3168200,
+      "phased_36_worst_pct": 0.0
+     },
+     {
+      "entry": "1929-06",
+      "lump_terminal": 538160,
+      "lump_worst_pct": -85.2,
+      "phased_24_beats_lump": true,
+      "phased_24_terminal": 2019840,
+      "phased_24_worst_pct": -44.4,
+      "phased_30_beats_lump": true,
+      "phased_30_terminal": 2844200,
+      "phased_30_worst_pct": -11.4,
+      "phased_36_beats_lump": true,
+      "phased_36_terminal": 3015610,
+      "phased_36_worst_pct": 0.0
+     },
+     {
+      "entry": "1929-07",
+      "lump_terminal": 520870,
+      "lump_worst_pct": -86.3,
+      "phased_24_beats_lump": true,
+      "phased_24_terminal": 2325750,
+      "phased_24_worst_pct": -38.7,
+      "phased_30_beats_lump": true,
+      "phased_30_terminal": 3037820,
+      "phased_30_worst_pct": -7.9,
+      "phased_36_beats_lump": true,
+      "phased_36_terminal": 2968800,
+      "phased_36_worst_pct": 0.0
+     },
+     {
+      "entry": "1929-08",
+      "lump_terminal": 509400,
+      "lump_worst_pct": -87.0,
+      "phased_24_beats_lump": true,
+      "phased_24_terminal": 2612060,
+      "phased_24_worst_pct": -32.9,
+      "phased_30_beats_lump": true,
+      "phased_30_terminal": 3170280,
+      "phased_30_worst_pct": -4.7,
+      "phased_36_beats_lump": true,
+      "phased_36_terminal": 2868360,
+      "phased_36_worst_pct": -1.1
+     },
+     {
+      "entry": "1929-09",
+      "lump_terminal": 442250,
+      "lump_worst_pct": -87.1,
+      "phased_24_beats_lump": true,
+      "phased_24_terminal": 2398430,
+      "phased_24_worst_pct": -27.3,
+      "phased_30_beats_lump": true,
+      "phased_30_terminal": 2844080,
+      "phased_30_worst_pct": -2.1,
+      "phased_36_beats_lump": true,
+      "phased_36_terminal": 2426690,
+      "phased_36_worst_pct": -0.2
+     },
+     {
+      "entry": "1929-10",
+      "lump_terminal": 479930,
+      "lump_worst_pct": -83.9,
+      "phased_24_beats_lump": true,
+      "phased_24_terminal": 2156330,
+      "phased_24_worst_pct": -22.3,
+      "phased_30_beats_lump": true,
+      "phased_30_terminal": 2535090,
+      "phased_30_worst_pct": 0.0,
+      "phased_36_beats_lump": true,
+      "phased_36_terminal": 2061320,
+      "phased_36_worst_pct": 0.0
+     },
+     {
+      "entry": "1929-11",
+      "lump_terminal": 546670,
+      "lump_worst_pct": -79.5,
+      "phased_24_beats_lump": true,
+      "phased_24_terminal": 1973020,
+      "phased_24_worst_pct": -17.9,
+      "phased_30_beats_lump": true,
+      "phased_30_terminal": 2246110,
+      "phased_30_worst_pct": 0.0,
+      "phased_36_beats_lump": true,
+      "phased_36_terminal": 1783710,
+      "phased_36_worst_pct": 0.0
+     },
+     {
+      "entry": "1929-12",
+      "lump_terminal": 503030,
+      "lump_worst_pct": -81.0,
+      "phased_24_beats_lump": true,
+      "phased_24_terminal": 2031560,
+      "phased_24_worst_pct": -13.4,
+      "phased_30_beats_lump": true,
+      "phased_30_terminal": 2153990,
+      "phased_30_worst_pct": 0.0,
+      "phased_36_beats_lump": true,
+      "phased_36_terminal": 1712470,
+      "phased_36_worst_pct": 0.0
+     }
+    ],
+    "summary": {
+     "phased_24": {
+      "beats_lump": 12,
+      "entries": 12,
+      "median_terminal_vs_lump_pct": 275.3,
+      "worst_worst_pct": -61.4
+     },
+     "phased_30": {
+      "beats_lump": 12,
+      "entries": 12,
+      "median_terminal_vs_lump_pct": 402.3,
+      "worst_worst_pct": -37.3
+     },
+     "phased_36": {
+      "beats_lump": 12,
+      "entries": 12,
+      "median_terminal_vs_lump_pct": 460.4,
+      "worst_worst_pct": -5.7
+     }
+    }
+   },
+   "title": "Sensitivity: every entry month in 1929"
+  },
+  "sweep_2007": {
+   "cash": "3-month Treasury bill (FRED TB3MS)",
+   "index": "NASDAQ Composite, monthly average (FRED NASDAQCOM); proxy for a broad stock index",
+   "result": {
+    "lump_worst_pct_range": [
+     -48.5,
+     -36.5
+    ],
+    "rows": [
+     {
+      "entry": "2007-10",
+      "lump_terminal": 1754790,
+      "lump_worst_pct": -48.5,
+      "phased_24_beats_lump": true,
+      "phased_24_terminal": 2220060,
+      "phased_24_worst_pct": 0.0,
+      "phased_30_beats_lump": true,
+      "phased_30_terminal": 2042900,
+      "phased_30_worst_pct": 0.0,
+      "phased_36_beats_lump": true,
+      "phased_36_terminal": 1882640,
+      "phased_36_worst_pct": -3.3
+     },
+     {
+      "entry": "2007-11",
+      "lump_terminal": 1908710,
+      "lump_worst_pct": -46.2,
+      "phased_24_beats_lump": true,
+      "phased_24_terminal": 2278800,
+      "phased_24_worst_pct": 0.0,
+      "phased_30_beats_lump": true,
+      "phased_30_terminal": 2101360,
+      "phased_30_worst_pct": 0.0,
+      "phased_36_beats_lump": true,
+      "phased_36_terminal": 1944450,
+      "phased_36_worst_pct": -3.8
+     },
+     {
+      "entry": "2007-12",
+      "lump_terminal": 1893840,
+      "lump_worst_pct": -46.2,
+      "phased_24_beats_lump": true,
+      "phased_24_terminal": 2223520,
+      "phased_24_worst_pct": -0.5,
+      "phased_30_beats_lump": true,
+      "phased_30_terminal": 2046070,
+      "phased_30_worst_pct": 0.0,
+      "phased_36_beats_lump": true,
+      "phased_36_terminal": 1918390,
+      "phased_36_worst_pct": -4.0
+     },
+     {
+      "entry": "2008-01",
+      "lump_terminal": 1906760,
+      "lump_worst_pct": -40.8,
+      "phased_24_beats_lump": true,
+      "phased_24_terminal": 2001600,
+      "phased_24_worst_pct": -0.7,
+      "phased_30_beats_lump": false,
+      "phased_30_terminal": 1837700,
+      "phased_30_worst_pct": -0.2,
+      "phased_36_beats_lump": false,
+      "phased_36_terminal": 1752220,
+      "phased_36_worst_pct": -3.8
+     },
+     {
+      "entry": "2008-02",
+      "lump_terminal": 1918980,
+      "lump_worst_pct": -38.4,
+      "phased_24_beats_lump": false,
+      "phased_24_terminal": 1905840,
+      "phased_24_worst_pct": -0.6,
+      "phased_30_beats_lump": false,
+      "phased_30_terminal": 1738570,
+      "phased_30_worst_pct": -2.4,
+      "phased_36_beats_lump": false,
+      "phased_36_terminal": 1691020,
+      "phased_36_worst_pct": -3.4
+     },
+     {
+      "entry": "2008-03",
+      "lump_terminal": 2108590,
+      "lump_worst_pct": -36.5,
+      "phased_24_beats_lump": false,
+      "phased_24_terminal": 1988210,
+      "phased_24_worst_pct": -0.9,
+      "phased_30_beats_lump": false,
+      "phased_30_terminal": 1827210,
+      "phased_30_worst_pct": -3.7,
+      "phased_36_beats_lump": false,
+      "phased_36_terminal": 1791100,
+      "phased_36_worst_pct": -2.7
+     },
+     {
+      "entry": "2008-04",
+      "lump_terminal": 2065860,
+      "lump_worst_pct": -39.5,
+      "phased_24_beats_lump": false,
+      "phased_24_terminal": 2020800,
+      "phased_24_worst_pct": -0.4,
+      "phased_30_beats_lump": false,
+      "phased_30_terminal": 1862270,
+      "phased_30_worst_pct": -4.6,
+      "phased_36_beats_lump": false,
+      "phased_36_terminal": 1825440,
+      "phased_36_worst_pct": -2.1
+     },
+     {
+      "entry": "2008-05",
+      "lump_terminal": 1928220,
+      "lump_worst_pct": -42.3,
+      "phased_24_beats_lump": true,
+      "phased_24_terminal": 1957260,
+      "phased_24_worst_pct": 0.0,
+      "phased_30_beats_lump": false,
+      "phased_30_terminal": 1811110,
+      "phased_30_worst_pct": -4.9,
+      "phased_36_beats_lump": false,
+      "phased_36_terminal": 1773480,
+      "phased_36_worst_pct": -1.3
+     },
+     {
+      "entry": "2008-06",
+      "lump_terminal": 2000550,
+      "lump_worst_pct": -41.0,
+      "phased_24_beats_lump": false,
+      "phased_24_terminal": 1951410,
+      "phased_24_worst_pct": 0.0,
+      "phased_30_beats_lump": false,
+      "phased_30_terminal": 1829640,
+      "phased_30_worst_pct": -5.0,
+      "phased_36_beats_lump": false,
+      "phased_36_terminal": 1791860,
+      "phased_36_worst_pct": -0.5
+     }
+    ],
+    "summary": {
+     "phased_24": {
+      "beats_lump": 5,
+      "entries": 9,
+      "median_terminal_vs_lump_pct": 1.5,
+      "worst_worst_pct": -0.9
+     },
+     "phased_30": {
+      "beats_lump": 3,
+      "entries": 9,
+      "median_terminal_vs_lump_pct": -6.1,
+      "worst_worst_pct": -5.0
+     },
+     "phased_36": {
+      "beats_lump": 3,
+      "entries": 9,
+      "median_terminal_vs_lump_pct": -8.1,
+      "worst_worst_pct": -4.0
+     }
+    }
+   },
+   "title": "Sensitivity: every entry month from October 2007 to June 2008"
+  }
+ },
+ "meta": {
+  "horizon_months": 96,
+  "limits": "The 1929 episode uses monthly averages, so its peak and trough differ from the daily closes published by the Federal Reserve. The 2007 episode uses NASDAQ Composite because the FRED monthly S&P 500 and Dow pages returned by the source began in December 2016 and could not be used for 2007 to 2010.",
+  "method": "Price indices only; dividends excluded for both strategies. Parked cash earns the month's Treasury yield divided by twelve. Phased strategies wait the stated months, then buy in 12 equal monthly tranches of the remaining cash. Every value is per $1,000,000 of proceeds and rounded to $10. Valued 96 months after entry.",
+  "tranches": 12,
+  "waits": [
+   24,
+   30,
+   36
+  ]
+ }
+}

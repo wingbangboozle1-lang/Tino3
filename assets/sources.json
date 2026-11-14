@@ -1272,6 +1272,51 @@
    "checked": "Opened on the publisher's official domain on 2026-11-13.",
    "supports": "At the 20 May 2026 public hearing the district board approved Ordinance No. 137 with a sewer rate increase of 3 percent for FY 2026-2027, below the 5 percent maximum in the notice, effective 1 July 2026.",
    "limits": "The minutes record the percentage, not the resulting schedule. The FY 2026-2027 single family figure shown on this site is computed from the FY 2025-2026 charge and this 3 percent, and is labelled as computed."
+  },
+  {
+   "id": "fred_nasdaqcom_m",
+   "publisher": "Federal Reserve Bank of St. Louis (data: Nasdaq)",
+   "title": "NASDAQ Composite Index (NASDAQCOM), monthly average, 2007 to 2020",
+   "url": "https://fred.stlouisfed.org/series/NASDAQCOM",
+   "checked": "Read in this session from the FRED series CSV with frequency set to monthly and aggregation set to average (2007-01 to 2020-12); data used by the crash-test script.",
+   "supports": "Monthly average NASDAQ Composite levels used for the 2007 to 2008 entry test: 2007-10 2,780.42; 2009-03 1,432.23 (about -48.5 percent from the October 2007 month).",
+   "limits": "Monthly averages, not closing prices. NASDAQ Composite is a technology-heavy proxy and is not a broad market index. The S&P 500 and Dow monthly series were not usable for 2007 to 2010 in this build."
+  },
+  {
+   "id": "fred_tb3ms",
+   "publisher": "Federal Reserve Bank of St. Louis (data: Board of Governors)",
+   "title": "3-Month Treasury Bill Secondary Market Rate, Discount Basis (TB3MS), monthly",
+   "url": "https://fred.stlouisfed.org/series/TB3MS",
+   "checked": "Read in this session from the FRED series CSV (2007-01 to 2020-12); used by the crash-test script as the parking yield.",
+   "supports": "Monthly 3-month Treasury bill rate used as the parking yield for the 2007 to 2008 test (2007-12 3.00 percent; 2008-12 0.03 percent).",
+   "limits": "Discount-basis monthly averages, not a yield to maturity. The phased-entry model uses the monthly rate divided by twelve as a simple approximation."
+  },
+  {
+   "id": "fred_gs2",
+   "publisher": "Federal Reserve Bank of St. Louis (data: Board of Governors)",
+   "title": "2-Year Treasury Constant Maturity Rate (GS2), monthly",
+   "url": "https://fred.stlouisfed.org/series/GS2",
+   "checked": "Read in this session from the FRED series CSV (2007-01 to 2020-12); used by the crash-test script as the 2-year parking yield.",
+   "supports": "Monthly 2-year Treasury yield used for the 2-year parking variant of the 2007 to 2008 test (2008-12 0.82 percent).",
+   "limits": "Constant-maturity monthly averages. Bond prices are not marked to market in the model; holding the note to maturity is assumed."
+  },
+  {
+   "id": "nber_m11009b",
+   "publisher": "NBER Macrohistory Database via Federal Reserve Bank of St. Louis (FRED)",
+   "title": "Dow Jones Industrial Average, monthly, not seasonally adjusted (FRED M1109BUSM293NNBR)",
+   "url": "https://fred.stlouisfed.org/series/M1109BUSM293NNBR",
+   "checked": "Read in this session from the FRED series CSV for 1928-01 to 1934-12 and for 1935-01 to 1939-12, and cross-checked by reading the series page (1914-12 to 1968-12).",
+   "supports": "Monthly Dow Jones Industrial Average used for the 1929 entry test: 1929-09 362.35; 1929-10 291.50; 1932-06 46.85; 1937-08 182.95.",
+   "limits": "FRED does not state whether the monthly figure is an average of daily closes or a monthly close; treat as provisional. Monthly values differ from the daily peak (381.17, 3 September 1929) and trough (41.22, 8 July 1932) in the Federal Reserve essay. Price index: dividends excluded."
+  },
+  {
+   "id": "nber_m13029a",
+   "publisher": "NBER Macrohistory Database via Federal Reserve Bank of St. Louis (FRED)",
+   "title": "3-to-6-Month Treasury Notes and Certificates, average (FRED M1329AUSM193NNBR)",
+   "url": "https://fred.stlouisfed.org/series/M1329AUSM193NNBR",
+   "checked": "Read in this session from the FRED series CSV for 1929-01 to 1934-12.",
+   "supports": "Monthly 3-to-6-month Treasury rate used as the parking yield for the 1929 test (1929-09 4.58 percent; 1931-06 0.55 percent; 1932-10 0.01 percent).",
+   "limits": "Before February 1931 the series averages daily 3-to-6-month notes and certificates; from February 1931 it averages weekly discount rates on new 3-month bills. The series mixes two methods. No 2-year Treasury series for 1929 to 1934 was located, so the 1929 parking leg uses this 3-to-6-month series (disclosed substitution)."
   }
  ]
 }
