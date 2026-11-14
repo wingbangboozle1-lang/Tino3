@@ -37,7 +37,7 @@ OFFICIAL_HOSTS = {
     "bls.gov", "www.bls.gov", "fred.stlouisfed.org", "REDACTED.legistar.com",
     "sos.ca.gov", "www.sos.ca.gov", "voterguide.sos.ca.gov", "electionresults.sos.ca.gov",
     "REDACTED.org", "www.REDACTED", "REDACTED", "www.REDACTEDcounty.gov",
-    "clerkrecorder.REDACTEDcounty.gov", "files.REDACTEDcounty.gov",
+    "clerkrecorder.REDACTEDcounty.gov", "files.REDACTEDcounty.gov", "dtac.REDACTEDcounty.gov",
     "ssa.gov", "www.ssa.gov", "govinfo.gov", "www.govinfo.gov",
     # added when the two independently maintained ledgers were merged
     "www.REDACTED.gov", "REDACTED.archive.REDACTED", "elections.cdn.sos.ca.gov",
