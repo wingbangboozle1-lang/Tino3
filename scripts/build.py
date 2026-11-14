@@ -27,16 +27,17 @@ ASM = INPUTS["assumptions"]
 BUILD_DATE = "13 November 2026"
 
 NAV_GROUPS = [
-    ("Start here", ["index.html", "executive-summary.html", "decision.html", "briefing.html"]),
+    ("Start here", ["index.html", "executive-summary.html", "decision.html", "what-if.html", "briefing.html"]),
     ("The two properties", ["property-a.html", "property-b.html", "ownership-distinction.html"]),
     ("Money over time", ["costs.html", "projections.html", "taxes.html"]),
-    ("Rules and the estate", ["inheritance.html", "estate.html", "laws.html", "timeline.html"]),
+    ("Rules and the estate", ["inheritance.html", "timeline.html", "estate.html", "laws.html"]),
     ("Black swan economics", ["black-swan.html", "economy.html"]),
     ("Review before deciding", ["questions.html", "suggestions.html", "review.html", "briefing-sheet.html", "glossary.html"]),
     ("Evidence", ["glossary.html", "sources.html"]),
 ]
 PAGE_TITLES = {
     "index.html": "Dashboard",
+    "what-if.html": "What-if cases",
     "executive-summary.html": "Executive summary",
     "decision.html": "The decision",
     "briefing.html": "Attorney & CPA briefing sheet",
@@ -95,6 +96,36 @@ def pc(x, places=2) -> str:
     if x is None:
         return '<span class="blank">not supplied</span>'
     return f"{x:.{places}f}%"
+
+
+SELL_KEYS = ("sell_equities", "sell_treasury")
+
+
+def regime_facts() -> dict:
+    """Stress-regime results, read from the model so the prose cannot drift from the numbers."""
+    regs = MODEL["regimes"]
+    sell = [r for r in regs if r["run"]["best"] in SELL_KEYS]
+    keep = [r for r in regs if r["run"]["best"] == "live_in"]
+    let_ = [r for r in regs if r["run"]["best"] in ("rent_out", "live_then_rent")]
+    lowest_let = [r for r in regs
+                  if min(r["run"]["terminal"], key=r["run"]["terminal"].get) == "rent_out"]
+    return {
+        "n": len(regs), "sell": len(sell), "keep": keep, "let": len(let_),
+        "lowest_let": len(lowest_let),
+        "keep_names": "; ".join(r["name"] for r in keep) or "none",
+    }
+
+
+RF = regime_facts()
+
+
+def ret_cell(x) -> str:
+    """A break-even return. Negative means selling beats the alternative even if the sale proceeds lose that much a year."""
+    if x is None:
+        return '<span class="blank">not reachable</span>'
+    if x < 0:
+        return f"{x:.2f}% a year (negative: the sale still wins if the proceeds lose this much a year)"
+    return f"{x:.2f}% a year"
 
 
 def slink(sid: str, label: str | None = None) -> str:
@@ -178,6 +209,9 @@ METHOD_TEXT = (
     "scripts/model.py. House prices grow at a stated nominal rate, the assessed value rolls forward under the "
     "published rules with an inflation cap, fixed charges grow with inflation, running costs are inflated at "
     "the same rate, and each path is valued at the end of a thirty year horizon after selling costs and tax. "
+    "On the paths that keep or let the house, every year's property tax and running costs are deducted at their "
+    "compounded future value at the after-tax equity return, so the living and letting paths bear the same cash costs "
+    "that the sell paths are spared. "
     "Every monetary result is rounded to the nearest $10 before it is printed. There is no randomness, so the "
     "same inputs always produce the same outputs."
 )
@@ -293,6 +327,20 @@ grandparent and a grandchild whose parent has died. If that is not the relations
 the property is reassessed to full market value, every shelter figure on this site disappears, and the case for
 selling gets stronger. The trust document is the only thing that settles it. <a href="questions.html">Answer
 question A-1</a> before relying on any number here. {slink('rtc63_2_eligibility')}</p>""")
+    regs = MODEL["regimes"]
+    keep_regs = [r for r in regs if r["run"]["best"] == "live_in"]
+    keep_names = "; ".join(r["name"] for r in keep_regs) or "none"
+    sens = MODEL["sensitivity"]
+    eq_vals = sorted(set(x["equity_return"] for x in sens))
+    tsy_wins = sum(1 for x in sens if x["best"] == "sell_treasury")
+    wwc = callout("flag", "What would change the answer", f"""
+<ol class="change-list">
+<li><strong>The Proposition 19 exclusion does not apply.</strong> Then the property is reassessed in full, every shelter figure on this site falls away, and selling gets stronger. <a href="questions.html">Question A-1</a> settles it.</li>
+<li><strong>House prices in this area grow faster than {pc(p45['breakeven_house_growth'])} a year for thirty years.</strong> Then keeping the home matches selling at a 7% return. <a href="what-if.html#threshold-growth">Break-even case</a>.</li>
+<li><strong>Market rent reaches {m(p45['breakeven_rent_monthly'])} a month in 2045 dollars.</strong> Then letting the home out matches selling. <a href="what-if.html#threshold-rent">Break-even case</a>.</li>
+<li><strong>A regime like the one in the stress cases recurs.</strong> Keeping the home wins in {len(keep_regs)} of {len(regs)} stress regimes: {esc(keep_names)}. <a href="black-swan.html">Black swan conditions</a>.</li>
+<li><strong>The heir genuinely wants to live in the house.</strong> The one-line recommendation is conditional on that. <a href="suggestions.html">Suggestions for review</a>.</li>
+</ol>""")
     cards = []
     for group, pages in NAV_GROUPS:
         if group == "Start here":
@@ -304,21 +352,13 @@ question A-1</a> before relying on any number here. {slink('rtc63_2_eligibility'
     return (
         privacy_banner()
         + gating
+        + wwc
         + f'<section class="kpi-row">{kpis}</section>'
         + callout("answer", "The one-line answer", f"""
 <p>Under every baseline this site can build, <strong>selling Property A soon after it is inherited beats living in it or letting it out</strong>, and it is not close. The reason is a one-off combination: the inheritance resets the income-tax basis to the value at death, so an immediate sale pays almost no capital gains tax, while the property tax assessment jumps to market value under Proposition 19. Waiting converts a tax-free asset into a taxed one and adds roughly {m(p45['bill_if_rent_year1'] - p45['bill_today_projected'])} a year of extra property tax if the home is let out.</p>
 <p>The break-even house growth needed to make keeping the home beat selling is <strong>{pc(p45['breakeven_house_growth'])} a year for thirty years</strong>. The verified house price index for this area compounded at 6.9% a year over the last fifty years and 3.3% a year over the last twenty. Read the <a href="decision.html">full decision</a>, then the <a href="black-swan.html">cases where this flips</a>.</p>
-<p class="reinvest"><strong>Reinvestment risk beside the headline.</strong> Selling and investing assumes the proceeds can be reinvested at the modelled equity return. Inheriting into a 1929- or 2008-style crash means buying equities at the top. The phased path on the black-swan page parks the proceeds in short-term Treasuries for 24-36 months, then moves them into stocks, which softens crash-entry risk - at the cost of missing out while equities rally.</p>
+<p class="reinvest"><strong>Reinvestment risk beside the headline.</strong> Selling and investing assumes the proceeds can be reinvested at the modelled equity return. Inheriting into a 1929- or 2008-style crash means buying equities at the top. The phased path on the black-swan page parks the proceeds in short-term Treasuries for 24-36 months, then moves them into stocks, which softens crash-entry risk - at the cost of missing out while equities rally. On the 2045 baseline the proceeds could lose {pc(-p45['breakeven_return_vs_live'])} a year and selling would still match living, so the case for selling does not need a high return. <a href="what-if.html#threshold-return">Break-even case</a>.</p>
 """)
-        + callout("note", "What would change the answer", f"""\
-<p>The recommendation rests on a few things that could flip it:</p>
-<ul>
-<li><strong>The parent-child gate.</strong> If the transfer is not between a parent and a child (or a grandparent and a grandchild whose parent has died), there is no Proposition 19 exclusion: Property A is reassessed to full market value, every shelter figure here disappears, and selling gets stronger. Confirm the relationship against the trust document <a href="questions.html">(question A-1)</a>.</li>
-<li><strong>Rent.</strong> Both letting paths are credited with zero rent because no market rent has been supplied. If the market clears roughly {m(p45['breakeven_rent_monthly'])} a month ({m(p45['breakeven_rent_annual'])} a year in 2045 dollars), letting becomes competitive - about {pc(p45['breakeven_rent_annual'] / p45['value_at_death'] * 100, 1)} of value in gross rent, every year.</li>
-<li><strong>House growth.</strong> Keeping the home only wins if this one neighbourhood outgrows the whole stock market: the break-even is {pc(p45['breakeven_house_growth'])} a year for thirty years.</li>
-<li><strong>Estate size.</strong> If the inherited cash plus both properties push the estate above the federal exclusion, estate tax is due on the excess. The estate page works in anonymous scenario bands because the inherited cash amount is not published.</li>
-</ul>
-<p>The dashboard shows the baseline; the <a href="decision.html">decision page</a> prices every path, and the <a href="black-swan.html">black-swan page</a> prices the regimes where the answer flips.</p>""")
         + '<section class="card-grid">' + "".join(cards) + "</section>"
         + callout("method", "How to read this site", """
 <ol>
@@ -341,6 +381,7 @@ SUMMARIES = {
     "projections.html": "Year by year to 2076 for value, assessed value and tax.",
     "taxes.html": "Basis step-up, capital gains, the 121 exclusion, recapture.",
     "inheritance.html": "The trust transfer, phase by phase, with deadlines.",
+    "what-if.html": "One lever at a time, with each case linked.",
     "estate.html": "Federal thresholds, California's position, scenario bands.",
     "laws.html": "Enacted, dead and proposed rules that could move the answer.",
     "black-swan.html": "Regimes where the answer changes, and by how much.",
@@ -378,7 +419,7 @@ def page_executive_summary() -> str:
         "Terminal value after 30 years, by inheritance year and path. "
         "Baseline assumptions: house prices 4.0% a year, inflation 2.5%, equities 7.0% gross, "
         "Treasuries 4.7%, selling costs 5.5%.",
-        ["Inherited", "Path", "Terminal value", "Tax and costs paid over 30 years", "Basis"],
+        ["Inherited", "Path", "Terminal value", "Carrying tax and running costs over 30 years (sell paths: cost of sale)", "Basis"],
         rows)
 
     facts = [
@@ -404,7 +445,7 @@ def page_executive_summary() -> str:
         + callout("summary", "Recommendation", f"""
 <p><strong>Sell Property A soon after it is inherited, unless the heir genuinely wants to live in that house.</strong></p>
 <p>Selling converts an asset earning nothing into capital, at almost no tax, and it removes a property tax bill that is about to multiply by six to eleven times. Living in the house is the only path that keeps the tax bill lower, and it still leaves the heir holding a single, undiversified, illiquid asset in one California school district. Letting it out fails every scenario this site can build, because it combines the full reassessment with landlord costs and a rental yield below the return available elsewhere — but that comparison credits the letting paths with <strong>no rent at all</strong>, so read it as a floor and check the break-even rent below before relying on it.</p>
-<p>The counter-case is real and it is on the <a href="black-swan.html">black swan page</a>: if house prices in this area repeat their 1977 to 1981 or 2021 to 2023 pace, keeping the house wins. That is a bet on one neighbourhood, not a plan.</p>
+<p>The counter-case is real and it is on the <a href="black-swan.html">black swan page</a>: keeping the house wins in {len(RF['keep'])} of the {RF['n']} stress regimes, namely {esc(RF['keep_names'])}. That is a bet on one neighbourhood, not a plan.</p>
 """)
         + ftab
         + term
@@ -437,10 +478,13 @@ def page_decision() -> str:
                         + method_cell("#method", "Model output"))
     paths_table = table(
         "Terminal value after thirty years, by inheritance year and path",
-        ["Inherited", "Path", "Terminal value", "Tax and costs paid", "Basis"], rows,
-        note="Terminal value is what is left after selling costs and capital gains tax at the end of the "
-             "thirty years, plus any accumulated net rental cash in the rental paths. It is a nominal "
-             "figure in the money of that future year.")
+        ["Inherited", "Path", "Terminal value", "Carrying tax and running costs (sell paths: cost of sale)", "Basis"], rows,
+        note="Terminal value is what is left at the end of the thirty years. On the sell paths it is the sale "
+             "proceeds after selling costs, grown at the return shown. On the living and letting paths it is the "
+             "sale after selling costs and capital gains tax, less the compounded future value of every year's "
+             "property tax and running costs (and, for letting, plus the net rent). The column "
+             "\"Carrying tax and running costs\" is their nominal total; on the sell paths it is the cost of the "
+             "sale at inheritance, already netted from the proceeds. Nominal figures in the money of that future year.")
 
     be_rows = []
     for p in MODEL["paths"]:
@@ -448,8 +492,8 @@ def page_decision() -> str:
             f"<td>{p['inherit_year']}</td>"
             f"<td>{m(p['breakeven_rent_annual'])}</td>"
             f"<td>{m(p['breakeven_rent_monthly'])}</td>"
-            f"<td>{pc(p['breakeven_return_vs_live'])}</td>"
-            f"<td>{pc(p['breakeven_return_vs_rent'])}</td>"
+            f"<td>{ret_cell(p['breakeven_return_vs_live'])}</td>"
+            f"<td>{ret_cell(p['breakeven_return_vs_rent'])}</td>"
             f"<td>{pc(p['breakeven_house_growth'])}</td>"
             f"<td>{m(p['housing_value_needed'])}</td>"
             + method_cell("#method", "Model output"))
@@ -459,9 +503,12 @@ def page_decision() -> str:
          "Return needed to beat living in it", "Return needed to beat letting it",
          "House growth needed to keep it", "Housing value the home must provide per year"],
         be_rows,
-        note="\"Housing value\" is the annual value of living in the house that would be needed to close the "
-             "gap between living in it and selling. It is the number to compare against what the heir would "
-             "otherwise pay, or could otherwise earn, for somewhere to live.")
+        note="\"Housing value\" is the level annual value of living in the house that would be needed to close the "
+             "gap between living in it and selling, after the living path's own tax and running costs. It is the number "
+             "to compare against what the heir would otherwise pay, or could otherwise earn, for somewhere to live. "
+             "A negative return means the sale proceeds beat the alternative even if they lose that much a year. "
+             "\"Not reachable\" means the letting path has a negative terminal value even with zero rent, so no return on "
+             "the sale proceeds can match it.")
 
     sens_rows = []
     for s in MODEL["sensitivity"]:
@@ -509,7 +556,7 @@ model rebuilt.</p>
         kpi(f"{sens_sell} of {sens_total}", "Sensitivity combinations won by selling",
             "The rest are won by selling into Treasuries, which is still selling."),
         kpi(f"{reg_sell} of {reg_total}", "Stress regimes won by selling",
-            "The ones it loses repeat the 1970s or the 2021 to 2023 burst."),
+            f"Not won by selling: {RF['keep_names']}."),
     ]) + "</div>"
 
     # ------------------------------------------------------------------ what-if map --
@@ -1152,7 +1199,7 @@ def page_inheritance() -> str:
         ("5", "Change in ownership statement",
          "A change in ownership statement goes to the county assessor. The assessor decides whether the transfer is a change in ownership and sets a new base year value if it is.",
          "The new owner, on the assessor's form.",
-         "The statute sets the deadline and the penalties.",
+         "For a transfer on death, the statement is due within 150 days after the death under RTC section 480(b), or with the inventory and appraisal if the estate is probated. Other changes in ownership are due within 90 days under section 480(a).",
          ["rtc480", "boe_pub800_9"]),
         ("6", "The Proposition 19 decision",
          "If the heir will use the house as a principal residence, claim the intergenerational transfer exclusion. The claim is not a public document.",
@@ -1462,16 +1509,14 @@ whether the house and the stock market take their bad years at the same time.</p
         + replay
         + '<h2>Phased investment after a sale</h2>'
         + page_phased_stress()
-        + callout("answer", "What the stress cases say", """
-<p>Selling and investing wins in four of the six regimes, including both hypothetical stress cases. Keeping the
-house wins in the two regimes where house prices in this area grew at an exceptional pace, which is exactly what
-happened in the late 1970s and in 2021 to 2023. That is a coherent result: this decision is a bet on whether one
-neighbourhood outgrows the whole market, and the historical record says that sometimes it does and mostly it
-does not.</p>
+        + callout("answer", "What the stress cases say", f"""
+<p>Selling and investing wins in {RF['sell']} of the {RF['n']} regimes. Keeping the house wins only in: {esc(RF['keep_names'])}. Where house
+prices in this area grew at an exceptional pace, keeping the house can win; that is a bet on one neighbourhood outgrowing
+the whole market, and the historical record says that sometimes it does and mostly it does not.</p>
 <p>Two findings survive every regime. First, the property tax bill after reassessment is large and completely
 insensitive to how the economy performs: assessed value rises at the 2% cap whether house prices boom or crash.
-Second, letting the property out is the weakest path in every regime except the two house-price booms, because it
-pays the full reassessment and then competes with a diversified portfolio on yield.</p>""")
+Second, letting the property out from the start is the lowest-valued path in {RF['lowest_let']} of the {RF['n']} regimes, because it
+pays the full reassessment and the running costs, and then competes with a diversified portfolio on yield.</p>""")
     )
 
 
@@ -2231,7 +2276,12 @@ def page_review() -> str:
         ("Combined tax rates are added, not interacted",
          "State and federal rates are added and no federal deduction is taken for state tax paid. That overstates the tax on a sale and therefore understates the case for selling, which is the conservative direction."),
         ("The housing value of living in the home is priced, not added",
-         "The terminal-value tables do not credit the live-in path with the value of the housing it provides. The break-even table prices that value instead; on the 2045 baseline it comes out at about $1,760,770 a year."),
+         f"The living and letting paths bear their property tax and running costs in the terminal-value tables, "
+         f"but are not credited with the housing they provide, and the sell paths are not charged for housing elsewhere. "
+         f"The housing-value row prices the difference instead: on the 2045 baseline it is about "
+         f"{m(next(p for p in MODEL['paths'] if p['inherit_year'] == 2045)['housing_value_needed'])} a year, a level "
+         f"nominal amount. An earlier edition printed a figure about six times larger, because it used the "
+         f"present-value form of the annuity on a future-value gap; that is corrected."),
         ("Depreciation follows a simple rule",
          "80% of value treated as improvements, straight line over 27.5 years, capped at the building's depreciable amount. Land is not depreciated. Real cost segregation would differ."),
         ("No mortgage, no 1031 exchange, no instalment sale, no gifting",
@@ -2352,49 +2402,6 @@ Sources are cited only for what they actually state.</p>""")
 
 
 # ------------------------------------------------------------------ timeline --
-def page_timeline() -> str:
-    rows = []
-    def row(cells, sources):
-        rows.append(cells + src_cell(sources, "Official source"))
-    row("<td>The settlor dies; the revocable trust becomes irrevocable</td>\n"
-        "<td>Trustee notifies heirs and beneficiaries of the trust becoming irrevocable; timing and service rules are set by statute.</td>\n"
-        "<td>Both properties; the trust terms decide who receives Property A and when.</td>",
-        ["prob16061_7"])
-    row("<td>Transfer of Property A by reason of death, in trust</td>\n"
-        "<td>Exempt from documentary transfer tax (outright or in trust). Claim the exemption at recording; no city transfer tax applies to Property A.</td>\n"
-        "<td>Property A (Santa Clara County).</td>",
-        ["rtc11930", "scc_recorder", "cnty_a_recorder"])
-    row("<td>Within one year of the transfer</td>\n"
-        "<td>File the homeowners' exemption claim so the Proposition 19 parent-child exclusion can apply.</td>\n"
-        "<td>Property A.</td>",
-        ["rtc63_2", "boe_prop19"])
-    row("<td>Within three years of the transfer</td>\n"
-        "<td>File the Proposition 19 intergenerational exclusion claim (the exclusion is the reason the reassessment can stay near the prior taxable value plus the biennial shelter amount).</td>\n"
-        "<td>Property A.</td>",
-        ["boe_prop19", "rtc63_2"])
-    row("<td>Change of ownership</td>\n"
-        "<td>If the parent-child gate is not met, Property A is reassessed to full market value under Proposition 13; the fixed annual inflation cap still applies from the new base year.</td>\n"
-        "<td>Property A.</td>",
-        ["rtc51", "boe_pub29", "scc_ratebook"])
-    row("<td>Nine months after the date of death</td>\n"
-        "<td>Federal estate tax return (Form 706) is due, and that is when the portability election must be made, if the gross estate is above the filing threshold.</td>\n"
-        "<td>The whole estate (inherited cash plus both properties), modelled in anonymous bands.</td>",
-        ["irs_i706", "irs_estate"])
-    row("<td>Every year, two instalments</td>\n"
-        "<td>Property tax is payable; the first instalment is delinquent after 10 December and the second after 10 April.</td>\n"
-        "<td>Both properties, once owned.</td>",
-        ["cnty_a_rates"])
-    return (
-        privacy_banner()
-        + eligibility_callout()
-        + "<p>Key dates that shape the inheritance decision, before the transfer and after it. All figures are rounded to the nearest $10; all dates are stated rules to be confirmed against the trust document and the county recorder at the time.</p>"
-        + table("Deadlines and key dates", ["When", "What happens", "Applies to", "Source"], rows,
-              note="These are stated deadlines from the linked statutes and county pages. The trust document, the assessor and the recorder control the actual dates for this parcel; confirm each one before relying on it.")
-        + callout("answer", "Which deadlines can move the answer",
-"""<p>The three deadlines that can change the recommendation are: (1) whether the parent-child relationship is in place before the transfer, because without it the Proposition 19 shelter disappears; (2) the one-year homeowners' exemption and three-year exclusion-claim windows, because missing them costs the shelter; and (3) the nine-month estate-tax return, because a late return loses the portability election. The estate page works entirely in anonymous scenario bands because the inherited cash amount is not published.</p>""")
-    )
-
-
 # ------------------------------------------------------------------- glossary --
 def page_glossary() -> str:
     terms = [
@@ -2475,6 +2482,185 @@ def page_briefing() -> str:
     return summary
 
 
+# ------------------------------------------------------------ timeline page --
+def page_timeline() -> str:
+    """Every dated step in order. Each row names its official source or is not on the page."""
+    rows_spec = [
+        ("Within 60 days after the trust becomes irrevocable",
+         "The trustee sends the heirs and beneficiaries the notice the statute requires.",
+         "The trustee.", ["prob16061_7"]),
+        ("At the transfer of Property A by reason of death, in trust",
+         "Exempt from the documentary transfer tax, whether the transfer is outright or in trust. The exemption is "
+         "claimed at recording. No city transfer tax applies to Property A.",
+         "The trustee, at recording.", ["rtc11930", "scc_recorder", "cnty_a_recorder"]),
+        ("Within 150 days after death",
+         "Change in ownership statement for a transfer on death, under RTC section 480(b). If the estate is "
+         "probated, the statement is filed with the inventory and appraisal instead.",
+         "The successor, on the assessor's form.", ["rtc480", "boe_pub800_9"]),
+        ("Within 9 months after death, if a federal estate tax return is required",
+         "Form 706 is due. Filing Form 4768 by that date gives an automatic six-month extension of the filing "
+         "date. Part III of the same form is a separate request for more time to pay.",
+         "The executor. The portability election is made on this return if the gross estate is above the filing threshold.", ["irs_i706", "irs_i4768"]),
+        ("Within 1 year after the transfer, if the exclusion is claimed",
+         "Occupy the house as the principal residence, and file the homeowners' exemption.",
+         "The heir.", ["rtc63_2", "boe_lta26026", "boe_prop19"]),
+        ("Within 3 years after the transfer, or before any transfer to someone else",
+         "File the Proposition 19 exclusion claim. The claim is not a public document.",
+         "The heir, on the assessor's claim form.", ["rtc63_2"]),
+        ("After a change in ownership",
+         "If the exclusion is not claimed, the property is reassessed to full value and a supplemental bill "
+         "may follow for the part of the year already gone.",
+         "The county assessor.", ["boe_pub29"]),
+        ("Each year, on the Santa Clara County calendar",
+         "Secured bills are mailed in October. First installment due 1 November, penalty date 10 December. "
+         "Second installment due 1 February, penalty date 10 April. Last day for the current year's taxes 30 June. "
+         "A penalty date that falls on a weekend or county holiday moves to the next business day.",
+         "The owner of record.", ["dtac_secured"]),
+        ("10 December 2026",
+         "Last day to pay the first installment of the 2026/27 secured bill without penalty, while the bill is "
+         "still on the owner's record. Relevant to Property A only while it is held and before it is inherited.",
+         "The owner of record.", ["dtac_secured"]),
+    ]
+    rows = []
+    for when, what, who, ids in rows_spec:
+        rows.append(f"<td>{esc(when)}</td><td>{esc(what)}</td><td>{esc(who)}</td>" + src_cell(ids, "Official source"))
+    tl = table(
+        "Deadlines in order",
+        ["When", "What must happen", "Who", "Official source"], rows,
+        note="Day 0 is the date of death, which is not yet known, so the clocks are shown from it. "
+             "A row without an official source is not on this page. The county calendar applies to Property A "
+             "only while it is held in the trust; after the transfer, the heir's own bills follow the same calendar. "
+             "Every date here is a deadline to check, not advice on when to act.")
+    return (
+        eligibility_callout()
+        + callout("answer", "The next dated item", """
+<p>The first installment of the 2026/27 Santa Clara County secured bill must be paid, or postmarked, by
+<strong>10 December 2026</strong> to avoid penalties. That is the only dated item on this page that falls in the
+next year. Everything else is measured from the date of death or the date of transfer.</p>""")
+        + '<p class="lede">Read in order. Each row is a legal or tax clock, and each names the official text it comes from.</p>'
+        + tl
+        + callout("answer", "Which deadlines can move the answer",
+"""<p>The three deadlines that can change the recommendation are: (1) whether the parent-child relationship is in place before the transfer, because without it the Proposition 19 shelter disappears; (2) the one-year homeowners' exemption and three-year exclusion-claim windows, because missing them costs the shelter; and (3) the nine-month estate-tax return, because a late return loses the portability election. The estate page works entirely in anonymous scenario bands because the inherited cash amount is not published.</p>""")
+        + callout("method", "Why the order matters", """
+<ol>
+<li>The trust notice (60 days) and the change-in-ownership statement (150 days) are the first two clocks after death.</li>
+<li>The federal return, if one is needed, comes at nine months, and Form 4768 is the only automatic way to extend it.</li>
+<li>The exclusion claim has a three-year window, but the occupancy and homeowners' exemption steps are one year.
+Missing the one-year steps is the most expensive mistake that can be made on the timeline.</li>
+</ol>""")
+    )
+
+
+# -------------------------------------------------------------- what-if page --
+def page_what_if() -> str:
+    """Link-driven what-if: each case is one row and every row is reachable from the list at the top."""
+    paths = {x["inherit_year"]: x for x in MODEL["paths"]}
+    p45 = paths[2045]
+    sens = MODEL["sensitivity"]
+    regs = MODEL["regimes"]
+    KEYS = ["sell_equities", "sell_treasury", "live_in", "live_then_rent", "rent_out"]
+
+    def lever_row(s, anchor):
+        best = s["best"]
+        cells = "".join(
+            (f"<td class='best'>{m(s[k])}</td>" if k == best else f"<td>{m(s[k])}</td>")
+            for k in ["sell_equities", "sell_treasury", "live_in", "rent_out"])
+        return (f"<td><a id='{anchor}'></a>{pc(s['house_growth'], 1)}</td><td>{pc(s['equity_return'], 1)}</td>"
+                + cells + f"<td><strong>{esc(PATH_LABELS[best])}</strong></td>"
+                + method_cell("#method", "Model output"))
+
+    lever_hdr = ["House growth", "Equity return", "Sell, equities", "Sell, Treasuries",
+                 "Live in it", "Let it out", "Best path", "Basis"]
+
+    by_house = [s for s in sens if s["equity_return"] == 7.0]
+    by_house.sort(key=lambda s: s["house_growth"])
+    by_equity = [s for s in sens if s["house_growth"] == 4.0]
+    by_equity.sort(key=lambda s: s["equity_return"])
+    lever1 = table(
+        "Lever 1: change house growth, hold the equity return at 7.0%",
+        lever_hdr, [lever_row(s, f"house-{s['house_growth']}") for s in by_house],
+        note="Each row is one case. The case with 4.0% house growth is the 2045 baseline used on the decision page.")
+    lever2 = table(
+        "Lever 2: change the equity return, hold house growth at 4.0%",
+        lever_hdr, [lever_row(s, f"equity-{s['equity_return']}") for s in by_equity],
+        note="Each row is one case. Lever 1 and lever 2 share the baseline row.")
+
+    reg_rows = []
+    for i, r in enumerate(regs):
+        t = r["run"]["terminal"]
+        best = r["run"]["best"]
+        cells = "".join(
+            (f"<td class='best'>{m(t[k])}</td>" if k == best else f"<td>{m(t[k])}</td>")
+            for k in ["sell_equities", "sell_treasury", "live_in", "rent_out"])
+        reg_rows.append(
+            f"<td><a id='regime-{i}'></a>{esc(r['name'])}</td><td>{pc(r['cpi'], 1)}</td>"
+            f"<td>{pc(r['house'], 1)}</td><td>{pc(r['treasury'], 1)}</td>"
+            + cells + f"<td><strong>{esc(PATH_LABELS[best])}</strong></td>"
+            + method_cell("black-swan.html", "Stress regime"))
+    reg_table = table(
+        "Stress regimes: each one is a case",
+        ["Regime", "Inflation a year", "House prices a year", "Treasury yield",
+         "Sell, equities", "Sell, Treasuries", "Live in it", "Let it out", "Best path", "Basis"],
+        reg_rows,
+        note="Figures are the terminal value at 2045 after thirty years in the regime. The regime's own "
+             "analogue is described on the black swan page.")
+
+    yr_rows = []
+    for y in (2040, 2045, 2050):
+        pr = paths[y]["paths"]
+        best = max(pr, key=lambda k: pr[k]["terminal"])
+        cells = "".join(
+            (f"<td class='best'>{m(pr[k]['terminal'])}</td>" if k == best else f"<td>{m(pr[k]['terminal'])}</td>")
+            for k in ["sell_equities", "sell_treasury", "live_in", "live_then_rent", "rent_out"])
+        yr_rows.append(f"<td><a id='year-{y}'></a>{y}</td>" + cells
+                       + f"<td><strong>{esc(PATH_LABELS[best])}</strong></td>"
+                       + method_cell("#method", "Model output"))
+    yr_table = table(
+        "Inheritance year: each one is a case",
+        ["Inherited", "Sell, equities", "Sell, Treasuries", "Live in it", "Live in it, then let it",
+         "Let it out", "Best path", "Basis"], yr_rows,
+        note="Terminal values after thirty years, in nominal dollars of that future year. Live in it, then let it is a mixed path: "
+             "the heir occupies the house for a period and then lets it out.")
+
+    be_rows = [
+        ("<a id='threshold-growth'></a>House growth needed to make keeping the home match selling (2045)",
+         f"{pc(p45['breakeven_house_growth'])} a year for thirty years"),
+        ("<a id='threshold-rent'></a>Monthly rent needed to make letting match selling (2045)",
+         f"{m(p45['breakeven_rent_monthly'])} a month, in 2045 dollars"),
+        ("<a id='threshold-return'></a>Return on the sale proceeds at which living matches selling (2045)",
+         f"{ret_cell(p45['breakeven_return_vs_live'])}"),
+    ]
+    be_table = table(
+        "Break-even thresholds, 2045 inheritance",
+        ["Threshold", "Value"],
+        [f"<td>{a}</td><td>{b}</td>" + method_cell("#method", "Model output") for a, b in be_rows],
+        note="A negative return means selling still matches living even if the sale proceeds lose that much a year.")
+
+    jump = ("<ul class='card-list'>"
+            "<li><a href='#house-2.5'>House growth at 2.5%</a></li>"
+            "<li><a href='#house-5.5'>House growth at 5.5%</a></li>"
+            "<li><a href='#equity-5.0'>Equity return at 5.0%</a></li>"
+            "<li><a href='#equity-9.0'>Equity return at 9.0%</a></li>"
+            "<li><a href='#regime-0'>Great Inflation repeat</a></li>"
+            "<li><a href='#regime-2'>A financial crisis crash</a></li>"
+            "<li><a href='#year-2040'>Inherit in 2040</a></li>"
+            "<li><a href='#year-2050'>Inherit in 2050</a></li>"
+            "<li><a href='#threshold-growth'>House growth needed</a></li>"
+            "<li><a href='#threshold-rent'>Rent needed</a></li>"
+            "</ul>")
+    return (
+        callout("method", "How to use this page", f"""
+<p>There are no sliders, because this site runs no script. Each case below is a link target. Choose one from the list,
+or read the tables in order. Change one lever at a time, and the other stays at the baseline. Every figure is rounded
+to the nearest $10 and comes from the same model that builds the rest of the site.</p>
+{jump}""")
+        + lever1 + lever2 + reg_table + yr_table + be_table
+        + callout("flag", "What the cases do not show", """
+<p>No case here credits the letting paths with a market rent, because none has been supplied. Read every letting row as
+the path at zero rent, which is a floor. The model also does not change the Proposition 19 eligibility question; if
+that answer is no, the reassessment is full and every case here moves toward selling.</p>""")
+    )
+
 # ------------------------------------------------------------------- briefing --
 def page_briefing_sheet() -> str:
     rows = [
@@ -2506,6 +2692,8 @@ PAGE_BUILDERS = {
     "projections.html": (page_projections, "Year by year to 2076 for value, assessed value and tax."),
     "taxes.html": (page_taxes, "Basis step-up, capital gains, the 121 exclusion, recapture."),
     "inheritance.html": (page_inheritance, "The trust transfer, phase by phase, with deadlines."),
+    "timeline.html": (page_timeline, "Every legal and tax clock in order, from death and from transfer, with its official source."),
+    "what-if.html": (page_what_if, "Change one lever at a time. Each case is a link; no script is used."),
     "estate.html": (page_estate, "Federal thresholds, California's position, scenario bands."),
     "laws.html": (page_laws, "Enacted, dead and proposed rules that could move the answer."),
     "black-swan.html": (page_black_swan, "Regimes where the answer changes, and by how much."),
@@ -2515,7 +2703,6 @@ PAGE_BUILDERS = {
     "review.html": (page_review, "Unverified figures, modelling caveats and the repository audit."),
     "briefing-sheet.html": (page_briefing_sheet, "A one-page printable brief for the attorney and the tax adviser."),
     "glossary.html": (page_glossary, "Plain-language definitions of the terms used on this site."),
-    "timeline.html": (page_timeline, "The deadlines and key dates that shape the inheritance decision."),
     "sources.html": (page_sources, "Every official source used, with what it supports."),
 }
 
@@ -2618,9 +2805,8 @@ def executive_summary_markdown() -> str:
         a(f"| {r['name']} | {r['cpi']}% | {r['house']}% | {r['treasury']}% | "
           f"{PATH_LABELS[r['run']['best']]} |")
     a("")
-    a("Sold into equities or Treasuries wins five of the six. The exception is a repeat of the 1965-1982 Great "
-      "Inflation or the 2021-2023 burst, where nominal house prices outran everything else. That is a bet on one "
-      "neighbourhood repeating its best decades, not a plan.")
+    a(f"Sold into equities or Treasuries wins {RF['sell']} of the {RF['n']} regimes. Keeping the house wins only in: "
+      f"{RF['keep_names']}. That is a bet on one neighbourhood repeating its best decades, not a plan.")
     a("")
     a("## Estate and inheritance tax")
     a("")
