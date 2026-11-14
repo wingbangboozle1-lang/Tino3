@@ -1002,7 +1002,7 @@
    "title": "Revenue and Taxation Code section 480 - change in ownership statement",
    "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=480",
    "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
-   "supports": "The requirement to file a change in ownership statement with the county assessor after a transfer, used in the step-by-step inheritance page.",
+   "supports": "The change in ownership statement: section 480(a) sets 90 days for most transfers; section 480(b) sets 150 days after death for a transfer on death, or with the inventory and appraisal if the estate is probated. Used in the step-by-step inheritance page.",
    "limits": "Deadlines and penalties must be read from the current statute."
   },
   {
@@ -1236,6 +1236,24 @@
    "checked": "Opened on the publisher's official domain on 2026-11-13.",
    "supports": "No documentary transfer tax is imposed on a deed or other writing where the property is transferred outright, or in trust for the benefit of any person or entity, by reason of an inter vivos gift or by reason of the death of any person.",
    "limits": "States the exemption; it does not decide whether a particular trust distribution is a gift or a death transfer, which is a question for the county recorder and counsel."
+  },
+  {
+   "id": "dtac_secured",
+   "publisher": "County of Santa Clara, Department of Tax and Collections (DTAC)",
+   "title": "Obtain secured property tax information: property tax calendar",
+   "url": "https://dtac.santaclaracounty.gov/taxes/obtain-secured-property-tax-information",
+   "checked": "Opened on 14 November 2026. Calendar read: bills mailed in October; first installment 1 November; first-installment penalty date 10 December; second installment 1 February; second-installment penalty date 10 April; last day for current-year taxes 30 June; weekend and county-holiday penalty dates move to the next business day. The DTAC home page (dtac.santaclaracounty.gov/home) confirms that the 2026/27 first installment must be paid, or postmarked, by 10 December 2026 to avoid penalties.",
+   "supports": "The Santa Clara County secured property tax calendar and the 2026/27 first-installment penalty date used on the timeline page.",
+   "limits": "Does not state penalty amounts or interest. Read the bill and the county's penalty notice."
+  },
+  {
+   "id": "irs_i4768",
+   "publisher": "Internal Revenue Service",
+   "title": "Instructions for Form 4768, Application for Extension of Time To File a Return and/or Pay U.S. Estate (and Generation-Skipping Transfer) Taxes",
+   "url": "https://www.irs.gov/instructions/i4768",
+   "checked": "Opened on 14 November 2026. Read the 'When To File' section: an automatic 6-month extension of time to file Form 706 is requested on Form 4768 by the original due date; an extension for cause is available after that date only with good cause. Part III is a separate extension of time to pay under section 6161.",
+   "supports": "The automatic six-month extension of time to file Form 706 by filing Form 4768 by the original due date, and that payment extension is a separate request.",
+   "limits": "Does not extend the time to pay unless Part III is granted. Read the current form and instructions before filing."
   }
  ]
 }

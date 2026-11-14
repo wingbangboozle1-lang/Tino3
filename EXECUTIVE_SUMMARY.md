@@ -6,7 +6,7 @@ Planning analysis, not legal, tax or investment advice.
 
 ## The recommendation
 
-**Sell Property A soon after it is inherited, unless the heir genuinely wants to live in that house.** Selling leads in the baseline, in 9 of the 9 sensitivity combinations and in 4 of the 6 stress regimes, and it is the only path that does not depend on the heir wanting that house, being able to hold it as a principal residence, or finding a tenant at an implausible rent.
+**Sell Property A soon after it is inherited, unless the heir genuinely wants to live in that house.** Selling leads in the baseline, in 9 of the 9 sensitivity combinations and in 5 of the 6 stress regimes, and it is the only path that does not depend on the heir wanting that house, being able to hold it as a principal residence, or finding a tenant at an implausible rent.
 
 ## One condition outranks every number below
 
@@ -18,9 +18,9 @@ Selling and investing the proceeds, against keeping the house. Baseline: house p
 
 | Inherited | Sell, equities | Sell, Treasuries | Live in it | Let it out |
 |---|---|---|---|---|
-| 2040 | $31,714,550 | $20,121,530 | $12,433,650 | $10,575,840 |
-| 2045 | $38,585,540 | $24,480,880 | $15,107,350 | $12,867,130 |
-| 2050 | $46,945,240 | $29,784,760 | $18,360,300 | $15,654,830 |
+| 2040 | $31,714,550 | $20,121,530 | $4,440,110 | $-867,860 |
+| 2045 | $38,585,540 | $24,480,880 | $5,322,760 | $-1,001,320 |
+| 2050 | $46,945,240 | $29,784,760 | $6,375,070 | $-1,167,130 |
 
 The letting paths are credited with **no rent**, because no market rent for Property A has been supplied and no official source publishes one for a specific home. Read them as a floor, not as a comparison.
 
@@ -30,7 +30,7 @@ The letting paths are credited with **no rent**, because no market rent for Prop
 - **The shelter is smaller than the growth.** On a 2045 inheritance the exclusion shelters the old taxable value plus $1,886,640 against a market value of $6,531,230. Everything above the sum is reassessed.
 - **The tax-free window.** Property acquired from a decedent takes a basis equal to its value at death, so a sale soon afterwards pays about zero capital gains tax. In the 2045 baseline a $6,531,230 sale carries $0 of tax.
 - **What waiting costs.** Hold the same house thirty years and the tax on the eventual sale is about $4,910,950 after the section 121 exclusion; let it out as well and depreciation recapture pushes that to about $7,151,170.
-- **The break-even.** Keeping the home beats selling only if it appreciates 7.72% a year for thirty years. The verified index for this area compounded at 6.9% over fifty years and 3.3% over the last twenty.
+- **The break-even.** Keeping the home beats selling only if it appreciates 8.66% a year for thirty years. The verified index for this area compounded at 6.9% over fifty years and 3.3% over the last twenty.
 - **The break-even rent.** Letting would need about $30,180 a month, $362,120 a year, in 2045, to match selling and investing.
 
 ## The black swans, and what they do to the answer
@@ -42,11 +42,11 @@ Real economies do not grow at a constant rate. In the verified record used here,
 | Great Inflation repeat | 9.8% | 18.9% | 10.13% | Live in it |
 | A long house price slump | 3.4% | -0.2% | 7.06% | Sell, reinvest in Treasuries |
 | A financial crisis crash | 2.2% | -5.6% | 3.51% | Sell, invest in equities |
-| A fast inflation burst then a rate shock | 5.6% | 8.3% | 2.78% | Live in it |
+| A fast inflation burst then a rate shock | 5.6% | 8.3% | 2.78% | Sell, invest in equities |
 | House prices flat for the whole horizon | 2.5% | 0.0% | 4.7% | Sell, invest in equities |
 | Low inflation and falling nominal house prices | 0.5% | -1.0% | 2.0% | Sell, invest in equities |
 
-Sold into equities or Treasuries wins five of the six. The exception is a repeat of the 1965-1982 Great Inflation or the 2021-2023 burst, where nominal house prices outran everything else. That is a bet on one neighbourhood repeating its best decades, not a plan.
+Sold into equities or Treasuries wins 5 of the 6 regimes. Keeping the house wins only in: Great Inflation repeat. That is a bet on one neighbourhood repeating its best decades, not a plan.
 
 ## Estate and inheritance tax
 
@@ -67,7 +67,7 @@ These sit on the flagged-for-review page, each with the publisher that holds the
 
 ## How this was checked
 
-Every rule, threshold and rate on the site was read on the publishing agency's own domain and is linked from the row that uses it. The ledger holds 107 sources. A build-time verifier fails if a table row has no official link, if the build is not reproducible, if any internal link or fragment does not resolve, or if any published dollar figure is not a multiple of $10. A separate check recomputed the published relationships from the inputs.
+Every rule, threshold and rate on the site was read on the publishing agency's own domain and is linked from the row that uses it. The ledger holds 109 sources. A build-time verifier fails if a table row has no official link, if the build is not reproducible, if any internal link or fragment does not resolve, or if any published dollar figure is not a multiple of $10. A separate check recomputed the published relationships from the inputs.
 
 ## Read next
 
