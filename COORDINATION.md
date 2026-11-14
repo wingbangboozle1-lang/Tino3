@@ -2526,3 +2526,21 @@ Live-site checks against https://wingbangboozle1-lang.github.io/Tino3/ after the
 - The branch was then pushed with `--force-with-lease` because an earlier `git pull --rebase` failure had been masked by a pipeline and the un-rebased tip (`05b17a9`) still sat on the remote; `--force-with-lease` replaced it with the rebased history (`7e3548b`). Logged here because a plain push was rejected as non-fast-forward.
 
 **Publication result:** the site at https://wingbangboozle1-lang.github.io/Tino3/ serves the merged edition as of this record; the board record itself ships in the follow-up pull request that contains this section.
+
+## Session `arena/bfb73d54-tino3` — brief completion: phased-investing test, timeline, glossary, what-if, attorney & CPA sheet (claimed 2026-11-14)
+
+*Branch note:* Arena fixes this session to `arena/bfb73d54-tino3`, based at `0cf046b` (PR #87 merge). The board was read first. No other session holds an open claim; the most recent claims above are all `done`.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| P-1 Phased-investing test (park net proceeds in 3M–2Y Treasuries for 24–36 months, then phase into equities) against 1929-type and 2008-type entry; mixed half-now/half-phased path | in progress | `arena/bfb73d54-tino3` | `scripts/model.py` (new function), `assets/data/model.json` (regenerated), `scripts/build.py` (black-swan section) |
+| P-2 Deadlines timeline page | in progress | `arena/bfb73d54-tino3` | `scripts/build.py` (new page), `assets/sources.json` (append) |
+| P-3 Glossary page | in progress | `arena/bfb73d54-tino3` | `scripts/build.py` (new page) |
+| P-4 What-if controls (link-driven, no script; the verifier forbids `<script>`) and first-screen "what would change the answer" with reinvestment risk beside the headline | in progress | `arena/bfb73d54-tino3` | `scripts/model.py` (new grid), `scripts/build.py` (what-if page, index), `assets/style.css` |
+| P-5 One-page printable Attorney & CPA briefing sheet | in progress | `arena/bfb73d54-tino3` | `scripts/build.py` (new page), `assets/style.css` (print rules) |
+| P-6 Grouped menu, review-page irregularities for this session, board record, integration gates, PR to `main`, merge, Pages check | in progress | `arena/bfb73d54-tino3` | `scripts/build.py` (nav, review section), `COORDINATION.md` (this section), `README.md` |
+
+**Not done in this session, and why:**
+- *Scrubbing pre-rounding Git history.* Would require rewriting and force-pushing `main`, which breaks every existing clone and fork and cannot recall copies already downloaded. Not performed without the owner's explicit decision. Flagged for review.
+- *Re-researching home insurance quotes for either property.* No insurer, broker or quote tool is reachable from this sandbox, and the prior session published the official statewide CDI benchmark. The property-specific premium stays blank and flagged.
+- *ZIP codes REDACTED and REDACTED in the brief.* Kept out of every published page by the privacy rule already in force. They are not written to any file.
