@@ -1236,24 +1236,6 @@
    "checked": "Opened on the publisher's official domain on 2026-11-13.",
    "supports": "No documentary transfer tax is imposed on a deed or other writing where the property is transferred outright, or in trust for the benefit of any person or entity, by reason of an inter vivos gift or by reason of the death of any person.",
    "limits": "States the exemption; it does not decide whether a particular trust distribution is a gift or a death transfer, which is a question for the county recorder and counsel."
-  },
-  {
-   "id": "treasury_par_1113",
-   "publisher": "U.S. Department of the Treasury",
-   "title": "Daily Treasury Par Yield Curve Rates, November 2026 (Treasury page, text view)",
-   "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value_month=202611",
-   "checked": "Opened on the publisher's official domain on 2026-11-14. Rows for 9 and 13 November 2026 read directly.",
-   "supports": "Par yields on 13 November 2026: 3-month 4.32%, 2-year 4.88%, 10-year 5.15%. On 9 November 2026: 1-year 4.38%, 5-year 4.67%, 10-year 4.88%. These are the park rates used by the phased-investing test (2-year as the base case, 3-month as the low case).",
-   "limits": "Single-day readings, not a forecast. The phased test holds a fixed rate for the whole parking period, which is a simplification: a 3-month bill is rolled over at whatever rate prevails, so the actual yield over 24 to 36 months is not known in advance."
-  },
-  {
-   "id": "irs_i706pdf",
-   "publisher": "Internal Revenue Service",
-   "title": "Instructions for Form 706 (Rev. July 2026), United States Estate (and Generation-Skipping Transfer) Tax Return",
-   "url": "https://www.irs.gov/pub/irs-pdf/i706.pdf",
-   "checked": "Opened on the publisher's official domain on 2026-11-14. The 'When To File' and 'Paying the Tax' sections read directly.",
-   "supports": "Form 706 must be filed within 9 months after the date of death. Form 4768 gives an automatic 6-month extension of time to file. Estate and GST tax is due within 9 months of death; Form 4768 can extend time to pay. A portability election requires timely filing (within 9 months, or within the 6-month extension). Executors who did not have a filing requirement may file to elect portability on or before the fifth anniversary of death under Rev. Proc. 2022-32.",
-   "limits": "The instructions control. This edition of the instructions applies to the year of death shown on the cover; the form that applies depends on the date of death. Form 706-NA, which applies to non-citizen nonresidents, is a different return and is not the subject of this site."
   }
  ]
 }

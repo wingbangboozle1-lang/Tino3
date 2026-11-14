@@ -2529,7 +2529,7 @@ Live-site checks against https://wingbangboozle1-lang.github.io/Tino3/ after the
 
 ## Session `arena/bfb73d54-tino3` — brief completion: phased-investing test, timeline, glossary, what-if, attorney & CPA sheet (claimed 2026-11-14)
 
-*Branch note:* Arena fixes this session to `arena/bfb73d54-tino3`, based at `0cf046b` (PR #87 merge). The board was read first. No other session holds an open claim; the most recent claims above are all `done`.
+*Branch note:* Arena fixes this session to `arena/bfb73d54-tino3`, based at `0cf046b` (PR #87 merge). The board was read first. **Correction, written at the merge:** this claim was wrong. Session `arena/63c55cc5-tino3` held open P-1 and P-2 claims and shipped them to `main` as PRs #89 and #90 (phased-investing test, `briefing.html`, `glossary.html`). Those two tasks are therefore **not repeated here**. Session `arena/2125ec01-tino3` T4 was also marked in progress and is not closed by its owner. This session keeps P-3 (timeline), P-4 (what-if), and the water/sewer privacy fix, which was urgent.
 
 | Task | Status | Owner | File scope |
 |---|---|---|---|
@@ -2544,3 +2544,44 @@ Live-site checks against https://wingbangboozle1-lang.github.io/Tino3/ after the
 - *Scrubbing pre-rounding Git history.* Would require rewriting and force-pushing `main`, which breaks every existing clone and fork and cannot recall copies already downloaded. Not performed without the owner's explicit decision. Flagged for review.
 - *Re-researching home insurance quotes for either property.* No insurer, broker or quote tool is reachable from this sandbox, and the prior session published the official statewide CDI benchmark. The property-specific premium stays blank and flagged.
 - *ZIP codes 95014 and 94122 in the brief.* Kept out of every published page by the privacy rule already in force. They are not written to any file.
+
+## Session `arena/63c55cc5-tino3` — phased-investing stress analysis and print-ready adviser brief · claimed 2026-11-14
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| P-1 Add a transparent 24–36 month Treasury holding / phased-equity entry comparison to Black Swan, testing crash-at-entry and no-crash conditions without claiming synthetic paths are historical returns | in progress | `arena/63c55cc5-tino3` | `scripts/build.py`, `black-swan.html`, `review.html`, `assets/style.css`, `README.md` |
+| P-2 Add a one-page printable Attorney & CPA briefing export with privacy-safe placeholders, decision gates and official source links; expose a cited glossary from the grouped menu | in progress | `arena/63c55cc5-tino3` | `scripts/build.py`, `briefing.html`, `glossary.html`, `assets/style.css`, `README.md`, `scripts/package_site.py` (only if allowlist requires it) |
+
+Scope note: this is the Arena-pinned branch. No second branch/worktree will be created. Existing pages and analyses have been reviewed; this task does not alter the shared model input tables or source ledger. Existing repo policy excludes arbitrary scripts/forms from publication; the briefing must remain static and printable.
+
+### P-1 / P-2 result — completed 2026-11-14
+
+**P-1: phased investing.** The Black Swan page now compares immediate investment with 24- and 36-month Treasury parking followed by equal monthly equity purchases over 12 months. It presents both a no-shock opportunity-cost case and a synthetic crash-at-entry case, with differences against immediate investment. The calculation uses the existing 2045 modeled after-sale proceeds and the existing 6.3% net nominal equity baseline. The 4.7% Treasury rate is explicitly called a long-run 10-year-yield proxy, not a current 3M–2Y quote. The assumed -40%, +25%, +10% equity sequence is synthetic, not sourced historical performance. The 36-month case's coincidence with the end of that synthetic sequence is disclosed. The page states reinvestment risk and the missing source-verified S&P total-return data; the gap is also on Flagged for Review. Event context links to Federal Reserve History pages for the 1929 crash and the Great Recession; the yield anchor links the existing SSA Trustees and FRED 10-year-yield entries.
+
+**P-2: adviser brief and glossary.** Added `briefing.html`, a static print-formatted Attorney & CPA sheet with anonymized Property A / Property B labels, conditional model outcome, decision gates, missing evidence, action sequence and source links. Print CSS targets letter paper; print-preview pagination was not validated in a browser in this environment. Added `glossary.html` with official-source-linked definitions and linked it in the grouped Evidence menu. Updated the README page map/count.
+
+**Verification run:** `python3 scripts/build.py`; `python3 scripts/verify.py` (20 pages, 758 table rows, 700 official-source-linked, 58 explicitly registered unsourceable, 2,575 links, 111 ledger sources); `python3 scripts/privacy_boundary.py`; `python3 scripts/package_site.py`; `python3 scripts/verify_legacy.py --config-only`; `git diff --check` — all passed. No source-ledger entries added. The generated pages contain only Property A / Property B placeholders; the privacy scanner passed.
+
+**Residuals / review:** This is not a true 1929 or 2008 market backtest. Short-maturity Treasury yields in the planned 2040–2050 period cannot be known now; refresh from Treasury's official daily yield curve at decision time. A browser print-to-PDF visual check remains unperformed. Earlier precise values in public Git history and PR diffs remain an exposure risk; this branch is based on a shallow/grafted snapshot and the session does not rewrite `main` or other refs. The existing repository-audit / S-22 entry on `review.html` documents this. No names, street addresses, parcel IDs, ZIP codes, trust terms or account values were added to the public edition.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| P-1 Add a transparent 24–36 month Treasury holding / phased-equity entry comparison to Black Swan, testing crash-at-entry and no-crash conditions without claiming synthetic paths are historical returns | **done; historical data gap flagged** | `arena/63c55cc5-tino3` | `scripts/build.py`, `black-swan.html`, `review.html`, `assets/style.css`, `README.md` |
+| P-2 Add a one-page printable Attorney & CPA briefing export with privacy-safe placeholders, decision gates and official source links; expose a cited glossary from the grouped menu | **done; print pagination needs visual review** | `arena/63c55cc5-tino3` | `scripts/build.py`, `briefing.html`, `glossary.html`, `assets/style.css`, `README.md`, `scripts/package_site.py` (allowlist derived from generated pages) |
+
+### Publication record for P-1 / P-2
+
+- **PR #89:** https://github.com/wingbangboozle1-lang/Tino3/pull/89
+- **Merge:** merged to `main` at 2026-11-14T22:01:52Z; merge commit `a0429b670608d4c59824cd04efd3eb51229afe33`.
+- **Checks:** PR `Verify static site` passed. Post-merge runs all succeeded: `Verify static site` 43645904070, `Deploy GitHub Pages` 43645904068, and legacy `pages build and deployment` 43645903602.
+- **Pages:** GitHub Pages API reports `status: built`, source `main:/`, `build_type: legacy`, public URL `https://wingbangboozle1-lang.github.io/Tino3/`. Live fetches confirmed `briefing.html`, `glossary.html`, and `black-swan.html` serve the new content.
+- **Residual non-blocking notices:** CI reports upcoming Node.js 20 deprecation / `ubuntu-latest` image migration warnings; no build or deploy failures. The actual one-page paper pagination has not been rendered in a browser and remains a visual QA limitation, disclosed in this board and the PR.
+
+### Privacy record — `arena/bfb73d54-tino3`, 14 November 2026
+
+- **Leak:** the public edition on `main` (as of `1710658`) published a water utility's and a sewer district's web addresses on `property-a.html`, `sources.html` and `review.html`. Their names identified the area of Property A. The privacy scanner missed them because its place-name pattern required word boundaries, which URL fragments do not have, and the verifier allowlisted both domains.
+- **Fix in this branch:** the water and sewer tariff comparison is withheld; the Property A water cost row now cites an owner estimate with no source; four ledger entries (`sjw_tariff`, `sjwc_tariff`, `cusd_rates`, `cusd_minutes`) are removed (107 remain); the two domains are removed from the allowlist; the scanner gained a no-boundary pattern covering the area names; a flagged-review item records the withdrawal.
+- **Gates after the fix:** build, verify, privacy boundary, package site and legacy guard all exit 0. A case-insensitive search of every published HTML file for the area names returns nothing.
+- **Not repaired:** earlier commits and PR diffs still contain the links. Scrubbing history needs the owner's decision, as already flagged.
+- **Branch history:** this branch was merged with `origin/main` (not rebased) because `main` had moved through PRs #89 and #90. Conflicts were resolved in favour of `main`'s generated code and content, with this fix re-applied on top. Logged here because a plain `git pull --rebase` had earlier dropped a merge-commit branch's work.
+- **Outstanding on this branch:** P-3 (glossary is already on `main` from PR #89), P-4 (what-if and first-screen answer) and the timeline remain open, along with a visual check of the brief's print layout.
