@@ -2550,7 +2550,8 @@ Live-site checks against https://wingbangboozle1-lang.github.io/Tino3/ after the
 - *Scrubbing pre-rounding Git history.* Would require rewriting and force-pushing `main`, breaking every existing clone and unable to recall downloaded copies. Not performed without the owner's explicit decision. Flagged for review on `review.html`.
 - *Re-researching home insurance quotes.* Not reachable from this sandbox; property-specific premium stays blank and flagged.
 
-### Publication record — this merge
-- **PR:** https://github.com/wingbangboozle1-lang/Tino3/pull/94 (branch `arena/912fbd58-tino3` → `main`)
-- **Pages:** `https://wingbangboozle1-lang.github.io/Tino3/` — confirm `briefing.html`, `glossary.html`, `deadlines-timeline.html`, `black-swan.html`, `index.html`, `decision.html` serve after merge.
+### Publication record — this session (integrated on `main` via PR #92 / commit `263930d`)
+- **PR #94:** https://github.com/wingbangboozle1-lang/Tino3/pull/94 — **CLOSED as superseded**, not merged. `main` had advanced through PR #92 ("Rebase phased-investing, briefing sheet, timeline, glossary, what-if map onto updated main; merge both sessions' generated pages"), which already integrates both sessions' work: the `sell_phased`/`sell_then_phase` model path and `phased_terminal` in `scripts/model.py`, regenerated `assets/data/model.json`, the Black Swan phased-entry stress test, `briefing.html`, `glossary.html`, `deadlines-timeline.html`, and the what-if map. Merging PR #94 on top would re-introduce conflicts and duplicate the integrated pages, so it was closed with this explanation recorded.
+- **Pages (live on `main`):** `https://wingbangboozle1-lang.github.io/Tino3/` — Pages API `status: built`, source `main:/`, `build_type: legacy`; serves `briefing.html`, `glossary.html`, `deadlines-timeline.html`, `black-swan.html`, `index.html`, `decision.html` and the dashboard with its privacy notice.
+- **Verification (this session, pre-closure):** `python3 scripts/build.py` (21 pages), `python3 scripts/verify.py` PASS (reproducible, every table row source-linked or registered, privacy boundary at nearest $10), `python3 scripts/privacy_boundary.py` PASS.
 
