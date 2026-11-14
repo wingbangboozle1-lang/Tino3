@@ -184,6 +184,15 @@ def run_paths(inherit_year: int, g: float, infl: float, eq: float, drag: float,
     inv_eq = sale["net"] * (1 + eq - drag) ** horizon
     inv_ts = sale["net"] * (1 + tsy) ** horizon
 
+    # Path 6: sell at inheritance, park the net proceeds in Treasuries for the
+    # stated parking period (24-36 months), then phase into equities in equal
+    # monthly slices. This is the crash-entry test: a lump sum invested on day
+    # one is fully exposed to a 1929- or 2008-style fall from day one; the phased
+    # path exposes only the slice already moved.
+    park_months = float(ASM["treasury_park_months"]["mid"])
+    phase_months = float(ASM["equity_phase_months"]["mid"])
+    phased = phased_terminal(sale["net"], park_months, phase_months, tsy, eq, drag, horizon)
+
     # Path 3: live in it for the whole horizon, then sell
     tax_live = tax_path(taxable_live, fit_T, inherit_year, infl, horizon)
     cost_live = carrying_costs(value_at_death, cost_a_base, maint_live, infl, horizon)
@@ -241,6 +250,11 @@ def run_paths(inherit_year: int, g: float, infl: float, eq: float, drag: float,
                               "start": sale["net"], "sale": sale},
             "sell_treasury": {"terminal": money10(inv_ts), "outflow": 0,
                               "start": sale["net"], "sale": sale},
+            "sell_phased": {"terminal": money10(phased), "outflow": 0,
+                            "start": sale["net"],
+                            "park_months": int(park_months),
+                            "phase_months": int(phase_months),
+                            "sale": sale},
             "live_in": {"terminal": money10(live["net"]),
                         "outflow": money10(tax_live + cost_live),
                         "tax_total": money10(tax_live),
@@ -315,6 +329,28 @@ def breakeven_return(inherit_year: int, g: float, cap_growth: float, sell_pct: f
         else:
             hi = mid
     return round((lo + hi) / 2 * 100.0, 2)
+
+
+def phased_terminal(net: float, park_months: float, phase_months: float,
+                    tsy: float, eq: float, drag: float, horizon: int) -> float:
+    """Lump sum parked in Treasuries, then phased into equities in equal
+    monthly slices. A delayed, staggered equity entry softens sequence-of-returns
+    risk: only the slice already moved into equities is exposed to a market fall
+    in any given month, while the rest keeps earning the Treasury yield."""
+    months = horizon * 12
+    r_tsy = (1 + tsy) ** (1 / 12) - 1
+    r_eq = (1 + eq - drag) ** (1 / 12) - 1
+    bal_tsy = net
+    bal_eq = 0.0
+    for mth in range(months):
+        bal_tsy *= 1 + r_tsy
+        bal_eq *= 1 + r_eq
+        if park_months <= mth < park_months + phase_months:
+            remaining = phase_months - (mth - park_months)
+            slice_ = bal_tsy / remaining
+            bal_tsy -= slice_
+            bal_eq += slice_
+    return bal_tsy + bal_eq
 
 
 def sensitivity(target_year: int):
@@ -551,6 +587,14 @@ def run_regime(regime: dict, horizon: int):
         maint_rent=A["annual_costs"]["maintenance_pct_rental"]["value"],
         rent_income=RENT_INCOME)
     cpi_mult = (1 + infl) ** horizon
+    park_months = float(ASM["treasury_park_months"]["mid"])
+    phase_months = float(ASM["equity_phase_months"]["mid"])
+    phased = phased_terminal(res["paths"]["sell_treasury"]["start"],
+                             park_months, phase_months, tsy, ASM["equity_return_nominal_gross"]["baseline"],
+                             ASM["equity_tax_drag"]["baseline"], horizon)
+    res["paths"]["sell_phased"] = {"terminal": money10(phased),
+                                   "park_months": int(park_months),
+                                   "phase_months": int(phase_months)}
     return {
         "terminal": {k: v["terminal"] for k, v in res["paths"].items()},
         "terminal_real": {k: money10(v["terminal"] / cpi_mult) for k, v in res["paths"].items()},

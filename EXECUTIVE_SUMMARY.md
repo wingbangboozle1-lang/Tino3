@@ -31,7 +31,7 @@ The letting paths are credited with **no rent**, because no market rent for Prop
 - **The tax-free window.** Property acquired from a decedent takes a basis equal to its value at death, so a sale soon afterwards pays about zero capital gains tax. In the 2045 baseline a $6,531,230 sale carries $0 of tax.
 - **What waiting costs.** Hold the same house thirty years and the tax on the eventual sale is about $4,910,950 after the section 121 exclusion; let it out as well and depreciation recapture pushes that to about $7,151,170.
 - **The break-even.** Keeping the home beats selling only if it appreciates 7.72% a year for thirty years. The verified index for this area compounded at 6.9% over fifty years and 3.3% over the last twenty.
-- **The break-even rent.** Letting would need about $30,180 a month, $362,120 a year, in 2045, to match selling and investing.
+- **The break-even rent.** Letting would need about $34,260 a month, $411,110 a year, in 2045, to match selling and investing.
 
 ## The black swans, and what they do to the answer
 

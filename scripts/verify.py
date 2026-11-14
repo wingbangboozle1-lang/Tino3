@@ -112,8 +112,9 @@ class PageAudit(HTMLParser):
 
 def check_reproducible() -> list[str]:
     problems = []
-    for name, (fn, lede) in builder.PAGE_BUILDERS.items():
-        expected = builder.page(name, fn(), lede)
+    for name, (fn, lede, *rest) in builder.PAGE_BUILDERS.items():
+        body_class = rest[0] if rest else ""
+        expected = builder.page(name, fn(), lede, body_class=body_class)
         actual = (ROOT / name).read_text(encoding="utf-8")
         if expected != actual:
             problems.append(f"{name}: file on disk differs from the builder output; run scripts/build.py")
