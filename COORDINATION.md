@@ -2526,3 +2526,12 @@ Live-site checks against https://wingbangboozle1-lang.github.io/Tino3/ after the
 - The branch was then pushed with `--force-with-lease` because an earlier `git pull --rebase` failure had been masked by a pipeline and the un-rebased tip (`05b17a9`) still sat on the remote; `--force-with-lease` replaced it with the rebased history (`7e3548b`). Logged here because a plain push was rejected as non-fast-forward.
 
 **Publication result:** the site at https://wingbangboozle1-lang.github.io/Tino3/ serves the merged edition as of this record; the board record itself ships in the follow-up pull request that contains this section.
+
+## Session `arena/63c55cc5-tino3` — phased-investing stress analysis and print-ready adviser brief · claimed 2026-11-14
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| P-1 Add a transparent 24–36 month Treasury holding / phased-equity entry comparison to Black Swan, testing crash-at-entry and no-crash conditions without claiming synthetic paths are historical returns | in progress | `arena/63c55cc5-tino3` | `scripts/build.py`, `black-swan.html`, `assets/style.css` |
+| P-2 Add a one-page printable Attorney & CPA briefing export with privacy-safe placeholders, decision gates and official source links | in progress | `arena/63c55cc5-tino3` | `scripts/build.py`, `briefing.html`, `assets/style.css`, `scripts/package_site.py` (only if allowlist requires it) |
+
+Scope note: this is the Arena-pinned branch. No second branch/worktree will be created. Existing pages and analyses have been reviewed; this task does not alter the shared model input tables or source ledger. Existing repo policy excludes arbitrary scripts/forms from publication; the briefing must remain static and printable.
