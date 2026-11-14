@@ -95,6 +95,36 @@ def pc(x, places=2) -> str:
     return f"{x:.{places}f}%"
 
 
+SELL_KEYS = ("sell_equities", "sell_treasury")
+
+
+def regime_facts() -> dict:
+    """Stress-regime results, read from the model so the prose cannot drift from the numbers."""
+    regs = MODEL["regimes"]
+    sell = [r for r in regs if r["run"]["best"] in SELL_KEYS]
+    keep = [r for r in regs if r["run"]["best"] == "live_in"]
+    let_ = [r for r in regs if r["run"]["best"] in ("rent_out", "live_then_rent")]
+    lowest_let = [r for r in regs
+                  if min(r["run"]["terminal"], key=r["run"]["terminal"].get) == "rent_out"]
+    return {
+        "n": len(regs), "sell": len(sell), "keep": keep, "let": len(let_),
+        "lowest_let": len(lowest_let),
+        "keep_names": "; ".join(r["name"] for r in keep) or "none",
+    }
+
+
+RF = regime_facts()
+
+
+def ret_cell(x) -> str:
+    """A break-even return. Negative means selling beats the alternative even if the sale proceeds lose that much a year."""
+    if x is None:
+        return '<span class="blank">not reachable</span>'
+    if x < 0:
+        return f"{x:.2f}% a year (negative: the sale still wins if the proceeds lose this much a year)"
+    return f"{x:.2f}% a year"
+
+
 def slink(sid: str, label: str | None = None) -> str:
     s = SOURCES[sid]
     text = label or f"{s['publisher']}"
@@ -176,6 +206,9 @@ METHOD_TEXT = (
     "scripts/model.py. House prices grow at a stated nominal rate, the assessed value rolls forward under the "
     "published rules with an inflation cap, fixed charges grow with inflation, running costs are inflated at "
     "the same rate, and each path is valued at the end of a thirty year horizon after selling costs and tax. "
+    "On the paths that keep or let the house, every year's property tax and running costs are deducted at their "
+    "compounded future value at the after-tax equity return, so the living and letting paths bear the same cash costs "
+    "that the sell paths are spared. "
     "Every monetary result is rounded to the nearest $10 before it is printed. There is no randomness, so the "
     "same inputs always produce the same outputs."
 )
@@ -362,7 +395,7 @@ def page_executive_summary() -> str:
         "Terminal value after 30 years, by inheritance year and path. "
         "Baseline assumptions: house prices 4.0% a year, inflation 2.5%, equities 7.0% gross, "
         "Treasuries 4.7%, selling costs 5.5%.",
-        ["Inherited", "Path", "Terminal value", "Tax and costs paid over 30 years", "Basis"],
+        ["Inherited", "Path", "Terminal value", "Carrying tax and running costs over 30 years (sell paths: cost of sale)", "Basis"],
         rows)
 
     facts = [
@@ -388,7 +421,7 @@ def page_executive_summary() -> str:
         + callout("summary", "Recommendation", f"""
 <p><strong>Sell Property A soon after it is inherited, unless the heir genuinely wants to live in that house.</strong></p>
 <p>Selling converts an asset earning nothing into capital, at almost no tax, and it removes a property tax bill that is about to multiply by six to eleven times. Living in the house is the only path that keeps the tax bill lower, and it still leaves the heir holding a single, undiversified, illiquid asset in one California school district. Letting it out fails every scenario this site can build, because it combines the full reassessment with landlord costs and a rental yield below the return available elsewhere — but that comparison credits the letting paths with <strong>no rent at all</strong>, so read it as a floor and check the break-even rent below before relying on it.</p>
-<p>The counter-case is real and it is on the <a href="black-swan.html">black swan page</a>: if house prices in this area repeat their 1977 to 1981 or 2021 to 2023 pace, keeping the house wins. That is a bet on one neighbourhood, not a plan.</p>
+<p>The counter-case is real and it is on the <a href="black-swan.html">black swan page</a>: keeping the house wins in {len(RF['keep'])} of the {RF['n']} stress regimes, namely {esc(RF['keep_names'])}. That is a bet on one neighbourhood, not a plan.</p>
 """)
         + ftab
         + term
@@ -420,10 +453,13 @@ def page_decision() -> str:
                         + method_cell("#method", "Model output"))
     paths_table = table(
         "Terminal value after thirty years, by inheritance year and path",
-        ["Inherited", "Path", "Terminal value", "Tax and costs paid", "Basis"], rows,
-        note="Terminal value is what is left after selling costs and capital gains tax at the end of the "
-             "thirty years, plus any accumulated net rental cash in the rental paths. It is a nominal "
-             "figure in the money of that future year.")
+        ["Inherited", "Path", "Terminal value", "Carrying tax and running costs (sell paths: cost of sale)", "Basis"], rows,
+        note="Terminal value is what is left at the end of the thirty years. On the sell paths it is the sale "
+             "proceeds after selling costs, grown at the return shown. On the living and letting paths it is the "
+             "sale after selling costs and capital gains tax, less the compounded future value of every year's "
+             "property tax and running costs (and, for letting, plus the net rent). The column "
+             "\"Carrying tax and running costs\" is their nominal total; on the sell paths it is the cost of the "
+             "sale at inheritance, already netted from the proceeds. Nominal figures in the money of that future year.")
 
     be_rows = []
     for p in MODEL["paths"]:
@@ -431,8 +467,8 @@ def page_decision() -> str:
             f"<td>{p['inherit_year']}</td>"
             f"<td>{m(p['breakeven_rent_annual'])}</td>"
             f"<td>{m(p['breakeven_rent_monthly'])}</td>"
-            f"<td>{pc(p['breakeven_return_vs_live'])}</td>"
-            f"<td>{pc(p['breakeven_return_vs_rent'])}</td>"
+            f"<td>{ret_cell(p['breakeven_return_vs_live'])}</td>"
+            f"<td>{ret_cell(p['breakeven_return_vs_rent'])}</td>"
             f"<td>{pc(p['breakeven_house_growth'])}</td>"
             f"<td>{m(p['housing_value_needed'])}</td>"
             + method_cell("#method", "Model output"))
@@ -442,9 +478,12 @@ def page_decision() -> str:
          "Return needed to beat living in it", "Return needed to beat letting it",
          "House growth needed to keep it", "Housing value the home must provide per year"],
         be_rows,
-        note="\"Housing value\" is the annual value of living in the house that would be needed to close the "
-             "gap between living in it and selling. It is the number to compare against what the heir would "
-             "otherwise pay, or could otherwise earn, for somewhere to live.")
+        note="\"Housing value\" is the level annual value of living in the house that would be needed to close the "
+             "gap between living in it and selling, after the living path's own tax and running costs. It is the number "
+             "to compare against what the heir would otherwise pay, or could otherwise earn, for somewhere to live. "
+             "A negative return means the sale proceeds beat the alternative even if they lose that much a year. "
+             "\"Not reachable\" means the letting path has a negative terminal value even with zero rent, so no return on "
+             "the sale proceeds can match it.")
 
     sens_rows = []
     for s in MODEL["sensitivity"]:
@@ -492,7 +531,7 @@ model rebuilt.</p>
         kpi(f"{sens_sell} of {sens_total}", "Sensitivity combinations won by selling",
             "The rest are won by selling into Treasuries, which is still selling."),
         kpi(f"{reg_sell} of {reg_total}", "Stress regimes won by selling",
-            "The ones it loses repeat the 1970s or the 2021 to 2023 burst."),
+            f"Not won by selling: {RF['keep_names']}."),
     ]) + "</div>"
 
     return (
@@ -1415,16 +1454,14 @@ whether the house and the stock market take their bad years at the same time.</p
         + replay
         + '<h2>Phased investment after a sale</h2>'
         + page_phased_stress()
-        + callout("answer", "What the stress cases say", """
-<p>Selling and investing wins in four of the six regimes, including both hypothetical stress cases. Keeping the
-house wins in the two regimes where house prices in this area grew at an exceptional pace, which is exactly what
-happened in the late 1970s and in 2021 to 2023. That is a coherent result: this decision is a bet on whether one
-neighbourhood outgrows the whole market, and the historical record says that sometimes it does and mostly it
-does not.</p>
+        + callout("answer", "What the stress cases say", f"""
+<p>Selling and investing wins in {RF['sell']} of the {RF['n']} regimes. Keeping the house wins only in: {esc(RF['keep_names'])}. Where house
+prices in this area grew at an exceptional pace, keeping the house can win; that is a bet on one neighbourhood outgrowing
+the whole market, and the historical record says that sometimes it does and mostly it does not.</p>
 <p>Two findings survive every regime. First, the property tax bill after reassessment is large and completely
 insensitive to how the economy performs: assessed value rises at the 2% cap whether house prices boom or crash.
-Second, letting the property out is the weakest path in every regime except the two house-price booms, because it
-pays the full reassessment and then competes with a diversified portfolio on yield.</p>""")
+Second, letting the property out from the start is the lowest-valued path in {RF['lowest_let']} of the {RF['n']} regimes, because it
+pays the full reassessment and the running costs, and then competes with a diversified portfolio on yield.</p>""")
     )
 
 
@@ -2184,7 +2221,12 @@ def page_review() -> str:
         ("Combined tax rates are added, not interacted",
          "State and federal rates are added and no federal deduction is taken for state tax paid. That overstates the tax on a sale and therefore understates the case for selling, which is the conservative direction."),
         ("The housing value of living in the home is priced, not added",
-         "The terminal-value tables do not credit the live-in path with the value of the housing it provides. The break-even table prices that value instead; on the 2045 baseline it comes out at about $1,760,770 a year."),
+         f"The living and letting paths bear their property tax and running costs in the terminal-value tables, "
+         f"but are not credited with the housing they provide, and the sell paths are not charged for housing elsewhere. "
+         f"The housing-value row prices the difference instead: on the 2045 baseline it is about "
+         f"{m(next(p for p in MODEL['paths'] if p['inherit_year'] == 2045)['housing_value_needed'])} a year, a level "
+         f"nominal amount. An earlier edition printed a figure about six times larger, because it used the "
+         f"present-value form of the annuity on a future-value gap; that is corrected."),
         ("Depreciation follows a simple rule",
          "80% of value treated as improvements, straight line over 27.5 years, capped at the building's depreciable amount. Land is not depreciated. Real cost segregation would differ."),
         ("No mortgage, no 1031 exchange, no instalment sale, no gifting",
@@ -2487,9 +2529,8 @@ def executive_summary_markdown() -> str:
         a(f"| {r['name']} | {r['cpi']}% | {r['house']}% | {r['treasury']}% | "
           f"{PATH_LABELS[r['run']['best']]} |")
     a("")
-    a("Sold into equities or Treasuries wins five of the six. The exception is a repeat of the 1965-1982 Great "
-      "Inflation or the 2021-2023 burst, where nominal house prices outran everything else. That is a bet on one "
-      "neighbourhood repeating its best decades, not a plan.")
+    a(f"Sold into equities or Treasuries wins {RF['sell']} of the {RF['n']} regimes. Keeping the house wins only in: "
+      f"{RF['keep_names']}. That is a bet on one neighbourhood repeating its best decades, not a plan.")
     a("")
     a("## Estate and inheritance tax")
     a("")
