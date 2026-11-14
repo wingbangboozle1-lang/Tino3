@@ -312,3 +312,24 @@ code {
   .layout { grid-template-columns: minmax(0, 1fr); }
   .table-wrap { break-inside: avoid; }
 }
+
+/* Attorney and CPA briefing sheet: one printed letter page (E-3). */
+.brief-sheet { font-size: 0.95rem; }
+.brief-sheet h2 { margin: 0.8rem 0 0.3rem; font-size: 1.05rem; }
+.brief-meta { color: #555; font-size: 0.85rem; }
+.brief-two { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.brief-table td, .brief-table th { font-size: 0.85rem; }
+@media print {
+  @page { size: letter; margin: 0.45in; }
+  body:has(.brief-sheet) .site-header,
+  body:has(.brief-sheet) .site-nav,
+  body:has(.brief-sheet) .method,
+  body:has(.brief-sheet) .page-footer,
+  body:has(.brief-sheet) .callout { display: none !important; }
+  body:has(.brief-sheet) .layout { display: block; }
+  body:has(.brief-sheet) .brief-sheet { font-size: 8.5pt; }
+  body:has(.brief-sheet) .brief-sheet h2 { font-size: 9.5pt; margin: 4pt 0 2pt; }
+  body:has(.brief-sheet) .brief-table td, body:has(.brief-sheet) .brief-table th { font-size: 7.5pt; padding: 2pt; }
+  body:has(.brief-sheet) .brief-sheet p, body:has(.brief-sheet) .brief-sheet li { margin: 2pt 0; }
+  body:has(.brief-sheet) .src { color: #000; text-decoration: none; }
+}

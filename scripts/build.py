@@ -31,8 +31,9 @@ NAV_GROUPS = [
     ("The two properties", ["property-a.html", "property-b.html", "ownership-distinction.html"]),
     ("Money over time", ["costs.html", "projections.html", "taxes.html"]),
     ("Rules and the estate", ["inheritance.html", "estate.html", "laws.html"]),
-    ("Black swan economics", ["black-swan.html", "economy.html"]),
+    ("Black swan economics", ["black-swan.html", "phased-entry.html", "economy.html"]),
     ("Review before deciding", ["questions.html", "suggestions.html", "review.html"]),
+    ("Print and reference", ["briefing.html", "timeline.html", "glossary.html"]),
     ("Evidence", ["sources.html"]),
 ]
 PAGE_TITLES = {
@@ -54,6 +55,10 @@ PAGE_TITLES = {
     "suggestions.html": "Suggestions for review",
     "review.html": "Flagged for review and repository audit",
     "sources.html": "Source ledger",
+    "phased-entry.html": "Phased entry after a sale, tested on past crashes",
+    "briefing.html": "Attorney and CPA briefing sheet",
+    "timeline.html": "Deadlines as a timeline",
+    "glossary.html": "Glossary",
 }
 
 
@@ -297,6 +302,7 @@ question A-1</a> before relying on any number here. {slink('rtc63_2_eligibility'
         cards.append(f'<section class="card"><h2>{esc(group)}</h2><ul class="card-list">{items}</ul></section>')
     return (
         privacy_banner()
+        + change_callout()
         + gating
         + f'<section class="kpi-row">{kpis}</section>'
         + callout("answer", "The one-line answer", f"""
@@ -332,6 +338,10 @@ SUMMARIES = {
     "suggestions.html": "A review queue of proposals. Nothing implemented yet.",
     "review.html": "Unverified figures, modelling caveats and the repository audit.",
     "sources.html": "Every official source used, with what it supports.",
+    "phased-entry.html": "A mixed path tested on the 1929 and 2007 falls, with its reinvestment risk.",
+    "briefing.html": "One printable page for the attorney and the CPA.",
+    "timeline.html": "The trust and tax deadlines, in order, with their sources.",
+    "glossary.html": "Plain meanings for the terms used across the site.",
 }
 
 
@@ -1785,6 +1795,30 @@ QUESTIONS = [
        "If the answer is yes, the cost of that preference is on the decision page and should be agreed knowingly.",
        []),
      ]),
+
+    ("I", "Phased entry and the crash tests",
+     [
+      ("What share of the proceeds must stay liquid before any phased entry?",
+       "The model has no reserve figure, so the phased test assumes all proceeds are parked.",
+       "The owner's budget for living costs, tax and reserves.",
+       "Owner worksheet, reviewed with the attorney and the CPA.",
+       "A reserve decides how much of the money is exposed to a fall at all. That matters more than the entry rule.", []),
+      ("Does the trust let the trustee hold short Treasuries, then buy equities in stages?",
+       "The phased test assumes the trustee has that power.",
+       "The trust's investment and distribution powers.",
+       "Read the trust instrument with the attorney.",
+       "If the power is missing, the phased path cannot be used as tested.", []),
+      ("Which broad stock index should the 2007 test use, in place of the NASDAQ proxy?",
+       "NASDAQ Composite monthly averages.",
+       "A broad-index monthly or total-return series for 2007 to 2010, from an official source.",
+       "Check the FRED series list or the index provider's published history.",
+       "The proxy is technology-weighted and may overstate the fall or the recovery.", ["fred_nasdaqcom_m"]),
+      ("Is there an official 2-year Treasury series for 1929 to 1934?",
+       "The 3-to-6-month NBER series stands in for the parking leg.",
+       "A 1929 to 1934 two-year or longer note yield.",
+       "Search the NBER and Federal Reserve data archives.",
+       "The parking leg is a substitution. A two-year rate would show a different reinvestment result.", ["nber_m13029a"]),
+     ]),
 ]
 
 
@@ -1886,6 +1920,15 @@ SUGGESTIONS = [
     ("S-22", "Decide whether the public repository and its history should stay public",
      "The repository is public and earlier commits contain unrounded owner figures. Rounding the published page does not change what Git history holds. Making the repository private, or rewriting history, are the only two ways to close that exposure.",
      "Medium", "High for privacy, none for the analysis", "review", []),
+    ("S-23", "Test the phased path on a broad index series before relying on it",
+     "Replaces the NASDAQ proxy for 2007 to 2010 with a broad-index series and checks the phased result against it.",
+     "Medium", "Medium", "phased-entry", ["fred_nasdaqcom_m"]),
+    ("S-24", "Decide the cash reserve before any phased entry",
+     "Sets how much of the proceeds is exposed to a fall at all. The phased test assumes all proceeds are parked.",
+     "Low", "High if skipped", "phased-entry", []),
+    ("S-25", "Confirm the Form 706 deadline and extension in the full IRS instructions",
+     "Moves the two snippet-only rows on the timeline to read status.",
+     "Low", "Medium", "timeline", ["irs_i706"]),
 ]
 
 
@@ -2191,7 +2234,8 @@ def page_review() -> str:
                 for a, b, c in audit]
 
     return (
-        callout("note", "What this page is for", """
+        flagged_new_callout()
+        + callout("note", "What this page is for", """
 <p>Three lists. The first is every figure on this site that is not verified against an official source, and where
 the record for it is actually held. The second is every modelling shortcut that materially affects the answer.
 The third is the audit of the repository this site is built from. None of these block the recommendation, but
@@ -2240,6 +2284,389 @@ Sources are cited only for what they actually state.</p>""")
     )
 
 
+# ------------------------------------- phased entry, briefing, timeline, glossary --
+# E-2 / E-3 / E-5. Every figure on these pages is read from assets/data/crash.json or from
+# the two crash-test input CSVs, or from the model output used by the rest of the site.
+CRASH = json.loads((DATA / "crash.json").read_text(encoding="utf-8"))
+CRASH_EP = CRASH["episodes"]
+CRASH_SRC = {
+    "crash_1929": ["nber_m11009b", "nber_m13029a", "frh_1929"],
+    "crash_2007": ["fred_nasdaqcom_m", "fred_tb3ms"],
+    "crash_2007_2y": ["fred_nasdaqcom_m", "fred_gs2"],
+    "control_2012": ["fred_nasdaqcom_m", "fred_tb3ms"],
+    "sweep_1929": ["nber_m11009b", "nber_m13029a"],
+    "sweep_2007": ["fred_nasdaqcom_m", "fred_tb3ms"],
+}
+CRASH_YIELD_COL = {
+    "crash_1929": ("crash_1929.csv", "treasury_3to6m_pct_nbr_m13029a"),
+    "crash_2007": ("crash_2007.csv", "treasury_3m_bill_pct_fred_TB3MS"),
+    "crash_2007_2y": ("crash_2007.csv", "treasury_2y_note_pct_fred_GS2"),
+    "control_2012": ("crash_2007.csv", "treasury_3m_bill_pct_fred_TB3MS"),
+    "sweep_1929": ("crash_1929.csv", "treasury_3to6m_pct_nbr_m13029a"),
+    "sweep_2007": ("crash_2007.csv", "treasury_3m_bill_pct_fred_TB3MS"),
+}
+STRAT_LABEL = {"lump": "Lump sum on the entry month", "phased_24": "Park 24 months, then buy over 12",
+               "phased_30": "Park 30 months, then buy over 12", "phased_36": "Park 36 months, then buy over 12"}
+WAIT_OF = {"phased_24": 24, "phased_30": 30, "phased_36": 36}
+
+
+def sgn_pct(x: float, places: int = 1) -> str:
+    s = f"{abs(x):.{places}f}%"
+    return ("&minus;" + s) if x < 0 else ("+" + s if x > 0 else s)
+
+
+def _month_add(ym: str, k: int) -> str:
+    t = int(ym[:4]) * 12 + (int(ym[5:7]) - 1) + k
+    return f"{t // 12:04d}-{t % 12 + 1:02d}"
+
+
+def _csv_yields(key: str, entry: str, wait: int) -> list[float]:
+    """Yield earned in each month the cash was parked (entry month up to the first buying month)."""
+    import csv
+    fname, col = CRASH_YIELD_COL[key]
+    with (DATA / fname).open(encoding="utf-8", newline="") as fh:
+        by = {r["month"]: r for r in csv.DictReader(fh)}
+    out = []
+    for k in range(wait):
+        r = by.get(_month_add(entry, k))
+        if r is None or not r[col].strip():
+            raise ValueError(f"no yield for {_month_add(entry, k)} in {fname}")
+        out.append(float(r[col]))
+    return out
+
+
+def _back_to_cost(s: dict) -> str:
+    if s["never_below_cost"]:
+        return "Never fell below cost"
+    if s["recovered_at_month"] is None:
+        return "Not within 96 months"
+    return f"After {s['recovered_at_month']} months"
+
+
+def _episode_table(key: str) -> str:
+    ep = CRASH_EP[key]
+    res = ep["result"]
+    rows = []
+    for sk in ("lump", "phased_24", "phased_30", "phased_36"):
+        s = res["strategies"][sk]
+        rows.append(
+            f"<td><strong>{esc(STRAT_LABEL[sk])}</strong></td>"
+            f"<td>{m(s['terminal'])}</td>"
+            f"<td>{m(s['worst_value'])}<br><span class='muted'>{sgn_pct(s['worst_change_pct'])}, "
+            f"month {s['worst_at_month']}</span></td>"
+            f"<td>{pcf(s['max_drawdown_pct'] / 100.0)}</td>"
+            f"<td>{esc(_back_to_cost(s))}</td>"
+            + src_cell(CRASH_SRC[key], "Official series"))
+    return table(f"{ep['title']}. Index: {ep['index']}. Parking: {ep['cash']}.",
+                 ["Strategy", "Value after 96 months", "Lowest value", "Deepest fall from a peak",
+                  "Back to cost", "Source"], rows)
+
+
+def _reinvestment_table() -> str:
+    rows = []
+    for key in ("crash_1929", "crash_2007", "crash_2007_2y"):
+        ep = CRASH_EP[key]
+        entry = ep["result"]["entry"]
+        for sk in ("phased_24", "phased_30", "phased_36"):
+            wait = WAIT_OF[sk]
+            y = _csv_yields(key, entry, wait)
+            rows.append(
+                f"<td><strong>{esc(ep['title'].split('(')[0].replace('Entry at the ', '').strip())}</strong>"
+                f"<br><span class='muted'>{esc(ep['cash'])}</span></td>"
+                f"<td>{wait} months</td>"
+                f"<td>{pc(y[0])}</td><td>{pc(min(y))}</td><td>{pc(sum(y) / len(y))}</td>"
+                + src_cell(CRASH_SRC[key], "Official series"))
+    return table("Reinvestment risk: what the parked cash actually earned",
+                 ["Test", "Parking period", "Yield in the entry month", "Lowest yield while parked",
+                  "Average yield while parked", "Source"], rows,
+                 note="A headline return assumes the cash keeps earning what it earned at entry. In each test the "
+                      "parking yield fell sharply during the wait, so the cash earned far less than the entry rate. "
+                      "The yields are simple monthly figures, not compounded daily.")
+
+
+def _sweep_table() -> str:
+    rows = []
+    for key, label in (("sweep_1929", "Every entry month in 1929"),
+                       ("sweep_2007", "Every entry month, October 2007 to June 2008")):
+        sm = CRASH_EP[key]["result"]["summary"]
+        for sk in ("phased_24", "phased_30", "phased_36"):
+            s = sm[sk]
+            rows.append(
+                f"<td><strong>{esc(label)}</strong></td>"
+                f"<td>{WAIT_OF[sk]} months</td>"
+                f"<td>{s['entries']}</td>"
+                f"<td>{s['beats_lump']} of {s['entries']}</td>"
+                f"<td>{sgn_pct(s['worst_worst_pct'])}</td>"
+                f"<td>{sgn_pct(s['median_terminal_vs_lump_pct'])}</td>"
+                + src_cell(CRASH_SRC[key], "Official series"))
+    return table("Sensitivity: the same rule applied to every entry month in the window",
+                 ["Window", "Parking period", "Entry months tested", "Phased beat lump sum",
+                  "Worst fall, across entries", "Median value against lump sum", "Source"], rows,
+                 note="A single crash can flatter the phased rule, because the cash waits through the fall. "
+                      "The rows show how sensitive the result is to the month chosen. Median value against lump sum "
+                      "is the difference in value after 96 months.")
+
+
+def _anchor_table() -> str:
+    lump = CRASH_EP["crash_1929"]["result"]["strategies"]["lump"]
+    rows = [
+        "<td><strong>Peak</strong></td><td>381.17 on 3 September 1929</td>"
+        "<td>362.35 for September 1929</td>"
+        + src_cell(["frh_1929", "nber_m11009b"], "Daily close and monthly average"),
+        "<td><strong>Trough</strong></td><td>41.22 on 8 July 1932</td>"
+        "<td>46.85 for June 1932</td>"
+        + src_cell(["frh_1929", "nber_m11009b"], "Daily close and monthly average"),
+        f"<td><strong>Fall used in the test</strong></td><td>&minus;89% from peak to trough</td>"
+        f"<td>{sgn_pct(lump['worst_change_pct'])} to the lowest monthly average</td>"
+        + src_cell(["frh_1929", "nber_m11009b"], "Daily close and monthly average"),
+    ]
+    return table("1929: daily anchors against the monthly averages used by the test",
+                 ["Anchor", "Daily close (Federal Reserve essay)", "Monthly average (test input)", "Source"], rows,
+                 note="The test uses monthly averages because the monthly series is the only one that spans 1929 to "
+                      "1939 in the sources read. A monthly average cannot show the intra-month fall, so the 1929 "
+                      "drawdown is understated.")
+
+
+def page_phased() -> str:
+    h = CRASH_EP["crash_1929"]["result"]["strategies"]
+    h07 = CRASH_EP["crash_2007"]["result"]["strategies"]
+    ctl = CRASH_EP["control_2012"]["result"]["strategies"]
+    cost_of_wait = (ctl["phased_24"]["terminal"] / ctl["lump"]["terminal"] - 1) * 100
+    body = []
+    body.append(callout("note", "What this page tests", f"""
+<p>The phased path is a <strong>mixed path</strong>: sell, park the proceeds in short Treasuries for a fixed
+period, then buy stocks in twelve equal monthly steps. It is a rule chosen before the test and not tuned to the
+results. Each test compares it with a lump-sum purchase on the same entry month, using the same index path.</p>
+<p>The value of the crash test is mainly the <strong>downside</strong>. Its limit is that it is run on a few
+historical episodes, and the sensitivity table shows how much the answer moves with the entry month.</p>"""))
+    body.append(callout("flag", "Headline, with its reinvestment risk beside it", f"""
+<ul>
+<li><strong>1929 crash, September entry.</strong> The lowest point of a lump sum was {sgn_pct(h['lump']['worst_change_pct'])} against its entry value.
+The lowest point of the 24-month phased rule was {sgn_pct(h['phased_24']['worst_change_pct'])}, and of the 30-month rule {sgn_pct(h['phased_30']['worst_change_pct'])}.
+Value after 96 months: lump sum {m(h['lump']['terminal'])}, 24-month phased {m(h['phased_24']['terminal'])}
+(per $1,000,000 of proceeds).</li>
+<li><strong>2007 crash, October entry.</strong> The lowest point of a lump sum was {sgn_pct(h07['lump']['worst_change_pct'])} against its entry value.
+The 24-month phased rule never fell below its entry value.</li>
+<li><strong>The cost, in a market that did not fall.</strong> In the January 2012 control, the 24-month phased rule
+ended {sgn_pct(cost_of_wait)} against a lump sum over 96 months.</li>
+<li><strong>Reinvestment risk.</strong> The cash earned far less than its entry yield while it was parked (table below).
+The phased results above already include the actual parking yields, so the risk is in the numbers, not added on top.</li>
+</ul>
+<p>In short: phasing reduces the depth of a fall that occurs during the wait. It costs return when the market rises.
+It is a trade-off between the downside and the upside, not a free improvement.</p>"""))
+    body.append("<h2>Episode results</h2>")
+    for key in ("crash_1929", "crash_2007", "crash_2007_2y", "control_2012"):
+        body.append(_episode_table(key))
+    body.append("<h2>Reinvestment risk</h2>" + _reinvestment_table())
+    body.append("<h2>Sensitivity to the entry month</h2>" + _sweep_table())
+    body.append("<h2>1929: daily and monthly anchors</h2>" + _anchor_table())
+    body.append(callout("flag", "What this test is not, and what it leaves out", """
+<ul>
+<li><strong>Index, not portfolio.</strong> Dividends are excluded for both strategies, and no fees, taxes or
+transaction costs are charged. The two strategies are comparable with each other, not with a total-return figure.</li>
+<li><strong>Monthly averages.</strong> The 1929 episode uses monthly averages; the 2007 episode uses monthly averages of
+the NASDAQ Composite, a technology-weighted proxy, because the S&amp;P 500 and Dow monthly series available to this
+build began in December 2016. A broad-index series for 2007 to 2010 has not been checked.</li>
+<li><strong>Parking leg.</strong> For 1929 there is no 2-year Treasury series in the sources read, so the 3-to-6-month
+series is used. For 2007 both the 3-month bill and the 2-year note are tested.</li>
+<li><strong>Normalised amount.</strong> Results are per $1,000,000 of proceeds. That is a unit for comparison, not the
+owner's inherited amount, which is not published.</li>
+<li><strong>Not in the decision model yet.</strong> The five-path comparison on the decision page does not yet include
+this mixed path; this page reports it alongside those results and does not change them.</li>
+</ul>"""))
+    return "".join(body)
+
+
+def page_briefing() -> str:
+    p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
+    h = CRASH_EP["crash_1929"]["result"]["strategies"]
+    rows = [
+        ("Property A, estimated value, November 2026", m(A["estimated_market_value_2026"]),
+         "Owner estimate, not verified", None),
+        ("Property B, estimated value, November 2026", m(B["estimated_market_value_2026"]),
+         "Owner estimate, not verified", None),
+        ("Property A, value at the assumed inheritance year (2045)", m(p45["value_at_death"]),
+         "Model output from the house-growth assumption", ["boe_lta26026", "rtc63_2"]),
+        ("Property A, factored base-year value, 2045", m(p45["factored_base_year_value"]),
+         "Model output", ["boe_lta26026"]),
+        ("Property A, Proposition 19 sheltered amount, 2045", m(p45["prop19_cap"]),
+         "Model output from the value cap", ["boe_lta26026"]),
+        ("Property A, property tax bill if let out, first year, 2045", m(p45["bill_if_rent_year1"]),
+         "Model output; assessed value without the exclusion path", ["boe_prop19"]),
+        ("Property A, house growth needed to justify keeping it", pc(p45["breakeven_house_growth"]) + " a year",
+         "Model output over 30 years, against a 7% portfolio", None),
+        ("Federal estate tax exclusion, 2026, per person", m(V["federal_basic_exclusion_2026"]["value"]),
+         "Verified", V["federal_basic_exclusion_2026"]["src"]),
+        ("Federal estate tax exclusion, 2027, per person", m(V["federal_basic_exclusion_2027"]["value"]),
+         "Verified", V["federal_basic_exclusion_2027"]["src"]),
+        ("Phased entry after a 1929 sale: lowest point, 24-month rule", sgn_pct(h["phased_24"]["worst_change_pct"]),
+         "Test on monthly averages; not a forecast", CRASH_SRC["crash_1929"]),
+        ("Lump-sum entry at the 1929 peak: lowest point", sgn_pct(h["lump"]["worst_change_pct"]),
+         "Test on monthly averages; not a forecast", CRASH_SRC["crash_1929"]),
+    ]
+    trs = []
+    for item, fig, status, srcs in rows:
+        cell = (src_cell(srcs, "Official source") if srcs is not None and srcs and srcs[0] in SOURCES
+                else (src_cell(CRASH_SRC["crash_1929"], "Official series") if isinstance(srcs, list)
+                      and srcs and srcs[0].startswith("nber") else src_cell([], "Owner figure or assumption")))
+        trs.append(f"<td>{esc(item)}</td><td>{fig}</td><td>{esc(status)}</td>{cell}")
+    facts = table("Figures the advisers are asked to check", ["Item", "Figure", "Status", "Source"], trs,
+                  cls="brief-table",
+                  note="Rounded to the nearest $10. Owner figures are unverified. The Property A assessment "
+                       "assumes the parent-and-child exclusion applies; that is the first point to confirm.")
+    attorney = ("<li>Is the heir a child of the transferor under Revenue and Taxation Code section 63.2, including the "
+                "statutory definitions (A-1)?</li>"
+                "<li>Is the house titled in the trust now, and what is the recorded chain (questions page, section A)?</li>"
+                "<li>Does the trust allow the trustee to park sale proceeds in Treasuries and then buy stocks on a "
+                "phased schedule?</li>"
+                "<li>Which estate tax return and extension position applies, and what is the portability election "
+                "decision?</li>")
+    cpa = ("<li>Does the Proposition 19 occupancy and claim timetable match the planned move or letting date (questions page, section C)?</li>"
+           "<li>What is the income tax basis at the date of death, and how is the sale reported?</li>"
+           "<li>How are the rent and property tax treated on the Property B return?</li>"
+           "<li>Is the phased sale-and-purchase plan consistent with the state and federal income tax position?</li>"
+           "<li>Which insurance and water costs are documented, rather than owner estimates?</li>")
+    body = (
+        '<section class="brief-sheet">'
+        '<p class="brief-meta">Anonymised. Two California properties. Prepared from public sources and '
+        'owner-supplied figures, rounded to the nearest $10. Not legal, tax or investment advice.</p>'
+        '<h2>Question first</h2>'
+        '<p>Is the heir a child of the transferor? The reassessment relief in section 63.2 applies only to a parent '
+        'and child, or a grandparent and grandchild where the middle generation has died. If the answer is no, the '
+        'saving on this site does not exist.</p>'
+        + facts
+        + '<div class="brief-two"><div><h2>For the attorney</h2><ol>' + attorney + '</ol></div>'
+        '<div><h2>For the CPA</h2><ol>' + cpa + '</ol></div></div>'
+        '<p class="brief-meta">Deadlines: see <a href="timeline.html">the timeline</a>. Terms: '
+        '<a href="glossary.html">the glossary</a>. Full questions: <a href="questions.html">questions page</a>.</p>'
+        '</section>'
+    )
+    return (callout("note", "How to print this sheet",
+                    "<p>Use your browser's print command. This section is set to print on one page of letter-size paper, "
+                    "without the navigation.</p>")
+            + body)
+
+
+TIMELINE_ROWS = [
+    ("Day 0", "Date of death", "Trigger for the inheritance steps below. Basis for the heir's sale is normally the fair market value on this date.",
+     "Read", ["irs_basis"]),
+    ("Within 150 days", "Change in ownership statement for the trust transfer",
+     "The trustee files the statement with the county assessor after a trust transfer on death (non-death transfers: 90 days).",
+     "Read in statute text", ["rtc480"]),
+    ("Within 9 months", "Federal estate tax return (Form 706), if required",
+     "Due nine months after death. A six-month extension is available on Form 4768. Confirmed in an IRS search snippet; "
+     "the body of the instructions was not reached, so it is flagged for review.",
+     "Flagged: snippet only", ["irs_i706"]),
+    ("Within 1 year", "Homeowners' exemption filed by the heir (if the exclusion is claimed)",
+     "The transferee must file for the homeowners' exemption within one year of the transfer.",
+     "Read in BOE letter", ["boe_lta26026"]),
+    ("Within 1 year", "Principal residence occupancy, if the exclusion is claimed",
+     "The transferee must occupy the home as a principal residence within one year, with no exceptions. The exclusion is "
+     "removed if eligibility lapses.",
+     "Read in BOE letter", ["boe_lta26026"]),
+    ("Within 3 years, or before a third-party sale", "Proposition 19 exclusion claim",
+     "The exclusion claim must be filed within three years, or before any transfer to a third party, whichever is earlier.",
+     "Read in BOE letter", ["boe_lta26026"]),
+    ("Within 30 days of the 706 due date", "Consistent basis statement, if a Form 706 is filed",
+     "Statements of consistent basis are due within 30 days of the return's due date.",
+     "Flagged: snippet only", ["irs_i706"]),
+]
+
+
+def page_timeline() -> str:
+    rows = []
+    for i, (when, step, rule, status, srcs) in enumerate(TIMELINE_ROWS, 1):
+        rows.append(f"<td><strong>{i}. {esc(when)}</strong></td><td>{esc(step)}</td><td>{esc(rule)}</td>"
+                    f"<td>{esc(status)}</td>" + src_cell(srcs, "Official source"))
+    t = table("Deadlines, in order", ["When", "Step", "What the rule requires", "Status", "Source"], rows,
+              note="Dates run from the date of death, which is not yet known. The sequence matters more than the "
+                   "precise dates, which depend on the trust document and the county record.")
+    return (callout("flag", "Confirm before relying on any date",
+                    "<p>No date here is a legal determination. Rows marked <em>snippet only</em> rest on a search result "
+                    "from the official IRS site, and the full text has not been read.</p>")
+            + t
+            + callout("note", "Sequence, not dates",
+                      "<p>The inheritance steps are: (1) date of death; (2) the trustee's statement to the assessor; "
+                      "(3) any estate tax return, which can be extended; (4) the heir's exemption and occupancy steps, "
+                      "if the exclusion is claimed. Selling before step 4 does not preserve the exclusion; the "
+                      "decision page sets out why.</p>"))
+
+
+GLOSSARY_ROWS = [
+    ("Basis", "The tax starting value of an asset, used to work out gain on a sale. For inherited property, normally the value at the date of death.", ["irs_basis"]),
+    ("Change in ownership", "A transfer that can trigger reassessment of a property's taxable value under Proposition 13.", ["rtc480"]),
+    ("Intergenerational exclusion", "The Proposition 19 rule (Revenue and Taxation Code section 63.2) under which a parent-to-child transfer can keep the old assessed value, up to a cap, if the heir moves in.", ["boe_lta26026", "rtc63_2"]),
+    ("Factored base-year value", "The assessed value carried forward from the prior change in ownership, adjusted by the inflation factor set each year.", ["boe_lta26026"]),
+    ("Homeowners' exemption", "A reduction in assessed value for an owner-occupied home. The transferee must file for it within one year of the transfer.", ["boe_lta26026"]),
+    ("Principal residence", "The home where the person actually lives. The Proposition 19 exclusion requires occupancy within one year.", ["boe_lta26026"]),
+    ("Portability", "A surviving spouse can use a deceased spouse's unused federal exclusion, but only if a timely estate tax return is filed.", ["irs_i706"]),
+    ("Estate tax exclusion", "The federal amount that can pass free of federal estate tax per person. California has no estate tax.", ["irs_estate", "sco_estate"]),
+    ("Parking yield", "The Treasury yield earned on cash while it waits before being invested. Modelled as the monthly rate divided by twelve.", ["fred_tb3ms", "fred_gs2"]),
+    ("Monthly average", "The average index level for a calendar month. Used in the crash test instead of daily closes, so intra-month moves are not shown.", ["fred_nasdaqcom_m"]),
+    ("Drawdown", "The fall from the highest value reached so far to a later low, shown as a percentage. Computed by the crash test; not an official figure.", []),
+    ("Lump-sum entry", "Buying the whole amount in one month. The comparison case for the phased rule.", []),
+    ("Phased entry", "Parking the cash, then buying in equal monthly steps. A mixed path: sale, then staged investment.", []),
+    ("Reinvestment risk", "The risk that cash earns a lower rate than expected when it is reinvested, shown beside each headline on the phased-entry page.", []),
+    ("Black swan", "A rare, severe event outside the normal range of expectations. Used on this site for the historical stress regimes.", []),
+]
+
+
+def page_glossary() -> str:
+    rows = []
+    for term, definition, srcs in GLOSSARY_ROWS:
+        rows.append(f"<td><strong>{esc(term)}</strong></td><td>{esc(definition)}</td>"
+                    + (src_cell(srcs, "Official source") if srcs else src_cell([], "Defined for this site")))
+    return table("Glossary", ["Term", "Meaning on this site", "Source"], rows,
+                 note="Where a term has an official definition, the source is linked. Terms defined for this analysis "
+                      "say so, and are not presented as legal definitions.")
+
+
+def change_callout() -> str:
+    p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
+    h = CRASH_EP["crash_1929"]["result"]["strategies"]
+    return callout("flag", "What would change the answer", f"""
+<ol>
+<li><strong>The parent-and-child relationship (question A-1).</strong> If the heir is not a qualifying child, the
+Proposition 19 exclusion does not exist, and the saving shown on this site disappears.</li>
+<li><strong>House growth.</strong> Keeping Property A beats selling only if the house grows by at least
+{pc(p45['breakeven_house_growth'])} a year for 30 years. That is the break-even against a 7% portfolio.</li>
+<li><strong>Rent.</strong> Letting Property A out beats selling only at about {m(p45['breakeven_rent_monthly'])} a month
+in 2045 dollars. No rent is credited to the letting paths in the model, so this is a hurdle, not a forecast.</li>
+<li><strong>Phased entry after a sale.</strong> In the 1929 test a 24-month phased rule raised the lowest point from
+{sgn_pct(h['lump']['worst_change_pct'])} to {sgn_pct(h['phased_24']['worst_change_pct'])}, but it trails a lump sum in a
+rising market. See <a href="phased-entry.html">the phased-entry test</a>.</li>
+<li><strong>Owner estimates.</strong> Insurance, water and the valuation are unverified and are flagged. Verified figures
+could move the running-cost rows.</li>
+<li><strong>Law changes.</strong> Proposition 19 and the estate rules are under discussion; see
+<a href="laws.html">what may change</a>.</li>
+</ol>""")
+
+
+def flagged_new_callout() -> str:
+    return callout("flag", "New flags from the phased-entry and crash tests (this round)", """
+<ul>
+<li><strong>1929 uses monthly averages.</strong> Peak 362.35 (September 1929) against the daily close of 381.17; the
+trough is 46.85 (June 1932) against 41.22 (8 July 1932). Monthly averages understate intra-month falls.
+<a href="phased-entry.html">Phased-entry test</a>.</li>
+<li><strong>1929 parking yield is a substitution.</strong> No 2-year Treasury series for 1929 to 1934 was read; the
+3-to-6-month series is used. The series also changes method in February 1931.</li>
+<li><strong>2007 index is a proxy.</strong> NASDAQ Composite monthly averages stand in for a broad index, because the
+FRED S&amp;P 500 and Dow monthly pages returned by the source began in December 2016.</li>
+<li><strong>Form 706 deadline is snippet-only.</strong> Confirmed from an IRS search result; the full instructions were not
+reached. <a href="timeline.html">Timeline</a>.</li>
+<li><strong>Git history.</strong> The repository is public and earlier commits contain pre-rounding owner figures. Rewriting history
+needs an owner decision; see suggestion S-22 on the <a href="suggestions.html">suggestions page</a>.</li>
+</ul>""")
+
+
+PAGE_BUILDERS_EXTRA = {
+    "phased-entry.html": (page_phased, "A mixed path: sell, park the cash in Treasuries, then buy in stages. Tested on the 1929 and 2007 falls."),
+    "briefing.html": (page_briefing, "A one-page brief for the attorney and CPA. Print it from this page."),
+    "timeline.html": (page_timeline, "The trust transfer and tax deadlines, in order, with their sources."),
+    "glossary.html": (page_glossary, "Plain meanings for the terms used across the site, with official sources where they exist."),
+}
+
+
 PAGE_BUILDERS = {
     "index.html": (page_index, "Two California properties, one decision. Every figure rounded to the nearest $10."),
     "executive-summary.html": (page_executive_summary,
@@ -2263,6 +2690,7 @@ PAGE_BUILDERS = {
 }
 
 
+PAGE_BUILDERS.update(PAGE_BUILDERS_EXTRA)
 PAGES = list(PAGE_BUILDERS)
 ASSETS = ["assets/style.css"]
 
