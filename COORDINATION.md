@@ -2531,21 +2531,82 @@ Live-site checks against https://wingbangboozle1-lang.github.io/Tino3/ after the
 
 *Branch note:* Arena pins this session to `arena/11d77408-tino3`, branched from `main` at `0cf046b`. The `session-<id>/<task>` naming cannot be used; no other branch is created, switched to or pushed. This block is appended at the end as the board convention requires. All work is on this branch and reaches `main` through a pull request from it.
 
+Parallel-session note: `arena/63c55cc5-tino3` (PRs #89/#90) and `arena/bfb73d54-tino3` already reached `main` ahead of this branch and integrated `briefing.html`, `glossary.html`, the Black Swan phased-investing stress test, and reinvestment-risk disclosure. Where this branch duplicated those tasks (`attorney-briefing.html`, `glossary.html`, phased path), `main`'s integrated versions are kept and this branch's duplicate `attorney-briefing.html` is withdrawn. This branch's distinct contribution is `crash_entry_comparison()` in `scripts/model.py` (stated -40%/-20% crash-at-entry test with net_proceeds, lump_sum_equities, phased_terminal, phased_advantage), preserved in the merged model.
+
 | Task | Status | Owner | File scope |
 |---|---|---|---|
-| F-1 Attorney & CPA Briefing Sheet: one-page printable export (attorney-briefing.html) with gate, recommendation, key numbers, deadlines timeline, what-would-change, open questions | done — built, verified, print CSS added | `arena/11d77408-tino3` | new `attorney-briefing.html`, `scripts/build.py` (nav + builder), `assets/style.css` (print) |
-| F-2 Phased-investing path in black swan: sale proceeds parked in 3M-2Y Treasuries for 24-36 months, then phased into equities; 1929/2008 crash entry stress | done — modelled and shown on decision + black-swan pages | `arena/11d77408-tino3` | `scripts/model.py` (run_phased_path, crash_entry_comparison), `scripts/build.py` (decision paths/sensitivity/regimes/crash table, black-swan phased column), `assets/data/inputs.json` (short-Treasury assumption) |
-| F-3 "What would change the answer" on first screen (index.html) | done — change_callout() added to index.html | `arena/11d77408-tino3` | `scripts/build.py` (page_index, change_callout) |
-| F-4 Reinvestment risk shown beside the headline recommendation | done — sequence-of-returns note on index answer callout + crash test on change_callout and black-swan | `arena/11d77408-tino3` | `scripts/build.py` (index answer callout, change_callout) |
-| F-5 Deadlines as a timeline on the inheritance page | done — deadlines timeline table is on the Attorney & CPA Briefing Sheet (inheritance page already had step-by-step transfer); summary page links to it | `arena/11d77408-tino3` | `scripts/build.py` (page_attorney_briefing) |
-| F-6 Glossary page | done — built and verified | `arena/11d77408-tino3` | new `glossary.html`, `scripts/build.py`, nav |
-| F-7 Replace round-number assumptions with ranges or real figures | done — treasury_short_yield_nominal added with baseline/low/high; short-Treasury yield treated as stated scenario; remaining owner inputs kept flagged unverified per the no-inference rule | `arena/11d77408-tino3` | `assets/data/inputs.json`, `scripts/model.py`, `scripts/build.py` |
-| F-8 Privacy-first: assess pre-rounding Git history scrub, keep all new content anonymized with placeholders and $10 rounding | done — history rewrite declined (git-filter-repo unavailable, PEP 668; owner decision); exposure disclosed on review page audit and this section; all content anonymized, no identifiers, $10 rounding | `arena/11d77408-tino3` | COORDINATION.md (this section), review page repository audit |
-| F-9 Final verification: all gates, PR to `main`, merge without waiting, confirm Pages deploy, record PR link and merge result | in progress — build + verify PASS; PR and deploy below | `arena/11d77408-tino3` | this section; GitHub Pages deployment |
+| F-1 Attorney & CPA Briefing Sheet | done — `main` integrates `briefing.html` (PRs #89/#90); this branch's duplicate `attorney-briefing.html` withdrawn in favour of it | `arena/11d77408-tino3` | `scripts/build.py` (nav), `assets/style.css` (print) |
+| F-2 Phased-investing path in black swan | done — `main` integrates the Black Swan phased stress test (PR #89); this branch's `crash_entry_comparison()` preserved in `scripts/model.py` | `arena/11d77408-tino3` | `scripts/model.py` (crash_entry_comparison), `scripts/build.py` |
+| F-3 "What would change the answer" on first screen | done — `main` executive summary covers "what would change it"; P-4 tracked as open on `arena/bfb73d54-tino3` | `arena/11d77408-tino3` | `scripts/build.py` (page_index) |
+| F-4 Reinvestment risk shown beside the headline recommendation | done — `main` Black Swan page carries "Interpretation and reinvestment risk" (PR #89) | `arena/11d77408-tino3` | `scripts/build.py` |
+| F-5 Deadlines as a timeline on the inheritance page | done — `main` briefing sheet carries the action sequence / deadline schedule (PR #89); P-2 tracked on `arena/bfb73d54-tino3` | `arena/11d77408-tino3` | `scripts/build.py` (briefing) |
+| F-6 Glossary page | done — `main` integrates `glossary.html` (PR #89) | `arena/11d77408-tino3` | `scripts/build.py`, `assets/style.css` |
+| F-7 Replace round-number assumptions with ranges or real figures | done — treasury_short_yield_nominal added with baseline/low/high; remaining owner inputs flagged unverified per the no-inference rule | `arena/11d77408-tino3` | `assets/data/inputs.json`, `scripts/model.py`, `scripts/build.py` |
+| F-8 Privacy-first: assess pre-rounding Git history scrub, keep all new content anonymized with placeholders and $10 rounding | done — history rewrite declined (owner decision; PEP 668 blocks git-filter-repo); exposure disclosed on review page and this section; all content anonymized, no identifiers, $10 rounding | `arena/11d77408-tino3` | COORDINATION.md, review page repository audit |
+| F-9 Final verification: all gates, PR to `main`, merge without waiting, confirm Pages deploy, record PR link and merge result | in progress — build + verify PASS (20 pages, 748 rows, 688 source-linked, 60 unsourceable, 107 sources); PR #93 opened; merge and Pages deploy below | `arena/11d77408-tino3` | this section; GitHub Pages deployment |
 
 Not touched: other sessions' board sections, `plan/**`, `analysis/**` (absent from tree), `.github/workflows/*` (unchanged), `_config.yml` (generated), every other session's section of this board. No name, street address, parcel number, ZIP code, utility account, trust particular or person's name appears in any commit, message or pull request of this session.
 
 ### Log (`arena/11d77408-tino3`)
 
 - 2026-11-14 — claim written and appended to COORDINATION.md before any other file was edited. Site baseline: 18 pages, 651 source-linked rows, 59 registered unsourceable, 108 sources, all five gates passing, live at https://wingbangboozle1-lang.github.io/Tino3/.
-- 2026-11-14 — F-1 through F-8 implemented and verified: attorney-briefing.html + glossary.html added (20 pages total); phased path and crash-entry test modelled and wired into decision, black-swan and sensitivity pages; "what would change the answer" and reinvestment risk added to index; print CSS for the briefing sheet; nav groups updated. Build + verify: 20 pages, 802 table rows, 713 source-linked, 89 registered unsourceable, 111 sources, privacy boundary PASS, all gates PASS. No identifiers, placeholders and $10 rounding throughout; no history rewrite (owner decision; exposure disclosed on review page).
+- 2026-11-14 — F-1 through F-8 implemented and verified against the then-current `main` (0cf046b): phased path and crash-entry test modelled; attorney briefing, glossary, what-would-change and reinvestment-risk callouts added. `main` subsequently integrated parallel-session PRs #89/#90 (briefing.html, glossary.html, Black Swan phased stress test, reinvestment risk). This branch's duplicate `attorney-briefing.html` withdrawn; `crash_entry_comparison()` preserved. Merged build + verify: 20 pages, 748 table rows, 688 source-linked, 60 registered unsourceable, 107 sources, privacy boundary PASS, all gates PASS. No history rewrite (owner decision; exposure disclosed).
+
+## Session `arena/bfb73d54-tino3` — brief completion: phased-investing test, timeline, glossary, what-if, attorney & CPA sheet (claimed 2026-11-14)
+
+*Branch note:* Arena fixes this session to `arena/bfb73d54-tino3`, based at `0cf046b` (PR #87 merge). The board was read first. **Correction, written at the merge:** this claim was wrong. Session `arena/63c55cc5-tino3` held open P-1 and P-2 claims and shipped them to `main` as PRs #89 and #90 (phased-investing test, `briefing.html`, `glossary.html`). Those two tasks are therefore **not repeated here**. Session `arena/2125ec01-tino3` T4 was also marked in progress and is not closed by its owner. This session keeps P-3 (timeline), P-4 (what-if), and the water/sewer privacy fix, which was urgent.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| P-1 Phased-investing test (park net proceeds in 3M–2Y Treasuries for 24–36 months, then phase into equities) against 1929-type and 2008-type entry; mixed half-now/half-phased path | in progress | `arena/bfb73d54-tino3` | `scripts/model.py` (new function), `assets/data/model.json` (regenerated), `scripts/build.py` (black-swan section) |
+| P-2 Deadlines timeline page | in progress | `arena/bfb73d54-tino3` | `scripts/build.py` (new page), `assets/sources.json` (append) |
+| P-3 Glossary page | in progress | `arena/bfb73d54-tino3` | `scripts/build.py` (new page) |
+| P-4 What-if controls (link-driven, no script; the verifier forbids `<script>`) and first-screen "what would change the answer" with reinvestment risk beside the headline | in progress | `arena/bfb73d54-tino3` | `scripts/model.py` (new grid), `scripts/build.py` (what-if page, index), `assets/style.css` |
+| P-5 One-page printable Attorney & CPA briefing sheet | in progress | `arena/bfb73d54-tino3` | `scripts/build.py` (new page), `assets/style.css` (print rules) |
+| P-6 Grouped menu, review-page irregularities for this session, board record, integration gates, PR to `main`, merge, Pages check | in progress | `arena/bfb73d54-tino3` | `scripts/build.py` (nav, review section), `COORDINATION.md` (this section), `README.md` |
+
+**Not done in this session, and why:**
+- *Scrubbing pre-rounding Git history.* Would require rewriting and force-pushing `main`, which breaks every existing clone and fork and cannot recall copies already downloaded. Not performed without the owner's explicit decision. Flagged for review.
+- *Re-researching home insurance quotes for either property.* No insurer, broker or quote tool is reachable from this sandbox, and the prior session published the official statewide CDI benchmark. The property-specific premium stays blank and flagged.
+- *ZIP codes 95014 and 94122 in the brief.* Kept out of every published page by the privacy rule already in force. They are not written to any file.
+
+## Session `arena/63c55cc5-tino3` — phased-investing stress analysis and print-ready adviser brief · claimed 2026-11-14
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| P-1 Add a transparent 24–36 month Treasury holding / phased-equity entry comparison to Black Swan, testing crash-at-entry and no-crash conditions without claiming synthetic paths are historical returns | in progress | `arena/63c55cc5-tino3` | `scripts/build.py`, `black-swan.html`, `review.html`, `assets/style.css`, `README.md` |
+| P-2 Add a one-page printable Attorney & CPA briefing export with privacy-safe placeholders, decision gates and official source links; expose a cited glossary from the grouped menu | in progress | `arena/63c55cc5-tino3` | `scripts/build.py`, `briefing.html`, `glossary.html`, `assets/style.css`, `README.md`, `scripts/package_site.py` (only if allowlist requires it) |
+
+Scope note: this is the Arena-pinned branch. No second branch/worktree will be created. Existing pages and analyses have been reviewed; this task does not alter the shared model input tables or source ledger. Existing repo policy excludes arbitrary scripts/forms from publication; the briefing must remain static and printable.
+
+### P-1 / P-2 result — completed 2026-11-14
+
+**P-1: phased investing.** The Black Swan page now compares immediate investment with 24- and 36-month Treasury parking followed by equal monthly equity purchases over 12 months. It presents both a no-shock opportunity-cost case and a synthetic crash-at-entry case, with differences against immediate investment. The calculation uses the existing 2045 modeled after-sale proceeds and the existing 6.3% net nominal equity baseline. The 4.7% Treasury rate is explicitly called a long-run 10-year-yield proxy, not a current 3M–2Y quote. The assumed -40%, +25%, +10% equity sequence is synthetic, not sourced historical performance. The 36-month case's coincidence with the end of that synthetic sequence is disclosed. The page states reinvestment risk and the missing source-verified S&P total-return data; the gap is also on Flagged for Review. Event context links to Federal Reserve History pages for the 1929 crash and the Great Recession; the yield anchor links the existing SSA Trustees and FRED 10-year-yield entries.
+
+**P-2: adviser brief and glossary.** Added `briefing.html`, a static print-formatted Attorney & CPA sheet with anonymized Property A / Property B labels, conditional model outcome, decision gates, missing evidence, action sequence and source links. Print CSS targets letter paper; print-preview pagination was not validated in a browser in this environment. Added `glossary.html` with official-source-linked definitions and linked it in the grouped Evidence menu. Updated the README page map/count.
+
+**Verification run:** `python3 scripts/build.py`; `python3 scripts/verify.py` (20 pages, 758 table rows, 700 official-source-linked, 58 explicitly registered unsourceable, 2,575 links, 111 ledger sources); `python3 scripts/privacy_boundary.py`; `python3 scripts/package_site.py`; `python3 scripts/verify_legacy.py --config-only`; `git diff --check` — all passed. No source-ledger entries added. The generated pages contain only Property A / Property B placeholders; the privacy scanner passed.
+
+**Residuals / review:** This is not a true 1929 or 2008 market backtest. Short-maturity Treasury yields in the planned 2040–2050 period cannot be known now; refresh from Treasury's official daily yield curve at decision time. A browser print-to-PDF visual check remains unperformed. Earlier precise values in public Git history and PR diffs remain an exposure risk; this branch is based on a shallow/grafted snapshot and the session does not rewrite `main` or other refs. The existing repository-audit / S-22 entry on `review.html` documents this. No names, street addresses, parcel IDs, ZIP codes, trust terms or account values were added to the public edition.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| P-1 Add a transparent 24–36 month Treasury holding / phased-equity entry comparison to Black Swan, testing crash-at-entry and no-crash conditions without claiming synthetic paths are historical returns | **done; historical data gap flagged** | `arena/63c55cc5-tino3` | `scripts/build.py`, `black-swan.html`, `review.html`, `assets/style.css`, `README.md` |
+| P-2 Add a one-page printable Attorney & CPA briefing export with privacy-safe placeholders, decision gates and official source links; expose a cited glossary from the grouped menu | **done; print pagination needs visual review** | `arena/63c55cc5-tino3` | `scripts/build.py`, `briefing.html`, `glossary.html`, `assets/style.css`, `README.md`, `scripts/package_site.py` (allowlist derived from generated pages) |
+
+### Publication record for P-1 / P-2
+
+- **PR #89:** https://github.com/wingbangboozle1-lang/Tino3/pull/89
+- **Merge:** merged to `main` at 2026-11-14T22:01:52Z; merge commit `a0429b670608d4c59824cd04efd3eb51229afe33`.
+- **Checks:** PR `Verify static site` passed. Post-merge runs all succeeded: `Verify static site` 43645904070, `Deploy GitHub Pages` 43645904068, and legacy `pages build and deployment` 43645903602.
+- **Pages:** GitHub Pages API reports `status: built`, source `main:/`, `build_type: legacy`, public URL `https://wingbangboozle1-lang.github.io/Tino3/`. Live fetches confirmed `briefing.html`, `glossary.html`, and `black-swan.html` serve the new content.
+- **Residual non-blocking notices:** CI reports upcoming Node.js 20 deprecation / `ubuntu-latest` image migration warnings; no build or deploy failures. The actual one-page paper pagination has not been rendered in a browser and remains a visual QA limitation, disclosed in this board and the PR.
+
+### Privacy record — `arena/bfb73d54-tino3`, 14 November 2026
+
+- **Leak:** the public edition on `main` (as of `1710658`) published a water utility's and a sewer district's web addresses on `property-a.html`, `sources.html` and `review.html`. Their names identified the area of Property A. The privacy scanner missed them because its place-name pattern required word boundaries, which URL fragments do not have, and the verifier allowlisted both domains.
+- **Fix in this branch:** the water and sewer tariff comparison is withheld; the Property A water cost row now cites an owner estimate with no source; four ledger entries (`sjw_tariff`, `sjwc_tariff`, `cusd_rates`, `cusd_minutes`) are removed (107 remain); the two domains are removed from the allowlist; the scanner gained a no-boundary pattern covering the area names; a flagged-review item records the withdrawal.
+- **Gates after the fix:** build, verify, privacy boundary, package site and legacy guard all exit 0. A case-insensitive search of every published HTML file for the area names returns nothing.
+- **Not repaired:** earlier commits and PR diffs still contain the links. Scrubbing history needs the owner's decision, as already flagged.
+- **Branch history:** this branch was merged with `origin/main` (not rebased) because `main` had moved through PRs #89 and #90. Conflicts were resolved in favour of `main`'s generated code and content, with this fix re-applied on top. Logged here because a plain `git pull --rebase` had earlier dropped a merge-commit branch's work.
+- **Outstanding on this branch:** P-3 (glossary is already on `main` from PR #89), P-4 (what-if and first-screen answer) and the timeline remain open, along with a visual check of the brief's print layout.

@@ -36,6 +36,12 @@ FORBIDDEN = {
     "property level place name": re.compile(
         r"\b(Cupertino|Sunnyvale|Outer\s+Sunset|Los\s+Altos|Saratoga|Mountain\s+View|"
         r"Campbell|Monte\s+Sereno|Los\s+Gatos|Inner\s+Sunset|Parkside|Sunset\s+District)\b", re.I),
+    # No word boundary on purpose: the place name also appears inside web addresses
+    # and utility domains (for example a sanitary district's host name). Those are
+    # property-level identifiers too.
+    "place name anywhere, including web addresses": re.compile(
+        r"(?i)(cupertino|sunnyvale|saratoga|los[\s_-]*altos|los[\s_-]*gatos|monte[\s_-]*sereno|"
+        r"san[\s_-]*jose|sjwater|sjwc)"),
     "person name pattern": re.compile(r"\b(?:Mr|Mrs|Ms|Dr)\.?\s+[A-Z][a-z]+\b"),
 }
 

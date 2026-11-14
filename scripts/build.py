@@ -13,7 +13,6 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-
 DATA = ROOT / "assets" / "data"
 SRC_DOC = json.loads((ROOT / "assets" / "sources.json").read_text(encoding="utf-8"))
 SOURCES = {s["id"]: s for s in SRC_DOC["sources"]}
@@ -28,18 +27,19 @@ ASM = INPUTS["assumptions"]
 BUILD_DATE = "13 November 2026"
 
 NAV_GROUPS = [
-    ("Start here", ["index.html", "executive-summary.html", "decision.html", "attorney-briefing.html"]),
+    ("Start here", ["index.html", "executive-summary.html", "decision.html", "briefing.html"]),
     ("The two properties", ["property-a.html", "property-b.html", "ownership-distinction.html"]),
     ("Money over time", ["costs.html", "projections.html", "taxes.html"]),
     ("Rules and the estate", ["inheritance.html", "estate.html", "laws.html"]),
     ("Black swan economics", ["black-swan.html", "economy.html"]),
     ("Review before deciding", ["questions.html", "suggestions.html", "review.html"]),
-    ("Evidence", ["sources.html", "glossary.html"]),
+    ("Evidence", ["glossary.html", "sources.html"]),
 ]
 PAGE_TITLES = {
     "index.html": "Dashboard",
     "executive-summary.html": "Executive summary",
     "decision.html": "The decision",
+    "briefing.html": "Attorney & CPA briefing sheet",
     "property-a.html": "Property A - the home being inherited",
     "property-b.html": "Property B - the building already owned",
     "ownership-distinction.html": "Why the two properties are not the same",
@@ -54,9 +54,8 @@ PAGE_TITLES = {
     "questions.html": "Questions to answer before deciding",
     "suggestions.html": "Suggestions for review",
     "review.html": "Flagged for review and repository audit",
+    "glossary.html": "Glossary",
     "sources.html": "Source ledger",
-    "attorney-briefing.html": "Attorney & CPA Briefing Sheet",
-    "glossary.html": "Glossary of terms used",
 }
 
 
@@ -221,7 +220,7 @@ def page(name: str, body: str, lede: str = "") -> str:
   <nav class="site-nav" aria-label="Sections">
     {"".join(nav)}
   </nav>
-  <main id="main">
+  <main id="main" class="{'print-brief' if name == 'briefing.html' else ''}">
     <h1>{esc(PAGE_TITLES[name])}</h1>
     {lede_html}
     {body}
@@ -266,27 +265,6 @@ def kpi(value, label, sub=""):
     return f'<div class="kpi"><span class="kpi-value">{value}</span><span class="kpi-label">{esc(label)}</span>{sub_html}</div>'
 
 
-# ----------------------------------------------------------------- what would change --
-def change_callout() -> str:
-    p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
-    crash45 = next(c for c in MODEL["crash_entry"] if c["inherit_year"] == 2045)
-    return callout("answer", "What would change the answer", f"""
-<p>The recommendation is conditional. These are the conditions that could flip it, so they belong on the
-attorney/CPA agenda before any filing:</p>
-<ul>
-<li><strong>The heir wants to live in the house.</strong> That moves the recommendation toward keeping it, but only as a principal residence for the whole exclusion period.</li>
-<li><strong>The relationship is not parent-and-child.</strong> Then the Proposition 19 exclusion does not exist, the property is reassessed to full market value, and every shelter figure here falls away.</li>
-<li><strong>Congress cuts or repeals the federal estate tax exclusion.</strong> That makes the cash inheritance taxable and could force a sale for liquidity.</li>
-<li><strong>A California wealth tax or one-time asset tax is enacted.</strong> That taxes holding rather than selling.</li>
-<li><strong>Proposition 19 is narrowed or repealed.</strong> That changes the reassessment arithmetic, the largest single number here.</li>
-<li><strong>The basis step-up at death is abolished.</strong> That removes the strongest argument for selling at inheritance.</li>
-<li><strong>Property A appreciates over {pc(p45['breakeven_house_growth'])} a year for thirty years.</strong> Then keeping the home beats selling (the published break-even).</li>
-<li><strong>Sequence-of-returns risk at entry.</strong> Under the stated crash scenario (-40% equities year 1, -20% year 2, then baseline), the phased path finishes {m(crash45['phased_advantage'])} ahead of investing everything at once. Phasing is the protection, not a forecast.</li>
-</ul>
-<p class="callout-src">{slink('rtc63_2')} &middot; {slink('boe_prop19')} &middot; {slink('irs_estate')} &middot; <a href="black-swan.html" class="src">Black swan: crash entry</a></p>
-""")
-
-
 # --------------------------------------------------------------------- index --
 def page_index() -> str:
     p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
@@ -325,8 +303,7 @@ question A-1</a> before relying on any number here. {slink('rtc63_2_eligibility'
         + f'<section class="kpi-row">{kpis}</section>'
         + callout("answer", "The one-line answer", f"""
 <p>Under every baseline this site can build, <strong>selling Property A soon after it is inherited beats living in it or letting it out</strong>, and it is not close. The reason is a one-off combination: the inheritance resets the income-tax basis to the value at death, so an immediate sale pays almost no capital gains tax, while the property tax assessment jumps to market value under Proposition 19. Waiting converts a tax-free asset into a taxed one and adds roughly {m(p45['bill_if_rent_year1'] - p45['bill_today_projected'])} a year of extra property tax if the home is let out.</p>
-<p>The break-even house growth needed to make keeping the home beat selling is <strong>{pc(p45['breakeven_house_growth'])} a year for thirty years</strong>. The verified house price index for this area compounded at 6.9% a year over the last fifty years and 3.3% a year over the last twenty.</p>
-<p><strong>Reinvestment risk beside the headline:</strong> selling at a market peak and investing everything at once exposes the full sum to a 1929- or 2008-style entry crash. Parking the proceeds in short Treasuries and phasing into equities softens that risk - see the crash-entry test on <a href="black-swan.html">black swan conditions</a>. Read the <a href="decision.html">full decision</a>.</p>
+<p>The break-even house growth needed to make keeping the home beat selling is <strong>{pc(p45['breakeven_house_growth'])} a year for thirty years</strong>. The verified house price index for this area compounded at 6.9% a year over the last fifty years and 3.3% a year over the last twenty. Read the <a href="decision.html">full decision</a>, then the <a href="black-swan.html">cases where this flips</a>.</p>
 """)
         + '<section class="card-grid">' + "".join(cards) + "</section>"
         + callout("method", "How to read this site", """
@@ -336,13 +313,13 @@ question A-1</a> before relying on any number here. {slink('rtc63_2_eligibility'
 <li><strong>Check the stress.</strong> No projection on this site relies on a single smooth growth rate. See <a href="black-swan.html">black swan conditions</a> and the <a href="economy.html">verified historical record</a>.</li>
 <li><strong>Do not act yet.</strong> The <a href="questions.html">questions page</a> lists what is still unknown and how to find it out. The <a href="suggestions.html">suggestions page</a> is a review queue: nothing there has been implemented.</li>
 </ol>""")
-        + change_callout()
     )
 
 
 SUMMARIES = {
     "executive-summary.html": "The important details on one page.",
     "decision.html": "Five paths, the break-evens, and the recommendation.",
+    "briefing.html": "Print-ready attorney and CPA discussion sheet.",
     "property-a.html": "The inherited home: roll, value, reassessment, costs.",
     "property-b.html": "The building already owned: rent, rent control, costs.",
     "ownership-distinction.html": "Why inherited and already-owned are not interchangeable.",
@@ -357,9 +334,8 @@ SUMMARIES = {
     "questions.html": "What is known, what is missing, and how to find it.",
     "suggestions.html": "A review queue of proposals. Nothing implemented yet.",
     "review.html": "Unverified figures, modelling caveats and the repository audit.",
+    "glossary.html": "Plain-language terms with official citations.",
     "sources.html": "Every official source used, with what it supports.",
-    "attorney-briefing.html": "One-page printable briefing for the attorney and the tax adviser.",
-    "glossary.html": "Plain-language definitions of the tax, property and economic terms used.",
 }
 
 
@@ -430,36 +406,24 @@ def page_executive_summary() -> str:
 # ------------------------------------------------------------------ decision --
 def page_decision() -> str:
     p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
-    phased_by_year = {p["inherit_year"]: p for p in MODEL["phased"]}
     rows = []
     for p in MODEL["paths"]:
         for key, label in (("sell_equities", "Sell at inheritance, invest in equities"),
                            ("sell_treasury", "Sell at inheritance, reinvest at Treasuries"),
-                           ("sell_phased", "Sell, park in short Treasuries, then phase into equities"),
                            ("live_in", "Move in and hold for 30 years"),
                            ("live_then_rent", "Move in two years, then let it out"),
                            ("rent_out", "Let it out from the start")):
-            if key == "sell_phased":
-                v = phased_by_year[p["inherit_year"]]
-                terminal = v["terminal"]
-                outflow = 0
-            else:
-                v = p["paths"][key]
-                terminal = v["terminal"]
-                outflow = v.get("outflow", 0)
+            v = p["paths"][key]
             rows.append(f"<td>{p['inherit_year']}</td><td>{esc(label)}</td>"
-                        f"<td>{m(terminal)}</td>"
-                        f"<td>{m(outflow)}</td>"
+                        f"<td>{m(v['terminal'])}</td>"
+                        f"<td>{m(v.get('outflow', 0))}</td>"
                         + method_cell("#method", "Model output"))
     paths_table = table(
         "Terminal value after thirty years, by inheritance year and path",
         ["Inherited", "Path", "Terminal value", "Tax and costs paid", "Basis"], rows,
         note="Terminal value is what is left after selling costs and capital gains tax at the end of the "
              "thirty years, plus any accumulated net rental cash in the rental paths. It is a nominal "
-             "figure in the money of that future year. The phased path parks the net sale proceeds in short "
-             "Treasuries (3 month to 2 year) for 30 months, then dollar-cost-averages into equities over 18 "
-             "months; both the parking yield and the phase-in schedule are stated assumptions, not official "
-             "figures, and are flagged on the costs page.")
+             "figure in the money of that future year.")
 
     be_rows = []
     for p in MODEL["paths"]:
@@ -493,14 +457,12 @@ def page_decision() -> str:
             f"<td>{pc(s['house_growth'], 1)}</td><td>{pc(s['equity_return'], 1)}</td>"
             + cell("sell_equities", s["sell_equities"])
             + cell("sell_treasury", s["sell_treasury"])
-            + cell("sell_phased", s["sell_phased"])
             + cell("live_in", s["live_in"])
             + cell("rent_out", s["rent_out"])
             + f"<td><strong>{esc(PATH_LABELS[best_key])}</strong></td>"
             + method_cell("#method", "Model output"))
     sens_total = len(MODEL["sensitivity"])
     sens_sell = sum(1 for s in MODEL["sensitivity"] if s["best"].startswith("sell"))
-    sens_phased = sum(1 for s in MODEL["sensitivity"] if s["best"] == "sell_phased")
     reg_total = len(MODEL["regimes"])
     reg_sell = sum(1 for r in MODEL["regimes"] if r["run"]["best"].startswith("sell"))
     rent_callout = callout("flag", "The letting paths are credited with no rent at all", f"""
@@ -521,39 +483,17 @@ model rebuilt.</p>
     sens_table = table(
         "Sensitivity: which path wins at each combination of house growth and equity return",
         ["House growth", "Equity return", "Sell, equities", "Sell, Treasuries",
-         "Sell, phased (Treasuries then equities)", "Live in it", "Let it out",
-         "Best path", "Basis"], sens_rows,
-        note=f"Selling wins in {sens_sell} of the {sens_total} combinations; the phased path wins in "
-             f"{sens_phased}; in the remaining combinations the winner is selling and holding Treasuries, "
-             "which is still selling. Keeping the home wins only where this one neighbourhood outgrows the "
-             "whole stock market by a wide margin. The highlighted figure in each row is that row's winner.")
+         "Live in it", "Let it out", "Best path", "Basis"], sens_rows,
+        note=f"Selling wins in {sens_sell} of the {sens_total} combinations; in the others the winner is "
+             "selling and holding Treasuries, which is still selling. Keeping the home wins only where this "
+             "one neighbourhood outgrows the whole stock market by a wide margin. The highlighted figure in "
+             "each row is that row's winner.")
     sens_kpis = '<div class="kpi-row">' + "".join([
         kpi(f"{sens_sell} of {sens_total}", "Sensitivity combinations won by selling",
             "The rest are won by selling into Treasuries, which is still selling."),
         kpi(f"{reg_sell} of {reg_total}", "Stress regimes won by selling",
             "The ones it loses repeat the 1970s or the 2021 to 2023 burst."),
     ]) + "</div>"
-
-    whatif_rows = []
-    for s in MODEL["sensitivity"]:
-        best_key = s["best"]
-        whatif_rows.append(
-            f"<td>{esc('Baseline') if s['house_growth'] == ASM['house_growth']['baseline'] and s['equity_return'] == ASM['equity_return_nominal_gross']['baseline'] else 'Soft scenario'}</td>"
-            f"<td>{pc(s['house_growth'], 1)}</td><td>{pc(s['equity_return'], 1)}</td>"
-            + "".join(f"<td>{m(s[k])}</td>" for k in ("sell_equities", "sell_treasury", "sell_phased", "live_in", "rent_out"))
-            + f"<td><strong>{esc(PATH_LABELS[best_key])}</strong></td>"
-            + src_cell([], "Verified series + stated assumptions"))
-    whatif_table = table(
-        "What-if controls: terminal value after 30 years, 2045 inheritance, at each stated assumption pair",
-        ["Scenario", "House growth", "Equity return", "Sell, equities", "Sell, Treasuries",
-         "Sell, phased", "Live in it", "Let it out", "Best path", "Basis"], whatif_rows,
-        note="Each row recomputes every path at the stated house growth and equity return. The low / baseline "
-             "high bands come from the verified historical series; the equity return band is stated, not an "
-             "official forecast. Use these rows as static what-if controls: change an assumption and read off "
-             "the new best path. There is no JavaScript on this site, so the controls are the table rows "
-             "themselves.")
-
-    whatif_callout = callout("answer", "What-if controls (static scenarios)", whatif_table)
 
     return (
         eligibility_callout()
@@ -567,7 +507,6 @@ or finding a tenant at an implausible rent.</p>""")
         + rent_callout
         + be_table
         + sens_table
-        + whatif_callout
         + '<h2>What the model does and does not do</h2>'
         + table("Model inputs and their status",
                 ["Input", "Value used", "Status", "Basis"],
@@ -622,7 +561,6 @@ or finding a tenant at an implausible rent.</p>""")
 PATH_LABELS = {
     "sell_equities": "Sell, invest in equities",
     "sell_treasury": "Sell, reinvest in Treasuries",
-    "sell_phased": "Sell, park in short Treasuries, then phase into equities",
     "live_in": "Live in it",
     "live_then_rent": "Live in it, then let it",
     "rent_out": "Let it out",
@@ -681,7 +619,7 @@ def page_property_a() -> str:
     cost_rows = [
         f"<td>Water</td><td>{m(A['annual_costs']['water']['low'])} to {m(A['annual_costs']['water']['high'])}</td><td>{m(A['annual_costs']['water']['mid'])}</td>"
         f'<td><span class="badge unverified">owner estimate</span></td>'
-        + src_cell(["sjw_tariff"], "Provider tariff, now read"),
+        + src_cell([], "Owner estimate, unverified"),
         f"<td>Electricity, net of solar export credit</td><td>{m(A['annual_costs']['electricity']['low'])} to {m(A['annual_costs']['electricity']['high'])}</td><td>{m(A['annual_costs']['electricity']['mid'])}</td>"
         f'<td><span class="badge unverified">owner estimate</span></td>'
         + src_cell(["cpuc_nem"], "Tariff rules"),
@@ -710,34 +648,15 @@ def page_property_a() -> str:
     sewer_fy2526 = 802.14
     sewer_fy2627 = sewer_fy2526 * 1.03   # the adopted 3% increase, minutes of 20 May 2026
 
-    tariff_rows = [
-        f"<td>Water service charge, 5/8 x 3/4-inch or 3/4-inch meter</td><td>{m(money10(SVC))} a month</td>"
-        + src_cell(["sjw_tariff"], "CPUC tariff, from 1 July 2026"),
-        f"<td>Derived water bill at 8 Ccf a month (about 6,000 gallons)</td><td>{m(money10(water_bill(8)))}</td>"
-        + src_cell(["sjw_tariff"], "Computed from the tariff"),
-        f"<td>Derived water bill at 12 Ccf a month (about 9,000 gallons)</td><td>{m(money10(water_bill(12)))}</td>"
-        + src_cell(["sjw_tariff"], "Computed from the tariff"),
-        f"<td>Derived water bill at 15 Ccf a month (about 11,000 gallons)</td><td>{m(money10(water_bill(15)))}</td>"
-        + src_cell(["sjw_tariff"], "Computed from the tariff"),
-        f"<td>Sewer service charge, single family, FY 2025-26</td><td>{m(money10(sewer_fy2526))} a year</td>"
-        + src_cell(["cusd_rates"], "District hearing notice"),
-        f"<td>Sewer rate increase adopted for FY 2026-27</td><td>3%, from 1 July 2026</td>"
-        + src_cell(["cusd_minutes"], "Board minutes, 20 May 2026"),
-        f"<td>Sewer service charge, single family, FY 2026-27, derived</td><td>{m(money10(sewer_fy2627))} a year</td>"
-        + src_cell(["cusd_minutes", "cusd_rates"], "Computed from the two official figures"),
-    ]
-    tariffs = table(
-        "Water and sewer: what the official tariffs say",
-        ["Item", "Amount", "Source"], tariff_rows,
-        note="Rounded to the nearest $10; the exact tariff amounts are on the linked official pages. "
-             "Usage is billed in three tiers per hundred cubic feet, the top tier roughly triple the "
-             "first; the exact tier amounts are on the linked tariff sheet. The provider's territory "
-             "covers the area where Property A stands. The owner's water estimate of $100 to $150 a "
-             "month implies usage at the low end of the derived range, and excludes the guest charges, "
-             "CPUC fees and utility users' taxes a real bill carries. Sewer was never supplied by the "
-             "owner; the district's published charges are shown as context, and the parcel's own "
-             "district, zone and charge must be read from its tax bill. Neither figure is added to the "
-             "model totals.")
+    # Water and sewer tariffs are withheld from the public edition for privacy:
+    # provider and district names, and their web addresses, would identify the area.
+    tariffs = (
+        '<section class="withheld"><h3>Water and sewer: withheld for privacy</h3>'
+        '<p>The official water and sewer tariffs for this property are not published here, because the '
+        "provider and district names and their web addresses would identify the area. The owner's water "
+        'estimate in the costs table above stays marked unverified. Confirm the provider and the charges '
+        "from the parcel's own bill.</p></section>"
+    )
 
     return (
         table("Property A at a glance",
@@ -1450,7 +1369,6 @@ def page_black_swan() -> str:
             f"<td><strong>{esc(rg['name'])}</strong><br><span class='muted'>{esc(rg['analogue'])}</span></td>"
             f"<td>{pc(rg['cpi'], 1)}</td><td>{pc(rg['house'], 1)}</td><td>{pc(rg['treasury'], 2)}</td>"
             f"<td>{m(run['terminal']['sell_equities'])}</td>"
-            f"<td>{m(run['phased_terminal'])}</td>"
             f"<td>{m(run['terminal']['live_in'])}</td>"
             f"<td>{m(run['terminal']['rent_out'])}</td>"
             f"<td>{m(run['bill_if_rent_year1'])}</td>"
@@ -1458,40 +1376,11 @@ def page_black_swan() -> str:
             + src_cell(rg["src"] if rg["src"] else [], "Official source" if rg["src"] else "None"))
     reg_table = table("Stress regimes applied to the 2045 inheritance, over a 30 year horizon",
                       ["Regime", "Inflation", "House prices", "Treasury yield",
-                       "Sell, equities", "Sell, phased (Treasuries then equities)", "Live in it",
-                       "Let it out", "Tax bill if let out, year one", "Best path", "Source"], reg_rows,
+                       "Sell, equities", "Live in it", "Let it out",
+                       "Tax bill if let out, year one", "Best path", "Source"], reg_rows,
                       note="The four historical regimes use averages computed directly from the verified "
                            "series listed in the source column. The last two are hypothetical stress cases "
-                           "with no historical analogue and are labelled as such. The phased column shows the "
-                           "phased-investing path (net proceeds parked in short Treasuries for 30 months, then "
-                           "phased into equities over 18 months) under the same regime.")
-
-    crash45 = next(c for c in MODEL["crash_entry"] if c["inherit_year"] == 2045)
-    crash_rows = [
-        f"<td>Lump sum: all net proceeds into equities at inheritance</td>"
-        f"<td>{m(crash45['net_proceeds'])}</td><td>{m(crash45['lump_sum_equities'])}</td>"
-        f"<td colspan=\"2\"><span class=\"badge unverified\">stated scenario</span></td>"
-        + src_cell([], "No official source - hypothetical crash path"),
-        f"<td>Phased: park in short Treasuries 30 months, then phase into equities over 18 months</td>"
-        f"<td>{m(crash45['net_proceeds'])}</td><td>{m(crash45['phased_terminal'])}</td>"
-        f"<td><strong>{m(crash45['phased_advantage'])} ahead of lump sum</strong></td>"
-        + src_cell([], "No official source - hypothetical crash path"),
-    ]
-    crash_table = table(
-        "Sequence-of-returns test: a 1929/2008-style crash at entry (stated scenario, not a forecast)",
-        ["Approach", "Net sale proceeds at inheritance", "Terminal value after 30 years",
-         "Result", "Source"],
-        crash_rows,
-        note="Both paths sell Property A at the 2045 inheritance and invest the same net proceeds in equities. "
-             "The lump-sum path is fully exposed from month 1. The phased path parks the proceeds in short "
-             "Treasuries for 30 months, then dollar-cost-averages into equities over 18 months. During the "
-             "first three years equities earn a severe negative return (a 1929- or 2008-style entry crash, "
-             "-40% a year annualised) and then recover to the baseline equity return. Because the phased path "
-             "keeps most of the money in Treasuries through the crash and deploys it into equities across the "
-             "downturn and recovery, it avoids the worst of the entry drawdown. The crash depth, duration and "
-             "recovery return are stated scenarios - no data series goes back to 1929 and no official source "
-             "publishes a forward crash path - so this table illustrates sequencing risk, it does not predict "
-             "it.")
+                           "with no historical analogue and are labelled as such.")
 
     rep_rows = []
     for r in MODEL["replay"]:
@@ -1524,6 +1413,8 @@ whether the house and the stock market take their bad years at the same time.</p
                 stats_rows)
         + reg_table
         + replay
+        + '<h2>Phased investment after a sale</h2>'
+        + page_phased_stress()
         + callout("answer", "What the stress cases say", """
 <p>Selling and investing wins in four of the six regimes, including both hypothetical stress cases. Keeping the
 house wins in the two regimes where house prices in this area grew at an exceptional pace, which is exactly what
@@ -1535,6 +1426,77 @@ insensitive to how the economy performs: assessed value rises at the 2% cap whet
 Second, letting the property out is the weakest path in every regime except the two house-price booms, because it
 pays the full reassessment and then competes with a diversified portfolio on yield.</p>""")
     )
+
+
+# ------------------------------------------------ phased entry stress test --
+def phased_terminal(proceeds: float, wait_years: int, annual_treasury: float,
+                    shock: bool, horizon: int = 30, phase_months: int = 12) -> int:
+    """Monthly deterministic illustration; shock path is synthetic, not a backtest."""
+    cash_balance = float(proceeds)
+    equity_balance = 0.0
+    phase_start = wait_years * 12
+    shock_returns = [-0.40, 0.25, 0.10]
+    baseline_net = ASM["equity_return_nominal_gross"]["baseline"] - ASM["equity_tax_drag"]["baseline"]
+    for month in range(horizon * 12):
+        year = month // 12
+        if shock:
+            annual_stock_return = shock_returns[year] if year < len(shock_returns) else baseline_net
+        else:
+            annual_stock_return = baseline_net
+        equity_balance *= (1 + annual_stock_return) ** (1 / 12)
+        cash_balance *= (1 + annual_treasury) ** (1 / 12)
+        phase_month = month - phase_start
+        if 0 <= phase_month < phase_months:
+            months_left = phase_months - phase_month
+            contribution = cash_balance / months_left
+            cash_balance -= contribution
+            equity_balance += contribution
+    return money10(equity_balance + cash_balance)
+
+
+def page_phased_rows() -> str:
+    p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
+    proceeds = p45["paths"]["sell_equities"]["sale"]["net"]
+    base_tsy = ASM["treasury_yield_nominal"]["baseline"]
+    direct_no_crash = phased_terminal(proceeds, 0, base_tsy, False)
+    direct_crash = phased_terminal(proceeds, 0, base_tsy, True)
+    cases = [
+        ("Immediate equity; no shock", 0, False, "Reference case"),
+        ("Immediate equity; synthetic crash-at-entry stress", 0, True, "Shared stylized stress; not a dated replay"),
+        ("Treasuries 24 months, then phase to equities over 12 months; no shock", 2, False, "No-crash opportunity-cost case"),
+        ("Treasuries 24 months, then phase to equities over 12 months; synthetic crash stress", 2, True, "Shared stylized stress; not a dated replay"),
+        ("Treasuries 36 months, then phase to equities over 12 months; no shock", 3, False, "No-crash opportunity-cost case"),
+        ("Treasuries 36 months, then phase to equities over 12 months; synthetic crash stress", 3, True, "Shared stylized stress; not a dated replay"),
+    ]
+    rows = []
+    for label, wait, shock, context in cases:
+        amount = phased_terminal(proceeds, wait, base_tsy, shock)
+        comparator = direct_crash if shock else direct_no_crash
+        srcs = (["fedhist_1929", "fedhist_greatrecession"] if shock else ["ssa_trustees", "fred_gs10"])
+        rows.append(f"<td><strong>{esc(label)}</strong></td><td>{wait * 12} months</td>"
+                    f"<td>{pcf(base_tsy, 1)}</td><td>{m(amount)}</td>"
+                    f"<td>{m(amount - comparator)}</td><td>{esc(context)}</td>"
+                    + method_cell("#phased-method", "Illustrative model", srcs))
+    return table("2045 sale-proceeds entry-timing stress test (30-year nominal terminal value)",
+                  ["Path", "Treasury wait", "Treasury yield proxy", "Terminal value", "Difference vs immediate entry in same market case", "Reading", "Method and sources"], rows,
+                  note="Rounded to $10. Outputs are conditional illustrations, not recommendations or forecasts. The 4.7% proxy is the model's long-run 10-year-yield anchor, not a current 3-month-to-2-year Treasury quote.")
+
+
+def page_phased_stress() -> str:
+    return callout("key", "What this test does and does not say", """
+<p>It tests the requested choice: after a hypothetical 2045 inheritance and sale, keep proceeds in short-dated Treasuries for 24 or 36 months, then move equal monthly portions into equities over the following 12 months. It compares that path with investing immediately.</p>
+<p>The crash sequence is explicitly <strong>synthetic</strong>: an assumed -40% equity year, then +25%, then +10%, followed by the baseline 6.3% net nominal equity return. The 36-month wait therefore ends just as that invented three-year sequence ends; that coincidence is a scenario artifact, not evidence that a three-year wait avoids real crashes. It is not a reconstruction of 1929 or 2008 market returns. The Federal Reserve History links document the events and their timing, not these assumed percentages. The repository does not contain a source-verified S&amp;P total-return series for those episodes; a true historical backtest is flagged as a data gap.</p>
+<p>The treasury rate shown is a 4.7% long-run proxy derived from the Social Security Trustees' real-rate and inflation assumptions and historical 10-year yields. It is <strong>not</strong> a 3-month, 1-year or 2-year yield forecast. The actual bill/note yield, reinvestment rates, taxes on interest, transaction costs, and the chosen equity allocation must be refreshed with a fiduciary before implementation.</p>""") + page_phased_rows() + f"""
+<section id="phased-method">
+<h2>Interpretation and reinvestment risk</h2>
+<ul>
+<li>Waiting reduces the dollars exposed to an immediate hypothetical crash, but it does not eliminate market risk: equity purchases still face subsequent losses.</li>
+<li>With no crash, waiting has an opportunity cost if equities outperform the Treasury proxy. The no-shock rows make that cost visible rather than showing only the favorable case.</li>
+<li>Short Treasuries mature frequently. If market yields are lower at maturity, proceeds must be reinvested at lower rates; if rates rise, existing notes' market value can fall before maturity. Neither future yield nor ladder is known today.</li>
+<li>All terminal values omit estate-level investment tax details, a personalized asset allocation, withdrawals, fees beyond the model's stated drag, and changes in future law. Ask the CPA and investment fiduciary to rerun with an actual sale estimate and current Treasury quotes.</li>
+</ul>
+<p>Official event context: {slink('fedhist_1929')} &middot; {slink('fedhist_greatrecession')}. Treasury proxy basis: {slink('ssa_trustees')} &middot; {slink('fred_gs10')}.</p>
+</section>"""
 
 
 # ------------------------------------------------------------------ economy --
@@ -2163,7 +2125,7 @@ def page_review() -> str:
          "Published by the City and County of San Francisco for fiscal year 2026-27",
          "None. This one is verified."),
         ("Property A water", f"{m(A['annual_costs']['water']['low'])} to {m(A['annual_costs']['water']['high'])} a year",
-         "Owner estimate. A CPUC-approved tariff for the area's water utility is now read and linked on the property page, and a discovery-path source is on the ledger; the provider printed on the parcel's own bill is still unconfirmed, and the owner's bills are unchecked against any tariff.",
+         "Owner estimate, unverified. The water and sewer tariff comparison is withheld from the public edition for privacy, and the provider printed on the parcel's own bill is unconfirmed.",
          "Confirm the provider on the bill, then compare twelve months of bills with the derived tariff range."),
         ("Property A electricity, net of solar", f"{m(A['annual_costs']['electricity']['low'])} to {m(A['annual_costs']['electricity']['high'])} a year",
          "Owner estimate", "Read twelve months of bills and the interconnection agreement."),
@@ -2196,7 +2158,7 @@ def page_review() -> str:
         "Both assessment rolls and tax bills": ["scc_ratebook", "sf_treas_rate", "boe_lta26002"],
         "Property A ad valorem rate": ["scc_ratebook"],
         "Property B ad valorem rate": ["sf_treas_rate"],
-        "Property A water": ["sjwc_tariff"],
+        "Property A water": [],
         "Property A electricity, net of solar": ["cpuc_nem"],
         "Property B water": ["sfpuc_rates"],
         "Property B electricity": [],
@@ -2237,6 +2199,8 @@ def page_review() -> str:
          "Section 63.2(a)(1)(C) says the base year value established at the change in ownership, adjusted annually, is enrolled when the transferee stops being eligible for the homeowners' exemption. The live-then-rent path is modelled on that reading, which is favourable to it. If the assessor instead enrolled full market value at the move-out, that path's tax bill would rise and its terminal value would fall. The recommendation does not depend on it: selling already leads that path."),
         ("Every reassessment figure is conditional on the parent-and-child relationship",
          "Section 63.2 excludes only transfers between parents and their children, or grandparents and grandchildren where the middle generation has died. Every shelter, live-in and rental figure on this site assumes that condition holds. The trust document is the only thing that confirms it and this site has not seen it."),
+        ("The 1929 / 2008 equity-entry test is synthetic, not a historical backtest",
+         "The repository has no source-verified S&P total-return sequence for those event windows. The Black Swan page uses an explicitly assumed -40%, +25%, +10% sequence, then the model return; Federal Reserve History links establish event context, not those returns. Obtain a verified total-return dataset before treating any result as a historical simulation."),
     ]
     # Each caveat links only to the official source that bears on it; a caveat that is a planning
     # statement rather than a rule says so and links to the register.
@@ -2253,6 +2217,7 @@ def page_review() -> str:
         "The Proposition 19 shelter path after 2027 is a projection": ["boe_lta25009"],
         "A sheltered base is assumed to survive a later move-out": ["rtc63_2_eligibility", "boe_prop19"],
         "Every reassessment figure is conditional on the parent-and-child relationship": ["rtc63_2_eligibility"],
+        "The 1929 / 2008 equity-entry test is synthetic, not a historical backtest": ["fedhist_1929", "fedhist_greatrecession"],
     }
     assert set(CAV_WHERE) == {a for a, _ in caveats}, "every caveat needs a source decision"
     cav_rows = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td>"
@@ -2261,7 +2226,7 @@ def page_review() -> str:
 
     audit = [
         ("The repository contains more than the published site",
-         "The published site is the eighteen pages in the repository root plus one stylesheet. What is not published is the build and verification code in scripts/, the data files in assets/data/, the source ledger, this page's own register, the README, the executive summary and a very large coordination board.",
+         "The published site is the twenty pages in the repository root plus one stylesheet. What is not published is the build and verification code in scripts/, the data files in assets/data/, the source ledger, this page's own register, the README, the executive summary and a very large coordination board.",
          "All of it is excluded from the published site by the Jekyll configuration and by the packaging allowlist, and the guard script fails the build if a tracked path would bypass those exclusions. It is still readable in the public repository."),
         ("Two earlier editions were removed from the working tree",
          "An earlier cross-check edition under plan/ and a fifty-year edition under analysis/ were built from unrounded owner figures. Both directories were removed from the tree on 13 November 2026; their routes now return content-free withdrawal notices.",
@@ -2272,6 +2237,9 @@ def page_review() -> str:
         ("Prior commits and pull-request diffs may contain finer figures",
          "Rounding to $10 applies to what this site publishes. It does not change what earlier commits contain.",
          "Older commits, pull-request diffs, forks and external copies are separate exposure surfaces. Nothing on this site can certify them erased."),
+        ("Property A water and sewer figures withdrawn for privacy",
+         "Earlier editions linked a water utility's and a sewer district's web addresses, whose names identified the area of Property A. They were visible on the public pages and are now withdrawn. The owner's water estimate stays in the costs table, marked unverified; the parcel's own bill is the source for the provider and the charges.",
+         "Earlier editions and their Git history still contain those links. The privacy scanner now checks web addresses for the area's names, so this cannot recur silently."),
         ("Pull request records",
          "PRs 62 and 70 were merged. PRs 65 and 66 recorded a live privacy-publication blocker on 12 November 2026; the blocker they describe, the legacy Pages route serving the whole repository, was closed by the restored configuration guard and audited live. Both were closed as superseded on 13 November 2026 with an explanatory comment, not silently.",
          "The coordination board records the full disposition. Nothing on this site depends on them."),
@@ -2336,155 +2304,64 @@ Sources are cited only for what they actually state.</p>""")
     )
 
 
-def page_attorney_briefing() -> str:
-    """One-page printable briefing sheet for the attorney and the tax adviser.
-
-    Designed to fit a single printed page. All figures are rounded to the nearest
-    $10 and anonymised; no identifiers appear.
-    """
-    p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
-    phased45 = next(c for c in MODEL["phased"] if c["inherit_year"] == 2045)
-
-    head = (
-        '<div class="briefing-head">'
-        '<h2>Attorney &amp; CPA Briefing Sheet</h2>'
-        '<p class="tagline" style="display:block">Property inheritance decision &middot; anonymised &middot; every figure rounded to the nearest $10 &middot; not legal, tax or investment advice</p>'
-        '</div>')
-
-    privacy = callout("privacy", "Privacy and accuracy notice", """
-<p><strong>No identifiers.</strong> No name, street address, parcel number, ZIP code, trust term, beneficiary
- detail or utility account appears on this sheet. The homes are called Property A (the single-family home
- being inherited through a trust, planned 2040 to 2050, in Santa Clara County) and Property B (the three-unit
- building already owned by the heir, in the City and County of San Francisco).</p>
-<p><strong>Owner figures are unverified.</strong> Values, bills, rent and cost estimates come from the owner's
- own records and are labelled unverified unless an official public record was checked. They must be confirmed
- against the county roll, the tax bills, a written appraisal and real quotes before any filing.</p>
-""")
-
-    gate = callout("flag", "First gate: parent-and-child relationship (condition of everything)", f"""
-<p>The intergenerational exclusion in Revenue and Taxation Code section 63.2 applies <strong>only</strong> where
-the transfer is between a parent and a child, or between a grandparent and a grandchild whose parent has died.
-If the relationship is different, there is no exclusion: Property A is reassessed to full market value on
-transfer, every shelter figure below falls away, and the case for selling gets stronger.</p>
-<p><strong>Action for the attorney:</strong> confirm the relationship and read the trust instrument and the
-recorded deed before relying on any Proposition 19 figure. {slink('rtc63_2_eligibility')} &middot; {slink('boe_prop19')}</p>
-""")
-
-    recommend = callout("recommend", "Recommendation", f"""
-<p><strong>Sell Property A soon after it is inherited, unless the heir genuinely wants to live in that house.</strong></p>
-<p>Selling converts a concentrated, illiquid asset into capital at almost no tax (basis resets to value at
-death), and removes a property tax bill that is projected to multiply from about
-{m(p45['bill_today_projected'])} today to about {m(p45['bill_if_rent_year1'])} from 2045 if the home is let
-out, or {m(p45['bill_if_live_year1'])} if the heir moves in and claims the exclusion.</p>
-<p>Keeping the home beats selling only if it appreciates about {pc(p45['breakeven_house_growth'])} a year for
-thirty years. The verified house price index for the area compounded at 6.9% a year over fifty years and
-3.3% a year over the last twenty.</p>
-""")
-
-    key_rows = [
-        f"<td>Estimated market value, Property A (Nov 2026)</td><td>{m(A['estimated_market_value_2026'])}</td><td><span class=\"badge unverified\">owner estimate</span></td>" + src_cell([], ""),
-        f"<td>Estimated market value, Property B (Nov 2026)</td><td>{m(B['estimated_market_value_2026'])}</td><td><span class=\"badge unverified\">owner estimate</span></td>" + src_cell([], ""),
-        f"<td>Current Property A tax bill</td><td>{m(MODEL['costs_a_now']['property_tax'])}</td><td><span class=\"badge derived\">derived</span></td>" + src_cell([], ""),
-        f"<td>Projected Property A bill from 2045, reassessed</td><td>{m(p45['bill_if_rent_year1'])}</td><td><span class=\"badge derived\">derived</span></td>" + src_cell([], ""),
-        f"<td>Projected Property A bill from 2045, with exclusion</td><td>{m(p45['bill_if_live_year1'])}</td><td><span class=\"badge derived\">derived</span></td>" + src_cell([], ""),
-        f"<td>Proposition 19 shelter amount (2045)</td><td>{m(p45['prop19_cap'])}</td><td><span class=\"badge verified\">published rule</span></td>" + src_cell(["boe_lta25009"], ""),
-        f"<td>Federal estate tax exclusion (2026 / 2027)</td><td>{m(V['federal_basic_exclusion_2026']['value'])} / {m(V['federal_basic_exclusion_2027']['value'])}</td><td><span class=\"badge verified\">IRS</span></td>" + src_cell(["irs_estate"], ""),
-    ]
-    key_table = table("Key figures", ["Figure", "Amount", "Status", "Source"], key_rows,
-                      note="Every dollar figure is rounded to the nearest $10.")
-
-    path_rows = [
-        f"<td>{esc(PATH_LABELS['sell_equities'])}</td><td>{m(p45['paths']['sell_equities']['terminal'])}</td><td>{m(p45['paths']['sell_equities']['sale']['tax'])}</td>" + src_cell([], ""),
-        f"<td>{esc(PATH_LABELS['sell_treasury'])}</td><td>{m(p45['paths']['sell_treasury']['terminal'])}</td><td>{m(p45['paths']['sell_treasury']['sale']['tax'])}</td>" + src_cell([], ""),
-        f"<td>{esc(PATH_LABELS['sell_phased'])}</td><td>{m(phased45['terminal'])}</td><td>{m(p45['paths']['sell_equities']['sale']['tax'])}</td>" + src_cell([], ""),
-        f"<td>Move in and hold for 30 years</td><td>{m(p45['paths']['live_in']['terminal'])}</td><td>{m(p45['paths']['live_in']['sale']['tax'])}</td>" + src_cell([], ""),
-        f"<td>Let it out from the start</td><td>{m(p45['paths']['rent_out']['terminal'])}</td><td>{m(p45['paths']['rent_out']['sale']['tax'])}</td>" + src_cell([], ""),
-    ]
-    path_table = table("Terminal value after 30 years, 2045 inheritance (baseline assumptions)",
-                       ["Path", "Terminal value", "Tax on sale at inheritance", "Source"], path_rows,
-                       note="The phased path parks sale proceeds in short Treasuries for 30 months, then phases\n"
-                       "into equities over 18 months. Parking yield and phase-in schedule are stated assumptions.")
-
-    deadlines = [
-        f"<td>Move into Property A as principal residence</td><td>Within one year of transfer</td><td>Required to claim the Proposition 19 exclusion; no exceptions</td>" + src_cell(["rtc63_2", "boe_lta26026"], "Statute / BOE"),
-        f"<td>File the Proposition 19 exclusion claim</td><td>Within three years of transfer, or before any transfer to someone else, whichever is earlier</td><td>Missed deadlines lose the exclusion</td>" + src_cell(["rtc63_2", "boe_prop19"], "Statute / BOE"),
-        f"<td>File homeowners' exemption</td><td>Within one year of transfer</td><td>Principal-residence requirement</td>" + src_cell(["boe_lta26026"], "BOE guidance"),
-        f"<td>Change in ownership statement to assessor</td><td>150 days from transfer</td><td>Sets the new base year value</td>" + src_cell(["rtc480"], "Statute"),
-        f"<td>Federal estate tax return (Form 706), if estate exceeds exclusion</td><td>Nine months after death (extension available)</td><td>Tax is on the estate, not the heir</td>" + src_cell(["irs_estate", "irs_i706"], "IRS"),
-        f"<td>Basis step-up recorded</td><td>At date of death</td><td>Basis = fair market value at death</td>" + src_cell(["irs_basis"], "IRS"),
-    ]
-    deadline_table = table("Deadlines timeline", ["Deadline", "Timing", "Consequence", "Source"], deadlines)
-
-    change_rows = [
-        "<td>The heir wants to live in the house</td><td>Moves the recommendation toward keeping it; must hold as principal residence for the whole exclusion period</td>" + src_cell([], ""),
-        "<td>Congress cuts or repeals the federal estate tax exclusion</td><td>Makes the cash inheritance taxable; could force a sale for liquidity</td>" + src_cell([], ""),
-        "<td>A California wealth tax or one-time asset tax is enacted</td><td>Taxes holding rather than selling; penalises keeping the house</td>" + src_cell([], ""),
-        "<td>Proposition 19 is narrowed or repealed</td><td>Changes the reassessment arithmetic, the largest single number here</td>" + src_cell([], ""),
-        "<td>The basis step-up at death is abolished</td><td>Removes the strongest argument for selling at inheritance</td>" + src_cell([], ""),
-        "<td>Property A appreciates over 7.72% a year for thirty years</td><td>Keeping the home beats selling (the published break-even)</td>" + src_cell([], ""),
-    ]
-    change_table = table("What would change the answer", ["Change", "Direction of the effect", "Source"], change_rows,
-                         note="These are the conditions that could flip the recommendation. They belong on the\n"
-                         "attorney/CPA agenda before any filing.")
-
-    questions_rows = [
-        "<td>Is the heir a child of the transferor (or qualifying grandchild)?</td><td>Confirms whether the Proposition 19 exclusion exists at all</td>" + src_cell(["rtc63_2_eligibility"], "Statute"),
-        "<td>Is the house titled in the trust today?</td><td>Determines the transfer path and whether probate is needed</td>" + src_cell(["scc_recorder"], "County recorder"),
-        "<td>Does the heir take outright, in further trust, or for life?</td><td>Affects the basis step-up and who may claim the exclusion</td>" + src_cell([], "Trust instrument"),
-        "<td>What is the total estate including the cash inheritance, and does it exceed the federal exclusion?</td><td>Determines whether an estate tax return and liquidity planning are needed</td>" + src_cell(["irs_estate", "irs_i706"], "IRS"),
-        "<td>Are there inherited retirement accounts?</td><td>Taxed as withdrawn, no basis step-up; a common surprise</td>" + src_cell(["irs_rmd"], "IRS"),
-        "<td>What are the actual insurance premiums and maintenance costs for each building?</td><td>Replaces the owner estimates and assumptions now used</td>" + src_cell(["cdi_tips"], "Where to quote"),
-        "<td>What market rent could Property A command?</td><td>Tests whether the letting path could ever match selling (break-even on the decision page)</td>" + src_cell([], "No official source publishes a rent for a specific home"),
-    ]
-    questions_table = table("Open questions for the attorney and CPA", ["Question", "Why it matters", "Source"], questions_rows)
-
-    return (
-        head
-        + privacy
-        + gate
-        + recommend
-        + key_table
-        + path_table
-        + deadline_table
-        + change_table
-        + questions_table
-        + callout("method", "Basis", "Every figure is generated from <code>assets/data/inputs.json</code> by\n"
-          "<code>scripts/model.py</code> and rounded to the nearest $10. Official sources are linked per row and\n"
-          "listed in full on the <a href=\"sources.html\">source ledger</a>. The baseline recommendation is a\n"
-          "conditional model result, not a professional appraisal, legal opinion, tax opinion or investment\n"
-          "recommendation.")
-    )
-
-
+# ---------------------------------------------------------------- glossary --
 def page_glossary() -> str:
     terms = [
-        ("Basis step-up", "The income-tax basis of inherited property is reset to its fair market value at the\ndate of death. A sale soon afterwards therefore produces almost no taxable gain.", "irs_basis"),
-        ("Proposition 13", "California's rule that a property's assessed value is set at purchase and can rise no\nmore than 2% a year until ownership changes, when it resets to market value.", "boe_pub29"),
-        ("Proposition 19 / intergenerational exclusion", "Excludes a parent-to-child (or qualifying grandparent-to-grandchild) transfer from\nreassessment, so the heir can keep the lower assessed value if they move in within a year and file the claim.\nSubject to a value cap and a one-year occupation rule.", "rtc63_2"),
-        ("Proposition 19 value cap", "The sheltered amount: the prior taxable value plus an indexed $1,000,000\n($1,044,586 for transfers 16 February 2025 to 15 February 2027). Growth above the cap is reassessed.", "boe_lta25009"),
-        ("Section 121 exclusion", "Up to $250,000 ($500,000 for a joint return) of gain on the sale of a principal\nresidence, if owned and lived in for two of the last five years.", "irs_p523"),
-        ("Depreciation recapture", "Depreciation claimed while a property was let is taxed back at up to 25%\nfederal plus California rates when the property is sold.", "irs_tc409"),
-        ("Net investment income tax (NIIT)", "An additional 3.8% federal tax on investment income above a threshold.", "irs_tc559"),
-        ("Federal estate tax exclusion", "The amount of an estate sheltered from federal estate tax: $15,000,000 per\nperson for 2026, $15,480,000 for 2027. Above it, the top rate is 40%.", "irs_estate"),
-        ("Portability", "A surviving spouse can elect to use a deceased spouse's unused exclusion, but only by\nfiling a timely estate tax return.", "irs_estate"),
-        ("California estate / inheritance tax", "None. California has no estate tax and no inheritance tax, and no\nCalifornia estate tax return is required for a death on or after 1 January 2005.", "sco_estate"),
-        ("Change in ownership statement", "A form filed with the county assessor when property transfers. The assessor\ndecides whether reassessment applies and sets the new base year value.", "rtc480"),
-        ("Documentary transfer tax", "A county tax on deeds transferring real property. Transfers by reason of\ndeath or by inter vivos gift (including into or out of a trust) are exempt under Revenue and Taxation Code\nsection 11930.", "rtc11930_trust"),
-        ("Rent control / just cause", "San Francisco and California limit annual rent increases and restrict\nno-fault evictions, with relocation payments. Whether a specific unit is covered depends on the building's age,\nownership and notices.", "civ1947_12"),
-        ("Short Treasuries (3M-2Y)", "Treasury bills and notes maturing in 3 months to 2 years, used in the phased-investing\npath to hold sale proceeds while phasing into equities. Yield is a stated scenario, not an official forward\nrate.", ""),
-        ("Sequence-of-returns risk", "The risk that poor investment returns early in the holding period - such as selling\ninto a market peak before a 1929- or 2008-style crash - permanently reduce a portfolio. Phasing into equities\nis one way to soften it.", ""),
-        ("Break-even", "The growth rate, rent or return at which one path ties another. Published for house growth,\nrent and investment return on the decision page.", ""),
-        ("Unverified / assumption / derived", "Status badges used throughout: unverified = owner figure not checked against an\nofficial source; assumption = a stated scenario, not a forecast; derived = computed by the model from other\ninputs.", ""),
+        ("Assessed value", "The value on the property-tax roll used to calculate ad valorem property tax; it can differ from market value and follows California reassessment limits and exceptions.", ["boe_pub29", "rtc51"]),
+        ("Basis step-up", "For many inherited assets, basis is generally reset to fair market value at death; exceptions and trust/entity ownership can change the result, so have the CPA confirm the particular asset.", ["irs_basis", "irs_rr2023_2"]),
+        ("Change in ownership", "A transfer that generally triggers property-tax reassessment unless a statutory exclusion applies; inheritance alone does not establish eligibility for Proposition 19 relief.", ["rtc63_2_eligibility", "boe_pub800_9"]),
+        ("Estate tax", "Federal transfer tax calculated on a decedent's taxable estate. It is distinct from income tax owed by a beneficiary and from a state inheritance tax.", ["irs_estate", "irs_i706"]),
+        ("Fair market value", "A valuation concept used for federal basis purposes. The date-of-death value should be substantiated by an appropriate appraisal or other acceptable evidence.", ["irs_basis"]),
+        ("Proposition 19 parent-child exclusion", "A conditional California change-in-ownership exclusion, limited by statute and generally requiring the eligible transferee to use the transferred home as a principal residence and file a claim.", ["rtc63_2_eligibility", "boe_prop19"]),
+        ("Reinvestment risk", "The risk that short-term securities mature and proceeds must be reinvested at a lower available yield; a Treasury yield observed today is not a promise of the yield available years later.", ["treasury_cmt"]),
+        ("Depreciation recapture", "On sale of rental real estate, prior depreciation can affect the amount and character of taxable gain; exact treatment depends on the tax record and sale facts.", ["irs_p527", "irs_tc559"]),
+        ("Portability", "A surviving spouse may be able to use a deceased spouse's unused federal estate-tax exclusion if the required estate-tax return is timely and correctly filed.", ["irs_estate", "irs_i706"]),
     ]
-    rows = [f"<td><strong>{esc(t)}</strong></td><td>{esc(d)}</td>"
-            + (src_cell([s], "Official source") if s else src_cell([], "Official source"))
-            for t, d, s in terms]
-    return (
-        callout("note", "Glossary of terms used on this site", """
-<p>Plain-language definitions of the tax, property and economic terms used in the analysis. Terms marked \"no\nofficial source\" are concepts rather than figures drawn from a published document.</p>
-""")
-        + table("Terms and definitions", ["Term", "Meaning", "Source"], rows)
-    )
+    rows = [f"<td><strong>{esc(term)}</strong></td><td>{esc(definition)}</td>" + src_cell(ids)
+            for term, definition, ids in terms]
+    return callout("note", "Use this as a reading aid", """
+<p>These short definitions are not legal or tax advice. The linked law or agency guidance controls, and the rule in force at the actual transfer date must be checked again. Use the <a href="questions.html">question register</a> and <a href="review.html">Flagged for Review</a> page for case-specific unknowns.</p>""") + table(
+        "Terms used in the decision pages", ["Term", "Plain-language meaning", "Official source"], rows)
+
+
+# -------------------------------------------------- adviser briefing sheet --
+def page_briefing() -> str:
+    p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
+    value = p45["value_at_death"]
+    cash_net = p45["paths"]["sell_equities"]["sale"]["net"]
+    summary = f"""
+<div class="brief-toolbar"><p><strong>Print / save as PDF:</strong> use your browser's Print command. This sheet is formatted for one letter-size page.</p></div>
+<p class="brief-confidential"><strong>Planning brief — placeholders only; no personal names, addresses, parcel IDs, trust terms or account figures.</strong></p>
+<div class="brief-grid">
+<section><h2>Decision in front of the family</h2>
+<p>Property A is expected to pass through a trust around 2040–2050; Property B is already owned by the heir and currently has two rented units plus one available unit. Do not treat the inherited home as already owned or assume Property B rent is displaced by living there.</p>
+<p>Current model direction: sell Property A soon after inheritance unless the heir genuinely wants to live in it. This is conditional—not advice—and depends on eligibility, title, tax basis, actual carrying costs, market rent and updated law. A 2045 illustration puts inherited-home value around {m(value)} and after-sale proceeds before reinvestment around {m(cash_net)}; both are model outputs, not appraisals or quotes.</p>
+</section>
+<section><h2>First questions for counsel and tax adviser</h2>
+<ol>
+<li>Does the trust actually own the property, and is the transferor-to-beneficiary relationship eligible for California's parent-child Proposition 19 exclusion? If not, full reassessment is assumed. {slink('rtc63_2_eligibility')} {slink('boe_prop19')}</li>
+<li>What are the trust's distribution, sale, occupancy, debt and trustee powers? Confirm deed, trust amendments, successor-trustee process and authority to sell.</li>
+<li>What is the date-of-death basis, appraisal standard and allocation between land/building? What is the cash estate, prior taxable gifts, marital portability and federal Form 706 filing position? {slink('irs_basis')} {slink('irs_estate')} {slink('irs_i706')}</li>
+<li>Which home will be the heir's principal residence after transfer, and can occupancy/claim deadlines be met? Confirm eligibility and filing sequence with the assessor. {slink('boe_lta25009')}</li>
+</ol>
+</section>
+<section><h2>Known / unknown before choosing</h2>
+<p><strong>Known from the supplied brief, not independently verified:</strong> owner-reported values, Property B rent and utilities, Property A water/solar estimate and historic tax-roll figures. <strong>Unknown:</strong> actual deed/title and trust terms, relationship eligibility, current insurance quotes, property-specific utilities, repairs/capital work, exact tax-rate areas, Property A market rent, selling costs, total taxable estate and future law.</p>
+<p>Obtain certified tax bills and assessor records, title report, trust copy, date-of-death appraisal, insurer quotes for owner-occupied and rental uses, utility bills, property-condition inspection and a local rent opinion. Do not publish source documents or identifiers.</p>
+</section>
+<section><h2>Options and material risks</h2>
+<ul><li>Live in Property A: possible reassessment shelter only if eligible and occupancy requirements are met; higher concentration and maintenance exposure.</li><li>Rent Property A: full reassessment may apply; income, vacancy, repairs, landlord rules and depreciation/recapture need a CPA-grade model.</li><li>Sell and reinvest: basis step-up may limit immediate gain, but confirm sale costs and tax; reinvestment risk remains. The Black Swan page models 24/36-month Treasury parking and phased equity entry as a synthetic stress test, not a historical backtest. Reinvestment yield may decline at maturity.</li><li>Property B remains an independent owned asset: include its net operating costs, insurance, rent/legal rules and available unit in household liquidity planning.</li></ul>
+</section>
+<section><h2>Timing / action sequence</h2>
+<p>Before transfer: verify trust/deed, relationship eligibility, estate liquidity and insurance. At death/transfer: secure property, contact trustee/assessor/insurer, obtain date-of-death valuation, inventory expenses and confirm tax filing calendar. After title transfer: have counsel/CPA calendar assessor claim deadlines, income/estate returns, insurance endorsements and rental notices; model live/rent/sell choices with actual quotes before signing or distributing proceeds. Exact dates depend on transfer and filing facts.</p>
+</section>
+<section class="brief-glossary"><h2>Glossary</h2>
+<p><strong>Basis step-up</strong>: generally resets inherited property tax basis to date-of-death value, subject to exceptions. <strong>Prop 19 exclusion</strong>: conditional California parent-child reassessment exclusion subject to statutory value and occupancy rules. <strong>Estate tax</strong>: federal tax on taxable estate, not a California inheritance tax. <strong>Reinvestment risk</strong>: future short-term Treasury proceeds may earn lower yields at maturity.</p>
+</section>
+</div>
+<p class="brief-footer">For attorney / CPA discussion only. Laws and projections may change before 2040–2050. Sources and full assumptions: <a href="sources.html">source ledger</a>, <a href="questions.html">question register</a>, <a href="review.html">unverified items</a>, <a href="black-swan.html">phased-investing stress test</a>. No legal, tax or investment advice.</p>
+"""
+    return summary
 
 
 PAGE_BUILDERS = {
@@ -2492,6 +2369,7 @@ PAGE_BUILDERS = {
     "executive-summary.html": (page_executive_summary,
                                "The important details, the recommendation, and what would change it."),
     "decision.html": (page_decision, "Five paths, priced, with the break-even numbers and the sensitivity."),
+    "briefing.html": (page_briefing, "A printable one-page attorney and CPA discussion sheet."),
     "property-a.html": (page_property_a, "The home being inherited through a trust, planned 2040 to 2050."),
     "property-b.html": (page_property_b, "The three-unit building the heir already owns and rents out."),
     "ownership-distinction.html": (page_distinction, "Why inherited and already-owned are not interchangeable."),
@@ -2506,9 +2384,8 @@ PAGE_BUILDERS = {
     "questions.html": (page_questions, "What is known, what is missing, and how to find it."),
     "suggestions.html": (page_suggestions, "A review queue of proposals. Nothing implemented yet."),
     "review.html": (page_review, "Unverified figures, modelling caveats and the repository audit."),
+    "glossary.html": (page_glossary, "Plain-language definitions with official source links."),
     "sources.html": (page_sources, "Every official source used, with what it supports."),
-    "attorney-briefing.html": (page_attorney_briefing, "One-page printable briefing for the attorney and the tax adviser."),
-    "glossary.html": (page_glossary, "Plain-language definitions of the tax, property and economic terms used."),
 }
 
 
