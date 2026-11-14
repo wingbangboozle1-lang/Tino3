@@ -37,7 +37,7 @@ OFFICIAL_HOSTS = {
     "bls.gov", "www.bls.gov", "fred.stlouisfed.org", "sfgov.legistar.com",
     "sos.ca.gov", "www.sos.ca.gov", "voterguide.sos.ca.gov", "electionresults.sos.ca.gov",
     "sftreasurer.org", "www.sf.gov", "sf.gov", "www.santaclaracounty.gov",
-    "clerkrecorder.santaclaracounty.gov", "files.santaclaracounty.gov",
+    "clerkrecorder.santaclaracounty.gov", "files.santaclaracounty.gov", "dtac.santaclaracounty.gov",
     "ssa.gov", "www.ssa.gov", "govinfo.gov", "www.govinfo.gov",
     # added when the two independently maintained ledgers were merged
     "www.sfpuc.gov", "sfbos.archive.sf.gov", "elections.cdn.sos.ca.gov",

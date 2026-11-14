@@ -27,16 +27,18 @@ ASM = INPUTS["assumptions"]
 BUILD_DATE = "13 November 2026"
 
 NAV_GROUPS = [
-    ("Start here", ["index.html", "executive-summary.html", "decision.html", "briefing.html"]),
+    ("Start here", ["index.html", "executive-summary.html", "decision.html", "what-if.html", "briefing.html"]),
     ("The two properties", ["property-a.html", "property-b.html", "ownership-distinction.html"]),
     ("Money over time", ["costs.html", "projections.html", "taxes.html"]),
-    ("Rules and the estate", ["inheritance.html", "estate.html", "laws.html"]),
+    ("Rules and the estate", ["inheritance.html", "timeline.html", "estate.html", "laws.html"]),
     ("Black swan economics", ["black-swan.html", "economy.html"]),
     ("Review before deciding", ["questions.html", "suggestions.html", "review.html"]),
     ("Evidence", ["glossary.html", "sources.html"]),
 ]
 PAGE_TITLES = {
     "index.html": "Dashboard",
+    "what-if.html": "What-if cases",
+    "timeline.html": "Deadlines timeline",
     "executive-summary.html": "Executive summary",
     "decision.html": "The decision",
     "briefing.html": "Attorney & CPA briefing sheet",
@@ -322,6 +324,26 @@ grandparent and a grandchild whose parent has died. If that is not the relations
 the property is reassessed to full market value, every shelter figure on this site disappears, and the case for
 selling gets stronger. The trust document is the only thing that settles it. <a href="questions.html">Answer
 question A-1</a> before relying on any number here. {slink('rtc63_2_eligibility')}</p>""")
+    regs = MODEL["regimes"]
+    keep_regs = [r for r in regs if r["run"]["best"] == "live_in"]
+    keep_names = "; ".join(r["name"] for r in keep_regs) or "none"
+    sens = MODEL["sensitivity"]
+    eq_vals = sorted(set(x["equity_return"] for x in sens))
+    tsy_wins = sum(1 for x in sens if x["best"] == "sell_treasury")
+    wwc = callout("flag", "What would change the answer", f"""
+<ol class="change-list">
+<li><strong>The Proposition 19 exclusion does not apply.</strong> Then the property is reassessed in full, every shelter figure on this site falls away, and selling gets stronger. <a href="questions.html">Question A-1</a> settles it.</li>
+<li><strong>House prices in this area grow faster than {pc(p45['breakeven_house_growth'])} a year for thirty years.</strong> Then keeping the home matches selling at a 7% return. <a href="what-if.html#threshold-growth">Break-even case</a>.</li>
+<li><strong>Market rent reaches {m(p45['breakeven_rent_monthly'])} a month in 2045 dollars.</strong> Then letting the home out matches selling. <a href="what-if.html#threshold-rent">Break-even case</a>.</li>
+<li><strong>A regime like the one in the stress cases recurs.</strong> Keeping the home wins in {len(keep_regs)} of {len(regs)} stress regimes: {esc(keep_names)}. <a href="black-swan.html">Black swan conditions</a>.</li>
+<li><strong>The heir genuinely wants to live in the house.</strong> The one-line recommendation is conditional on that. <a href="suggestions.html">Suggestions for review</a>.</li>
+</ol>""")
+    reinv = callout("warn", "Reinvestment risk, beside the headline", f"""
+<p>The recommendation depends on what the sale money earns afterwards. The sensitivity grid tests equity returns from
+{pc(eq_vals[0], 1)} to {pc(eq_vals[-1], 1)} a year. Selling wins in every one of the {len(sens)} combinations; selling into
+Treasuries is the winning sale in {tsy_wins} of them. On the 2045 baseline the proceeds could lose {pc(-p45['breakeven_return_vs_live'])}
+a year and selling would still match living, so the case for selling does not need a high return.
+<a href="black-swan.html">Reinvestment risk in the stress cases</a>.</p>""")
     cards = []
     for group, pages in NAV_GROUPS:
         if group == "Start here":
@@ -333,11 +355,13 @@ question A-1</a> before relying on any number here. {slink('rtc63_2_eligibility'
     return (
         privacy_banner()
         + gating
+        + wwc
         + f'<section class="kpi-row">{kpis}</section>'
         + callout("answer", "The one-line answer", f"""
 <p>Under every baseline this site can build, <strong>selling Property A soon after it is inherited beats living in it or letting it out</strong>, and it is not close. The reason is a one-off combination: the inheritance resets the income-tax basis to the value at death, so an immediate sale pays almost no capital gains tax, while the property tax assessment jumps to market value under Proposition 19. Waiting converts a tax-free asset into a taxed one and adds roughly {m(p45['bill_if_rent_year1'] - p45['bill_today_projected'])} a year of extra property tax if the home is let out.</p>
 <p>The break-even house growth needed to make keeping the home beat selling is <strong>{pc(p45['breakeven_house_growth'])} a year for thirty years</strong>. The verified house price index for this area compounded at 6.9% a year over the last fifty years and 3.3% a year over the last twenty. Read the <a href="decision.html">full decision</a>, then the <a href="black-swan.html">cases where this flips</a>.</p>
 """)
+        + reinv
         + '<section class="card-grid">' + "".join(cards) + "</section>"
         + callout("method", "How to read this site", """
 <ol>
@@ -360,6 +384,8 @@ SUMMARIES = {
     "projections.html": "Year by year to 2076 for value, assessed value and tax.",
     "taxes.html": "Basis step-up, capital gains, the 121 exclusion, recapture.",
     "inheritance.html": "The trust transfer, phase by phase, with deadlines.",
+    "timeline.html": "Every dated step in order, each with its official source.",
+    "what-if.html": "One lever at a time, with each case linked.",
     "estate.html": "Federal thresholds, California's position, scenario bands.",
     "laws.html": "Enacted, dead and proposed rules that could move the answer.",
     "black-swan.html": "Regimes where the answer changes, and by how much.",
@@ -1145,7 +1171,7 @@ def page_inheritance() -> str:
         ("5", "Change in ownership statement",
          "A change in ownership statement goes to the county assessor. The assessor decides whether the transfer is a change in ownership and sets a new base year value if it is.",
          "The new owner, on the assessor's form.",
-         "The statute sets the deadline and the penalties.",
+         "For a transfer on death, the statement is due within 150 days after the death under RTC section 480(b), or with the inventory and appraisal if the estate is probated. Other changes in ownership are due within 90 days under section 480(a).",
          ["rtc480", "boe_pub800_9"]),
         ("6", "The Proposition 19 decision",
          "If the heir will use the house as a principal residence, claim the intergenerational transfer exclusion. The claim is not a public document.",
@@ -2406,6 +2432,179 @@ def page_briefing() -> str:
     return summary
 
 
+# ------------------------------------------------------------ timeline page --
+def page_timeline() -> str:
+    """Every dated step in order. Each row names its official source or is not on the page."""
+    rows_spec = [
+        ("Within 60 days after the trust becomes irrevocable",
+         "The trustee sends the heirs and beneficiaries the notice the statute requires.",
+         "The trustee.", ["prob16061_7"]),
+        ("Within 150 days after death",
+         "Change in ownership statement for a transfer on death, under RTC section 480(b). If the estate is "
+         "probated, the statement is filed with the inventory and appraisal instead.",
+         "The successor, on the assessor's form.", ["rtc480", "boe_pub800_9"]),
+        ("Within 9 months after death, if a federal estate tax return is required",
+         "Form 706 is due. Filing Form 4768 by that date gives an automatic six-month extension of the filing "
+         "date. Part III of the same form is a separate request for more time to pay.",
+         "The executor.", ["irs_i706", "irs_i4768"]),
+        ("Within 1 year after the transfer, if the exclusion is claimed",
+         "Occupy the house as the principal residence, and file the homeowners' exemption.",
+         "The heir.", ["rtc63_2", "boe_lta26026", "boe_prop19"]),
+        ("Within 3 years after the transfer, or before any transfer to someone else",
+         "File the Proposition 19 exclusion claim. The claim is not a public document.",
+         "The heir, on the assessor's claim form.", ["rtc63_2"]),
+        ("After a change in ownership",
+         "If the exclusion is not claimed, the property is reassessed to full value and a supplemental bill "
+         "may follow for the part of the year already gone.",
+         "The county assessor.", ["boe_pub29"]),
+        ("Each year, on the Santa Clara County calendar",
+         "Secured bills are mailed in October. First installment due 1 November, penalty date 10 December. "
+         "Second installment due 1 February, penalty date 10 April. Last day for the current year's taxes 30 June. "
+         "A penalty date that falls on a weekend or county holiday moves to the next business day.",
+         "The owner of record.", ["dtac_secured"]),
+        ("10 December 2026",
+         "Last day to pay the first installment of the 2026/27 secured bill without penalty, while the bill is "
+         "still on the owner's record. Relevant to Property A only while it is held and before it is inherited.",
+         "The owner of record.", ["dtac_secured"]),
+    ]
+    rows = []
+    for when, what, who, ids in rows_spec:
+        rows.append(f"<td>{esc(when)}</td><td>{esc(what)}</td><td>{esc(who)}</td>" + src_cell(ids, "Official source"))
+    tl = table(
+        "Deadlines in order",
+        ["When", "What must happen", "Who", "Official source"], rows,
+        note="Day 0 is the date of death, which is not yet known, so the clocks are shown from it. "
+             "A row without an official source is not on this page. The county calendar applies to Property A "
+             "only while it is held in the trust; after the transfer, the heir's own bills follow the same calendar. "
+             "Every date here is a deadline to check, not advice on when to act.")
+    return (
+        callout("answer", "The next dated item", """
+<p>The first installment of the 2026/27 Santa Clara County secured bill must be paid, or postmarked, by
+<strong>10 December 2026</strong> to avoid penalties. That is the only dated item on this page that falls in the
+next year. Everything else is measured from the date of death or the date of transfer.</p>""")
+        + '<p class="lede">Read in order. Each row is a legal or tax clock, and each names the official text it comes from.</p>'
+        + tl
+        + callout("method", "Why the order matters", """
+<ol>
+<li>The trust notice (60 days) and the change-in-ownership statement (150 days) are the first two clocks after death.</li>
+<li>The federal return, if one is needed, comes at nine months, and Form 4768 is the only automatic way to extend it.</li>
+<li>The exclusion claim has a three-year window, but the occupancy and homeowners' exemption steps are one year.
+Missing the one-year steps is the most expensive mistake that can be made on the timeline.</li>
+</ol>""")
+    )
+
+
+# -------------------------------------------------------------- what-if page --
+def page_what_if() -> str:
+    """Link-driven what-if: each case is one row and every row is reachable from the list at the top."""
+    paths = {x["inherit_year"]: x for x in MODEL["paths"]}
+    p45 = paths[2045]
+    sens = MODEL["sensitivity"]
+    regs = MODEL["regimes"]
+    KEYS = ["sell_equities", "sell_treasury", "live_in", "live_then_rent", "rent_out"]
+
+    def lever_row(s, anchor):
+        best = s["best"]
+        cells = "".join(
+            (f"<td class='best'>{m(s[k])}</td>" if k == best else f"<td>{m(s[k])}</td>")
+            for k in ["sell_equities", "sell_treasury", "live_in", "rent_out"])
+        return (f"<td><a id='{anchor}'></a>{pc(s['house_growth'], 1)}</td><td>{pc(s['equity_return'], 1)}</td>"
+                + cells + f"<td><strong>{esc(PATH_LABELS[best])}</strong></td>"
+                + method_cell("#method", "Model output"))
+
+    lever_hdr = ["House growth", "Equity return", "Sell, equities", "Sell, Treasuries",
+                 "Live in it", "Let it out", "Best path", "Basis"]
+
+    by_house = [s for s in sens if s["equity_return"] == 7.0]
+    by_house.sort(key=lambda s: s["house_growth"])
+    by_equity = [s for s in sens if s["house_growth"] == 4.0]
+    by_equity.sort(key=lambda s: s["equity_return"])
+    lever1 = table(
+        "Lever 1: change house growth, hold the equity return at 7.0%",
+        lever_hdr, [lever_row(s, f"house-{s['house_growth']}") for s in by_house],
+        note="Each row is one case. The case with 4.0% house growth is the 2045 baseline used on the decision page.")
+    lever2 = table(
+        "Lever 2: change the equity return, hold house growth at 4.0%",
+        lever_hdr, [lever_row(s, f"equity-{s['equity_return']}") for s in by_equity],
+        note="Each row is one case. Lever 1 and lever 2 share the baseline row.")
+
+    reg_rows = []
+    for i, r in enumerate(regs):
+        t = r["run"]["terminal"]
+        best = r["run"]["best"]
+        cells = "".join(
+            (f"<td class='best'>{m(t[k])}</td>" if k == best else f"<td>{m(t[k])}</td>")
+            for k in ["sell_equities", "sell_treasury", "live_in", "rent_out"])
+        reg_rows.append(
+            f"<td><a id='regime-{i}'></a>{esc(r['name'])}</td><td>{pc(r['cpi'], 1)}</td>"
+            f"<td>{pc(r['house'], 1)}</td><td>{pc(r['treasury'], 1)}</td>"
+            + cells + f"<td><strong>{esc(PATH_LABELS[best])}</strong></td>"
+            + method_cell("black-swan.html", "Stress regime"))
+    reg_table = table(
+        "Stress regimes: each one is a case",
+        ["Regime", "Inflation a year", "House prices a year", "Treasury yield",
+         "Sell, equities", "Sell, Treasuries", "Live in it", "Let it out", "Best path", "Basis"],
+        reg_rows,
+        note="Figures are the terminal value at 2045 after thirty years in the regime. The regime's own "
+             "analogue is described on the black swan page.")
+
+    yr_rows = []
+    for y in (2040, 2045, 2050):
+        pr = paths[y]["paths"]
+        best = max(pr, key=lambda k: pr[k]["terminal"])
+        cells = "".join(
+            (f"<td class='best'>{m(pr[k]['terminal'])}</td>" if k == best else f"<td>{m(pr[k]['terminal'])}</td>")
+            for k in ["sell_equities", "sell_treasury", "live_in", "live_then_rent", "rent_out"])
+        yr_rows.append(f"<td><a id='year-{y}'></a>{y}</td>" + cells
+                       + f"<td><strong>{esc(PATH_LABELS[best])}</strong></td>"
+                       + method_cell("#method", "Model output"))
+    yr_table = table(
+        "Inheritance year: each one is a case",
+        ["Inherited", "Sell, equities", "Sell, Treasuries", "Live in it", "Live in it, then let it",
+         "Let it out", "Best path", "Basis"], yr_rows,
+        note="Terminal values after thirty years, in nominal dollars of that future year. Live in it, then let it is a mixed path: "
+             "the heir occupies the house for a period and then lets it out.")
+
+    be_rows = [
+        ("<a id='threshold-growth'></a>House growth needed to make keeping the home match selling (2045)",
+         f"{pc(p45['breakeven_house_growth'])} a year for thirty years"),
+        ("<a id='threshold-rent'></a>Monthly rent needed to make letting match selling (2045)",
+         f"{m(p45['breakeven_rent_monthly'])} a month, in 2045 dollars"),
+        ("<a id='threshold-return'></a>Return on the sale proceeds at which living matches selling (2045)",
+         f"{ret_cell(p45['breakeven_return_vs_live'])}"),
+    ]
+    be_table = table(
+        "Break-even thresholds, 2045 inheritance",
+        ["Threshold", "Value"],
+        [f"<td>{a}</td><td>{b}</td>" + method_cell("#method", "Model output") for a, b in be_rows],
+        note="A negative return means selling still matches living even if the sale proceeds lose that much a year.")
+
+    jump = ("<ul class='card-list'>"
+            "<li><a href='#house-2.5'>House growth at 2.5%</a></li>"
+            "<li><a href='#house-5.5'>House growth at 5.5%</a></li>"
+            "<li><a href='#equity-5.0'>Equity return at 5.0%</a></li>"
+            "<li><a href='#equity-9.0'>Equity return at 9.0%</a></li>"
+            "<li><a href='#regime-0'>Great Inflation repeat</a></li>"
+            "<li><a href='#regime-2'>A financial crisis crash</a></li>"
+            "<li><a href='#year-2040'>Inherit in 2040</a></li>"
+            "<li><a href='#year-2050'>Inherit in 2050</a></li>"
+            "<li><a href='#threshold-growth'>House growth needed</a></li>"
+            "<li><a href='#threshold-rent'>Rent needed</a></li>"
+            "</ul>")
+    return (
+        callout("method", "How to use this page", f"""
+<p>There are no sliders, because this site runs no script. Each case below is a link target. Choose one from the list,
+or read the tables in order. Change one lever at a time, and the other stays at the baseline. Every figure is rounded
+to the nearest $10 and comes from the same model that builds the rest of the site.</p>
+{jump}""")
+        + lever1 + lever2 + reg_table + yr_table + be_table
+        + callout("flag", "What the cases do not show", """
+<p>No case here credits the letting paths with a market rent, because none has been supplied. Read every letting row as
+the path at zero rent, which is a floor. The model also does not change the Proposition 19 eligibility question; if
+that answer is no, the reassessment is full and every case here moves toward selling.</p>""")
+    )
+
+
 PAGE_BUILDERS = {
     "index.html": (page_index, "Two California properties, one decision. Every figure rounded to the nearest $10."),
     "executive-summary.html": (page_executive_summary,
@@ -2419,6 +2618,8 @@ PAGE_BUILDERS = {
     "projections.html": (page_projections, "Year by year to 2076 for value, assessed value and tax."),
     "taxes.html": (page_taxes, "Basis step-up, capital gains, the 121 exclusion, recapture."),
     "inheritance.html": (page_inheritance, "The trust transfer, phase by phase, with deadlines."),
+    "timeline.html": (page_timeline, "Every legal and tax clock in order, from death and from transfer, with its official source."),
+    "what-if.html": (page_what_if, "Change one lever at a time. Each case is a link; no script is used."),
     "estate.html": (page_estate, "Federal thresholds, California's position, scenario bands."),
     "laws.html": (page_laws, "Enacted, dead and proposed rules that could move the answer."),
     "black-swan.html": (page_black_swan, "Regimes where the answer changes, and by how much."),
