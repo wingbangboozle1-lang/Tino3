@@ -968,11 +968,28 @@
       "net": 5072950
      }
     },
+    "sell_phased": {
+     "terminal": 30057140,
+     "outflow": 0,
+     "start": 5072950,
+     "park_months": 30,
+     "phase_months": 24,
+     "sale": {
+      "price": 5368200,
+      "costs": 295250,
+      "basis": 5368200,
+      "gain": 0,
+      "recapture": 0,
+      "exclusion": 0,
+      "tax": 0,
+      "net": 5072950
+     }
+    },
     "live_in": {
      "terminal": 12433650,
-     "outflow": 3170370,
+     "outflow": 4348760,
      "tax_total": 1868170,
-     "cost_total": 1302200,
+     "cost_total": 2480590,
      "sale": {
       "price": 17411200,
       "costs": 957620,
@@ -986,9 +1003,9 @@
     },
     "rent_out": {
      "terminal": 10575840,
-     "outflow": 4538620,
+     "outflow": 6306210,
      "tax_total": 2647230,
-     "cost_total": 1891390,
+     "cost_total": 3658980,
      "rent_income_total": 0,
      "depreciation": 4294560,
      "sale": {
@@ -1004,9 +1021,9 @@
     },
     "live_then_rent": {
      "terminal": 10668590,
-     "outflow": 4503570,
+     "outflow": 6271160,
      "tax_total": 2612180,
-     "cost_total": 1891390,
+     "cost_total": 3658980,
      "rent_income_total": 0,
      "depreciation": 4294560,
      "sale": {
@@ -1021,8 +1038,8 @@
      }
     }
    },
-   "breakeven_rent_annual": 298050,
-   "breakeven_rent_monthly": 24840,
+   "breakeven_rent_annual": 338310,
+   "breakeven_rent_monthly": 28190,
    "breakeven_return_vs_live": 3.03,
    "breakeven_return_vs_rent": 2.48,
    "housing_value_needed": 1445990,
@@ -1072,11 +1089,28 @@
       "net": 6172010
      }
     },
+    "sell_phased": {
+     "terminal": 36569050,
+     "outflow": 0,
+     "start": 6172010,
+     "park_months": 30,
+     "phase_months": 24,
+     "sale": {
+      "price": 6531230,
+      "costs": 359220,
+      "basis": 6531230,
+      "gain": 0,
+      "recapture": 0,
+      "exclusion": 0,
+      "tax": 0,
+      "net": 6172010
+     }
+    },
     "live_in": {
      "terminal": 15107350,
-     "outflow": 3880030,
+     "outflow": 5313720,
      "tax_total": 2322530,
-     "cost_total": 1557500,
+     "cost_total": 2991190,
      "sale": {
       "price": 21183380,
       "costs": 1165090,
@@ -1090,9 +1124,9 @@
     },
     "rent_out": {
      "terminal": 12867130,
-     "outflow": 5500020,
+     "outflow": 7650560,
      "tax_total": 3225670,
-     "cost_total": 2274350,
+     "cost_total": 4424890,
      "rent_income_total": 0,
      "depreciation": 5224990,
      "sale": {
@@ -1108,9 +1142,9 @@
     },
     "live_then_rent": {
      "terminal": 12959880,
-     "outflow": 5459830,
+     "outflow": 7610370,
      "tax_total": 3185490,
-     "cost_total": 2274350,
+     "cost_total": 4424890,
      "rent_income_total": 0,
      "depreciation": 5224990,
      "sale": {
@@ -1125,8 +1159,8 @@
      }
     }
    },
-   "breakeven_rent_annual": 362120,
-   "breakeven_rent_monthly": 30180,
+   "breakeven_rent_annual": 411110,
+   "breakeven_rent_monthly": 34260,
    "breakeven_return_vs_live": 3.03,
    "breakeven_return_vs_rent": 2.48,
    "housing_value_needed": 1760770,
@@ -1176,11 +1210,28 @@
       "net": 7509200
      }
     },
+    "sell_phased": {
+     "terminal": 44491880,
+     "outflow": 0,
+     "start": 7509200,
+     "park_months": 30,
+     "phase_months": 24,
+     "sale": {
+      "price": 7946240,
+      "costs": 437040,
+      "basis": 7946240,
+      "gain": 0,
+      "recapture": 0,
+      "exclusion": 0,
+      "tax": 0,
+      "net": 7509200
+     }
+    },
     "live_in": {
      "terminal": 18360300,
-     "outflow": 4751940,
+     "outflow": 6496240,
      "tax_total": 2883820,
-     "cost_total": 1868110,
+     "cost_total": 3612420,
      "sale": {
       "price": 25772820,
       "costs": 1417510,
@@ -1194,9 +1245,9 @@
     },
     "rent_out": {
      "terminal": 15654830,
-     "outflow": 6671080,
+     "outflow": 9287540,
      "tax_total": 3930810,
-     "cost_total": 2740270,
+     "cost_total": 5356730,
      "rent_income_total": 0,
      "depreciation": 6356990,
      "sale": {
@@ -1212,9 +1263,9 @@
     },
     "live_then_rent": {
      "terminal": 15747580,
-     "outflow": 6625070,
+     "outflow": 9241530,
      "tax_total": 3884810,
-     "cost_total": 2740270,
+     "cost_total": 5356730,
      "rent_income_total": 0,
      "depreciation": 6356990,
      "sale": {
@@ -1229,8 +1280,8 @@
      }
     }
    },
-   "breakeven_rent_annual": 440110,
-   "breakeven_rent_monthly": 36680,
+   "breakeven_rent_annual": 499710,
+   "breakeven_rent_monthly": 41640,
    "breakeven_return_vs_live": 3.03,
    "breakeven_return_vs_rent": 2.48,
    "housing_value_needed": 2143760,
@@ -1258,6 +1309,7 @@
     "terminal": {
      "sell_equities": 491186780,
      "sell_treasury": 1420423720,
+     "sell_phased": 556904880,
      "live_in": 8930221310,
      "rent_out": 8902791700,
      "live_then_rent": 8902884450
@@ -1265,6 +1317,7 @@
     "terminal_real": {
      "sell_equities": 29728740,
      "sell_treasury": 85970160,
+     "sell_phased": 33706280,
      "live_in": 540495420,
      "rent_out": 538835260,
      "live_then_rent": 538840880
@@ -1272,9 +1325,10 @@
     "outflow": {
      "sell_equities": 0,
      "sell_treasury": 0,
-     "live_in": 106603680,
-     "rent_out": 140428850,
-     "live_then_rent": 140454620
+     "sell_phased": 0,
+     "live_in": 172447740,
+     "rent_out": 239194950,
+     "live_then_rent": 239220720
     },
     "value_at_death": 83141320,
     "bill_if_live_year1": 967750,
@@ -1300,6 +1354,7 @@
     "terminal": {
      "sell_equities": 17630790,
      "sell_treasury": 21831870,
+     "sell_phased": 18081450,
      "live_in": 2655770,
      "rent_out": 1809560,
      "live_then_rent": 1809560
@@ -1307,6 +1362,7 @@
     "terminal_real": {
      "sell_equities": 6466300,
      "sell_treasury": 8007090,
+     "sell_phased": 6631580,
      "live_in": 974030,
      "rent_out": 663680,
      "live_then_rent": 663680
@@ -1314,9 +1370,10 @@
     "outflow": {
      "sell_equities": 0,
      "sell_treasury": 0,
-     "live_in": 1562980,
-     "rent_out": 2844990,
-     "live_then_rent": 2806660
+     "sell_phased": 0,
+     "live_in": 2320710,
+     "rent_out": 3981590,
+     "live_then_rent": 3943260
     },
     "value_at_death": 2984300,
     "bill_if_live_year1": 15640,
@@ -1343,6 +1400,7 @@
     "terminal": {
      "sell_equities": 6127160,
      "sell_treasury": 2758870,
+     "sell_phased": 5577000,
      "live_in": 173950,
      "rent_out": 173950,
      "live_then_rent": 173950
@@ -1350,6 +1408,7 @@
     "terminal_real": {
      "sell_equities": 3189570,
      "sell_treasury": 1436170,
+     "sell_phased": 2903180,
      "live_in": 90550,
      "rent_out": 90550,
      "live_then_rent": 90550
@@ -1357,9 +1416,10 @@
     "outflow": {
      "sell_equities": 0,
      "sell_treasury": 0,
-     "live_in": 808240,
-     "rent_out": 1029320,
-     "live_then_rent": 1028010
+     "sell_phased": 0,
+     "live_in": 1025330,
+     "rent_out": 1354950,
+     "live_then_rent": 1353640
     },
     "value_at_death": 1037120,
     "bill_if_live_year1": 11590,
@@ -1385,6 +1445,7 @@
     "terminal": {
      "sell_equities": 83316680,
      "sell_treasury": 30338380,
+     "sell_phased": 73963640,
      "live_in": 96997240,
      "rent_out": 92267520,
      "live_then_rent": 92360270
@@ -1392,6 +1453,7 @@
     "terminal_real": {
      "sell_equities": 16248540,
      "sell_treasury": 5916640,
+     "sell_phased": 14424500,
      "live_in": 18916550,
      "rent_out": 17994150,
      "live_then_rent": 18012240
@@ -1399,9 +1461,10 @@
     "outflow": {
      "sell_equities": 0,
      "sell_treasury": 0,
-     "live_in": 11555190,
-     "rent_out": 15057030,
-     "live_then_rent": 15026930
+     "sell_phased": 0,
+     "live_in": 16752590,
+     "rent_out": 22853130,
+     "live_then_rent": 22823030
     },
     "value_at_death": 14102700,
     "bill_if_live_year1": 148250,
@@ -1423,6 +1486,7 @@
     "terminal": {
      "sell_equities": 18314350,
      "sell_treasury": 11619670,
+     "sell_phased": 17357240,
      "live_in": 2929500,
      "rent_out": 1980300,
      "live_then_rent": 1980300
@@ -1430,6 +1494,7 @@
     "terminal_real": {
      "sell_equities": 8731230,
      "sell_treasury": 5539590,
+     "sell_phased": 8274940,
      "live_in": 1396620,
      "rent_out": 944090,
      "live_then_rent": 944090
@@ -1437,9 +1502,10 @@
     "outflow": {
      "sell_equities": 0,
      "sell_treasury": 0,
-     "live_in": 1484280,
-     "rent_out": 2727670,
-     "live_then_rent": 2687490
+     "sell_phased": 0,
+     "live_in": 2164780,
+     "rent_out": 3748410,
+     "live_then_rent": 3708230
     },
     "value_at_death": 3100000,
     "bill_if_live_year1": 16580,
@@ -1461,6 +1527,7 @@
     "terminal": {
      "sell_equities": 15130730,
      "sell_treasury": 4383970,
+     "sell_phased": 13075860,
      "live_in": 1790270,
      "rent_out": 1264990,
      "live_then_rent": 1264990
@@ -1468,6 +1535,7 @@
     "terminal_real": {
      "sell_equities": 13028010,
      "sell_treasury": 3774730,
+     "sell_phased": 11258700,
      "live_in": 1541480,
      "rent_out": 1089190,
      "live_then_rent": 1089190
@@ -1475,9 +1543,10 @@
     "outflow": {
      "sell_equities": 0,
      "sell_treasury": 0,
-     "live_in": 937490,
-     "rent_out": 1986250,
-     "live_then_rent": 1946650
+     "sell_phased": 0,
+     "live_in": 1350850,
+     "rent_out": 2606300,
+     "live_then_rent": 2566700
     },
     "value_at_death": 2561120,
     "bill_if_live_year1": 10990,
@@ -2390,6 +2459,7 @@
    "equity_return": 5.0,
    "sell_equities": 16560620,
    "sell_treasury": 18575810,
+   "sell_phased": 16786700,
    "live_in": 8110290,
    "rent_out": 6388070,
    "live_then_rent": 6480820,
@@ -2400,6 +2470,7 @@
    "equity_return": 7.0,
    "sell_equities": 29278260,
    "sell_treasury": 18575810,
+   "sell_phased": 27748170,
    "live_in": 8110290,
    "rent_out": 6388070,
    "live_then_rent": 6480820,
@@ -2410,6 +2481,7 @@
    "equity_return": 9.0,
    "sell_equities": 51215460,
    "sell_treasury": 18575810,
+   "sell_phased": 45444950,
    "live_in": 8110290,
    "rent_out": 6388070,
    "live_then_rent": 6480820,
@@ -2420,6 +2492,7 @@
    "equity_return": 5.0,
    "sell_equities": 21825080,
    "sell_treasury": 24480880,
+   "sell_phased": 22123020,
    "live_in": 15107350,
    "rent_out": 12867130,
    "live_then_rent": 12959880,
@@ -2430,6 +2503,7 @@
    "equity_return": 7.0,
    "sell_equities": 38585540,
    "sell_treasury": 24480880,
+   "sell_phased": 36569050,
    "live_in": 15107350,
    "rent_out": 12867130,
    "live_then_rent": 12959880,
@@ -2440,6 +2514,7 @@
    "equity_return": 9.0,
    "sell_equities": 67496350,
    "sell_treasury": 24480880,
+   "sell_phased": 59891470,
    "live_in": 15107350,
    "rent_out": 12867130,
    "live_then_rent": 12959880,
@@ -2450,6 +2525,7 @@
    "equity_return": 5.0,
    "sell_equities": 28649650,
    "sell_treasury": 32135910,
+   "sell_phased": 29040760,
    "live_in": 28672410,
    "rent_out": 25760690,
    "live_then_rent": 25853440,
@@ -2460,6 +2536,7 @@
    "equity_return": 7.0,
    "sell_equities": 50651000,
    "sell_treasury": 32135910,
+   "sell_phased": 48003970,
    "live_in": 28672410,
    "rent_out": 25760690,
    "live_then_rent": 25853440,
@@ -2470,6 +2547,7 @@
    "equity_return": 9.0,
    "sell_equities": 88602050,
    "sell_treasury": 32135910,
+   "sell_phased": 78619160,
    "live_in": 28672410,
    "rent_out": 25760690,
    "live_then_rent": 25853440,
@@ -2480,7 +2558,7 @@
   "water": 1500,
   "electricity": -180,
   "insurance": 1500,
-  "maintenance": 15500,
+  "maintenance": 31000,
   "property_tax": 7360
  },
  "costs_b_now": {

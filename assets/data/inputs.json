@@ -105,13 +105,17 @@
     "verified": false
    },
    "maintenance_pct_owner_occupied": {
-    "value": 0.005,
-    "basis": "assumption",
+    "value": 0.01,
+    "low": 0.005,
+    "high": 0.02,
+    "basis": "Assumption band: about one percent of the home's value a year is the common planning rule of thumb; the model uses 1 percent at baseline with a half to two percent band. No official source publishes a maintenance rate for a specific home.",
     "verified": false
    },
    "maintenance_pct_rental": {
-    "value": 0.0075,
-    "basis": "assumption",
+    "value": 0.015,
+    "low": 0.01,
+    "high": 0.03,
+    "basis": "Assumption band: the owner states repairs run higher at the three-unit building than at the home; the model uses 1.5 percent of value at baseline with a one to three percent band. No official source publishes a maintenance rate for a specific building.",
     "verified": false
    }
   },
@@ -426,6 +430,20 @@
     "ssa_trustees",
     "fred_gs10"
    ]
+  },
+  "treasury_park_months": {
+   "low": 24,
+   "mid": 30,
+   "high": 36,
+   "basis": "Stated scenario for the phased-investing path: net sale proceeds are parked in Treasuries for 24 to 36 months after the inheritance before any equity purchase, so a 1929- or 2008-style entry does not hit the whole lump sum at once. A design choice, not an official figure.",
+   "src": []
+  },
+  "equity_phase_months": {
+   "low": 12,
+   "mid": 24,
+   "high": 36,
+   "basis": "Stated scenario: once the parking period ends, the Treasury balance is moved into equities in equal monthly slices over this many months. A design choice, not an official figure.",
+   "src": []
   },
   "prop19_cap_growth": {
    "baseline": 0.03,
