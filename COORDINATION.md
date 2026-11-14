@@ -2527,6 +2527,24 @@ Live-site checks against https://wingbangboozle1-lang.github.io/Tino3/ after the
 
 **Publication result:** the site at https://wingbangboozle1-lang.github.io/Tino3/ serves the merged edition as of this record; the board record itself ships in the follow-up pull request that contains this section.
 
+## Session `arena/bfb73d54-tino3` — brief completion: phased-investing test, timeline, glossary, what-if, attorney & CPA sheet (claimed 2026-11-14)
+
+*Branch note:* Arena fixes this session to `arena/bfb73d54-tino3`, based at `0cf046b` (PR #87 merge). The board was read first. **Correction, written at the merge:** this claim was wrong. Session `arena/63c55cc5-tino3` held open P-1 and P-2 claims and shipped them to `main` as PRs #89 and #90 (phased-investing test, `briefing.html`, `glossary.html`). Those two tasks are therefore **not repeated here**. Session `arena/2125ec01-tino3` T4 was also marked in progress and is not closed by its owner. This session keeps P-3 (timeline), P-4 (what-if), and the water/sewer privacy fix, which was urgent.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| P-1 Phased-investing test (park net proceeds in 3M–2Y Treasuries for 24–36 months, then phase into equities) against 1929-type and 2008-type entry; mixed half-now/half-phased path | in progress | `arena/bfb73d54-tino3` | `scripts/model.py` (new function), `assets/data/model.json` (regenerated), `scripts/build.py` (black-swan section) |
+| P-2 Deadlines timeline page | in progress | `arena/bfb73d54-tino3` | `scripts/build.py` (new page), `assets/sources.json` (append) |
+| P-3 Glossary page | in progress | `arena/bfb73d54-tino3` | `scripts/build.py` (new page) |
+| P-4 What-if controls (link-driven, no script; the verifier forbids `<script>`) and first-screen "what would change the answer" with reinvestment risk beside the headline | in progress | `arena/bfb73d54-tino3` | `scripts/model.py` (new grid), `scripts/build.py` (what-if page, index), `assets/style.css` |
+| P-5 One-page printable Attorney & CPA briefing sheet | in progress | `arena/bfb73d54-tino3` | `scripts/build.py` (new page), `assets/style.css` (print rules) |
+| P-6 Grouped menu, review-page irregularities for this session, board record, integration gates, PR to `main`, merge, Pages check | in progress | `arena/bfb73d54-tino3` | `scripts/build.py` (nav, review section), `COORDINATION.md` (this section), `README.md` |
+
+**Not done in this session, and why:**
+- *Scrubbing pre-rounding Git history.* Would require rewriting and force-pushing `main`, which breaks every existing clone and fork and cannot recall copies already downloaded. Not performed without the owner's explicit decision. Flagged for review.
+- *Re-researching home insurance quotes for either property.* No insurer, broker or quote tool is reachable from this sandbox, and the prior session published the official statewide CDI benchmark. The property-specific premium stays blank and flagged.
+- *ZIP codes 95014 and 94122 in the brief.* Kept out of every published page by the privacy rule already in force. They are not written to any file.
+
 ## Session `arena/63c55cc5-tino3` — phased-investing stress analysis and print-ready adviser brief · claimed 2026-11-14
 
 | Task | Status | Owner | File scope |
@@ -2558,3 +2576,12 @@ Scope note: this is the Arena-pinned branch. No second branch/worktree will be c
 - **Checks:** PR `Verify static site` passed. Post-merge runs all succeeded: `Verify static site` 43645904070, `Deploy GitHub Pages` 43645904068, and legacy `pages build and deployment` 43645903602.
 - **Pages:** GitHub Pages API reports `status: built`, source `main:/`, `build_type: legacy`, public URL `https://wingbangboozle1-lang.github.io/Tino3/`. Live fetches confirmed `briefing.html`, `glossary.html`, and `black-swan.html` serve the new content.
 - **Residual non-blocking notices:** CI reports upcoming Node.js 20 deprecation / `ubuntu-latest` image migration warnings; no build or deploy failures. The actual one-page paper pagination has not been rendered in a browser and remains a visual QA limitation, disclosed in this board and the PR.
+
+### Privacy record — `arena/bfb73d54-tino3`, 14 November 2026
+
+- **Leak:** the public edition on `main` (as of `1710658`) published a water utility's and a sewer district's web addresses on `property-a.html`, `sources.html` and `review.html`. Their names identified the area of Property A. The privacy scanner missed them because its place-name pattern required word boundaries, which URL fragments do not have, and the verifier allowlisted both domains.
+- **Fix in this branch:** the water and sewer tariff comparison is withheld; the Property A water cost row now cites an owner estimate with no source; four ledger entries (`sjw_tariff`, `sjwc_tariff`, `cusd_rates`, `cusd_minutes`) are removed (107 remain); the two domains are removed from the allowlist; the scanner gained a no-boundary pattern covering the area names; a flagged-review item records the withdrawal.
+- **Gates after the fix:** build, verify, privacy boundary, package site and legacy guard all exit 0. A case-insensitive search of every published HTML file for the area names returns nothing.
+- **Not repaired:** earlier commits and PR diffs still contain the links. Scrubbing history needs the owner's decision, as already flagged.
+- **Branch history:** this branch was merged with `origin/main` (not rebased) because `main` had moved through PRs #89 and #90. Conflicts were resolved in favour of `main`'s generated code and content, with this fix re-applied on top. Logged here because a plain `git pull --rebase` had earlier dropped a merge-commit branch's work.
+- **Outstanding on this branch:** P-3 (glossary is already on `main` from PR #89), P-4 (what-if and first-screen answer) and the timeline remain open, along with a visual check of the brief's print layout.

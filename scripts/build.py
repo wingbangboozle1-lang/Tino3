@@ -619,7 +619,7 @@ def page_property_a() -> str:
     cost_rows = [
         f"<td>Water</td><td>{m(A['annual_costs']['water']['low'])} to {m(A['annual_costs']['water']['high'])}</td><td>{m(A['annual_costs']['water']['mid'])}</td>"
         f'<td><span class="badge unverified">owner estimate</span></td>'
-        + src_cell(["sjw_tariff"], "Provider tariff, now read"),
+        + src_cell([], "Owner estimate, unverified"),
         f"<td>Electricity, net of solar export credit</td><td>{m(A['annual_costs']['electricity']['low'])} to {m(A['annual_costs']['electricity']['high'])}</td><td>{m(A['annual_costs']['electricity']['mid'])}</td>"
         f'<td><span class="badge unverified">owner estimate</span></td>'
         + src_cell(["cpuc_nem"], "Tariff rules"),
@@ -648,34 +648,15 @@ def page_property_a() -> str:
     sewer_fy2526 = 802.14
     sewer_fy2627 = sewer_fy2526 * 1.03   # the adopted 3% increase, minutes of 20 May 2026
 
-    tariff_rows = [
-        f"<td>Water service charge, 5/8 x 3/4-inch or 3/4-inch meter</td><td>{m(money10(SVC))} a month</td>"
-        + src_cell(["sjw_tariff"], "CPUC tariff, from 1 July 2026"),
-        f"<td>Derived water bill at 8 Ccf a month (about 6,000 gallons)</td><td>{m(money10(water_bill(8)))}</td>"
-        + src_cell(["sjw_tariff"], "Computed from the tariff"),
-        f"<td>Derived water bill at 12 Ccf a month (about 9,000 gallons)</td><td>{m(money10(water_bill(12)))}</td>"
-        + src_cell(["sjw_tariff"], "Computed from the tariff"),
-        f"<td>Derived water bill at 15 Ccf a month (about 11,000 gallons)</td><td>{m(money10(water_bill(15)))}</td>"
-        + src_cell(["sjw_tariff"], "Computed from the tariff"),
-        f"<td>Sewer service charge, single family, FY 2025-26</td><td>{m(money10(sewer_fy2526))} a year</td>"
-        + src_cell(["cusd_rates"], "District hearing notice"),
-        f"<td>Sewer rate increase adopted for FY 2026-27</td><td>3%, from 1 July 2026</td>"
-        + src_cell(["cusd_minutes"], "Board minutes, 20 May 2026"),
-        f"<td>Sewer service charge, single family, FY 2026-27, derived</td><td>{m(money10(sewer_fy2627))} a year</td>"
-        + src_cell(["cusd_minutes", "cusd_rates"], "Computed from the two official figures"),
-    ]
-    tariffs = table(
-        "Water and sewer: what the official tariffs say",
-        ["Item", "Amount", "Source"], tariff_rows,
-        note="Rounded to the nearest $10; the exact tariff amounts are on the linked official pages. "
-             "Usage is billed in three tiers per hundred cubic feet, the top tier roughly triple the "
-             "first; the exact tier amounts are on the linked tariff sheet. The provider's territory "
-             "covers the area where Property A stands. The owner's water estimate of $100 to $150 a "
-             "month implies usage at the low end of the derived range, and excludes the guest charges, "
-             "CPUC fees and utility users' taxes a real bill carries. Sewer was never supplied by the "
-             "owner; the district's published charges are shown as context, and the parcel's own "
-             "district, zone and charge must be read from its tax bill. Neither figure is added to the "
-             "model totals.")
+    # Water and sewer tariffs are withheld from the public edition for privacy:
+    # provider and district names, and their web addresses, would identify the area.
+    tariffs = (
+        '<section class="withheld"><h3>Water and sewer: withheld for privacy</h3>'
+        '<p>The official water and sewer tariffs for this property are not published here, because the '
+        "provider and district names and their web addresses would identify the area. The owner's water "
+        'estimate in the costs table above stays marked unverified. Confirm the provider and the charges '
+        "from the parcel's own bill.</p></section>"
+    )
 
     return (
         table("Property A at a glance",
@@ -2144,7 +2125,7 @@ def page_review() -> str:
          "Published by the City and County of San Francisco for fiscal year 2026-27",
          "None. This one is verified."),
         ("Property A water", f"{m(A['annual_costs']['water']['low'])} to {m(A['annual_costs']['water']['high'])} a year",
-         "Owner estimate. A CPUC-approved tariff for the area's water utility is now read and linked on the property page, and a discovery-path source is on the ledger; the provider printed on the parcel's own bill is still unconfirmed, and the owner's bills are unchecked against any tariff.",
+         "Owner estimate, unverified. The water and sewer tariff comparison is withheld from the public edition for privacy, and the provider printed on the parcel's own bill is unconfirmed.",
          "Confirm the provider on the bill, then compare twelve months of bills with the derived tariff range."),
         ("Property A electricity, net of solar", f"{m(A['annual_costs']['electricity']['low'])} to {m(A['annual_costs']['electricity']['high'])} a year",
          "Owner estimate", "Read twelve months of bills and the interconnection agreement."),
@@ -2177,7 +2158,7 @@ def page_review() -> str:
         "Both assessment rolls and tax bills": ["scc_ratebook", "sf_treas_rate", "boe_lta26002"],
         "Property A ad valorem rate": ["scc_ratebook"],
         "Property B ad valorem rate": ["sf_treas_rate"],
-        "Property A water": ["sjwc_tariff"],
+        "Property A water": [],
         "Property A electricity, net of solar": ["cpuc_nem"],
         "Property B water": ["sfpuc_rates"],
         "Property B electricity": [],
@@ -2256,6 +2237,9 @@ def page_review() -> str:
         ("Prior commits and pull-request diffs may contain finer figures",
          "Rounding to $10 applies to what this site publishes. It does not change what earlier commits contain.",
          "Older commits, pull-request diffs, forks and external copies are separate exposure surfaces. Nothing on this site can certify them erased."),
+        ("Property A water and sewer figures withdrawn for privacy",
+         "Earlier editions linked a water utility's and a sewer district's web addresses, whose names identified the area of Property A. They were visible on the public pages and are now withdrawn. The owner's water estimate stays in the costs table, marked unverified; the parcel's own bill is the source for the provider and the charges.",
+         "Earlier editions and their Git history still contain those links. The privacy scanner now checks web addresses for the area's names, so this cannot recur silently."),
         ("Pull request records",
          "PRs 62 and 70 were merged. PRs 65 and 66 recorded a live privacy-publication blocker on 12 November 2026; the blocker they describe, the legacy Pages route serving the whole repository, was closed by the restored configuration guard and audited live. Both were closed as superseded on 13 November 2026 with an explanatory comment, not silently.",
          "The coordination board records the full disposition. Nothing on this site depends on them."),
