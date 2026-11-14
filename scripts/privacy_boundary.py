@@ -36,6 +36,9 @@ FORBIDDEN = {
     "property level place name": re.compile(
         r"\b(REDACTED|REDACTED|Outer\s+Sunset|Los\s+Altos|REDACTED|Mountain\s+View|"
         r"REDACTED|Monte\s+Sereno|Los\s+Gatos|Inner\s+Sunset|REDACTED|Sunset\s+District)\b", re.I),
+    # No word boundary: a place name inside a web address (e.g. a district's domain) is still a leak.
+    "place name anywhere, including web addresses": re.compile(
+        r"(?i)(REDACTED|san[-_ ]?jose|REDACTED|REDACTED|los[-_ ]?altos|los[-_ ]?gatos|monte[-_ ]?sereno)"),
     "person name pattern": re.compile(r"\b(?:Mr|Mrs|Ms|Dr)\.?\s+[A-Z][a-z]+\b"),
 }
 
