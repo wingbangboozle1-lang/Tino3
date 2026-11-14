@@ -30,9 +30,9 @@ NAV_GROUPS = [
     ("Start here", ["index.html", "executive-summary.html", "decision.html", "briefing.html"]),
     ("The two properties", ["property-a.html", "property-b.html", "ownership-distinction.html"]),
     ("Money over time", ["costs.html", "projections.html", "taxes.html"]),
-    ("Rules and the estate", ["inheritance.html", "estate.html", "laws.html"]),
+    ("Rules and the estate", ["inheritance.html", "estate.html", "laws.html", "timeline.html"]),
     ("Black swan economics", ["black-swan.html", "economy.html"]),
-    ("Review before deciding", ["questions.html", "suggestions.html", "review.html"]),
+    ("Review before deciding", ["questions.html", "suggestions.html", "review.html", "briefing-sheet.html", "glossary.html"]),
     ("Evidence", ["glossary.html", "sources.html"]),
 ]
 PAGE_TITLES = {
@@ -54,7 +54,9 @@ PAGE_TITLES = {
     "questions.html": "Questions to answer before deciding",
     "suggestions.html": "Suggestions for review",
     "review.html": "Flagged for review and repository audit",
-    "glossary.html": "Glossary",
+    "briefing-sheet.html": "Attorney & CPA Briefing Sheet (printable)",
+    "glossary.html": "Glossary of terms",
+    "timeline.html": "Deadlines and key dates",
     "sources.html": "Source ledger",
 }
 
@@ -282,6 +284,8 @@ def page_index() -> str:
             "Per year, for 30 years, to match selling and investing at 7%"),
         kpi(m(p45["breakeven_rent_monthly"]), "Monthly rent needed to justify letting it",
             "In 2045 dollars, on zero rent credited to the letting paths"),
+        kpi(m(p45["paths"]["sell_then_phase"]["terminal"]), "Phased path: sell, park in Treasuries, then equities",
+            "24-36 months in short-term Treasuries after inheritance, then stocks - softens 1929/2008 crash entry"),
     ])
     gating = callout("flag", "One fact is assumed, not verified, and everything else depends on it", f"""
 <p>The Proposition 19 exclusion applies only where the transfer is between a parent and a child, or between a
@@ -304,7 +308,17 @@ question A-1</a> before relying on any number here. {slink('rtc63_2_eligibility'
         + callout("answer", "The one-line answer", f"""
 <p>Under every baseline this site can build, <strong>selling Property A soon after it is inherited beats living in it or letting it out</strong>, and it is not close. The reason is a one-off combination: the inheritance resets the income-tax basis to the value at death, so an immediate sale pays almost no capital gains tax, while the property tax assessment jumps to market value under Proposition 19. Waiting converts a tax-free asset into a taxed one and adds roughly {m(p45['bill_if_rent_year1'] - p45['bill_today_projected'])} a year of extra property tax if the home is let out.</p>
 <p>The break-even house growth needed to make keeping the home beat selling is <strong>{pc(p45['breakeven_house_growth'])} a year for thirty years</strong>. The verified house price index for this area compounded at 6.9% a year over the last fifty years and 3.3% a year over the last twenty. Read the <a href="decision.html">full decision</a>, then the <a href="black-swan.html">cases where this flips</a>.</p>
+<p class="reinvest"><strong>Reinvestment risk beside the headline.</strong> Selling and investing assumes the proceeds can be reinvested at the modelled equity return. Inheriting into a 1929- or 2008-style crash means buying equities at the top. The phased path on the black-swan page parks the proceeds in short-term Treasuries for 24-36 months, then moves them into stocks, which softens crash-entry risk - at the cost of missing out while equities rally.</p>
 """)
+        + callout("note", "What would change the answer", f"""\
+<p>The recommendation rests on a few things that could flip it:</p>
+<ul>
+<li><strong>The parent-child gate.</strong> If the transfer is not between a parent and a child (or a grandparent and a grandchild whose parent has died), there is no Proposition 19 exclusion: Property A is reassessed to full market value, every shelter figure here disappears, and selling gets stronger. Confirm the relationship against the trust document <a href="questions.html">(question A-1)</a>.</li>
+<li><strong>Rent.</strong> Both letting paths are credited with zero rent because no market rent has been supplied. If the market clears roughly {m(p45['breakeven_rent_monthly'])} a month ({m(p45['breakeven_rent_annual'])} a year in 2045 dollars), letting becomes competitive - about {pc(p45['breakeven_rent_annual'] / p45['value_at_death'] * 100, 1)} of value in gross rent, every year.</li>
+<li><strong>House growth.</strong> Keeping the home only wins if this one neighbourhood outgrows the whole stock market: the break-even is {pc(p45['breakeven_house_growth'])} a year for thirty years.</li>
+<li><strong>Estate size.</strong> If the inherited cash plus both properties push the estate above the federal exclusion, estate tax is due on the excess. The estate page works in anonymous scenario bands because the inherited cash amount is not published.</li>
+</ul>
+<p>The dashboard shows the baseline; the <a href="decision.html">decision page</a> prices every path, and the <a href="black-swan.html">black-swan page</a> prices the regimes where the answer flips.</p>""")
         + '<section class="card-grid">' + "".join(cards) + "</section>"
         + callout("method", "How to read this site", """
 <ol>
@@ -334,7 +348,9 @@ SUMMARIES = {
     "questions.html": "What is known, what is missing, and how to find it.",
     "suggestions.html": "A review queue of proposals. Nothing implemented yet.",
     "review.html": "Unverified figures, modelling caveats and the repository audit.",
+    "briefing-sheet.html": "A one-page printable brief for the attorney and the tax adviser.",
     "glossary.html": "Plain-language terms with official citations.",
+    "timeline.html": "The deadlines and key dates that shape the inheritance decision.",
     "sources.html": "Every official source used, with what it supports.",
 }
 
@@ -410,6 +426,7 @@ def page_decision() -> str:
     for p in MODEL["paths"]:
         for key, label in (("sell_equities", "Sell at inheritance, invest in equities"),
                            ("sell_treasury", "Sell at inheritance, reinvest at Treasuries"),
+                           ("sell_then_phase", "Sell at inheritance, park in short-term Treasuries for 30 months, then phase into equities"),
                            ("live_in", "Move in and hold for 30 years"),
                            ("live_then_rent", "Move in two years, then let it out"),
                            ("rent_out", "Let it out from the start")):
@@ -495,6 +512,34 @@ model rebuilt.</p>
             "The ones it loses repeat the 1970s or the 2021 to 2023 burst."),
     ]) + "</div>"
 
+    # ------------------------------------------------------------------ what-if map --
+    best_short = {
+        "sell_equities": "Sell\u2192equities",
+        "sell_treasury": "Sell\u2192Treasuries",
+        "sell_then_phase": "Sell\u2192phase",
+        "live_in": "Live in",
+        "rent_out": "Let out",
+        "live_then_rent": "Live\u2192rent",
+    }
+    eq_cols = [c["eq"] for c in MODEL["sensitivity_fine"][0]["cells"]]
+    eq_headers = [f"{float(eq):.0f}%" for eq in eq_cols]
+    what_rows = []
+    for r in MODEL["sensitivity_fine"]:
+        cells = [f"<td><strong>{float(r['g']):.0f}%</strong></td>"]
+        for c in r["cells"]:
+            label = best_short[c["best"]]
+            cls = "best" if c["best"].startswith("sell") else ""
+            cells.append(f"<td class=\"{cls}\" title=\"{esc(label)} wins\">{esc(label)}</td>")
+        what_rows.append("".join(cells))
+    whatif_map = table(
+        "What-if map: which path wins at each house-growth / equity-return combination (2045 inheritance)",
+        ["House growth"] + eq_headers, what_rows,
+        note="Each cell prices all six paths at that combination and names the winner. Sell\u2192phase is the "
+             "phased-investing path: sale proceeds park in short-term Treasuries for 24-36 months, then move into "
+             "equities. Cells where a sell path wins are shaded. All figures come from scripts/model.py; change "
+             "assets/data/inputs.json and rebuild to explore other assumptions. "
+             + method_cell("#method", "Model output"))
+
     return (
         eligibility_callout()
         + callout("recommend", "What this site recommends", f"""
@@ -561,6 +606,7 @@ or finding a tenant at an implausible rent.</p>""")
 PATH_LABELS = {
     "sell_equities": "Sell, invest in equities",
     "sell_treasury": "Sell, reinvest in Treasuries",
+    "sell_then_phase": "Sell, park in Treasuries, then phase into equities",
     "live_in": "Live in it",
     "live_then_rent": "Live in it, then let it",
     "rent_out": "Let it out",
@@ -1369,6 +1415,7 @@ def page_black_swan() -> str:
             f"<td><strong>{esc(rg['name'])}</strong><br><span class='muted'>{esc(rg['analogue'])}</span></td>"
             f"<td>{pc(rg['cpi'], 1)}</td><td>{pc(rg['house'], 1)}</td><td>{pc(rg['treasury'], 2)}</td>"
             f"<td>{m(run['terminal']['sell_equities'])}</td>"
+            f"<td>{m(run['terminal']['sell_then_phase'])}</td>"
             f"<td>{m(run['terminal']['live_in'])}</td>"
             f"<td>{m(run['terminal']['rent_out'])}</td>"
             f"<td>{m(run['bill_if_rent_year1'])}</td>"
@@ -1376,7 +1423,7 @@ def page_black_swan() -> str:
             + src_cell(rg["src"] if rg["src"] else [], "Official source" if rg["src"] else "None"))
     reg_table = table("Stress regimes applied to the 2045 inheritance, over a 30 year horizon",
                       ["Regime", "Inflation", "House prices", "Treasury yield",
-                       "Sell, equities", "Live in it", "Let it out",
+                       "Sell, equities", "Sell, park then equities", "Live in it", "Let it out",
                        "Tax bill if let out, year one", "Best path", "Source"], reg_rows,
                       note="The four historical regimes use averages computed directly from the verified "
                            "series listed in the source column. The last two are hypothetical stress cases "
@@ -2304,24 +2351,88 @@ Sources are cited only for what they actually state.</p>""")
     )
 
 
-# ---------------------------------------------------------------- glossary --
+# ------------------------------------------------------------------ timeline --
+def page_timeline() -> str:
+    rows = []
+    def row(cells, sources):
+        rows.append(cells + src_cell(sources, "Official source"))
+    row("<td>The settlor dies; the revocable trust becomes irrevocable</td>\n"
+        "<td>Trustee notifies heirs and beneficiaries of the trust becoming irrevocable; timing and service rules are set by statute.</td>\n"
+        "<td>Both properties; the trust terms decide who receives Property A and when.</td>",
+        ["prob16061_7"])
+    row("<td>Transfer of Property A by reason of death, in trust</td>\n"
+        "<td>Exempt from documentary transfer tax (outright or in trust). Claim the exemption at recording; no city transfer tax applies to Property A.</td>\n"
+        "<td>Property A (REDACTED County).</td>",
+        ["rtc11930", "scc_recorder", "cnty_a_recorder"])
+    row("<td>Within one year of the transfer</td>\n"
+        "<td>File the homeowners' exemption claim so the Proposition 19 parent-child exclusion can apply.</td>\n"
+        "<td>Property A.</td>",
+        ["rtc63_2", "boe_prop19"])
+    row("<td>Within three years of the transfer</td>\n"
+        "<td>File the Proposition 19 intergenerational exclusion claim (the exclusion is the reason the reassessment can stay near the prior taxable value plus the biennial shelter amount).</td>\n"
+        "<td>Property A.</td>",
+        ["boe_prop19", "rtc63_2"])
+    row("<td>Change of ownership</td>\n"
+        "<td>If the parent-child gate is not met, Property A is reassessed to full market value under Proposition 13; the fixed annual inflation cap still applies from the new base year.</td>\n"
+        "<td>Property A.</td>",
+        ["rtc51", "boe_pub29", "scc_ratebook"])
+    row("<td>Nine months after the date of death</td>\n"
+        "<td>Federal estate tax return (Form 706) is due, and that is when the portability election must be made, if the gross estate is above the filing threshold.</td>\n"
+        "<td>The whole estate (inherited cash plus both properties), modelled in anonymous bands.</td>",
+        ["irs_i706", "irs_estate"])
+    row("<td>Every year, two instalments</td>\n"
+        "<td>Property tax is payable; the first instalment is delinquent after 10 December and the second after 10 April.</td>\n"
+        "<td>Both properties, once owned.</td>",
+        ["cnty_a_rates"])
+    return (
+        privacy_banner()
+        + eligibility_callout()
+        + "<p>Key dates that shape the inheritance decision, before the transfer and after it. All figures are rounded to the nearest $10; all dates are stated rules to be confirmed against the trust document and the county recorder at the time.</p>"
+        + table("Deadlines and key dates", ["When", "What happens", "Applies to", "Source"], rows,
+              note="These are stated deadlines from the linked statutes and county pages. The trust document, the assessor and the recorder control the actual dates for this parcel; confirm each one before relying on it.")
+        + callout("answer", "Which deadlines can move the answer",
+"""<p>The three deadlines that can change the recommendation are: (1) whether the parent-child relationship is in place before the transfer, because without it the Proposition 19 shelter disappears; (2) the one-year homeowners' exemption and three-year exclusion-claim windows, because missing them costs the shelter; and (3) the nine-month estate-tax return, because a late return loses the portability election. The estate page works entirely in anonymous scenario bands because the inherited cash amount is not published.</p>""")
+    )
+
+
+# ------------------------------------------------------------------- glossary --
 def page_glossary() -> str:
     terms = [
-        ("Assessed value", "The value on the property-tax roll used to calculate ad valorem property tax; it can differ from market value and follows California reassessment limits and exceptions.", ["boe_pub29", "rtc51"]),
-        ("Basis step-up", "For many inherited assets, basis is generally reset to fair market value at death; exceptions and trust/entity ownership can change the result, so have the CPA confirm the particular asset.", ["irs_basis", "irs_rr2023_2"]),
+        ("Assessed value", "The value the county assessor places on the property for tax bills. Under Proposition 13 it can rise only with inflation (capped at 2% a year) until a change of ownership, when it is reset to market value.",
+         ["boe_pub29", "rtc51"]),
+        ("Base year value", "The assessed value assigned when the property was acquired or built; the starting point for the 2% annual inflation cap.", ["boe_pub29"]),
+        ("Basis step-up", "When someone inherits an asset, its income-tax cost basis is reset to its value at the date of death. A sale soon after inheritance therefore produces little or no capital gains tax.", ["irs_basis"]),
         ("Change in ownership", "A transfer that generally triggers property-tax reassessment unless a statutory exclusion applies; inheritance alone does not establish eligibility for Proposition 19 relief.", ["rtc63_2_eligibility", "boe_pub800_9"]),
+        ("Documentary transfer tax", "A county tax on recording a deed that changes ownership. Transfers by reason of death or gift, outright or in trust, are exempt.", ["rtc11930", "rtc11911"]),
         ("Estate tax", "Federal transfer tax calculated on a decedent's taxable estate. It is distinct from income tax owed by a beneficiary and from a state inheritance tax.", ["irs_estate", "irs_i706"]),
+        ("Estate tax exclusion", "The amount of an estate that can pass free of federal estate tax. California has no estate tax. The 2026 figure is modelled in scenario bands on the estate page.", ["irs_estate", "irs_2027", "sco_estate", "ftb_inheritance"]),
         ("Fair market value", "A valuation concept used for federal basis purposes. The date-of-death value should be substantiated by an appropriate appraisal or other acceptable evidence.", ["irs_basis"]),
-        ("Proposition 19 parent-child exclusion", "A conditional California change-in-ownership exclusion, limited by statute and generally requiring the eligible transferee to use the transferred home as a principal residence and file a claim.", ["rtc63_2_eligibility", "boe_prop19"]),
-        ("Reinvestment risk", "The risk that short-term securities mature and proceeds must be reinvested at a lower available yield; a Treasury yield observed today is not a promise of the yield available years later.", ["treasury_cmt"]),
-        ("Depreciation recapture", "On sale of rental real estate, prior depreciation can affect the amount and character of taxable gain; exact treatment depends on the tax record and sale facts.", ["irs_p527", "irs_tc559"]),
+        ("Section 121 exclusion", "Up to $250,000 ($500,000 for a couple) of gain on the sale of a principal residence can be excluded from federal income tax, subject to ownership and use tests.", ["irs_p523"]),
+        ("Depreciation recapture", "Depreciation claimed while a property was rented is taxed back when it is sold, at up to 25% federally plus state tax.", ["irs_tc409", "ftb_cg"]),
+        ("Net investment income tax (NIIT)", "A 3.8% federal tax on investment income for higher earners, layered on top of capital gains tax.", ["irs_tc559"]),
         ("Portability", "A surviving spouse may be able to use a deceased spouse's unused federal estate-tax exclusion if the required estate-tax return is timely and correctly filed.", ["irs_estate", "irs_i706"]),
+        ("Proposition 13", "California's rule that property tax is 1% of assessed value plus voter-approved bonds, with assessed value rising no more than 2% a year until ownership changes.", ["boe_pub29", "rtc51"]),
+        ("Proposition 19", "The rule that the parent-child property-tax exclusion now applies only when the child makes the inherited home their principal residence, and shelters only value above the prior taxable value plus a biennial adjustment amount.", ["rtc63_2", "boe_prop19", "boe_lta25009"]),
+        ("Proposition 19 parent-child exclusion", "A conditional California change-in-ownership exclusion, limited by statute and generally requiring the eligible transferee to use the transferred home as a principal residence and file a claim.", ["rtc63_2_eligibility", "boe_prop19"]),
+        ("Reinvestment risk", "The risk that sale proceeds must be reinvested at lower returns than expected - for example, inheriting just before a stock-market crash and buying equities at the top. The phased-investing path on the black-swan page tests parking proceeds in short-term Treasuries for 24-36 months before buying stocks.", ["fred_gs10"]),
+        ("Phased investing", "Selling the inherited home, holding the proceeds in 3-month to 2-year Treasury bills for 24-36 months, then moving them into equities. It softens the risk of entering the stock market at a 1929- or 2008-style peak.", ["fred_gs10"]),
+        ("Break-even", "The rent, return or house-growth rate at which one path ties another. Below it, selling and investing wins; above it, keeping the home can win.", []),
+        ("Horizon", "The 30 years after the inheritance over which each path is valued.", []),
+        ("Outflow", "The total property tax and carrying cost paid over the horizon on a path (rental paths also credit rent received).", []),
     ]
-    rows = [f"<td><strong>{esc(term)}</strong></td><td>{esc(definition)}</td>" + src_cell(ids)
-            for term, definition, ids in terms]
-    return callout("note", "Use this as a reading aid", """
-<p>These short definitions are not legal or tax advice. The linked law or agency guidance controls, and the rule in force at the actual transfer date must be checked again. Use the <a href="questions.html">question register</a> and <a href="review.html">Flagged for Review</a> page for case-specific unknowns.</p>""") + table(
-        "Terms used in the decision pages", ["Term", "Plain-language meaning", "Official source"], rows)
+    rows = []
+    for term, definition, srcs in terms:
+        if srcs:
+            links = "<br>".join(slink(s) for s in srcs)
+        else:
+            links = '<span class="blank">plain-language term; not from an official source</span> <a class="src" href="review.html#register">Logged on the register</a>'
+        src_td = '<td class="src-cell">' + links + '</td>'
+        rows.append(f"<td><strong>{esc(term)}</strong></td><td>{esc(definition)}</td>" + src_td)
+    return (
+        privacy_banner()
+        + table("Glossary of terms", ["Term", "Plain-language meaning", "Source"], rows,
+              note="Plain-language definitions, not legal or tax definitions. Where a term is anchored to an official source it is linked; terms marked " + chr(34) + "plain-language term" + chr(34) + " are stated for readability and are not cited to a statute.")
+    )
 
 
 # -------------------------------------------------- adviser briefing sheet --
@@ -2364,6 +2475,24 @@ def page_briefing() -> str:
     return summary
 
 
+# ------------------------------------------------------------------- briefing --
+def page_briefing_sheet() -> str:
+    rows = [
+        f"<td><strong>Client matter</strong></td><td>Anonymised inheritance decision: Property A (home to be inherited through a trust, planned 2040-2050) versus Property B (three-unit rental building already owned by the heir). <a class=\"src\" href=\"review.html#register\">Follow up on the register</a></td>",
+        f"<td><strong>Estimated values (Nov 2026)</strong></td><td>Property A {m(A['estimated_market_value_2026'])} (owner estimate, unverified). Property B {m(B['estimated_market_value_2026'])} (owner estimate, unverified). Neither address nor parcel is published. <a class=\"src\" href=\"review.html#register\">Follow up on the register</a></td>",
+        f"<td><strong>First gate to confirm</strong></td><td>Is the transfer between a parent and a child (or grandparent and grandchild whose parent has died)? Without it there is no Proposition 19 exclusion: Property A is reassessed to full market value and every shelter figure here disappears. The trust document settles it. {slink('rtc63_2_eligibility')} <a class=\"src\" href=\"review.html#register\">Follow up on the register</a></td>",
+        f"<td><strong>Next step</strong></td><td>A California estate attorney and a CPA should review the trust document, the deed, the tax bill and the county records before anything is implemented. Use the deadlines timeline page and the questions page as the checklist. <a class=\"src\" href=\"review.html#register\">Follow up on the register</a></td>",
+    ]
+    return (
+        privacy_banner()
+        + callout("note", "Attorney & CPA Briefing Sheet - printable one page", """
+<p>Print this page (Ctrl+P / Cmd+P). It contains no names, addresses, parcel numbers, ZIP codes, trust terms, beneficiary details, account numbers or unrounded owner figures. Every dollar is rounded to the nearest $10. It is a briefing aid, not legal or tax advice.</p>""")
+        + table("Briefing sheet", ["Item", "What to confirm"], rows,
+              note="The full figures, assumptions and source links are on the decision, black-swan, estate and sources pages. Nothing on this page substitutes for a review of the trust document, the deed, the tax bill and the county records by a California estate attorney and a CPA.")
+    )
+
+
+
 PAGE_BUILDERS = {
     "index.html": (page_index, "Two California properties, one decision. Every figure rounded to the nearest $10."),
     "executive-summary.html": (page_executive_summary,
@@ -2384,7 +2513,9 @@ PAGE_BUILDERS = {
     "questions.html": (page_questions, "What is known, what is missing, and how to find it."),
     "suggestions.html": (page_suggestions, "A review queue of proposals. Nothing implemented yet."),
     "review.html": (page_review, "Unverified figures, modelling caveats and the repository audit."),
-    "glossary.html": (page_glossary, "Plain-language definitions with official source links."),
+    "briefing-sheet.html": (page_briefing_sheet, "A one-page printable brief for the attorney and the tax adviser."),
+    "glossary.html": (page_glossary, "Plain-language definitions of the terms used on this site."),
+    "timeline.html": (page_timeline, "The deadlines and key dates that shape the inheritance decision."),
     "sources.html": (page_sources, "Every official source used, with what it supports."),
 }
 
