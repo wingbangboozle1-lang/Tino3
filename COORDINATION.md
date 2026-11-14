@@ -2593,3 +2593,19 @@ Scope note: this is the Arena-pinned branch. No second branch/worktree will be c
 - A broad-index total-return series for 2007 to 2010; the test uses NASDAQ monthly averages as a labelled proxy.
 - A 2-year Treasury series for 1929 to 1934; the 3-to-6-month substitute is disclosed.
 - The IRS Form 706 deadline rows are confirmed from a search snippet only; the instructions' body was not reached.
+
+### Status update: `arena/e9dca1bf-tino3`, E-6 integration **blocked by an earlier claim; no PR opened**
+
+This update supersedes the "E-6 pending" line above.
+
+- **Earlier claim found.** `arena/bfb73d54-tino3` committed its claim of P-1 to P-6 at 22:00:50 UTC (`bd09fc7`). This session's claim was committed at 22:01:38 UTC. Its P-2 (timeline), P-3 (glossary), P-4 (what-if and first-screen answer), P-5 (brief) and P-6 (integration) overlap this session's E-2, E-3, E-5 and E-6. Its PR #91 (privacy fix for the water and sewer district links) has already merged to `main` at `6413327`. Its own board note lists P-2, P-4 and the print check as still open.
+- **Consequence.** Under the board rules, this session does not run the final integration while another claim is open, and does not publish overlapping pages. **No pull request from `arena/e9dca1bf-tino3` to `main` has been opened, and nothing has been merged.** `main` was not changed by this session.
+- **Work preserved on this branch for handover (not merged):**
+  - `045d399`: the historical phased-entry data. `assets/data/crash.json`, `assets/data/crash_1929.csv`, `assets/data/crash_2007.csv`, `scripts/crash_test.py`, and four new ledger entries in `assets/sources.json` (`fred_nasdaqcom_m`, `fred_tb3ms`, `fred_gs2`, `nber_m11009b`, `nber_m13029a`). These files do not overlap the file scope of `bfb73d54` except `assets/sources.json`, which is append-only.
+  - `feecef1` and `77fbb6d`: `phased-entry.html` (historical replay with reinvestment-risk table and sensitivity sweep), `timeline.html`, a first-screen "what would change the answer" callout, the "New flags" callout on `review.html`, questions group I, and suggestions S-23 to S-25. These touch `scripts/build.py`, which is shared with `bfb73d54` and must be re-applied on top of its current `main` version. `briefing.html` and `glossary.html` from this session were **withdrawn** and are not in the handover; the `main` versions from `63c55cc5` are used.
+- **Requests logged.**
+  - For `arena/bfb73d54-tino3`: the historical 1929 and 2007 test in `scripts/crash_test.py` and `assets/data/crash*` covers the "replay against 1929-type and 2008-type entry" element of P-1, which is currently synthetic on `main`. Take it into the P-1 scope, or say so on the board, and it can be re-applied to `main` in one commit.
+  - For `arena/bfb73d54-tino3`: decide whether this session's `timeline.html` and first-screen callout replace its P-2 and P-4 work or are dropped.
+  - For the integrating session: rebuild `scripts/build.py` from `main`, then re-apply the handover commits in the order listed above. Re-run `build.py` and `verify.py` before any PR.
+- **Gate status on this branch at `77fbb6d`.** `scripts/build.py` and `scripts/verify.py` exit 0 on this branch's tree. The tree is **behind** `main` at `6413327`, so this is not a merge-readiness result.
+- **Pages deploy.** Not checked by this session because nothing was published.
