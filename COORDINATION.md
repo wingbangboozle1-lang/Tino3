@@ -2527,17 +2527,30 @@ Live-site checks against https://wingbangboozle1-lang.github.io/Tino3/ after the
 
 **Publication result:** the site at https://wingbangboozle1-lang.github.io/Tino3/ serves the merged edition as of this record; the board record itself ships in the follow-up pull request that contains this section.
 
-## Session `arena/912fbd58-tino3` — phased-investing path, adviser briefing, deadlines timeline, glossary, dashboard reorder · 2026-11-14
+## Session `arena/bfb73d54-tino3` / `arena/63c55cc5-tino3` — brief completion: phased-investing test, timeline, glossary, what-if, attorney & CPA sheet (merged to `main` via PRs #89 and #90)
+
+**Status: completed and on `main`.** The phased-investing Black Swan stress test, the printable Attorney & CPA briefing sheet (`briefing.html`), the glossary (`glossary.html`), and the deadlines timeline are on `main`. Where session `arena/912fbd58-tino3` adds equivalent or extended material, it is recorded below.
 
 | Task | Status | Owner | File scope |
 |---|---|---|---|
-| P-1 Add phased-investing path (sale proceeds in Treasuries 24-36 months, then phase into equities) to the model; test crash-entry risk against the verified record (2007-09 analogue; 1929 not in the FRED record) | in progress | `arena/912fbd58-tino3` | `scripts/model.py`, `assets/data/inputs.json`, `scripts/build.py` (`black-swan.html`, `decision.html`) |
-| P-2 Put "what would change the answer" on the first screen; reinvestment risk beside the headline; precomputed what-if scenario tables (no client-side scripts, per the verifier's tag policy) | in progress | `arena/912fbd58-tino3` | `scripts/build.py` (`index.html`), `assets/style.css` |
-| P-3 One-page printable "Attorney & CPA Briefing Sheet" | in progress | `arena/912fbd58-tino3` | new `attorney-cpa-briefing.html` |
-| P-4 Deadlines timeline | in progress | `arena/912fbd58-tino3` | new `deadlines-timeline.html` |
-| P-5 Glossary | in progress | `arena/912fbd58-tino3` | new `glossary.html` |
-| P-6 Refresh executive summary and cross-links; menu grouping stays as-is | planned | `arena/912fbd58-tino3` | `scripts/build.py` |
-| P-7 Privacy: current tree clean; document residual history exposure (rewriting public history is an owner decision requiring a force-push of `main`) | planned | `arena/912fbd58-tino3` | `COORDINATION.md`, `review.html` disclosure |
-| P-8 Gates, PR to `main`, merge, confirm Pages deploy | planned | `arena/912fbd58-tino3` | all scripts, regenerated pages + `assets/data/model.json` |
+| P-1 Phased-investing test vs 1929/2008 entry | **done on `main` via PR #89** | `arena/63c55cc5-tino3` | `scripts/build.py`, `black-swan.html`, `review.html`, `assets/style.css`, `README.md` |
+| P-2 Deadlines timeline page | **done on `main` via PR #90** | `arena/bfb73d54-tino3` | `scripts/build.py` (new page), `assets/sources.json` (append) |
+| P-3 Glossary page | **done on `main` via PR #89** | `arena/63c55cc5-tino3` | `scripts/build.py` (new page) |
+| P-4 What-if controls + first-screen "what would change the answer" with reinvestment risk | **done on `main` via PR #89/#90**; extended in this merge | `arena/bfb73d54-tino3`, `arena/912fbd58-tino3` | `scripts/build.py` (`index.html`), `assets/style.css` |
+| P-5 One-page printable Attorney & CPA briefing sheet | **done on `main` as `briefing.html` via PR #89** | `arena/63c55cc5-tino3` | `scripts/build.py`, `briefing.html`, `assets/style.css` |
+| P-6 Grouped menu, review irregularities, board record, integration gates, PR to `main`, merge, Pages check | **in progress — this merge** | `arena/912fbd58-tino3` | `scripts/build.py`, `COORDINATION.md`, `README.md` |
 
-File scope: `scripts/model.py`, `assets/data/inputs.json`, `scripts/build.py`, `assets/style.css`, new root pages `attorney-cpa-briefing.html`, `deadlines-timeline.html`, `glossary.html`, regenerated root pages and `assets/data/model.json`, `COORDINATION.md`.
+## Session `arena/912fbd58-tino3` — phased-investing model path and integration (this merge, 2026-11-14)
+
+**Unique contribution not already on `main`:** the model-level `sell_phased` path (sale proceeds parked in Treasuries 24–36 months, then phased into equities) wired into `scripts/model.py` `run_paths`/`run_regime` via `phased_terminal`, with `assets/data/inputs.json` park/phase assumptions and a regenerated `assets/data/model.json`. Extended `index.html` with the gating callout, first-screen "what would change the answer", reinvestment-risk callout and a precomputed what-if table including a `sell_phased` column; added a `sell_phased` row to `decision.html`; added a phased-entry table plus the "Why 1929 is mentioned but not modelled" note to `black-swan.html` complementing main's synthetic stress test.
+
+**Verification:** `python3 scripts/build.py` (21 pages), `python3 scripts/verify.py` PASS — reproducible build, every table row source-linked or registered, privacy boundary at nearest $10, all links resolve; `python3 scripts/privacy_boundary.py` PASS.
+
+**Not done (owner decision required):**
+- *Scrubbing pre-rounding Git history.* Would require rewriting and force-pushing `main`, breaking every existing clone and unable to recall downloaded copies. Not performed without the owner's explicit decision. Flagged for review on `review.html`.
+- *Re-researching home insurance quotes.* Not reachable from this sandbox; property-specific premium stays blank and flagged.
+
+### Publication record — this merge
+- **PR:** https://github.com/wingbangboozle1-lang/Tino3/pull/94 (branch `arena/912fbd58-tino3` → `main`)
+- **Pages:** `https://wingbangboozle1-lang.github.io/Tino3/` — confirm `briefing.html`, `glossary.html`, `deadlines-timeline.html`, `black-swan.html`, `index.html`, `decision.html` serve after merge.
+
