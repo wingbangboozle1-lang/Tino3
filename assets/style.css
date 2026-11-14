@@ -196,6 +196,9 @@ main h3 { font-size: 16px; margin: 20px 0 6px; }
   border-left-color: var(--accent);
   background: #f7fbff;
 }
+.callout.reinvest { border-left-color: var(--warn); background: #fffaf2; }
+.callout.reinvest p { font-size: 14px; }
+.reinvest strong { color: var(--warn); }
 
 /* Tables */
 .table-wrap {
@@ -308,7 +311,7 @@ code {
 }
 
 @media print {
-  .site-nav, .skip { display: none; }
+  .site-nav, .skip, .method, .page-footer { display: none; }
   .layout { grid-template-columns: minmax(0, 1fr); }
   .table-wrap { break-inside: avoid; }
   body { background: #ffffff; color: #000000; font-size: 12.5px; line-height: 1.45; }
@@ -330,6 +333,7 @@ code {
   .no-print, .nav-group, .card-grid { display: none; }
   .briefing-head { border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 14px; }
   .briefing-head h1 { font-size: 19px; margin: 0 0 4px; }
+  @page { size: letter; margin: 14mm 16mm; }
 }
 
 /* The one-page attorney/CPA export. Links remain visible in print; all identity fields are placeholders. */
