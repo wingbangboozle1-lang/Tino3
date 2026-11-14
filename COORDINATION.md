@@ -2526,3 +2526,18 @@ Live-site checks against https://wingbangboozle1-lang.github.io/Tino3/ after the
 - The branch was then pushed with `--force-with-lease` because an earlier `git pull --rebase` failure had been masked by a pipeline and the un-rebased tip (`05b17a9`) still sat on the remote; `--force-with-lease` replaced it with the rebased history (`7e3548b`). Logged here because a plain push was rejected as non-fast-forward.
 
 **Publication result:** the site at https://wingbangboozle1-lang.github.io/Tino3/ serves the merged edition as of this record; the board record itself ships in the follow-up pull request that contains this section.
+
+## Session `arena/912fbd58-tino3` — phased-investing path, adviser briefing, deadlines timeline, glossary, dashboard reorder · 2026-11-14
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| P-1 Add phased-investing path (sale proceeds in Treasuries 24-36 months, then phase into equities) to the model; test crash-entry risk against the verified record (2007-09 analogue; 1929 not in the FRED record) | in progress | `arena/912fbd58-tino3` | `scripts/model.py`, `assets/data/inputs.json`, `scripts/build.py` (`black-swan.html`, `decision.html`) |
+| P-2 Put "what would change the answer" on the first screen; reinvestment risk beside the headline; precomputed what-if scenario tables (no client-side scripts, per the verifier's tag policy) | in progress | `arena/912fbd58-tino3` | `scripts/build.py` (`index.html`), `assets/style.css` |
+| P-3 One-page printable "Attorney & CPA Briefing Sheet" | in progress | `arena/912fbd58-tino3` | new `attorney-cpa-briefing.html` |
+| P-4 Deadlines timeline | in progress | `arena/912fbd58-tino3` | new `deadlines-timeline.html` |
+| P-5 Glossary | in progress | `arena/912fbd58-tino3` | new `glossary.html` |
+| P-6 Refresh executive summary and cross-links; menu grouping stays as-is | planned | `arena/912fbd58-tino3` | `scripts/build.py` |
+| P-7 Privacy: current tree clean; document residual history exposure (rewriting public history is an owner decision requiring a force-push of `main`) | planned | `arena/912fbd58-tino3` | `COORDINATION.md`, `review.html` disclosure |
+| P-8 Gates, PR to `main`, merge, confirm Pages deploy | planned | `arena/912fbd58-tino3` | all scripts, regenerated pages + `assets/data/model.json` |
+
+File scope: `scripts/model.py`, `assets/data/inputs.json`, `scripts/build.py`, `assets/style.css`, new root pages `attorney-cpa-briefing.html`, `deadlines-timeline.html`, `glossary.html`, regenerated root pages and `assets/data/model.json`, `COORDINATION.md`.
