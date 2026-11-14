@@ -2610,3 +2610,21 @@ Scope note: this is the Arena-pinned branch. No second branch/worktree will be c
 - **Not repaired:** earlier commits and PR diffs still contain the links. Scrubbing history needs the owner's decision, as already flagged.
 - **Branch history:** this branch was merged with `origin/main` (not rebased) because `main` had moved through PRs #89 and #90. Conflicts were resolved in favour of `main`'s generated code and content, with this fix re-applied on top. Logged here because a plain `git pull --rebase` had earlier dropped a merge-commit branch's work.
 - **Outstanding on this branch:** P-3 (glossary is already on `main` from PR #89), P-4 (what-if and first-screen answer) and the timeline remain open, along with a visual check of the brief's print layout.
+
+## Session `arena/e0151d56-tino3` — takeover of open items P-2 (timeline) and P-4 (what-if, first screen), model correction, privacy scrub of this board · claimed 2026-11-14
+
+*Branch note:* Arena pins this session to `arena/e0151d56-tino3`, fast-forwarded to `main` at `98a74f5` (PR #93) before any edit. No other branch is created, switched to or pushed.
+
+*Handoff:* `arena/bfb73d54-tino3` left P-2 (deadlines timeline) and P-4 (what-if controls, first-screen "what would change the answer", reinvestment risk beside the headline) open after its last commit (PR #91). `arena/11d77408-tino3` marked F-3 and F-5 "done" by pointing to other pages. Re-reading the rendered `main` on 14 November 2026 shows neither a timeline page, a what-if page, nor a first-screen answer block on `index.html`; `what would change` appears only on the executive summary. Both are claimed here as takeovers, and the earlier claims are withdrawn as not delivered.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| H-1 Model correction: the living, letting and mixed paths report carrying tax and running costs but never deduct them from their terminal values, while the break-even rent already deducts them. Deduct the compounded future value of those outflows from those paths, so every break-even on the site uses one consistent definition. | in progress | `arena/e0151d56-tino3` | `scripts/model.py`, `assets/data/model.json` (regenerated), `scripts/build.py` (captions and method text) |
+| H-2 Deadlines as a timeline: new `timeline.html` (event-based and calendar deadlines, each with an official source link) | in progress | `arena/e0151d56-tino3` | `scripts/build.py` (new page, nav), `assets/style.css`, `assets/sources.json` (append) |
+| H-3 What-if controls: new `what-if.html`. No script (the verifier forbids `<script>`); precomputed one-control-at-a-time grid built from the model, so every value is traceable | in progress | `arena/e0151d56-tino3` | `scripts/build.py`, `scripts/model.py` (grid function), `assets/style.css` |
+| H-4 First screen: "What would change the answer" block and reinvestment risk beside the headline on `index.html` | in progress | `arena/e0151d56-tino3` | `scripts/build.py` (`page_index`) |
+| H-5 Trust step 5: RTC 480(b) sets 150 days, not an unspecified deadline, for a change in ownership statement on a transfer by reason of death through a trust. Correct the step and add it to the timeline. | in progress | `arena/e0151d56-tino3` | `scripts/build.py` (`page_inheritance`), `assets/sources.json` |
+| H-6 Privacy scrub of this board's current text: remove the water utility and sanitary-district names, their web addresses, the retired page path and the two ZIP codes. Older history is not changed (see the owner decision in the earlier record). | in progress | `arena/e0151d56-tino3` | `COORDINATION.md` (this section and the redaction of earlier text only) |
+| H-7 Gates, pull request to `main`, merge without waiting, Pages check, board record | in progress | `arena/e0151d56-tino3` | this section, `README.md` (page map and counts), `EXECUTIVE_SUMMARY.md` (generated) |
+
+Not in scope and not touched: `scripts/economy.py`, `assets/data/economy.json`, `assets/data/inputs.json` (owner inputs), and all other sessions' sections.
