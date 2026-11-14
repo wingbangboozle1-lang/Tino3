@@ -2663,7 +2663,7 @@ Not in scope and not touched: `scripts/economy.py`, `assets/data/economy.json`, 
 |---|---|---|---|
 | I-1 Read-only integration audit of the current public edition and overlapping PRs; identify method, duplication, source, and privacy risks without editing feature files | done — findings recorded below; no feature files changed | `arena/1663e879-tino3` | `COORDINATION.md` (this section only) |
 
-Scope note: PRs #92 and #93 had merged when the audit began; PR #94 was closed without merge. PRs #95 and #96 then merged while PR #97 was being prepared. Their feature files were not edited by this session; the audit branch was merged forward to include their current-main changes. This remains a read-only feature audit apart from this coordination entry; the only external action was a scope warning on PR #88 while it was open, after which its owner closed it unmerged as superseded. The repository is public, so this section does not repeat property-specific figures, identifiers, or place names.
+Scope note: PRs #92 and #93 had merged when the audit began; PR #94 was closed without merge. PRs #95 and #96 then merged while PR #97 was being prepared. Their feature files were not edited by this session; the audit branch was merged forward to include their current-main changes and resolve PR #97's conflict. The PR diff remains `COORDINATION.md` only; no feature files or public deployment were changed. External follow-up consisted of a scope warning on PR #88 while it was open, after which its owner closed it unmerged as superseded, and the documentation-only update to PR #97. The repository is public, so this section does not repeat property-specific figures, identifiers, or place names.
 
 ### I-1 results — 14 November 2026
 
