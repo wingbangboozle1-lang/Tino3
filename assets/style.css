@@ -312,3 +312,39 @@ code {
   .layout { grid-template-columns: minmax(0, 1fr); }
   .table-wrap { break-inside: avoid; }
 }
+
+/* The one-page attorney/CPA export. Links remain visible in print; all identity fields are placeholders. */
+.brief-toolbar { padding: 8px 12px; border: 1px solid var(--line); background: #f7fbff; border-radius: 6px; }
+.brief-confidential { font-size: 13px; border-bottom: 2px solid var(--ink); padding-bottom: 5px; }
+.brief-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 18px; }
+.brief-grid section { break-inside: avoid; }
+.brief-grid h2 { margin: 10px 0 4px; font-size: 15px; }
+.brief-grid p, .brief-grid li { font-size: 12.5px; line-height: 1.38; }
+.brief-grid ol, .brief-grid ul { padding-left: 18px; margin: 4px 0; }
+.brief-footer { font-size: 11px; margin-top: 8px; border-top: 1px solid var(--line); padding-top: 5px; }
+
+@page { size: letter; margin: 0.38in; }
+@media print {
+  body:has(.print-brief) { background: #fff; font-size: 9pt; line-height: 1.25; }
+  body:has(.print-brief) .site-header,
+  body:has(.print-brief) .site-nav,
+  body:has(.print-brief) .skip,
+  body:has(.print-brief) .method,
+  body:has(.print-brief) .page-footer,
+  body:has(.print-brief) .brief-toolbar { display: none !important; }
+  body:has(.print-brief) .layout { display: block; padding: 0; }
+  body:has(.print-brief) .wrap { max-width: none; padding: 0; }
+  body:has(.print-brief) main { width: 100%; }
+  body:has(.print-brief) main > h1 { font-size: 19pt; margin: 0 0 4px; }
+  body:has(.print-brief) .lede { font-size: 9pt; margin: 0 0 6px; }
+  body:has(.print-brief) .brief-confidential { font-size: 8pt; margin: 3px 0; }
+  body:has(.print-brief) .brief-grid { gap: 4px 12px; }
+  body:has(.print-brief) .brief-grid h2 { font-size: 10pt; margin: 5px 0 2px; padding: 0; }
+  body:has(.print-brief) .brief-grid p,
+  body:has(.print-brief) .brief-grid li { font-size: 7.4pt; line-height: 1.2; margin: 2px 0; }
+  body:has(.print-brief) .brief-grid ol,
+  body:has(.print-brief) .brief-grid ul { padding-left: 12px; }
+  body:has(.print-brief) .brief-footer { font-size: 7pt; margin-top: 4px; padding-top: 3px; }
+  body:has(.print-brief) a { color: #111; text-decoration: underline; }
+  body:has(.print-brief) a::after { content: none; }
+}
