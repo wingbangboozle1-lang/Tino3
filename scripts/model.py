@@ -612,6 +612,152 @@ def prop19_cap_projection():
     return rows
 
 
+# -------------------------------------------------------- phased investing ----
+# Entry-risk test. Net sale proceeds arrive at a market peak. They are either put into an
+# equity index at once, or parked in Treasuries for 24 or 36 months and then phased in over
+# 12 equal monthly instalments. The crash shapes are stylised: a straight-line fall to the
+# trough, then a straight-line return to the old peak, then growth at the modelled net
+# equity return. Each shape is anchored to an official page for its depth and dates.
+
+PARK_2Y = 4.88   # % a year, 2-year Treasury par yield, 13 November 2026 (treasury_par_1113)
+PARK_3M = 4.32   # % a year, 3-month Treasury par yield, 13 November 2026 (treasury_par_1113)
+PHASE_MONTHS = 12  # stated assumption: instalments after the parking period
+
+
+def months_between(y1: int, m1: int, y2: int, m2: int) -> int:
+    return (y2 - y1) * 12 + (m2 - m1)
+
+
+CRASH_CASES = [
+    {"key": "none", "name": "No crash: growth from the peak",
+     "drawdown": 0.0, "down_months": 0, "recovery_months": 0,
+     "dates": "No fall assumed.", "src": [],
+     "depth_src": None, "recovery_src": None},
+    {"key": "1929", "name": "1929-type crash",
+     "drawdown": 0.89,
+     "down_months": months_between(1929, 9, 1932, 7),
+     "recovery_months": months_between(1932, 7, 1954, 11),
+     "dates": "Peak 3 September 1929; low 8 July 1932 (34 months); old peak regained 23 November 1954 (268 months after the low).",
+     "src": ["fedhist_1929"], "depth_src": "fedhist_1929", "recovery_src": "fedhist_1929"},
+    {"key": "2008", "name": "2008-type crash",
+     "drawdown": 0.57,
+     "down_months": months_between(2007, 10, 2009, 3),
+     "recovery_months": months_between(2009, 3, 2013, 3),
+     "dates": "Peak October 2007; low March 2009 (17 months); old peak regained March 2013 (48 months after the low). The 2013 date is from press coverage, not an official source, and is flagged.",
+     "src": ["fedhist_greatrecession"], "depth_src": "fedhist_greatrecession", "recovery_src": None},
+]
+
+
+def _equity_level(case: dict, t: int, g_month: float) -> float:
+    """Index level at month t, with the peak at 1.0."""
+    d, dn, rn = case["drawdown"], case["down_months"], case["recovery_months"]
+    if t <= dn and dn > 0:
+        return 1.0 - d * t / dn
+    if dn == 0 and t == 0:
+        return 1.0
+    if t <= dn + rn and rn > 0:
+        return (1.0 - d) + d * (t - dn) / rn
+    return (1.0 + g_month) ** (t - dn - rn)
+
+
+def _strategy_path(case: dict, lump: float, park_months: int, park_annual: float,
+                   g_month: float, horizon_months: int) -> list[float]:
+    """Total wealth per $1 of proceeds, month by month, under one strategy."""
+    r_m = (1.0 + park_annual / 100.0) ** (1 / 12) - 1.0
+    units = lump / _equity_level(case, 0, g_month)
+    cash = 1.0 - lump
+    wealth = [units * _equity_level(case, 0, g_month) + cash]
+    for t in range(1, horizon_months + 1):
+        e = _equity_level(case, t, g_month)
+        cash *= (1.0 + r_m)
+        if park_months < t <= park_months + PHASE_MONTHS and cash > 0:
+            invest = cash / (park_months + PHASE_MONTHS - t + 1)
+            cash -= invest
+            units += invest / e
+        wealth.append(units * e + cash)
+    return wealth
+
+
+def phased_test(horizon_years: int = 30) -> dict:
+    eq = ASM["equity_return_nominal_gross"]["baseline"]
+    drag = ASM["equity_tax_drag"]["baseline"]
+    g_month = (1.0 + eq - drag) ** (1 / 12) - 1.0
+    horizon_months = horizon_years * 12
+    strategies = [
+        ("lump", "All now, into equities", 0.0, 0, PARK_2Y),
+        ("p24", "Parked 24 months at the 2-year rate, then phased in", 0.0, 24, PARK_2Y),
+        ("p36", "Parked 36 months at the 2-year rate, then phased in", 0.0, 36, PARK_2Y),
+        ("p36_3m", "Parked 36 months at the 3-month rate, then phased in", 0.0, 36, PARK_3M),
+        ("mix", "Mixed: half now, half parked 36 months then phased in", 0.5, 36, PARK_2Y),
+    ]
+    cases = []
+    for case in CRASH_CASES:
+        rows = []
+        for key, label, lump_frac, park, rate in strategies:
+            w = _strategy_path(case, lump_frac, park, rate, g_month, horizon_months)
+            trough = min(w)
+            t_trough = w.index(trough)
+            back = next((t for t in range(t_trough, len(w)) if w[t] >= 1.0), None)
+            rows.append({
+                "key": key, "label": label, "park_months": park, "lump_fraction": lump_frac,
+                "park_rate": rate,
+                "trough_per_million": money10(trough * 1_000_000),
+                "trough_month": t_trough,
+                "after_10y_per_million": money10(w[120] * 1_000_000),
+                "after_30y_per_million": money10(w[horizon_months] * 1_000_000),
+                "back_to_start_month": back,
+            })
+        cases.append({
+            "key": case["key"], "name": case["name"], "dates": case["dates"],
+            "drawdown": case["drawdown"], "down_months": case["down_months"],
+            "recovery_months": case["recovery_months"], "src": case["src"],
+            "depth_src": case["depth_src"], "recovery_src": case["recovery_src"],
+            "rows": rows,
+        })
+    return {
+        "inputs": {"equity_net_annual": round(eq - drag, 4), "park_2y": PARK_2Y,
+                   "park_3m": PARK_3M, "phase_months": PHASE_MONTHS,
+                   "horizon_years": horizon_years, "per": 1_000_000},
+        "cases": cases,
+    }
+
+
+def whatif_grid() -> dict:
+    """Every combination of the three inheritance years and the low, baseline and high
+    value of house growth, equity return and Treasury yield. Each row is a full run of the
+    same path model that the decision page uses; nothing is re-estimated."""
+    infl = ASM["inflation"]["baseline"]
+    horizon = ASM["horizon_years"]
+    rows = []
+    for year in ASM["inheritance_years"]:
+        for gk in ("low", "baseline", "high"):
+            for ek in ("low", "baseline", "high"):
+                for tk in ("low", "baseline", "high"):
+                    g = ASM["house_growth"][gk]
+                    eq = ASM["equity_return_nominal_gross"][ek]
+                    tsy = ASM["treasury_yield_nominal"][tk]
+                    res = run_paths(
+                        inherit_year=year, g=g, infl=infl, eq=eq,
+                        drag=ASM["equity_tax_drag"]["baseline"], tsy=tsy,
+                        cap_growth=ASM["prop19_cap_growth"]["baseline"],
+                        sell_pct=ASM["selling_cost_pct"]["baseline"], horizon=horizon,
+                        gain_rate=ASM["combined_gain_tax_rate"]["baseline"],
+                        rec_rate=ASM["depreciation_recapture_rate"]["baseline"],
+                        exclusion=V["section121_exclusion_single"]["value"],
+                        fixed_growth=ASM["fixed_charge_growth"]["baseline"], fit_a=FIT_A,
+                        cost_a_base=COST_A_BASE,
+                        maint_live=A["annual_costs"]["maintenance_pct_owner_occupied"]["value"],
+                        maint_rent=A["annual_costs"]["maintenance_pct_rental"]["value"],
+                        rent_income=RENT_INCOME)
+                    rows.append({
+                        "year": year, "house": gk, "equity": ek, "treasury": tk,
+                        "g": g, "eq": eq, "tsy": tsy,
+                        "terminal": {k: v["terminal"] for k, v in res["paths"].items()},
+                        "best": max(res["paths"], key=lambda k: res["paths"][k]["terminal"]),
+                    })
+    return {"inflation": infl, "horizon_years": horizon, "rows": rows}
+
+
 # ------------------------------------------------------------------ main ----
 FIT_A = fit_bill(A["roll"], ASM["ad_valorem_rate_a"]["value"])
 FIT_B = fit_bill(B["roll"], ASM["ad_valorem_rate_b"]["value"])
@@ -715,6 +861,8 @@ def main() -> dict:
     for regime in regime_stress():
         out["regimes"].append({**regime, "run": run_regime(regime, horizon)})
 
+    out["phased"] = phased_test(horizon)
+    out["whatif"] = whatif_grid()
     (DATA / "model.json").write_text(json.dumps(out, indent=1), encoding="utf-8")
     return out
 
