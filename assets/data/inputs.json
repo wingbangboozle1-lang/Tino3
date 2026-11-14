@@ -443,6 +443,20 @@
     "boe_lta25009"
    ]
   },
+  "short_term_treasury_yield": {
+   "baseline": 0.040,
+   "low": 0.030,
+   "high": 0.050,
+   "basis": "Stated scenario for parking sale proceeds in 3-month to 2-year Treasury bills during the 24-36 month phased-investing period. No official source publishes forward short-term rates for the 2040s, so this is a stated assumption and not an official figure. The verified 10-year Treasury series anchors the long-rate pages; this row is used only by the phased-investing path on the black-swan page.",
+   "src": []
+  },
+  "phased_investing_park_months": {
+   "baseline": 30,
+   "low": 24,
+   "high": 36,
+   "basis": "Owner instruction: park sale proceeds in 3-month to 2-year Treasuries for 24-36 months after inheritance, then phase into stocks.",
+   "verified": false
+  },
   "selling_cost_pct": {
    "baseline": 0.055,
    "low": 0.04,
