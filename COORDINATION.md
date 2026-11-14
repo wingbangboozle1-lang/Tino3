@@ -2550,3 +2550,11 @@ Scope note: this is the Arena-pinned branch. No second branch/worktree will be c
 |---|---|---|---|
 | P-1 Add a transparent 24–36 month Treasury holding / phased-equity entry comparison to Black Swan, testing crash-at-entry and no-crash conditions without claiming synthetic paths are historical returns | **done; historical data gap flagged** | `arena/63c55cc5-tino3` | `scripts/build.py`, `black-swan.html`, `review.html`, `assets/style.css`, `README.md` |
 | P-2 Add a one-page printable Attorney & CPA briefing export with privacy-safe placeholders, decision gates and official source links; expose a cited glossary from the grouped menu | **done; print pagination needs visual review** | `arena/63c55cc5-tino3` | `scripts/build.py`, `briefing.html`, `glossary.html`, `assets/style.css`, `README.md`, `scripts/package_site.py` (allowlist derived from generated pages) |
+
+### Publication record for P-1 / P-2
+
+- **PR #89:** https://github.com/wingbangboozle1-lang/Tino3/pull/89
+- **Merge:** merged to `main` at 2026-11-14T22:01:52Z; merge commit `a0429b670608d4c59824cd04efd3eb51229afe33`.
+- **Checks:** PR `Verify static site` passed. Post-merge runs all succeeded: `Verify static site` 43645904070, `Deploy GitHub Pages` 43645904068, and legacy `pages build and deployment` 43645903602.
+- **Pages:** GitHub Pages API reports `status: built`, source `main:/`, `build_type: legacy`, public URL `https://wingbangboozle1-lang.github.io/Tino3/`. Live fetches confirmed `briefing.html`, `glossary.html`, and `black-swan.html` serve the new content.
+- **Residual non-blocking notices:** CI reports upcoming Node.js 20 deprecation / `ubuntu-latest` image migration warnings; no build or deploy failures. The actual one-page paper pagination has not been rendered in a browser and remains a visual QA limitation, disclosed in this board and the PR.
