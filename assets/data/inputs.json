@@ -427,6 +427,13 @@
     "fred_gs10"
    ]
   },
+  "treasury_short_yield_nominal": {
+   "baseline": 0.042,
+   "low": 0.035,
+   "high": 0.050,
+   "basis": "Short Treasury bills and notes (3 month to 2 year) anchor near the policy rate rather than the 10-year term yield. Baseline is a stated scenario, not an official forward rate; the band brackets the 2025-2026 short-end range. No official agency publishes a forward short-Treasury yield for 2040-2050.",
+   "src": []
+  },
   "prop19_cap_growth": {
    "baseline": 0.03,
    "low": 0.0,
@@ -471,6 +478,16 @@
     "irs_tc409",
     "ftb_cg"
    ]
+  },
+  "phased_park_months": {
+   "value": 30,
+   "basis": "Months sale proceeds stay in short Treasuries before the equity phase-in begins. Midpoint of the owner's 24-36 month window. A stated scenario, not an official figure.",
+   "src": []
+  },
+  "phased_equity_phase_months": {
+   "value": 18,
+   "basis": "Months over which the parked proceeds are phased into equities by equal monthly amounts. A stated scenario, not an official figure.",
+   "src": []
   },
   "horizon_years": 30,
   "inheritance_years": [
