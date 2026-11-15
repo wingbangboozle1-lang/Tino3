@@ -1047,6 +1047,8 @@
    },
    "breakeven_rent_annual": 298440,
    "breakeven_rent_monthly": 24870,
+   "imputed_rent_breakeven_annual": 249490,
+   "imputed_rent_breakeven_monthly": 20790,
    "breakeven_return_vs_live": -0.44,
    "breakeven_return_vs_rent": null,
    "housing_value_needed": 327190,
@@ -1175,6 +1177,8 @@
    },
    "breakeven_rent_annual": 362600,
    "breakeven_rent_monthly": 30220,
+   "imputed_rent_breakeven_annual": 304270,
+   "imputed_rent_breakeven_monthly": 25360,
    "breakeven_return_vs_live": -0.49,
    "breakeven_return_vs_rent": null,
    "housing_value_needed": 399020,
@@ -1303,6 +1307,8 @@
    },
    "breakeven_rent_annual": 440690,
    "breakeven_rent_monthly": 36720,
+   "imputed_rent_breakeven_annual": 371120,
+   "imputed_rent_breakeven_monthly": 30930,
    "breakeven_return_vs_live": -0.54,
    "breakeven_return_vs_rent": null,
    "housing_value_needed": 486680,
@@ -4730,6 +4736,323 @@
      "fred_tb3ms",
      "fred_cpiaucns"
     ]
+   }
+  ]
+ },
+ "surcharge_sensitivity": {
+  "year": 2045,
+  "surcharge_rate": 0.01,
+  "threshold": 1000000,
+  "threshold_indexed": false,
+  "rate_without": 0.361,
+  "rate_with": 0.371,
+  "rows": [
+   {
+    "key": "sell_equities",
+    "label": "Sell at inheritance, invest in equities",
+    "gain": 0,
+    "tax_without_surcharge": 0,
+    "tax_with_surcharge": 0,
+    "difference": 0,
+    "terminal_with_surcharge": 38585540
+   },
+   {
+    "key": "sell_treasury",
+    "label": "Sell at inheritance, hold Treasuries",
+    "gain": 0,
+    "tax_without_surcharge": 0,
+    "tax_with_surcharge": 0,
+    "difference": 0,
+    "terminal_with_surcharge": 24480880
+   },
+   {
+    "key": "live_in",
+    "label": "Live in it, sell after 30 years",
+    "gain": 13487060,
+    "tax_without_surcharge": 4778580,
+    "tax_with_surcharge": 4910950,
+    "difference": 132370,
+    "terminal_with_surcharge": 5322760
+   },
+   {
+    "key": "rent_out",
+    "label": "Let it out, sell after 30 years",
+    "gain": 18712050,
+    "tax_without_surcharge": 6664800,
+    "tax_with_surcharge": 7203420,
+    "difference": 538620,
+    "terminal_with_surcharge": -1053570
+   },
+   {
+    "key": "live_then_rent",
+    "label": "Live in it 2 years, then let it out",
+    "gain": 18712050,
+    "tax_without_surcharge": 6664800,
+    "tax_with_surcharge": 7110670,
+    "difference": 445870,
+    "terminal_with_surcharge": -715440
+   }
+  ],
+  "recommendation_unchanged": true
+ },
+ "projections_distribution": {
+  "start_value": 3100000,
+  "span": 30,
+  "source": "economy.json bootstrap",
+  "bands": [],
+  "draws": 2000
+ },
+ "roll_audit": {
+  "property_a": {
+   "rate_used": 0.0118,
+   "base_year": 2025,
+   "fixed": [
+    {
+     "year": 2014,
+     "bill": 5970,
+     "assessed": 440310,
+     "ad_valorem": 5200,
+     "fixed": 770,
+     "fixed_pct": 13.0
+    },
+    {
+     "year": 2015,
+     "bill": 6130,
+     "assessed": 449100,
+     "ad_valorem": 5300,
+     "fixed": 830,
+     "fixed_pct": 13.6
+    },
+    {
+     "year": 2016,
+     "bill": 6410,
+     "assessed": 455950,
+     "ad_valorem": 5380,
+     "fixed": 1030,
+     "fixed_pct": 16.1
+    },
+    {
+     "year": 2017,
+     "bill": 6380,
+     "assessed": 465070,
+     "ad_valorem": 5490,
+     "fixed": 890,
+     "fixed_pct": 14.0
+    },
+    {
+     "year": 2018,
+     "bill": 6380,
+     "assessed": 474370,
+     "ad_valorem": 5600,
+     "fixed": 780,
+     "fixed_pct": 12.3
+    },
+    {
+     "year": 2019,
+     "bill": 6570,
+     "assessed": 483850,
+     "ad_valorem": 5710,
+     "fixed": 860,
+     "fixed_pct": 13.1
+    },
+    {
+     "year": 2020,
+     "bill": 6570,
+     "assessed": 493530,
+     "ad_valorem": 5820,
+     "fixed": 750,
+     "fixed_pct": 11.4
+    },
+    {
+     "year": 2021,
+     "bill": 6660,
+     "assessed": 498640,
+     "ad_valorem": 5880,
+     "fixed": 780,
+     "fixed_pct": 11.7
+    },
+    {
+     "year": 2022,
+     "bill": 6760,
+     "assessed": 508610,
+     "ad_valorem": 6000,
+     "fixed": 760,
+     "fixed_pct": 11.2
+    },
+    {
+     "year": 2023,
+     "bill": 6920,
+     "assessed": 518790,
+     "ad_valorem": 6120,
+     "fixed": 800,
+     "fixed_pct": 11.5
+    },
+    {
+     "year": 2024,
+     "bill": 7000,
+     "assessed": 529160,
+     "ad_valorem": 6240,
+     "fixed": 760,
+     "fixed_pct": 10.8
+    },
+    {
+     "year": 2025,
+     "bill": 7210,
+     "assessed": 539740,
+     "ad_valorem": 6370,
+     "fixed": 840,
+     "fixed_pct": 11.7
+    }
+   ],
+   "fixed_share_latest_pct": 11.7,
+   "fixed_share_first_pct": 13.0,
+   "window": [
+    2014,
+    2025
+   ],
+   "fixed_growth_full_pct": 0.79,
+   "fixed_growth_2020_2025_pct": 2.29,
+   "cap_breaches": [],
+   "year_pairs_checked": 11,
+   "assumption_used_pct": 2.5,
+   "max_bound_share_pct": 88.3
+  },
+  "property_b": {
+   "rate_used": 0.0118162182,
+   "base_year": 2025,
+   "fixed": [
+    {
+     "year": 2016,
+     "bill": 1680,
+     "assessed": 96560,
+     "ad_valorem": 1140,
+     "fixed": 540,
+     "fixed_pct": 32.1
+    },
+    {
+     "year": 2017,
+     "bill": 1740,
+     "assessed": 98490,
+     "ad_valorem": 1160,
+     "fixed": 580,
+     "fixed_pct": 33.1
+    },
+    {
+     "year": 2018,
+     "bill": 2060,
+     "assessed": 100460,
+     "ad_valorem": 1190,
+     "fixed": 870,
+     "fixed_pct": 42.4
+    },
+    {
+     "year": 2019,
+     "bill": 2130,
+     "assessed": 102470,
+     "ad_valorem": 1210,
+     "fixed": 920,
+     "fixed_pct": 43.2
+    },
+    {
+     "year": 2020,
+     "bill": 2200,
+     "assessed": 104510,
+     "ad_valorem": 1230,
+     "fixed": 970,
+     "fixed_pct": 43.9
+    },
+    {
+     "year": 2021,
+     "bill": 2070,
+     "assessed": 105600,
+     "ad_valorem": 1250,
+     "fixed": 820,
+     "fixed_pct": 39.7
+    },
+    {
+     "year": 2022,
+     "bill": 2110,
+     "assessed": 107660,
+     "ad_valorem": 1270,
+     "fixed": 840,
+     "fixed_pct": 39.7
+    },
+    {
+     "year": 2023,
+     "bill": 2180,
+     "assessed": 109810,
+     "ad_valorem": 1300,
+     "fixed": 880,
+     "fixed_pct": 40.5
+    },
+    {
+     "year": 2024,
+     "bill": 2320,
+     "assessed": 112010,
+     "ad_valorem": 1320,
+     "fixed": 1000,
+     "fixed_pct": 43.0
+    },
+    {
+     "year": 2025,
+     "bill": 2440,
+     "assessed": 114250,
+     "ad_valorem": 1350,
+     "fixed": 1090,
+     "fixed_pct": 44.7
+    }
+   ],
+   "fixed_share_latest_pct": 44.7,
+   "fixed_share_first_pct": 32.1,
+   "window": [
+    2016,
+    2025
+   ],
+   "fixed_growth_full_pct": 8.12,
+   "fixed_growth_2020_2025_pct": 2.36,
+   "cap_breaches": [],
+   "year_pairs_checked": 9,
+   "assumption_used_pct": 2.5,
+   "max_bound_share_pct": 55.3
+  }
+ },
+ "imputed_rent": {
+  "year": 2045,
+  "rent_annual": 362600,
+  "rent_monthly": 30220,
+  "publish_zero": true,
+  "rows": [
+   {
+    "share": 0.0,
+    "annual_credit": 0,
+    "credit_fv": 0,
+    "terminal": 5322760,
+    "gap_to_sell": 33262780,
+    "living_wins": false
+   },
+   {
+    "share": 0.5,
+    "annual_credit": 181300,
+    "credit_fv": 19819570,
+    "terminal": 25142330,
+    "gap_to_sell": 13443210,
+    "living_wins": false
+   },
+   {
+    "share": 0.75,
+    "annual_credit": 271950,
+    "credit_fv": 29729360,
+    "terminal": 35052120,
+    "gap_to_sell": 3533420,
+    "living_wins": false
+   },
+   {
+    "share": 1.0,
+    "annual_credit": 362600,
+    "credit_fv": 39639140,
+    "terminal": 44961900,
+    "gap_to_sell": -6376360,
+    "living_wins": true
    }
   ]
  }

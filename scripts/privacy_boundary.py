@@ -96,6 +96,9 @@ OFFICIAL_AMOUNTS = {
     # Recording and instrument fees, published as statute-set amounts and quoted
     # verbatim from Government Code sections 27361 and 27388.1.
     3, 10, 75, 225,
+    # Local parcel tax floor and pass-through cap, verbatim from the official
+    # measure text.
+    249, 65,
 }
 
 
