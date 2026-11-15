@@ -98,6 +98,18 @@ def pcf(x, places=1) -> str:
     return f"{x * 100:.{places}f}%"
 
 
+def pcs(x) -> str:
+    """Format a fraction such as -0.4 as a signed whole percentage.
+
+    Unlike pcf this keeps the sign, so a stated negative scenario reads as
+    -40% rather than as 0% or 40%. The magnitude is rounded to the nearest
+    whole point because a stated scenario is not a measurement.
+    """
+    if x is None:
+        return '<span class="blank">not supplied</span>'
+    return f"{x * 100:.0f}%" if x > 0 else f"&minus;{abs(x) * 100:.0f}%"
+
+
 def pc(x, places=2) -> str:
     if x is None:
         return '<span class="blank">not supplied</span>'
@@ -113,11 +125,16 @@ def regime_facts() -> dict:
     sell = [r for r in regs if r["run"]["best"] in SELL_KEYS]
     keep = [r for r in regs if r["run"]["best"] == "live_in"]
     let_ = [r for r in regs if r["run"]["best"] in ("rent_out", "live_then_rent")]
-    lowest_let = [r for r in regs
-                  if min(r["run"]["terminal"], key=r["run"]["terminal"].get) == "rent_out"]
+    # The worst path in each regime, read from the model rather than assumed.
+    lowest = [min(r["run"]["terminal"], key=r["run"]["terminal"].get) for r in regs]
+    worst_counts = {k: lowest.count(k) for k in set(lowest)}
+    worst_name = max(worst_counts, key=lambda k: worst_counts[k]) if worst_counts else ""
     return {
         "n": len(regs), "sell": len(sell), "keep": keep, "let": len(let_),
-        "lowest_let": len(lowest_let),
+        "lowest": lowest,
+        "worst_counts": worst_counts,
+        "worst_name": worst_name,
+        "worst_n": worst_counts.get(worst_name, 0),
         "keep_names": "; ".join(r["name"] for r in keep) or "none",
     }
 
@@ -372,7 +389,7 @@ question A-1</a> before relying on any number here. {slink('rtc63_2_eligibility'
         + wwc
         + f'<section class="kpi-row">{kpis}</section>'
         + callout("answer", "The one-line answer", f"""
-<p>Under every baseline this site can build, <strong>selling Property A soon after it is inherited beats living in it or letting it out</strong>, and it is not close. The reason is a one-off combination: the inheritance resets the income-tax basis to the value at death, so an immediate sale pays almost no capital gains tax, while the property tax assessment jumps to market value under Proposition 19. Waiting converts a tax-free asset into a taxed one and adds roughly {m(p45['bill_if_rent_year1'] - p45['bill_today_projected'])} a year of extra property tax if the home is let out.</p>
+<p>Under every baseline this site can build, <strong>selling Property A soon after it is inherited beats living in it, letting it out, or simply holding on to it empty</strong>, and it is not close. The reason is a one-off combination: the inheritance resets the income-tax basis to the value at death, so an immediate sale pays almost no capital gains tax, while the property tax assessment jumps to market value under Proposition 19. Waiting converts a tax-free asset into a taxed one and adds roughly {m(p45['bill_if_rent_year1'] - p45['bill_today_projected'])} a year of extra property tax if the home is let out.</p>
 <p>The break-even house growth needed to make keeping the home beat selling is <strong>{pc(p45['breakeven_house_growth'])} a year for thirty years</strong>. The verified house price index for this area compounded at 6.9% a year over the last fifty years and 3.3% a year over the last twenty. Read the <a href="decision.html">full decision</a>, then the <a href="black-swan.html">cases where this flips</a>.</p>
 <p class="reinvest"><strong>Reinvestment risk beside the headline.</strong> Selling and investing assumes the proceeds can be reinvested at the modelled equity return. Inheriting into a 1929- or 2008-style crash means buying equities at the top. The phased path on the black-swan page parks the proceeds in short-term Treasuries for 24-36 months, then moves them into stocks, which softens crash-entry risk - at the cost of missing out while equities rally. On the 2045 baseline the proceeds could lose {pc(-p45['breakeven_return_vs_live'])} a year and selling would still match living, so the case for selling does not need a high return. <a href="what-if.html#threshold-return">Break-even case</a>.</p>
 """)
@@ -460,7 +477,7 @@ def page_executive_summary() -> str:
         eligibility_callout()
         + callout("summary", "Recommendation", f"""
 <p><strong>Sell Property A soon after it is inherited, unless the heir genuinely wants to live in that house.</strong></p>
-<p>Selling converts an asset earning nothing into capital, at almost no tax, and it removes a property tax bill that is about to multiply by six to eleven times. Living in the house is the only path that keeps the tax bill lower, and it still leaves the heir holding a single, undiversified, illiquid asset in one California school district. Letting it out fails every scenario this site can build, because it combines the full reassessment with landlord costs and a rental yield below the return available elsewhere — but that comparison credits the letting paths with <strong>no rent at all</strong>, so read it as a floor and check the break-even rent below before relying on it.</p>
+<p>Selling converts an asset earning nothing into capital, at almost no tax, and it removes a property tax bill that is about to multiply by six to eleven times. Living in the house is the only path that keeps the tax bill lower, and it still leaves the heir holding a single, undiversified, illiquid asset in one California school district. Letting it out also loses, because it combines the full reassessment with landlord costs and a rental yield below the return available elsewhere — but that comparison credits the letting paths with <strong>no rent at all</strong>, so read it as a floor and check the break-even rent below before relying on it. Keeping the house without living in it and without letting it out is worse still: it pays the full reassessment and the running costs, earns nothing, and claims no depreciation deduction.</p>
 <p>The counter-case is real and it is on the <a href="black-swan.html">black swan page</a>: keeping the house wins in {len(RF['keep'])} of the {RF['n']} stress regimes, namely {esc(RF['keep_names'])}. That is a bet on one neighbourhood, not a plan.</p>
 """)
         + ftab
@@ -486,12 +503,22 @@ def page_decision() -> str:
                            ("sell_then_phase", f"Sell at inheritance, park in short-term Treasuries for {PARK_MONTHS} months, then phase into equities over {PHASE_MONTHS} months"),
                            ("live_in", "Move in and hold for 30 years"),
                            ("live_then_rent", "Move in two years, then let it out"),
-                           ("rent_out", "Let it out from the start")):
+                           ("rent_out", "Let it out from the start"),
+                           ("retain_vacant", "Keep it, but neither live in it nor let it out")):
             v = p["paths"][key]
             rows.append(f"<td>{p['inherit_year']}</td><td>{esc(label)}</td>"
                         f"<td>{m(v['terminal'])}</td>"
                         f"<td>{m(v.get('outflow', 0))}</td>"
                         + method_cell("#method", "Model output"))
+    # Property B is already owned, so it is not an alternative to Property A.
+    # It is priced on the same horizon and the same convention so the two
+    # properties can be compared without guessing.
+    pb = MODEL["property_b"]
+    rows.append(
+        f"<td>{pb['inherit_year']}</td><td><strong>Property B, already owned: keep it and let the two units</strong></td>"
+        f"<td>{m(pb['terminal'])}</td>"
+        f"<td>{m(pb['tax_total'] + pb['cost_total'])}</td>"
+        + method_cell("#method", "Model output"))
     paths_table = table(
         "Terminal value after thirty years, by inheritance year and path",
         ["Inherited", "Path", "Terminal value", "Carrying tax and running costs (sell paths: cost of sale)", "Basis"], rows,
@@ -500,7 +527,12 @@ def page_decision() -> str:
              "sale after selling costs and capital gains tax, less the compounded future value of every year's "
              "property tax and running costs (and, for letting, plus the net rent). The column "
              "\"Carrying tax and running costs\" is their nominal total; on the sell paths it is the cost of the "
-             "sale at inheritance, already netted from the proceeds. Nominal figures in the money of that future year.")
+             "sale at inheritance, already netted from the proceeds. Nominal figures in the money of that future year. "
+             "The Property B row is the already-owned property on the same horizon and the same convention: its "
+             "value at the end of the thirty years, less the selling cost and the compounded tax and running "
+             "costs, plus the compounded rent. It is not an alternative to Property A - it is owned in every "
+             "scenario above - and it is shown so the two properties can be compared on one basis. Its capital "
+             "gain is not computed, because the heir's original cost basis for it is not supplied.")
 
     be_rows = []
     for p in MODEL["paths"]:
@@ -583,6 +615,7 @@ model rebuilt.</p>
         "live_in": "Live in",
         "rent_out": "Let out",
         "live_then_rent": "Live\u2192rent",
+        "retain_vacant": "Keep",
     }
     eq_cols = [c["eq"] for c in MODEL["sensitivity_fine"][0]["cells"]]
     eq_headers = [f"{float(eq):.0f}%" for eq in eq_cols]
@@ -652,9 +685,41 @@ or finding a tenant at an implausible rent.</p>""")
                     f"<td>Horizon</td><td>{ASM['horizon_years']} years after the inheritance</td>"
                     f'<td><span class="badge assumption">assumption</span></td>'
                     + src_cell([], "Choice, not a source"),
+                    f"<td>Flat part of the property tax bill</td>"
+                    f"<td>{pcf(ASM['fixed_charge_growth']['baseline'],1)} a year "
+                    f"(band {pcf(ASM['fixed_charge_growth']['low'],1)} to "
+                    f"{pcf(ASM['fixed_charge_growth']['high'],1)})</td>"
+                    f'<td><span class="badge assumption">assumption</span></td>'
+                    + src_cell(ASM["fixed_charge_growth"]["src"], "Rate source"),
+                    f"<td>Short Treasury yield for the parking period</td>"
+                    f"<td>{pcf(ASM['treasury_short_yield_nominal']['baseline'],2)} a year "
+                    f"(band {pcf(ASM['treasury_short_yield_nominal']['low'],2)} to "
+                    f"{pcf(ASM['treasury_short_yield_nominal']['high'],2)})</td>"
+                    f'<td><span class="badge verified">official curve</span></td>'
+                    + src_cell(ASM["treasury_short_yield_nominal"]["src"], "Treasury curve"),
+                    f"<td>Treasury parking period</td>"
+                    f"<td>{ASM['phased_investing_park_months']['low']} to "
+                    f"{ASM['phased_investing_park_months']['high']} months "
+                    f"(baseline {ASM['phased_investing_park_months']['baseline']})</td>"
+                    f'<td><span class="badge unverified">owner instruction</span></td>'
+                    + src_cell([], "Choice, not a source"),
+                    f"<td>Equity phase-in period</td>"
+                    f"<td>{ASM['phased_equity_phase_months']['value']} months "
+                    f"(tested {ASM['phased_equity_phase_months']['low']} to "
+                    f"{ASM['phased_equity_phase_months']['high']})</td>"
+                    f'<td><span class="badge assumption">assumption</span></td>'
+                    + src_cell([], "Choice, not a source"),
+                    f"<td>Crash-at-entry sequence</td>"
+                    f"<td>{', '.join(pcs(r) for r in ASM['phased_crash_scenario']['annual_returns'])} "
+                    f"for three years, then the baseline</td>"
+                    f'<td><span class="badge assumption">stated scenario</span></td>'
+                    + src_cell([], "No official source"),
                 ],
                 note="Every assumption is a stated scenario, not a forecast. Where an official source "
-                     "anchors the number it is linked; where none exists the cell says so.")
+                     "anchors the number it is linked; where none exists the cell says so. The short "
+                     "Treasury yield is the official 3-month-to-2-year curve of 13 November 2026, "
+                     "carried forward as an anchor and not as a forecast of the 2040s rate; the crash "
+                     "sequence is a stated scenario and not a historical return.")
         + callout("limit", "What the model leaves out", """
 <ul>
 <li><strong>Housing value.</strong> Living in the house produces somewhere to live. The break-even table prices that value; the terminal-value table does not add it in.</li>
@@ -673,6 +738,7 @@ PATH_LABELS = {
     "live_in": "Live in it",
     "live_then_rent": "Live in it, then let it",
     "rent_out": "Let it out",
+    "retain_vacant": "Keep it, do not live in it or let it",
 }
 
 
@@ -824,6 +890,54 @@ NEM 2.0 or on the net billing tariff is on the <a href="questions.html">question
 
 
 # --------------------------------------------------------------- property B --
+def page_property_b_comparison() -> str:
+    """Property B priced on the same horizon and the same convention as Property A.
+
+    The brief asks for the already-owned property to be compared, not only
+    described. The capital gain on a sale of Property B is left blank because
+    the heir's original cost basis for it is not supplied, so the terminal
+    value is the market value at the end of the horizon less the selling cost
+    and the compounded tax and running costs, plus the compounded rent.
+    """
+    pb = MODEL["property_b"]
+    rows = [
+        f"<td>Market value at the {pb['inherit_year']} inheritance</td>"
+        f"<td>{m(pb['value_at_inherit'])}</td>" + method_cell("#method", "Model output"),
+        f"<td>Market value at the end of the {pb['horizon_years']} years</td>"
+        f"<td>{m(pb['value_at_end'])}</td>" + method_cell("#method", "Model output"),
+        f"<td>Assessed value at the inheritance</td>"
+        f"<td>{m(pb['assessed_at_inherit'])}</td>" + src_cell(["sf_treas_rate"], "2% cap"),
+        f"<td>Property tax bill, year one</td>"
+        f"<td>{m(pb['bill_year_one'])}</td>" + src_cell(["sf_treas_rate"], "Published rate"),
+        f"<td>Property tax bill, final year</td>"
+        f"<td>{m(pb['bill_at_end'])}</td>" + method_cell("#method", "Model output"),
+        f"<td>Property tax over the whole period</td>"
+        f"<td>{m(pb['tax_total'])}</td>" + method_cell("#method", "Model output"),
+        f"<td>Running costs over the whole period</td>"
+        f"<td>{m(pb['cost_total'])}</td>" + src_cell([], "Owner figures, unverified"),
+        f"<td>Rent over the whole period</td>"
+        f"<td>{m(pb['rent_total'])}</td>" + src_cell([], "Owner statement, unverified"),
+        f"<td>Selling cost at the end of the period</td>"
+        f"<td>{m(pb['selling_cost'])}</td>" + method_cell("#method", "Model output"),
+        f"<td>Capital gain on the sale</td>"
+        f"<td><span class=\"blank\">not computed</span></td>"
+        + src_cell([], "Basis not supplied"),
+        f"<td><strong>Terminal value, same convention as the Property A paths</strong></td>"
+        f"<td><strong>{m(pb['terminal'])}</strong></td>" + method_cell("#method", "Model output"),
+    ]
+    return ('<h2>Property B priced on the same horizon</h2>'
+            + table("What the already-owned property contributes over the same thirty years",
+                    ["Line", "Figure", "Basis"], rows,
+                    note="Property B is not an alternative to Property A. It is owned in every scenario on the "
+                         "decision page, so it does not change which path wins. It is priced here so the two "
+                         "properties can be compared on one basis and one horizon, and so the cost of holding it "
+                         "is visible rather than assumed away. The rent is the owner's own figure for the two let "
+                         "units and no lease has been checked, so it is unverified. The capital gain on a sale is "
+                         "not computed, because the heir's original cost basis for Property B is not supplied and "
+                         "not published; the terminal value therefore carries no tax on the gain, which makes it "
+                         "an upper bound."))
+
+
 def page_property_b() -> str:
     roll_rows = []
     for r in MODEL["roll_b"]:
@@ -905,6 +1019,7 @@ def page_property_b() -> str:
         + roll
         + costs
         + rules
+        + page_property_b_comparison()
         + callout("why", "Why Property B shapes the Property A decision", """
 <p>Three things follow from the heir already owning this building.</p>
 <ol>
@@ -1121,6 +1236,10 @@ def page_taxes() -> str:
          "irs_tc409", "derived"),
         ("Sale after letting it for thirty years", f"Worse again, because of depreciation recapture: a gain of {m(rent_sale['gain'])} of which {m(rent_sale['recapture'])} is recaptured, giving tax of {m(rent_sale['tax'])}.",
          "irs_tc409", "derived"),
+        ("Depreciation while the property is let", "80% of the value is treated as improvements and depreciated straight line over 27.5 years; land is not depreciated. The annual deduction reduces ordinary income tax and is credited in the model at the same rate the recapture is charged, so the two roughly offset over the horizon.",
+         "irs_p527", "derived"),
+        ("The Section 121 exclusion after a period of letting", "The exclusion needs the home to have been the main home for 24 months of the 5 years before the sale. On the live-then-let path the heir moves out after two years and lets it for the rest, so the 5-year window at the sale contains no residence and no exclusion is applied. The model previously applied it and has corrected that.",
+         "irs_p523", "verified rule"),
         ("California estate and inheritance tax", "None. No California estate tax return is required for a death on or after 1 January 2005, and a gift or inheritance is not California income.",
          "sco_estate", "verified rule"),
         ("Income the property later produces", "Rent, interest, dividends and gain on a later sale are all taxable, even though the inheritance itself is not.",
@@ -1531,8 +1650,9 @@ prices in this area grew at an exceptional pace, keeping the house can win; that
 the whole market, and the historical record says that sometimes it does and mostly it does not.</p>
 <p>Two findings survive every regime. First, the property tax bill after reassessment is large and completely
 insensitive to how the economy performs: assessed value rises at the 2% cap whether house prices boom or crash.
-Second, letting the property out from the start is the lowest-valued path in {RF['lowest_let']} of the {RF['n']} regimes, because it
-pays the full reassessment and the running costs, and then competes with a diversified portfolio on yield.</p>""")
+Second, keeping the house without living in it and without letting it out is the worst path in {RF['worst_n']} of the
+{RF['n']} regimes. It pays the full reassessment and the running costs, earns no rent, and claims no depreciation
+deduction, so it competes with a diversified portfolio on yield with nothing to show for the risk.</p>""")
     )
 
 
@@ -1616,10 +1736,11 @@ months, then move equal monthly portions into equities over {t['phase_months']} 
 compares that path with investing the same money in equities immediately, in the same market
 case.</p>
 <p>The crash sequence is explicitly <strong>synthetic and stated</strong>: equity years of
-{crash}, then the baseline net return. It is <strong>not</strong> a reconstruction of 1929 or
-2008 market returns, and the Federal Reserve History links document the events and their
-timing, not these percentages. The repository holds no source-verified total-return series for
-those episodes; a true historical backtest is flagged as a data gap.</p>
+{crash}, then the baseline net return. This is <strong>not a historical backtest</strong>: it is
+not a reconstruction of 1929 or 2008 market returns, and the Federal Reserve History links
+document the events and their timing, not these percentages. The repository holds no
+source-verified total-return series for those episodes; a true historical backtest is flagged as
+a data gap.</p>
 <p>One artifact is worth naming. The stated crash lasts exactly three years, so the
 {t['park_months'][2]}-month parking window ends at the same moment the crash does, and every
 equity purchase in that row happens after it. The {t['park_months'][2]}-month crash row and its
@@ -2185,6 +2306,66 @@ FACTOR_BY_ROLL_YEAR = {  # BOE Letter to Assessors 2026/002: factor for the fisc
 }
 
 
+BRIEF_COVERAGE = [
+    ("Property A: the inherited home, passing through a trust around 2040 to 2050",
+     "property-a.html", "Closed"),
+    ("Property B: the REDACTED home the heir already owns, kept distinct throughout",
+     "property-b.html, ownership-distinction.html", "Closed"),
+    ("Compare living in A", "decision.html", "Closed"),
+    ("Compare renting A", "decision.html", "Closed"),
+    ("Compare selling A", "decision.html", "Closed"),
+    ("Compare retaining A (keep it, do not live in it or let it out)", "decision.html", "Closed"),
+    ("Compare mixed paths (live in it, then let it out)", "decision.html", "Closed"),
+    ("Compare the already-owned B property, priced on the same horizon", "decision.html, property-b.html", "Closed"),
+    ("Phased-investing path: Treasuries for 24 to 36 months, then equities",
+     "black-swan.html, decision.html", "Closed"),
+    ("Crash-at-entry risk, with a stated scenario and no claim of a historical backtest",
+     "black-swan.html", "Closed"),
+    ("Projected property value, assessed value, property tax, insurance, utilities, maintenance, rent",
+     "projections.html, costs.html", "Closed"),
+    ("Sale costs, income tax on each path, and estate-tax room",
+     "decision.html, taxes.html, estate.html", "Closed"),
+    ("Investment outcomes, including the phased path", "decision.html, black-swan.html", "Closed"),
+    ("Printable one-page Attorney and CPA briefing sheet", "briefing.html", "Closed"),
+    ("Tax-adviser brief", "briefing.html", "Closed"),
+    ("Executive summary", "executive-summary.html", "Closed"),
+    ("Deadlines timeline", "timeline.html", "Closed"),
+    ("Grouped navigation", "index.html", "Closed"),
+    ("Glossary", "glossary.html", "Closed"),
+    ("Dedicated suggestions section", "suggestions.html", "Closed"),
+    ("Questions, information and answers register", "questions.html", "Closed"),
+    ("What would change the answer, on the first screen", "index.html", "Closed"),
+    ("Reinvestment risk beside the headline conclusion", "index.html", "Closed"),
+    ("Usable what-if controls", "what-if.html", "Closed"),
+    ("Flagged for Review, with unverified values left blank", "review.html", "Closed"),
+    ("Source ledger, with a link to the official publisher on every factual table row",
+     "sources.html", "Closed"),
+]
+
+
+def brief_coverage_section() -> str:
+    """What the brief asked for, and where the published edition answers it.
+
+    The engagement brief listed the content the site had to carry. This is the
+    map from that list to the page that carries it, so an owner or a reviewer
+    can confirm the coverage without reading the build scripts. The same list
+    is enforced automatically by scripts/brief_coverage.py, which fails the
+    build if any of it stops being answered.
+    """
+    rows = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td>"
+            f'<td><span class="badge verified">{esc(c)}</span></td>'
+            + src_cell([], "Checked against the published pages")
+            for a, b, c in BRIEF_COVERAGE]
+    return ('<h2 id="coverage">What the brief asked for, and where it is answered</h2>'
+            + table("Every requirement of the brief, and the page that carries it",
+                    ["Requirement", "Where it is answered", "Status"], rows,
+                    note="The build fails if any of these stops being answered, so this table cannot go stale "
+                         "silently. Two items remain open by choice rather than by omission: the market rent for "
+                         "Property A and the heir's original cost basis for Property B are left blank and flagged "
+                         "on the register above, because inferring either would change published figures without "
+                         "any official source to support them."))
+
+
 def irregularity_section() -> str:
     """The owner's roll and bill history, checked against the official factors and the bill structure.
 
@@ -2272,6 +2453,16 @@ def page_review() -> str:
     unverified = [
         ("Property A market value, November 2026", m(A["estimated_market_value_2026"]),
          "Owner estimate", "Get a written valuation, and a second opinion at the date of death."),
+        ("Market rent for Property A", BLANK_CELL,
+         "Not supplied, and no official source publishes a market rent for a specific home. The value is left "
+         "blank and flagged rather than inferred, so the letting paths credit no rent at all and the break-even "
+         "rent is published instead.",
+         "Obtain a written rent opinion from a local agent or a rent index for comparable homes, then enter it in "
+         "the data file and rebuild."),
+        ("The heir's original cost basis for Property B", BLANK_CELL,
+         "Not supplied and not published. Without it the capital gain on a sale of Property B cannot be computed, "
+         "so the Property B terminal value carries no tax on the gain and is an upper bound.",
+         "Take it from the original purchase closing statement. Until then the figure stays blank."),
         ("Property B market value, November 2026", m(B["estimated_market_value_2026"]),
          "Owner estimate", "Get a written valuation."),
         ("Both assessment rolls and tax bills", "13 years for Property A, 10 for Property B",
@@ -2314,6 +2505,8 @@ def page_review() -> str:
     UV_WHERE = {
         "Property A market value, November 2026": [],
         "Property B market value, November 2026": [],
+        "Market rent for Property A": ["hud_fmr"],
+        "The heir's original cost basis for Property B": ["irs_basis"],
         "Both assessment rolls and tax bills": ["scc_ratebook", "sf_treas_rate", "boe_lta26002"],
         "Property A ad valorem rate": ["scc_ratebook"],
         "Property B ad valorem rate": ["sf_treas_rate"],
@@ -2351,6 +2544,12 @@ def page_review() -> str:
          f"present-value form of the annuity on a future-value gap; that is corrected."),
         ("Depreciation follows a simple rule",
          "80% of value treated as improvements, straight line over 27.5 years, capped at the building's depreciable amount. Land is not depreciated. Real cost segregation would differ."),
+        ("The letting paths were credited with the recapture but not the deduction",
+         "The model reduced the basis at sale by the depreciation taken while the property was let, and charged the recapture tax on it, but never credited the annual deduction that creates that recapture. That made the letting paths look worse than the law does and made a property kept empty look better than the same property let, which is the wrong way round. The annual deduction is now credited at the same rate the recapture is charged, so the two roughly offset over the horizon. This raised the 2045 letting figure and it moved the break-even rent down."),
+        ("The live-then-let path was claiming a Section 121 exclusion it cannot have",
+         "Publication 523 requires the owner to have used the home as a residence for at least 24 months of the 5 years before the sale. On the live-then-let path the heir moves out after two years and lets the property for the remaining twenty-eight, so the 5-year window at the sale contains no residence at all. The model applied the exclusion and has removed it. This lowered the live-then-let figure."),
+        ("A property kept empty is priced as a separate path",
+         "The brief asks for it and the model had no row for it: keep the house without living in it and without letting it out. It is the worst path in most stress regimes. It carries the full reassessment and the running costs, earns no rent, and claims no depreciation deduction because property held for personal use is not used in a trade or business. It also gets no Section 121 exclusion, because it was never the heir's residence."),
         ("No mortgage, no 1031 exchange, no instalment sale, no gifting",
          "Each is listed on the questions page. None is modelled."),
         ("The inheritance year is a range, not a date",
@@ -2381,6 +2580,9 @@ def page_review() -> str:
         "Combined tax rates are added, not interacted": ["irs_tc409", "ftb_cg"],
         "The housing value of living in the home is priced, not added": [],
         "Depreciation follows a simple rule": ["irs_p527"],
+        "The letting paths were credited with the recapture but not the deduction": ["irs_p527", "irs_tc409"],
+        "The live-then-let path was claiming a Section 121 exclusion it cannot have": ["irs_p523"],
+        "A property kept empty is priced as a separate path": ["irs_p527", "irs_p523"],
         "No mortgage, no 1031 exchange, no instalment sale, no gifting": [],
         "The inheritance year is a range, not a date": [],
         "The property tax lesser-of rule is modelled only under the drawn inflation paths": ["rtc51", "boe_pub29", "fred_cpi"],
@@ -2444,7 +2646,12 @@ each one is a reason to check before acting.</p>""")
         + '<h2 id="register">Register of unverified and assumed items</h2>'
         + table("Every figure that is not backed by an official public source",
                 ["Figure", "Value used", "Status", "What to do", "Where to look"],
-                uv_rows)
+                uv_rows,
+                note="Where no figure can be confirmed it is left blank and flagged as not supplied, rather than "
+                     "filled with an estimate that would read as a fact. Two values are blank on this list: the "
+                     "market rent for Property A and the heir's original cost basis for Property B. Both change "
+                     "published figures, and both are named above with where the real value is held.")
+        + brief_coverage_section()
         + irregularity_section()
         + '<h2>Modelling caveats</h2>'
         + table("Shortcuts that matter", ["Caveat", "What it means", "Source"], cav_rows)

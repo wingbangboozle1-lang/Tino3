@@ -142,6 +142,27 @@ def sale_proceeds(price: float, basis: float, sell_pct: float, gain_rate: float,
     }
 
 
+def depreciation_schedule(value: float, horizon: int, share: float = 0.8,
+                          life: float = 27.5) -> list[float]:
+    """Annual depreciation on the improvements: straight line over 27.5 years.
+
+    80% of the value is treated as improvements and the rest as land, which
+    is not depreciable. The schedule stops when the improvements are fully
+    depreciated, so a horizon longer than the recovery period does not keep
+    generating a deduction. The total over the horizon equals
+    min(share * value, share * value / life * horizon), which is what the sale
+    figures have always used, so the basis at sale is unchanged.
+    """
+    remaining = share * value
+    annual = remaining / life
+    out = []
+    for _ in range(horizon):
+        take = min(annual, remaining)
+        out.append(take)
+        remaining -= take
+    return out
+
+
 def carrying_costs(value: float, cost_base: float, maint_pct: float, infl: float,
                    horizon: int, start_mult: float = 1.0) -> float:
     tot = 0.0
@@ -235,14 +256,24 @@ def run_paths(inherit_year: int, g: float, infl: float, eq: float, drag: float,
     bills_rent = annual_bills(taxable_rent, fit_T, inherit_year, infl, horizon)
     tax_rent = sum(bills_rent)
     cost_rent = carrying_costs(value_at_death, cost_a_base, maint_rent, infl, horizon)
-    deprec = min(0.8 * value_at_death, 0.8 * value_at_death / 27.5 * horizon)
+    dep_sched = depreciation_schedule(value_at_death, horizon)
+    deprec = sum(dep_sched)
     rent_sale = sale_proceeds(terminal_price, value_at_death - deprec, sell_pct,
                               gain_rate, rec_rate, deprec)
+    # The depreciation deduction is claimed every year it is available, and it
+    # reduces ordinary income tax. The model previously reduced the basis at
+    # sale - and so charged the recapture tax - without ever crediting the
+    # annual deduction that offsets it. That made the letting path look worse
+    # than it is, and it made a property kept empty look better than the same
+    # property let, which is the wrong way round. The shield is credited here
+    # at the same rate the recapture is charged.
+    dep_shield = [d * rec_rate for d in dep_sched]
     rent_cash = rent_accumulated(horizon)
     # Net rental cash: gross rent less the same tax and running costs, compounded.
     rent_carry_fv = fv_stream(
         [rent0 * (1 + infl) ** j - bills_rent[j]
          - (cost_a_base + maint_rent * value_at_death) * (1 + infl) ** j
+         + dep_shield[j]
          for j in range(horizon)], rate_fv)
 
     # Path 6: phased investing - sell at inheritance, park the sale proceeds in short-term
@@ -270,17 +301,50 @@ def run_paths(inherit_year: int, g: float, infl: float, eq: float, drag: float,
     bills_h2 = annual_bills(av_after, fit_T2, inherit_year + 2, infl, horizon - 2)
     tax_h2 = sum(bills_h2)
     cost_h = carrying_costs(value_at_death, cost_a_base, maint_rent, infl, horizon)
-    deprec_h = min(0.8 * value_at_death,
-                   0.8 * value_at_death / 27.5 * (horizon - 2))
+    # The property is lived in for the first two years and let only after
+    # that, so no depreciation is claimed until it is actually placed in
+    # service. The schedule therefore covers the letting years only, and the
+    # shield is applied to those years and not to the two lived-in years.
+    dep_sched_h = depreciation_schedule(value_at_death, horizon - 2)
+    deprec_h = sum(dep_sched_h)
+    dep_shield_h = [0.0, 0.0] + [d * rec_rate for d in dep_sched_h]
+    # No Section 121 exclusion on the hybrid path. Publication 523 requires
+    # the owner to have used the home as a residence for at least 24 months of
+    # the 5 years before the sale. On this path the heir moves out after two
+    # years and lets the property for the remaining twenty-eight, so at the
+    # sale the 5-year window contains no residence at all and the exclusion
+    # does not apply. The model previously applied it here.
     hybrid_sale = sale_proceeds(terminal_price, value_at_death - deprec_h, sell_pct,
-                                gain_rate, rec_rate, deprec_h, exclusion)
+                                gain_rate, rec_rate, deprec_h)
     hybrid_cash = rent_accumulated(horizon - 2)
     # Net rental cash for the years let: gross rent (hybrid_cash, already compounded) less the
     # tax and running costs of every year of the horizon, compounded at the same rate.
     hybrid_out_fv = fv_stream(
         [(bills_h1 + bills_h2)[j] + (cost_a_base + maint_rent * value_at_death) * (1 + infl) ** j
+         - dep_shield_h[j]
          for j in range(horizon)], rate_fv)
     hybrid_carry_fv = hybrid_cash - hybrid_out_fv
+
+    # Path 7: retain the house without occupying it and without letting it out.
+    # The brief asks for this comparison explicitly, so it is priced rather than
+    # described. Three things make it different from every other path:
+    #   * no occupancy means no Proposition 19 shelter and no homestead
+    #     exemption, so the property is reassessed to full value, the same
+    #     treatment the letting path receives;
+    #   * a property held for personal use is not used in a trade or business,
+    #     so no depreciation is allowable and there is no recapture on sale;
+    #   * no Section 121 exclusion is available on the eventual sale, because
+    #     the property was never the heir's principal residence.
+    # The vacant maintenance rate is a stated assumption: the higher of the
+    # two rates on file, because a vacant property has no occupant doing the
+    # small repairs.
+    bills_vac = annual_bills(taxable_rent, fit_T, inherit_year, infl, horizon)
+    tax_vac = sum(bills_vac)
+    cost_vac = carrying_costs(value_at_death, cost_a_base, maint_rent, infl, horizon)
+    vac_sale = sale_proceeds(terminal_price, value_at_death, sell_pct, gain_rate, rec_rate, 0.0)
+    vac_carry_fv = fv_stream(
+        [bills_vac[j] + (cost_a_base + maint_rent * value_at_death) * (1 + infl) ** j
+         for j in range(horizon)], rate_fv)
 
     return {
         "inherit_year": inherit_year,
@@ -325,6 +389,12 @@ def run_paths(inherit_year: int, g: float, infl: float, eq: float, drag: float,
                                 "equity_at_park_end": money10(phase_eng["equity"]),
                                 "park_months": phase_eng["park_months"],
                                 "phase_months": phase_eng["phase_months"]},
+            "retain_vacant": {"terminal": money10(vac_sale["net"] - vac_carry_fv),
+                               "outflow": money10(tax_vac + cost_vac),
+                               "carry_fv": money10(vac_carry_fv),
+                               "tax_total": money10(tax_vac),
+                               "cost_total": money10(cost_vac),
+                               "sale": vac_sale},
             "live_then_rent": {"terminal": money10(hybrid_sale["net"] + hybrid_carry_fv),
                                "outflow": money10(tax_h1 + tax_h2 + cost_h),
                                "carry_fv": money10(hybrid_carry_fv),
@@ -507,6 +577,106 @@ def crash_entry_comparison(inherit_year: int, g: float, infl: float, eq: float, 
     }
 
 
+def property_b_comparison(inherit_year: int = 2045) -> dict:
+    """What the already-owned Property B contributes to the same horizon.
+
+    The brief asks for the already-owned property to be compared alongside
+    Property A rather than described in prose. This prices it on the same
+    30-year horizon and the same conventions as the Property A paths:
+
+      * the market value grows at the same house-growth assumption;
+      * the assessed value grows at the 2% Proposition 13 cap;
+      * the rent is the owner's own figure for the two let units, grown with
+        inflation. It is an owner statement, not a verified lease, and it is
+        labelled that way wherever it appears;
+      * the running costs are the owner's own figures, the maintenance at the
+        stated percentage of value;
+      * the sale at the end of the horizon is priced on the heir's own
+        original cost basis, which the site does not have, so no capital gain
+        is computed on the sale. The terminal value is therefore the market
+        value at the end of the horizon plus the accumulated net rent, less
+        the tax and running costs.
+
+    The missing basis is disclosed rather than assumed, because assuming a
+    purchase price the owner never supplied would be inventing the figure
+    that most changes the answer.
+    """
+    g = ASM["house_growth"]["baseline"]
+    infl = ASM["inflation"]["baseline"]
+    eq = ASM["equity_return_nominal_gross"]["baseline"]
+    drag = ASM["equity_tax_drag"]["baseline"]
+    horizon = ASM["horizon_years"]
+    rate_fv = eq - drag
+
+    k = inherit_year - 2026
+    value_at_inherit = B["estimated_market_value_2026"] * (1 + g) ** k
+    value_at_end = value_at_inherit * (1 + g) ** horizon
+    assessed_start = float(B["roll"][0]["assessed"]) * (1 + 0.02) ** k
+    fit_T = dict(FIT_B)
+    fit_T["fixed_base"] = FIT_B["fixed_base"] * (1 + INFL) ** (inherit_year - FIT_B["base_year"])
+
+    bills = annual_bills(assessed_start, fit_T, inherit_year, infl, horizon)
+    tax_total = sum(bills)
+
+    rent0 = float(B["rent"]["annual"])
+    cost_base = COST_B_BASE
+    maint_pct = B["annual_costs"]["maintenance_pct"]["value"]
+    # Maintenance follows the same convention as the Property A paths: a
+    # percentage of the value at the start of the horizon, inflated each year.
+    # A building's upkeep tracks its condition and its running cost, not the
+    # market value it happens to be carrying, so tying maintenance to a
+    # growing market value would manufacture a drag that the owner would not
+    # actually bear.
+    costs, rents = [], []
+    for j in range(horizon):
+        costs.append((cost_base + maint_pct * value_at_inherit) * (1 + infl) ** j)
+        rents.append(rent0 * (1 + infl) ** j)
+    cost_total = sum(costs)
+    rent_total = sum(rents)
+
+    # Carrying cost and rent, each compounded at the same after-tax equity
+    # rate the Property A paths use, so the two properties' cash flows are
+    # compared on one convention.
+    carry_fv = fv_stream([bills[j] + costs[j] for j in range(horizon)], rate_fv)
+    rent_fv = fv_stream(rents, rate_fv)
+
+    # The same terminal-value convention as the Property A paths: the property
+    # is sold at the end of the horizon, the selling cost is deducted, and the
+    # compounded carrying cost is charged. One thing is missing, and it is
+    # missing because the input is missing, not because it is small: the
+    # heir's original cost basis for Property B is not supplied and is not
+    # published, so the capital gain on the eventual sale cannot be computed.
+    # The gain is therefore reported as not computed rather than assumed away.
+    selling_cost = value_at_end * ASM["selling_cost_pct"]["baseline"]
+    terminal = value_at_end - selling_cost - carry_fv + rent_fv
+
+    return {
+        "inherit_year": inherit_year,
+        "horizon_years": horizon,
+        "value_at_inherit": money10(value_at_inherit),
+        "value_at_end": money10(value_at_end),
+        "assessed_at_inherit": money10(assessed_start),
+        "bill_year_one": money10(bills[0]),
+        "bill_at_end": money10(bills[-1]),
+        "tax_total": money10(tax_total),
+        "cost_total": money10(cost_total),
+        "rent_total": money10(rent_total),
+        "carry_fv": money10(carry_fv),
+        "rent_fv": money10(rent_fv),
+        "selling_cost": money10(selling_cost),
+        "capital_gain_tax": None,
+        "terminal": money10(terminal),
+        "rent_annual": money10(rent0),
+        "rent_basis": B["rent"]["basis"],
+        "rent_verified": B["rent"]["verified"],
+        "basis_note": ("The heir's original cost basis for Property B is not supplied and is not "
+                       "published, so the capital gain on the eventual sale cannot be computed and "
+                       "is left blank rather than assumed. The terminal value is the market value "
+                       "at the end of the horizon, less the selling cost, less the compounded tax "
+                       "and running costs, plus the compounded rent."),
+    }
+
+
 def phased_entry_timing(inherit_year: int = 2045) -> dict:
     """The entry-timing comparison published on the black-swan page.
 
@@ -632,16 +802,26 @@ def breakeven_rent(inherit_year: int, g: float, infl: float, eq: float, drag: fl
     fit_T = dict(fit_a)
     fit_T["fixed_base"] = fit_a["fixed_base"] * (1 + fixed_growth) ** (inherit_year - fit_a["base_year"])
 
+    # The same depreciation treatment as the published letting path: the
+    # annual deduction is credited against tax, and the basis is reduced by
+    # the same amount at sale, so the recapture is charged on the same
+    # depreciation. Before this, the break-even rent was solved against a
+    # model that charged the recapture and credited no shield, so the
+    # published break-even rent did not match the published path.
+    dep_sched = depreciation_schedule(value_at_death, horizon)
+    dep_shield = [d * rec_rate for d in dep_sched]
+
     def rent_terminal(r0: float) -> float:
         cash = 0.0
         av = value_at_death
         for j in range(horizon):
             net = (r0 * (1 + infl) ** j
                    - (cost_a_base + maint_rent * value_at_death) * (1 + infl) ** j
-                   - bill_for(av, fit_T, inherit_year + j, infl))
+                   - bill_for(av, fit_T, inherit_year + j, infl)
+                   + dep_shield[j])
             cash += net * (1 + eq - drag) ** (horizon - 1 - j)
             av *= 1.02
-        deprec = min(0.8 * value_at_death, 0.8 * value_at_death / 27.5 * horizon)
+        deprec = sum(dep_sched)
         price = value_at_death * (1 + g) ** horizon
         s = sale_proceeds(price, value_at_death - deprec, sell_pct, gain_rate, rec_rate, deprec)
         return cash + s["net"]
@@ -1130,6 +1310,7 @@ def main() -> dict:
         out["crash_entry"].append(crash)
 
     out["phased_timing"] = phased_entry_timing(2045)
+    out["property_b"] = property_b_comparison(2045)
     for regime in regime_stress():
         out["regimes"].append({**regime, "run": run_regime(regime, horizon)})
 

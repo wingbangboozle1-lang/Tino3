@@ -18,9 +18,9 @@ Selling and investing the proceeds, against keeping the house. Baseline: house p
 
 | Inherited | Sell, equities | Sell, Treasuries | Live in it | Let it out |
 |---|---|---|---|---|
-| 2040 | $31,714,550 | $20,121,530 | $4,440,110 | $-867,860 |
-| 2045 | $38,585,540 | $24,480,880 | $5,322,760 | $-1,001,320 |
-| 2050 | $46,945,240 | $29,784,760 | $6,375,070 | $-1,167,130 |
+| 2040 | $31,714,550 | $20,121,530 | $4,440,110 | $4,313,870 |
+| 2045 | $38,585,540 | $24,480,880 | $5,322,760 | $5,303,040 |
+| 2050 | $46,945,240 | $29,784,760 | $6,375,070 | $6,503,090 |
 
 The letting paths are credited with **no rent**, because no market rent for Property A has been supplied and no official source publishes one for a specific home. Read them as a floor, not as a comparison.
 
@@ -31,7 +31,7 @@ The letting paths are credited with **no rent**, because no market rent for Prop
 - **The tax-free window.** Property acquired from a decedent takes a basis equal to its value at death, so a sale soon afterwards pays about zero capital gains tax. In the 2045 baseline a $6,531,230 sale carries $0 of tax.
 - **What waiting costs.** Hold the same house thirty years and the tax on the eventual sale is about $4,910,950 after the section 121 exclusion; let it out as well and depreciation recapture pushes that to about $7,151,170.
 - **The break-even.** Keeping the home beats selling only if it appreciates 8.66% a year for thirty years. The verified index for this area compounded at 6.9% over fifty years and 3.3% over the last twenty.
-- **The break-even rent.** Letting would need about $30,180 a month, $362,120 a year, in 2045, to match selling and investing.
+- **The break-even rent.** Letting would need about $25,370 a month, $304,450 a year, in 2045, to match selling and investing.
 
 ## The black swans, and what they do to the answer
 
