@@ -636,6 +636,12 @@ def page_executive_summary() -> str:
         ("The rental comparison", f"Letting the home out would need about {m(p45['breakeven_rent_monthly'])} a month in 2045 to match selling and investing. That is over 5% of the property's value per year in gross rent."),
         ("The estate position", f"California has had no estate tax since 2005. Federally, the 2026 exclusion is {m(V['federal_basic_exclusion_2026']['value'])} per person and {m(V['federal_basic_exclusion_2027']['value'])} for 2027. Portability lets a surviving spouse use a deceased spouse's unused exclusion."),
         ("The biggest unknown", "Whether the heir wants to live in this specific house. That is a preference, not a number, and it is worth more than any gap in this analysis."),
+        ("Mixed paths", f"Living there for a while and then selling is the closest of the mixed paths, and it still ends behind an immediate sale: five years of occupancy followed by a sale leaves {m(next(x for x in MIXED['paths'] if x['occupy_years'] == 5 and x['mode'] == 'sell')['gap_vs_sell_now'])} less than selling at the inheritance. The table is on the <a href=\"decision.html\">decision page</a>."),
+        ("The clawback nobody models", f"Moving out after claiming the Proposition 19 exclusion is not free. On the live-then-let path the exclusion is removed and the change-of-ownership base year value is enrolled, which costs about {m(MIXED['clawback']['difference'])} of extra property tax over thirty years against the reading in which the low assessment survives. Both readings are now published."),
+        ("How often it holds", f"Over {MIXED['distribution']['draws']} resampled histories of the verified record, selling beats living in the house in {next(s['value'] for s in MIXED['distribution']['shares'] if s['key'].startswith('Selling beats living in it for thirty'))*100:.1f}% of them, and beats living there ten years and then selling in {next(s['value'] for s in MIXED['distribution']['shares'] if s['key'].startswith('Selling beats living in it ten years'))*100:.1f}%. The distribution is on the <a href=\"index.html#distribution\">dashboard</a> and the <a href=\"projections.html#fan\">projections page</a>."),
+        ("What a sale actually costs the state", f"The transfer tax and recording fees the brief asked to have priced come to {m(MIXED['fees_example']['published_total'])} on a {m(MIXED['fees_example']['price'])} sale, about {MIXED['fees_example']['published_share_of_modelled']}% of the modelled 5.5% selling cost. The other {MIXED['fees_example']['private_share_of_modelled']}% is commission, escrow and title, which are private quotes rather than statutes. The itemisation is on the <a href=\"taxes.html\">taxes page</a>."),
+        ("The repeal that did not happen", "The initiative that would have undone most of Proposition 19 failed to qualify for the November 2026 ballot, so the shelter arithmetic above is current law rather than law about to change. A replacement measure can be filed at any time; the Secretary of State's qualification dashboard is the official page that would show it."),
+        ("The pre-commitment rule", "Before reading any projection, the household should write down what would make it choose each path. That register, with its decision columns empty, is on the <a href=\"precommit.html\">pre-commitment page</a>. Without it a single projection can be made to justify any path."),
     ]
     fact_rows = [
         f"<td><strong>{esc(k)}</strong></td><td>{v}</td>"
@@ -2872,6 +2878,26 @@ SUGGESTIONS = [
     ("S-21", "Get the county assessor's written answer on the base year after a move-out",
      "Section 63.2(a)(1)(C) says the base year established at the change in ownership is enrolled when the transferee stops being eligible for the homeowners' exemption. The live-then-rent path is modelled on that reading. A written answer removes the uncertainty.",
      "Low", "Medium: it moves the live-then-rent path, not the recommendation", "questions", ["rtc63_2_eligibility"]),
+    ("S-23", "Sign the pre-commitment register before reading any projection",
+     "The rules that decide each path, and the household's own priorities, are written down on the pre-commitment page. Filling in the two decision columns before reading the numbers is what stops a single projection from choosing the answer.",
+     "Low", "High: without it the model can justify any path", "precommit", [])
+    ,
+    ("S-24", "Have a California property tax lawyer confirm the clawback reading in writing",
+     "Section 63.2(a)(1)(C) enrols the change-of-ownership base year value when the heir stops qualifying, and this site now prices a six-figure cost for that. The live-then-let path moves by more than any other single input here, and the statute has not been applied by a court on these facts as far as this repository knows.",
+     "Medium", "Medium: it moves the live-then-let path, not the headline", "decision", ["rtc63_2_eligibility", "boe_lta26026"])
+    ,
+    ("S-25", "Obtain one written rent opinion and enter it, replacing the scenario range",
+     "The imputed-rent table prices the housing the household gets from living there across a range of hypothetical rents. One documented rent opinion replaces the range with a figure and closes the last open input in the model.",
+     "Low", "Medium: the living path is the only one whose value is not measured", "precommit", ["hud_fmr"])
+    ,
+    ("S-26", "Re-read the Secretary of State's initiative dashboard every year at gate RG-3",
+     "The Proposition 19 repeal initiative failed to qualify in May 2026, which is why the shelter arithmetic is current law. A replacement can be filed at any time, and the dashboard is the official page that records whether it has.",
+     "Low", "Medium: a repeal would remove the shelter and change the arithmetic", "laws", ["sos_initiative_status"])
+    ,
+    ("S-27", "Decide whether a city transfer tax applies before relying on the 5.5% sale cost",
+     "Only the county documentary transfer tax is modelled. Section 11911(b) lets a city add half the county rate again, and whether it applies to this property cannot be published without naming the city. The difference is small in dollars but it is an unverified part of the sale cost.",
+     "Low", "Low", "taxes", ["rtc11911"])
+    ,
     ("S-22", "Decide whether the public repository and its history should stay public",
      "The repository is public and earlier commits contain unrounded owner figures. Rounding the published page does not change what Git history holds. Making the repository private, or rewriting history, are the only two ways to close that exposure.",
      "Medium", "High for privacy, none for the analysis", "review", []),
@@ -3145,6 +3171,38 @@ def page_review() -> str:
         ("City transfer tax reduction proposal", "Not used in any figure",
          "Reported publicly but not verified against an official city source on the public site",
          "Check the city's Board of Supervisors file before relying on it."),
+        ("City documentary transfer tax on a sale of Property A", "Not modelled",
+         "Section 11911(b) lets a city add half the county rate again, with a credit against the "
+         "county tax. Whether a city tax applies here cannot be checked without naming the city, so "
+         "only the county charge is carried.",
+         "Ask the escrow officer for a fee estimate, or look up the city's own schedule privately."),
+        ("Commission, escrow and title as a share of the sale price", "The remainder of the modelled 5.5%",
+         "A private charge, not a statute. The published statutes come to about 0.11% of the price; "
+         "the rest of the 5.5% is a market quote this repository has not obtained.",
+         "Get two written listing and escrow estimates."),
+        ("Property A market rent, and therefore the imputed-rent credit", "Published only as a range of scenarios",
+         "No official source publishes a market rent for a specific home, and the input is empty.",
+         "Obtain one documented rent opinion and enter it in the data file."),
+        ("Combined recapture rate, corrected from 41.1% to 42.1%",
+         "42.1% (was 41.1%)",
+         "Arithmetic defect now fixed. Every component is a published rate - 25% federal "
+         "unrecaptured section 1250, the 13.3% California top marginal rate and the 3.8% net "
+         "investment income tax - and 25 + 13.3 + 3.8 = 42.1. The previous edition published 41.1, "
+         "one percentage point below its own stated components. Every figure that depends on "
+         "recapture was rebuilt.",
+         "No action needed: the correction is in. Have the CPA confirm the components apply on "
+         "these facts."),
+        ("Mixed paths and the distributions behind the headline",
+         "Published on the decision, dashboard and projections pages",
+         "Computed by scripts/mixed.py from the published inputs and the same verified series the "
+         "economy page uses. The mixed paths carry every cost the pure paths carry; the distributions "
+         "resample the verified record and do not forecast.",
+         "Read the method section; re-run scripts/mixed.py after any input change."),
+        ("The Proposition 19 clawback on the live-then-let path", "Now priced, both readings",
+         "Section 63.2(a)(1)(C) is applied as written, but no court has applied it to these facts in "
+         "anything this repository has read. The difference between the two readings is published "
+         "rather than assumed away.",
+         "Get a written answer from the county assessor, and have counsel confirm the reading."),
     ]
     # Each row points only at the official source that actually bears on it. A row with no
     # matching official source says so, and links to the register, rather than borrowing a
@@ -3164,6 +3222,12 @@ def page_review() -> str:
         "Property B rent": [],
         "The inherited cash amount": [],
         "City transfer tax reduction proposal": [],
+        "City documentary transfer tax on a sale of Property A": ["rtc11911"],
+        "Commission, escrow and title as a share of the sale price": [],
+        "Property A market rent, and therefore the imputed-rent credit": ["hud_fmr"],
+        "The Proposition 19 clawback on the live-then-let path": ["rtc63_2_eligibility", "boe_lta26026"],
+        "Combined recapture rate, corrected from 41.1% to 42.1%": ["irs_tc409", "irs_tc559", "ftb_cg", "ftb_rates"],
+        "Mixed paths and the distributions behind the headline": ["fred_casthpi", "fred_cpi"],
     }
     assert set(UV_WHERE) == {a for a, _, _, _ in unverified}, "every unverified row needs a source decision"
     uv_rows = [f"<td><strong>{esc(a)}</strong></td><td>{b}</td>"
@@ -3697,6 +3761,49 @@ def executive_summary_markdown() -> str:
     a("")
     a("The letting paths are credited with **no rent**, because no market rent for Property A has been supplied "
       "and no official source publishes one for a specific home. Read them as a floor, not as a comparison.")
+    a("")
+    a("## Mixed paths, and what moving out costs")
+    a("")
+    a("| Path | Terminal value | Selling at the inheritance leaves this much more |")
+    a("|---|---|---|")
+    for r in MIXED["paths"]:
+        if r["occupy_years"] == 0 and r["mode"] == "sell":
+            continue
+        a(f"| {r['label']} | {cash(r['asset_terminal'])} | {cash(r['gap_vs_sell_now'])} |")
+    a("")
+    a(f"The closest mixed path is a short occupancy followed by a sale, and it still ends behind selling at "
+      f"the inheritance. Moving out after claiming the Proposition 19 exclusion costs about "
+      f"{cash(MIXED['clawback']['difference'])} of extra property tax over thirty years on the "
+      "live-then-let path, against the reading in which the low assessment survives; both readings are published.")
+    a("")
+    a("## How often the answer holds")
+    a("")
+    for s in MIXED["distribution"]["shares"]:
+        a(f"- {s['key']}: **{s['value']*100:.1f}%** of {MIXED['distribution']['draws']} resampled histories.")
+    a("")
+    a("The draws are ten-year blocks of the verified California house price index and consumer price index, "
+      "drawn together so house and inflation history move as they did. The equity return is held at the "
+      "published scenario, because no official series of forward equity returns exists.")
+    a("")
+    a("## Read this before the numbers")
+    a("")
+    a("The pre-commitment register on `precommit.html` states, in advance, the condition under which the "
+      "household would choose each path, and the household's own priorities. It is meant to be filled in "
+      "before any projection is read, so the answer cannot be reverse-engineered from one scenario.")
+    a("")
+    a("## Corrections in this edition")
+    a("")
+    a(f"- The combined depreciation recapture rate is corrected from 41.1% to **42.1%**. Its own stated "
+      f"components are 25% federal, 13.3% California and 3.8% net investment income tax, which sum to 42.1. "
+      f"Every figure that depends on recapture was rebuilt.")
+    a("- The transfer tax and recording fees on the sell path are itemised: about "
+      f"{cash(MIXED['fees_example']['published_total'])} on a {cash(MIXED['fees_example']['price'])} sale, "
+      f"about {MIXED['fees_example']['published_share_of_modelled']}% of the modelled 5.5% selling cost. "
+      "The $75 instrument fee does **not** apply, because Government Code section 27388.1(a)(2)(A) exempts "
+      "an instrument recorded in connection with a transfer subject to the documentary transfer tax.")
+    a("- The initiative to repeal most of Proposition 19 **failed to qualify** for the November 2026 ballot "
+      "(Secretary of State memorandum, 18 May 2026), so the shelter arithmetic is current law rather than "
+      "law about to change. It is recorded as dead on the law page.")
     a("")
     a("## The numbers that drive it")
     a("")
