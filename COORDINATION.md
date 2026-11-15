@@ -97,6 +97,13 @@ PASS: legacy Jekyll source is guarded; 23 public files allowed.
 
 **Session closed.** F-1, F-2, F-3 and F-4 complete. No open work is left on this branch.
 
+
+### Post-merge follow-up (same session, after #110 merged)
+
+One inconsistency was left after the merge and fixed in a follow-up commit on this branch: the history-audit table named the jurisdiction class but the prose above it still said only "property-level place names". Corrected. All gates re-run and passing; the board records it so the next session does not re-open the same item.
+
+**Session end state:** F-1 through F-4 complete, PR #110 merged at `8e4f52ad`, Pages `status: built`, live pages verified by fetching them. Nothing is waiting on the owner to proceed; the two items that need an owner decision are the history rewrite (procedure written, section 4 of `PRIVACY_REMEDIATION.md`) and the two property ZIPs remaining withdrawn from the site by policy.
+
 **Coordination notes at claim time.** Three pull requests were open when this session started: #97 (`arena/1663e879-tino3`, board record only), #102 (`arena/1405ad9c-tino3`, briefing/costs/review edits) and #103 (`arena/8eebc036-tino3`, briefing consolidation and privacy sweep). All three touch `scripts/build.py`, which this session also edits. This session will make its changes **additive and isolated** (new module, new data file, new page section appended to one builder function) so a rebase can keep every session's work. These sessions are live, so their branches are not merged from here. Shared outputs (`assets/data/model.json`, generated pages) are regenerated last, from the merged builder.
 
 ## Session `arena/0dcaf9f7-tino3` — open-item completion: ledger research, economy reconciliation, stale-PR disposition, final publication · claimed 2026-11-13
