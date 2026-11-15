@@ -2775,3 +2775,28 @@ No pull request was created or merged in this session because this branch is ide
 ### Gates (this branch, after G-2)
 
 `build.py`, `verify.py`, `privacy_boundary.py`, `package_site.py`, `verify_legacy.py --config-only` — all exit 0. Navigation check: 23 links, no duplicates.
+
+## Session `arena/83059c34-tino3` — final review, verification, publication and merge · 2026-11-15
+
+*Branch note:* Arena pins this session to `arena/83059c34-tino3`, based on `main` at `a61404f`. All work is on this branch and reaches `main` through a pull request from it.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| R-1 Review the repository line by line; confirm every brief item is implemented on a page | done | `arena/83059c34-tino3` | read-only; all 23 pages present |
+| R-2 Run every local gate (build, verify, privacy boundary, package, legacy guard) | done | `arena/83059c34-tino3` | `scripts/*` |
+| R-3 Confirm GitHub Pages is built and serving the current commit | done | `arena/83059c34-tino3` | GitHub Pages API |
+| R-4 Open PR from this branch to `main`; merge without waiting; confirm Pages deploys; record result | in progress | `arena/83059c34-tino3` | `COORDINATION.md` (this section) |
+
+### Result
+
+- **Repository state:** branch `arena/83059c34-tino3` == `main` == `a61404f`. Working tree clean.
+- **All 23 pages build** (`scripts/build.py` exit 0): index, executive-summary, decision, briefing, briefing-sheet, property-a, property-b, ownership-distinction, costs, projections, taxes, inheritance, timeline, what-if, estate, laws, black-swan, economy, questions, suggestions, review, sources, glossary.
+- **verify.py PASS:** 23 pages, 795 table rows, 729 linked to an official publisher, 66 explicitly logged as unsourceable (left blank, never inferred), 2,894 links, 109 ledger sources.
+- **privacy_boundary.py PASS:** every published dollar figure rounded to nearest $10 or a published official amount; no identifiers in the served tree.
+- **package_site.py PASS:** 23 public pages, 1 runtime asset, 117 content-free withdrawal routes.
+- **verify_legacy.py --config-only PASS:** legacy Jekyll source guarded; 24 public files allowed.
+- **GitHub Pages:** `build_type: legacy`, source `main:/`, status `built`. Latest Pages build is commit `a61404f` (this session's HEAD), error `null`, built 2026-11-15. Live site: https://wingbangboozle1-lang.github.io/Tino3/
+- **Privacy:** Property A / Property B placeholders only; no name, street address, parcel number, ZIP code, trust detail or utility account in any published file. Owner-supplied figures (Property A $3,100,000; Property B $1,800,000; Property B rent $7,150/month; water and electricity ranges) are rounded to the nearest $10 and labelled unverified where no official record was checked.
+- **Brief coverage:** every item in the owner's brief is implemented on a page: phased investing (black-swan.html), Attorney & CPA briefing sheet (briefing.html / briefing-sheet.html), what-would-change + reinvestment risk (index.html), what-if controls (what-if.html), mixed paths (decision.html, projections.html), deadlines timeline (timeline.html), grouped menu + glossary (glossary.html), executive summary (executive-summary.html), suggestions (suggestions.html), questions (questions.html), irregularities (review.html), property tables (property-a.html, property-b.html), inheritance thresholds (estate.html, laws.html, taxes.html), black-swan economics (black-swan.html, economy.html), step-by-step trust process (inheritance.html).
+- **Irregularities flagged (pre-existing, not blocking; none were filled in):** Property A water utility tariff and sanitary-district sewer rates not publishable under the privacy rule; Property A market rent not supplied (break-even rent reported instead); property-specific insurance premiums blank (CDI statewide benchmark only); city transfer-tax band detail and Santa Clara tax-rate-area tables beyond page one flagged. All left blank per the no-inference rule.
+- **Git history:** earlier commits and PR diffs retain unrounded owner figures and names; scrubbing history is an owner decision (requires a force-push to `main`) and was not performed.
