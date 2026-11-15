@@ -286,7 +286,7 @@ def privacy_banner() -> str:
     return callout("privacy", "Privacy and accuracy notice", f"""
 <ul>
 <li><strong>What is published.</strong> Market values, assessed values, tax bills, rent and running costs, rounded to the nearest $10 as requested, plus the model outputs computed from them.</li>
-<li><strong>What is never published.</strong> No name, street address, parcel number, ZIP code, trust term, beneficiary detail or utility account appears on any page or in any published file. The two properties are called Property A (the home being inherited, in REDACTED County) and Property B (the three-unit building already owned by the heir, in the City and County of REDACTED).</li>
+<li><strong>What is never published.</strong> No name, street address, parcel number, ZIP code, county or city name, trust term, beneficiary detail or utility account appears on any page or in any published file. The two properties are called Property A (the home being inherited) and Property B (the three-unit building already owned by the heir). Their county and city are deliberately withheld: like the parcel, they identify the properties, so official county and city pages are not linked from the public site either.</li>
 <li><strong>The inherited cash.</strong> The amount is not published. The estate page works entirely in anonymous scenario bands.</li>
 <li><strong>Rounding is not anonymity.</strong> Rounding to $10 defeats a search for an exact figure; it does not stop someone who already holds the county record from recognising a parcel. That residual risk is disclosed here rather than hidden.</li>
 <li><strong>Owner figures are unverified.</strong> Values taken from the owner's own records are labelled <span class="badge unverified">unverified</span> unless an official public record was checked. They are listed again on the <a href="review.html">flagged for review</a> page.</li>
@@ -651,9 +651,9 @@ or finding a tenant at an implausible rent.</p>""")
                     f"<td>Property A ad valorem rate</td><td>{pcf(ASM['ad_valorem_rate_a']['value'],3)}</td>"
                     f'<td><span class="badge unverified">assumption, flagged</span></td>'
                     + src_cell(ASM["ad_valorem_rate_a"]["src"], "Rate structure"),
-                    f"<td>Property B ad valorem rate</td><td>{pcf(ASM['ad_valorem_rate_b']['value'],5)}</td>"
+                    f"<td>Property B ad valorem rate</td><td>{pcf(ASM['ad_valorem_rate_b']['value'],2)}</td>"
                     f'<td><span class="badge verified">published</span></td>'
-                    + src_cell(ASM["ad_valorem_rate_b"]["src"], "SF Treasurer"),
+                    + src_cell(ASM["ad_valorem_rate_b"]["src"], "Published rate; publisher withheld for privacy"),
                     f"<td>Assessed value growth</td><td>{pcf(ASM['assessed_value_growth']['baseline'],1)} a year</td>"
                     f'<td><span class="badge verified">verified rule</span></td>'
                     + src_cell(ASM["assessed_value_growth"]["src"], "Proposition 13 cap"),
@@ -694,7 +694,7 @@ def page_property_a() -> str:
             f"<td>{m(r['bill']) if r['bill'] is not None else BLANK_CELL}</td>"
             f"<td>{m(r['fitted'])}</td>"
             f"<td>{m(r['residual']) if r['residual'] is not None else '&mdash;'}</td>"
-            + src_cell(["scc_ratebook", "boe_pub29"], "How a bill is built"))
+            + src_cell(["boe_pub29"], "How a bill is built; local rate withheld"))
     roll = table(
         "Property A assessment roll and tax bill, as supplied, rounded to the nearest $10",
         ["Year", "Assessed value", "Tax bill as supplied", "Bill implied by the model",
@@ -748,7 +748,7 @@ def page_property_a() -> str:
         + src_cell([], "No official source"),
         f"<td>Property tax, today</td><td>&mdash;</td><td>{m(MODEL['costs_a_now']['property_tax'])}</td>"
         f'<td><span class="badge derived">derived</span></td>'
-        + src_cell(["scc_ratebook"], "Rate structure"),
+        + src_cell([], "Local rate withheld for privacy"),
     ]
     costs = table("Property A annual running costs",
                   ["Cost", "Range supplied", "Used in the model", "Status", "Source"], cost_rows)
@@ -782,13 +782,13 @@ def page_property_a() -> str:
                   f"<td>Role</td><td>Inherited through a trust, planned 2040 to 2050. Not owned by the heir today.</td>"
                   + src_cell([], "Owner statement"),
                   f"<td>Jurisdiction</td><td>{esc(A['jurisdiction'])}</td>"
-                  + src_cell(["scc_ratebook"], "County rate book"),
+                  + src_cell([], "Withheld for privacy"),
                   f"<td>Estimated market value, November 2026</td><td>{m(A['estimated_market_value_2026'])}</td>"
                   + src_cell([], "Owner estimate, unverified"),
                   f"<td>Current assessed value</td><td>{m(A['roll'][0]['assessed'])}</td>"
                   + src_cell([], "Owner record, unverified"),
                   f"<td>Current property tax bill</td><td>{m(MODEL['costs_a_now']['property_tax'])}</td>"
-                  + src_cell(["scc_ratebook"], "Rate structure"),
+                  + src_cell([], "Local rate withheld for privacy"),
                   f"<td>Units</td><td>{A['units']}, occupied by the transferor as a principal residence</td>"
                   + src_cell(["boe_lta26026"], "Principal residence test"),
                   f"<td>Solar</td><td>Installed. Export credit currently exceeds usage.</td>"
@@ -801,20 +801,22 @@ Proposition 13 protects that gap only until ownership changes. When the trust tr
 value resets to market value, less the Proposition 19 shelter of about {m(p45['prop19_cap'])} if the heir moves in
 within a year and files the claim, or with no shelter at all if not. Either way this is the largest single change
 in the whole analysis, and it happens by operation of law whether or not anyone plans for it.</p>""")
-        + table("How the county builds a property tax rate (published rate book, FY 2025-26)",
+        + table("How a property tax rate is built (state law and the county's published rate book, FY 2025-26)",
                 ["Component", "Rate", "Source"],
                 [("<td>1% maximum levy, applied to every parcel</td><td>1.00000%</td>"
-                  + src_cell(["scc_ratebook", "boe_pub29"], "Rate book summary")),
+                  + src_cell(["boe_pub29"], "State law summary")),
                  ("<td>County Retirement Levy</td><td>0.03880%</td>"
-                  + src_cell(["scc_ratebook"], "Rate book summary")),
+                  + src_cell([], "Official county rate book withheld for privacy")),
                  ("<td>County Library Retirement Levy</td><td>0.00240%</td>"
-                  + src_cell(["scc_ratebook"], "Rate book summary")),
+                  + src_cell([], "Official county rate book withheld for privacy")),
                  ("<td>County Housing Bond 2016</td><td>0.00560%</td>"
-                  + src_cell(["scc_ratebook"], "Rate book summary")),
+                  + src_cell([], "Official county rate book withheld for privacy")),
                  ("<td>City, school and special-district voter-approved bonds</td><td>varies by tax rate area</td>"
-                  + src_cell(["scc_ratebook"], "816 areas listed in the book"))],
+                  + src_cell([], "Official county rate book withheld for privacy"))],
                 note="The county publishes 816 tax rate areas for FY 2025-26; the components above are the "
-                     "countywide ones listed in the book's own summary. The parcel's own rate area and total "
+                     "countywide ones listed in the book's own summary. The book is an official published "
+                     "document, but its web address names the jurisdiction, so it is not linked on the public "
+                     "site and its rows are registered instead. The parcel's own rate area and total "
                      "rate are deliberately not published on this site. The model's 1.18% ad valorem "
                      "assumption stays flagged on the review page, and the parcel's exact rate must be read "
                      "from its own tax bill.")
@@ -839,10 +841,12 @@ def page_property_b() -> str:
             f"<td>{r['year']}</td><td>{m(r['assessed'])}</td>"
             f"<td>{m(r['bill'])}</td><td>{m(r['fitted'])}</td>"
             f"<td>{m(r['residual'])}</td>"
-            + src_cell(["sf_treas_rate", "boe_pub29"], "Rate and rule"))
+            + src_cell(["boe_pub29"], "Rule; local rate withheld for privacy"))
     roll = table("Property B assessment roll and tax bill, as supplied, rounded to the nearest $10",
                  ["Year", "Assessed value", "Tax bill as supplied", "Bill implied by the model",
-                  "Difference", "Source"], roll_rows)
+                  "Difference", "Source"], roll_rows,
+                 note="The state rule behind the fitted column is linked. The local secured rate behind it is "
+                      "withheld from the public site for privacy; the parcel's own bill is the controlling record.")
 
     cost_rows = [
         f"<td>Water, all three units</td><td>{m(B['annual_costs']['water']['low'])} to {m(B['annual_costs']['water']['high'])}</td><td>{m(B['annual_costs']['water']['mid'])}</td>"
@@ -854,7 +858,7 @@ def page_property_b() -> str:
         f"<td>Maintenance and repair</td><td>not supplied</td><td>{m(MODEL['costs_b_now']['maintenance'])}</td>"
         f'<td><span class="badge assumption">assumption</span></td>' + src_cell([], "No official source"),
         f"<td>Property tax, today</td><td>&mdash;</td><td>{m(MODEL['costs_b_now']['property_tax'])}</td>"
-        f'<td><span class="badge derived">derived</span></td>' + src_cell(["sf_treas_rate"], "Published rate"),
+        f'<td><span class="badge derived">derived</span></td>' + src_cell([], "Local rate withheld for privacy"),
     ]
     inc = MODEL["costs_b_now"]
     net = inc["rent"] - sum(inc[k] for k in ("water", "electricity", "insurance", "maintenance", "property_tax"))
@@ -868,14 +872,14 @@ def page_property_b() -> str:
         "Rent rules that apply to Property B",
         ["Rule", "What it says", "Source"],
         [
-            f"<td>REDACTED allowed annual increase</td><td>1.6% from 1 March 2026 to 28 February 2027, "
-            f"based on 60% of the change in the REDACTED consumer price index. One increase every twelve "
+            f"<td>The city's rent ordinance: allowed annual increase</td><td>1.6% from 1 March 2026 to 28 February 2027, "
+            f"based on 60% of the change in the regional consumer price index. One increase every twelve "
             f"months. There is no limit on the rent first charged to a new tenant of an empty unit.</td>"
-            + src_cell(["sf_rent_increase"], "SF Rent Board"),
+            + src_cell([], "Official city page withheld for privacy"),
             f"<td>Proposed cap on banked and capital improvement increases</td>"
-            f"<td>The Board of Supervisors is considering File 261020, which would limit combined banked and "
+            f"<td>A city ordinance file would limit combined banked and "
             f"capital improvement increases to 10% a year. <strong>Not enacted.</strong></td>"
-            + src_cell(["sf_file261020"], "Legistar file"),
+            + src_cell([], "Official file not linked for privacy"),
             f"<td>Statewide rent cap</td><td>Gross rent cannot rise more than 5% plus the change in the cost "
             f"of living, or 10%, whichever is lower, over twelve months. Housing already under a stricter "
             f"local ordinance is excluded.</td>"
@@ -883,10 +887,10 @@ def page_property_b() -> str:
             f"<td>Statewide just cause</td><td>A tenancy cannot be ended without a stated just cause, and a "
             f"no-fault termination including an owner move-in carries a relocation payment.</td>"
             + src_cell(["civ1946_2"], "Civil Code 1946.2"),
-            f"<td>Which rules apply</td><td>Whether these units are covered by the REDACTED Rent "
+            f"<td>Which rules apply</td><td>Whether these units are covered by the city's Rent "
             f"Ordinance, by the statewide act, or by an exemption depends on the building's age, its "
             f"ownership and the notices given. This site does not verify that.</td>"
-            + src_cell(["sf_rent_increase", "civ1947_12"], "Both rules"),
+            + src_cell(["civ1947_12"], "Statewide rule"),
         ])
 
     return (
@@ -896,19 +900,19 @@ def page_property_b() -> str:
                   f"<td>Role</td><td>Already owned by the heir. Rental income is already flowing and the heir can live here without losing it.</td>"
                   + src_cell([], "Owner statement"),
                   f"<td>Jurisdiction</td><td>{esc(B['jurisdiction'])}</td>"
-                  + src_cell(["sf_treas_rate"], "SF Treasurer"),
+                  + src_cell([], "Withheld for privacy"),
                   f"<td>Estimated market value, November 2026</td><td>{m(B['estimated_market_value_2026'])}</td>"
                   + src_cell([], "Owner estimate, unverified"),
                   f"<td>Current assessed value</td><td>{m(B['roll'][0]['assessed'])}</td>"
                   + src_cell([], "Owner record, unverified"),
                   f"<td>Current property tax bill</td><td>{m(MODEL['costs_b_now']['property_tax'])}</td>"
-                  + src_cell(["sf_treas_rate"], "Published rate"),
+                  + src_cell([], "Local rate withheld for privacy"),
                   f"<td>Units</td><td>{B['units']}, of which {B['units_rented']} are let</td>"
                   + src_cell([], "Owner statement"),
                   f"<td>Rent received</td><td>{m(B['rent']['monthly'])} a month, {m(B['rent']['annual'])} a year</td>"
                   + src_cell([], "Owner statement, unverified"),
                   f"<td>Effective tax rate on assessed value</td><td>{MODEL['projection_b'][0]['effective_rate']}%</td>"
-                  + src_cell(["sf_treas_rate"], "Rate plus fixed charges"),
+                  + src_cell([], "Computed from the owner's bills"),
               ])
         + roll
         + costs
@@ -956,7 +960,7 @@ def page_distinction() -> str:
     tbl = table("The two properties side by side",
                 ["Dimension", "Property A - inherited", "Property B - already owned", "Why the difference decides the case"],
                 [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td><td>{esc(d)}</td>"
-                 + src_cell(["rtc63_2", "boe_pub29", "irs_basis", "sf_treas_rate"], "Governing rules")
+                 + src_cell(["rtc63_2", "boe_pub29", "irs_basis"], "Governing rules")
                  for a, b, c, d in rows])
     return (tbl
             + callout("key", "The distinction that changes the arithmetic", """
@@ -1034,11 +1038,11 @@ for either building appears on this site; both remain owner estimates flagged un
                 ["Item", "Amount", "Source"],
                 [
                     f"<td>Rent received, two units</td><td>{m(net['rent'])}</td>" + src_cell([], "Owner statement, unverified"),
-                    f"<td>Less water</td><td>{m(-net['water'])}</td>" + src_cell(["REDACTED_rates"], "Owner estimate; city schedule"),
+                    f"<td>Less water</td><td>{m(-net['water'])}</td>" + src_cell([], "Owner estimate; city schedule withheld for privacy"),
                     f"<td>Less electricity</td><td>{m(-net['electricity'])}</td>" + src_cell([], "Owner estimate, unverified"),
                     f"<td>Less insurance</td><td>{m(-net['insurance'])}</td>" + src_cell([], "Owner estimate, unverified"),
                     f"<td>Less maintenance at the assumed rate</td><td>{m(-net['maintenance'])}</td>" + src_cell([], "Assumption"),
-                    f"<td>Less property tax</td><td>{m(-net['property_tax'])}</td>" + src_cell(["sf_treas_rate"], "Published rate"),
+                    f"<td>Less property tax</td><td>{m(-net['property_tax'])}</td>" + src_cell([], "Local rate withheld for privacy"),
                     f"<td><strong>Net, before income tax and vacancy</strong></td><td><strong>{m(net_now)}</strong></td>" + method_cell("#method", "Model output"),
                 ],
                 note=f"That is about {net_now / B['estimated_market_value_2026'] * 100:.1f}% of the estimated value. "
@@ -1047,9 +1051,9 @@ for either building appears on this site; both remain owner estimates flagged un
         + table("Projection method", ["Step", "What is done", "Source"],
                 [
                     "<td>Assessed value</td><td>Grown at the Proposition 13 cap of 2% a year, which has been binding in every year of both supplied rolls.</td>" + src_cell(["boe_pub29", "rtc51"], "Proposition 13"),
-                    "<td>Tax bill</td><td>Ad valorem rate times assessed value, plus a fixed charge grown at the modelled inflation rate.</td>" + src_cell(["scc_ratebook", "sf_treas_rate"], "Rate structure and published rate"),
+                    "<td>Tax bill</td><td>Ad valorem rate times assessed value, plus a fixed charge grown at the modelled inflation rate.</td>" + src_cell(["boe_pub29"], "Rule; local rates withheld for privacy"),
                     "<td>Water, power, insurance, maintenance</td><td>Grown at the modelled inflation rate. No real-terms change in usage or tariffs is assumed.</td>" + src_cell(["ssa_trustees"], "Inflation anchor"),
-                    "<td>Market value</td><td>Grown at the modelled house price growth rate of 4% a year.</td>" + src_cell(["fred_hpi_a", "fred_hpi_b"], "Historical index"),
+                    "<td>Market value</td><td>Grown at the modelled house price growth rate of 4% a year.</td>" + src_cell([], "Source series withheld for privacy"),
                 ],
                 note="A constant rate is used for the year-by-year page because it is the only way to show a "
                      "readable table. It is not a forecast. The <a href=\"black-swan.html\">black swan page</a> "
@@ -1177,7 +1181,7 @@ rules work, and it only exists at the moment of transfer.</p>""")
         + table("City transfer tax on a sale of Property B",
                 ["Price band", "Rate", "Note", "Source"],
                 [f"<td>{esc(a)}</td><td>{esc(b)}</td><td>{esc(c)}</td>"
-                 + src_cell(["cityb_transfer"], "City fee schedule")
+                 + src_cell([], "City fee schedule withheld for privacy")
                  for a, b, c in [
                      ("Up to $250,000", "0.5%", "Lowest band."),
                      ("Above $250,000 and below $1,000,000", "0.68%", "Applies to the whole price, not just the excess."),
@@ -1209,17 +1213,17 @@ def page_inheritance() -> str:
          "Confirm three things: that the trust holds title to the house, that the heir's relationship to the transferor is a parent-and-child relationship (or grandparent and grandchild with the middle generation deceased), and whether the heir takes outright, in further trust, or for life. The relationship is what qualifies the transfer for the intergenerational exclusion; without it the property is reassessed in full.",
          "The successor trustee, with the trust instrument and the recorded deed.",
          "No statutory deadline, but this is the step that determines everything else.",
-         ["scc_recorder", "rtc63_2"]),
+         ["rtc63_2"]),
         ("2", "Check the assessment record now",
          "Confirm the assessed value, the tax rate area, the fixed charges on the bill and whether a homeowners' exemption is in place.",
          "The heir or the current owner, from the county assessor and the tax bill.",
          "Do this before the transfer, not after.",
-         ["scc_ratebook", "boe_pub29"]),
+         ["boe_pub29"]),
         ("3", "The transfer event",
          "On the transfer, the trustee signs and records a deed moving the house out of the trust to the heir. Recording is what starts the county's clock.",
          "The trustee records with the county recorder.",
          "Recording fees are due at recording. The documentary transfer tax does not apply to a deed where the property passes by reason of death or by inter vivos gift, so a transfer out of the trust at death should be exempt from it; the county recorder's fee schedule confirms the fee exemption for exempt transfers. Property A is in the county, not the city, so no city transfer tax applies to it either.",
-         ["scc_recorder", "rtc11930_trust", "rtc11911"]),
+         ["rtc11930_trust", "rtc11911"]),
         ("4", "Notice to beneficiaries",
          "When a revocable trust becomes irrevocable, the trustee must notify the heirs and beneficiaries and give them the information the statute requires.",
          "The trustee.",
@@ -1239,7 +1243,7 @@ def page_inheritance() -> str:
          "The property is reassessed to its full market value at the date of transfer and a supplemental bill may follow for the part of the year already gone.",
          "The county assessor, automatically.",
          "Supplemental bills are issued after the reassessment.",
-         ["boe_pub29", "sf_treas_rate"]),
+         ["boe_pub29"]),
         ("8", "Federal estate tax, if the estate is large enough",
          "If the gross estate plus adjusted taxable gifts exceeds the exclusion for the year of death, an estate tax return is due and tax is paid. Portability of a unused exclusion is elected on a timely return.",
          "The executor or the trustee.",
@@ -1415,17 +1419,17 @@ def page_laws() -> str:
          ["sb974"]),
     ]
     pending = [
-        ("REDACTED File 261020",
+        ("A city measure capping banked and capital-improvement rent increases",
          "Would temporarily cap combined banked and capital improvement rent increases on rent-controlled units at 10% a year.",
          "Would further limit income growth on Property B if the units are covered.",
-         "Not enacted. The Rent Board itself says so.",
-         ["sf_file261020"]),
-        ("REDACTED transfer tax reductions",
+         "Not enacted. Not verified against an official source on the public site, because the official file names the jurisdiction.",
+         []),
+        ("City transfer tax reductions",
          "A package introduced in February 2026 proposed rolling back the 2020 transfer tax increases for large transactions.",
          "Would reduce the cost of selling Property B. Would not affect Property A.",
-         "Reported but not verified against an official city source on this site. It is left deliberately "
+         "Reported but not verified against an official city source on the public site. It is left deliberately "
          "unresolved rather than given a number.",
-         ["sf_file261020"]),
+         []),
     ]
     dead = [
         ("AB 1157", "Would have amended Civil Code sections 1946.2, 1947.12 and 1947.13 on just cause and rent increases.",
@@ -1444,7 +1448,7 @@ results before relying on any of them.</p>""")
         + table("Proposed, not enacted", ["Measure", "What it would do", "Why it matters here", "Status", "Source"],
                 [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td>"
                  f'<td><span class="badge unverified">{esc(d)}</span></td>'
-                 + (src_cell(e, "Official source") if e else '<td class="src-cell"><span class="src-label">no official source retrieved</span></td>')
+                 + src_cell(e, "Official source" if e else "No official source retrieved")
                  for a, b, c, d, e in pending])
         + table("Dead bills recorded so they are not mistaken for law",
                 ["Bill", "What it would have done", "Status", "Source"],
@@ -1458,7 +1462,7 @@ results before relying on any of them.</p>""")
                     "<td>A change to Proposition 19 removing or widening the shelter</td><td>Would change the reassessment arithmetic at the transfer, which is the largest single number here.</td>" + src_cell(["rtc63_2", "boe_lta25009"], "Current rule"),
                     "<td>A split-roll change to Proposition 13</td><td>Would reset assessments on both properties and change every projection on this site.</td>" + src_cell(["boe_pub29"], "Current rule"),
                     "<td>Abolition of the basis step-up at death</td><td>Would remove the single strongest argument for selling at inheritance.</td>" + src_cell(["irs_basis"], "Current rule"),
-                    "<td>A stricter local rent ordinance in REDACTED</td><td>Would reduce the income from Property B and make Property A look slightly better by comparison.</td>" + src_cell(["sf_rent_increase"], "Current rate"),
+                    "<td>A stricter local rent ordinance in the city</td><td>Would reduce the income from Property B and make Property A look slightly better by comparison.</td>" + src_cell([], "Official city page withheld for privacy"),
                 ])
     )
 
@@ -1468,8 +1472,8 @@ def page_black_swan() -> str:
     cpi = MODEL["meta"]
     stats = []
     for key, label, sid in (("cpi", "Consumer prices, 1977 to 2024", "fred_cpi"),
-                            ("hpi_a", "House prices, Property A area, 1977 to 2025", "fred_hpi_a"),
-                            ("hpi_b", "House prices, Property B area, 1977 to 2025", "fred_hpi_b"),
+                            ("hpi_a", "House prices, Property A area, 1977 to 2025", ""),
+                            ("hpi_b", "House prices, Property B area, 1977 to 2025", ""),
                             ("gs10", "10-year Treasury yield, 1976 to 2025", "fred_gs10")):
         changes = [r[key + "_chg"] for r in MODEL["series_table"] if r.get(key + "_chg") is not None]
         if key == "gs10":
@@ -1482,7 +1486,8 @@ def page_black_swan() -> str:
                           f"{sum(changes) / len(changes) * 100:.1f}%",
                           f"{len(changes)} years, {dn} of them down", sid))
     stats_rows = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td><td>{esc(d)}</td>"
-                  + src_cell([e], "Verified series") for a, b, c, d, e in stats]
+                  + (src_cell([e], "Verified series") if e else src_cell([], "Official series withheld for privacy"))
+                  for a, b, c, d, e in stats]
 
     reg_rows = []
     for rg in MODEL["regimes"]:
@@ -1515,7 +1520,7 @@ def page_black_swan() -> str:
             f"<td>{m(r['b_value'])}</td>"
             f"<td>{r['down_years_a']}</td><td>{pc(r['worst_year_a'], 1)}</td>"
             f"<td>{m(r['tax_if_reset'])}</td><td>{m(r['tax_if_kept'])}</td>"
-            + src_cell(["fred_hpi_a", "fred_hpi_b", "fred_cpi", "fred_gs10"], "Verified series"))
+            + src_cell(["fred_cpi", "fred_gs10"], "Verified series; the house-price series is withheld for privacy"))
     replay = table("Every full 30-year window in the verified record, applied to these two properties",
                    ["Window", "House growth a year", "Inflation a year", "Treasury compounding",
                     "Property A value at the end", "Same, in start-year money",
@@ -1813,7 +1818,7 @@ def page_economy() -> str:
             f"<td>{r['hpi_a'] if r['hpi_a'] is not None else '&mdash;'}</td><td>{chg('hpi_a')}</td>"
             f"<td>{r['hpi_b'] if r['hpi_b'] is not None else '&mdash;'}</td><td>{chg('hpi_b')}</td>"
             f"<td>{r['gs10'] if r['gs10'] is not None else '&mdash;'}</td>"
-            + src_cell(["fred_cpi", "fred_hpi_a", "fred_hpi_b", "fred_gs10"], "FRED series"))
+            + src_cell(["fred_cpi", "fred_gs10"], "FRED series; house-price series withheld for privacy"))
     tbl = table("The verified annual record, 1976 to 2025",
                 ["Year", "Consumer price index", "Change",
                  "House price index, Property A area", "Change",
@@ -1846,7 +1851,7 @@ as they did in the record. The percentile of each outcome is shown against the c
                     f"<td>{m(r['constant'])}</td>" if r['unit'] == 'money' else
                     f"<td>{pc(r['p05'], 2)}</td><td>{pc(r['p50'], 2)}</td><td>{pc(r['p95'], 2)}</td>"
                     f"<td>{pc(r['constant'], 2)}</td>")
-                 + src_cell(["fred_hpi_a", "fred_cpi"], "Bootstrap source series")
+                 + src_cell(["fred_cpi"], "Bootstrap source series; house-price series withheld for privacy")
                  for r in ECON["bootstrap"]["rows"]],
                 note="The record's median is well above the model's 4% because the fifty years to 2026 "
                      "include the 1970s and 1980s. The model's constant sits near the record's 5th "
@@ -1855,11 +1860,11 @@ as they did in the record. The percentile of each outcome is shown against the c
         + table("How often each outcome happens across the draws",
                 ["Share of the two thousand draws", "Share", "Source"],
                 [f"<td>{esc(s['key'])}</td><td><strong>{s['value'] * 100:.1f}%</strong></td>"
-                 + src_cell(["fred_hpi_a", "fred_cpi"], "Bootstrap source series")
+                 + src_cell(["fred_cpi"], "Bootstrap source series; house-price series withheld for privacy")
                  for s in ECON["bootstrap"]["shares"]]
                 + [f"<td>{esc(ECON['bootstrap']['wins']['case'])}</td>"
                    f"<td><strong>{ECON['bootstrap']['wins']['sell_wins_share'] * 100:.1f}%</strong></td>"
-                   + src_cell(["fred_hpi_a", "fred_cpi"], "Bootstrap source series")],
+                   + src_cell(["fred_cpi"], "Bootstrap source series; house-price series withheld for privacy")],
                 note=ECON["bootstrap"]["wins"]["note"])
         + table("The lesser-of rule under the record's inflation paths",
                 ["Outcome across the draws", "Property A", "Property B", "Source"],
@@ -1896,11 +1901,11 @@ as they did in the record. The percentile of each outcome is shown against the c
                  for a, b, c in [
                     ("Highest annual inflation in the record", "13.5%, in 1980", ["fred_cpi"]),
                     ("Only annual fall in consumer prices in the record", "minus 0.3%, in 2009", ["fred_cpi"]),
-                    ("Best year for house prices in Property A area", "plus 30.2%, in 1989", ["fred_hpi_a"]),
-                    ("Worst year for house prices in Property A area", "minus 12.3%, in 2009", ["fred_hpi_a"]),
-                    ("Property A area, 2006 to 2011", "a 25.6% fall from the 2006 level to the 2011 level", ["fred_hpi_a"]),
-                    ("Property B area, 2006 to 2011", "a 21.8% fall from the 2006 level to the 2011 level", ["fred_hpi_b"]),
-                    ("Property A area, 1989 to 1996", "a fall from 110.67 to 105.46 over seven years", ["fred_hpi_a"]),
+                    ("Best year for house prices in Property A area", "plus 30.2%, in 1989", []),
+                    ("Worst year for house prices in Property A area", "minus 12.3%, in 2009", []),
+                    ("Property A area, 2006 to 2011", "a 25.6% fall from the 2006 level to the 2011 level", []),
+                    ("Property B area, 2006 to 2011", "a 21.8% fall from the 2006 level to the 2011 level", []),
+                    ("Property A area, 1989 to 1996", "a fall from 110.67 to 105.46 over seven years", []),
                     ("Highest annual 10-year Treasury yield in the record", "13.91%, in 1981", ["fred_gs10"]),
                     ("Lowest annual 10-year Treasury yield in the record", "0.89%, in 2020", ["fred_gs10"]),
                     ("2025 annual 10-year Treasury yield", "4.29%", ["fred_gs10"]),
@@ -1927,7 +1932,7 @@ QUESTIONS = [
        "No deed, no parcel number, no trust document.",
        "Read the recorded grant deed and the preliminary change of ownership report at the county recorder.",
        "If the house is not in the trust, the transfer path, the reassessment and possibly probate all change.",
-       ["scc_recorder"]),
+       []),
       ("Is the trust revocable, and who is the successor trustee?",
        "Not supplied.",
        "Whether the settlor can revoke, who administers on death, and whether the trustee has a sale power.",
@@ -1960,13 +1965,13 @@ QUESTIONS = [
        "The exact published rate and the bond components.",
        "Look up the tax rate area on the tax bill and read the rate from the county's published rate book.",
        "The ad valorem rate drives every reassessment figure. This site assumes 1.18% and flags it.",
-       ["scc_ratebook"]),
+       []),
       ("What are the fixed charges on the Property A bill?",
        "Derived from the owner's bills at about $840 in 2025 at the assumed rate.",
        "The itemised parcel taxes, bonds and assessments.",
        "Read the itemised bill.",
        "Fixed charges have grown unevenly; on Property B they grew at 8.1% a year between 2016 and 2025.",
-       ["scc_ratebook", "sf_treas_rate"]),
+       []),
       ("Has a homeowners' exemption been claimed on Property A?",
        "Not supplied.",
        "Whether the exemption is in place on the transferor's main home.",
@@ -1978,7 +1983,7 @@ QUESTIONS = [
        "Which property currently carries the exemption.",
        "Check both bills.",
        "Only one exemption is available. Claiming it on Property A means giving it up on Property B.",
-       ["sf_treas_rate"]),
+       []),
       ("Have there been earlier transfers, exclusions or new construction on either property?",
        "Not supplied.",
        "Prior base year value transfers, prior Prop 19 claims, permits.",
@@ -2021,18 +2026,18 @@ QUESTIONS = [
        "Read the leases and the rent ledger.",
        "Drives the income on Property B and the timing of any increase.",
        []),
-      ("Are the Property B units covered by the REDACTED Rent Ordinance?",
+      ("Are the Property B units covered by the city's Rent Ordinance?",
        "Not verified.",
        "The certificate of occupancy date and the exemption status of the building.",
        "Check with the Rent Board and the building's records.",
        "Coverage decides whether the 1.6% local increase or the statewide cap applies.",
-       ["sf_rent_increase", "civ1947_12"]),
+       ["civ1947_12"]),
       ("Is the rent increase licence current, and is the building registered in the Housing Inventory?",
        "Not supplied.",
        "Whether the licence and registration are in place.",
        "Ask the Rent Board.",
        "Without them, annual increases cannot lawfully be imposed at all.",
-       ["sf_rent_increase"]),
+       []),
       ("What are the obligations if the heir wants a unit back for their own use?",
        "Not supplied.",
        "Just cause, notice periods and relocation payments under local and statewide rules.",
@@ -2085,7 +2090,7 @@ QUESTIONS = [
        "The itemised bill.",
        "Read the itemised bill.",
        "These are part of the fixed charge that keeps growing regardless of what the market does.",
-       ["scc_ratebook"]),
+       []),
      ]),
     ("F", "Taxes and the estate",
      [
@@ -2181,10 +2186,10 @@ SUGGESTIONS = [
      "Low", "Low", "costs", "cdi_tips"),
     ("S-02", "Look up Property A's tax rate area and read the published rate",
      "Replaces the assumed 1.18% with the rate the county actually applies, and itemises the fixed charges.",
-     "Low", "None", "property-a", "scc_ratebook"),
+     "Low", "None", "property-a", []),
     ("S-03", "Confirm the trust holds title and obtain the preliminary change of ownership report",
      "Establishes that the transfer will take the intended path and starts the county record correctly.",
-     "Low", "Low if done now, high if discovered late", "inheritance", ["scc_recorder", "rtc480"]),
+     "Low", "Low if done now, high if discovered late", "inheritance", ["rtc480"]),
     ("S-04", "Model a sale in the same tax year as the inheritance, before deciding anything else",
      "The basis step-up makes an immediate sale almost tax-free. This is the option everything else must beat.",
      "Low", "Low", "decision", ["irs_basis"]),
@@ -2194,9 +2199,9 @@ SUGGESTIONS = [
     ("S-06", "Get rental opinions for Property A and for the vacant unit at Property B",
      "Turns the break-even rent into a real comparison and prices the opportunity cost of occupying Property A.",
      "Low", "None", "decision", []),
-    ("S-07", "Confirm REDACTED Rent Ordinance coverage and the rent increase licence",
+    ("S-07", "Confirm Rent Ordinance coverage and the rent increase licence",
      "Decides which rent cap applies and whether increases can lawfully be made at all.",
-     "Low", "Medium if notices were missed", "property-b", ["sf_rent_increase", "civ1947_12"]),
+     "Low", "Medium if notices were missed", "property-b", ["civ1947_12"]),
     ("S-08", "Confirm the solar interconnection date and the tariff the system is on",
      "Determines whether the export credit survives, for how long, and what happens when the customer of record changes.",
      "Low", "Medium", "costs", ["cpuc_nem"]),
@@ -2275,10 +2280,10 @@ def page_suggestions() -> str:
                      "<td>5. Record</td><td>Write the decision and the date next to the item, so a future reader knows what was chosen and why.</td><td>Item S-17.</td>" + src_cell([], "Procedure, not a figure"),
                  ])
 
-    improve_src = {"Add per-unit detail for Property B": ["sf_rent_increase"],
+    improve_src = {"Add per-unit detail for Property B": [],
                    "Add a real rental opinion for Property A": [],
                    "Add a maintenance and capital schedule": [],
-                   "Add the itemised tax bills": ["scc_ratebook"],
+                   "Add the itemised tax bills": [],
                    "Add a liquidity model for the estate": ["irs_estate", "irs_i706"],
                    "Add a two-person household case": ["irs_tc409", "irs_estate"],
                    "Add a mortgage case": [],
@@ -2354,7 +2359,7 @@ def irregularity_section() -> str:
     b21a, b22a = rb[2021]["assessed"], rb[2022]["assessed"]
     b22_expect = money10(b21a * 1.02)
     a16_bill, a17_bill = ra[2016]["bill"], ra[2017]["bill"]
-    rate_2026_27 = 0.0118162182  # Property B secured rate for FY 2026-27 (sf_treas_rate)
+    rate_2026_27 = 0.0118162182  # Property B secured rate for FY 2026-27 (publisher withheld on the public site)
     b25_bill, b25_av = rb[2025]["bill"], rb[2025]["assessed"]
     b25_rate_part = money10(b25_av * rate_2026_27)
     chg_2021 = chg(rb[2020]["assessed"], rb[2021]["assessed"])
@@ -2376,27 +2381,27 @@ def irregularity_section() -> str:
          f"<td>Bill falls from {m(a16_bill)} to {m(a17_bill)} ({sgn(chg(a16_bill, a17_bill))}) while assessed value rises {chg(ra[2016]['assessed'], ra[2017]['assessed']):.2f}%.</td>"
          "<td>The bill is an ad valorem part (rate times assessed value) plus fixed and direct charges. A rising assessed value raises the first part, so a fall needs another charge to have dropped by more.</td>"
          "<td>Compare the 2016 and 2017 itemised bills.</td>"
-         + src_cell(["scc_ratebook"], "Tax rate book")),
+         + src_cell([], "County rate book withheld for privacy")),
         (f"<td><strong>Property A bill repeated</strong></td>"
          f"<td>The same bill in 2017 and 2018 ({m(ra[2018]['bill'])}), and in 2019 and 2020 ({m(ra[2020]['bill'])}). Assessed value rose 2.00% in both 2018 and 2020.</td>"
          "<td>The ad valorem part rises with assessed value, so an identical bill needs an offsetting change in another charge. A figure copied forward from the year before is also possible.</td>"
          "<td>Check the 2018 and 2020 bills against the figures in the owner's table.</td>"
-         + src_cell(["scc_ratebook"], "Tax rate book")),
+         + src_cell([], "County rate book withheld for privacy")),
         (f"<td><strong>Property B bill rises 18.4% in 2018</strong></td>"
          f"<td>Bill rises from {m(b17)} to {m(b18)} ({sgn(chg(b17, b18))}) while assessed value rises 2.00%.</td>"
          f"<td>Even if the whole 2017 bill had risen with assessed value, the rise would be about {m(money10(b17 * 0.02))}. About {m(money10((b18 - b17) - b17 * 0.02))} came from other charges.</td>"
          "<td>Read the itemised 2017 and 2018 bills for direct assessments, bond levies and special taxes.</td>"
-         + src_cell(["sf_treas_rate"], "Treasurer and Tax Collector")),
+         + src_cell([], "Official rate page withheld for privacy")),
         (f"<td><strong>Property B bill falls 5.9% in 2021</strong></td>"
          f"<td>Bill falls from {m(b20)} to {m(b21)} ({sgn(chg(b20, b21))}) while assessed value rises {chg_2021:.2f}%.</td>"
          f"<td>At most about {m(money10(assess_part_2021))} of the change can come from assessed value. Other charges therefore fell by at least {m(fall_2021)}.</td>"
          "<td>Read the itemised 2020 and 2021 bills.</td>"
-         + src_cell(["sf_treas_rate"], "Treasurer and Tax Collector")),
+         + src_cell([], "Official rate page withheld for privacy")),
         (f"<td><strong>Property B bill against the published rate</strong></td>"
          f"<td>The 2025 bill is {m(b25_bill)} on {m(b25_av)} of assessed value: {b25_bill / b25_av * 100:.2f}% of assessed value.</td>"
-         f"<td>The FY 2026-27 secured rate of 1.18162182%, applied to the same value, gives about {m(b25_rate_part)}. The other {m(money10(b25_bill - b25_rate_part))} a year comes from charges outside that rate.</td>"
+         f"<td>At the FY 2026-27 combined secured rate of about 1.18%, applied to the same value, the ad valorem part is about {m(b25_rate_part)}. The other {m(money10(b25_bill - b25_rate_part))} a year comes from charges outside that rate. The full-precision published rate is withheld from the public site for privacy.</td>"
          "<td>Read the itemised 2025 bill. Identify each direct assessment, bond levy and special tax, and whether each continues.</td>"
-         + src_cell(["sf_treas_rate"], "Treasurer and Tax Collector")),
+         + src_cell([], "Official rate page withheld for privacy")),
     ]
     head_note = (f"Assessed-value changes checked against the official factor for each year: {len(checks)} changes, "
                  f"of which {len(checks) - len(off)} match within $10. The exception is Property B in 2022. "
@@ -2418,13 +2423,17 @@ def history_audit_section() -> str:
         ("Street address", "0", "0", "Never committed in any reachable commit."),
         ("Parcel or assessor number", "0", "0", "Never committed in any reachable commit."),
         ("Telephone number", "0", "0", "Never committed in any reachable commit."),
-        ("Email address", "0", "0", "Present only in commit metadata, not in any file."),
         ("Postal code of either property", "66", "0",
          "Present in superseded file versions and in the archive directory, which is never published."),
-        ("Property-level place name", "173", "0",
-         "Same: superseded file versions and archive material, none of it in the deployable artifact."),
-        ("Dollar amount that is not a multiple of ten", "111", "1 file",
-         "The one current file is the source ledger, and the amounts are verbatim official documentary quotes."),
+        ("Place name, or the county or city name", "917", "0",
+         "Superseded file versions and archive material, plus every early version written before the county and "
+         "city names were withdrawn. None of it is in the deployable artifact."),
+        ("Dollar amount that is not a multiple of ten", "143", "0",
+         "Superseded versions only. Every amount in the current tree is a multiple of ten or a verbatim "
+         "published official amount."),
+        ("Email address", "1", "0 published",
+         "One internal working note carries a publisher's contact address in a quotation. The note is excluded "
+         "from the deployable artifact, so no published file contains an email address."),
     ]
     body = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td><td>{esc(d)}</td>"
             + f'<td><a href="review.html#register">Logged in the register</a></td>' for a, b, c, d in rows]
@@ -2438,7 +2447,7 @@ multiple of ten. That scan covers the deployable artifact, not the Git history b
 versions carry the <em>shape</em> of each identifier. It reports counts only. It does not print a matching value,
 because publishing the value in order to disclose it would recreate exactly the exposure being disclosed.</p>
 <p><strong>The result is that the current published tree is clean on every class, and the history is not clean on
-two of the lower-severity classes.</strong> No street address, parcel number or telephone number has ever been
+three of them.</strong> No street address, parcel number or telephone number has ever been
 committed. Postal codes and property-level place names did appear in superseded file versions and in archive
 material, none of which is part of the published artifact. The full counts are below.</p>
 <p>Cleaning the history is a different operation from cleaning the site: it needs a rewrite and a force-push of a
@@ -2481,9 +2490,9 @@ def page_review() -> str:
         ("Property A ad valorem rate", pcf(ASM["ad_valorem_rate_a"]["value"], 2),
          "Assumption. The data cannot identify it, because assessed value and fixed charges both grow at about 2% a year.",
          "Read the rate for the property's tax rate area from the county's published rate book."),
-        ("Property B ad valorem rate", pcf(ASM["ad_valorem_rate_b"]["value"], 5),
-         "Published by the City and County of REDACTED for fiscal year 2026-27",
-         "None. This one is verified."),
+        ("Property B ad valorem rate", pcf(ASM["ad_valorem_rate_b"]["value"], 2),
+         "Published for the city's secured roll for fiscal year 2026-27; the publisher is not named or linked on the public site for privacy",
+         "Confirm against the parcel's own bill; the official page is not linked for privacy."),
         ("Property A water", f"{m(A['annual_costs']['water']['low'])} to {m(A['annual_costs']['water']['high'])} a year",
          "Owner estimate, unverified. The water and sewer tariff comparison is withheld from the public edition for privacy, and the provider printed on the parcel's own bill is unconfirmed.",
          "Confirm the provider on the bill, then compare twelve months of bills with the derived tariff range."),
@@ -2505,9 +2514,9 @@ def page_review() -> str:
         ("The inherited cash amount", "Not published",
          "Deliberately withheld from this site",
          "Work through the scenario bands on the estate page privately."),
-        ("REDACTED transfer tax reduction proposal", "Not used in any figure",
-         "Reported publicly but not verified against an official city source",
-         "Check the Board of Supervisors file before relying on it."),
+        ("City transfer tax reduction proposal", "Not used in any figure",
+         "Reported publicly but not verified against an official city source on the public site",
+         "Check the city's Board of Supervisors file before relying on it."),
     ]
     # Each row points only at the official source that actually bears on it. A row with no
     # matching official source says so, and links to the register, rather than borrowing a
@@ -2515,18 +2524,18 @@ def page_review() -> str:
     UV_WHERE = {
         "Property A market value, November 2026": [],
         "Property B market value, November 2026": [],
-        "Both assessment rolls and tax bills": ["scc_ratebook", "sf_treas_rate", "boe_lta26002"],
-        "Property A ad valorem rate": ["scc_ratebook"],
-        "Property B ad valorem rate": ["sf_treas_rate"],
+        "Both assessment rolls and tax bills": ["boe_lta26002"],
+        "Property A ad valorem rate": [],
+        "Property B ad valorem rate": [],
         "Property A water": [],
         "Property A electricity, net of solar": ["cpuc_nem"],
-        "Property B water": ["REDACTED_rates"],
+        "Property B water": [],
         "Property B electricity": [],
         "Insurance on both properties": ["cdi_homeowners_avg"],
         "Maintenance on both properties": [],
-        "Property B rent": ["sf_rent_increase"],
+        "Property B rent": [],
         "The inherited cash amount": [],
-        "REDACTED transfer tax reduction proposal": [],
+        "City transfer tax reduction proposal": [],
     }
     assert set(UV_WHERE) == {a for a, _, _, _ in unverified}, "every unverified row needs a source decision"
     uv_rows = [f"<td><strong>{esc(a)}</strong></td><td>{b}</td>"
@@ -2568,12 +2577,14 @@ def page_review() -> str:
          "The California FAIR Plan caps a residential dwelling at $3,000,000 combined (official CDI figure). Property A's owner-estimated value is $3,100,000 and is itself unverified, so no coverage conclusion follows from the two figures alone. If standard-market cover cannot be placed for either building, cover above the cap would be needed, its cost is unknown until quoted, and no premium for either building appears on this site."),
         ("The 1929 / 2008 equity-entry test is synthetic, not a historical backtest",
          "The repository has no source-verified S&P total-return sequence for those event windows. The Black Swan page uses an explicitly assumed -40%, +25%, +10% sequence, then the model return; Federal Reserve History links establish event context, not those returns. Obtain a verified total-return dataset before treating any result as a historical simulation."),
+        ("Jurisdiction names and their official pages are withheld from the public site",
+         "The county and city of the two properties are not named or linked anywhere on the public site, because they identify the properties. Rows that were sourced to a county or city page are registered on this page instead. The public policy figures those pages carried stay, because they are law rather than property data, but a reader combining several of them could infer the jurisdiction; removing them entirely would end the rent, transfer-tax and rate analysis and is the owner's decision. The two metro-area house-price series are withheld for the same reason."),
     ]
     # Each caveat links only to the official source that bears on it; a caveat that is a planning
     # statement rather than a rule says so and links to the register.
     CAV_WHERE = {
-        "The ad valorem rate for Property A is not identifiable from the data": ["scc_ratebook", "boe_lta26002"],
-        "Fixed charges are projected at the inflation rate": ["sf_treas_rate", "bls_cpi"],
+        "The ad valorem rate for Property A is not identifiable from the data": ["boe_lta26002"],
+        "Fixed charges are projected at the inflation rate": ["bls_cpi"],
         "The November 2026 California election results are unofficial": ["sos_results", "voterguide_p3"],
         "Combined tax rates are added, not interacted": ["irs_tc409", "ftb_cg"],
         "The housing value of living in the home is priced, not added": [],
@@ -2586,6 +2597,7 @@ def page_review() -> str:
         "Every reassessment figure is conditional on the parent-and-child relationship": ["rtc63_2_eligibility"],
         "The 1929 / 2008 equity-entry test is synthetic, not a historical backtest": ["fedhist_1929", "fedhist_greatrecession"],
         "Insurance above the insurer-of-last-resort cap": ["cdi_fairplan"],
+        "Jurisdiction names and their official pages are withheld from the public site": [],
     }
     assert set(CAV_WHERE) == {a for a, _ in caveats}, "every caveat needs a source decision"
     cav_rows = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td>"
@@ -2632,7 +2644,7 @@ def page_review() -> str:
          "Removing it from history needs a rewrite, which is the owner's decision. For new commits, the account setting that keeps the address private is the owner's to change."),
     ]
     aud_rows = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td>"
-                + src_cell(rest[0] if rest else ["boe_lta25009", "irs_estate", "scc_ratebook"], "Related sources")
+                + src_cell(rest[0] if rest else ["boe_lta25009", "irs_estate"], "Related sources")
                 for a, b, c, *rest in audit]
 
     return (
@@ -2777,7 +2789,7 @@ def page_timeline() -> str:
         ("At the transfer of Property A by reason of death, in trust",
          "Exempt from the documentary transfer tax, whether the transfer is outright or in trust. The exemption is "
          "claimed at recording. No city transfer tax applies to Property A.",
-         "The trustee, at recording.", ["rtc11930", "scc_recorder", "cnty_a_recorder"]),
+         "The trustee, at recording.", ["rtc11930", "rtc11930_trust"]),
         ("Within 150 days after death",
          "Change in ownership statement for a transfer on death, under RTC section 480(b). If the estate is "
          "probated, the statement is filed with the inventory and appraisal instead. The statute also sets the "
@@ -2787,7 +2799,10 @@ def page_timeline() -> str:
         ("Within 9 months after death, if a federal estate tax return is required",
          "Form 706 is due. Filing Form 4768 by that date gives an automatic six-month extension of the filing "
          "date. Part III of the same form is a separate request for more time to pay.",
-         "The executor. The portability election is made on this return if the gross estate is above the filing threshold.", ["irs_i706", "irs_i4768"]),
+         "The executor. The portability election is made on this return if the gross estate is above the filing "
+         "threshold. For an estate that was not required to file a return at all, a simplified late portability "
+         "election exists: a complete Form 706 may be filed by the fifth anniversary of the date of death.",
+         ["irs_i706", "irs_i4768", "rp_2022_32"]),
         ("Within 1 year after the transfer, if the exclusion is claimed",
          "Occupy the house as the principal residence, and file the homeowners' exemption.",
          "The heir.", ["rtc63_2", "boe_lta26026", "boe_prop19"]),
@@ -2798,15 +2813,15 @@ def page_timeline() -> str:
          "If the exclusion is not claimed, the property is reassessed to full value and a supplemental bill "
          "may follow for the part of the year already gone.",
          "The county assessor.", ["boe_pub29"]),
-        ("Each year, on the REDACTED County calendar",
+        ("Each year, on the state's secured-roll calendar",
          "Secured bills are mailed in October. First installment due 1 November, penalty date 10 December. "
          "Second installment due 1 February, penalty date 10 April. Last day for the current year's taxes 30 June. "
          "A penalty date that falls on a weekend or county holiday moves to the next business day.",
-         "The owner of record.", ["dtac_secured"]),
+         "The owner of record.", ["boe_pub29"]),
         ("10 December 2026",
          "Last day to pay the first installment of the 2026/27 secured bill without penalty, while the bill is "
          "still on the owner's record. Relevant to Property A only while it is held and before it is inherited.",
-         "The owner of record.", ["dtac_secured"]),
+         "The owner of record.", ["boe_pub29"]),
     ]
     rows = []
     for when, what, who, ids in rows_spec:
@@ -2815,19 +2830,20 @@ def page_timeline() -> str:
         "Deadlines in order",
         ["When", "What must happen", "Who", "Official source"], rows,
         note="Day 0 is the date of death, which is not yet known, so the clocks are shown from it. "
-             "A row without an official source is not on this page. The county calendar applies to Property A "
-             "only while it is held in the trust; after the transfer, the heir's own bills follow the same calendar. "
+             "A row without an official source is not on this page. The state payment calendar applies to "
+             "Property A only while it is held in the trust; after the transfer, the heir's own bills follow the "
+             "same calendar. "
              "Every date here is a deadline to check, not advice on when to act.")
     return (
         eligibility_callout()
         + callout("answer", "The next dated item", """
-<p>The first installment of the 2026/27 REDACTED County secured bill must be paid, or postmarked, by
+<p>The first installment of the 2026/27 secured bill must be paid, or postmarked, by
 <strong>10 December 2026</strong> to avoid penalties. That is the only dated item on this page that falls in the
 next year. Everything else is measured from the date of death or the date of transfer.</p>""")
         + '<p class="lede">Read in order. Each row is a legal or tax clock, and each names the official text it comes from.</p>'
         + tl
         + callout("answer", "Which deadlines can move the answer",
-"""<p>The three deadlines that can change the recommendation are: (1) whether the parent-child relationship is in place before the transfer, because without it the Proposition 19 shelter disappears; (2) the one-year homeowners' exemption and three-year exclusion-claim windows, because missing them costs the shelter; and (3) the nine-month estate-tax return, because a late return loses the portability election. The estate page works entirely in anonymous scenario bands because the inherited cash amount is not published.</p>""")
+"""<p>The three deadlines that can change the recommendation are: (1) whether the parent-child relationship is in place before the transfer, because without it the Proposition 19 shelter disappears; (2) the one-year homeowners' exemption and three-year exclusion-claim windows, because missing them costs the shelter; and (3) the nine-month estate-tax return: a late return loses the portability election, except for the simplified late election by the fifth anniversary that is available to an estate that was never required to file a return at all. The estate page works entirely in anonymous scenario bands because the inherited cash amount is not published.</p>""")
         + callout("method", "Why the order matters", """
 <ol>
 <li>The trust notice (60 days) and the change-in-ownership statement (150 days) are the first two clocks after death.</li>
@@ -3002,9 +3018,9 @@ def executive_summary_markdown() -> str:
     a("")
     a(f"Built {BUILD_DATE} from the same deterministic model as the site. Every dollar figure is rounded to the "
       "nearest $10. Anonymised throughout: **Property A** is the single-family home being inherited through a "
-      "trust, in REDACTED County; **Property B** is the three-unit building the heir already owns, in the City "
-      "and County of REDACTED. No name, street address, postal parcel number, postal code, trust term or "
-      "utility account appears here or on the site.")
+      "trust; **Property B** is the three-unit building the heir already owns. No name, street address, postal "
+      "parcel number, postal code, county or city name, trust term or utility account appears here or on the "
+      "site; the county and city are deliberately withheld because they identify the properties.")
     a("")
     a("Planning analysis, not legal, tax or investment advice.")
     a("")

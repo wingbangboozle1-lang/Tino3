@@ -1373,8 +1373,7 @@
    "src": [
     "frh_great_inflation",
     "fred_cpi",
-    "fred_gs10",
-    "fred_hpi_a"
+    "fred_gs10"
    ],
    "derived": true,
    "cpi": 9.8,
@@ -1419,8 +1418,6 @@
    "name": "A long house price slump",
    "analogue": "1989-1996 in Property A's metropolitan area",
    "src": [
-    "fred_hpi_a",
-    "fred_hpi_b",
     "fred_cpi"
    ],
    "derived": true,
@@ -1466,8 +1463,6 @@
    "name": "A financial crisis crash",
    "analogue": "2007-2011",
    "src": [
-    "fred_hpi_a",
-    "fred_hpi_b",
     "fred_gs10",
     "frh_great_recession"
    ],
@@ -3671,7 +3666,7 @@
     "units": "Index, 1982-84 = 100",
     "coverage": "1913-01 to present; this file holds 1928-01 to 2026-10",
     "src": "fred_cpiaucns",
-    "limits": "A national average, not a REDACTED REDACTED index. It is used only to express results in start-year purchasing power, never to drive a return."
+    "limits": "A national urban average, not a local index. It is used only to express results in start-year purchasing power, never to drive a return."
    }
   },
   "episodes": [

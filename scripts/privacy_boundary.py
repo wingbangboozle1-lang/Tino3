@@ -43,12 +43,23 @@ FORBIDDEN = {
         r"(?i)(REDACTED|REDACTED|REDACTED|los[\s_-]*altos|los[\s_-]*gatos|monte[\s_-]*sereno|"
         r"san[\s_-]*jose|REDACTED|REDACTED)"),
     "person name pattern": re.compile(r"\b(?:Mr|Mrs|Ms|Dr)\.?\s+[A-Z][a-z]+\b"),
+    # The jurisdictions of the two properties. Any county or city name that narrows the
+    # search area, in prose or inside a web address, is a location disclosure.
+    "jurisdiction name": re.compile(
+        r"(?i)(santa[\s_-]*clara|san[\s_-]*francisco|san[\s_-]*jose|REDACTED|REDACTED|"
+        r"bay[\s_-]*area|silicon[\s_-]*valley)"),
+    # Official hosts for the withheld jurisdictions: a link to them crosswalks the
+    # placeholders to their geographies even when the prose does not.
+    "location-specific source host": re.compile(
+        r"(?i)(REDACTEDcounty|REDACTED|REDACTED|REDACTED|REDACTED|REDACTED|REDACTED|\bsf\.gov\b)"),
 }
 
-# County and city level names are published deliberately: they are the level at
-# which the property tax, rent and transfer rules in this analysis operate.
-ALLOWED_PLACE_NAMES = ("REDACTED County", "City and County of REDACTED",
-                       "REDACTED", "California", "REDACTED")
+# County and city level names are NOT published: they, like the parcel, identify the
+# properties, and official county and city pages are not linked from the public site
+# either (their web addresses name the jurisdiction). Only the state name appears,
+# because the state-level law is the level at which the main rules operate.
+# (The tuple is kept for documentation; the FORBIDDEN patterns below enforce it.)
+ALLOWED_PLACE_NAMES = ("California",)
 
 FORBIDDEN_ELEMENTS = re.compile(r"<(?:script|iframe|form|input|textarea|object|embed|img)\b", re.I)
 # A scale word after the figure means it is a quoted macroeconomic aggregate, not a

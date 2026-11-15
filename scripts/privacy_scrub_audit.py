@@ -36,9 +36,15 @@ ROOT = Path(__file__).resolve().parents[1]
 # tool never depends on the publication path.
 PATTERNS = {
     "postal code": re.compile(r"\b(?:REDACTED|REDACTED|REDACTED|REDACTED|REDACTED)\b"),
-    "property-level place name": re.compile(
+    # The published policy now withdraws the two jurisdictions as well as the
+    # property-level place names, because a county or city name narrows the search
+    # area exactly as a postal code does. This class therefore matches the same
+    # pattern scripts/privacy_boundary.py now enforces.
+    "property-level place name or jurisdiction": re.compile(
         r"(?i)(REDACTED|REDACTED|REDACTED|los[\s_-]*altos|los[\s_-]*gatos|"
-        r"monte[\s_-]*sereno|outer[\s_-]*sunset|inner[\s_-]*sunset)"),
+        r"monte[\s_-]*sereno|outer[\s_-]*sunset|inner[\s_-]*sunset|"
+        r"santa[\s_-]*clara|san[\s_-]*francisco|san[\s_-]*jose|"
+        r"bay[\s_-]*area|silicon[\s_-]*valley)"),
     "street address": re.compile(
         r"\b\d{1,5}\s+[A-Z][a-z]+\s+(?:Street|St|Avenue|Ave|Road|Rd|Drive|Dr|Way|Lane|Ln|"
         r"Boulevard|Blvd|Court|Ct|Place|Pl|Terrace|Circle)\b"),
