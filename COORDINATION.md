@@ -19,9 +19,34 @@ Gates re-run successfully: `scripts/build.py`, `scripts/verify.py`, `scripts/pri
 | Task | Status | Owner | File scope |
 |---|---|---|---|
 | T-1 Claim this scope and push before any other edit | **done** | `arena/cd33d6db-tino3` | `COORDINATION.md` (this section only) |
-| T-2 Take over the stale `f8ab312e` F-4 close-out under the takeover rule (claim >8 h old, no commits since 03:51 UTC): apply the history-audit prose fix the session left unmerged (name the jurisdiction class in the prose, as its audit table already does) and record its closing board note in `main`'s copy; mark F-4 closed with the handoff noted | pending | `arena/cd33d6db-tino3` | `scripts/build.py` (history-audit prose strings only), regenerated `review.html`, `COORDINATION.md` (F-4 status cell + this section only) |
-| T-3 Independent verification pass: live re-reads of key official sources on the publishers' own domains; all five gates; spot-check published figures against module outputs | pending | `arena/cd33d6db-tino3` | `COORDINATION.md` (this section only) |
-| T-4 Rebuild, run every gate, pull request from this branch, merge without waiting, confirm the Pages deploy, record PR link and merge result | pending | `arena/cd33d6db-tino3` | `COORDINATION.md` (this section only) |
+| T-2 Take over the stale `f8ab312e` F-4 close-out under the takeover rule (claim >8 h old, no commits since 03:51 UTC): apply the history-audit prose fix the session left unmerged (name the jurisdiction class in the prose, as its audit table already does) and record its closing board note in `main`'s copy; mark F-4 closed with the handoff noted | **done** | `arena/cd33d6db-tino3` | `scripts/build.py` (history-audit prose strings only), regenerated `review.html`, `COORDINATION.md` (F-4 status cell + this section only) |
+| T-3 Independent verification pass: live re-reads of key official sources on the publishers' own domains; all five gates; spot-check published figures against module outputs | **done** | `arena/cd33d6db-tino3` | `COORDINATION.md` (this section only) |
+| T-4 Rebuild, run every gate, pull request from this branch, merge without waiting, confirm the Pages deploy, record PR link and merge result | **in progress** | `arena/cd33d6db-tino3` | `COORDINATION.md` (this section only) |
+
+### T-3 record — independent verification pass, 15 November 2026
+
+Eight official sources re-opened live on the publishers' own domains, independently of the ledger's prior re-verifications. Every verdict: **confirmed, zero contradictions.**
+
+| Source (ledger id) | Publisher | What was re-read and confirmed |
+|---|---|---|
+| `irs_estate` | IRS, Estate tax | Filing-threshold table ends at 2026 / $15,000,000; filing required where gross estate plus adjusted taxable gifts and specific gift tax exemption exceeds the year-of-death threshold. |
+| `ftb_inheritance` | California FTB, Gifts and inheritance | "If you received a gift or inheritance, **do not** include it in your income"; later income (interest, dividends, rent, gain on sale) is taxable. Page dated 24 Sep 2025. |
+| `sco_estate` | California State Controller, Estate Tax | For deaths on or after 1 Jan 2005 no California Estate Tax Return is required; generation-skipping tax does not apply after 31 Dec 2004. |
+| `boe_lta25009` | BOE Letter to Assessors 2025/009 | Value cap = factored base year value + **$1,044,586** for transfers 16 Feb 2025 – 15 Feb 2027; prior amounts $1,000,000 / $1,022,600 in the enclosed table; next adjustment February 2027; FHFA California HPI change 2.15% for 2024. |
+| `ssa_trustees` | SSA, 2026 OASDI Trustees Report, Table II.C1 | Annual CPI-W change intermediate **2.4%** (low-cost 3.0%, high-cost 1.8%); trust fund new-issue real interest rate for 2044 and later **2.3%** intermediate (2.8% / 1.8%). |
+| `civ1947_12` | California Civil Code 1947.12 (leginfo) | Cap is 5% plus the cost-of-living change or 10%, whichever is lower, over any 12-month period; two-increment rule; new-tenancy initial rate exempt; single-family/condominium exemption where the owner is not a REIT, corporation or LLC. |
+| `boe_prop19` | BOE, Proposition 19 | Principal residence of **transferor and transferee**; value limit current taxable value plus $1,000,000 (as biennially adjusted); claim for exclusion within 3 years or before transfer to a third party; homeowners' exemption within 1 year. |
+| `irs_i706` | IRS, Instructions for Form 706 (Rev. 07/2026) | "You must file Form 706 … within **9 months** after the date of the decedent's death"; Form 4768 automatic 6-month extension; portability requires timely filing; Rev. Proc. 2022-32 late portability election on or before the **fifth anniversary** of death; filing threshold $15,000,000 restated. |
+
+**Gates (all exit 0):** `build.py` (22 pages), `verify.py` (870 table rows; 756 official-source-linked; 114 logged unsourceable; 2,927 links; 98 ledger sources), `privacy_boundary.py`, `package_site.py` (130 content-free withdrawal routes), `verify_legacy.py --config-only`, `git diff --check`.
+
+**Figure spot-checks:** the dashboard's phased KPI ($34,639,310), the economy page's median fifty-year house growth (5.46%) and sell-beats-hold share (61.8%) match the module outputs; Property A's 2026 assessment projection ($550,540 = $539,743 × 1.02 rounded to $10) and 2026 tax projection ($7,360) reproduce exactly by hand under the documented two-component method (ad valorem $6,496.35 at 1.18% + fixed $858.98 at 2.5% growth = $7,355.33 → $7,360). The initial naive check ($7,350, growing the whole bill 2%) was rejected as method error, not a model error: the model's method states fixed charges grow at modelled inflation, and the pages document this.
+
+**Irregularities found:** none new. One observation logged for the final integration session: the `da1ed309` claim table's D-2/D-4/D-5/D-6 status cells still read "pending" although that session's own record below confirms completion (PRs #116/#117/#118); not edited by this session per the file-ownership rule.
+
+### T-2 record — takeover of the stale `f8ab312e` session
+
+The stale session's substantive work landed through PR #110 (`8e4f52ad`); its branch carried two unmerged closing commits (`3f546b3` prose fix, `57c6397` board record). Per the takeover rule the prose fix was re-applied to `scripts/build.py` with its original wording (the history-audit prose now names the county and city names class, matching the audit table's "Place name, or the county or city name" row with 917 history matches and 0 published), `review.html` was regenerated, the F-4 row is marked closed with the handoff noted, and the closing note is recorded in that session's section. The branch history of `arena/f8ab312e-tino3` preserves both original commits; nothing was discarded. Word count check: the prose change touches only the two sentences describing identifier classes; the counts table is untouched.
 
 *Scope note on other sessions' tables:* the `da1ed309` claim table still reads D-2/D-4/D-5/D-6 as "pending" while that session's own record below confirms all of them done and published (PRs #116/#117/#118). Per the file-ownership rule this session does not edit that table; it logs the observation here for the final integration session to normalize. The `f8ab312e` F-4 status cell is the one exception: the takeover rule explicitly authorizes taking over a stale task and noting the handoff, which requires touching that status cell. No file overlap with `arena/1ca458e9-tino3` (README only).
 
