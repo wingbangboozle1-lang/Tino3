@@ -1625,36 +1625,41 @@ neutral.</p>""")
 
 # -------------------------------------------------------------------- taxes --
 def fan_section() -> str:
-    """Year-by-year fan chart: the constant 4% line against the resampled deciles."""
-    by_key = {s["key"]: s for s in MIXED["distribution"]["series"]}
-    vod = next(s for s in MIXED["distribution"]["series"]
-               if s["key"] == "value_at_death")
+    """Year-by-year fan chart: the constant 4% line against the resampled record.
+
+    Three series on one axis: the value at the inheritance, the value after a
+    thirty-year hold, and the value the sale proceeds reach if they are invested
+    instead. The point of putting them together is that the holder's upside tail
+    and the seller's downside tail are both real, and only the shape shows it.
+    """
+    series = {s["key"]: s for s in MIXED["distribution"]["series"]}
+    vod, live, sell = series["value_at_death"], series["live"], series["sell"]
+    const_2045 = next((x["value"] for x in MODEL["projection_a"] if x["year"] == 2045), 0)
     rows = []
-    proj = MODEL["projection_a"]
-    for yr, idx in ((2036, None), (2046, None), (2056, None), (2066, None), (2076, None)):
-        p = next((x for x in proj if x["year"] == yr), None)
-        rows.append((yr, p["value"] if p else None))
-    decile_rows = []
     for i in range(11):
-        decile_rows.append({
+        rows.append({
             "label": "p100" if i == 10 else f"p{i*10}",
-            "values": [("sell", vod["deciles"][i], "Value at the 2045 inheritance"),
-                       ("band", vod["deciles"][i], "Same, shown as the band")],
+            "values": [("sell", sell["deciles"][i], "Sell and invest"),
+                       ("live", live["deciles"][i], "Live in it 30 years"),
+                       ("band", vod["deciles"][i], "Value at the 2045 inheritance")],
         })
     chart = fan_chart(
-        "Property A's value at the 2045 inheritance: the constant line against the record",
-        f"The constant 4% a year the tables use gives {m(next((x['value'] for x in proj if x['year'] == 2045), 0))}. "
-        f"The {MIXED['distribution']['draws']} resampled histories put the same value anywhere from "
-        f"{m(vod['deciles'][0])} to {m(vod['deciles'][10])}.",
-        "money", decile_rows,
-        "The table below the chart is the constant case and is deliberately kept: it is the arithmetic "
-        "the break-even figures are built on. The fan is what that arithmetic looks like when house "
-        "prices and consumer prices move as they actually have, in the same ten-year blocks.")
+        "After thirty years, by decile of the verified record",
+        f"The constant 4% a year gives {m(const_2045)} at the 2045 inheritance. The "
+        f"{MIXED['distribution']['draws']} resampled histories put the value at the inheritance "
+        f"anywhere from {m(vod['deciles'][0])} to {m(vod['deciles'][10])}, and the thirty-year "
+        f"outcome for either path across a much wider band.",
+        "money", rows,
+        "Read the tails, not the middle. In the bottom decile the household that lived in the house "
+        "is close to the household that sold, because house prices there did badly while the sale "
+        "proceeds still earned the modelled equity return. In the top decile keeping the house wins "
+        "by more than a hundred million nominal dollars. The median favours selling in every "
+        "comparison, and the spread is why the answer is published as a share of draws.")
     return ('<section id="fan"><h2>Year by year, with the record\'s own variation</h2>'
             f'<p>The tables on this page use one constant growth rate so the arithmetic is legible. '
             f'That is not what the record looks like: annual house price growth in the California '
-            f'record has run from minus 20.0% to plus 25.3%. The fan below redraws the 2045 value '
-            f'using {MIXED["distribution"]["draws"]} resampled fifty-year histories of the verified '
+            f'record has run from minus 20.0% to plus 25.3%. The fan below redraws both paths using '
+            f'{MIXED["distribution"]["draws"]} resampled fifty-year histories of the verified '
             f'series, drawn in ten-year blocks so house prices and consumer prices move together as '
             f'they did. The method is the <a href="economy.html">economy page</a>\'s.</p>'
             + chart + "</section>")
