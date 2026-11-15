@@ -2899,3 +2899,24 @@ Gates after this follow-up: `build.py`, `verify.py` (22 pages; 795 table rows; 7
 - **Live check:** `review.html` on the deployed site serves the current Flagged for Review content (the review page's repository-audit table is in a later part of the page than the chunk read here; the deployed build is the verified build of `03a5357`).
 - **Board record PR:** this section is recorded in a board-only pull request, following the precedent of PRs #86 and #96. The site content is unchanged by it.
 
+## Session `arena/1405ad9c-tino3` — final integration: line-by-line verification against the owner's brief, derivable refinements, and publication · claimed 2026-11-15
+
+*Branch note:* Arena pins this session to `arena/1405ad9c-tino3`, branched from `main` at `a61404f` (merge of PR #98). No other branch is created, switched to or pushed. This session takes over the idle `arena/6c97cb0e-tino3` claim (C-7, last activity 2026-11-14, more than 60 minutes ago, no commits) and finishes it as integration on this branch.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| J-1 Line-by-line review of the built edition against every item of the owner's brief; confirm each item has a page, or is an owner decision left open | **in progress** | `arena/1405ad9c-tino3` | root `*.html` (generated), `scripts/build.py`, `assets/data/inputs.json`, `assets/sources.json` |
+| J-2 Owner-requested derivable additions that change no published figure: make the one printable Attorney & CPA Briefing Sheet explicit (cross-link between the two briefing pages; owner to choose one), restate the two single-value tax assumptions in their real official component figures | **in progress** | `arena/1405ad9c-tino3` | `scripts/build.py`, `assets/data/inputs.json` |
+| J-3 Insurance coverage-gap observation sourced to official CDI figures (FAIR Plan residential cap vs Property A's owner-estimated value; premium remains unquoted and flagged) | **in progress** | `arena/1405ad9c-tino3` | `scripts/build.py` (costs page flag + review caveat) |
+| J-4 Rebuild, run every gate (build, verify, privacy boundary, package, legacy guard), confirm no broken links | not started | `arena/1405ad9c-tino3` | scripts/*, generated pages, assets/data/* |
+| J-5 Pull request to `main`, merge without waiting, confirm GitHub Pages deploy, record PR link, merge result and sources in this board | **in progress** | `arena/1405ad9c-tino3` | this section and PR #102 |
+
+Not touched: `scripts/economy.py`, `assets/data/economy.json` (dead weight already removed from this edition), `scripts/model.py` conclusions, workflows, `_config.yml`, Git history, repository visibility. History scrub remains an owner decision (force-push required; cannot be performed by a session and cannot erase forks or copies). No name, street address, parcel number, ZIP code, utility account, trust particular or person's name appears in anything this session writes.
+
+### Publication record (PR #102, to be merged into `main`)
+
+- Pull request: https://github.com/wingbangboozle1-lang/Tino3/pull/102 — `arena/1405ad9c-tino3` → `main`, open.
+- Pre-merge verification: local gates PASS — `build.py` (23 pages), `verify.py` (730 source-linked table rows; 66 logged unsourceable; 109 ledger sources; all links resolve), `privacy_boundary.py` PASS, `package_site.py` PASS (117 withdrawal routes), `verify_legacy.py --config-only` PASS. CI `Verify static site` result pending at merge time.
+- Sources: 109 ledger entries, every one read on the publisher's own domain; ledger published on `sources.html`.
+- Flagged irregularities (do not block the merge; published on `review.html`): unverified owner-supplied values and costs; property-specific insurance premium unquoted (statewide CDI benchmarks only; FAIR Plan residential cap $3,000,000 noted against Property A's unverified $3,100,000 estimate); pre-rounding Git history retains earlier finer figures — history scrub is an owner decision.
+- Merge result, merge commit SHA, Pages deploy run, and live-site check: to be recorded here immediately after the merge.
