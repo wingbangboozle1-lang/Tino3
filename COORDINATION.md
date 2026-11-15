@@ -34,6 +34,30 @@ Every entry below was re-opened on the publisher's own domain in this session. "
 **Verdict on this batch: all 10 confirmed, 0 contradictions, 1 new development (SF File 261020) already correctly classified as pending.**
 
 
+
+### Session status at push time (F-1, F-2, F-3 complete; F-4 in progress)
+
+**F-1 complete — real replays replace the synthetic-only stress test.**
+
+- New deterministic module `scripts/episodes.py` and data file `assets/data/episodes.json`, reading five verbatim official CSVs stored in `assets/data/episodes/` with a provenance note (`README.md` in that directory).
+- Five series added to `assets/sources.json` (ledger now 114): `fred_djia_1929`, `fred_nasdaq`, `fred_tb3ms`, `fred_callmoney`, `fred_cpiaucns`. Each fetched from FRED's own CSV endpoint on 2026-11-15.
+- Published on `black-swan.html` under a new `#real-replays` section: the four-episode main table, the 24/30/36-month window table, a later-entry table, the realistic "inherit first, crash later" table, and a series table. A compact version is on `executive-summary.html`, `EXECUTIVE_SUMMARY.md` and the dashboard.
+- **Findings, published as they are:** waiting beat day-one investing in 3 of 4 episodes; it lost in the 2020 episode; the 34-month whole-balance variant beat the 30-month phased entry in 3 of 4; and once the entry moves past the peak the advantage shrinks or reverses (2008 entered 12 months later: day-one investing wins by a wide margin). No cherry-picking.
+- **Validation:** the stored 1954-11 index level (375.75) sits above the stored 1929-09 level (362.35), which independently reproduces the Federal Reserve History essay's statement that the index did not regain its September 1929 high until 23 November 1954.
+
+**F-2 complete — ten official sources re-opened and confirmed, zero contradictions.**
+
+- `irs_estate`, `irs_whatsnew`, `ftb_inheritance`, `sco_estate`, `boe_lta25009`, `boe_prop19`, `civ1947_12`, `sf_rent_increase`, `sf_treas_rate`, `ssa_trustees`, `rtc480`. Detail table above.
+- **Gap found and fixed:** `timeline.html` stated the RTC §480 150-day change-of-ownership deadline but not the statutory penalty for an unanswered assessor request ($100 or 10% of the new base-year tax, capped at $5,000). The statute was read in this session and the penalty row updated.
+- **One dead guessed URL closed:** `boe.ca.gov/lawguides/letters/2025/09/lta-2025-09.html` 404s. It was never in the ledger; the ledger's PDF resolves and confirms $1,044,586.
+
+**F-3 complete — history audit performed, read-only, disclosed without values.**
+
+- New `scripts/privacy_scrub_audit.py` walks every reachable commit and reports counts, paths and hashes, never a matching value.
+- New `PRIVACY_REMEDIATION.md` for the owner: the facts, why a scrub is an owner decision, and a nine-step safe procedure with costs.
+- `review.html` now carries a value-free summary plus the audit method.
+- **Result:** street address 0, parcel number 0, telephone 0 across all 1,696 file versions. Postal code and property-level place name appear in superseded versions only; the current published tree is clean on every class. Full history rewrite was **not** performed and the published site does not claim it was.
+
 **Coordination notes at claim time.** Three pull requests were open when this session started: #97 (`arena/1663e879-tino3`, board record only), #102 (`arena/1405ad9c-tino3`, briefing/costs/review edits) and #103 (`arena/8eebc036-tino3`, briefing consolidation and privacy sweep). All three touch `scripts/build.py`, which this session also edits. This session will make its changes **additive and isolated** (new module, new data file, new page section appended to one builder function) so a rebase can keep every session's work. These sessions are live, so their branches are not merged from here. Shared outputs (`assets/data/model.json`, generated pages) are regenerated last, from the merged builder.
 
 ## Session `arena/0dcaf9f7-tino3` — open-item completion: ledger research, economy reconciliation, stale-PR disposition, final publication · claimed 2026-11-13
