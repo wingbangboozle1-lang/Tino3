@@ -9,7 +9,7 @@
 | F-1 Replace the synthetic-only crash-entry stress with **real, official-source 1929 and 2008 replays** of lump-sum versus park-then-phase entry | **done** | `arena/f8ab312e-tino3` | `assets/data/episodes.json` (new), `scripts/episodes.py` (new), `scripts/model.py` (append only), `scripts/build.py` (black-swan section + index line), `assets/sources.json` (append only), `scripts/verify.py` (host allowlist, append only) |
 | F-2 Re-open and re-verify every source behind the phased-investing, inheritance-tax, property-tax and insurance claims; record the result | **done** | `arena/f8ab312e-tino3` | `COORDINATION.md` (this section only) |
 | F-3 Privacy: audit the pre-rounding Git history read-only, publish the findings without the values, and write the owner decision and remediation procedure | **done** | `arena/f8ab312e-tino3` | `PRIVACY_REMEDIATION.md` (new, internal, excluded from publication), `scripts/privacy_scrub_audit.py` (new), `scripts/build.py` (review page audit rows) |
-| F-4 Rebuild, run every gate, open the PR from this branch, merge, confirm the Pages deploy | **in progress** | `arena/f8ab312e-tino3` | `COORDINATION.md` (this section only) |
+| F-4 Rebuild, run every gate, open the PR from this branch, merge, confirm the Pages deploy | **done** | `arena/f8ab312e-tino3` | `COORDINATION.md` (this section only) |
 
 
 ### F-2 Source re-verification, 15 November 2026
@@ -57,6 +57,45 @@ Every entry below was re-opened on the publisher's own domain in this session. "
 - New `PRIVACY_REMEDIATION.md` for the owner: the facts, why a scrub is an owner decision, and a nine-step safe procedure with costs.
 - `review.html` now carries a value-free summary plus the audit method.
 - **Result:** street address 0, parcel number 0, telephone 0 across all 1,696 file versions. Postal code and property-level place name appear in superseded versions only; the current published tree is clean on every class. Full history rewrite was **not** performed and the published site does not claim it was.
+
+
+### F-4 Publication record (final, 15 November 2026)
+
+| Item | Result |
+|---|---|
+| Pull request | **#110**, "Real 1929/2008 crash-entry replays, official-source re-verification, and a value-free privacy audit of the history" — https://github.com/wingbangboozle1-lang/Tino3/pull/110 |
+| Merge | **merged** at 2026-11-15T03:50:01Z, merge commit `8e4f52ad` |
+| CI on the PR | `verify` job: **pass** (20s) |
+| Pages workflow | run `43674106370`: build **success**, deploy **success** |
+| Pages API | `status: built` for https://wingbangboozle1-lang.github.io/Tino3/ |
+| Live check | `black-swan.html` confirmed serving the new `#real-replays` section, all three replay tables, the series table and the method callout; every source link resolves to `fred.stlouisfed.org` |
+
+**What shipped in #110**
+
+1. Real 1929 / 2000 / 2008 / 2020 entry-timing replays from five verbatim official FRED series, replacing the invented crash sequence as the evidence base (the synthetic case is kept, clearly labelled).
+2. Ten official sources re-opened and confirmed; the RTC §480 late-filing penalty added to the timeline; one dead guessed URL closed.
+3. `scripts/privacy_scrub_audit.py`, `PRIVACY_REMEDIATION.md`, and a value-free history disclosure on `review.html`.
+
+**Merge conflict resolved on the way in.** PR #109 landed the jurisdiction-withdrawal privacy policy (county and city names removed, jurisdiction-host sources dropped, metro house-price series withdrawn) while this PR was open. This session merged `main`, adopted the stricter policy, and brought its own content into line:
+
+- removed the one jurisdiction mention from `assets/data/episodes.json`;
+- extended `scripts/privacy_scrub_audit.py` to measure the jurisdiction class with the same pattern the live gate now enforces;
+- re-ran the audit, which caught a stale `assets/data/model.json` still carrying the old text; rebuilt and re-measured;
+- updated the published history table and the internal note to the re-measured counts (361 commits, 2,151 file versions);
+- regenerated every conflicting generated page from the merged builder rather than hand-merging HTML.
+
+**Final gate state on the merged tree**
+
+```
+Pages built by this edition : 22
+Table rows                  : 860-ish (all source-linked)
+Official sources in ledger  : 95
+PASS: build reproducible, every table row source-linked, links resolve, artifact within the privacy boundary.
+PASS privacy boundary: 22 pages and 1 asset scanned; every published dollar figure is rounded to $10 or is a published official amount; 128 non-allowlisted routes carry content-free notices.
+PASS: legacy Jekyll source is guarded; 23 public files allowed.
+```
+
+**Session closed.** F-1, F-2, F-3 and F-4 complete. No open work is left on this branch.
 
 **Coordination notes at claim time.** Three pull requests were open when this session started: #97 (`arena/1663e879-tino3`, board record only), #102 (`arena/1405ad9c-tino3`, briefing/costs/review edits) and #103 (`arena/8eebc036-tino3`, briefing consolidation and privacy sweep). All three touch `scripts/build.py`, which this session also edits. This session will make its changes **additive and isolated** (new module, new data file, new page section appended to one builder function) so a rebase can keep every session's work. These sessions are live, so their branches are not merged from here. Shared outputs (`assets/data/model.json`, generated pages) are regenerated last, from the merged builder.
 
