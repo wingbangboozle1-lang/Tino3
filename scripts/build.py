@@ -365,7 +365,7 @@ question A-1</a> before relying on any number here. {slink('rtc63_2_eligibility'
         + f'<section class="kpi-row">{kpis}</section>'
         + callout("answer", "The one-line answer", f"""
 <p>Under every baseline this site can build, <strong>selling Property A soon after it is inherited beats living in it or letting it out</strong>, and it is not close. The reason is a one-off combination: the inheritance resets the income-tax basis to the value at death, so an immediate sale pays almost no capital gains tax, while the property tax assessment jumps to market value under Proposition 19. Waiting converts a tax-free asset into a taxed one and adds roughly {m(p45['bill_if_rent_year1'] - p45['bill_today_projected'])} a year of extra property tax if the home is let out.</p>
-<p>The break-even house growth needed to make keeping the home beat selling is <strong>{pc(p45['breakeven_house_growth'])} a year for thirty years</strong>. The verified house price index for this area compounded at 6.9% a year over the last fifty years and 3.3% a year over the last twenty. Read the <a href="decision.html">full decision</a>, then the <a href="black-swan.html">cases where this flips</a>.</p>
+<p>The break-even house growth needed to make keeping the home beat selling is <strong>{pc(p45['breakeven_house_growth'])} a year for thirty years</strong>. The verified California state house price index compounded at 6.4% a year over the fifty years to 2025 and 2.6% a year over the last twenty. Read the <a href="decision.html">full decision</a>, then the <a href="black-swan.html">cases where this flips</a>.</p>
 <p class="reinvest"><strong>Reinvestment risk beside the headline.</strong> Selling and investing assumes the proceeds can be reinvested at the modelled equity return. Inheriting into a 1929- or 2008-style crash means buying equities at the top. The phased path on the black-swan page parks the proceeds in short-term Treasuries for 24-36 months, then moves them into stocks, which softens crash-entry risk - at the cost of missing out while equities rally. On the 2045 baseline the proceeds could lose {pc(-p45['breakeven_return_vs_live'])} a year and selling would still match living, so the case for selling does not need a high return. <a href="what-if.html#threshold-return">Break-even case</a>.</p>
 """)
         + '<section class="card-grid">' + "".join(cards) + "</section>"
@@ -458,7 +458,7 @@ def page_executive_summary() -> str:
         ("The tax cliff at transfer", f"Today the Property A bill is about {m(MODEL['costs_a_now']['property_tax'])}. If the heir inherits in 2045 and does not move in, the bill becomes about {m(p45['bill_if_rent_year1'])}. If the heir does move in and claims the Proposition 19 exclusion, it becomes about {m(p45['bill_if_live_year1'])}."),
         ("Why moving in only half-helps", f"The Proposition 19 exclusion shelters the old assessed value plus an indexed {m(V['prop19_value_cap_2025_2027']['value'])}. Everything above that is reassessed. In 2045 the sheltered slice is about {m(p45['prop19_cap'])} against a market value of {m(p45['value_at_death'])}."),
         ("The tax-free sale window", "Property acquired from a decedent takes a basis equal to its value at death, so a sale soon after the inheritance pays close to zero capital gains tax. Holding it for thirty years turns the appreciation into a gain taxed at roughly 37% combined federal and California."),
-        ("The equity comparison", f"To match selling and investing at 7%, the home must appreciate {pc(p45['breakeven_house_growth'])} a year for thirty years. The verified index for the area compounded at 6.9% over fifty years and 3.3% over the last twenty."),
+        ("The equity comparison", f"To match selling and investing at 7%, the home must appreciate {pc(p45['breakeven_house_growth'])} a year for thirty years. The verified California state index compounded at 6.4% over fifty years and 2.6% over the last twenty."),
         ("The rental comparison", f"Letting the home out would need about {m(p45['breakeven_rent_monthly'])} a month in 2045 to match selling and investing. That is over 5% of the property's value per year in gross rent."),
         ("The estate position", f"California has had no estate tax since 2005. Federally, the 2026 exclusion is {m(V['federal_basic_exclusion_2026']['value'])} per person and {m(V['federal_basic_exclusion_2027']['value'])} for 2027. Portability lets a surviving spouse use a deceased spouse's unused exclusion."),
         ("The biggest unknown", "Whether the heir wants to live in this specific house. That is a preference, not a number, and it is worth more than any gap in this analysis."),
@@ -614,8 +614,10 @@ model rebuilt.</p>
         "What-if map: which path wins at each house-growth / equity-return combination (2045 inheritance)",
         ["House growth"] + eq_headers, what_rows,
         note="Each cell prices all six paths at that combination and names the winner. Sell\u2192phase is the "
-             "phased-investing path: sale proceeds park in short-term Treasuries for the 24-36-month park window, "
-             "then move into equities by equal monthly purchases. Cells where a sell path wins are shaded. All figures come from scripts/model.py; change "
+             "phased-investing path: sale proceeds park in short-term Treasuries for the canonical 30 months (the "
+             "owner's 24-36 month band), then buy equities in equal monthly pieces over the following 12 months, "
+             "the same canonical monthly path the black-swan page stress-tests and back-tests. Cells where a "
+             "sell path wins are shaded. All figures come from scripts/model.py; change "
              "assets/data/inputs.json and rebuild to explore other assumptions. "
              + method_cell("#method", "Model output"))
 
@@ -1084,7 +1086,7 @@ for either building appears on this site; both remain owner estimates flagged un
                     "<td>Assessed value</td><td>Grown at the Proposition 13 cap of 2% a year, which has been binding in every year of both supplied rolls.</td>" + src_cell(["boe_pub29", "rtc51"], "Proposition 13"),
                     "<td>Tax bill</td><td>Ad valorem rate times assessed value, plus a fixed charge grown at the modelled inflation rate.</td>" + src_cell(["boe_pub29"], "Rule; local rates withheld for privacy"),
                     "<td>Water, power, insurance, maintenance</td><td>Grown at the modelled inflation rate. No real-terms change in usage or tariffs is assumed.</td>" + src_cell(["ssa_trustees"], "Inflation anchor"),
-                    "<td>Market value</td><td>Grown at the modelled house price growth rate of 4% a year.</td>" + src_cell([], "Source series withheld for privacy"),
+                    "<td>Market value</td><td>Grown at the modelled house price growth rate of 4% a year.</td>" + src_cell(["fred_casthpi"], "Historical index"),
                 ],
                 note="A constant rate is used for the year-by-year page because it is the only way to show a "
                      "readable table. It is not a forecast. The <a href=\"black-swan.html\">black swan page</a> "
@@ -1506,10 +1508,9 @@ results before relying on any of them.</p>""")
 def page_black_swan() -> str:
     cpi = MODEL["meta"]
     stats = []
-    for key, label, sid in (("cpi", "Consumer prices, 1977 to 2024", "fred_cpi"),
-                            ("hpi_a", "House prices, Property A area, 1977 to 2025", ""),
-                            ("hpi_b", "House prices, Property B area, 1977 to 2025", ""),
-                            ("gs10", "10-year Treasury yield, 1976 to 2025", "fred_gs10")):
+    for key, label, sid in (("cpi", "Consumer prices, 1976 to 2024", "fred_cpi"),
+                            ("hpi_a", "House prices, California state record, 1976 to 2025", "fred_casthpi"),
+                            ("gs10", "10-year Treasury yield, 1975 to 2025", "fred_gs10")):
         changes = [r[key + "_chg"] for r in MODEL["series_table"] if r.get(key + "_chg") is not None]
         if key == "gs10":
             levels = [r[key] for r in MODEL["series_table"] if r.get(key) is not None]
@@ -1555,7 +1556,7 @@ def page_black_swan() -> str:
             f"<td>{m(r['b_value'])}</td>"
             f"<td>{r['down_years_a']}</td><td>{pc(r['worst_year_a'], 1)}</td>"
             f"<td>{m(r['tax_if_reset'])}</td><td>{m(r['tax_if_kept'])}</td>"
-            + src_cell(["fred_cpi", "fred_gs10"], "Verified series; the house-price series is withheld for privacy"))
+            + src_cell(["fred_casthpi", "fred_cpi", "fred_gs10"], "Verified series"))
     replay = table("Every full 30-year window in the verified record, applied to these two properties",
                    ["Window", "House growth a year", "Inflation a year", "Treasury compounding",
                     "Property A value at the end", "Same, in start-year money",
@@ -1563,13 +1564,16 @@ def page_black_swan() -> str:
                     "Total tax if reassessed", "Total tax if not", "Source"], rep_rows,
                    note="Each row takes the realised annual changes in the house price index, the consumer "
                         "price index and the 10-year Treasury yield for that real 30-year window and applies "
-                        "them to these two properties. No smoothing, no resampling, no invented numbers.")
+                        "them to these two properties. Both properties grow with the same California "
+                         "state-level index: the metropolitan-area series were withdrawn from the published "
+                         "edition because the index publisher's own metadata crosswalks the placeholders to "
+                         "their metropolitan areas. No smoothing, no resampling, no invented numbers.")
 
     return (
         callout("why", "Why a smooth 4% line is the wrong tool", f"""
 <p>Real economies do not grow at a constant rate. In the verified record used here, annual consumer price
-inflation ranged from minus 0.3% to plus 13.5%, and annual house price growth in Property A's area ranged from
-minus 12.3% to plus 30.2%. A single constant rate hides the thing that actually decides this case, which is
+inflation ranged from minus 0.3% to plus 13.5%, and annual house price growth in the California state record ranged from
+minus 20.0% to plus 25.3%. A single constant rate hides the thing that actually decides this case, which is
 whether the house and the stock market take their bad years at the same time.</p>
 <p>The <a href="economy.html">economy page</a> shows the full record. The tables below apply it.</p>""")
         + table("The shape of the record", ["Series", "Range of annual changes", "Average", "Coverage", "Source"],
@@ -1582,8 +1586,8 @@ whether the house and the stock market take their bad years at the same time.</p
         + page_phased_stress()
         + callout("answer", "What the stress cases say", f"""
 <p>Selling and investing wins in {RF['sell']} of the {RF['n']} regimes. Keeping the house wins only in: {esc(RF['keep_names'])}. Where house
-prices in this area grew at an exceptional pace, keeping the house can win; that is a bet on one neighbourhood outgrowing
-the whole market, and the historical record says that sometimes it does and mostly it does not.</p>
+prices grew at an exceptional pace, keeping the house can win; that is a bet on one local market outgrowing the
+state-wide record, and the historical record says that sometimes it does and mostly it does not.</p>
 <p>Two findings survive every regime. First, the property tax bill after reassessment is large and completely
 insensitive to how the economy performs: assessed value rises at the 2% cap whether house prices boom or crash.
 Second, letting the property out from the start is the lowest-valued path in {RF['lowest_let']} of the {RF['n']} regimes, because it
@@ -1768,68 +1772,69 @@ inheritance will not arrive on a 1929 or a 2008 schedule. The point is to size t
 
 # ------------------------------------------------ phased entry stress test --
 def page_phased_rows() -> str:
-    """Entry-timing stress table. Every figure comes from the model's one monthly
-    phased engine with the model's one short-Treasury yield key; the shock path is
-    the stated synthetic sequence, applied to the phased and lump-sum paths alike."""
-    p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
-    proceeds = p45["paths"]["sell_equities"]["sale"]["net"]
-    base_tsy = ASM["treasury_short_yield_nominal"]["baseline"]
-    crash = [-0.40, 0.25, 0.10]
-    phase_months = 12
-    horizon = ASM["horizon_years"]
-
-    def run(wait_months: int, shock: bool) -> dict:
-        return model_mod.phased_engine(proceeds, wait_months, phase_months, base_tsy,
-                                       ASM["equity_return_nominal_gross"]["baseline"],
-                                       ASM["equity_tax_drag"]["baseline"], horizon,
-                                       crash_annual=crash if shock else None)
-
-    direct_no_crash = run(0, False)["terminal"]
-    direct_crash = run(0, True)["terminal"]
-    cases = [
-        ("Immediate equity; no shock", 0, False, "Reference case"),
-        ("Immediate equity; synthetic crash-at-entry stress", 0, True, "Shared stylized stress; not a dated replay"),
-        ("Treasuries 24 months, then phase to equities over 12 months; no shock", 24, False, "No-crash opportunity-cost case"),
-        ("Treasuries 24 months, then phase to equities over 12 months; synthetic crash stress", 24, True, "Shared stylized stress; not a dated replay"),
-        ("Treasuries 36 months, then phase to equities over 12 months; no shock", 36, False, "No-crash opportunity-cost case"),
-        ("Treasuries 36 months, then phase to equities over 12 months; synthetic crash stress", 36, True, "Shared stylized stress; not a dated replay"),
-    ]
+    ps = MODEL["phased_stress"]
     rows = []
-    for label, wait, shock, context in cases:
-        amount = run(wait, shock)["terminal"]
-        comparator = direct_crash if shock else direct_no_crash
-        srcs = (["fedhist_1929", "fedhist_greatrecession"] if shock
+    for r in ps["rows"]:
+        srcs = (["fedhist_1929", "fedhist_greatrecession"] if r["shock"]
                 else ["ssa_trustees", "fred_gs10"])
-        rows.append(f"<td><strong>{esc(label)}</strong></td><td>{wait} months</td>"
-                    f"<td>{pcf(base_tsy, 1)}</td><td>{m(amount)}</td>"
-                    f"<td>{m(amount - comparator)}</td><td>{esc(context)}</td>"
+        rows.append(f"<td><strong>{esc(r['label'])}</strong></td><td>{r['wait_months']} months</td>"
+                    f"<td>{esc(ps['parking_yield'])}%</td><td>{m(r['terminal'])}</td>"
+                    f"<td>{m(r['difference'])}</td><td>{esc(r['reading'])}</td>"
                     + method_cell("#phased-method", "Illustrative model", srcs))
     short = ASM["treasury_short_yield_nominal"]
     return table("2045 sale-proceeds entry-timing stress test (30-year nominal terminal value)",
-                  ["Path", "Treasury wait", "Treasury yield assumption", "Terminal value",
-                   "Difference vs immediate entry in same market case", "Reading", "Method and sources"], rows,
-                  note=f"Rounded to $10. Outputs are conditional illustrations, not recommendations or forecasts. "
-                       f"The Treasury yield is the model's stated short-Treasury scenario (baseline {pcf(short['baseline'], 1)}, "
-                       f"band {pcf(short['low'], 1)} to {pcf(short['high'], 1)}), the same key every phased path uses; "
-                       f"it is not a current 3-month-to-2-year quote and no official source publishes forward short rates "
-                       f"for the 2040s. The rate-context links in the last column are historical context only.")
+                 ["Path", "Treasury wait", "Parking yield", "Terminal value",
+                  "Difference vs immediate entry in same market case", "Reading", "Method and sources"], rows,
+                 note=f"Rounded to $10. The parking yield is the model's one canonical 3-month-to-2-year Treasury "
+                      f"parking scenario, {esc(ps['parking_yield'])}% (band {esc(ps['parking_yield_low'])}% to "
+                      f"{esc(ps['parking_yield_high'])}%), not a current quote. The immediate comparator buys the "
+                      f"whole proceeds in month 1, so its no-shock terminal equals the dashboard's sell-and-invest "
+                      f"headline. One canonical monthly engine, a "
+                      f"{esc(str(ps['park_months_baseline']))}-month park (owner band 24-36) and a "
+                      f"{esc(str(ps['phase_months']))}-month phase-in, produces every phased figure on this site.")
+
+
+def page_backtest() -> str:
+    bt = MODEL["backtest"]
+    rows = []
+    for ep in bt["episodes"]:
+        fed = {"1929": "fedhist_1929", "2008": "fedhist_greatrecession"}.get(str(ep["entry_year"]))
+        for r in ep["rows"]:
+            srcs = ["damodaran_histret"] + ([fed] if fed else [])
+            rows.append(
+                f"<td><strong>{ep['entry_year']}</strong> entry<br><span class='muted'>{r['horizon']} window, "
+                f"{ep['entry_year']}&ndash;{ep['window_end']}</span></td>"
+                f"<td>{esc(r['path'])}</td><td>{m(r['terminal'])}</td>"
+                f"<td>{m(r['difference_vs_immediate'])}</td>"
+                + src_cell(srcs, "Realized returns; academic source"))
+    return table("Dated historical backtest: the returns that actually followed three crash entries",
+                 ["Entry and window", "Path", "Terminal value", "Difference vs immediate entry", "Source"], rows,
+                 note=f"Rounded to $10. Applies the realized annual S&amp;P 500 total return (dividends reinvested) "
+                      f"and the realized 3-month Treasury bill return of every year after the entry year to the same "
+                      f"hypothetical 2045 net sale proceeds; annual returns are spread evenly across the twelve "
+                      f"months of their year. Gross of taxes, costs and fees; an academic series, not a government "
+                      f"publication. The 2000 and 2008 windows end at {bt['record_end_year']} where the record ends. "
+                      f"Entry at the start of the entry year approximates a peak entry but is not a day-level replay.")
 
 
 def page_phased_stress() -> str:
-    short = ASM["treasury_short_yield_nominal"]
+    ps = MODEL["phased_stress"]
+    bt = MODEL["backtest"]
+    win = bt["phased_wins_at_10_years"]
     return callout("key", "What this test does and does not say", f"""
-<p>It tests the requested choice: after a hypothetical 2045 inheritance and sale, keep proceeds in short-dated Treasuries for 24 or 36 months, then move equal monthly portions into equities over the following 12 months. It compares that path with investing immediately. Every figure comes from the model's one monthly phased engine - the same engine the dashboard's phased path uses - with the model's one short-Treasury yield key.</p>
-<p>The crash sequence is explicitly <strong>synthetic</strong>: an assumed -40% equity year, then +25%, then +10%, followed by the baseline 6.3% net nominal equity return. The 36-month wait therefore ends just as that invented three-year sequence ends; that coincidence is a scenario artifact, not evidence that a three-year wait avoids real crashes. It is not a reconstruction of 1929 or 2008 market returns. The Federal Reserve History links document the events and their timing, not these assumed percentages. The repository does not contain a source-verified S&amp;P total-return series for those episodes; a true historical backtest is flagged as a data gap.</p>
-<p>The Treasury rate shown is the model's stated short-Treasury scenario (baseline {pcf(short['baseline'], 1)}, band {pcf(short['low'], 1)} to {pcf(short['high'], 1)}), not a 3-month, 1-year or 2-year yield quote and not a forecast. The actual bill/note yield, reinvestment rates, taxes on interest, transaction costs, and the chosen equity allocation must be refreshed with a fiduciary before implementation.</p>""") + page_phased_rows() + f"""
+<p>It tests the requested choice: after a hypothetical 2045 inheritance and sale, keep proceeds in short-dated Treasuries for 24 or 36 months, then move equal monthly portions into equities over the following 12 months. It compares that path with investing immediately.</p>
+<p>Two tests run side by side. The <strong>synthetic stress</strong> assumes a stylized crash at entry (a -40% equity year, then +25%, then +10%, then the baseline {esc(ps['equity_baseline'])}% net nominal equity return); it is a scenario, not history. The <strong>dated backtest</strong> applies the returns that actually followed the 1929, 2000 and 2008 entries. In {win} of 3 dated crash entries the phased path ended its first decade ahead of immediate entry; in the synthetic no-shock case, phasing costs between {m(ps['rows'][2]['difference'])} and {m(ps['rows'][4]['difference'])} of terminal value. Phasing is insurance whose premium is the no-crash opportunity cost, not a free lunch.</p>
+<p>The parking yield is the model's one canonical 3-month-to-2-year Treasury parking scenario ({esc(ps['parking_yield'])}%, band {esc(ps['parking_yield_low'])}%-{esc(ps['parking_yield_high'])}%), stated, not a forecast. The actual bill/note yield, reinvestment rates, taxes on interest, transaction costs and the chosen equity allocation must be refreshed with a fiduciary before implementation.</p>""") + page_phased_rows() + page_backtest() + f"""
 <section id="phased-method">
 <h2>Interpretation and reinvestment risk</h2>
 <ul>
-<li>Waiting reduces the dollars exposed to an immediate hypothetical crash, but it does not eliminate market risk: equity purchases still face subsequent losses.</li>
-<li>With no crash, waiting has an opportunity cost if equities outperform the Treasury assumption. The no-shock rows make that cost visible rather than showing only the favorable case.</li>
+<li>Waiting reduces the dollars exposed to an immediate crash, but it does not eliminate market risk: equity purchases still face subsequent losses.</li>
+<li>With no crash, waiting has an opportunity cost if equities outperform the parking yield. The no-shock rows make that cost visible rather than showing only the favorable case.</li>
 <li>Short Treasuries mature frequently. If market yields are lower at maturity, proceeds must be reinvested at lower rates; if rates rise, existing notes' market value can fall before maturity. Neither future yield nor ladder is known today.</li>
+<li>Every phased figure on this site comes from one canonical monthly engine and one parking-yield assumption - the same engine behind the dashboard's phased headline path.</li>
 <li>All terminal values omit estate-level investment tax details, a personalized asset allocation, withdrawals, fees beyond the model's stated drag, and changes in future law. Ask the CPA and investment fiduciary to rerun with an actual sale estimate and current Treasury quotes.</li>
 </ul>
-<p>Official event context: {slink('fedhist_1929')} &middot; {slink('fedhist_greatrecession')}. Long-rate history (context only; the parking yield is a stated scenario): {slink('fred_gs10')} &middot; {slink('ssa_trustees')}.</p>
+<p>Official event context: {slink('fedhist_1929')} &middot; {slink('fedhist_greatrecession')}. Parking-yield band basis: {slink('ssa_trustees')} &middot; {slink('fred_gs10')}. Backtest return series: {slink('damodaran_histret')}.</p>
 </section>"""
 
 
@@ -1847,22 +1852,25 @@ def page_economy() -> str:
             f"<td>{r['year']}</td>"
             f"<td>{r['cpi'] if r['cpi'] is not None else '&mdash;'}</td><td>{chg('cpi')}</td>"
             f"<td>{r['hpi_a'] if r['hpi_a'] is not None else '&mdash;'}</td><td>{chg('hpi_a')}</td>"
-            f"<td>{r['hpi_b'] if r['hpi_b'] is not None else '&mdash;'}</td><td>{chg('hpi_b')}</td>"
             f"<td>{r['gs10'] if r['gs10'] is not None else '&mdash;'}</td>"
-            + src_cell(["fred_cpi", "fred_gs10"], "FRED series; house-price series withheld for privacy"))
-    tbl = table("The verified annual record, 1976 to 2025",
+            + src_cell(["fred_cpi", "fred_casthpi", "fred_gs10"], "FRED series"))
+    tbl = table("The verified annual record, 1975 to 2025",
                 ["Year", "Consumer price index", "Change",
-                 "House price index, Property A area", "Change",
-                 "House price index, Property B area", "Change",
+                 "House price index, California (state-level)", "Change",
                  "10-year Treasury yield, %", "Source"], rows,
-                note="Every value was downloaded as a CSV file from the official FRED domain on 13 November "
-                     "2026 and read directly from that file. No value was typed from memory. The consumer "
-                     "price series ends at 2024 because the 2025 annual value was blank in the file retrieved.")
+                note="Every value was downloaded as a CSV file from the official FRED domain and read directly "
+                     "from that file; the state-level house price series was re-read there on 15 November 2026. No "
+                     "value was typed from memory. Both property placeholders now grow with this one state-level "
+                     "series: the two metropolitan-area series were withdrawn from the published edition because "
+                     "the index publisher's own metadata crosswalks the placeholders to their metropolitan areas. "
+                     "The consumer price series ends at 2024 because the 2025 annual value was blank in the file "
+                     "retrieved.")
     return (
         callout("note", "Why this page exists", """
 <p>The <a href="black-swan.html">black swan page</a> uses this record rather than invented scenarios. Every
-number below comes from one of four series hosted by the Federal Reserve Bank of St. Louis on behalf of the
-Bureau of Labor Statistics, the Federal Housing Finance Agency and the Board of Governors. Where a series stops
+number below comes from one of three series hosted by the Federal Reserve Bank of St. Louis on behalf of the
+Bureau of Labor Statistics, the Federal Housing Finance Agency and the Board of Governors; the market-return
+series used on the black-swan page comes from the academic ledger and is cited there. Where a series stops
 before 2025, the table shows a dash rather than filling the gap.</p>
 <p>The tables after the annual record answer the objection that a single constant rate is unrealistic, in the
 one way the record supports: the fifty years to 2026 are sliced into ten-year blocks and redrawn two thousand
@@ -1932,11 +1940,10 @@ as they did in the record. The percentile of each outcome is shown against the c
                  for a, b, c in [
                     ("Highest annual inflation in the record", "13.5%, in 1980", ["fred_cpi"]),
                     ("Only annual fall in consumer prices in the record", "minus 0.3%, in 2009", ["fred_cpi"]),
-                    ("Best year for house prices in Property A area", "plus 30.2%, in 1989", []),
-                    ("Worst year for house prices in Property A area", "minus 12.3%, in 2009", []),
-                    ("Property A area, 2006 to 2011", "a 25.6% fall from the 2006 level to the 2011 level", []),
-                    ("Property B area, 2006 to 2011", "a 21.8% fall from the 2006 level to the 2011 level", []),
-                    ("Property A area, 1989 to 1996", "a fall from 110.67 to 105.46 over seven years", []),
+                    ("Best year for house prices in the California state record", "plus 25.3%, in 1977", ["fred_casthpi"]),
+                    ("Worst year for house prices in the California state record", "minus 20.0%, in 2008", ["fred_casthpi"]),
+                    ("California, 2006 to 2011", "a 39.8% fall from the 2006 annual level to the 2011 annual level", ["fred_casthpi"]),
+                    ("California, 1989 to 1996", "a fall from 211.04 to 201.60 over seven years", ["fred_casthpi"]),
                     ("Highest annual 10-year Treasury yield in the record", "13.91%, in 1981", ["fred_gs10"]),
                     ("Lowest annual 10-year Treasury yield in the record", "0.89%, in 2020", ["fred_gs10"]),
                     ("2025 annual 10-year Treasury yield", "4.29%", ["fred_gs10"]),
@@ -2604,12 +2611,14 @@ def page_review() -> str:
          "Section 63.2(a)(1)(C) says the base year value established at the change in ownership, adjusted annually, is enrolled when the transferee stops being eligible for the homeowners' exemption. The live-then-rent path is modelled on that reading, which is favourable to it. If the assessor instead enrolled full market value at the move-out, that path's tax bill would rise and its terminal value would fall. The recommendation does not depend on it: selling already leads that path."),
         ("Every reassessment figure is conditional on the parent-and-child relationship",
          "Section 63.2 excludes only transfers between parents and their children, or grandparents and grandchildren where the middle generation has died. Every shelter, live-in and rental figure on this site assumes that condition holds. The trust document is the only thing that confirms it and this site has not seen it."),
+        ("Both properties are projected with the same state-level house price index",
+         "The two metropolitan-area FHFA/FRED series were withdrawn from the published edition because the index publisher's own metadata crosswalks the placeholders to their metropolitan areas (audit finding, remediated 15 November 2026). Both placeholders now grow with the California state-level all-transactions index, which hides metropolitan differences and slightly understates the local boom years the old metro series showed. The recommendation does not depend on that precision; the state record still puts the break-even house growth far above what the record supports."),
+        ("Jurisdiction names and their official pages are withheld from the public site",
+         "The county and city of the two properties are not named or linked anywhere on the public site, because they identify the properties. Rows that were sourced to a county or city page are registered on this page instead. The public policy figures those pages carried stay, because they are law rather than property data, but a reader combining several of them could infer the jurisdiction; removing them entirely would end the rent, transfer-tax and rate analysis and is the owner's decision. The two metro-area house-price series are withdrawn for the same reason; the published record now uses the state-level California index, whose publisher metadata names no smaller geography."),
         ("Insurance above the insurer-of-last-resort cap",
          "The California FAIR Plan caps a residential dwelling at $3,000,000 combined (official CDI figure). Property A's owner-estimated value is $3,100,000 and is itself unverified, so no coverage conclusion follows from the two figures alone. If standard-market cover cannot be placed for either building, cover above the cap would be needed, its cost is unknown until quoted, and no premium for either building appears on this site."),
-        ("The 1929 / 2008 equity-entry test is synthetic, not a historical backtest",
-         "The repository has no source-verified S&P total-return sequence for those event windows. The Black Swan page uses an explicitly assumed -40%, +25%, +10% sequence, then the model return; Federal Reserve History links establish event context, not those returns. Obtain a verified total-return dataset before treating any result as a historical simulation."),
-        ("Jurisdiction names and their official pages are withheld from the public site",
-         "The county and city of the two properties are not named or linked anywhere on the public site, because they identify the properties. Rows that were sourced to a county or city page are registered on this page instead. The public policy figures those pages carried stay, because they are law rather than property data, but a reader combining several of them could infer the jurisdiction; removing them entirely would end the rent, transfer-tax and rate analysis and is the owner's decision. The two metro-area house-price series are withheld for the same reason."),
+        ("The dated equity-entry backtest uses an academic return series",
+         "An earlier edition had only the synthetic -40%, +25%, +10% sequence because no verified total-return series was in the repository. The Black Swan page now also backtests the realized 1929, 2000 and 2008 sequences - S&P 500 total return with dividends and the 3-month Treasury bill, from the NYU Stern (Damodaran) table - gross of taxes, costs and fees, with entry at the start of the entry year, so it is not a day-level replay. The synthetic stress remains beside it; treat the backtest as sequencing evidence, not a forecast."),
     ]
     # Each caveat links only to the official source that bears on it; a caveat that is a planning
     # statement rather than a rule says so and links to the register.
@@ -2626,7 +2635,8 @@ def page_review() -> str:
         "The Proposition 19 shelter path after 2027 is a projection": ["boe_lta25009"],
         "A sheltered base is assumed to survive a later move-out": ["rtc63_2_eligibility", "boe_prop19"],
         "Every reassessment figure is conditional on the parent-and-child relationship": ["rtc63_2_eligibility"],
-        "The 1929 / 2008 equity-entry test is synthetic, not a historical backtest": ["fedhist_1929", "fedhist_greatrecession"],
+        "The dated equity-entry backtest uses an academic return series": ["damodaran_histret", "fedhist_1929", "fedhist_greatrecession"],
+        "Both properties are projected with the same state-level house price index": ["fred_casthpi", "fred_casthpi"],
         "Insurance above the insurer-of-last-resort cap": ["cdi_fairplan"],
         "Jurisdiction names and their official pages are withheld from the public site": [],
     }
@@ -2637,7 +2647,7 @@ def page_review() -> str:
 
     audit = [
         ("The repository contains more than the published site",
-         "The published site is the twenty pages in the repository root plus one stylesheet. What is not published is the build and verification code in scripts/, the data files in assets/data/, the source ledger, this page's own register, the README, the executive summary and a very large coordination board.",
+         "The published site is the twenty-two pages in the repository root plus one stylesheet. What is not published is the build and verification code in scripts/, the data files in assets/data/, the source ledger, this page's own register, the README, the executive summary and a very large coordination board.",
          "All of it is excluded from the published site by the Jekyll configuration and by the packaging allowlist, and the guard script fails the build if a tracked path would bypass those exclusions. It is still readable in the public repository."),
         ("Two earlier editions were removed from the working tree",
          "An earlier cross-check edition under plan/ and a fifty-year edition under analysis/ were built from unrounded owner figures. Both directories were removed from the tree on 13 November 2026; their routes now return content-free withdrawal notices.",
@@ -2648,6 +2658,9 @@ def page_review() -> str:
         ("Prior commits and pull-request diffs may contain finer figures",
          "Rounding to $10 applies to what this site publishes. It does not change what earlier commits contain.",
          "Older commits, pull-request diffs, forks and external copies are separate exposure surfaces. Nothing on this site can certify them erased."),
+        ("A location crosswalk existed on the live site, and was remediated on 15 November 2026",
+         "An audit on 14 November 2026 found that the black-swan and economy pages linked two FHFA/FRED metropolitan-area house-price series whose publisher metadata identified the metropolitan areas, creating a crosswalk from the placeholders to their metros; the automated privacy gate could not see it because it does not read remote pages. Both placeholders now grow with the California state-level index, the metropolitan links, their series identifiers and metro phrasing are withdrawn from the published edition, and the privacy gate now rejects the identifiers and metro phrasing so the crosswalk cannot return silently.",
+         "The withdrawn identifiers and earlier figures remain in Git history and pull-request diffs; removing them is the owner's history decision. An owner-runnable scrub kit is in scripts/history_scrub.py."),
         ("Property A water and sewer figures withdrawn for privacy",
          "Earlier editions linked a water utility's and a sewer district's web addresses, whose names identified the area of Property A. They were visible on the public pages and are now withdrawn. The owner's water estimate stays in the costs table, marked unverified; the parcel's own bill is the source for the provider and the charges.",
          "Earlier editions and their Git history still contain those links. The privacy scanner now checks web addresses for the area's names, so this cannot recur silently."),
@@ -2752,8 +2765,8 @@ def page_glossary() -> str:
         ("Proposition 13", "California's rule that property tax is 1% of assessed value plus voter-approved bonds, with assessed value rising no more than 2% a year until ownership changes.", ["boe_pub29", "rtc51"]),
         ("Proposition 19", "The rule that the parent-child property-tax exclusion now applies only when the child makes the inherited home their principal residence, and shelters only value above the prior taxable value plus a biennial adjustment amount.", ["rtc63_2", "boe_prop19", "boe_lta25009"]),
         ("Proposition 19 parent-child exclusion", "A conditional California change-in-ownership exclusion, limited by statute and generally requiring the eligible transferee to use the transferred home as a principal residence and file a claim.", ["rtc63_2_eligibility", "boe_prop19"]),
-        ("Reinvestment risk", "The risk that sale proceeds must be reinvested at lower returns than expected - for example, inheriting just before a stock-market crash and buying equities at the top. The phased-investing path on the black-swan page tests parking proceeds in short-term Treasuries for 24-36 months before buying stocks.", ["fred_gs10"]),
-        ("Phased investing", "Selling the inherited home, holding the proceeds in 3-month to 2-year Treasury bills for 24-36 months, then moving them into equities. It softens the risk of entering the stock market at a 1929- or 2008-style peak.", ["fred_gs10"]),
+        ("Reinvestment risk", "The risk that sale proceeds must be reinvested at lower returns than expected - for example, inheriting just before a stock-market crash and buying equities at the top. The phased-investing path on the black-swan page tests parking proceeds in short-term Treasuries for 24-36 months before buying stocks, with a synthetic stress and a dated backtest of the realized 1929, 2000 and 2008 returns.", ["fred_gs10", "damodaran_histret"]),
+        ("Phased investing", "Selling the inherited home, holding the proceeds in 3-month to 2-year Treasury bills for 24-36 months, then buying equities in equal monthly pieces over the following 12 months. It softens the risk of entering the stock market at a 1929- or 2008-style peak; the black-swan page tests it synthetically and against realized returns.", ["fred_gs10", "damodaran_histret"]),
         ("Break-even", "The rent, return or house-growth rate at which one path ties another. Below it, selling and investing wins; above it, keeping the home can win.", []),
         ("Horizon", "The 30 years after the inheritance over which each path is valued.", []),
         ("Outflow", "The total property tax and carrying cost paid over the horizon on a path (rental paths also credit rent received).", []),
@@ -2799,7 +2812,7 @@ def page_briefing() -> str:
 <p>Obtain certified tax bills and assessor records, title report, trust copy, date-of-death appraisal, insurer quotes for owner-occupied and rental uses, utility bills, property-condition inspection and a local rent opinion. Do not publish source documents or identifiers.</p>
 </section>
 <section><h2>Options and material risks</h2>
-<ul><li>Live in Property A: possible reassessment shelter only if eligible and occupancy requirements are met; higher concentration and maintenance exposure.</li><li>Rent Property A: full reassessment may apply; income, vacancy, repairs, landlord rules and depreciation/recapture need a CPA-grade model.</li><li>Sell and reinvest: basis step-up may limit immediate gain, but confirm sale costs and tax; reinvestment risk remains. The Black Swan page models 24/36-month Treasury parking and phased equity entry as a synthetic stress test, not a historical backtest. Reinvestment yield may decline at maturity.</li><li>Property B remains an independent owned asset: include its net operating costs, insurance, rent/legal rules and available unit in household liquidity planning.</li></ul>
+<ul><li>Live in Property A: possible reassessment shelter only if eligible and occupancy requirements are met; higher concentration and maintenance exposure.</li><li>Rent Property A: full reassessment may apply; income, vacancy, repairs, landlord rules and depreciation/recapture need a CPA-grade model.</li><li>Sell and reinvest: basis step-up may limit immediate gain, but confirm sale costs and tax; reinvestment risk remains. The Black Swan page models 24/36-month Treasury parking and phased equity entry through one canonical monthly path: a synthetic stress test and a dated backtest of the realized 1929, 2000 and 2008 returns. Reinvestment yield may decline at maturity.</li><li>Property B remains an independent owned asset: include its net operating costs, insurance, rent/legal rules and available unit in household liquidity planning.</li></ul>
 </section>
 <section><h2>Timing / action sequence</h2>
 <p>Before transfer: verify trust/deed, relationship eligibility, estate liquidity and insurance. At death/transfer: secure property, contact trustee/assessor/insurer, obtain date-of-death valuation, inventory expenses and confirm tax filing calendar. After title transfer: have counsel/CPA calendar assessor claim deadlines, income/estate returns, insurance endorsements and rental notices; model live/rent/sell choices with actual quotes before signing or distributing proceeds. Exact dates depend on transfer and filing facts.</p>
@@ -2838,9 +2851,8 @@ def page_timeline() -> str:
          "Form 706 is due. Filing Form 4768 by that date gives an automatic six-month extension of the filing "
          "date. Part III of the same form is a separate request for more time to pay.",
          "The executor. The portability election is made on this return if the gross estate is above the filing "
-         "threshold. For an estate that was not required to file a return at all, a simplified late portability "
-         "election exists: a complete Form 706 may be filed by the fifth anniversary of the date of death.",
-         ["irs_i706", "irs_i4768", "rp_2022_32"]),
+         "threshold. An estate not otherwise required to file can still elect portability with a simplified late "
+         "return under Rev. Proc. 2022-32, within five years of death.", ["irs_i706", "irs_i4768", "rp_2022_32"]),
         ("Within 1 year after the transfer, if the exclusion is claimed",
          "Occupy the house as the principal residence, and file the homeowners' exemption.",
          "The heir.", ["rtc63_2", "boe_lta26026", "boe_prop19"]),
@@ -2881,7 +2893,7 @@ next year. Everything else is measured from the date of death or the date of tra
         + '<p class="lede">Read in order. Each row is a legal or tax clock, and each names the official text it comes from.</p>'
         + tl
         + callout("answer", "Which deadlines can move the answer",
-"""<p>The three deadlines that can change the recommendation are: (1) whether the parent-child relationship is in place before the transfer, because without it the Proposition 19 shelter disappears; (2) the one-year homeowners' exemption and three-year exclusion-claim windows, because missing them costs the shelter; and (3) the nine-month estate-tax return: a late return loses the portability election, except for the simplified late election by the fifth anniversary that is available to an estate that was never required to file a return at all. The estate page works entirely in anonymous scenario bands because the inherited cash amount is not published.</p>""")
+"""<p>The three deadlines that can change the recommendation are: (1) whether the parent-child relationship is in place before the transfer, because without it the Proposition 19 shelter disappears; (2) the one-year homeowners' exemption and three-year exclusion-claim windows, because missing them costs the shelter; and (3) the nine-month estate-tax return, because portability is normally lost when no timely return is filed - although an estate not otherwise required to file can use the simplified late election of Rev. Proc. 2022-32 within five years of death. The estate page works entirely in anonymous scenario bands because the inherited cash amount is not published.</p>""")
         + callout("method", "Why the order matters", """
 <ol>
 <li>The trust notice (60 days) and the change-in-ownership statement (150 days) are the first two clocks after death.</li>
