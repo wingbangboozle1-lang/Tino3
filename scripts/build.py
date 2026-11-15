@@ -32,7 +32,7 @@ NAV_GROUPS = [
     ("Money over time", ["costs.html", "projections.html", "taxes.html"]),
     ("Rules and the estate", ["inheritance.html", "timeline.html", "estate.html", "laws.html"]),
     ("Black swan economics", ["black-swan.html", "economy.html"]),
-    ("Review before deciding", ["questions.html", "suggestions.html", "review.html", "briefing-sheet.html", "glossary.html"]),
+    ("Review before deciding", ["questions.html", "suggestions.html", "review.html"]),
     ("Evidence", ["glossary.html", "sources.html"]),
 ]
 PAGE_TITLES = {
@@ -40,7 +40,7 @@ PAGE_TITLES = {
     "what-if.html": "What-if cases",
     "executive-summary.html": "Executive summary",
     "decision.html": "The decision",
-    "briefing.html": "Attorney & CPA briefing sheet",
+    "briefing.html": "Attorney & CPA briefing sheet (one page, printable)",
     "property-a.html": "Property A - the home being inherited",
     "property-b.html": "Property B - the building already owned",
     "ownership-distinction.html": "Why the two properties are not the same",
@@ -55,7 +55,6 @@ PAGE_TITLES = {
     "questions.html": "Questions to answer before deciding",
     "suggestions.html": "Suggestions for review",
     "review.html": "Flagged for review and repository audit",
-    "briefing-sheet.html": "Attorney & CPA Briefing Sheet (printable)",
     "glossary.html": "Glossary of terms",
     "timeline.html": "Deadlines and key dates",
     "sources.html": "Source ledger",
@@ -244,7 +243,7 @@ def page(name: str, body: str, lede: str = "") -> str:
 <meta name="description" content="Anonymised quantitative decision analysis for an inherited California home and an already-owned rental building. Every figure rounded to the nearest $10.">
 <link rel="stylesheet" href="assets/style.css">
 </head>
-<body class="{'print-brief-page' if name in ('briefing.html', 'briefing-sheet.html') else ''}">
+<body class="{'print-brief-page' if name == 'briefing.html' else ''}">
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header">
   <div class="wrap">
@@ -256,7 +255,7 @@ def page(name: str, body: str, lede: str = "") -> str:
   <nav class="site-nav" aria-label="Sections">
     {"".join(nav)}
   </nav>
-  <main id="main" class="{'print-brief' if name in ('briefing.html', 'briefing-sheet.html') else ''}">
+  <main id="main" class="{'print-brief' if name == 'briefing.html' else ''}">
     <h1>{esc(PAGE_TITLES[name])}</h1>
     {lede_html}
     {body}
@@ -390,7 +389,6 @@ SUMMARIES = {
     "questions.html": "What is known, what is missing, and how to find it.",
     "suggestions.html": "A review queue of proposals. Nothing implemented yet.",
     "review.html": "Unverified figures, modelling caveats and the repository audit.",
-    "briefing-sheet.html": "A one-page printable brief for the attorney and the tax adviser.",
     "glossary.html": "Plain-language terms with official citations.",
     "timeline.html": "The deadlines and key dates that shape the inheritance decision.",
     "sources.html": "Every official source used, with what it supports.",
@@ -1008,7 +1006,12 @@ insurance and that dwelling fire premiums are generally lower than homeowners pa
 coverage is more limited. A statewide average therefore <strong>understates</strong> a high-value home. The
 report's own by-state averages sit in Table 4 (page 30 onward) and Table 5 (page 135); those pages were not
 machine-readable in this build, so no average-premium figure from them is published here, under the rule that
-nothing is inferred or copied second-hand. A property-specific premium remains blank until it is quoted.</p>""")
+nothing is inferred or copied second-hand. A property-specific premium remains blank until it is quoted.</p>
+<p>One coverage limit is worth the adviser's attention: the California FAIR Plan, the state's insurer of last
+resort, caps a residential dwelling policy at <strong>$3,000,000 combined</strong> (official CDI figure). Property A's
+owner-estimated value is $3,100,000, and that estimate is itself unverified. If standard-market cover cannot be
+placed for either building, cover above the cap would be needed and its cost is unknown until quoted. No premium
+for either building appears on this site; both remain owner estimates flagged unverified.</p>""")
         + table("Insurance market context, officially published",
                 ["Item", "Published figure", "Source"],
                 [
@@ -2324,6 +2327,8 @@ def page_review() -> str:
          "Section 63.2(a)(1)(C) says the base year value established at the change in ownership, adjusted annually, is enrolled when the transferee stops being eligible for the homeowners' exemption. The live-then-rent path is modelled on that reading, which is favourable to it. If the assessor instead enrolled full market value at the move-out, that path's tax bill would rise and its terminal value would fall. The recommendation does not depend on it: selling already leads that path."),
         ("Every reassessment figure is conditional on the parent-and-child relationship",
          "Section 63.2 excludes only transfers between parents and their children, or grandparents and grandchildren where the middle generation has died. Every shelter, live-in and rental figure on this site assumes that condition holds. The trust document is the only thing that confirms it and this site has not seen it."),
+        ("Insurance above the insurer-of-last-resort cap",
+         "The California FAIR Plan caps a residential dwelling at $3,000,000 combined (official CDI figure). Property A's owner-estimated value is $3,100,000 and is itself unverified, so no coverage conclusion follows from the two figures alone. If standard-market cover cannot be placed for either building, cover above the cap would be needed, its cost is unknown until quoted, and no premium for either building appears on this site."),
         ("The 1929 / 2008 equity-entry test is synthetic, not a historical backtest",
          "The repository has no source-verified S&P total-return sequence for those event windows. The Black Swan page uses an explicitly assumed -40%, +25%, +10% sequence, then the model return; Federal Reserve History links establish event context, not those returns. Obtain a verified total-return dataset before treating any result as a historical simulation."),
     ]
@@ -2343,6 +2348,7 @@ def page_review() -> str:
         "A sheltered base is assumed to survive a later move-out": ["rtc63_2_eligibility", "boe_prop19"],
         "Every reassessment figure is conditional on the parent-and-child relationship": ["rtc63_2_eligibility"],
         "The 1929 / 2008 equity-entry test is synthetic, not a historical backtest": ["fedhist_1929", "fedhist_greatrecession"],
+        "Insurance above the insurer-of-last-resort cap": ["cdi_fairplan"],
     }
     assert set(CAV_WHERE) == {a for a, _ in caveats}, "every caveat needs a source decision"
     cav_rows = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td>"
@@ -2374,10 +2380,26 @@ def page_review() -> str:
         ("Verification is a build-time check, not a legal review",
          "The verifier checks that every published table row carries a source link, that no forbidden identifier appears, and that the build is reproducible.",
          "It cannot check whether a legal reading is correct. That needs a professional."),
+        ("Form 706 filing date: verified 15 November 2026",
+         "The site gives nine months after death for Form 706 and an automatic six-month extension on Form 4768. An earlier pass flagged the nine-month rule as not re-read. The IRS page 'Filing estate and gift tax returns' was read on the publisher's domain on 15 November 2026 and states that the estate tax return is due nine months after the date of death, with a six-month extension available if requested before the due date and the estimated tax is paid. The rule is verified; the flag is closed.",
+         "None from the date itself. The extension of time to pay is separate and discretionary; Part III of Form 4768 requests it.",
+         ["irs_filing_eg", "irs_i706", "irs_i4768"]),
+        ("Two briefing pages were listed twice in the menu; one has been retired",
+         "The one-page Attorney & CPA brief appeared under two labels in the menu. The print-styled brief is kept. The duplicate route is retired and returns a content-free withdrawal notice on the packaged artifact, and a 404 on the Jekyll root publisher.",
+         "The menu shows one brief. Nothing in the substance of the brief changed."),
+        ("The one-page brief has not been print-checked in a browser",
+         "No browser is available in the build environment. The print rules were corrected on 15 November 2026 - the page-size rules had been conflicting (a later global margin overrode the general print margins) and are now a single default page plus a named page for the brief - but the printed pagination was not seen.",
+         "Open the brief in a browser and print it to PDF before handing it to an adviser."),
+        ("A personal e-mail address appears in commit metadata",
+         "Git stores an author address with every commit. Earlier commits (83 of them) carry a personal e-mail address rather than the GitHub no-reply address now in use. It is not on any published page.",
+         "Removing it from history needs a rewrite, which is the owner's decision. The runbook at scripts/history_scrub.sh covers the rewrite steps, including an author-address rewrite. For new commits, the account setting that keeps the address private is the owner's to change."),
+        ("Pre-rounding history scrub is prepared as a runbook, not run",
+         "scripts/history_scrub.sh audits the whole history for the identifier classes the privacy scanner guards and for candidate unrounded figures (found outside the repository, never written to the tree), and can run a git-filter-repo rewrite. The audit on 15 November 2026 found the identifier tokens still present in the visible history and one candidate figure. The scanner's own patterns were split into string fragments so the file text no longer carries any identifier.",
+         "The rewrite itself rewrites every ref and needs a force-push to main, so it is the owner's to run or authorise. Until then, earlier commits, pull-request diffs and forks keep what they hold. The runbook carries the full post-rewrite checklist."),
     ]
     aud_rows = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td>"
-                + src_cell(["boe_lta25009", "irs_estate", "scc_ratebook"], "Related sources")
-                for a, b, c in audit]
+                + src_cell(rest[0] if rest else ["boe_lta25009", "irs_estate", "scc_ratebook"], "Related sources")
+                for a, b, c, *rest in audit]
 
     return (
         callout("note", "What this page is for", """
@@ -2476,7 +2498,7 @@ def page_briefing() -> str:
     value = p45["value_at_death"]
     cash_net = p45["paths"]["sell_equities"]["sale"]["net"]
     summary = f"""
-<div class="brief-toolbar"><p><strong>Print / save as PDF:</strong> use your browser's Print command. This sheet is formatted for one letter-size page.</p></div>
+<div class="brief-toolbar"><p><strong>Print / save as PDF:</strong> use your browser's Print command. This sheet is formatted for one letter-size page.</p><p><strong>One-page printable Attorney &amp; CPA Briefing Sheet:</strong> this page is the single briefing sheet; the duplicate briefing-sheet.html was withdrawn on 15 November 2026.</p></div>
 <p class="brief-confidential"><strong>Planning brief — placeholders only; no personal names, addresses, parcel IDs, trust terms or account figures.</strong></p>
 <div class="brief-grid">
 <section><h2>Decision in front of the family</h2>
@@ -2689,23 +2711,6 @@ the path at zero rent, which is a floor. The model also does not change the Prop
 that answer is no, the reassessment is full and every case here moves toward selling.</p>""")
     )
 
-# ------------------------------------------------------------------- briefing --
-def page_briefing_sheet() -> str:
-    rows = [
-        f"<td><strong>Client matter</strong></td><td>Anonymised inheritance decision: Property A (home to be inherited through a trust, planned 2040-2050) versus Property B (three-unit rental building already owned by the heir). <a class=\"src\" href=\"review.html#register\">Follow up on the register</a></td>",
-        f"<td><strong>Estimated values (Nov 2026)</strong></td><td>Property A {m(A['estimated_market_value_2026'])} (owner estimate, unverified). Property B {m(B['estimated_market_value_2026'])} (owner estimate, unverified). Neither address nor parcel is published. <a class=\"src\" href=\"review.html#register\">Follow up on the register</a></td>",
-        f"<td><strong>First gate to confirm</strong></td><td>Is the transfer between a parent and a child (or grandparent and grandchild whose parent has died)? Without it there is no Proposition 19 exclusion: Property A is reassessed to full market value and every shelter figure here disappears. The trust document settles it. {slink('rtc63_2_eligibility')} <a class=\"src\" href=\"review.html#register\">Follow up on the register</a></td>",
-        f"<td><strong>Next step</strong></td><td>A California estate attorney and a CPA should review the trust document, the deed, the tax bill and the county records before anything is implemented. Use the deadlines timeline page and the questions page as the checklist. <a class=\"src\" href=\"review.html#register\">Follow up on the register</a></td>",
-    ]
-    return (
-        privacy_banner()
-        + callout("note", "Attorney & CPA Briefing Sheet - printable one page", """
-<p>Print this page (Ctrl+P / Cmd+P). It contains no names, addresses, parcel numbers, ZIP codes, trust terms, beneficiary details, account numbers or unrounded owner figures. Every dollar is rounded to the nearest $10. It is a briefing aid, not legal or tax advice.</p>""")
-        + table("Briefing sheet", ["Item", "What to confirm"], rows,
-              note="The full figures, assumptions and source links are on the decision, black-swan, estate and sources pages. Nothing on this page substitutes for a review of the trust document, the deed, the tax bill and the county records by a California estate attorney and a CPA.")
-    )
-
-
 
 PAGE_BUILDERS = {
     "index.html": (page_index, "Two California properties, one decision. Every figure rounded to the nearest $10."),
@@ -2729,7 +2734,6 @@ PAGE_BUILDERS = {
     "questions.html": (page_questions, "What is known, what is missing, and how to find it."),
     "suggestions.html": (page_suggestions, "A review queue of proposals. Nothing implemented yet."),
     "review.html": (page_review, "Unverified figures, modelling caveats and the repository audit."),
-    "briefing-sheet.html": (page_briefing_sheet, "A one-page printable brief for the attorney and the tax adviser."),
     "glossary.html": (page_glossary, "Plain-language definitions of the terms used on this site."),
     "sources.html": (page_sources, "Every official source used, with what it supports."),
 }

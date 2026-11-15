@@ -1264,6 +1264,15 @@
    "checked": "Opened on the publisher's official domain on 15 November 2026; the report narrative and Tables 1 to 3 were read in full. Tables 4 and 5 (the by-state average premiums, report pages 30 to 134 and 135 onward) begin beyond the pages this build could machine-read, so no average-premium figure from them is published anywhere on this site.",
    "supports": "The official state-level insurance benchmark series. Average premium is written premium divided by written exposures in house-years as reported to statistical agents. California 2023 exposures read from Tables 1 and 3: dwelling fire 329,584.8 house-years (3.1% of the state market); owner-occupied homeowners 6,237,525.5 (58.8%); tenants and condominium 4,036,912.8 (38.1%); HO-3 alone 5,227,903.4. Only 8.4% of California dwelling fire and owner-occupied policies carry $1,000,000 or more of insurance. The report states that average premium increases with the amount of insurance and that dwelling fire premiums are generally lower than the five homeowners form premiums because the coverage is more limited.",
    "limits": "Statewide and across all amounts of insurance. Not a premium for any building and not an average for any postal area. The report covers non-commercial dwelling fire and homeowners package forms; it is not a quote. The by-state average-premium tables (Tables 4 and 5) were not machine-read in this build and their figures are therefore left blank on the site, not inferred."
+  },
+  {
+   "id": "irs_filing_eg",
+   "publisher": "Internal Revenue Service",
+   "title": "Filing estate and gift tax returns - When to file",
+   "url": "https://www.irs.gov/businesses/small-businesses-self-employed/filing-estate-and-gift-tax-returns",
+   "checked": "Opened on the publisher's official domain on 15 November 2026; the 'When to file' section was read in full.",
+   "supports": "Generally, the estate tax return is due nine months after the date of death. A six-month extension is available if requested prior to the due date and the estimated correct amount of tax is paid before the due date. The gift tax return is due on April 15 following the year of the gift.",
+   "limits": "A general rule; a decedent's facts can change the date (for example a nonresident not a citizen estate). The extension of time to file is not an extension of time to pay."
   }
  ]
 }

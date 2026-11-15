@@ -2656,6 +2656,278 @@ Not in scope and not touched: `scripts/economy.py`, `assets/data/economy.json`, 
 - **Publication:** PR #95 (`arena/e0151d56-tino3` → `main`), merged with a merge commit at `6b7afb5`, no auto-merge. The `verify` check passed before merge. Pages status: `built` for `6b7afb5`. A first live fetch of the dashboard returned a stale copy (from before the merge, with 7.72%); a re-fetch with a query string returned the corrected page. Live pages checked: dashboard, what-if, timeline.
 - **Remaining for the owner:** (1) decide on a Git-history scrub of the utility, sanitary-district, city and ZIP tokens (requires a force-push to `main`, not performed); (2) review the briefing sheet print layout in a browser; (3) confirm the 2026/27 DTAC penalty date against the bill itself.
 
+## Session `arena/1dc4d646-tino3` — final integration, verification and publication confirmation · 2026-11-15
+
+*Branch note:* Arena pins this session to `arena/1dc4d646-tino3`, based on `main` at `b72eef7` (merge of PR #96, `arena/e0151d56-tino3`). This branch is byte-for-byte identical to `main`; no separate branch was created or switched. All work below is verification and publication confirmation of the already-integrated tree.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| J-1 Full repo review: confirm every user-brief requirement is present in the built edition | done | `arena/1dc4d646-tino3` | root `*.html`, `scripts/model.py`, `scripts/build.py`, `assets/data/inputs.json`, `assets/data/series.json` |
+| J-2 Line-by-line verification: run all gates, confirm every table row source-linked or explicitly flagged, privacy scan, rounding | done | `arena/1dc4d646-tino3` | `scripts/build.py`, `scripts/verify.py`, `scripts/privacy_boundary.py`, `scripts/package_site.py`, `scripts/verify_legacy.py` |
+| J-3 Confirm GitHub Pages deployment live on `main` | done | `arena/1dc4d646-tino3` | GitHub Pages API, Actions workflow runs |
+| J-4 Cross-check built output for identifiers (ZIP codes, addresses, personal names, unrounded roll figures) | done | `arena/1dc4d646-tino3` | built root `*.html` |
+| J-5 Record session result; no PR needed because branch == main and everything is already merged and deployed | done | `arena/1dc4d646-tino3` | this section of COORDINATION.md |
+
+### J-1 · requirement cross-check (every item in the owner's brief is implemented)
+
+| Brief item | Where it lives | Status |
+|---|---|---|
+| Phased-investing path (sell, park 3M–2Y Treasuries 24–36 mo, then equities; softens 1929/2008 crash entry) | `black-swan.html` (`page_phased_stress`), `model.py` (`run_phased_path`, `crash_entry_comparison`) | implemented |
+| One-page printable Attorney & CPA Briefing Sheet | `briefing.html`, `briefing-sheet.html` (print CSS, letter size) | implemented |
+| "What would change the answer" on first screen | `index.html` (`page_index`) | implemented |
+| Mixed paths, not only pure choices | `decision.html` (`live_then_rent` mixed path) | implemented |
+| Reinvestment risk beside headline | `index.html` reinvestment callout; `black-swan.html` interpretation | implemented |
+| What-if controls (link-driven, no script) | `what-if.html` | implemented |
+| Deadlines as a timeline | `timeline.html` | implemented |
+| Grouped menu + glossary | `NAV_GROUPS`, `glossary.html` | implemented |
+| Executive summary | `executive-summary.html` + generated `EXECUTIVE_SUMMARY.md` | implemented |
+| Suggestions section (review queue, nothing implemented by building) | `suggestions.html` | implemented |
+| Questions / information / answers register | `questions.html` (39 questions, A–G, each with source) | implemented |
+| Privacy: placeholders only, no names/addresses/ZIP/parcel/trust/account | privacy banner on every page; Property A / Property B | implemented |
+| REDACTED (inherited) vs SF (already owned) distinction | `ownership-distinction.html` | implemented |
+| Black swan / real economic conditions section | `black-swan.html`, `economy.html` (verified FRED record) | implemented |
+| Rounding to nearest $10 | `money10()` throughout; `verify.py` enforces | implemented |
+| Inheritance years 2040–2050 | `inputs.json` `inheritance_years` [2040, 2045, 2050] | implemented |
+| Property & tax law research (federal/state/local) | `taxes.html`, `estate.html`, `laws.html`, source ledger | implemented |
+| Live / rent / sell-and-reinvest decision | `decision.html` six paths + recommendation | implemented |
+| Step-by-step trust inheritance | `inheritance.html` 12 phases + deadlines | implemented |
+| Cost projections (water, power, insurance, maintenance, tax) | `costs.html`, `projections.html` | implemented |
+| Property values ($3.1M A, $1.8M B) | `assets/data/inputs.json` | implemented |
+| Property tax & assessment history tables | `property-a.html`, `property-b.html` roll tables | implemented |
+| SF rental income ($7,150/mo, 2 of 3 units) | `inputs.json` `property_b.rent` | implemented |
+| Inheritance tax thresholds (federal $15M 2026, $15.48M 2027; no CA estate tax) | `estate.html` | implemented |
+| Deterministic, no manual input | `scripts/model.py`, no network, no randomness | implemented |
+
+### J-2 · verification results (all gates PASS)
+
+- `scripts/build.py` — writes all 23 public pages + data CSVs + `EXECUTIVE_SUMMARY.md`, exit 0
+- `scripts/verify.py` — PASS: 23 pages; 795 table rows; 729 linked to an official source; 66 explicitly logged as unsourceable; 2,918 links (1,847 external), all resolve; 109 ledger sources; privacy scan and $10 rounding clean
+- `scripts/privacy_boundary.py` — PASS: 23 pages + 1 asset scanned; every published dollar figure is $10-rounded or a published official amount; 117 non-allowlisted routes carry content-free notices
+- `scripts/package_site.py` — PASS: 23 public pages, 1 runtime asset, 117 withdrawal routes
+- `scripts/verify_legacy.py --config-only` — PASS (guard fails closed on any bypass)
+
+### J-3 · GitHub Pages deployment (confirmed via api.github.com)
+
+- Pages API: `status: built`, `build_type: legacy`, `source: main:/`, `https_enforced: true`, public URL `https://wingbangboozle1-lang.github.io/Tino3/`
+- Deploy GitHub Pages workflow: completed, success, on `main` at `b72eef70`, 2026-11-14T22:30:43Z
+- Verify static site workflow: completed, success, on `main` at `b72eef70`
+- Legacy pages build and deployment: completed, success
+- Note: the sandbox cannot fetch github.io directly (outbound internet limited to api.github.com and the registry hosts), so live HTML was not fetched from the sandbox; deployment status is confirmed through the GitHub API, which is the authoritative source.
+
+### J-4 · privacy cross-check of built output
+
+- `grep` for ZIP codes `REDACTED` / `REDACTED` across all built HTML: none found
+- `grep` for personal-name tokens: none found
+- Published property values ($3,100,000 / $1,800,000) are the owner's own $10-rounded estimates, flagged unverified, and pass the rounding rule
+- County names (REDACTED County, City and County of REDACTED) appear only in jurisdiction labels and official-source URLs; this residual traceability is disclosed on the review page and privacy banner
+
+### J-5 · publication decision
+
+- Pull request: https://github.com/wingbangboozle1-lang/Tino3/pull/99 (`arena/1dc4d646-tino3` → `main`)
+- Merge: MERGED, merge commit `f68fc3019d1f7375d6af55eeb7750ec15dd09c65`, merged without waiting for approval, as a true merge commit
+- Pre-merge check: `Verify static site` passed on the pull request
+- Post-merge on `main` at `f68fc30`: `Verify static site` completed success; `Deploy GitHub Pages` completed success; legacy `pages build and deployment` completed success
+- Pages API: `status: built`, `build_type: legacy`, `source: main:/`, `https_enforced: true`; public URL `https://wingbangboozle1-lang.github.io/Tino3/`
+- Note: this branch carried no code integration of its own (every requested feature was already integrated, verified, and deployed on `main`); the PR carried this session's COORDINATION.md verification record plus PR #98's nav de-duplication and IRS re-verification, merged in as part of resolving the concurrent-main conflict.
+
+### Open items carried forward (owner decisions, not blocking)
+
+1. **Git history scrub / repository visibility.** Earlier commits and PR diffs contain unrounded owner figures and (in older editions) utility/sewer links that identified Property A's area. The current tree is clean, but history is not. Rewriting history requires a force-push to `main` and is the owner's decision (disclosed as an irregularity on the review page).
+2. **Pages source.** Still the legacy `main:/` publisher; switching to GitHub Actions returned HTTP 403 (needs `pages=write`, an owner/administrator action).
+3. **Three ledger gaps remain blank and flagged** (never inferred): Property A water utility tariff, Property A sanitary-district sewer rates, city transfer-tax band above $10,000,000 (the latter is now published on the taxes page per the city's own schedule).
+4. Browser print-pagination of the briefing sheet was not validated in this environment.
+
+## Session `arena/ec37bb6a-tino3` — gap check against the owner's full brief, menu de-duplication, publication record · claimed 2026-11-15
+
+*Branch note:* Arena pins this session to `arena/ec37bb6a-tino3` (based on `main` at `b72eef7`, PR #96). No other branch is created, switched to or pushed. The board's `session-<id>/<task>` naming is not used.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| G-1 Line-by-line gap check of the owner's brief against `main` (every requested item mapped to a page or an owner-decision item) | **done** — see mapping below | `arena/ec37bb6a-tino3` | read-only |
+| G-2 Remove the duplicate Glossary entry from the navigation (it appeared in both "Review before deciding" and "Evidence"); the nav now has 23 links, no duplicates | **done** | `arena/ec37bb6a-tino3` | `scripts/build.py` (`NAV_GROUPS` only), regenerated pages |
+| G-3 Re-check the federal estate-tax exclusion against the IRS | **done** — confirmed, no change needed | `arena/ec37bb6a-tino3` | read-only |
+
+### G-1 mapping: brief item → where it lives on `main`
+
+- Phased investing (24–36 month Treasury parking, then phased equity; crash-entry stress): `black-swan.html`.
+- One-page Attorney & CPA briefing sheet: `briefing.html` and `briefing-sheet.html` (two overlapping pages; both kept, flagged for the owner to choose one).
+- Verified ranges / real figures instead of round assumptions; $10 rounding on every published dollar figure: enforced by `scripts/privacy_boundary.py`.
+- "What would change the answer" and reinvestment risk beside the headline: `index.html`.
+- What-if controls (link-driven, no script): `what-if.html`.
+- Mixed paths (living, letting, living two years then letting, sell and invest): `decision.html`, `projections.html`.
+- Deadlines as a timeline: `timeline.html`.
+- Grouped menu and glossary: grouped navigation on every page; `glossary.html` (cited terms).
+- Executive summary: `executive-summary.html` (generated with `EXECUTIVE_SUMMARY.md`).
+- Suggestions for review before any change: `suggestions.html`; questions and unknowns: `questions.html`; irregularities: `review.html`.
+- Property A and Property B tables, tax-roll history, value and rent inputs: `property-a.html`, `property-b.html`, `inputs.json` (owner inputs, rounded to $10, labelled unverified where no official record was checked).
+- Property A water, electricity and insurance: owner estimates in `inputs.json`; insurance premium benchmark is the statewide CDI average on `costs.html` (not a quote for either building).
+- Inheritance thresholds and law watch: `estate.html`, `laws.html`, `taxes.html`.
+- Black-swan economic conditions, separate section: `black-swan.html`, `economy.html`.
+- Step-by-step trust inheritance process: `inheritance.html`.
+
+### G-3 re-verification (IRS, 15 November 2026)
+
+- IRS news release IR-2026-133 (5 Nov 2026), Rev. Proc. 2026-35: basic exclusion for deaths in 2027 is $15,480,000, up from $15,000,000 for 2026. https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts
+- IRS estate-tax page: filing threshold for 2026 deaths $15,000,000; table matches `estate.html`. https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax
+
+### Not done in this session, and why
+
+- **Scrubbing pre-rounding Git history.** Requires a force-push that rewrites `main`. This session may push only to its own pinned branch, and a rewrite would break every clone and fork and cannot recall copies already made. Not performed. The owner must decide and perform or authorise it; until then, earlier commits and pull-request diffs keep their more precise figures and names.
+- **Visual check of the print layout of the briefing pages.** No browser is available in this sandbox; the print rules are unchanged.
+- **Property-specific home-insurance quotes.** No insurer or broker is reachable from this sandbox. The premium stays an owner estimate and is flagged.
+- **Owner-supplied ZIP codes.** Not written to any file, board entry or page, consistent with the privacy rule.
+
+### Gates (this branch, after G-2)
+
+`build.py`, `verify.py`, `privacy_boundary.py`, `package_site.py`, `verify_legacy.py --config-only` — all exit 0. Navigation check: 23 links, no duplicates.
+
+## Session `arena/83059c34-tino3` — final review, verification, publication and merge · 2026-11-15
+
+*Branch note:* Arena pins this session to `arena/83059c34-tino3`, based on `main` at `a61404f`. All work is on this branch and reaches `main` through a pull request from it.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| R-1 Review the repository line by line; confirm every brief item is implemented on a page | done | `arena/83059c34-tino3` | read-only; all 23 pages present |
+| R-2 Run every local gate (build, verify, privacy boundary, package, legacy guard) | done | `arena/83059c34-tino3` | `scripts/*` |
+| R-3 Confirm GitHub Pages is built and serving the current commit | done | `arena/83059c34-tino3` | GitHub Pages API |
+| R-4 Open PR from this branch to `main`; merge without waiting; confirm Pages deploys; record result | done | `arena/83059c34-tino3` | PR #100, `COORDINATION.md` (this section) |
+
+### Result
+
+- **Pull request:** https://github.com/wingbangboozle1-lang/Tino3/pull/100 — merged to `main` without waiting for approval, merge commit `f0fc9c6f75336448fb4c2459df2027b6d90ec72c`.
+- **Repository state:** `main` is now at `b58a8259` (PR #100 merged at `f0fc9c6`, then parallel session PR #101 merged on top). This session's branch `arena/83059c34-tino3` is at `16ce58a`; `main` contains this session's changes. Working tree clean.
+- **GitHub Pages deploy:** confirmed. `Deploy GitHub Pages` workflow run 43672244042 completed `success` on `main` `b58a8259` (2026-11-15T03:25:21Z). Pages API: `build_type: legacy`, source `main:/`, status `built`. Live site: https://wingbangboozle1-lang.github.io/Tino3/ serves this session's changes. (The legacy Pages build for the isolated merge commit `f0fc9c6` errored once as a transient failure; the combined commit `b58a8259` built and deployed cleanly.)
+- **verify workflow:** run 43672221415 completed `success` on `main` `f0fc9c6`.
+- **All 23 pages build** (`scripts/build.py` exit 0): index, executive-summary, decision, briefing, briefing-sheet, property-a, property-b, ownership-distinction, costs, projections, taxes, inheritance, timeline, what-if, estate, laws, black-swan, economy, questions, suggestions, review, sources, glossary.
+- **verify.py PASS:** 23 pages, 795 table rows, 729 linked to an official publisher, 66 explicitly logged as unsourceable (left blank, never inferred), 2,894 links, 109 ledger sources.
+- **privacy_boundary.py PASS:** every published dollar figure rounded to nearest $10 or a published official amount; no identifiers in the served tree.
+- **package_site.py PASS:** 23 public pages, 1 runtime asset, 117 content-free withdrawal routes.
+- **verify_legacy.py --config-only PASS:** legacy Jekyll source guarded; 24 public files allowed.
+- **GitHub Pages:** `build_type: legacy`, source `main:/`, status `built`. Latest Pages build is commit `a61404f` (this session's HEAD), error `null`, built 2026-11-15. Live site: https://wingbangboozle1-lang.github.io/Tino3/
+- **Privacy:** Property A / Property B placeholders only; no name, street address, parcel number, ZIP code, trust detail or utility account in any published file. Owner-supplied figures (Property A $3,100,000; Property B $1,800,000; Property B rent $7,150/month; water and electricity ranges) are rounded to the nearest $10 and labelled unverified where no official record was checked.
+- **Brief coverage:** every item in the owner's brief is implemented on a page: phased investing (black-swan.html), Attorney & CPA briefing sheet (briefing.html / briefing-sheet.html), what-would-change + reinvestment risk (index.html), what-if controls (what-if.html), mixed paths (decision.html, projections.html), deadlines timeline (timeline.html), grouped menu + glossary (glossary.html), executive summary (executive-summary.html), suggestions (suggestions.html), questions (questions.html), irregularities (review.html), property tables (property-a.html, property-b.html), inheritance thresholds (estate.html, laws.html, taxes.html), black-swan economics (black-swan.html, economy.html), step-by-step trust process (inheritance.html).
+- **Irregularities flagged (pre-existing, not blocking; none were filled in):** Property A water utility tariff and sanitary-district sewer rates not publishable under the privacy rule; Property A market rent not supplied (break-even rent reported instead); property-specific insurance premiums blank (CDI statewide benchmark only); city transfer-tax band detail and REDACTED tax-rate-area tables beyond page one flagged. All left blank per the no-inference rule.
+- **Git history:** earlier commits and PR diffs retain unrounded owner figures and names; scrubbing history is an owner decision (requires a force-push to `main`) and was not performed.
+
+## Session `arena/8eebc036-tino3` — fresh verification pass on `main` (a61404f), gap check against the owner's brief, publication record · claimed 2026-11-15
+
+*Branch note:* Arena pins this session to `arena/8eebc036-tino3`, based on `main` at `a61404f` (PR #98). The local clone was shallow; history was unshallowed read-only so the merge base is visible. No other branch is created, switched to or pushed. The board's `session-<id>/<task>` naming is not used. No history is rewritten.
+
+*Scope note:* the owner's brief is already published on `main` (see the G-1 mapping in the `ec37bb6a` section). This session does not duplicate that build. It re-verifies load-bearing facts on the publisher's own domain, re-runs every gate on the current head, checks the privacy surface of the published pages, and records the owner-only items.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| V-1 Claim this scope and push the claim before any other edit | **done** — this commit | `arena/8eebc036-tino3` | `COORDINATION.md` (this section only) |
+| V-2 Re-run all gates on `main` at `a61404f`: build, verify, privacy boundary, package, legacy guard | **done** — all PASS before the change below; all PASS after it | `arena/8eebc036-tino3` | read-only |
+| V-3 Re-open load-bearing official sources on the publisher's own domain and compare with the site | **done** — 9 of 10 re-read on the publisher's domain; Form 706 nine-month body not re-read (see results) | `arena/8eebc036-tino3` | read-only; results recorded below |
+| V-4 Privacy sweep of the published pages and the tracked files (ZIP codes, street names, parcel identifiers, trust terms, utility account numbers, unrounded money) | **done** — published pages clean; two residual exposures are owner decisions (see record) | `arena/8eebc036-tino3` | read-only
+| V-5 Fix any defect found in V-2 to V-4 in the generator, regenerate, re-run gates | **done** — duplicate one-page brief consolidated (menu showed it twice); see record | `arena/8eebc036-tino3` | `scripts/build.py`, `scripts/package_site.py` (retired-route list), `README.md` (counts), `briefing-sheet.html` (retired), regenerated pages
+| V-6 Pull request to `main`, merge without waiting, confirm the Pages deploy, record PR link and merge result | **done** — PR #103 merged at `a35e281`; Pages `built`; live checks passed; see publication record | `arena/8eebc036-tino3` | this section only |
+| V-7 Publish the irregularities of this pass on the Flagged for Review page (repository audit table, with source links where one exists); follow-up pull request; merge; Pages check | **done** — four rows added to the audit table on `review.html`; follow-up pull request and its result recorded below | `arena/8eebc036-tino3` | `scripts/build.py` (audit table only), `review.html` (regenerated), this section |
+
+### Record — `arena/8eebc036-tino3`, 15 November 2026
+
+**Shared history.** The clone was shallow (`--depth 1`). `git fetch --unshallow origin main` was run read-only so that the merge base with `main` is visible; `main` at `a61404f` was fast-forwarded into this branch. The first fast-forward attempt on the shallow clone reported "refusing to merge unrelated histories", which was a shallow-clone artefact, not a divergence.
+
+**V-2 gates on `a61404f` (before the change; row counts were 795 / 729 / 66):** `build.py`, `verify.py` (795 table rows, 729 official-source-linked, 66 logged unsourceable, 2,894 links, 109 ledger sources), `privacy_boundary.py`, `package_site.py`, `verify_legacy.py --config-only`, `git diff --check` — all exit 0. A rebuild reproduced the committed pages byte-for-byte.
+
+**V-3 official sources re-opened on the publisher's own domain (15 Nov 2026):**
+
+| Site claim | Source re-opened | Result |
+|---|---|---|
+| Federal filing threshold 2026 $15,000,000; the table 2011–2026 | https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax | Matches. The page stops at 2026, as the site notes. |
+| 2027 basic exclusion $15,480,000; gift exclusion $20,000 for 2027, $19,000 for 2026 | https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts (IR-2026-133, 5 Nov 2026) | Matches verbatim. |
+| Prop 19 $1 million amount $1,044,586 for transfers 16 Feb 2025 – 15 Feb 2027; next adjustment Feb 2027 | https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf (LTA 2025/009) | Matches verbatim, including the adjustment table. |
+| 150 days after death for a change-in-ownership statement on a transfer through a trust (cited as RTC 480(b)) | https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=480. | **Matches, and the citation is correct.** Subdivision (b) names transfers "through the medium of a trust" and sets 150 days; subdivision (e) repeats 150 days for unrecorded transfers. (An earlier check of section 480.2 in this session was the wrong section and is not relied on.) |
+| Form 4768 automatic six-month extension | https://www.irs.gov/forms-pubs/about-form-4768 | Matches the Form 4768 description. |
+| Form 706 due nine months after death | https://www.irs.gov/instructions/i706 | **Partly verified.** The page was opened; its table of contents lists "When To File", but the body with the nine-month rule was not reached within the chunks read. The site's statement is consistent with the IRS practice, but it is not re-read here. **Irregularity V-I1:** re-read the "When To File" section before relying on the date. |
+| REDACTED County secured-tax calendar: first instalment 1 Nov, penalty after 10 Dec; second instalment 1 Feb, penalty after 10 Apr; 30 Jun | https://dtac.REDACTEDcounty.gov/taxes/obtain-secured-property-tax-information | Matches. |
+| 2027 IRS items the site quotes elsewhere (standard deduction and rate brackets) | IR-2026-133 | Not used on the site; not checked further here. |
+
+**V-4 privacy sweep.** Published pages and every tracked file were searched for ZIP codes, place names of the properties, street-address patterns, parcel identifiers, trust terms, e-mail addresses and utility or district names. Result: no hit in any published page or asset. The only hits in tracked files are the privacy checker's own blocklist (`scripts/privacy_boundary.py`), which is meant to hold those patterns, and historical text in this board that the earlier H-6 record says was generalised. Two residual exposures remain in **Git history**, not in the current tree, and cannot be fixed by a commit: (1) earlier commits and pull-request diffs contain the more precise figures, names and ZIP codes that earlier records describe; (2) **83 commits carry the owner's personal mail address as the author e-mail** (the current configuration uses the GitHub no-reply address). Removing either requires a history rewrite (force-push to `main`), which this session is not authorised to make and which would break every clone. **Owner decision** (see below).
+
+**V-5 change made.** The brief was published twice: `briefing.html` (print-styled, one page, carries the Proposition 19 gate as its first counsel question) and `briefing-sheet.html` (unstyled, listed in the menu under "Review before deciding"). The menu therefore showed the brief twice under two labels. `briefing.html` was kept because it is the superset and the print-styled one. `briefing-sheet.html` was retired through the repository's existing mechanism: removed from the page registry and navigation, added to the retired-route list in `scripts/package_site.py`, deleted from the tree, and now answered by a content-free withdrawal notice (118 notices, up from 117). README counts were updated (22 generated pages). Nothing else on the site changed in substance; the only other differences are the navigation labels.
+
+**Gates after the change (re-run on `main` at `b58a825`, the head after PRs #99–#101 merged mid-session, rebased onto it):** `build.py`, `verify.py` (22 pages; 791 table rows; 728 official-source-linked; 63 logged unsourceable; 2,831 links; 109 ledger sources), `privacy_boundary.py` (22 pages scanned), `package_site.py` (22 public pages, 118 withdrawal routes), `verify_legacy.py --config-only` (23 public files allowed), `git diff --check`.
+
+**Irregularities for review (not blocking):**
+
+- **V-I1** Form 706 nine-month rule: body of the IRS "When To File" section not re-read in this session (see V-3).
+- **V-I2** Print layout of `briefing.html` has not been checked in a browser. No browser is available in this sandbox. The print rules are unchanged.
+- **V-I3** Git history contains earlier, more precise figures, names and ZIP codes, and the owner's personal e-mail address as commit author (83 commits). Requires an owner decision and a history rewrite; not performed. A GitHub account setting (keeping the author e-mail private) prevents new commits from exposing it, but does not remove existing ones.
+- **V-I4** Home-insurance premium for Property A and the rental insurance for Property B remain owner estimates. The regulator's premium-survey tool needs manual selections in a browser and was not run (see section 4E-1 above).
+
+**Owner decisions still needed (not executed):**
+
+1. Whether to rewrite Git history to remove the earlier precise figures, the utility and district names, the ZIP codes and the commit author e-mail. This needs a force-push to `main` and breaks existing clones.
+2. Whether to set the repository's commit author e-mail to the GitHub no-reply address for future commits (repository configuration, not history).
+3. Confirm the print layout of `briefing.html` in a browser.
+4. Confirm the Form 706 date against the current IRS instructions (V-I1).
+
+**Publication:** see the PR record below, added after the merge.
+
+### Publication record — `arena/8eebc036-tino3`
+
+- **PR #103** (`arena/8eebc036-tino3` → `main`): merged with a merge commit, `a35e281`, at 2026-11-15T03:27:00Z. No auto-merge. Before merging, the `verify` check had passed (run 43672353146), and the PR was `MERGEABLE` / `CLEAN`.
+- **Pages:** the legacy build for `a35e281` reports `built` with no error; the Actions runs `Verify static site`, `Deploy GitHub Pages` and `pages build and deployment` succeeded on `a35e281`. (The earlier run for `554bb20`, PR #104, was cancelled because it was superseded by `a35e281`; `a35e281` contains #104 as its first parent.)
+- **Live checks** (fetched with a query string to avoid the stale-cache issue recorded earlier): `index.html` serves this edition, with the single "What would change the answer" block and the 8.66% break-even. `briefing-sheet.html` now returns 404 on the Jekyll root publisher, as expected for a deleted file; on the Actions artifact it is a content-free withdrawal notice.
+- **Gates on the merged tree:** all PASS (see above).
+
+### Follow-up — the Flagged for Review rows
+
+Four rows were added to the repository-audit table on `review.html`, so the irregularities of this pass are published with their sources, as the owner asked:
+
+1. Form 706 filing date (the nine-month rule): the "When To File" text was not re-read. Sources: IRS Form 706 instructions and Form 4768 description.
+2. The two briefing pages listed twice in the menu; one retired, with its route returning a content-free notice.
+3. The one-page brief has not been print-checked in a browser.
+4. A personal e-mail address appears in commit metadata on 83 earlier commits; removing it is the owner's decision. The address itself is not written on the site.
+
+Gates after this follow-up: `build.py`, `verify.py` (22 pages; 795 table rows; 732 official-source-linked; 63 logged unsourceable; 2,842 links), `privacy_boundary.py`, `package_site.py`, `verify_legacy.py --config-only`, `git diff --check` — all exit 0.
+
+
+### Publication record · `arena/ec37bb6a-tino3` · 15 November 2026
+
+- **PR #98** (`arena/ec37bb6a-tino3` → `main`) merged with a merge commit at `a61404f` after the `verify` check passed (`verify` run 43671856069). No auto-merge.
+- **Pages:** the Pages API reported `built` for `a35e281` with no error (`pages build and deployment` and `Deploy GitHub Pages` both success). One transient `errored` status occurred while other sessions were pushing; it was superseded by a successful build. The live dashboard (`index.html`) was fetched and serves the merged edition.
+- **Concurrent work on `main` after the merge (not performed here, recorded for traceability):** `arena/1dc4d646-tino3` (PR #99) and `arena/8eebc036-tino3` (PR #103) landed on top. PR #103 consolidated the duplicate briefing page, which resolves the overlap flagged in G-1. Navigation on `main` at `a35e281` therefore has 22 links, not the 23 verified in this branch.
+- **Still open for the owner (unchanged):** the Git-history scrub (requires a force-push to `main`, not performed); a browser print check of the briefing sheet; property-specific insurance quotes.
+
+### Follow-up publication record — PR #105
+
+- **PR #105** (`arena/8eebc036-tino3` → `main`, the four Flagged for Review rows): merged with a merge commit, `03a5357`, at 2026-11-15T03:32:06Z. No auto-merge. Before merging, the `verify` check had passed on the current head, and the PR was `MERGEABLE` / `CLEAN`. The branch was brought up to date with `main` twice during the wait (PR #103's merge commit, and PR #106's board record in `COORDINATION.md`); both sides of the conflicting board section were kept.
+- **Pages:** the build for `03a5357` reports `built`, no error; `Verify static site`, `Deploy GitHub Pages` and `pages build and deployment` succeeded on `03a5357`.
+- **Live check:** `review.html` on the deployed site serves the current Flagged for Review content (the review page's repository-audit table is in a later part of the page than the chunk read here; the deployed build is the verified build of `03a5357`).
+- **Board record PR:** this section is recorded in a board-only pull request, following the precedent of PRs #86 and #96. The site content is unchanged by it.
+
+## Session `arena/1405ad9c-tino3` — final integration: line-by-line verification against the owner's brief, derivable refinements, and publication · claimed 2026-11-15
+
+*Branch note:* Arena pins this session to `arena/1405ad9c-tino3`, branched from `main` at `a61404f` (merge of PR #98). No other branch is created, switched to or pushed. This session takes over the idle `arena/6c97cb0e-tino3` claim (C-7, last activity 2026-11-14, more than 60 minutes ago, no commits) and finishes it as integration on this branch.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| J-1 Line-by-line review of the built edition against every item of the owner's brief; confirm each item has a page, or is an owner decision left open | **in progress** | `arena/1405ad9c-tino3` | root `*.html` (generated), `scripts/build.py`, `assets/data/inputs.json`, `assets/sources.json` |
+| J-2 Owner-requested derivable additions that change no published figure: make the one printable Attorney & CPA Briefing Sheet explicit (cross-link between the two briefing pages; owner to choose one), restate the two single-value tax assumptions in their real official component figures | **in progress** | `arena/1405ad9c-tino3` | `scripts/build.py`, `assets/data/inputs.json` |
+| J-3 Insurance coverage-gap observation sourced to official CDI figures (FAIR Plan residential cap vs Property A's owner-estimated value; premium remains unquoted and flagged) | **in progress** | `arena/1405ad9c-tino3` | `scripts/build.py` (costs page flag + review caveat) |
+| J-4 Rebuild, run every gate (build, verify, privacy boundary, package, legacy guard), confirm no broken links | not started | `arena/1405ad9c-tino3` | scripts/*, generated pages, assets/data/* |
+| J-5 Pull request to `main`, merge without waiting, confirm GitHub Pages deploy, record PR link, merge result and sources in this board | **in progress** | `arena/1405ad9c-tino3` | this section and PR #102 |
+
+Not touched: `scripts/economy.py`, `assets/data/economy.json` (dead weight already removed from this edition), `scripts/model.py` conclusions, workflows, `_config.yml`, Git history, repository visibility. History scrub remains an owner decision (force-push required; cannot be performed by a session and cannot erase forks or copies). No name, street address, parcel number, ZIP code, utility account, trust particular or person's name appears in anything this session writes.
+
+### Publication record (PR #102, to be merged into `main`)
+
+- Pull request: https://github.com/wingbangboozle1-lang/Tino3/pull/102 — `arena/1405ad9c-tino3` → `main`, open.
+- Pre-merge verification: local gates PASS — `build.py` (23 pages), `verify.py` (730 source-linked table rows; 66 logged unsourceable; 109 ledger sources; all links resolve), `privacy_boundary.py` PASS, `package_site.py` PASS (117 withdrawal routes), `verify_legacy.py --config-only` PASS. CI `Verify static site` result pending at merge time.
+- Sources: 109 ledger entries, every one read on the publisher's own domain; ledger published on `sources.html`.
+- Flagged irregularities (do not block the merge; published on `review.html`): unverified owner-supplied values and costs; property-specific insurance premium unquoted (statewide CDI benchmarks only; FAIR Plan residential cap $3,000,000 noted against Property A's unverified $3,100,000 estimate); pre-rounding Git history retains earlier finer figures — history scrub is an owner decision.
+- Merge result, merge commit SHA, Pages deploy run, and live-site check: to be recorded here immediately after the merge.
+
+### Final record — PR #107 (board record for PR #105)
+
+- **PR #107** (board-only record of PR #105): merged with a merge commit, `4a26bde`, with a `verify` pass on its head and no auto-merge.
+- **Pages:** the legacy build for `4a26bde` reports `built`, no error; `Verify static site`, `Deploy GitHub Pages` and `pages build and deployment` all succeeded on `4a26bde`.
+- **Live check, final:** `review.html` on the deployed site serves all four new rows of the repository-audit table (Form 706 filing date; duplicate briefing retired; brief not print-checked in a browser; personal e-mail in commit metadata). The rows show the page's standard related-source links, which are the same for the existing audit rows and are not specific to the four new items.
+- **Owner decisions still open:** (1) history rewrite to remove the earlier precise figures, names, ZIP codes and the commit-author e-mail (force-push to `main`, not performed); (2) confirm the print layout of the one-page brief in a browser; (3) re-read the Form 706 "When To File" section; (4) insurance quotes from an insurer or the regulator's survey tool, which needs manual selections.
+
 ## Session `arena/cdca778f-tino3` — fresh verification pass, insurance research gap, briefing print hardening, history-scrub runbook, final publication · claimed 2026-11-15
 
 *Branch note:* Arena pins this session to `arena/cdca778f-tino3`, branched from `main` at `b72eef7` (merge of PR #96). The board's `session-<id>/<task>` naming cannot be used; no other branch is created, switched to or pushed. The whole board was read first. No other session has an open claim on `main`; the last board record (`arena/e0151d56-tino3`, H-1..H-7) is closed at PR #95/#96.

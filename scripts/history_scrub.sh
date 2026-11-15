@@ -35,16 +35,21 @@
 #   1. Force-push every rewritten ref: main and any live session branches.
 #   2. Re-check pull-request diffs: old diff URLs can serve pre-rewrite content;
 #      comment on, or close and re-open, affected pull requests.
-#   3. Forks keep the old history. Ask fork owners to delete, or delete and
+#   3. Rewrite commit author and committer addresses too (83 earlier commits carry
+#      a personal e-mail address): run git-filter-repo with a mailmap file mapping
+#      the personal address to the GitHub no-reply address, before or with the
+#      text replacement pass. Then set the account's e-mail privacy so new commits
+#      never expose it again.
+#   4. Forks keep the old history. Ask fork owners to delete, or delete and
 #      recreate the forks you control.
-#   4. Ask GitHub Support to purge cached views (raw files, commit diffs) or wait
+#   5. Ask GitHub Support to purge cached views (raw files, commit diffs) or wait
 #      for caches to expire: https://support.github.com/
-#   5. Confirm GitHub Pages rebuilds from the rewritten main and re-run the gates:
+#   6. Confirm GitHub Pages rebuilds from the rewritten main and re-run the gates:
 #      python3 scripts/build.py && python3 scripts/verify.py &&
 #      python3 scripts/privacy_boundary.py && python3 scripts/package_site.py &&
 #      python3 scripts/verify_legacy.py --config-only
-#   6. Re-run this script's audit and expect zero findings.
-#   7. Until step 1 completes, treat the exposed copies as public and live.
+#   7. Re-run this script's audit and expect zero findings.
+#   8. Until step 1 completes, treat the exposed copies as public and live.
 
 set -euo pipefail
 cd "$(dirname "$0")/.."
