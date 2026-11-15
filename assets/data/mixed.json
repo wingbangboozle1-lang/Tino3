@@ -1082,26 +1082,26 @@
     {
      "label": "Live in it for the whole 30 years, then sell",
      "asset_terminal": 5322760,
-     "opportunity_adjusted": null,
+     "opportunity_adjusted": 5322760,
      "credit": 0,
      "gap_vs_sell_now": 33262780,
-     "gap_adjusted": null
+     "gap_adjusted": 33262780
     },
     {
      "label": "Live in it for 10 years, then sell",
      "asset_terminal": 26687250,
-     "opportunity_adjusted": null,
+     "opportunity_adjusted": 26687250,
      "credit": 0,
      "gap_vs_sell_now": 11898280,
-     "gap_adjusted": null
+     "gap_adjusted": 11898280
     },
     {
      "label": "Live in it for 10 years, then let it out",
      "asset_terminal": 1460930,
-     "opportunity_adjusted": null,
+     "opportunity_adjusted": 1460930,
      "credit": 0,
      "gap_vs_sell_now": 37124610,
-     "gap_adjusted": null
+     "gap_adjusted": 37124610
     }
    ]
   },
@@ -1307,6 +1307,40 @@
      "gap_adjusted": -2230300
     }
    ]
+  }
+ ],
+ "rent_breakeven": [
+  {
+   "occupy_years": 30,
+   "mode": "sell",
+   "label": "Live in it for the whole 30 years, then sell",
+   "annual_rent": 304270,
+   "monthly_rent": 25360,
+   "share_of_value_at_death": 4.7
+  },
+  {
+   "occupy_years": 10,
+   "mode": "sell",
+   "label": "Live in it for 10 years, then sell",
+   "annual_rent": 237020,
+   "monthly_rent": 19750,
+   "share_of_value_at_death": 3.6
+  },
+  {
+   "occupy_years": 5,
+   "mode": "sell",
+   "label": "Live in it for 5 years, then sell",
+   "annual_rent": 211440,
+   "monthly_rent": 17620,
+   "share_of_value_at_death": 3.2
+  },
+  {
+   "occupy_years": 10,
+   "mode": "rent",
+   "label": "Live in it for 10 years, then let it out",
+   "annual_rent": 339600,
+   "monthly_rent": 28300,
+   "share_of_value_at_death": 5.2
   }
  ],
  "fees_example": {
