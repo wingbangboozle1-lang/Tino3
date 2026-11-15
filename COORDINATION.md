@@ -2920,3 +2920,11 @@ Not touched: `scripts/economy.py`, `assets/data/economy.json` (dead weight alrea
 - Sources: 109 ledger entries, every one read on the publisher's own domain; ledger published on `sources.html`.
 - Flagged irregularities (do not block the merge; published on `review.html`): unverified owner-supplied values and costs; property-specific insurance premium unquoted (statewide CDI benchmarks only; FAIR Plan residential cap $3,000,000 noted against Property A's unverified $3,100,000 estimate); pre-rounding Git history retains earlier finer figures — history scrub is an owner decision.
 - Merge result, merge commit SHA, Pages deploy run, and live-site check: to be recorded here immediately after the merge.
+
+### Final record — PR #107 (board record for PR #105)
+
+- **PR #107** (board-only record of PR #105): merged with a merge commit, `4a26bde`, with a `verify` pass on its head and no auto-merge.
+- **Pages:** the legacy build for `4a26bde` reports `built`, no error; `Verify static site`, `Deploy GitHub Pages` and `pages build and deployment` all succeeded on `4a26bde`.
+- **Live check, final:** `review.html` on the deployed site serves all four new rows of the repository-audit table (Form 706 filing date; duplicate briefing retired; brief not print-checked in a browser; personal e-mail in commit metadata). The rows show the page's standard related-source links, which are the same for the existing audit rows and are not specific to the four new items.
+- **Owner decisions still open:** (1) history rewrite to remove the earlier precise figures, names, ZIP codes and the commit-author e-mail (force-push to `main`, not performed); (2) confirm the print layout of the one-page brief in a browser; (3) re-read the Form 706 "When To File" section; (4) insurance quotes from an insurer or the regulator's survey tool, which needs manual selections.
+
