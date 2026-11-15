@@ -2732,3 +2732,46 @@ No pull request was created or merged in this session because this branch is ide
 3. **Three ledger gaps remain blank and flagged** (never inferred): Property A water utility tariff, Property A sanitary-district sewer rates, city transfer-tax band above $10,000,000 (the latter is now published on the taxes page per the city's own schedule).
 4. Browser print-pagination of the briefing sheet was not validated in this environment.
 
+## Session `arena/ec37bb6a-tino3` — gap check against the owner's full brief, menu de-duplication, publication record · claimed 2026-11-15
+
+*Branch note:* Arena pins this session to `arena/ec37bb6a-tino3` (based on `main` at `b72eef7`, PR #96). No other branch is created, switched to or pushed. The board's `session-<id>/<task>` naming is not used.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| G-1 Line-by-line gap check of the owner's brief against `main` (every requested item mapped to a page or an owner-decision item) | **done** — see mapping below | `arena/ec37bb6a-tino3` | read-only |
+| G-2 Remove the duplicate Glossary entry from the navigation (it appeared in both "Review before deciding" and "Evidence"); the nav now has 23 links, no duplicates | **done** | `arena/ec37bb6a-tino3` | `scripts/build.py` (`NAV_GROUPS` only), regenerated pages |
+| G-3 Re-check the federal estate-tax exclusion against the IRS | **done** — confirmed, no change needed | `arena/ec37bb6a-tino3` | read-only |
+
+### G-1 mapping: brief item → where it lives on `main`
+
+- Phased investing (24–36 month Treasury parking, then phased equity; crash-entry stress): `black-swan.html`.
+- One-page Attorney & CPA briefing sheet: `briefing.html` and `briefing-sheet.html` (two overlapping pages; both kept, flagged for the owner to choose one).
+- Verified ranges / real figures instead of round assumptions; $10 rounding on every published dollar figure: enforced by `scripts/privacy_boundary.py`.
+- "What would change the answer" and reinvestment risk beside the headline: `index.html`.
+- What-if controls (link-driven, no script): `what-if.html`.
+- Mixed paths (living, letting, living two years then letting, sell and invest): `decision.html`, `projections.html`.
+- Deadlines as a timeline: `timeline.html`.
+- Grouped menu and glossary: grouped navigation on every page; `glossary.html` (cited terms).
+- Executive summary: `executive-summary.html` (generated with `EXECUTIVE_SUMMARY.md`).
+- Suggestions for review before any change: `suggestions.html`; questions and unknowns: `questions.html`; irregularities: `review.html`.
+- Property A and Property B tables, tax-roll history, value and rent inputs: `property-a.html`, `property-b.html`, `inputs.json` (owner inputs, rounded to $10, labelled unverified where no official record was checked).
+- Property A water, electricity and insurance: owner estimates in `inputs.json`; insurance premium benchmark is the statewide CDI average on `costs.html` (not a quote for either building).
+- Inheritance thresholds and law watch: `estate.html`, `laws.html`, `taxes.html`.
+- Black-swan economic conditions, separate section: `black-swan.html`, `economy.html`.
+- Step-by-step trust inheritance process: `inheritance.html`.
+
+### G-3 re-verification (IRS, 15 November 2026)
+
+- IRS news release IR-2026-133 (5 Nov 2026), Rev. Proc. 2026-35: basic exclusion for deaths in 2027 is $15,480,000, up from $15,000,000 for 2026. https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts
+- IRS estate-tax page: filing threshold for 2026 deaths $15,000,000; table matches `estate.html`. https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax
+
+### Not done in this session, and why
+
+- **Scrubbing pre-rounding Git history.** Requires a force-push that rewrites `main`. This session may push only to its own pinned branch, and a rewrite would break every clone and fork and cannot recall copies already made. Not performed. The owner must decide and perform or authorise it; until then, earlier commits and pull-request diffs keep their more precise figures and names.
+- **Visual check of the print layout of the briefing pages.** No browser is available in this sandbox; the print rules are unchanged.
+- **Property-specific home-insurance quotes.** No insurer or broker is reachable from this sandbox. The premium stays an owner estimate and is flagged.
+- **Owner-supplied ZIP codes.** Not written to any file, board entry or page, consistent with the privacy rule.
+
+### Gates (this branch, after G-2)
+
+`build.py`, `verify.py`, `privacy_boundary.py`, `package_site.py`, `verify_legacy.py --config-only` — all exit 0. Navigation check: 23 links, no duplicates.
