@@ -32,7 +32,7 @@ NAV_GROUPS = [
     ("Money over time", ["costs.html", "projections.html", "taxes.html"]),
     ("Rules and the estate", ["inheritance.html", "timeline.html", "estate.html", "laws.html"]),
     ("Black swan economics", ["black-swan.html", "economy.html"]),
-    ("Review before deciding", ["questions.html", "suggestions.html", "review.html", "briefing-sheet.html"]),
+    ("Review before deciding", ["questions.html", "suggestions.html", "review.html"]),
     ("Evidence", ["glossary.html", "sources.html"]),
 ]
 PAGE_TITLES = {
@@ -40,7 +40,7 @@ PAGE_TITLES = {
     "what-if.html": "What-if cases",
     "executive-summary.html": "Executive summary",
     "decision.html": "The decision",
-    "briefing.html": "Attorney & CPA briefing sheet",
+    "briefing.html": "Attorney & CPA briefing sheet (one page, printable)",
     "property-a.html": "Property A - the home being inherited",
     "property-b.html": "Property B - the building already owned",
     "ownership-distinction.html": "Why the two properties are not the same",
@@ -55,7 +55,6 @@ PAGE_TITLES = {
     "questions.html": "Questions to answer before deciding",
     "suggestions.html": "Suggestions for review",
     "review.html": "Flagged for review and repository audit",
-    "briefing-sheet.html": "Attorney & CPA Briefing Sheet (printable)",
     "glossary.html": "Glossary of terms",
     "timeline.html": "Deadlines and key dates",
     "sources.html": "Source ledger",
@@ -389,7 +388,6 @@ SUMMARIES = {
     "questions.html": "What is known, what is missing, and how to find it.",
     "suggestions.html": "A review queue of proposals. Nothing implemented yet.",
     "review.html": "Unverified figures, modelling caveats and the repository audit.",
-    "briefing-sheet.html": "A one-page printable brief for the attorney and the tax adviser.",
     "glossary.html": "Plain-language terms with official citations.",
     "timeline.html": "The deadlines and key dates that shape the inheritance decision.",
     "sources.html": "Every official source used, with what it supports.",
@@ -2661,23 +2659,6 @@ the path at zero rent, which is a floor. The model also does not change the Prop
 that answer is no, the reassessment is full and every case here moves toward selling.</p>""")
     )
 
-# ------------------------------------------------------------------- briefing --
-def page_briefing_sheet() -> str:
-    rows = [
-        f"<td><strong>Client matter</strong></td><td>Anonymised inheritance decision: Property A (home to be inherited through a trust, planned 2040-2050) versus Property B (three-unit rental building already owned by the heir). <a class=\"src\" href=\"review.html#register\">Follow up on the register</a></td>",
-        f"<td><strong>Estimated values (Nov 2026)</strong></td><td>Property A {m(A['estimated_market_value_2026'])} (owner estimate, unverified). Property B {m(B['estimated_market_value_2026'])} (owner estimate, unverified). Neither address nor parcel is published. <a class=\"src\" href=\"review.html#register\">Follow up on the register</a></td>",
-        f"<td><strong>First gate to confirm</strong></td><td>Is the transfer between a parent and a child (or grandparent and grandchild whose parent has died)? Without it there is no Proposition 19 exclusion: Property A is reassessed to full market value and every shelter figure here disappears. The trust document settles it. {slink('rtc63_2_eligibility')} <a class=\"src\" href=\"review.html#register\">Follow up on the register</a></td>",
-        f"<td><strong>Next step</strong></td><td>A California estate attorney and a CPA should review the trust document, the deed, the tax bill and the county records before anything is implemented. Use the deadlines timeline page and the questions page as the checklist. <a class=\"src\" href=\"review.html#register\">Follow up on the register</a></td>",
-    ]
-    return (
-        privacy_banner()
-        + callout("note", "Attorney & CPA Briefing Sheet - printable one page", """
-<p>Print this page (Ctrl+P / Cmd+P). It contains no names, addresses, parcel numbers, ZIP codes, trust terms, beneficiary details, account numbers or unrounded owner figures. Every dollar is rounded to the nearest $10. It is a briefing aid, not legal or tax advice.</p>""")
-        + table("Briefing sheet", ["Item", "What to confirm"], rows,
-              note="The full figures, assumptions and source links are on the decision, black-swan, estate and sources pages. Nothing on this page substitutes for a review of the trust document, the deed, the tax bill and the county records by a California estate attorney and a CPA.")
-    )
-
-
 
 PAGE_BUILDERS = {
     "index.html": (page_index, "Two California properties, one decision. Every figure rounded to the nearest $10."),
@@ -2701,7 +2682,6 @@ PAGE_BUILDERS = {
     "questions.html": (page_questions, "What is known, what is missing, and how to find it."),
     "suggestions.html": (page_suggestions, "A review queue of proposals. Nothing implemented yet."),
     "review.html": (page_review, "Unverified figures, modelling caveats and the repository audit."),
-    "briefing-sheet.html": (page_briefing_sheet, "A one-page printable brief for the attorney and the tax adviser."),
     "glossary.html": (page_glossary, "Plain-language definitions of the terms used on this site."),
     "sources.html": (page_sources, "Every official source used, with what it supports."),
 }
