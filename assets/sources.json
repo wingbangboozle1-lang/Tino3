@@ -1,5 +1,5 @@
 {
- "as_of": "2026-11-13",
+ "as_of": "2026-11-15",
  "edition": "Anonymised quantitative decision edition; every published figure rounded to the nearest $10.",
  "scope": "Union of two independently maintained ledgers, merged on 13 November 2026. Entries kept verbatim from whichever ledger supplied them; where an entry had no 'supports' field its 'verifies' list was carried across, and 'limits' was filled from 'limit' or 'caveat' when present. Neither ledger was rewritten to match the other.",
  "sources": [
@@ -87,7 +87,7 @@
    "publisher": "California State Board of Equalization",
    "title": "Letter to Assessors No. 2025/009 - Intergenerational Transfer Exclusion, adjustment of the $1 million amount",
    "url": "https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf",
-   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "checked": "Opened on the publisher's official domain on 2026-11-13. Re-verified on the publisher's official domain on 15 November 2026.",
    "supports": "For transfers occurring 16 February 2025 through 15 February 2027 the value cap is the property's factored base year value plus $1,044,586. Earlier amounts: $1,000,000 (16 Feb 2021 - 15 Feb 2023) and $1,022,600 (16 Feb 2023 - 15 Feb 2025). The next adjustment occurs in February 2027.",
    "limits": "The amount is adjusted every second February by the change in the FHFA California House Price Index, so a 2040-2050 transfer will use a different, currently unpublished amount."
   },
@@ -96,16 +96,16 @@
    "publisher": "California State Board of Equalization",
    "title": "Letter to Assessors No. 2026/002 - 2026-27 inflation adjustment",
    "url": "https://boe.ca.gov/proptaxes/pdf/lta26002.pdf",
-   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "checked": "Carried in the repository source ledger and re-read on the publisher's official domain on 15 November 2026.",
    "supports": "The California Consumer Price Index change used to set the 2026-27 inflation adjustment to assessed values.",
-   "limits": "The adjustment is set annually and can be below 2% in a low-inflation year."
+   "limits": "The adjustment is set annually and can be below 2% in a low-inflation year. Because the October 2025 regional indexes were not collected or published during the federal government shutdown, the 2026 lien-date factor was computed from the August 2024 to August 2025 change in the index (3.307%), the closest available period; the 2% constitutional cap was still binding, so the enrolled factor is 1.02."
   },
   {
    "id": "boe_lta26026",
    "publisher": "California State Board of Equalization",
    "title": "Letter to Assessors No. 2026/026 - Proposition 19 Intergenerational Transfer Exclusion, Frequently Asked Questions and Answers",
    "url": "https://www.boe.ca.gov/proptaxes/pdf/lta26026.pdf",
-   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "checked": "Opened on the publisher's official domain on 2026-11-13. Re-verified on the publisher's official domain on 15 November 2026.",
    "supports": "Definitions under Revenue and Taxation Code section 63.2; the requirement that the transfer be of the transferor's principal residence and become the transferee's principal residence within one year of the transfer, with no exceptions; removal of the exclusion when the home ceases to qualify and enrolment of the base year value established at the change in ownership, adjusted annually; transfers through a trust are covered; only the unit occupied as a principal residence qualifies in a multi-unit property.",
    "limits": "Guidance, not a legal determination. County assessors apply the rule to the facts."
   },
@@ -314,7 +314,7 @@
    "publisher": "California Legislative Information",
    "title": "Civil Code section 1947.12 - statewide rent cap (Tenant Protection Act of 2019)",
    "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1947.12",
-   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "checked": "Opened on the publisher's official domain on 2026-11-13. Re-verified on the publisher's official domain on 15 November 2026.",
    "supports": "Over any 12-month period gross rent may not be increased more than 5% plus the change in the cost of living, or 10%, whichever is lower, of the lowest gross rent charged in the prior 12 months; not more than two increases in any 12-month period; the initial rent for a new tenancy is not capped; exemptions including housing with a certificate of occupancy issued within the previous 15 years and certain separately alienable single-family homes and condominiums where the owner is not a REIT, corporation or certain LLC and gives the required notice; housing already subject to a stricter local rent control ordinance is excluded.",
    "limits": "Whether a specific building and unit are exempt depends on facts this site does not verify."
   },
@@ -653,7 +653,7 @@
    "publisher": "California Franchise Tax Board",
    "title": "Gifts and inheritance - Personal income types",
    "url": "https://www.ftb.ca.gov/file/personal/income-types/gifts-and-inheritance.html",
-   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "checked": "Opened on the publisher's official domain on 2026-11-13. Re-verified on the publisher's official domain on 15 November 2026.",
    "supports": "A gift or inheritance is not included in California income; income the inherited property later produces (interest, dividends, rent, gain on a real property sale) is taxable.",
    "limits": "Page last updated 24 September 2025. Federal treatment and California treatment can differ for the same receipt."
   },
@@ -744,7 +744,7 @@
    "publisher": "Internal Revenue Service",
    "title": "IRS releases tax inflation adjustments for tax year 2027 (IR-2026-133, 5 November 2026)",
    "url": "https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts",
-   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "checked": "Opened on the publisher's official domain on 2026-11-13. Re-verified on the publisher's official domain on 15 November 2026.",
    "supports": "For decedents dying during 2027 the basic exclusion amount is $15,480,000; the annual gift exclusion for 2027 is $20,000 per recipient (up from $19,000 for 2026); the 2027 standard deduction is $33,200 for married filing jointly; the top marginal income rate remains 37%.",
    "limits": "These are indexed statutory amounts for one year, not a forecast for later years."
   },
@@ -762,7 +762,7 @@
    "publisher": "Internal Revenue Service",
    "title": "Estate tax",
    "url": "https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax",
-   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "checked": "Opened on the publisher's official domain on 2026-11-13. Re-verified on the publisher's official domain on 15 November 2026.",
    "supports": "The federal gross estate is measured at fair market value at date of death; the filing threshold by year of death (2026: $15,000,000); the surviving-spouse portability election on a timely filed estate return.",
    "limits": "A filing threshold is not a complete tax computation. Prior taxable gifts, deductions, elections, ownership form and later law can change the result."
   },
@@ -942,7 +942,7 @@
    "publisher": "California Legislative Information",
    "title": "Probate Code section 16061.7 - notice to heirs and beneficiaries on a revocable trust becoming irrevocable",
    "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PROB&sectionNum=16061.7",
-   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13. Re-verified on the publisher's official domain on 15 November 2026.",
    "supports": "The trustee's duty to notify heirs and beneficiaries when a revocable trust becomes irrevocable, and the contents of that notice, used in the step-by-step inheritance page.",
    "limits": "Timing and service rules must be read from the current statute."
   },
@@ -1001,7 +1001,7 @@
    "publisher": "California Legislative Information",
    "title": "Revenue and Taxation Code section 480 - change in ownership statement",
    "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=480",
-   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13. Re-verified on the publisher's official domain on 15 November 2026.",
    "supports": "The change in ownership statement: section 480(a) sets 90 days for most transfers; section 480(b) sets 150 days after death for a transfer on death, or with the inventory and appraisal if the estate is probated. Used in the step-by-step inheritance page.",
    "limits": "Deadlines and penalties must be read from the current statute."
   },
@@ -1019,7 +1019,7 @@
    "publisher": "California Legislative Information",
    "title": "Revenue and Taxation Code section 63.2",
    "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=63.2",
-   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "checked": "Opened on the publisher's official domain on 2026-11-13. Re-verified on the publisher's official domain on 15 November 2026.",
    "supports": "The statutory text of the intergenerational transfer exclusion: the one-year principal-residence requirement, the homeowners'/disabled veterans' exemption filing requirement, removal of the exclusion when the exemption is lost, the claim-filing requirement, the confidentiality of the claim, and the new taxable value formula (existing taxable value plus the fair market value above the existing taxable value plus $1,000,000).",
    "limits": "Section 63.2 was amended by SB 974 (Chapter 665, Statutes of 2026); read the current text."
   },
@@ -1055,7 +1055,7 @@
    "publisher": "California State Controller's Office",
    "title": "California Estate Tax",
    "url": "https://www.sco.ca.gov/ardtax_estate_tax.html",
-   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "checked": "Opened on the publisher's official domain on 2026-11-13. Re-verified on the publisher's official domain on 15 November 2026.",
    "supports": "For decedents dying on or after 1 January 2005 there is no longer a requirement to file a California estate tax return; the California generation-skipping transfer tax does not apply after 31 December 2004.",
    "limits": "Pre-1982 inheritance and gift tax and 1982-2004 filing duties are outside this decision and are not covered."
   },
@@ -1137,9 +1137,9 @@
    "publisher": "California Secretary of State",
    "title": "State Ballot Measures - Statewide Results, 2026 General Election",
    "url": "https://electionresults.sos.ca.gov/returns/ballot-measures",
-   "checked": "Opened on the publisher's official domain on 2026-11-13.",
-   "supports": "Unofficial results as of 12 November 2026 with 23,860 of 23,860 precincts partially reporting; results will be certified by 11 December 2026. Proposition 3 (extension of the existing tax on high incomes) yes 60.7%; Proposition 40 (one-time tax on certain taxpayers) no 52.4%; Proposition 42 (no new state personal property taxes) yes 51.4%; Proposition 43 (limit on local revenue votes) no 57.5%; Proposition 41 (spending-limit audits) no 55.1%; Proposition 37 (middle-income buyer loans) yes 62.4%.",
-   "limits": "These are unofficial results. They change during the canvass and are not final until certified on 11 December 2026. Treat every figure as provisional."
+   "checked": "Opened on the publisher's official domain on 2026-11-15; results table read at the 14 November 2026, 5:16 p.m. update.",
+   "supports": "Unofficial results as of 14 November 2026, 5:16 p.m., with 23,860 of 23,860 precincts partially reporting; vote-by-mail, provisional and other ballots continue to be processed and counted during the canvass; results will be certified by 11 December 2026. Proposition 3 (extension of the existing tax on high incomes) yes 60.7%; Proposition 40 (one-time tax on certain taxpayers) no 52.2%; Proposition 41 (spending-limit audits) no 55.2%; Proposition 42 (no new state personal property taxes) yes 51.3%; Proposition 43 (limit on local revenue votes) no 57.6%; Proposition 37 (middle-income buyer loans) yes 62.5%.",
+   "limits": "These are unofficial results. They change during the canvass and are not final until certified on 11 December 2026. Treat every figure as provisional. An earlier edition published the 12 November 2026 counts (Prop 3 60.7% yes; Prop 40 52.4% no; Prop 41 55.1% no; Prop 42 51.4% yes; Prop 43 57.5% no); those moved during the canvass and were corrected on 15 November 2026."
   },
   {
    "id": "ssa_trustees",
@@ -1155,12 +1155,13 @@
    "title": "Daily Treasury par yield curve rates, November 2026",
    "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value_month=202611",
    "verifies": [
-    "On 9 November 2026 the par yields were 4.38% (1 year), 4.67% (5 years), 4.88% (10 years) and 5.26% (30 years)"
+    "On 9 November 2026 the par yields were 4.38% (1 year), 4.67% (5 years), 4.88% (10 years) and 5.26% (30 years)",
+    "On 13 November 2026 the par yields were 4.32% (3 months), 4.65% (1 year) and 4.88% (2 years) - the tenors the phased-investing path uses"
    ],
-   "quote": "11/09/2026 | ... | 4.38 | 4.56 | 4.58 | 4.67 | 4.76 | 4.88 | 5.29 | 5.26",
-   "checked": "opened on the publisher's site in this session; re-checked on the publisher's site on 11 November 2026",
+   "quote": "11/09/2026 | ... | 4.38 | 4.56 | 4.58 | 4.67 | 4.76 | 4.88 | 5.29 | 5.26 ; 11/13/2026 | ... | 4.32 | 4.34 | 4.42 | 4.65 | 4.88 | 4.92 | 4.98 | 5.05 | 5.15",
+   "checked": "opened on the publisher's site in an earlier session; re-read on the publisher's site on 15 November 2026. The 9 November 2026 row matched the earlier reading exactly; the latest row read is 13 November 2026.",
    "id": "treasury_cmt",
-   "supports": "On 9 November 2026 the par yields were 4.38% (1 year), 4.67% (5 years), 4.88% (10 years) and 5.26% (30 years)",
+   "supports": "On 9 November 2026 the par yields were 4.38% (1 year), 4.67% (5 years), 4.88% (10 years) and 5.26% (30 years); on 13 November 2026 they were 4.32% (3 months) and 4.88% (2 years), inside the modelled short-yield band",
    "limits": ""
   },
   {
@@ -1224,7 +1225,7 @@
    "publisher": "California Legislative Information",
    "title": "Revenue and Taxation Code section 63.2, intergenerational transfer exclusion (full text)",
    "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=63.2",
-   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "checked": "Opened on the publisher's official domain on 2026-11-13. Re-verified on the publisher's official domain on 15 November 2026.",
    "supports": "Subdivision (a)(1) excludes only a purchase or transfer of a principal residence between parents and their children, or between grandparents and their grandchildren where every parent of the grandchild who qualifies as a child of the grandparent is deceased. Subdivision (e)(1) defines 'children' to include a stepchild, a son-in-law or daughter-in-law, a child adopted before age 18, and a foster child of a licensed foster parent where adoption was barred. Subdivision (e)(9) treats a transfer through an inter vivos or testamentary trust as a transfer. Subdivision (f)(1)(A) sets the three-year claim period, ending earlier on transfer to a third party or when the transferee stops occupying.",
    "limits": "The statute states the conditions; it does not confirm any particular family's facts. Only the trust instrument and the deed can do that."
   },
@@ -1251,9 +1252,18 @@
    "publisher": "Internal Revenue Service",
    "title": "Instructions for Form 4768, Application for Extension of Time To File a Return and/or Pay U.S. Estate (and Generation-Skipping Transfer) Taxes",
    "url": "https://www.irs.gov/instructions/i4768",
-   "checked": "Opened on 14 November 2026. Read the 'When To File' section: an automatic 6-month extension of time to file Form 706 is requested on Form 4768 by the original due date; an extension for cause is available after that date only with good cause. Part III is a separate extension of time to pay under section 6161.",
+   "checked": "Opened on 14 November 2026. Read the 'When To File' section: an automatic 6-month extension of time to file Form 706 is requested on Form 4768 by the original due date; an extension for cause is available after that date only with good cause. Part III is a separate extension of time to pay under section 6161. Re-verified on the publisher's official domain on 15 November 2026.",
    "supports": "The automatic six-month extension of time to file Form 706 by filing Form 4768 by the original due date, and that payment extension is a separate request.",
    "limits": "Does not extend the time to pay unless Part III is granted. Read the current form and instructions before filing."
+  },
+  {
+   "id": "naic_hmr_2023",
+   "publisher": "National Association of Insurance Commissioners",
+   "title": "Dwelling Fire, Homeowners Owner-Occupied, and Homeowners Tenant and Condominium/Cooperative Unit Owners Insurance: Data for 2023 (published July 2026)",
+   "url": "https://content.naic.org/sites/default/files/publication-hmr-zu-homeowners-report.pdf",
+   "checked": "Opened on the publisher's official domain on 15 November 2026; the report narrative and Tables 1 to 3 were read in full. Tables 4 and 5 (the by-state average premiums, report pages 30 to 134 and 135 onward) begin beyond the pages this build could machine-read, so no average-premium figure from them is published anywhere on this site.",
+   "supports": "The official state-level insurance benchmark series. Average premium is written premium divided by written exposures in house-years as reported to statistical agents. California 2023 exposures read from Tables 1 and 3: dwelling fire 329,584.8 house-years (3.1% of the state market); owner-occupied homeowners 6,237,525.5 (58.8%); tenants and condominium 4,036,912.8 (38.1%); HO-3 alone 5,227,903.4. Only 8.4% of California dwelling fire and owner-occupied policies carry $1,000,000 or more of insurance. The report states that average premium increases with the amount of insurance and that dwelling fire premiums are generally lower than the five homeowners form premiums because the coverage is more limited.",
+   "limits": "Statewide and across all amounts of insurance. Not a premium for any building and not an average for any postal area. The report covers non-commercial dwelling fire and homeowners package forms; it is not a quote. The by-state average-premium tables (Tables 4 and 5) were not machine-read in this build and their figures are therefore left blank on the site, not inferred."
   }
  ]
 }

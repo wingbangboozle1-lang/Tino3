@@ -32,7 +32,7 @@ LEDGER_IDS = [item["id"] for item in LEDGER["sources"]]
 OFFICIAL_HOSTS = {
     "irs.gov", "www.irs.gov", "ftb.ca.gov", "www.ftb.ca.gov", "sco.ca.gov", "www.sco.ca.gov",
     "leginfo.legislature.ca.gov", "boe.ca.gov", "www.boe.ca.gov", "cpuc.ca.gov", "www.cpuc.ca.gov",
-    "insurance.ca.gov", "www.insurance.ca.gov", "federalreservehistory.org",
+    "insurance.ca.gov", "www.insurance.ca.gov", "content.naic.org", "federalreservehistory.org",
     "www.federalreservehistory.org", "libertystreeteconomics.newyorkfed.org",
     "bls.gov", "www.bls.gov", "fred.stlouisfed.org", "sfgov.legistar.com",
     "sos.ca.gov", "www.sos.ca.gov", "voterguide.sos.ca.gov", "electionresults.sos.ca.gov",
