@@ -1,5 +1,18 @@
 # Coordination board
 
+## Session `arena/0b5284a0-tino3` — brief-gap completion: imputed-rent input for living paths, Proposition H official terms for Property B, README/board hygiene, verification and publication · claimed 2026-11-15
+
+*Branch note:* Arena pins this session to `arena/0b5284a0-tino3` (based on `main` at `ee7082c`, the merge of PR #118). No other branch is created, switched on or pushed; the pull request is opened from this branch to `main`. The board was read first: no pull request is open, so no live session currently holds `scripts/build.py`, `assets/data/*` or `assets/sources.json`.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| A-1 Claim this scope and push before any other edit | **done** — this commit | `arena/0b5284a0-tino3` | `COORDINATION.md` (this section only) |
+| A-2 Fresh line-by-line gap check of the owner's brief against the published edition; record the mapping and any defects found | pending | `arena/0b5284a0-tino3` | read-only; results recorded in this section |
+| A-3 **Imputed-rent input for the living paths** (brief item): add a named, blank-by-default imputed-rent input, publish how each living-path comparison changes per stated monthly amount, and register the missing market-rent opinion — never infer a rent figure | pending | `arena/0b5284a0-tino3` | `assets/data/inputs.json` (append), `scripts/model.py` (append only), `scripts/build.py` (affected page sections only), `assets/data/model.json` (regenerated) |
+| A-4 **Model Proposition H with its official terms** (brief item): research the measure's official text and its canvassed status, publish its terms and its cost effect on Property B as a law-watch entry distinguishing proposal from enacted law, with the city publisher withheld for privacy per the established register pattern | pending | `arena/0b5284a0-tino3` | `assets/sources.json` (append only), `scripts/build.py` (laws / property-b / index sections only), `assets/data/inputs.json` (append), `scripts/model.py` (append only), `scripts/verify.py` (host allowlist only if a non-location official host is required) |
+| A-5 README hygiene: remove the duplicated published-content paragraph carrying stale ledger counts (97 / 109 against the actual 98) and restate the current counts | pending | `arena/0b5284a0-tino3` | `README.md` |
+| A-6 Rebuild, run every gate, pull request to `main`, merge without waiting, confirm the Pages deploy, record the PR link and merge result | pending | `arena/0b5284a0-tino3` | this section only; `EXECUTIVE_SUMMARY.md` (generated) |
+
 ## Session `arena/f8ab312e-tino3` — real 1929/2008 entry-timing replays, official-source re-verification, privacy audit and publication · claimed 2026-11-15
 
 *Branch note:* Arena pins this session to `arena/f8ab312e-tino3` (based on `main` at `f68fc30`). The board's `session-<id>/<task>` branch naming cannot be used; no other branch is created, switched to or pushed. Pushes go to this branch only; the pull request is opened from it to `main`.
