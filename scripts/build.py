@@ -2479,15 +2479,16 @@ def history_audit_section() -> str:
         '<h2 id="history-audit">Privacy audit of this repository\'s own history</h2>'
         + callout("privacy", "What the history audit found, and what it did not do", """
 <p>The published site is scanned on every build for names, street addresses, postal codes, parcel numbers,
-telephone numbers, email addresses and property-level place names, and for any dollar figure that is not a
+telephone numbers, email addresses, property-level place names and the county and city names, and for any dollar
+figure that is not a
 multiple of ten. That scan covers the deployable artifact, not the Git history behind it.</p>
 <p>A separate read-only audit therefore walks every commit reachable in this repository and counts how many file
 versions carry the <em>shape</em> of each identifier. It reports counts only. It does not print a matching value,
 because publishing the value in order to disclose it would recreate exactly the exposure being disclosed.</p>
 <p><strong>The result is that the current published tree is clean on every class, and the history is not clean on
 three of them.</strong> No street address, parcel number or telephone number has ever been
-committed. Postal codes and property-level place names did appear in superseded file versions and in archive
-material, none of which is part of the published artifact. The full counts are below.</p>
+committed. Postal codes, property-level place names and the two jurisdiction names did appear in superseded file
+versions and in archive material, none of which is part of the published artifact. The full counts are below.</p>
 <p>Cleaning the history is a different operation from cleaning the site: it needs a rewrite and a force-push of a
 public branch, which invalidates every clone, every open pull request and every fork, and cannot recall copies
 already downloaded. That is the owner's decision, it is recorded as an open item, and the procedure and its costs
