@@ -998,7 +998,12 @@ which is an <strong>owner estimate</strong> and is flagged unverified.</p>
 either building, and it must not be read as one: a three-unit rental in the city and a single-family home in the
 county are priced on entirely different bases. It is published here only so the owner estimate can be seen
 against something official, which is the most this source can support. A property-specific premium remains
-blank until it is quoted.</p>""")
+blank until it is quoted.</p>
+<p>One coverage limit is worth the adviser's attention: the California FAIR Plan, the state's insurer of last
+resort, caps a residential dwelling policy at <strong>$3,000,000 combined</strong> (official CDI figure). Property A's
+owner-estimated value is $3,100,000, and that estimate is itself unverified. If standard-market cover cannot be
+placed for either building, cover above the cap would be needed and its cost is unknown until quoted. No premium
+for either building appears on this site; both remain owner estimates flagged unverified.</p>""")
         + table("Property B net income today",
                 ["Item", "Amount", "Source"],
                 [
@@ -2294,6 +2299,8 @@ def page_review() -> str:
          "Section 63.2(a)(1)(C) says the base year value established at the change in ownership, adjusted annually, is enrolled when the transferee stops being eligible for the homeowners' exemption. The live-then-rent path is modelled on that reading, which is favourable to it. If the assessor instead enrolled full market value at the move-out, that path's tax bill would rise and its terminal value would fall. The recommendation does not depend on it: selling already leads that path."),
         ("Every reassessment figure is conditional on the parent-and-child relationship",
          "Section 63.2 excludes only transfers between parents and their children, or grandparents and grandchildren where the middle generation has died. Every shelter, live-in and rental figure on this site assumes that condition holds. The trust document is the only thing that confirms it and this site has not seen it."),
+        ("Insurance above the insurer-of-last-resort cap",
+         "The California FAIR Plan caps a residential dwelling at $3,000,000 combined (official CDI figure). Property A's owner-estimated value is $3,100,000 and is itself unverified, so no coverage conclusion follows from the two figures alone. If standard-market cover cannot be placed for either building, cover above the cap would be needed, its cost is unknown until quoted, and no premium for either building appears on this site."),
         ("The 1929 / 2008 equity-entry test is synthetic, not a historical backtest",
          "The repository has no source-verified S&P total-return sequence for those event windows. The Black Swan page uses an explicitly assumed -40%, +25%, +10% sequence, then the model return; Federal Reserve History links establish event context, not those returns. Obtain a verified total-return dataset before treating any result as a historical simulation."),
     ]
@@ -2313,6 +2320,7 @@ def page_review() -> str:
         "A sheltered base is assumed to survive a later move-out": ["rtc63_2_eligibility", "boe_prop19"],
         "Every reassessment figure is conditional on the parent-and-child relationship": ["rtc63_2_eligibility"],
         "The 1929 / 2008 equity-entry test is synthetic, not a historical backtest": ["fedhist_1929", "fedhist_greatrecession"],
+        "Insurance above the insurer-of-last-resort cap": ["cdi_fairplan"],
     }
     assert set(CAV_WHERE) == {a for a, _ in caveats}, "every caveat needs a source decision"
     cav_rows = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td>"
@@ -2459,7 +2467,7 @@ def page_briefing() -> str:
     value = p45["value_at_death"]
     cash_net = p45["paths"]["sell_equities"]["sale"]["net"]
     summary = f"""
-<div class="brief-toolbar"><p><strong>Print / save as PDF:</strong> use your browser's Print command. This sheet is formatted for one letter-size page.</p></div>
+<div class="brief-toolbar"><p><strong>Print / save as PDF:</strong> use your browser's Print command. This sheet is formatted for one letter-size page.</p><p><strong>One-page printable Attorney &amp; CPA Briefing Sheet:</strong> this page is the single briefing sheet; the duplicate briefing-sheet.html was withdrawn on 15 November 2026.</p></div>
 <p class="brief-confidential"><strong>Planning brief — placeholders only; no personal names, addresses, parcel IDs, trust terms or account figures.</strong></p>
 <div class="brief-grid">
 <section><h2>Decision in front of the family</h2>
