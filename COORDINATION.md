@@ -2723,7 +2723,12 @@ Not in scope and not touched: `scripts/economy.py`, `assets/data/economy.json`, 
 
 ### J-5 · publication decision
 
-No pull request was created or merged in this session because this branch is identical to `main` and every feature requested in the brief is already integrated, verified, and deployed. If the owner later decides to scrub Git history (force-push) or change repository visibility, that is a separate owner action outside this session.
+- Pull request: https://github.com/wingbangboozle1-lang/Tino3/pull/99 (`arena/1dc4d646-tino3` → `main`)
+- Merge: MERGED, merge commit `f68fc3019d1f7375d6af55eeb7750ec15dd09c65`, merged without waiting for approval, as a true merge commit
+- Pre-merge check: `Verify static site` passed on the pull request
+- Post-merge on `main` at `f68fc30`: `Verify static site` completed success; `Deploy GitHub Pages` completed success; legacy `pages build and deployment` completed success
+- Pages API: `status: built`, `build_type: legacy`, `source: main:/`, `https_enforced: true`; public URL `https://wingbangboozle1-lang.github.io/Tino3/`
+- Note: this branch carried no code integration of its own (every requested feature was already integrated, verified, and deployed on `main`); the PR carried this session's COORDINATION.md verification record plus PR #98's nav de-duplication and IRS re-verification, merged in as part of resolving the concurrent-main conflict.
 
 ### Open items carried forward (owner decisions, not blocking)
 
