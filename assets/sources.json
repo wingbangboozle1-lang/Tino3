@@ -672,7 +672,7 @@
    "verifies": [
     "For calendar year 2027 the basic exclusion amount under section 2010(c)(3) is $15,480,000"
    ],
-   "quote": ".44 Basic Exclusion Amount for Estate Tax. For calendar year 2027, the basic exclusion amount under \u00a7 2010(c)(3) is $15,480,000.",
+   "quote": ".44 Basic Exclusion Amount for Estate Tax. For calendar year 2027, the basic exclusion amount under § 2010(c)(3) is $15,480,000.",
    "checked": "official-domain search excerpt read in this session (full document not opened)",
    "id": "irs_rp2635",
    "supports": "For calendar year 2027 the basic exclusion amount under section 2010(c)(3) is $15,480,000",
@@ -686,7 +686,7 @@
     "Assets of an irrevocable grantor trust that are not included in the gross estate get no basis adjustment at death",
     "Property the decedent placed in a trust that stayed revocable is treated as acquired from the decedent (section 1014(b)(2) and (3))"
    ],
-   "quote": "the basis of Asset is not adjusted to its fair market value on the date of A's death under \u00a7 1014 because Asset was not acquired or passed from a decedent as defined in \u00a7 1014(b).",
+   "quote": "the basis of Asset is not adjusted to its fair market value on the date of A's death under § 1014 because Asset was not acquired or passed from a decedent as defined in § 1014(b).",
    "checked": "opened on the publisher's site in this session",
    "id": "irs_rr2023_2",
    "supports": "Assets of an irrevocable grantor trust that are not included in the gross estate get no basis adjustment at death | Property the decedent placed in a trust that stayed revocable is treated as acquired from the decedent (section 1014(b)(2) and (3))",
@@ -1094,15 +1094,6 @@
    "checked": "Table read on the publisher's domain on 2026-11-15 (table updated 5 January 2026). The S&P 500 total-return and 3-month T-bill columns were transcribed for 1929-1958 and 2000-2024 and every row was cross-checked against the table's own cumulative $100 columns; all rows consistent.",
    "supports": "The dated historical backtest on the black-swan page: the realized annual equity and bill returns that followed the 1929, 2000 and 2008 entries, applied to the hypothetical 2045 sale proceeds.",
    "limits": "An academic compilation, not a government publication; pre-1957 rows use the S&P composite that predates the 500-stock index; gross of taxes, costs and fees; entry at the start of a calendar year, not the exact peak day."
-  },
-  {
-   "id": "ftb_540es_2026",
-   "publisher": "California Franchise Tax Board",
-   "title": "2026 Instructions for Form 540-ES, Estimated Tax for Individuals",
-   "url": "https://www.ftb.ca.gov/forms/2026/2026-540-es-instructions.pdf",
-   "checked": "Opened on the publisher's official domain on 2026-11-15 (re-audit arena/c1b491fb-tino3).",
-   "supports": "Behavioral Health Services Tax (previously Mental Health Services Tax): where taxable income or nonresident California source taxable income is more than $1,000,000, the worksheet subtracts $1,000,000 and applies a rate of 1 percent.",
-   "limits": "This is the estimated-tax booklet for 2026. The same surcharge is computed on the annual Form 540 (line 62 for 2025). Read the booklet for the year of the sale."
   }
  ]
 }
