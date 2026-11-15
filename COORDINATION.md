@@ -1,5 +1,14 @@
 # Coordination board
 
+## Session `arena/1ca458e9-tino3` — reconcile current project documentation and re-run final checks · claimed 2026-11-15
+
+*Branch note:* Arena pins this session to `arena/1ca458e9-tino3`, branched from `main` at `ee7082c`. Work remains on this branch only; the pinned branch name is used instead of the requested session/task branch convention.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| R-1 Reconcile root README against the current generated edition, clarify outstanding privacy and decision limits, and verify the published-site gates; no model inputs, source claims or site pages changed | **in progress** | `arena/1ca458e9-tino3` | `README.md`, `COORDINATION.md` (this section only) |
+
+
 ## Session `arena/f8ab312e-tino3` — real 1929/2008 entry-timing replays, official-source re-verification, privacy audit and publication · claimed 2026-11-15
 
 *Branch note:* Arena pins this session to `arena/f8ab312e-tino3` (based on `main` at `f68fc30`). The board's `session-<id>/<task>` branch naming cannot be used; no other branch is created, switched to or pushed. Pushes go to this branch only; the pull request is opened from it to `main`.
