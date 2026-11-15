@@ -1112,7 +1112,7 @@ def page_precommit() -> str:
         cells = []
         for p in point["paths"]:
             adj = p["opportunity_adjusted"]
-            shown = m(adj) if adj is not None else "no credit"
+            shown = m(adj) if adj is not None else m(p["asset_terminal"])
             cells.append(f"<td>{shown}</td>")
         rent_rows.append(f"<td>{m(point['rent'])} a year</td>" + "".join(cells)
                          + method_cell("#method", "Scenario, not a quote"))
@@ -1128,8 +1128,24 @@ def page_precommit() -> str:
              f"column with selling at the inheritance, which is {m(p45['paths']['sell_equities']['terminal'])} "
              "in the same money.")
 
-    bvs = [(a["key"], round(a["p50"] / a["constant"], 2) if a["constant"] else None)
-           for a in []]
+    be_rows = []
+    for b in MIXED["rent_breakeven"]:
+        be_rows.append(
+            f"<td>{esc(b['label'])}</td><td>{m(b['annual_rent'])}</td>"
+            f"<td>{m(b['monthly_rent'])}</td>"
+            f"<td>{pcf(b['share_of_value_at_death'], 1)} of the value at death</td>"
+            + method_cell("review.html#register", "Model output, rent unverified"))
+    be_table = table(
+        "The imputed-rent break-even: the market rent at which occupying the house matches selling",
+        ["Path", "Rent needed per year", "Rent needed per month", "As a share of the value at death",
+         "Basis"], be_rows,
+        note="This answers &ldquo;we would live there, so what does that have to be worth?&rdquo;. The "
+             "figure is the whole-house market rent at which the housing the household gets from living "
+             "there closes the entire gap against selling at the inheritance and investing the proceeds. "
+             "Compare it with what renting this house would actually cost. It is high because the "
+             "comparator is a tax-free sale of a single asset compounded at 7% for thirty years. It is "
+             "not an argument that the house could not command that rent, and it is not a rent opinion.")
+
     return (
         callout("flag", "Read this page before any other page", f"""
 <p>This page is the household's own rulebook, and it is meant to be read <em>before</em> the
@@ -1149,6 +1165,7 @@ money, market rent, and the cost of holding the building. Writing the rule down 
 question from &ldquo;which path does this projection favour?&rdquo; to &ldquo;does the evidence clear
 the bar the household set in advance?&rdquo;. That is the only defence against choosing a path and
 then finding the assumptions that justify it.</p>""")
+        + be_table
         + rent_table
         + callout("method", "How the test is applied", """
 <ol>

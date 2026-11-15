@@ -507,16 +507,61 @@ def rent_sensitivity() -> list[dict]:
         alloc = []
         for occupy, mode in ((HORIZON, "sell"), (10, "sell"), (10, "rent")):
             r = mixed_path(occupy, mode, market_rent=float(rent0) if rent0 else None)
+            # With no rent assumed there is no credit to add, so the adjusted value is
+            # the asset terminal itself rather than a blank: the row is the comparator.
+            adjusted = (r["opportunity_adjusted"] if r["opportunity_adjusted"] is not None
+                        else r["asset_terminal"])
             alloc.append({
                 "label": r["label"],
                 "asset_terminal": r["asset_terminal"],
-                "opportunity_adjusted": r["opportunity_adjusted"],
+                "opportunity_adjusted": adjusted,
                 "credit": r["housing_value_fv"],
                 "gap_vs_sell_now": r["gap_vs_sell_now"],
-                "gap_adjusted": r["gap_vs_sell_now_adjusted"],
+                "gap_adjusted": (r["gap_vs_sell_now_adjusted"]
+                                 if r["gap_vs_sell_now_adjusted"] is not None
+                                 else r["gap_vs_sell_now"]),
             })
         rows.append({"rent": money10(rent0), "paths": alloc})
     return rows
+
+
+def rent_breakeven(occupy_years: int, mode: str, inherit_year: int = INHERIT) -> dict | None:
+    """The market rent at which occupying the house matches selling at the inheritance.
+
+    Living in it produces housing worth the market rent saved. This solves for the
+    rent at which that benefit closes the whole gap against selling, so the
+    household can compare it with what it actually pays or would pay to live
+    somewhere. Solved by bisection on the same engine as every other figure.
+
+    Returns None when no rent closes the gap, which is the case where the path
+    loses for reasons other than the housing value - for example the letting
+    path, where the landlord costs swamp any rent.
+
+    The answer has to be read as a rent for the whole house. It is high because
+    the comparator is a tax-free sale of a $6.5 million asset compounded at 7%.
+    """
+    target = mixed_path(0, "sell", inherit_year=inherit_year)["asset_terminal"]
+
+    def gap(rent0: float) -> float:
+        r = mixed_path(occupy_years, mode, inherit_year=inherit_year, market_rent=rent0)
+        adjusted = r["opportunity_adjusted"] if r["opportunity_adjusted"] is not None \
+            else r["asset_terminal"]
+        return adjusted - target
+
+    if gap(3_000_000.0) < 0:
+        return None
+    lo, hi = 0.0, 3_000_000.0
+    for _ in range(120):
+        mid = (lo + hi) / 2
+        if gap(mid) < 0:
+            lo = mid
+        else:
+            hi = mid
+    annual = money10((lo + hi) / 2)
+    return {"occupy_years": occupy_years, "mode": mode,
+            "label": _label(occupy_years, mode, HORIZON),
+            "annual_rent": annual, "monthly_rent": money10(annual / 12),
+            "share_of_value_at_death": pct(annual / mixed_path(0, "sell")["value_at_death"], 1)}
 
 
 def build() -> dict:
@@ -557,6 +602,12 @@ def build() -> dict:
         "distribution": dist,
         "by_year": by_year,
         "rent_sensitivity": rent_sensitivity(),
+        "rent_breakeven": [x for x in (
+            rent_breakeven(HORIZON, "sell"),
+            rent_breakeven(10, "sell"),
+            rent_breakeven(5, "sell"),
+            rent_breakeven(10, "rent"),
+        ) if x],
         "fees_example": {"price": 5_000_000, **sale_charge_breakdown(5_000_000),
                          "note": ("Published statutory charges on a $5,000,000 sale, "
                                   "computed from the statutes at their published rates. "
