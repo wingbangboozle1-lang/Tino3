@@ -69,7 +69,7 @@
       "coverage": "1913-01 to present; this file holds 1928-01 to 2026-10",
       "src": "fred_cpiaucns",
       "quote": "Monthly index level",
-      "limits": "A national average, not a San Francisco Bay Area index. It is used only to express results in start-year purchasing power, never to drive a return."
+      "limits": "A national urban average, not a local index. It is used only to express results in start-year purchasing power, never to drive a return."
     }
   },
   "episodes": [

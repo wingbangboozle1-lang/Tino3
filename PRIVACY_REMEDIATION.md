@@ -28,15 +28,16 @@ paths and commit hashes, and **never a matching value**.
 | Class | Distinct file versions | Paths | Commit messages | Current tracked tree |
 |---|---|---|---|---|
 | Postal code (the two postal areas in the owner's brief) | 66 | 57 | 0 | **0** |
-| Property-level place name | 173 | 105 | 1 | **0** |
+| Place name, or the county or city name | 917 | 175 | 1 | **0** |
 | Street address | **0** | 0 | 0 | **0** |
 | Parcel or assessor number | **0** | 0 | 0 | **0** |
-| Email address | 0 | 0 | 7 | **0** |
 | Phone number | **0** | 0 | 0 | **0** |
-| Amount that is not a multiple of ten | 111 | 67 | 0 | 1 (verbatim official quotes only) |
+| Amount that is not a multiple of ten | 143 | 67 | 0 | **0** |
+| Email address | 1 | 1 | 8 | 1 (this note only, not published) |
 
-Scope: 343 commits reachable in this clone, 1,696 file versions, earliest commit
-2026-11-10, latest 2026-11-15. Underlying data files that are known to carry the
+Scope: 361 commits reachable in this clone, 2,151 file versions, re-measured on
+2026-11-15 after the jurisdiction-withdrawal change landed. Counts rise when more
+branches are fetched, which is why they are re-measured rather than carried forward. Underlying data files that are known to carry the
 unrounded values — `assets/data/inputs.json`, `assets/data/model.json` and the generated
 CSV files — are binary-like JSON blobs to the shell but plain text to a reader, and they
 are counted in the figures above.
@@ -47,13 +48,14 @@ are counted in the figures above.
   any file in the reachable history has ever contained the shape of a street address, a
   parcel number or a phone number. These are the identifiers that would matter most, and
   they have never been committed.
-- **Postal code and place name: present in history, absent from the published tree.**
-  These appear in early commits and in the `archive/` directory, which the publication
-  allowlist never copies. The site names only "Santa Clara County" and "City and County of
-  San Francisco", which are the levels at which the property-tax, rent and transfer rules
-  operate. Whether the owner regards a county-level place name as acceptable is a policy
-  choice, not a technical one; the current site assumes it is acceptable and says so in
-  the privacy notice on every page.
+- **Postal code, place name and jurisdiction: present in history, absent from the
+  published tree.** These appear in early commits and in the `archive/` directory, which
+  the publication allowlist never copies. **Policy changed on 15 November 2026:** the
+  published site now withdraws the county and city names as well, because a jurisdiction
+  narrows the search area exactly as a postal code does, and it no longer links official
+  county or city pages (their web addresses name the jurisdiction). The privacy boundary
+  enforces this on every build, and `scripts/privacy_scrub_audit.py` measures the same
+  class. The current tree is clean on it.
 - **Amount not a multiple of ten: present in history, essentially absent from the
   published tree.** The one hit in the current tree is `assets/sources.json`, and it is
   three verbatim official documentary quotes (a statutory rent fee per dwelling unit and

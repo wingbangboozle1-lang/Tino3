@@ -1,6 +1,6 @@
 # Executive summary
 
-Built 13 November 2026 from the same deterministic model as the site. Every dollar figure is rounded to the nearest $10. Anonymised throughout: **Property A** is the single-family home being inherited through a trust, in Santa Clara County; **Property B** is the three-unit building the heir already owns, in the City and County of San Francisco. No name, street address, postal parcel number, postal code, trust term or utility account appears here or on the site.
+Built 13 November 2026 from the same deterministic model as the site. Every dollar figure is rounded to the nearest $10. Anonymised throughout: **Property A** is the single-family home being inherited through a trust; **Property B** is the three-unit building the heir already owns. No name, street address, postal parcel number, postal code, county or city name, trust term or utility account appears here or on the site; the county and city are deliberately withheld because they identify the properties.
 
 Planning analysis, not legal, tax or investment advice.
 
@@ -80,7 +80,7 @@ These sit on the flagged-for-review page, each with the publisher that holds the
 
 ## How this was checked
 
-Every rule, threshold and rate on the site was read on the publishing agency's own domain and is linked from the row that uses it. The ledger holds 114 sources. A build-time verifier fails if a table row has no official link, if the build is not reproducible, if any internal link or fragment does not resolve, or if any published dollar figure is not a multiple of $10. A separate check recomputed the published relationships from the inputs.
+Every rule, threshold and rate on the site was read on the publishing agency's own domain and is linked from the row that uses it. The ledger holds 95 sources. A build-time verifier fails if a table row has no official link, if the build is not reproducible, if any internal link or fragment does not resolve, or if any published dollar figure is not a multiple of $10. A separate check recomputed the published relationships from the inputs.
 
 ## Read next
 

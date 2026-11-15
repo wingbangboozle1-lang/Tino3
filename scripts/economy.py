@@ -83,7 +83,7 @@ def annual_changes(series: dict) -> tuple[dict[int, float], str, str]:
     vals = {int(y): float(v) for y, v in series["values"].items()}
     years = sorted(vals)
     chg = {y: vals[y] / vals[y - 1] - 1.0 for y in years[1:]}
-    return chg, series["id"], f"{years[0]}-{years[-1]}"
+    return chg, series.get("key", series.get("id", "withheld")), f"{years[0]}-{years[-1]}"
 
 
 def pctile(sorted_vals: list[float], q: float) -> float:
