@@ -2780,8 +2780,10 @@ def page_timeline() -> str:
          "The trustee, at recording.", ["rtc11930", "scc_recorder", "cnty_a_recorder"]),
         ("Within 150 days after death",
          "Change in ownership statement for a transfer on death, under RTC section 480(b). If the estate is "
-         "probated, the statement is filed with the inventory and appraisal instead.",
-         "The successor, on the assessor's form.", ["rtc480", "boe_pub800_9"]),
+         "probated, the statement is filed with the inventory and appraisal instead. The statute also sets the "
+         "penalty for not answering the assessor: whichever is greater of $100 or 10% of the tax on the new base "
+         "year value, capped at $5,000, if a written request from the assessor goes unanswered for 90 days.",
+         "The successor or the trustee, on the assessor's form.", ["rtc480", "boe_pub800_9"]),
         ("Within 9 months after death, if a federal estate tax return is required",
          "Form 706 is due. Filing Form 4768 by that date gives an automatic six-month extension of the filing "
          "date. Part III of the same form is a separate request for more time to pay.",
