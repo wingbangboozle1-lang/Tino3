@@ -546,6 +546,57 @@ def crash_entry_backtest(proceeds: float) -> dict:
                      "values are rounded to $10.")}
 
 
+def local_parcel_tax(finished_sqft, years_after_2027: int = 0) -> float:
+    """Annual local parcel tax on a multifamily parcel, per the official measure terms.
+
+    Floor $249 for up to 5,000 sq ft of finished living area, plus $0.195 per sq ft above that,
+    capped at $50,000. With no building area supplied the floor is returned: it is the least the
+    tax can be, not an estimate of the building. Grows with the modelled inflation rate from the
+    first levy year (the measure says it is adjusted annually for inflation; the index is not named).
+    Official amounts are not rounded: they are published verbatim.
+    """
+    terms = B["annual_costs"]["parcel_tax_local_measure"]["terms"]
+    amount = float(terms["floor"])
+    if finished_sqft is not None:
+        extra = max(0.0, float(finished_sqft) - terms["threshold_sqft"]) * terms["rate_per_sqft_over_threshold"]
+        amount = min(amount + extra, float(terms["cap"]))
+    return amount * (1 + INFL) ** years_after_2027
+
+
+def parcel_tax_schedule() -> dict:
+    """Official parcel-tax terms, the floor over the term, and illustrative building sizes.
+
+    The example sizes are illustrations of the formula, not measurements of Property B. Their
+    tax is rounded to the nearest $10 like every other derived figure on the site.
+    """
+    terms = B["annual_costs"]["parcel_tax_local_measure"]["terms"]
+    examples = []
+    for sqft in (5000, 6000, 8000, 10000):
+        examples.append({"sqft": sqft, "tax_2027": money10(local_parcel_tax(sqft, 0))})
+    floor_total = sum(local_parcel_tax(None, k) for k in range(terms["term_years"]))
+    return {
+        "floor": terms["floor"],
+        "threshold_sqft": terms["threshold_sqft"],
+        "rate_per_sqft": terms["rate_per_sqft_over_threshold"],
+        "cap": terms["cap"],
+        "term_years": terms["term_years"],
+        "floor_term_total_nominal": money10(floor_total),
+        "examples": examples,
+    }
+
+
+def imputed_rent_breakeven(gap: float, infl: float, rate: float, horizon: int) -> float:
+    """First-year rent avoided, growing with inflation, whose accumulation at `rate` equals `gap`.
+
+    `gap` is the terminal-wealth shortfall of living in the home against selling and investing
+    (sell path minus live path, both at the horizon). Read as: the housing a comparable home would
+    cost, if the heir lived there instead, at which living and selling end level. Rent avoided is
+    not taxed, consistent with the letting paths.
+    """
+    factor = sum((1 + infl) ** j * (1 + rate) ** (horizon - 1 - j) for j in range(horizon))
+    return gap / factor
+
+
 def annuity_fv(future_gap: float, rate: float, years: int) -> float:
     """Level year-end payment whose future value after `years` equals `future_gap`.
 
@@ -1036,8 +1087,11 @@ def main() -> dict:
                                    * B["estimated_market_value_2026"]),
             "property_tax": money10(bill_for(B["roll"][0]["assessed"], FIT_B, 2026, infl)),
             "rent": money10(B["rent"]["annual"]),
+            # Official amount, not rounded: the floor of the local parcel tax from its first levy year.
+            "parcel_tax": money10(local_parcel_tax(None)),
         },
         "series_table": build_series_table(),
+        "parcel_tax_schedule": parcel_tax_schedule(),
     }
 
     for year in ASM["inheritance_years"]:
@@ -1053,6 +1107,10 @@ def main() -> dict:
             year, g, infl, eq, drag, cap_growth, sell_pct, horizon, gain_rate,
             rec_rate, infl, FIT_A, COST_A_BASE, maint_rent, t_eq)
         res["breakeven_rent_monthly"] = money10(res["breakeven_rent_annual"] / 12)
+        gap_live = res["paths"]["sell_equities"]["terminal"] - res["paths"]["live_in"]["terminal"]
+        res["imputed_rent_breakeven_annual"] = money10(
+            imputed_rent_breakeven(gap_live, infl, eq - drag, horizon))
+        res["imputed_rent_breakeven_monthly"] = money10(res["imputed_rent_breakeven_annual"] / 12)
         res["breakeven_return_vs_live"] = breakeven_return(
             year, g, cap_growth, sell_pct, horizon, gain_rate, rec_rate,
             res["paths"]["live_in"]["terminal"])

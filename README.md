@@ -34,6 +34,8 @@ estate taxes, the inheritance process, deadlines, current law and proposals, bla
 the historical economic record, a glossary and the source ledger. Navigation groups the material by
 purpose.
 
+`decision-rules.html` holds the gates, the pre-committed paths, a draft investment policy and the open items. It is an unsigned draft until the owner and household sign its last section.
+
 ## Model boundaries and headline result
 
 The current model conditionally favours selling Property A soon after inheritance unless the heir
@@ -42,6 +44,8 @@ on the beneficiary's eligibility for any property-tax exclusion, trust/title fac
 basis, actual sale costs, occupancy, rents, insurance, maintenance, utilities, debt, market returns
 and laws in force at transfer. Missing or unverified property-specific amounts are not presented as
 confirmed; they are identified on the relevant pages and on `review.html`.
+
+There are **23 generated HTML pages** and one stylesheet in the public allowlist. The pages show rounded owner-provided figures, model outputs and official-source-backed legal/economic information. The source ledger contains **99 entries**; the jurisdiction-specific entries (the two properties' county and city official pages) and the two metro-area house-price series were removed on 15 November 2026 because their publishers identify the properties. A factual table row either links to an official source or is explicitly registered as unsourceable/unverified. Both property placeholders grow with the California state-level FHFA house-price index: the two metropolitan-area series were withdrawn on 15 November 2026 because the index publisher's own metadata crosswalked the placeholders to their metropolitan areas (an audit finding), and the privacy gate now rejects the withdrawn series identifiers and metro phrasing.
 
 The Black Swan analysis uses one canonical monthly park-and-phase engine and one short-Treasury
 parking-yield assumption. It includes synthetic stresses and historical entry replays, including
@@ -55,12 +59,12 @@ professional advice when dates, facts or laws change.
 
 ## Published site and verification snapshot
 
-The current generated edition contains **22 HTML pages**, **one runtime stylesheet**, **98 entries
+The current generated edition contains **23 HTML pages**, **one runtime stylesheet**, **99 entries
 in the source ledger**, and **130 content-free withdrawal notices** for retired routes. The latest
-local verification reports **870 table rows**: **756 linked to official publishers** and **114
+local verification reports **930 table rows**: **788 linked to official publishers** and **142
 explicitly registered as unsourceable or unverified**. A row without a confirming official source is
-not filled in by inference. The public site contains no source ledger or internal model data files;
-the Jekyll and Actions publication boundaries are checked separately.
+not filled in by inference. The public site publishes the source ledger (`sources.html`) but no internal
+model data files; the Jekyll and Actions publication boundaries are checked separately.
 
 The model and pages are generated from `assets/data/` and `scripts/build.py`; do not edit generated
 HTML or CSV outputs by hand. `EXECUTIVE_SUMMARY.md` is generated from the same model data and is
