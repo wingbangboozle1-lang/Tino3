@@ -377,11 +377,13 @@
   },
   "fixed_charge_growth": {
    "baseline": 0.025,
-   "basis": "Fixed charges are projected at the modelled inflation rate. Diagnostic: the fixed part of the Property B bill grew at 8.1% a year between 2016 and 2025, so this projection is deliberately conservative and understates the bill if that pace continues.",
+   "basis": "The flat part of the property tax bill (the ad valorem tax on the land, the services and the district charges that do not rise with the assessed value) is projected at the inflation rate. The low case is the same 2.5%. The high case is 8.1% a year, the rate the flat part of the Property B bill actually grew at between 2016 and 2025. The baseline is the conservative one: at 2.5% the projection understates future bills if the observed pace continues.",
    "src": [
     "sf_treas_rate",
     "ssa_trustees"
-   ]
+   ],
+   "low": 0.025,
+   "high": 0.081
   },
   "house_growth": {
    "baseline": 0.04,
