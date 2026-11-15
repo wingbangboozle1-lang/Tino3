@@ -220,6 +220,27 @@
     "value": 0.015,
     "basis": "assumption; owner states repairs run higher here than at Property A",
     "verified": false
+   },
+   "parcel_tax_local_measure": {
+    "low": 249,
+    "high": 249,
+    "mid": 249,
+    "basis": "Local parcel tax approved on the 3 November 2026 count (unofficial, certification pending). Terms read in the official measure text: from 1 July 2027 to 30 June 2042, adjusted annually for inflation. Multifamily parcels (more than one dwelling unit) pay $249 for the first 5,000 square feet of finished living area, plus $0.195 for each square foot above that, capped at $50,000 a year. The building's finished living area is not supplied, so the $249 floor is used: it is the least the tax can be. The official link is withheld from the public site because it names the city; the owner holds it. Pass-through to tenants is not credited.",
+    "verified": false,
+    "terms": {
+     "floor": 249,
+     "threshold_sqft": 5000,
+     "rate_per_sqft_over_threshold": 0.195,
+     "cap": 50000,
+     "first_levy_year": 2027,
+     "last_levy_fiscal_year_end": 2042,
+     "term_years": 15,
+     "passthrough_share": 0.5,
+     "passthrough_cap_per_unit": 65,
+     "passthrough_base_rent_before": "1 June 2027",
+     "building_area_supplied": false
+    },
+    "src": []
    }
   }
  },
@@ -459,8 +480,8 @@
    ]
   },
   "depreciation_recapture_rate": {
-   "baseline": 0.411,
-   "basis": "Assumption: the components are published statutory rates - 25% federal unrecaptured section 1250 recapture, the California top marginal rate up to 13.3%, and the 3.8% net investment income tax where applicable - but only their combination here is an assumption; the site models 41.1% as a conservative planning figure.",
+   "baseline": 0.421,
+   "basis": "Planning ceiling built from published statutory maxima, added together: 25% federal maximum rate on unrecaptured section 1250 gain (IRS Topic 409), 3.8% net investment income tax (IRS Topic 559) and the 13.3% California top marginal rate, which is 12.3% plus the 1% Behavioral Health Services Tax on taxable income above $1,000,000 (FTB Form 540-ES instructions). 25 + 3.8 + 13.3 = 42.1%. Earlier editions used 41.1%, which did not equal the sum of its own components; corrected in the November 2026 re-audit. A seller in a lower bracket pays less.",
    "src": [
     "irs_tc409",
     "ftb_cg"
