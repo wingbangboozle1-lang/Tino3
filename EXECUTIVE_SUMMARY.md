@@ -6,7 +6,7 @@ Planning analysis, not legal, tax or investment advice.
 
 ## The recommendation
 
-**Sell Property A soon after it is inherited, unless the heir genuinely wants to live in that house.** Selling leads in the baseline, in 9 of the 9 sensitivity combinations and in 5 of the 6 stress regimes, and it is the only path that does not depend on the heir wanting that house, being able to hold it as a principal residence, or finding a tenant at an implausible rent.
+**Sell Property A soon after it is inherited, unless the heir genuinely wants to live in that house.** Selling leads in the baseline, in 9 of the 9 sensitivity combinations and in 4 of the 6 stress regimes, and it is the only path that does not depend on the heir wanting that house, being able to hold it as a principal residence, or finding a tenant at an implausible rent.
 
 ## One condition outranks every number below
 
@@ -39,14 +39,14 @@ Real economies do not grow at a constant rate. In the verified record used here,
 
 | Regime | Inflation | House growth | Treasury | Best path |
 |---|---|---|---|---|
-| Great Inflation repeat | 9.8% | 18.9% | 10.13% | Live in it |
-| A long house price slump | 3.4% | -0.2% | 7.06% | Sell, reinvest in Treasuries |
-| A financial crisis crash | 2.2% | -5.6% | 3.51% | Sell, invest in equities |
-| A fast inflation burst then a rate shock | 5.6% | 8.3% | 2.78% | Sell, invest in equities |
+| Great Inflation repeat | 9.8% | 17.2% | 10.13% | Live in it |
+| A long house price slump | 3.4% | -0.6% | 7.06% | Sell, reinvest in Treasuries |
+| A financial crisis crash | 2.2% | -9.4% | 3.51% | Sell, invest in equities |
+| A fast inflation burst then a rate shock | 5.6% | 10.1% | 2.78% | Live in it |
 | House prices flat for the whole horizon | 2.5% | 0.0% | 4.7% | Sell, invest in equities |
 | Low inflation and falling nominal house prices | 0.5% | -1.0% | 2.0% | Sell, invest in equities |
 
-Sold into equities or Treasuries wins 5 of the 6 regimes. Keeping the house wins only in: Great Inflation repeat. That is a bet on one neighbourhood repeating its best decades, not a plan.
+Sold into equities or Treasuries wins 4 of the 6 regimes. Keeping the house wins only in: Great Inflation repeat; A fast inflation burst then a rate shock. That is a bet on one neighbourhood repeating its best decades, not a plan.
 
 ### Entry timing, replayed against the real record
 
@@ -80,7 +80,7 @@ These sit on the flagged-for-review page, each with the publisher that holds the
 
 ## How this was checked
 
-Every rule, threshold and rate on the site was read on the publishing agency's own domain and is linked from the row that uses it. The ledger holds 97 sources. A build-time verifier fails if a table row has no official link, if the build is not reproducible, if any internal link or fragment does not resolve, or if any published dollar figure is not a multiple of $10. A separate check recomputed the published relationships from the inputs.
+Every rule, threshold and rate on the site was read on the publishing agency's own domain and is linked from the row that uses it. The ledger holds 98 sources. A build-time verifier fails if a table row has no official link, if the build is not reproducible, if any internal link or fragment does not resolve, or if any published dollar figure is not a multiple of $10. A separate check recomputed the published relationships from the inputs.
 
 ## Read next
 

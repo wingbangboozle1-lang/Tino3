@@ -64,6 +64,8 @@ FORBIDDEN = {
     # and the identifiers were withdrawn from the ledger and the data files; the gate now
     # also rejects them, so they cannot return silently. Literals split as above.
     "metro crosswalk series identifier": re.compile(r"(?i)atnh" r"pi|\b419" r"40\b|\b418" r"84\b"),
+    "metro phrasing attached to a placeholder": re.compile(
+        r"metropolitan\s+(?:area|division)\s+(?:of|containing|for)\s+Property", re.I),
 }
 
 # County and city level names are NOT published: they, like the parcel, identify the

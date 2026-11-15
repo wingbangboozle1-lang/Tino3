@@ -376,8 +376,10 @@
    "baseline": 0.04,
    "low": 0.025,
    "high": 0.055,
-   "basis": "Scenario band. The FHFA all-transactions index for Property A's area compounded at 6.9% a year from 1976 to 2025 but 3.3% a year over the last twenty years, so the baseline sits below the long run.",
-   "src": []
+   "basis": "Scenario band. The FHFA all-transactions index for California compounded at 6.4% a year over the fifty years to 2025 but 2.6% a year over the last twenty, so the baseline sits below the long record and near the recent one. The metropolitan-area series formerly cited here was withdrawn from the published edition for the location-crosswalk risk; the state-level series replaces it.",
+   "src": [
+    "fred_casthpi"
+   ]
   },
   "inflation": {
    "baseline": 0.025,
@@ -417,7 +419,7 @@
    "baseline": 0.042,
    "low": 0.035,
    "high": 0.05,
-   "basis": "Short Treasury bills and notes (3 month to 2 year) anchor near the policy rate rather than the 10-year term yield. Baseline is a stated scenario, not an official forward rate; the band brackets the 2025-2026 short-end range. No official agency publishes a forward short-Treasury yield for 2040-2050. This is the single parking yield used by every phased-investing figure on the site: the dashboard path, the regime and sensitivity runs, and the black-swan entry-timing stress table all call the one monthly engine with this key.",
+   "basis": "Short Treasury bills and notes (3 month to 2 year) anchor near the policy rate rather than the 10-year term yield. Baseline is a stated scenario, not an official forward rate; the band brackets the 2025-2026 short-end range. No official agency publishes a forward short-Treasury yield for 2040-2050. This is the single parking yield used by every phased-investing figure on the site: the dashboard path, the regime and sensitivity runs, and the black-swan entry-timing stress table and dated backtest's synthetic counterpart all call the one monthly engine with this key.",
    "src": []
   },
   "prop19_cap_growth": {
@@ -464,14 +466,9 @@
     "ftb_cg"
    ]
   },
-  "phased_park_months": {
-   "value": 30,
-   "basis": "Months sale proceeds stay in short Treasuries before the equity phase-in begins. Midpoint of the owner's 24-36 month window. A stated scenario, not an official figure.",
-   "src": []
-  },
   "phased_equity_phase_months": {
-   "value": 18,
-   "basis": "Months over which the parked proceeds are phased into equities by equal monthly amounts. A stated scenario, not an official figure.",
+   "value": 12,
+   "basis": "Months over which the parked proceeds are phased into equities by equal monthly purchases of the original proceeds. 12 everywhere on this edition: the dashboard path, the sensitivity runs and the black-swan stress table and backtest all use this one value.",
    "src": []
   },
   "horizon_years": 30,
@@ -479,6 +476,11 @@
    2040,
    2045,
    2050
-  ]
+  ],
+  "phased_park_months": {
+   "value": 30,
+   "basis": "Months sale proceeds stay in short Treasuries before the equity phase-in begins. Baseline 30 is the midpoint of the owner's 24-36 month band; the band is recorded on the black-swan page. A stated scenario, not an official figure.",
+   "src": []
+  }
  }
 }
