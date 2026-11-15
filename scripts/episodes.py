@@ -149,7 +149,7 @@ def replay(ep: dict, entry_override: str | None = None, park: int | None = None)
         # Strategy 2: 30 months of cash, then twelve equal monthly purchases.
         "phase": park_then_buy(park_months, PHASE_MONTHS),
         # Strategy 3: 34 months of cash, then one purchase.
-        "park34": park_then_buy(park_months + 4, 1),   # the 34-month variant
+        "park34": park_then_buy(LATE_PARK_MONTHS, 1),   # the "whole park, then buy" variant
     }
 
     exit_cpi = price(CPI, ep["exit"])
@@ -202,14 +202,19 @@ def park_sensitivity() -> list[dict]:
     for ep in EPISODES["episodes"]:
         for park in (24, 30, 36):
             r = replay(ep, park=park)
+            phase = r["strategies"]["phase"]["real_today"]
+            lump = r["strategies"]["lump"]["real_today"]
+            best = "phase" if phase > lump else "lump"
             rows.append({
                 "key": ep["key"],
                 "name": ep["name"],
                 "park_months": park,
-                "phase_real_today": r["strategies"]["phase"]["real_today"],
-                "lump_real_today": r["strategies"]["lump"]["real_today"],
-                "gap": r["strategies"]["phase"]["vs_lump"],
-                "best": r["best"],
+                "phase_real_today": phase,
+                "lump_real_today": lump,
+                "gap": phase - lump,
+                "best": best,
+                "best_label": (f"Park {park} months, then phase in over {PHASE_MONTHS}"
+                               if best == "phase" else "Invest on day one"),
                 "src": ep["src"],
             })
     return rows
@@ -231,17 +236,107 @@ def offset_sensitivity() -> list[dict]:
                 continue
             entry = months[offset]
             r = replay(ep, entry_override=entry)
+            phase = r["strategies"]["phase"]["real_today"]
+            lump = r["strategies"]["lump"]["real_today"]
+            best = "phase" if phase > lump else "lump"
             rows.append({
                 "key": ep["key"],
                 "name": ep["name"],
                 "offset_months": offset,
                 "entry": entry,
-                "lump_real_today": r["strategies"]["lump"]["real_today"],
-                "phase_real_today": r["strategies"]["phase"]["real_today"],
-                "gap": r["strategies"]["phase"]["vs_lump"],
-                "best": r["best"],
+                "lump_real_today": lump,
+                "phase_real_today": phase,
+                "gap": phase - lump,
+                "best": best,
+                "best_label": (f"Park {PARK_MONTHS} months, then phase in over {PHASE_MONTHS}"
+                               if best == "phase" else "Invest on day one"),
                 "src": ep["src"],
             })
+    return rows
+
+
+def inverse_replay(ep: dict, crash_offset_months: int) -> dict:
+    """The realistic unlucky case: inheritance now, the crash arrives later.
+
+    The money enters the index at the episode's peak month. The crash is then
+    aligned so that it begins `crash_offset_months` after the inheritance, using
+    the episode's own monthly prices, and the comparison runs from the
+    inheritance month for the episode's full horizon. The phased strategy parks
+    for the window the owner asked for and phases in over twelve months; the
+    lump strategy is fully invested from the start.
+    """
+    eq = SERIES[ep["eq"]]
+    cash = SERIES[ep["cash"]]
+    entry = ep["entry"]
+    # take the episode's price path, then shift it later in time
+    path_months = month_range(ep["entry"], ep["exit"])
+    eq_path = [price(eq, m) for m in path_months]
+    # cash rates are only needed for the first park+phase months, where the stored
+    # call money file is complete; beyond that the money is in the index
+    cash_path = [price(cash, m) if i <= PARK_MONTHS + PHASE_MONTHS else None
+                 for i, m in enumerate(path_months)]
+    shift = crash_offset_months
+    # The comparison may not run past the end of the episode's own record. A short
+    # episode therefore produces a shorter comparison, and the table says so.
+    horizon = len(path_months) - shift
+    if horizon < PARK_MONTHS + PHASE_MONTHS + 1:
+        raise SystemExit(f"{ep['key']}: no comparison window left at a {crash_offset_months}-month offset")
+
+    cpi_entry = price(CPI, entry)
+    base_cpi = price(CPI, BASE_CPI_MONTH)
+    principal = START_POWER * cpi_entry / base_cpi
+
+    # month 0 is the inheritance; the index level in month i is the episode's
+    # level i months after its peak, and the cash rate is the same month's rate.
+    levels = eq_path[:horizon]
+    rates = cash_path[:horizon]
+
+    units_lump = principal / levels[0]
+
+    balance = principal
+    units = 0.0
+    chunk = principal / PHASE_MONTHS
+    in_cash = True
+    for i in range(1, horizon):
+        if not in_cash:
+            break
+        if i <= PARK_MONTHS + PHASE_MONTHS:      # cash is held only inside this window
+            balance *= (1 + rates[i] / 100.0) ** (1 / 12)
+        if i > PARK_MONTHS:
+            take = min(chunk, balance)
+            balance -= take
+            units += take / levels[i]
+            if balance <= 1e-9:
+                in_cash = False
+
+    exit_level = levels[-1]
+    exit_month = path_months[horizon - 1]
+    exit_cpi = price(CPI, exit_month)
+    real = lambda u: money10(u * exit_level * base_cpi / exit_cpi)
+    lump_real, phase_real = real(units_lump), real(units)
+    return {
+        "key": ep["key"],
+        "name": ep["name"],
+        "crash_offset_months": crash_offset_months,
+        "horizon_months": horizon,
+        "lump_real_today": lump_real,
+        "phase_real_today": phase_real,
+        "gap": phase_real - lump_real,
+        "best": "phase" if phase_real > lump_real else "lump",
+        "src": ep["src"],
+    }
+
+
+def inverse_sensitivity() -> list[dict]:
+    """Crash arriving at different distances after the inheritance."""
+    rows = []
+    for ep in EPISODES["episodes"]:
+        # trailing windows may be shorter than the episode; every row states its own horizon
+        for offset in (0, 12, 24, 36):
+            try:
+                rows.append(inverse_replay(ep, offset))
+            except SystemExit:
+                continue          # no comparison window is left at this offset
     return rows
 
 
@@ -272,6 +367,7 @@ def build() -> dict:
         "worst_phase_gap": worst_phase_gap["strategies"]["phase"]["vs_lump"],
         "park_sensitivity": park_sensitivity(),
         "offset_sensitivity": offset_sensitivity(),
+        "inverse_sensitivity": inverse_sensitivity(),
     }
 
 
