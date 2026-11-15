@@ -18,9 +18,9 @@ Selling and investing the proceeds, against keeping the house. Baseline: house p
 
 | Inherited | Sell, equities | Sell, Treasuries | Live in it | Let it out |
 |---|---|---|---|---|
-| 2040 | $31,714,550 | $20,121,530 | $4,440,110 | $-910,810 |
-| 2045 | $38,585,540 | $24,480,880 | $5,322,760 | $-1,053,570 |
-| 2050 | $46,945,240 | $29,784,760 | $6,375,070 | $-1,230,700 |
+| 2040 | $31,714,550 | $20,121,530 | $4,440,110 | −$910,810 |
+| 2045 | $38,585,540 | $24,480,880 | $5,322,760 | −$1,053,570 |
+| 2050 | $46,945,240 | $29,784,760 | $6,375,070 | −$1,230,700 |
 
 The letting paths are credited with **no rent**, because no market rent for Property A has been supplied and no official source publishes one for a specific home. Read them as a floor, not as a comparison.
 
@@ -30,7 +30,7 @@ The letting paths are credited with **no rent**, because no market rent for Prop
 - **The shelter is smaller than the growth.** On a 2045 inheritance the exclusion shelters the old taxable value plus $1,886,640 against a market value of $6,531,230. Everything above the sum is reassessed.
 - **The tax-free window.** Property acquired from a decedent takes a basis equal to its value at death, so a sale soon afterwards pays about zero capital gains tax. In the 2045 baseline a $6,531,230 sale carries $0 of tax.
 - **What waiting costs.** Hold the same house thirty years and the tax on the eventual sale is about $4,910,950 after the section 121 exclusion; let it out as well and depreciation recapture pushes that to about $7,203,420.
-- **The break-even.** Keeping the home beats selling only if it appreciates 8.66% a year for thirty years. The verified index for this area compounded at 6.9% over fifty years and 3.3% over the last twenty.
+- **The break-even.** Keeping the home beats selling only if it appreciates 8.66% a year for thirty years. The verified California state index compounded at 6.4% over fifty years and 2.6% over the last twenty.
 - **The break-even rent.** Letting would need about $30,220 a month, $362,600 a year, in 2045, to match selling and investing.
 
 ## The black swans, and what they do to the answer
@@ -57,7 +57,7 @@ The stress regimes above are 30-year averages. The owner also asked what happens
 | The 1929 peak, replayed with real prices | 1929-09 to 1959-09 | $1,035,490 | $6,918,560 | $5,883,070 |
 | The 2008 peak, replayed with real prices | 2007-10 to 2025-12 | $5,241,270 | $6,194,830 | $953,560 |
 | The 2000 peak, replayed with real prices | 2000-02 to 2018-02 | $1,056,030 | $3,716,510 | $2,660,480 |
-| The 2020 crash month, replayed with real prices | 2020-02 to 2025-12 | $2,165,550 | $1,586,460 | $-579,090 |
+| The 2020 crash month, replayed with real prices | 2020-02 to 2025-12 | $2,165,550 | $1,586,460 | −$579,090 |
 
 Waiting beat day-one investing in 3 of the 4 episodes. It lost in the 2020 episode, where the crash was over before a 24-month parking period ended. It is insurance against one specific bad luck, paid for in the years when that luck does not happen. The full method, the 24-month and 36-month results, and the case where the crash arrives three years after the inheritance are on the black swan page.
 
