@@ -1654,6 +1654,68 @@ def fan_section() -> str:
             + chart + "</section>")
 
 
+def sale_charges_section() -> str:
+    """The published statutory charges on a sale of Property A, itemised.
+
+    The owner's brief asks for the transfer tax and recording fees to be priced
+    into the sell path rather than living inside a single 5.5% assumption. They
+    are small - together about 0.11% of the price - and the honest finding is
+    that almost all of the modelled 5.5% is private charges, not statute. The
+    section says so instead of implying the statutes explain the 5.5%.
+    """
+    f = MIXED["fees_example"]
+    rows = [
+        ("County documentary transfer tax (Revenue and Taxation Code 11911(a): "
+         "$0.55 per $500 of consideration, i.e. 0.11% of the price)",
+         m(f["documentary_transfer_tax"]), ["rtc11911"]),
+        ("City documentary transfer tax (section 11911(b): up to half the county rate again, "
+         "with a credit against the county tax)",
+         "not modelled: whether a city tax applies to this property is withheld for privacy",
+         []),
+        ("$75 instrument fee (Government Code 27388.1)",
+         f"{m(0)} &mdash; exempt, because 27388.1(a)(2)(A) excludes an instrument recorded in "
+         f"connection with a transfer subject to the documentary transfer tax", ["gov27388_1"]),
+        ("Recording the deed (Government Code 27361(a): up to $10 for the first page and $3 for "
+         "each further page; four pages assumed)",
+         m(f["recording_fee_27361"]), ["gov27361"]),
+        ("<strong>Published statutory charges in total</strong>",
+         f"<strong>{m(f['published_total'])}</strong>", []),
+        ("Commission, escrow, title and the other private closing charges "
+         "(the remainder of the modelled 5.5%)",
+         f"{m(f['private_closing_costs'])} &mdash; a private quote, not a statute", []),
+        ("<strong>Modelled total selling cost on the same price</strong>",
+         f"<strong>{m(f['modelled_selling_cost'])}</strong>", ["rtc11911"]),
+    ]
+    out = []
+    for a, b, srcs in rows:
+        cell = (src_cell(srcs, "Official source") if srcs
+                else method_cell("review.html#register", "Private cost or deliberate omission"))
+        out.append(f"<td>{a}</td><td>{b}</td>" + cell)
+    tbl = table(
+        "What a sale actually owes the state and the county, itemised on a $5,000,000 price",
+        ["Charge", "Amount", "Source"], out,
+        note="Every statutory charge here is computed from the published rate, and the section "
+             "numbers are printed so the arithmetic can be checked. The finding is the split: "
+             f"{f['published_share_of_modelled']}% of the modelled selling cost is statute and "
+             f"{f['private_share_of_modelled']}% is a private quote. The 5.5% assumption is "
+             "therefore a market-cost assumption, not a tax assumption, and it is unverified "
+             "wherever it appears.")
+    return ('<h2>The transfer tax and recording fees on the sell path</h2>'
+            + callout("note", "Priced, and smaller than the assumption it sits inside", f"""
+<p>The sell path carries a 5.5% selling cost. The brief asked for the transfer tax and the
+recording fees to be priced into that path explicitly rather than left inside the percentage, so
+they are itemised below. On a {m(f['price'])} sale they come to {m(f['published_total'])} in total,
+about {f['published_share_of_modelled']}% of the modelled selling cost. The other
+{f['private_share_of_modelled']}% is commission, escrow and title - quoted by private companies,
+not set by statute, and the part of the assumption that needs three real quotes before it is
+relied on.</p>
+<p>One charge that checklists routinely add does <strong>not</strong> apply. The $75 fee on
+recorded real-estate instruments is expressly excluded where the instrument is recorded in
+connection with a transfer subject to the documentary transfer tax, which a sale is. It is listed
+as zero with the reason, because deleting it silently would hide the verification.</p>""")
+            + tbl)
+
+
 def page_taxes() -> str:
     p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
     now_sale = p45["paths"]["sell_equities"]["sale"]
@@ -1716,6 +1778,7 @@ Let it out as well and depreciation recapture pushes it to <strong>{m(rent_sale[
 rules work, and it only exists at the moment of transfer.</p>""")
         + tbl
         + worked
+        + sale_charges_section()
         + '<h2>Transfer tax if Property B is sold</h2>'
         + table("City transfer tax on a sale of Property B",
                 ["Price band", "Rate", "Note", "Source"],
