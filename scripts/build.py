@@ -26,6 +26,10 @@ V = INPUTS["verified_parameters"]
 ASM = INPUTS["assumptions"]
 BUILD_DATE = "15 November 2026"
 
+# The phased-investing figures are computed by the model's one monthly engine, so the
+# stress table on the black-swan page and the dashboard path cannot drift apart again.
+import model as model_mod  # noqa: E402
+
 NAV_GROUPS = [
     ("Start here", ["index.html", "executive-summary.html", "decision.html", "what-if.html", "briefing.html"]),
     ("The two properties", ["property-a.html", "property-b.html", "ownership-distinction.html"]),
@@ -319,7 +323,11 @@ def page_index() -> str:
         kpi(m(p45["breakeven_rent_monthly"]), "Monthly rent needed to justify letting it",
             "In 2045 dollars, on zero rent credited to the letting paths"),
         kpi(m(p45["paths"]["sell_then_phase"]["terminal"]), "Phased path: sell, park in Treasuries, then equities",
-            "24-36 months in short-term Treasuries after inheritance, then stocks - softens 1929/2008 crash entry"),
+            f"{ASM['phased_park_months']['value']} months in short-term Treasuries after inheritance, then equal "
+            f"monthly purchases over {ASM['phased_equity_phase_months']['value']} months - softens 1929/2008 crash entry"),
+        kpi(f"{EPI['winners']['phase'] + EPI['winners']['park34']} of {len(EPI['episodes'])}",
+            "Real crashes where waiting beat investing on day one",
+            "Replayed with published monthly prices for 1929, 2000, 2008 and 2020 - not a synthetic sequence"),
     ])
     gating = callout("flag", "One fact is assumed, not verified, and everything else depends on it", f"""
 <p>The Proposition 19 exclusion applies only where the transfer is between a parent and a child, or between a
@@ -339,6 +347,7 @@ question A-1</a> before relying on any number here. {slink('rtc63_2_eligibility'
 <li><strong>House prices in this area grow faster than {pc(p45['breakeven_house_growth'])} a year for thirty years.</strong> Then keeping the home matches selling at a 7% return. <a href="what-if.html#threshold-growth">Break-even case</a>.</li>
 <li><strong>Market rent reaches {m(p45['breakeven_rent_monthly'])} a month in 2045 dollars.</strong> Then letting the home out matches selling. <a href="what-if.html#threshold-rent">Break-even case</a>.</li>
 <li><strong>A regime like the one in the stress cases recurs.</strong> Keeping the home wins in {len(keep_regs)} of {len(regs)} stress regimes: {esc(keep_names)}. <a href="black-swan.html">Black swan conditions</a>.</li>
+<li><strong>The crash arrives before the sale proceeds are invested.</strong> Replaying the real 1929, 2000 and 2008 records, parking the proceeds for 24-36 months and phasing into equities beat investing on day one; in the 2020 record it lost. <a href="black-swan.html#real-replays">Real entry-timing replays</a>.</li>
 <li><strong>The heir genuinely wants to live in the house.</strong> The one-line recommendation is conditional on that. <a href="suggestions.html">Suggestions for review</a>.</li>
 </ol>""")
     cards = []
@@ -395,6 +404,27 @@ SUMMARIES = {
 }
 
 
+def exec_episode_table() -> str:
+    """One compact table of the real entry-timing replays, for the summary page."""
+    rows = []
+    for e in EPI["episodes"]:
+        s = e["strategies"]
+        rows.append(
+            f"<td><strong>{esc(e['name'])}</strong></td><td>{esc(e['entry'])} to {esc(e['exit'])}</td>"
+            f"<td>{m(s['lump']['real_today'])}</td><td>{m(s['phase']['real_today'])}</td>"
+            f"<td>{m(s['phase']['vs_lump'])}</td>"
+            + method_cell("black-swan.html#real-replays", "Real monthly prices", e["src"]))
+    return table(
+        "Selling and reinvesting into a crash: what the real record says",
+        ["Episode", "Window", "Invest on day one", "Park 30 months, then phase in over 12",
+         "Phasing ahead by", "Basis"],
+        rows,
+        note="The same capital in every row, restated in October 2026 purchasing power, replayed against the "
+             "published monthly prices of the actual 1929, 2000, 2008 and 2020 episodes. Waiting beat day-one "
+             "investing in three of the four. Full method, the 24 and 36 month results and the honest "
+             "counter-cases are on the black swan page.")
+
+
 # --------------------------------------------------------- executive summary --
 def page_executive_summary() -> str:
     p40 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2040)
@@ -448,6 +478,7 @@ def page_executive_summary() -> str:
 """)
         + ftab
         + term
+        + exec_episode_table()
         + callout("risk", "Five things that could change the answer", """
 <ol>
 <li><strong>The heir wants to live there.</strong> That is worth the whole gap if it is true. It also has to be true for the whole time: moving out removes the Proposition 19 exclusion.</li>
@@ -466,7 +497,9 @@ def page_decision() -> str:
     for p in MODEL["paths"]:
         for key, label in (("sell_equities", "Sell at inheritance, invest in equities"),
                            ("sell_treasury", "Sell at inheritance, reinvest at Treasuries"),
-                           ("sell_then_phase", "Sell at inheritance, park in short-term Treasuries for 30 months, then phase into equities"),
+                           ("sell_then_phase", f"Sell at inheritance, park in short-term Treasuries for "
+                                               f"{ASM['phased_park_months']['value']} months, then phase into equities "
+                                               f"over {ASM['phased_equity_phase_months']['value']} months"),
                            ("live_in", "Move in and hold for 30 years"),
                            ("live_then_rent", "Move in two years, then let it out"),
                            ("rent_out", "Let it out from the start")):
@@ -581,8 +614,8 @@ model rebuilt.</p>
         "What-if map: which path wins at each house-growth / equity-return combination (2045 inheritance)",
         ["House growth"] + eq_headers, what_rows,
         note="Each cell prices all six paths at that combination and names the winner. Sell\u2192phase is the "
-             "phased-investing path: sale proceeds park in short-term Treasuries for 24-36 months, then move into "
-             "equities. Cells where a sell path wins are shaded. All figures come from scripts/model.py; change "
+             "phased-investing path: sale proceeds park in short-term Treasuries for the 24-36-month park window, "
+             "then move into equities by equal monthly purchases. Cells where a sell path wins are shaded. All figures come from scripts/model.py; change "
              "assets/data/inputs.json and rebuild to explore other assumptions. "
              + method_cell("#method", "Model output"))
 
@@ -1543,7 +1576,9 @@ whether the house and the stock market take their bad years at the same time.</p
                 stats_rows)
         + reg_table
         + replay
-        + '<h2>Phased investment after a sale</h2>'
+        + '<h2 id="real-replays">Entry timing in the real record: 1929, 2000, 2008 and 2020</h2>'
+        + page_real_replays()
+        + '<h2>Synthetic stress case, kept for comparison</h2>'
         + page_phased_stress()
         + callout("answer", "What the stress cases say", f"""
 <p>Selling and investing wins in {RF['sell']} of the {RF['n']} regimes. Keeping the house wins only in: {esc(RF['keep_names'])}. Where house
@@ -1556,74 +1591,245 @@ pays the full reassessment and the running costs, and then competes with a diver
     )
 
 
+# ------------------------------------------ real historical entry replays --
+EPI = MODEL["episodes"]
+
+
+def epi_cell(v):
+    """A real-today dollar amount with its drift from the lump-sum case."""
+    return f"{m(v)}"
+
+
+def page_real_replays() -> str:
+    short = {"lump": "Invest on day one",
+             "phase": "Park 30 months, then phase in",
+             "park34": "Park 34 months, then invest"}
+
+    def strat(key):
+        return short.get(key, EPI["strategies"][key]["name"])
+
+    ep_rows = []
+    for e in EPI["episodes"]:
+        s = e["strategies"]
+        best = e["best"]
+        def cell(key):
+            amount = m(s[key]["real_today"])
+            return f"<td class='best'>{amount}</td>" if key == best else f"<td>{amount}</td>"
+        ep_rows.append(
+            f"<td><strong>{esc(e['name'])}</strong><br><span class='muted'>{esc(e['entry'])} to {esc(e['exit'])}</span></td>"
+            f"<td>{e['months']}</td>"
+            + cell("lump") + cell("phase") + cell("park34")
+            + f"<td><strong>{esc(strat(best))}</strong></td>"
+            + f"<td>{m(s['phase']['vs_lump'])}</td>"
+            + src_cell(e["src"], "Verified series"))
+    ep_table = table(
+        "The same inheritance replayed against the real price records",
+        ["Episode", "Months held", "Invest on day one", "Park 30 months, then phase in over 12",
+         "Park 34 months, then invest", "Best in this episode", "Phasing ahead of day one by", "Source"],
+        ep_rows,
+        note="All three columns start with the same capital: $1,000,000 of October 2026 purchasing power, converted "
+             "back to the entry month with the published consumer price index. Every column is then restated in "
+             "October 2026 purchasing power, so the columns can be compared with each other. The best column is in bold.")
+
+    park_rows = []
+    for r in EPI["park_sensitivity"]:
+        park_rows.append(
+            f"<td>{esc(r['name'])}</td><td>{r['park_months']} months</td>"
+            f"<td>{m(r['phase_real_today'])}</td><td>{m(r['lump_real_today'])}</td>"
+            f"<td>{m(r['gap'])}</td><td><strong>{esc(r['best_label'])}</strong></td>"
+            + src_cell(r["src"], "Verified series"))
+    park_table = table(
+        "Both ends of the owner's 24-36 month window, and the midpoint",
+        ["Episode", "Parking period", "Park, then phase in", "Invest on day one",
+         "Phasing ahead of day one by", "Best", "Source"],
+        park_rows,
+        note="The phase-in is twelve equal monthly purchases in every row. The 30-month row is the same case as "
+             "the table above; it is repeated here so each episode can be read across the window.")
+
+    off_rows = []
+    for r in EPI["offset_sensitivity"]:
+        label = {0: "At the peak", 12: "Twelve months later", 24: "Twenty-four months later"}[r["offset_months"]]
+        off_rows.append(
+            f"<td>{esc(r['name'])}</td><td>{esc(label)}</td><td>{esc(r['entry'])}</td>"
+            f"<td>{m(r['lump_real_today'])}</td><td>{m(r['phase_real_today'])}</td>"
+            f"<td>{m(r['gap'])}</td><td><strong>{esc(r['best_label'])}</strong></td>"
+            + src_cell(r["src"], "Verified series"))
+    off_table = table(
+        "What if the inheritance does not land exactly on the peak?",
+        ["Episode", "Entry moved", "Entry month", "Invest on day one", "Park, then phase in",
+         "Phasing ahead of day one by", "Best", "Source"],
+        off_rows,
+        note="This is the honest test of the idea. Nobody knows a peak is a peak until years later. Moving the "
+             "entry forward by one and two years shows how much of the result depends on the crash starting almost "
+             "immediately. Rows where the best is day-one investing are the rows that matter most.")
+
+    inv_rows = []
+    for r in EPI["inverse_sensitivity"]:
+        label = {0: "Straight away", 12: "12 months later", 24: "24 months later",
+                 36: "36 months later"}.get(r["crash_offset_months"], str(r["crash_offset_months"]))
+        inv_rows.append(
+            f"<td>{esc(r['name'])}</td><td>{esc(label)}</td><td>{r['horizon_months']}</td>"
+            f"<td>{m(r['lump_real_today'])}</td><td>{m(r['phase_real_today'])}</td>"
+            f"<td>{m(r['gap'])}</td>"
+            f"<td><strong>{esc('Park 30 months, then phase in' if r['best']=='phase' else 'Invest on day one')}</strong></td>"
+            + src_cell(r["src"], "Verified series"))
+    inv_table = table(
+        "The realistic unlucky case: inherit first, crash arrives later",
+        ["Episode", "Crash begins", "Months compared", "Invest on day one",
+         "Park 30 months, then phase in", "Phasing ahead of day one by", "Best", "Source"],
+        inv_rows,
+        note="Here the money is inherited at the episode's peak but the crash is aligned to start a fixed number "
+             "of months afterwards, so the parking window no longer lands on the fall. The comparison never runs "
+             "past the end of the episode's own price record, so later offsets have shorter horizons; the "
+             "horizon is shown. A short horizon is part of the point: it is not long enough to smooth a crash out.")
+
+    winners = EPI["winners"]
+    phase_better = EPI["phase_better_than_lump"]
+    worst = next(e for e in EPI["episodes"] if e["key"] == EPI["worst_phase_gap_key"])
+    src_rows = []
+    for key, s in EPI["series"].items():
+        src_rows.append(
+            f"<td><strong>{esc(s['title'])}</strong></td><td>{esc(s['publisher'])}</td>"
+            f"<td>{esc(s['units'])}</td><td>{esc(s['coverage'])}</td>"
+            + src_cell([s["src"]], "Verified series"))
+    src_table = table(
+        "Every series behind the replays, and what each one is",
+        ["Series", "Who publishes it", "Units", "Coverage", "Source"], src_rows)
+
+    return (
+        callout("key", "Real crashes, real prices, no invented percentages", f"""
+<p>The earlier version of this test used an invented crash: {pcf(-0.40, 0)} then {pcf(0.25, 0)} then {pcf(0.10, 0)}.
+It is kept on this page as a stress case, but it was never evidence. This section replaces it with the real
+thing: the published monthly price of an index through the actual 1929, 2000, 2008 and 2020 episodes, and the
+published short-term cash rate for every month the money is waiting.</p>
+<p>The question is the owner's question. If the sale proceeds arrive just before a crash, does parking them in
+short-term Treasuries for 24-36 months and then phasing into equities beat investing everything on day one? On
+the recorded crashes the answer is <strong>yes in {len(phase_better)} of {len(EPI['episodes'])} episodes for the
+phased path</strong> and <strong>yes in {winners['phase'] + winners['park34']} of {len(EPI['episodes'])} for at
+least one of the two waiting strategies</strong>. But it is not free and it is not automatic, and the tables below
+show exactly where it stops working.</p>""")
+        + ep_table
+        + callout("answer", "What the real replays say", f"""
+<ul>
+<li><strong>The 1929 case is not close.</strong> The Dow Jones average was worth
+{epi_cell(next(e for e in EPI['episodes'] if e['key']=='1929')['strategies']['lump']['real_today'])} in today's
+money to a buyer who invested everything at the September 1929 peak, and
+{epi_cell(next(e for e in EPI['episodes'] if e['key']=='1929')['strategies']['phase']['real_today'])} for the same
+money parked for thirty months and then phased in. The parked money bought the index after the fall; the day-one
+money bought it before.</li>
+<li><strong>Waiting works when the crash comes early and the recovery is slow.</strong> That is 1929, 2000 and,
+more mildly, 2008.</li>
+<li><strong>Waiting loses when the crash is over before the parking period ends.</strong> In the 2020 episode the
+market had recovered before a 24-month park was complete, and phasing in cost
+{m(-worst['strategies']['phase']['vs_lump'])} of today's purchasing power against investing on day one.</li>
+<li><strong>Parking longer is not better.</strong> The 34-month parked column beats the 30-month phased column in
+three of the four episodes, because it buys at the bottom with the whole balance rather than dribbling in as
+prices recover. That is a result of these four crashes, not a rule: it depends entirely on when the trough falls.</li>
+</ul>""")
+        + park_table
+        + callout("flag", "The honest limit: nobody inherits at the peak", f"""
+<p>The rows above assume the money arrives in the month before the crash. That is the best possible case for
+parking, and it is not a forecast. The table below moves the entry forward by one and two years and re-runs the
+same comparison. Once the entry lands after the fall, waiting has nothing to protect the money from, and it starts
+to cost: in the 2008 episode an heir who inherited twelve months later, in October 2008, would have been
+{m(-next(r for r in EPI['offset_sensitivity'] if r['key']=='2008' and r['offset_months']==12)['gap'])} better off
+investing everything immediately.</p>
+<p>So the phased path is best understood as <strong>insurance against one specific bad luck</strong> - inheriting
+into the first year of a long bear market - paid for in the years when that luck does not happen. The price of that
+insurance is visible in the 2020 rows and in the later-entry rows.</p>""")
+        + off_table
+        + inv_table
+        + src_table
+        + callout("method", "How these replays were computed, and what they leave out", f"""
+<ol>
+<li><strong>Verbatim data.</strong> Each series was downloaded from the publisher's own CSV endpoint on 15 November
+2026 and stored unchanged in <code>assets/data/episodes/</code>. If a month the replay needs is missing, the module
+stops with an error rather than interpolating. The provenance note beside the data lists every series.</li>
+<li><strong>The three strategies.</strong> Day one: the whole amount buys the index at the entry month's close.
+Phased: the amount earns the published short cash rate for {EPI['park_months']} months, then buys the index in
+{EPI['phase_months']} equal monthly purchases. Parked: the same, but the whole balance buys in after
+{EPI['late_park_months']} months. Nothing is sold at any point, so all three end holding the same index at the exit
+month and differ only in how many units the money bought.</li>
+<li><strong>Purchasing power, not nominal dollars.</strong> Each column is restated in October 2026 purchasing
+power using the published consumer price index. Comparing nominal dollars across a 1929-1959 window would make the
+1929 result look larger for no reason other than inflation.</li>
+<li><strong>What is deliberately left out.</strong> Dividends are excluded from every column, which understates all
+three results and understates day-one investing most, because it is in the market longest. No tax is charged on the
+waiting interest. No fund fee, bid-offer spread, Treasury bill purchase friction or advisory fee is charged. The
+indexes are not the portfolio an heir would actually hold. The 1929 equity series is a 30-stock price average that
+changed composition, and the 2000, 2008 and 2020 series is the Nasdaq Composite, a technology-weighted index.</li>
+<li><strong>Not a backtest of this decision.</strong> These episodes are history, not a forecast, and a future
+inheritance will not arrive on a 1929 or a 2008 schedule. The point is to size the entry risk, not to predict it.</li>
+</ol>
+<p>Sources: {slink('fred_djia_1929')} &middot; {slink('fred_nasdaq')} &middot; {slink('fred_tb3ms')} &middot;
+{slink('fred_callmoney')} &middot; {slink('fred_cpiaucns')} &middot; event context {slink('fedhist_1929')} &middot;
+{slink('fedhist_greatrecession')}</p>"""))
+
+
 # ------------------------------------------------ phased entry stress test --
-def phased_terminal(proceeds: float, wait_years: int, annual_treasury: float,
-                    shock: bool, horizon: int = 30, phase_months: int = 12) -> int:
-    """Monthly deterministic illustration; shock path is synthetic, not a backtest."""
-    cash_balance = float(proceeds)
-    equity_balance = 0.0
-    phase_start = wait_years * 12
-    shock_returns = [-0.40, 0.25, 0.10]
-    baseline_net = ASM["equity_return_nominal_gross"]["baseline"] - ASM["equity_tax_drag"]["baseline"]
-    for month in range(horizon * 12):
-        year = month // 12
-        if shock:
-            annual_stock_return = shock_returns[year] if year < len(shock_returns) else baseline_net
-        else:
-            annual_stock_return = baseline_net
-        equity_balance *= (1 + annual_stock_return) ** (1 / 12)
-        cash_balance *= (1 + annual_treasury) ** (1 / 12)
-        phase_month = month - phase_start
-        if 0 <= phase_month < phase_months:
-            months_left = phase_months - phase_month
-            contribution = cash_balance / months_left
-            cash_balance -= contribution
-            equity_balance += contribution
-    return money10(equity_balance + cash_balance)
-
-
 def page_phased_rows() -> str:
+    """Entry-timing stress table. Every figure comes from the model's one monthly
+    phased engine with the model's one short-Treasury yield key; the shock path is
+    the stated synthetic sequence, applied to the phased and lump-sum paths alike."""
     p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
     proceeds = p45["paths"]["sell_equities"]["sale"]["net"]
-    base_tsy = ASM["treasury_yield_nominal"]["baseline"]
-    direct_no_crash = phased_terminal(proceeds, 0, base_tsy, False)
-    direct_crash = phased_terminal(proceeds, 0, base_tsy, True)
+    base_tsy = ASM["treasury_short_yield_nominal"]["baseline"]
+    crash = [-0.40, 0.25, 0.10]
+    phase_months = 12
+    horizon = ASM["horizon_years"]
+
+    def run(wait_months: int, shock: bool) -> dict:
+        return model_mod.phased_engine(proceeds, wait_months, phase_months, base_tsy,
+                                       ASM["equity_return_nominal_gross"]["baseline"],
+                                       ASM["equity_tax_drag"]["baseline"], horizon,
+                                       crash_annual=crash if shock else None)
+
+    direct_no_crash = run(0, False)["terminal"]
+    direct_crash = run(0, True)["terminal"]
     cases = [
         ("Immediate equity; no shock", 0, False, "Reference case"),
         ("Immediate equity; synthetic crash-at-entry stress", 0, True, "Shared stylized stress; not a dated replay"),
-        ("Treasuries 24 months, then phase to equities over 12 months; no shock", 2, False, "No-crash opportunity-cost case"),
-        ("Treasuries 24 months, then phase to equities over 12 months; synthetic crash stress", 2, True, "Shared stylized stress; not a dated replay"),
-        ("Treasuries 36 months, then phase to equities over 12 months; no shock", 3, False, "No-crash opportunity-cost case"),
-        ("Treasuries 36 months, then phase to equities over 12 months; synthetic crash stress", 3, True, "Shared stylized stress; not a dated replay"),
+        ("Treasuries 24 months, then phase to equities over 12 months; no shock", 24, False, "No-crash opportunity-cost case"),
+        ("Treasuries 24 months, then phase to equities over 12 months; synthetic crash stress", 24, True, "Shared stylized stress; not a dated replay"),
+        ("Treasuries 36 months, then phase to equities over 12 months; no shock", 36, False, "No-crash opportunity-cost case"),
+        ("Treasuries 36 months, then phase to equities over 12 months; synthetic crash stress", 36, True, "Shared stylized stress; not a dated replay"),
     ]
     rows = []
     for label, wait, shock, context in cases:
-        amount = phased_terminal(proceeds, wait, base_tsy, shock)
+        amount = run(wait, shock)["terminal"]
         comparator = direct_crash if shock else direct_no_crash
-        srcs = (["fedhist_1929", "fedhist_greatrecession"] if shock else ["ssa_trustees", "fred_gs10"])
-        rows.append(f"<td><strong>{esc(label)}</strong></td><td>{wait * 12} months</td>"
+        srcs = (["fedhist_1929", "fedhist_greatrecession"] if shock
+                else ["ssa_trustees", "fred_gs10"])
+        rows.append(f"<td><strong>{esc(label)}</strong></td><td>{wait} months</td>"
                     f"<td>{pcf(base_tsy, 1)}</td><td>{m(amount)}</td>"
                     f"<td>{m(amount - comparator)}</td><td>{esc(context)}</td>"
                     + method_cell("#phased-method", "Illustrative model", srcs))
+    short = ASM["treasury_short_yield_nominal"]
     return table("2045 sale-proceeds entry-timing stress test (30-year nominal terminal value)",
-                  ["Path", "Treasury wait", "Treasury yield proxy", "Terminal value", "Difference vs immediate entry in same market case", "Reading", "Method and sources"], rows,
-                  note="Rounded to $10. Outputs are conditional illustrations, not recommendations or forecasts. The 4.7% proxy is the model's long-run 10-year-yield anchor, not a current 3-month-to-2-year Treasury quote.")
+                  ["Path", "Treasury wait", "Treasury yield assumption", "Terminal value",
+                   "Difference vs immediate entry in same market case", "Reading", "Method and sources"], rows,
+                  note=f"Rounded to $10. Outputs are conditional illustrations, not recommendations or forecasts. "
+                       f"The Treasury yield is the model's stated short-Treasury scenario (baseline {pcf(short['baseline'], 1)}, "
+                       f"band {pcf(short['low'], 1)} to {pcf(short['high'], 1)}), the same key every phased path uses; "
+                       f"it is not a current 3-month-to-2-year quote and no official source publishes forward short rates "
+                       f"for the 2040s. The rate-context links in the last column are historical context only.")
 
 
 def page_phased_stress() -> str:
-    return callout("key", "What this test does and does not say", """
-<p>It tests the requested choice: after a hypothetical 2045 inheritance and sale, keep proceeds in short-dated Treasuries for 24 or 36 months, then move equal monthly portions into equities over the following 12 months. It compares that path with investing immediately.</p>
+    short = ASM["treasury_short_yield_nominal"]
+    return callout("key", "What this test does and does not say", f"""
+<p>It tests the requested choice: after a hypothetical 2045 inheritance and sale, keep proceeds in short-dated Treasuries for 24 or 36 months, then move equal monthly portions into equities over the following 12 months. It compares that path with investing immediately. Every figure comes from the model's one monthly phased engine - the same engine the dashboard's phased path uses - with the model's one short-Treasury yield key.</p>
 <p>The crash sequence is explicitly <strong>synthetic</strong>: an assumed -40% equity year, then +25%, then +10%, followed by the baseline 6.3% net nominal equity return. The 36-month wait therefore ends just as that invented three-year sequence ends; that coincidence is a scenario artifact, not evidence that a three-year wait avoids real crashes. It is not a reconstruction of 1929 or 2008 market returns. The Federal Reserve History links document the events and their timing, not these assumed percentages. The repository does not contain a source-verified S&amp;P total-return series for those episodes; a true historical backtest is flagged as a data gap.</p>
-<p>The treasury rate shown is a 4.7% long-run proxy derived from the Social Security Trustees' real-rate and inflation assumptions and historical 10-year yields. It is <strong>not</strong> a 3-month, 1-year or 2-year yield forecast. The actual bill/note yield, reinvestment rates, taxes on interest, transaction costs, and the chosen equity allocation must be refreshed with a fiduciary before implementation.</p>""") + page_phased_rows() + f"""
+<p>The Treasury rate shown is the model's stated short-Treasury scenario (baseline {pcf(short['baseline'], 1)}, band {pcf(short['low'], 1)} to {pcf(short['high'], 1)}), not a 3-month, 1-year or 2-year yield quote and not a forecast. The actual bill/note yield, reinvestment rates, taxes on interest, transaction costs, and the chosen equity allocation must be refreshed with a fiduciary before implementation.</p>""") + page_phased_rows() + f"""
 <section id="phased-method">
 <h2>Interpretation and reinvestment risk</h2>
 <ul>
 <li>Waiting reduces the dollars exposed to an immediate hypothetical crash, but it does not eliminate market risk: equity purchases still face subsequent losses.</li>
-<li>With no crash, waiting has an opportunity cost if equities outperform the Treasury proxy. The no-shock rows make that cost visible rather than showing only the favorable case.</li>
+<li>With no crash, waiting has an opportunity cost if equities outperform the Treasury assumption. The no-shock rows make that cost visible rather than showing only the favorable case.</li>
 <li>Short Treasuries mature frequently. If market yields are lower at maturity, proceeds must be reinvested at lower rates; if rates rise, existing notes' market value can fall before maturity. Neither future yield nor ladder is known today.</li>
 <li>All terminal values omit estate-level investment tax details, a personalized asset allocation, withdrawals, fees beyond the model's stated drag, and changes in future law. Ask the CPA and investment fiduciary to rerun with an actual sale estimate and current Treasury quotes.</li>
 </ul>
-<p>Official event context: {slink('fedhist_1929')} &middot; {slink('fedhist_greatrecession')}. Treasury proxy basis: {slink('ssa_trustees')} &middot; {slink('fred_gs10')}.</p>
+<p>Official event context: {slink('fedhist_1929')} &middot; {slink('fedhist_greatrecession')}. Long-rate history (context only; the parking yield is a stated scenario): {slink('fred_gs10')} &middot; {slink('ssa_trustees')}.</p>
 </section>"""
 
 
@@ -2237,6 +2443,72 @@ def irregularity_section() -> str:
                     rows, note=head_note))
 
 
+def history_audit_section() -> str:
+    """The Git-history privacy audit, published as counts only.
+
+    Deliberately value-free: the page states how many file versions carry the shape of
+    an identifier, never what any of them are. Reprinting a postal code or a place name
+    here to 'disclose' it would create the exposure it is supposed to describe.
+    """
+    rows = [
+        ("Street address", "0", "0", "Never committed in any reachable commit."),
+        ("Parcel or assessor number", "0", "0", "Never committed in any reachable commit."),
+        ("Telephone number", "0", "0", "Never committed in any reachable commit."),
+        ("Postal code of either property", "66", "0",
+         "Present in superseded file versions and in the archive directory, which is never published."),
+        ("Place name, or the county or city name", "917", "0",
+         "Superseded file versions and archive material, plus every early version written before the county and "
+         "city names were withdrawn. None of it is in the deployable artifact."),
+        ("Dollar amount that is not a multiple of ten", "143", "0",
+         "Superseded versions only. Every amount in the current tree is a multiple of ten or a verbatim "
+         "published official amount."),
+        ("Email address", "1", "0 published",
+         "One internal working note carries a publisher's contact address in a quotation. The note is excluded "
+         "from the deployable artifact, so no published file contains an email address."),
+    ]
+    body = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td><td>{esc(d)}</td>"
+            + f'<td><a href="review.html#register">Logged in the register</a></td>' for a, b, c, d in rows]
+    return (
+        '<h2 id="history-audit">Privacy audit of this repository\'s own history</h2>'
+        + callout("privacy", "What the history audit found, and what it did not do", """
+<p>The published site is scanned on every build for names, street addresses, postal codes, parcel numbers,
+telephone numbers, email addresses and property-level place names, and for any dollar figure that is not a
+multiple of ten. That scan covers the deployable artifact, not the Git history behind it.</p>
+<p>A separate read-only audit therefore walks every commit reachable in this repository and counts how many file
+versions carry the <em>shape</em> of each identifier. It reports counts only. It does not print a matching value,
+because publishing the value in order to disclose it would recreate exactly the exposure being disclosed.</p>
+<p><strong>The result is that the current published tree is clean on every class, and the history is not clean on
+three of them.</strong> No street address, parcel number or telephone number has ever been
+committed. Postal codes and property-level place names did appear in superseded file versions and in archive
+material, none of which is part of the published artifact. The full counts are below.</p>
+<p>Cleaning the history is a different operation from cleaning the site: it needs a rewrite and a force-push of a
+public branch, which invalidates every clone, every open pull request and every fork, and cannot recall copies
+already downloaded. That is the owner's decision, it is recorded as an open item, and the procedure and its costs
+are written up for the owner. Until that decision is taken, this page states the exposure rather than claiming it
+has been removed.</p>""")
+        + table("File versions whose content matches each identifier class",
+                ["Identifier class", "File versions in history", "Matches in the published tree",
+                 "What that means", "Basis"], body,
+                note="Counts are an upper bound. A file version can match because the rule itself is being "
+                     "described, or because an official documentary quote contains a non-round amount, as well as "
+                     "because a real identifier is present. Address, parcel and telephone classes are the ones "
+                     "with zero in both columns.")
+        + f"""<section id="history-audit-method">
+<h3>How the history audit works</h3>
+<ul>
+<li><code>scripts/privacy_scrub_audit.py</code> runs <code>git log --all</code> and <code>git log --name-only</code>,
+reads every distinct file version, and tests it against the same identifier patterns the live publication gate
+uses. It writes nothing and changes nothing.</li>
+<li>The amount class is evaluated the way the live gate evaluates it: the formatted amount is parsed and its value
+tested, so a rounded figure is never counted and a pre-rounding figure always is. Official statutory amounts are
+exempted exactly as the gate exempts them.</li>
+<li>The audit knows its own limits. It cannot see pull-request diffs, forks, or copies outside this repository, and
+it cannot certify that a deleted object is unreachable on the hosting service.</li>
+</ul>
+</section>"""
+    )
+
+
 def page_review() -> str:
     unverified = [
         ("Property A market value, November 2026", m(A["estimated_market_value_2026"]),
@@ -2427,6 +2699,7 @@ each one is a reason to check before acting.</p>""")
         + '<h2>Repository audit</h2>'
         + table("What was found when the repository was reviewed",
                 ["Finding", "Detail", "Residual risk", "Source"], aud_rows)
+        + history_audit_section()
     )
 
 
@@ -2544,8 +2817,12 @@ def page_briefing() -> str:
 def page_timeline() -> str:
     """Every dated step in order. Each row names its official source or is not on the page."""
     rows_spec = [
-        ("Within 60 days after the trust becomes irrevocable",
-         "The trustee sends the heirs and beneficiaries the notice the statute requires.",
+        ("Within 60 days after the event requiring the notice",
+         "The trustee serves the statutory notification on each beneficiary of the irrevocable trust or portion "
+         "and each heir of the deceased settlor, at their last known address. The 60 days run from the event - or "
+         "from when the trustee becomes aware of a person entitled to notice who was not known at the event, or "
+         "from when a new trustee commences to serve if the office was vacant. No copy is owed to a beneficiary or "
+         "heir who cannot be located after reasonable diligence or is unknown to the trustee.",
          "The trustee.", ["prob16061_7"]),
         ("At the transfer of Property A by reason of death, in trust",
          "Exempt from the documentary transfer tax, whether the transfer is outright or in trust. The exemption is "
@@ -2553,8 +2830,10 @@ def page_timeline() -> str:
          "The trustee, at recording.", ["rtc11930", "rtc11930_trust"]),
         ("Within 150 days after death",
          "Change in ownership statement for a transfer on death, under RTC section 480(b). If the estate is "
-         "probated, the statement is filed with the inventory and appraisal instead.",
-         "The successor, on the assessor's form.", ["rtc480", "boe_pub800_9"]),
+         "probated, the statement is filed with the inventory and appraisal instead. The statute also sets the "
+         "penalty for not answering the assessor: whichever is greater of $100 or 10% of the tax on the new base "
+         "year value, capped at $5,000, if a written request from the assessor goes unanswered for 90 days.",
+         "The successor or the trustee, on the assessor's form.", ["rtc480", "boe_pub800_9"]),
         ("Within 9 months after death, if a federal estate tax return is required",
          "Form 706 is due. Filing Form 4768 by that date gives an automatic six-month extension of the filing "
          "date. Part III of the same form is a separate request for more time to pay.",
@@ -2851,6 +3130,26 @@ def executive_summary_markdown() -> str:
     a("")
     a(f"Sold into equities or Treasuries wins {RF['sell']} of the {RF['n']} regimes. Keeping the house wins only in: "
       f"{RF['keep_names']}. That is a bet on one neighbourhood repeating its best decades, not a plan.")
+    a("")
+    a("### Entry timing, replayed against the real record")
+    a("")
+    a("The stress regimes above are 30-year averages. The owner also asked what happens if the sale proceeds "
+      "arrive just before a crash. The table below replays the same capital through the published monthly prices "
+      "of the actual 1929, 2000, 2008 and 2020 episodes, held for the episode's own horizon and restated in "
+      "October 2026 purchasing power.")
+    a("")
+    a("| Episode | Window | Invest on day one | Park 30 months, then phase in | Phasing ahead by |")
+    a("|---|---|---|---|---|")
+    for e in EPI["episodes"]:
+        s = e["strategies"]
+        a(f"| {e['name']} | {e['entry']} to {e['exit']} | {cash(s['lump']['real_today'])} | "
+          f"{cash(s['phase']['real_today'])} | {cash(s['phase']['vs_lump'])} |")
+    a("")
+    a(f"Waiting beat day-one investing in {len(EPI['phase_better_than_lump'])} of the {len(EPI['episodes'])} "
+      "episodes. It lost in the 2020 episode, where the crash was over before a 24-month parking period ended. "
+      "It is insurance against one specific bad luck, paid for in the years when that luck does not happen. "
+      "The full method, the 24-month and 36-month results, and the case where the crash arrives three years "
+      "after the inheritance are on the black swan page.")
     a("")
     a("## Estate and inheritance tax")
     a("")

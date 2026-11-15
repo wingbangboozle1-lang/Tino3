@@ -59,6 +59,11 @@ FORBIDDEN = {
     "location-specific source host": re.compile(
         r"(?i)(sant" "acl" "aracounty|sftre" "asurer|sfp" "uc|sfg" "ov|sfb" "os|sfass" "essor|"
         r"sfw" r"ater|\bsf\." r"gov\b)"),
+    # The federal host's series identifiers for the two local all-transactions house-price
+    # indexes encode the metropolitan areas (ATNHPI prefix plus a metro code). The entries
+    # and the identifiers were withdrawn from the ledger and the data files; the gate now
+    # also rejects them, so they cannot return silently. Literals split as above.
+    "metro crosswalk series identifier": re.compile(r"(?i)atnh" r"pi|\b419" r"40\b|\b418" r"84\b"),
 }
 
 # County and city level names are NOT published: they, like the parcel, identify the
