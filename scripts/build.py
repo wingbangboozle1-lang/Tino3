@@ -2957,7 +2957,33 @@ def page_suggestions() -> str:
                      "<td>5. Record</td><td>Write the decision and the date next to the item, so a future reader knows what was chosen and why.</td><td>Item S-17.</td>" + src_cell([], "Procedure, not a figure"),
                  ])
 
-    improve_src = {"Add per-unit detail for Property B": [],
+    # Status per proposal. The owner asked for a section where suggestions can be
+    # reviewed and chosen before anything is implemented; this map is the record of
+    # what the 15 November 2026 build actually did, so a reader can see which items
+    # are still open rather than assuming the whole list is untouched.
+    improve_status = {
+        "Add a distribution chart to the projections": ("done", "Implemented: decile fan charts on the dashboard and the projections page, a histogram of the sell-minus-keep gap on the dashboard and the decision page, and the same distributions behind every headline share."),
+        "Add a real rental opinion for Property A": ("open", "Still open. The site now publishes the rent at which occupying and letting each match selling, which is the closest substitute available without a rent opinion."),
+        "Add a real rental opinion for Property A (imputed rent)": ("done", "Implemented as a range of rent scenarios plus a solved break-even, because no rent opinion exists yet."),
+        "Add the itemised tax bills": ("open", "Still open: needs the parcel's own bill, which is not on the site."),
+        "Add a liquidity model for the estate": ("open", "Still open: the scenario bands on the estate page are the current substitute."),
+        "Add a two-person household case": ("open", "Still open."),
+        "Add a mortgage case": ("open", "Still open."),
+        "Add per-unit detail for Property B": ("open", "Still open."),
+        "Add a maintenance and capital schedule": ("open", "Still open."),
+        "Model mixed paths, not only the three pure choices": ("done", "Implemented: eleven mixed cases priced on their own engine, with the Proposition 19 clawback and the imputed-rent break-even."),
+        "Write the rules down before reading any projection": ("done", "Implemented: the pre-commitment register, with its decision columns deliberately empty."),
+        "Put the answer and what would change it on the first screen": ("done", "Implemented: the dashboard opens with the answer, a confidence label, the build date and the three checks that would move it."),
+        "Price the transfer tax and recording fees into the sell path": ("done", "Implemented: itemised on the taxes page, with the $75 instrument fee shown as exempt and the reason given."),
+        "Distinguish enacted changes from proposals": ("done", "Implemented on the law page, with a stated rule for moving an item between the three groups and an annual recheck gate."),
+    }
+    improve_src = {"Add a real rental opinion for Property A (imputed rent)": ["hud_fmr"],
+                   "Model mixed paths, not only the three pure choices": ["rtc63_2_eligibility"],
+                   "Write the rules down before reading any projection": [],
+                   "Put the answer and what would change it on the first screen": [],
+                   "Price the transfer tax and recording fees into the sell path": ["rtc11911", "gov27388_1"],
+                   "Distinguish enacted changes from proposals": ["sos_initiative_status"],
+                   "Add per-unit detail for Property B": [],
                    "Add a real rental opinion for Property A": [],
                    "Add a maintenance and capital schedule": [],
                    "Add the itemised tax bills": [],
@@ -2965,8 +2991,16 @@ def page_suggestions() -> str:
                    "Add a two-person household case": ["irs_tc409", "irs_estate"],
                    "Add a mortgage case": [],
                    "Add a distribution chart to the projections": []}
+    def improve_badge(a: str) -> str:
+        state = improve_status.get(a, ("proposed", ""))
+        return (f'<span class="badge verified">done</span>'
+                f'<br><span class="small">{esc(state[1])}</span>'
+                if state[0] == "done" else
+                f'<span class="badge proposed">open</span>'
+                + (f'<br><span class="small">{esc(state[1])}</span>' if state[1] else ""))
+
     improve_rows = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td>"
-                    f'<td><span class="badge proposed">proposed</span></td>'
+                    f"<td>{improve_badge(a)}</td>"
                     + (src_cell(improve_src[a], "Official source") if improve_src[a]
                        else src_cell([], "No official source applies"))
                     for a, b, c in [
@@ -2978,6 +3012,12 @@ def page_suggestions() -> str:
                         ("Add a two-person household case", "Joint filing, the $500,000 exclusion and two exclusions for estate tax.", "The model currently uses the single-filer exclusion throughout, which is conservative."),
                         ("Add a mortgage case", "What happens if the heir borrows against either property instead of selling.", "Not modelled at all."),
                         ("Add a distribution chart to the projections", "A visual range rather than a single line.", "Readers tend to read the single line as a forecast."),
+                        ("Add a real rental opinion for Property A (imputed rent)", "Prints the market rent at which living there, and at which letting it out, match selling at the inheritance.", "Without it the housing value of living there is a preference rather than a number."),
+                        ("Model mixed paths, not only the three pure choices", "Live for a period and then sell, or live and then let, with the Proposition 19 clawback priced.", "The pure paths overstate how bad a short occupancy is and understate what moving out costs."),
+                        ("Write the rules down before reading any projection", "The household's own test for each path and its priorities, recorded before the figures are read.", "Without it a single projection can be made to justify any path."),
+                        ("Put the answer and what would change it on the first screen", "A decision strip with the answer, a confidence label, the build date and the three checks that would move it.", "Readers arrive at the recommendation without knowing how conditional it is."),
+                        ("Price the transfer tax and recording fees into the sell path", "The statutory charges itemised, with the published and private parts separated.", "The 5.5% selling cost is mistaken for a tax figure when most of it is a private quote."),
+                        ("Distinguish enacted changes from proposals", "A stated rule and an annual recheck gate for the law page, with the failed Proposition 19 repeal recorded as dead.", "A proposal gets treated as law, or a dead measure keeps distorting the arithmetic."),
                     ]]
     improve = table("Improvements to this site, offered for review",
                     ["Proposal", "What it would add", "Cost of not doing it", "Status", "Source"],
