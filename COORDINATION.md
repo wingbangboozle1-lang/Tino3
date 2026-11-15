@@ -2891,3 +2891,11 @@ Gates after this follow-up: `build.py`, `verify.py` (22 pages; 795 table rows; 7
 - **Pages:** the Pages API reported `built` for `a35e281` with no error (`pages build and deployment` and `Deploy GitHub Pages` both success). One transient `errored` status occurred while other sessions were pushing; it was superseded by a successful build. The live dashboard (`index.html`) was fetched and serves the merged edition.
 - **Concurrent work on `main` after the merge (not performed here, recorded for traceability):** `arena/1dc4d646-tino3` (PR #99) and `arena/8eebc036-tino3` (PR #103) landed on top. PR #103 consolidated the duplicate briefing page, which resolves the overlap flagged in G-1. Navigation on `main` at `a35e281` therefore has 22 links, not the 23 verified in this branch.
 - **Still open for the owner (unchanged):** the Git-history scrub (requires a force-push to `main`, not performed); a browser print check of the briefing sheet; property-specific insurance quotes.
+
+### Follow-up publication record — PR #105
+
+- **PR #105** (`arena/8eebc036-tino3` → `main`, the four Flagged for Review rows): merged with a merge commit, `03a5357`, at 2026-11-15T03:32:06Z. No auto-merge. Before merging, the `verify` check had passed on the current head, and the PR was `MERGEABLE` / `CLEAN`. The branch was brought up to date with `main` twice during the wait (PR #103's merge commit, and PR #106's board record in `COORDINATION.md`); both sides of the conflicting board section were kept.
+- **Pages:** the build for `03a5357` reports `built`, no error; `Verify static site`, `Deploy GitHub Pages` and `pages build and deployment` succeeded on `03a5357`.
+- **Live check:** `review.html` on the deployed site serves the current Flagged for Review content (the review page's repository-audit table is in a later part of the page than the chunk read here; the deployed build is the verified build of `03a5357`).
+- **Board record PR:** this section is recorded in a board-only pull request, following the precedent of PRs #86 and #96. The site content is unchanged by it.
+
