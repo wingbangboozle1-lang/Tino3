@@ -43,6 +43,10 @@ OFFICIAL_HOSTS = {
     "elections.cdn.sos.ca.gov",
     "www.cbo.gov", "www.federalreserve.gov", "www.huduser.gov", "www.lao.ca.gov",
     "home.treasury.gov", "www.tsp.gov", "docs.github.com",
+    # Academic ledger host (Damodaran historical returns, NYU Stern): the standard
+    # academic reference for long-run S&P total returns and T-bill returns; the site
+    # labels it academic, not government, wherever it is cited.
+    "pages.stern.nyu.edu",
 }
 FORBIDDEN_TAGS = {"script", "iframe", "form", "input", "textarea", "object", "embed", "img"}
 
