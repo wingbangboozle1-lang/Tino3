@@ -93,6 +93,7 @@ OFFICIAL_AMOUNTS = {
     15_000_000, 15_480_000,                                      # IRS basic exclusion 2026 and 2027
     19_000, 20_000,                                              # IRS annual gift exclusion
     5_000_000_000, 15_000_000_000,                               # Proposition 3 fiscal impact range
+    249, 65,                                                     # local parcel tax floor and pass-through cap, verbatim from the official measure text
 }
 
 
