@@ -1,5 +1,18 @@
 # Coordination board
 
+## Session `arena/f8ab312e-tino3` — real 1929/2008 entry-timing replays, official-source re-verification, privacy audit and publication · claimed 2026-11-15
+
+*Branch note:* Arena pins this session to `arena/f8ab312e-tino3` (based on `main` at `f68fc30`). The board's `session-<id>/<task>` branch naming cannot be used; no other branch is created, switched to or pushed. Pushes go to this branch only; the pull request is opened from it to `main`.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| F-1 Replace the synthetic-only crash-entry stress with **real, official-source 1929 and 2008 replays** of lump-sum versus park-then-phase entry | **in progress** | `arena/f8ab312e-tino3` | `assets/data/episodes.json` (new), `scripts/episodes.py` (new), `scripts/model.py` (append only), `scripts/build.py` (black-swan section + index line), `assets/sources.json` (append only), `scripts/verify.py` (host allowlist, append only) |
+| F-2 Re-open and re-verify every source behind the phased-investing, inheritance-tax, property-tax and insurance claims; record the result | **in progress** | `arena/f8ab312e-tino3` | `COORDINATION.md` (this section only) |
+| F-3 Privacy: audit the pre-rounding Git history read-only, publish the findings without the values, and write the owner decision and remediation procedure | **in progress** | `arena/f8ab312e-tino3` | `PRIVACY_REMEDIATION.md` (new, internal, excluded from publication), `scripts/privacy_scrub_audit.py` (new), `scripts/build.py` (review page audit rows) |
+| F-4 Rebuild, run every gate, open the PR from this branch, merge, confirm the Pages deploy | not started | `arena/f8ab312e-tino3` | `COORDINATION.md` (this section only) |
+
+**Coordination notes at claim time.** Three pull requests were open when this session started: #97 (`arena/1663e879-tino3`, board record only), #102 (`arena/1405ad9c-tino3`, briefing/costs/review edits) and #103 (`arena/8eebc036-tino3`, briefing consolidation and privacy sweep). All three touch `scripts/build.py`, which this session also edits. This session will make its changes **additive and isolated** (new module, new data file, new page section appended to one builder function) so a rebase can keep every session's work. These sessions are live, so their branches are not merged from here. Shared outputs (`assets/data/model.json`, generated pages) are regenerated last, from the merged builder.
+
 ## Session `arena/0dcaf9f7-tino3` — open-item completion: ledger research, economy reconciliation, stale-PR disposition, final publication · claimed 2026-11-13
 
 *Branch note:* Arena pins this session to `arena/0dcaf9f7-tino3` (based on `main` at `19e5ccf`, fast-forwarded to `d977882`, then rebased on `469d1d5` when PRs #79–#83 landed mid-session). The board's `session-<id>/<task>` naming cannot be used; no other branch is created, switched to or pushed.
