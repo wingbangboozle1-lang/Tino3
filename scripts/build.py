@@ -3374,6 +3374,17 @@ def page_review() -> str:
          "economy page uses. The mixed paths carry every cost the pure paths carry; the distributions "
          "resample the verified record and do not forecast.",
          "Read the method section; re-run scripts/mixed.py after any input change."),
+        ("Proposition H: not located, not modelled",
+         "No figure on this site depends on it",
+         "The brief asked for a measure it called Prop H to be modelled on its official terms. No measure "
+         "by that name was found that applies to either property: the statewide November 2026 ballot is "
+         "numbered 1 to 5 and 37 to 45 on the Secretary of State's own returns page, and no municipal or "
+         "county measure could be searched by letter without naming the jurisdiction, which the privacy "
+         "boundary forbids. The site therefore models none of it, and says so here rather than inventing "
+         "terms for a measure it could not read.",
+         "Ask the owner which measure the brief meant, and which jurisdiction's ballot it was on. If it is "
+         "a local measure, supply its official text privately and it can be added without naming the "
+         "jurisdiction."),
         ("The Proposition 19 clawback on the live-then-let path", "Now priced, both readings",
          "Section 63.2(a)(1)(C) is applied as written, but no court has applied it to these facts in "
          "anything this repository has read. The difference between the two readings is published "
@@ -3401,6 +3412,7 @@ def page_review() -> str:
         "City documentary transfer tax on a sale of Property A": ["rtc11911"],
         "Commission, escrow and title as a share of the sale price": [],
         "Property A market rent, and therefore the imputed-rent credit": ["hud_fmr"],
+        "Proposition H: not located, not modelled": ["sos_initiative_status"],
         "The Proposition 19 clawback on the live-then-let path": ["rtc63_2_eligibility", "boe_lta26026"],
         "Combined recapture rate, corrected from 41.1% to 42.1%": ["irs_tc409", "irs_tc559", "ftb_cg", "ftb_rates"],
         "Mixed paths and the distributions behind the headline": ["fred_casthpi", "fred_cpi"],
