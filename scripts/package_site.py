@@ -59,6 +59,8 @@ LEGACY_URLS = [
     # published under a place name, so the two former property-named pages are not
     # recreated here; the whole artifact replaces the previous deployment anyway.
     "audit.html", "black-swans.html", "stress.html",
+    # Duplicate one-page brief retired on 15 November 2026; briefing.html is the single brief.
+    "briefing-sheet.html",
     "data/sf_rental_pl.csv", "data/sources.csv",
 ]
 
