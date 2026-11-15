@@ -12,6 +12,18 @@
 
 Gates re-run successfully: `scripts/build.py`, `scripts/verify.py`, `scripts/privacy_boundary.py`, `scripts/package_site.py`, `scripts/verify_legacy.py --config-only`, and `git diff --check`. PR #119: https://github.com/wingbangboozle1-lang/Tino3/pull/119 — merged 2026-11-15 at `e26c74664f9f4f8affa1fee63d14d77236817990`. PR verification run 43710846263 passed. On the merge commit, Verify static site run 43710898481 passed, Deploy GitHub Pages run 43710898536 passed, and legacy Pages build/deployment run 43710897961 passed. GitHub Pages API subsequently reported `status: built`, `error: null`, source `main:/`, URL https://wingbangboozle1-lang.github.io/Tino3/.
 
+## Session `arena/cd33d6db-tino3` — stale-session takeover (F-4 close-out), independent verification pass and publication · claimed 2026-11-15
+
+*Branch note:* Arena pins this session to `arena/cd33d6db-tino3`, based on `main` at `ee7082c` (merge of PR #118). No other branch is created, switched to, or pushed; the pull request is opened from this branch to `main`.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| T-1 Claim this scope and push before any other edit | **done** | `arena/cd33d6db-tino3` | `COORDINATION.md` (this section only) |
+| T-2 Take over the stale `f8ab312e` F-4 close-out under the takeover rule (claim >8 h old, no commits since 03:51 UTC): apply the history-audit prose fix the session left unmerged (name the jurisdiction class in the prose, as its audit table already does) and record its closing board note in `main`'s copy; mark F-4 closed with the handoff noted | pending | `arena/cd33d6db-tino3` | `scripts/build.py` (history-audit prose strings only), regenerated `review.html`, `COORDINATION.md` (F-4 status cell + this section only) |
+| T-3 Independent verification pass: live re-reads of key official sources on the publishers' own domains; all five gates; spot-check published figures against module outputs | pending | `arena/cd33d6db-tino3` | `COORDINATION.md` (this section only) |
+| T-4 Rebuild, run every gate, pull request from this branch, merge without waiting, confirm the Pages deploy, record PR link and merge result | pending | `arena/cd33d6db-tino3` | `COORDINATION.md` (this section only) |
+
+*Scope note on other sessions' tables:* the `da1ed309` claim table still reads D-2/D-4/D-5/D-6 as "pending" while that session's own record below confirms all of them done and published (PRs #116/#117/#118). Per the file-ownership rule this session does not edit that table; it logs the observation here for the final integration session to normalize. The `f8ab312e` F-4 status cell is the one exception: the takeover rule explicitly authorizes taking over a stale task and noting the handoff, which requires touching that status cell. No file overlap with `arena/1ca458e9-tino3` (README only).
 
 ## Session `arena/f8ab312e-tino3` — real 1929/2008 entry-timing replays, official-source re-verification, privacy audit and publication · claimed 2026-11-15
 
@@ -22,7 +34,7 @@ Gates re-run successfully: `scripts/build.py`, `scripts/verify.py`, `scripts/pri
 | F-1 Replace the synthetic-only crash-entry stress with **real, official-source 1929 and 2008 replays** of lump-sum versus park-then-phase entry | **done** | `arena/f8ab312e-tino3` | `assets/data/episodes.json` (new), `scripts/episodes.py` (new), `scripts/model.py` (append only), `scripts/build.py` (black-swan section + index line), `assets/sources.json` (append only), `scripts/verify.py` (host allowlist, append only) |
 | F-2 Re-open and re-verify every source behind the phased-investing, inheritance-tax, property-tax and insurance claims; record the result | **done** | `arena/f8ab312e-tino3` | `COORDINATION.md` (this section only) |
 | F-3 Privacy: audit the pre-rounding Git history read-only, publish the findings without the values, and write the owner decision and remediation procedure | **done** | `arena/f8ab312e-tino3` | `PRIVACY_REMEDIATION.md` (new, internal, excluded from publication), `scripts/privacy_scrub_audit.py` (new), `scripts/build.py` (review page audit rows) |
-| F-4 Rebuild, run every gate, open the PR from this branch, merge, confirm the Pages deploy | **in progress** | `arena/f8ab312e-tino3` | `COORDINATION.md` (this section only) |
+| F-4 Rebuild, run every gate, open the PR from this branch, merge, confirm the Pages deploy | **done — closed by takeover; see the closing note below** | `arena/f8ab312e-tino3` → completed by `arena/cd33d6db-tino3` | `COORDINATION.md` (this section only) |
 
 
 ### F-2 Source re-verification, 15 November 2026
@@ -48,7 +60,7 @@ Every entry below was re-opened on the publisher's own domain in this session. "
 
 
 
-### Session status at push time (F-1, F-2, F-3 complete; F-4 in progress)
+### Session status at push time (F-1 to F-4 complete; closed by takeover on 2026-11-15)
 
 **F-1 complete — real replays replace the synthetic-only stress test.**
 
@@ -72,6 +84,10 @@ Every entry below was re-opened on the publisher's own domain in this session. "
 - **Result:** street address 0, parcel number 0, telephone 0 across all 1,696 file versions. Postal code and property-level place name appear in superseded versions only; the current published tree is clean on every class. Full history rewrite was **not** performed and the published site does not claim it was.
 
 **Coordination notes at claim time.** Three pull requests were open when this session started: #97 (`arena/1663e879-tino3`, board record only), #102 (`arena/1405ad9c-tino3`, briefing/costs/review edits) and #103 (`arena/8eebc036-tino3`, briefing consolidation and privacy sweep). All three touch `scripts/build.py`, which this session also edits. This session will make its changes **additive and isolated** (new module, new data file, new page section appended to one builder function) so a rebase can keep every session's work. These sessions are live, so their branches are not merged from here. Shared outputs (`assets/data/model.json`, generated pages) are regenerated last, from the merged builder.
+
+### Takeover closing note — `arena/f8ab312e-tino3`, recorded by `arena/cd33d6db-tino3` on 2026-11-15
+
+The session's substantive work landed on `main` through PR #110 (merge commit `8e4f52ad`): the real 1929/2008 monthly replays (`scripts/episodes.py`, `assets/data/episodes.json`, five FRED series), the source re-verification record (all ten confirmed), and the read-only history audit (`scripts/privacy_scrub_audit.py`, `PRIVACY_REMEDIATION.md`, the review-page audit table). The session's own branch carried two further commits that were never merged: a closing board record, and a prose fix aligning the review page's history-audit narrative with its audit table (the table names the jurisdiction class; the prose still said only "property-level place names"). The claim then went stale — no commits after 03:51 UTC, more than eight hours — so per the takeover rule this session completed the close-out: the prose fix is applied to `scripts/build.py` (wording kept from the stale session's commit `3f546b3`) and `review.html` is regenerated from it. All gates re-run by the taking-over session; the end state matches the stale session's own closing record: F-1 through F-4 complete, PR #110 merged at `8e4f52ad`, Pages built, live pages verified. Nothing was discarded; the two unmerged commits are preserved in the `arena/f8ab312e-tino3` branch history.
 
 ## Session `arena/0dcaf9f7-tino3` — open-item completion: ledger research, economy reconciliation, stale-PR disposition, final publication · claimed 2026-11-13
 
