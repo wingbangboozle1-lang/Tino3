@@ -428,11 +428,14 @@
    ]
   },
   "treasury_short_yield_nominal": {
-   "baseline": 0.042,
-   "low": 0.035,
-   "high": 0.050,
-   "basis": "Short Treasury bills and notes (3 month to 2 year) anchor near the policy rate rather than the 10-year term yield. Baseline is a stated scenario, not an official forward rate; the band brackets the 2025-2026 short-end range. No official agency publishes a forward short-Treasury yield for 2040-2050.",
-   "src": []
+   "baseline": 0.0442,
+   "low": 0.0426,
+   "high": 0.0465,
+   "basis": "Official figures from the U.S. Treasury Daily Par Yield Curve Rates for 13 November 2026: 3-month 4.26%, 6-month 4.34%, 1-year 4.42%, 2-year 4.65%. The low case is the 3-month point, the high case the 2-year point, and the baseline the 1-year point, which is the midpoint of the 3-month-to-2-year window the owner named and the maturity a 24-to-36 month parking ladder would sit in. These are today's observed yields, carried forward as the scenario anchor: no agency publishes a forward short-Treasury yield for 2040 to 2050, and the actual yield at the time must be re-read from the same Treasury page before acting.",
+   "src": [
+    "treasury_curve_2026_11",
+    "treasury_bill_2026_11"
+   ]
   },
   "prop19_cap_growth": {
    "baseline": 0.03,
@@ -442,13 +445,6 @@
    "src": [
     "boe_lta25009"
    ]
-  },
-  "short_term_treasury_yield": {
-   "baseline": 0.040,
-   "low": 0.030,
-   "high": 0.050,
-   "basis": "Stated scenario for parking sale proceeds in 3-month to 2-year Treasury bills during the 24-36 month phased-investing period. No official source publishes forward short-term rates for the 2040s, so this is a stated assumption and not an official figure. The verified 10-year Treasury series anchors the long-rate pages; this row is used only by the phased-investing path on the black-swan page.",
-   "src": []
   },
   "phased_investing_park_months": {
    "baseline": 30,
@@ -493,21 +489,28 @@
     "ftb_cg"
    ]
   },
-  "phased_park_months": {
-   "value": 30,
-   "basis": "Months sale proceeds stay in short Treasuries before the equity phase-in begins. Midpoint of the owner's 24-36 month window. A stated scenario, not an official figure.",
-   "src": []
-  },
   "phased_equity_phase_months": {
    "value": 18,
-   "basis": "Months over which the parked proceeds are phased into equities by equal monthly amounts. A stated scenario, not an official figure.",
-   "src": []
+   "basis": "Months over which the parked proceeds are phased into equities by equal monthly amounts. The baseline is 18 months; the entry-timing table also prices 12 months. A stated scenario, not an official figure.",
+   "src": [],
+   "low": 12,
+   "high": 24
   },
   "horizon_years": 30,
   "inheritance_years": [
    2040,
    2045,
    2050
-  ]
+  ],
+  "phased_crash_scenario": {
+   "annual_returns": [
+    -0.4,
+    -0.2,
+    -0.1
+   ],
+   "basis": "The crash-at-entry sequence used by the phased-investing stress test: an equity year of -40%, then -20%, then -10%, then the baseline net equity rate. A STATED SCENARIO, not a historical return and not an official figure: no official data series reaches back to the 1929 crash, and no agency publishes a forward market path. The page that uses it says so in the same words and links the Federal Reserve History pages for the events themselves.",
+   "verified": false,
+   "src": []
+  }
  }
 }

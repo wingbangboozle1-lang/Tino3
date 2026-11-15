@@ -26,6 +26,13 @@ V = INPUTS["verified_parameters"]
 ASM = INPUTS["assumptions"]
 BUILD_DATE = "13 November 2026"
 
+# The owner's phased-investing instruction, read from the assumption register so
+# a label can never drift from the number the model actually used.
+PARK_MONTHS = ASM["phased_investing_park_months"]["baseline"]
+PHASE_MONTHS = ASM["phased_equity_phase_months"]["value"]
+PARK_LOW = ASM["phased_investing_park_months"]["low"]
+PARK_HIGH = ASM["phased_investing_park_months"]["high"]
+
 NAV_GROUPS = [
     ("Start here", ["index.html", "executive-summary.html", "decision.html", "what-if.html", "briefing.html"]),
     ("The two properties", ["property-a.html", "property-b.html", "ownership-distinction.html"]),
@@ -319,7 +326,8 @@ def page_index() -> str:
         kpi(m(p45["breakeven_rent_monthly"]), "Monthly rent needed to justify letting it",
             "In 2045 dollars, on zero rent credited to the letting paths"),
         kpi(m(p45["paths"]["sell_then_phase"]["terminal"]), "Phased path: sell, park in Treasuries, then equities",
-            "24-36 months in short-term Treasuries after inheritance, then stocks - softens 1929/2008 crash entry"),
+            f"{PARK_LOW}-{PARK_HIGH} months in short-term Treasuries after inheritance, then "
+            f"{PHASE_MONTHS} months of equal monthly purchases into stocks - softens 1929/2008 crash entry"),
     ])
     gating = callout("flag", "One fact is assumed, not verified, and everything else depends on it", f"""
 <p>The Proposition 19 exclusion applies only where the transfer is between a parent and a child, or between a
@@ -467,7 +475,7 @@ def page_decision() -> str:
     for p in MODEL["paths"]:
         for key, label in (("sell_equities", "Sell at inheritance, invest in equities"),
                            ("sell_treasury", "Sell at inheritance, reinvest at Treasuries"),
-                           ("sell_then_phase", "Sell at inheritance, park in short-term Treasuries for 30 months, then phase into equities"),
+                           ("sell_then_phase", f"Sell at inheritance, park in short-term Treasuries for {PARK_MONTHS} months, then phase into equities over {PHASE_MONTHS} months"),
                            ("live_in", "Move in and hold for 30 years"),
                            ("live_then_rent", "Move in two years, then let it out"),
                            ("rent_out", "Let it out from the start")):
@@ -1521,77 +1529,116 @@ pays the full reassessment and the running costs, and then competes with a diver
 
 
 # ------------------------------------------------ phased entry stress test --
-def phased_terminal(proceeds: float, wait_years: int, annual_treasury: float,
-                    shock: bool, horizon: int = 30, phase_months: int = 12) -> int:
-    """Monthly deterministic illustration; shock path is synthetic, not a backtest."""
-    cash_balance = float(proceeds)
-    equity_balance = 0.0
-    phase_start = wait_years * 12
-    shock_returns = [-0.40, 0.25, 0.10]
-    baseline_net = ASM["equity_return_nominal_gross"]["baseline"] - ASM["equity_tax_drag"]["baseline"]
-    for month in range(horizon * 12):
-        year = month // 12
-        if shock:
-            annual_stock_return = shock_returns[year] if year < len(shock_returns) else baseline_net
-        else:
-            annual_stock_return = baseline_net
-        equity_balance *= (1 + annual_stock_return) ** (1 / 12)
-        cash_balance *= (1 + annual_treasury) ** (1 / 12)
-        phase_month = month - phase_start
-        if 0 <= phase_month < phase_months:
-            months_left = phase_months - phase_month
-            contribution = cash_balance / months_left
-            cash_balance -= contribution
-            equity_balance += contribution
-    return money10(equity_balance + cash_balance)
-
-
 def page_phased_rows() -> str:
-    p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
-    proceeds = p45["paths"]["sell_equities"]["sale"]["net"]
-    base_tsy = ASM["treasury_yield_nominal"]["baseline"]
-    direct_no_crash = phased_terminal(proceeds, 0, base_tsy, False)
-    direct_crash = phased_terminal(proceeds, 0, base_tsy, True)
-    cases = [
-        ("Immediate equity; no shock", 0, False, "Reference case"),
-        ("Immediate equity; synthetic crash-at-entry stress", 0, True, "Shared stylized stress; not a dated replay"),
-        ("Treasuries 24 months, then phase to equities over 12 months; no shock", 2, False, "No-crash opportunity-cost case"),
-        ("Treasuries 24 months, then phase to equities over 12 months; synthetic crash stress", 2, True, "Shared stylized stress; not a dated replay"),
-        ("Treasuries 36 months, then phase to equities over 12 months; no shock", 3, False, "No-crash opportunity-cost case"),
-        ("Treasuries 36 months, then phase to equities over 12 months; synthetic crash stress", 3, True, "Shared stylized stress; not a dated replay"),
-    ]
+    """The entry-timing table, rendered from the model's canonical engine."""
+    t = MODEL["phased_timing"]
+    crash = t["crash_annual_returns"]
+    crash_text = ", ".join(f"{r * 100:.0f}%" for r in crash)
+
+    def label(park: int, crash_on: bool) -> str:
+        wait = f"Treasuries {park} months"
+        then = f"then {t['phase_months']} months of equal monthly purchases into equities"
+        case = "with the stated crash-at-entry sequence" if crash_on else "with no crash"
+        return f"{wait}, {then}; {case}"
+
     rows = []
-    for label, wait, shock, context in cases:
-        amount = phased_terminal(proceeds, wait, base_tsy, shock)
-        comparator = direct_crash if shock else direct_no_crash
-        srcs = (["fedhist_1929", "fedhist_greatrecession"] if shock else ["ssa_trustees", "fred_gs10"])
-        rows.append(f"<td><strong>{esc(label)}</strong></td><td>{wait * 12} months</td>"
-                    f"<td>{pcf(base_tsy, 1)}</td><td>{m(amount)}</td>"
-                    f"<td>{m(amount - comparator)}</td><td>{esc(context)}</td>"
-                    + method_cell("#phased-method", "Illustrative model", srcs))
-    return table("2045 sale-proceeds entry-timing stress test (30-year nominal terminal value)",
-                  ["Path", "Treasury wait", "Treasury yield proxy", "Terminal value", "Difference vs immediate entry in same market case", "Reading", "Method and sources"], rows,
-                  note="Rounded to $10. Outputs are conditional illustrations, not recommendations or forecasts. The 4.7% proxy is the model's long-run 10-year-yield anchor, not a current 3-month-to-2-year Treasury quote.")
+    for r in t["rows"]:
+        rows.append(
+            f"<td><strong>{esc(label(r['park_months'], r['crash']))}</strong></td>"
+            f"<td>{r['park_months']} months</td>"
+            f"<td>{pcf(r['tsy'], 2)}</td>"
+            f"<td>{m(r['terminal'])}</td>"
+            f"<td>{m(r['immediate'])}</td>"
+            f"<td>{m(r['difference'])}</td>"
+            + method_cell("#phased-method", "Model output, canonical engine",
+                          ["treasury_curve_2026_11", "treasury_bill_2026_11"]
+                          if r["crash"] else ["treasury_curve_2026_11", "ssa_trustees"]))
+    main_tbl = table(
+        f"2045 sale-proceeds entry-timing test (30-year nominal terminal value, "
+        f"after-tax, {t['horizon_years']} years)",
+        ["Path", "Treasury wait", "Treasury yield", "Terminal value",
+         "Immediate equity entry in the same market case", "Difference vs immediate entry",
+         "Method and sources"],
+        rows,
+        note=f"Rounded to $10. The same {t['net_proceeds']} of modelled net sale proceeds is used in "
+             f"every row. The crash rows apply one stated sequence - equity years of {crash_text}, "
+             f"then the baseline - to both the immediate entry and the parked path, so the "
+             f"difference isolates the timing, not the market. Outputs are conditional illustrations, "
+             f"not recommendations or forecasts.")
+
+    yrows = []
+    for r in t["yield_rows"]:
+        case = "stated crash sequence" if r["crash"] else "no crash"
+        yrows.append(
+            f"<td>{esc(r['label'].capitalize())}</td>"
+            f"<td>{pcf(r['tsy'], 2)}</td>"
+            f"<td>{esc(case)}</td>"
+            f"<td>{m(r['terminal'])}</td>"
+            f"<td>{m(r['immediate'])}</td>"
+            f"<td>{m(r['difference'])}</td>"
+            + method_cell("#phased-method", "Model output, canonical engine",
+                          ["treasury_curve_2026_11", "treasury_bill_2026_11"]))
+    yield_tbl = table(
+        f"What the parking yield is worth ({t['park_months'][1]} months parked, "
+        f"{t['phase_months']} months of equity purchases)",
+        ["Yield case", "Treasury yield", "Market case", "Terminal value",
+         "Immediate equity entry in the same market case", "Difference vs immediate entry",
+         "Method and sources"],
+        yrows,
+        note="The three yields are the official 3-month, 1-year and 2-year points of the U.S. "
+             "Treasury par yield curve for 13 November 2026, not forecasts. No agency publishes a "
+             "forward Treasury yield for 2040 to 2050, so the rate at the time must be re-read from "
+             "the same Treasury page before acting.")
+
+    return main_tbl + yield_tbl
 
 
 def page_phased_stress() -> str:
-    return callout("key", "What this test does and does not say", """
-<p>It tests the requested choice: after a hypothetical 2045 inheritance and sale, keep proceeds in short-dated Treasuries for 24 or 36 months, then move equal monthly portions into equities over the following 12 months. It compares that path with investing immediately.</p>
-<p>The crash sequence is explicitly <strong>synthetic</strong>: an assumed -40% equity year, then +25%, then +10%, followed by the baseline 6.3% net nominal equity return. The 36-month wait therefore ends just as that invented three-year sequence ends; that coincidence is a scenario artifact, not evidence that a three-year wait avoids real crashes. It is not a reconstruction of 1929 or 2008 market returns. The Federal Reserve History links document the events and their timing, not these assumed percentages. The repository does not contain a source-verified S&amp;P total-return series for those episodes; a true historical backtest is flagged as a data gap.</p>
-<p>The treasury rate shown is a 4.7% long-run proxy derived from the Social Security Trustees' real-rate and inflation assumptions and historical 10-year yields. It is <strong>not</strong> a 3-month, 1-year or 2-year yield forecast. The actual bill/note yield, reinvestment rates, taxes on interest, transaction costs, and the chosen equity allocation must be refreshed with a fiduciary before implementation.</p>""") + page_phased_rows() + f"""
+    t = MODEL["phased_timing"]
+    crash = ", ".join(f"{r * 100:.0f}%" for r in t["crash_annual_returns"])
+    base_park = t["park_months"][1]
+    no_crash_row = next(r for r in t["rows"]
+                        if r["park_months"] == base_park and not r["crash"])
+    crash_row = next(r for r in t["rows"]
+                     if r["park_months"] == base_park and r["crash"])
+    return callout("key", "What this test does and does not say", f"""
+<p>It tests the requested choice: after a hypothetical 2045 inheritance and sale, keep the
+proceeds in short-dated Treasuries for {t['park_months'][0]}, {base_park} or {t['park_months'][2]}
+months, then move equal monthly portions into equities over {t['phase_months']} months. It
+compares that path with investing the same money in equities immediately, in the same market
+case.</p>
+<p>The crash sequence is explicitly <strong>synthetic and stated</strong>: equity years of
+{crash}, then the baseline net return. It is <strong>not</strong> a reconstruction of 1929 or
+2008 market returns, and the Federal Reserve History links document the events and their
+timing, not these percentages. The repository holds no source-verified total-return series for
+those episodes; a true historical backtest is flagged as a data gap.</p>
+<p>One artifact is worth naming. The stated crash lasts exactly three years, so the
+{t['park_months'][2]}-month parking window ends at the same moment the crash does, and every
+equity purchase in that row happens after it. The {t['park_months'][2]}-month crash row and its
+no-crash row therefore carry the same terminal value. That is a coincidence of the scenario's
+length, not evidence that waiting three years avoids real crashes.</p>
+<p>The parking yield is the official 3-month-to-2-year Treasury curve, read from the Treasury's
+own daily rate pages for 13 November 2026. It is <strong>not</strong> a forecast of the rate in
+2040 to 2050: no agency publishes a forward Treasury yield for that horizon. The actual bill and
+note yield, reinvestment rates, taxes on interest, transaction costs, and the chosen equity
+allocation must be refreshed with a fiduciary before implementation.</p>
+<p>The result at the {base_park}-month midpoint: with no crash, parking costs
+{m(abs(no_crash_row['difference']))} against immediate entry; under the stated crash sequence it
+gains {m(crash_row['difference'])}. Waiting is not free in the good case, and it is not a
+guarantee in the bad one.</p>""") + page_phased_rows() + f"""
 <section id="phased-method">
 <h2>Interpretation and reinvestment risk</h2>
 <ul>
 <li>Waiting reduces the dollars exposed to an immediate hypothetical crash, but it does not eliminate market risk: equity purchases still face subsequent losses.</li>
-<li>With no crash, waiting has an opportunity cost if equities outperform the Treasury proxy. The no-shock rows make that cost visible rather than showing only the favorable case.</li>
+<li>With no crash, waiting has an opportunity cost if equities outperform the Treasury curve. The no-crash rows make that cost visible rather than showing only the favourable case.</li>
 <li>Short Treasuries mature frequently. If market yields are lower at maturity, proceeds must be reinvested at lower rates; if rates rise, existing notes' market value can fall before maturity. Neither future yield nor ladder is known today.</li>
-<li>All terminal values omit estate-level investment tax details, a personalized asset allocation, withdrawals, fees beyond the model's stated drag, and changes in future law. Ask the CPA and investment fiduciary to rerun with an actual sale estimate and current Treasury quotes.</li>
+<li>All terminal values omit estate-level investment tax details, a personalised asset allocation, withdrawals, fees beyond the model's stated drag, and changes in future law. Ask the CPA and investment fiduciary to rerun with an actual sale estimate and current Treasury quotes.</li>
+<li>The parking yield and the equity return are the model's stated assumptions. The parking yield is anchored on today's official curve; the equity return is a long-run assumption that no official source publishes as a forward number.</li>
 </ul>
-<p>Official event context: {slink('fedhist_1929')} &middot; {slink('fedhist_greatrecession')}. Treasury proxy basis: {slink('ssa_trustees')} &middot; {slink('fred_gs10')}.</p>
+<p>Official event context: {slink('fedhist_1929')} &middot; {slink('fedhist_greatrecession')}. Parking-yield basis: {slink('treasury_curve_2026_11')} &middot; {slink('treasury_bill_2026_11')}. Long-run equity and inflation basis: {slink('ssa_trustees')}.</p>
 </section>"""
 
 
-# ------------------------------------------------------------------ economy --
 def page_economy() -> str:
     rows = []
     for r in MODEL["series_table"]:

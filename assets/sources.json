@@ -1,5 +1,5 @@
 {
- "as_of": "2026-11-13",
+ "as_of": "2026-11-15",
  "edition": "Anonymised quantitative decision edition; every published figure rounded to the nearest $10.",
  "scope": "Union of two independently maintained ledgers, merged on 13 November 2026. Entries kept verbatim from whichever ledger supplied them; where an entry had no 'supports' field its 'verifies' list was carried across, and 'limits' was filled from 'limit' or 'caveat' when present. Neither ledger was rewritten to match the other.",
  "sources": [
@@ -836,7 +836,7 @@
    "verifies": [
     "For calendar year 2027 the basic exclusion amount under section 2010(c)(3) is $15,480,000"
    ],
-   "quote": ".44 Basic Exclusion Amount for Estate Tax. For calendar year 2027, the basic exclusion amount under § 2010(c)(3) is $15,480,000.",
+   "quote": ".44 Basic Exclusion Amount for Estate Tax. For calendar year 2027, the basic exclusion amount under \u00a7 2010(c)(3) is $15,480,000.",
    "checked": "official-domain search excerpt read in this session (full document not opened)",
    "id": "irs_rp2635",
    "supports": "For calendar year 2027 the basic exclusion amount under section 2010(c)(3) is $15,480,000",
@@ -850,7 +850,7 @@
     "Assets of an irrevocable grantor trust that are not included in the gross estate get no basis adjustment at death",
     "Property the decedent placed in a trust that stayed revocable is treated as acquired from the decedent (section 1014(b)(2) and (3))"
    ],
-   "quote": "the basis of Asset is not adjusted to its fair market value on the date of A's death under § 1014 because Asset was not acquired or passed from a decedent as defined in § 1014(b).",
+   "quote": "the basis of Asset is not adjusted to its fair market value on the date of A's death under \u00a7 1014 because Asset was not acquired or passed from a decedent as defined in \u00a7 1014(b).",
    "checked": "opened on the publisher's site in this session",
    "id": "irs_rr2023_2",
    "supports": "Assets of an irrevocable grantor trust that are not included in the gross estate get no basis adjustment at death | Property the decedent placed in a trust that stayed revocable is treated as acquired from the decedent (section 1014(b)(2) and (3))",
@@ -1254,6 +1254,33 @@
    "checked": "Opened on 14 November 2026. Read the 'When To File' section: an automatic 6-month extension of time to file Form 706 is requested on Form 4768 by the original due date; an extension for cause is available after that date only with good cause. Part III is a separate extension of time to pay under section 6161.",
    "supports": "The automatic six-month extension of time to file Form 706 by filing Form 4768 by the original due date, and that payment extension is a separate request.",
    "limits": "Does not extend the time to pay unless Part III is granted. Read the current form and instructions before filing."
+  },
+  {
+   "id": "treasury_curve_2026_11",
+   "publisher": "U.S. Department of the Treasury",
+   "title": "Daily Treasury Par Yield Curve Rates, November 2026",
+   "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value_month=202611",
+   "checked": "Opened on the publisher's official domain on 2026-11-15 and read directly from the November 2026 table.",
+   "supports": "The short-end anchors for the phased-investing parking assumption on 13 November 2026: 3-month 4.26%, 6-month 4.34%, 1-year 4.42%, 2-year 4.65%. These are the figures behind the low, baseline and high cases of the parking yield.",
+   "limits": "Observed yields on one day, carried forward as a scenario anchor. No agency publishes a forward Treasury yield for 2040 to 2050, so this is not a forecast of the rate that will exist at the inheritance. The rate must be re-read from the same page at the time of the decision."
+  },
+  {
+   "id": "treasury_bill_2026_11",
+   "publisher": "U.S. Department of the Treasury",
+   "title": "Daily Treasury Bill Rates, November 2026",
+   "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_bill_rates&field_tdr_date_value_month=202611",
+   "checked": "Opened on the publisher's official domain on 2026-11-15 and read directly from the November 2026 table.",
+   "supports": "Coupon-equivalent yields on 13 November 2026 of 4.13% at 13 weeks, 4.22% at 26 weeks and 4.42% at 52 weeks, confirming the short-bill end of the curve that the 3-month-to-2-year parking window sits in.",
+   "limits": "Coupon-equivalent yields on one day. The bank-discount and coupon-equivalent columns are different measures and are not interchangeable with the par yield curve."
+  },
+  {
+   "id": "irs_rev_proc_2022_32",
+   "publisher": "Internal Revenue Service",
+   "title": "Revenue Procedure 2022-32, simplified extension of time to elect portability (Internal Revenue Bulletin 2022-30, 25 July 2022)",
+   "url": "https://www.irs.gov/irb/2022-30_IRB#REV-PROC-2022-32",
+   "checked": "Opened on the publisher's official domain on 2026-11-15 and read directly from the bulletin synopsis.",
+   "supports": "The procedure 'provides a simplified method for certain estates to obtain an extension of time under Section 301.9100-3 to file a return on or before the fifth anniversary of the decedent's death to elect portability', and 'applies to estates that are not normally required to file an estate tax return because the value of the gross estate and adjusted taxable gifts is under the filing threshold in Section 6018(a)'.",
+   "limits": "Applies to estates that are not normally required to file. An estate that is required to file is not covered by this procedure, and the general rule is that the portability election must be made on a timely filed return."
   }
  ]
 }

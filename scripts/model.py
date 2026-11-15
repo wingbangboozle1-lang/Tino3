@@ -250,12 +250,16 @@ def run_paths(inherit_year: int, g: float, infl: float, eq: float, drag: float,
     # remainder of the horizon. This is the crash-entry softener: it tests whether keeping the
     # proceeds out of equities through the first market shock (1929/2008 style) and buying in
     # afterwards improves the terminal value versus going fully into equities on day one.
-    phase_months = float(ASM["phased_investing_park_months"]["baseline"])
-    phase_years = phase_months / 12.0
-    invest_years = max(0.0, horizon - phase_years)
-    tsy_short = ASM["short_term_treasury_yield"]["baseline"]
-    parked = sale["net"] * (1 + tsy_short) ** phase_years
-    phase_terminal = parked * (1 + eq - drag) ** invest_years
+    # Phased investing, through the one canonical engine. The parking length is
+    # the owner's instruction (24 to 36 months; the baseline is the midpoint).
+    # The engine is the same one the black-swan entry-timing table uses, so the
+    # headline figure and the stress table measure one thing.
+    phase_eng = phased_engine(
+        sale["net"], horizon * 12,
+        int(ASM["phased_investing_park_months"]["baseline"]),
+        int(ASM["phased_equity_phase_months"]["value"]),
+        TSY_SHORT, eq - drag)
+    phase_terminal = money10(phase_eng["terminal"])
 
     # Path 5: live in it for two years, then let it out for the rest
     bills_h1 = annual_bills(taxable_live, fit_T, inherit_year, infl, 2)
@@ -317,8 +321,10 @@ def run_paths(inherit_year: int, g: float, infl: float, eq: float, drag: float,
                          "depreciation": money10(deprec), "sale": rent_sale},
             "sell_then_phase": {"terminal": money10(phase_terminal), "outflow": 0,
                                 "start": sale["net"], "sale": sale,
-                                "parked": money10(parked),
-                                "invest_years": invest_years},
+                                "parked_at_park_end": money10(phase_eng["parked_at_park_end"]),
+                                "equity_at_park_end": money10(phase_eng["equity"]),
+                                "park_months": phase_eng["park_months"],
+                                "phase_months": phase_eng["phase_months"]},
             "live_then_rent": {"terminal": money10(hybrid_sale["net"] + hybrid_carry_fv),
                                "outflow": money10(tax_h1 + tax_h2 + cost_h),
                                "carry_fv": money10(hybrid_carry_fv),
@@ -331,52 +337,124 @@ def run_paths(inherit_year: int, g: float, infl: float, eq: float, drag: float,
     }
 
 
+# ------------------------------------------------------ phased investing ---
+# One canonical implementation of the owner's instruction: park the sale
+# proceeds in 3-month to 2-year Treasuries for 24 to 36 months after the
+# inheritance, then phase into equities.
+#
+# Before this consolidation four implementations of this path existed, each
+# with its own Treasury assumption and its own mechanic, so the dashboard
+# headline, the decision paths, the sensitivity grid and the black-swan
+# entry-timing table were measuring different things under one label. The
+# engine below is the only mechanic; every published phased figure comes
+# from it.
+
+# The crash-at-entry sequence used by the stress test. This is a STATED
+# SCENARIO, not a historical return: no official series goes back to the
+# 1929 crash and no agency publishes a forward market path. The page that
+# uses it says so in the same words.
+CRASH_SCENARIO = (-0.40, -0.20, -0.10)
+
+
+def _monthly_rate(annual: float) -> float:
+    """Effective monthly rate implied by an annual effective rate."""
+    return (1.0 + annual) ** (1.0 / 12.0) - 1.0
+
+
+def phased_engine(net: float, total_months: int, park_months: int, phase_months: int,
+                  tsy_short: float, eq_net_annual: float,
+                  crash_annual: tuple | None = None, lump: bool = False) -> dict:
+    """The single monthly engine behind every published phased-investing figure.
+
+    Mechanics:
+      * the net sale proceeds sit in short Treasuries for `park_months`;
+      * over the following `phase_months` the balance is drawn down into
+        equities in equal monthly amounts. Each purchase is a share of the
+        balance then held, so the interest earned while parked is invested
+        along with the principal and the balance reaches zero when the
+        phase ends;
+      * money not yet invested keeps earning the Treasury rate;
+      * equities earn the net equity rate from the month they are bought.
+
+    `lump=True` puts the whole balance into equities in month one, which is
+    the comparator for the phased path.
+
+    `crash_annual` is an optional tuple of annual equity returns applied to
+    the first years of the horizon, then the baseline net equity rate.
+    """
+    total_months = max(0, int(total_months))
+    park_months = max(0, min(int(park_months), total_months))
+    phase_months = max(0, min(int(phase_months), total_months - park_months))
+    phase_start = park_months + 1
+    phase_end = park_months + phase_months
+
+    m_tsy = _monthly_rate(tsy_short)
+    m_eq = _monthly_rate(eq_net_annual)
+
+    crash_monthly: list[float] = []
+    for r in (crash_annual or ()):
+        crash_monthly.extend([_monthly_rate(r)] * 12)
+
+    treasury = 0.0 if lump else float(net)
+    equity = float(net) if lump else 0.0
+    parked_at_park_end = 0.0
+
+    for month in range(1, total_months + 1):
+        m = m_eq
+        if crash_monthly and month <= len(crash_monthly):
+            m = crash_monthly[month - 1]
+        if not lump:
+            treasury *= (1 + m_tsy)
+        equity *= (1 + m)
+        if not lump and phase_start <= month <= phase_end:
+            months_left = phase_end - month + 1
+            contribution = treasury / months_left
+            treasury -= contribution
+            equity += contribution
+        if month == park_months and park_months > 0:
+            parked_at_park_end = treasury
+
+    return {
+        "terminal": treasury + equity,
+        "treasury": treasury,
+        "equity": equity,
+        "parked_at_park_end": parked_at_park_end,
+        "park_months": park_months,
+        "phase_months": phase_months,
+    }
+
+
 def run_phased_path(inherit_year: int, g: float, infl: float, eq: float, drag: float,
                     tsy_short: float, horizon: int, sell_pct: float, gain_rate: float,
                     rec_rate: float, exclusion: float, fixed_growth: float, fit_a: dict,
                     cost_a_base: float, maint_live: float, maint_rent: float,
-                    rent_income: float | None, park_months: int, phase_months: int) -> dict:
-    """Sell at inheritance, park the net proceeds in short Treasuries (3M-2Y) for
-    park_months, then phase into equities by equal monthly chunks over phase_months.
+                    rent_income: float | None, park_months: int, phase_months: int,
+                    crash_annual: tuple | None = None) -> dict:
+    """Sell at inheritance, park the net proceeds in short Treasuries (3M-2Y),
+    then phase into equities by equal monthly amounts.
 
-    The point of the path is entry-risk sequencing: instead of dumping the whole
-    sale proceeds into equities at a single moment (which could be the top before a
-    1929- or 2008-style crash), the money earns a short-Treasury yield while it is
-    phased in, so part of the portfolio is never exposed to an equity drawdown and
-    the equity purchases are spread across prices. Returns the terminal value and
-    the net sale proceeds, both rounded to the nearest $10.
+    The point of the path is entry-risk sequencing: instead of putting the
+    whole sale proceeds into equities at a single moment - which could be the
+    top before a 1929- or 2008-style crash - the money earns a short-Treasury
+    yield while it is phased in, so part of the portfolio is never exposed to
+    an equity drawdown and the equity purchases are spread across prices.
+
+    Returns the terminal value and the net sale proceeds, both rounded to the
+    nearest $10.
     """
     k = inherit_year - 2026
     value_at_death = A["estimated_market_value_2026"] * (1 + g) ** k
     sale = sale_proceeds(value_at_death, value_at_death, sell_pct, gain_rate, rec_rate, 0.0)
-    net = sale["net"]
-
-    total_months = horizon * 12
-    park_months = max(0, min(park_months, total_months))
-    phase_months = max(0, min(phase_months, total_months - park_months))
-    phase_start = park_months + 1
-    phase_end = park_months + phase_months
-    phase_chunk = net / phase_months if phase_months else 0.0
-
-    m_tsy = (1 + tsy_short) ** (1 / 12.0) - 1.0
-    m_eq = (1 + eq - drag) ** (1 / 12.0) - 1.0
-
-    treasury = net
-    equity = 0.0
-    for month in range(1, total_months + 1):
-        treasury *= (1 + m_tsy)
-        equity *= (1 + m_eq)
-        if phase_start <= month <= phase_end:
-            treasury -= phase_chunk
-            equity += phase_chunk
-
+    eng = phased_engine(sale["net"], horizon * 12, park_months, phase_months,
+                        tsy_short, eq - drag, crash_annual)
     return {
-        "terminal": money10(treasury + equity),
-        "net_proceeds": money10(net),
-        "treasury_portion": money10(treasury),
-        "equity_portion": money10(equity),
-        "park_months": park_months,
-        "phase_months": phase_months,
+        "terminal": money10(eng["terminal"]),
+        "net_proceeds": money10(sale["net"]),
+        "treasury_portion": money10(eng["treasury"]),
+        "equity_portion": money10(eng["equity"]),
+        "parked_at_park_end": money10(eng["parked_at_park_end"]),
+        "park_months": eng["park_months"],
+        "phase_months": eng["phase_months"],
     }
 
 
@@ -385,66 +463,150 @@ def crash_entry_comparison(inherit_year: int, g: float, infl: float, eq: float, 
                            rec_rate: float, exclusion: float, fixed_growth: float, fit_a: dict,
                            cost_a_base: float, maint_live: float, maint_rent: float,
                            rent_income: float | None, park_months: int, phase_months: int,
-                           crash_years: int = 3) -> dict:
+                           crash_annual: tuple = CRASH_SCENARIO) -> dict:
     """Sequence-of-returns comparison: lump-sum equity entry versus phased entry.
 
-    Both paths sell Property A at inheritance and invest the same net proceeds in
-    equities earning eq-drag. The lump-sum path is fully exposed from month 1. The
-    phased path parks in short Treasuries for park_months then dollar-cost-averages
-    into equities over phase_months. During the first crash_years both equity paths
-    earn a severe negative return (a 1929- or 2008-style entry crash), then recover
-    to eq-drag. Treasury earns tsy_short throughout. This isolates the sequencing
-    benefit of phasing: money not yet in equities avoids the crash drawdown and is
-    deployed at lower prices. All figures rounded to the nearest $10.
+    Both paths sell Property A at inheritance and invest the same net proceeds.
+    The lump-sum path is fully exposed from month 1. The phased path parks in
+    short Treasuries for park_months, then draws the balance into equities over
+    phase_months. During the crash years both equity paths earn the stated
+    crash sequence; Treasuries earn tsy_short throughout. This isolates the
+    sequencing benefit of phasing: money not yet in equities avoids the
+    drawdown and is deployed at lower prices.
 
-    Parameters crash_years, the crash depth and the recovery return are stated
-    scenarios, not official figures - no data series goes back to 1929 and no
-    official source publishes a forward crash path.
+    The crash sequence is CRASH_SCENARIO - annual equity returns of -40%,
+    then -20%, then -10%, then the baseline net equity rate. These are
+    STATED SCENARIOS, not official figures: no data series goes back to 1929
+    and no official source publishes a forward crash path.
     """
     k = inherit_year - 2026
     value_at_death = A["estimated_market_value_2026"] * (1 + g) ** k
     sale = sale_proceeds(value_at_death, value_at_death, sell_pct, gain_rate, rec_rate, 0.0)
     net = sale["net"]
-
     total_months = horizon * 12
-    park_months = max(0, min(park_months, total_months))
-    phase_months = max(0, min(phase_months, total_months - park_months))
-    phase_start = park_months + 1
-    phase_end = park_months + phase_months
-    phase_chunk = net / phase_months if phase_months else 0.0
 
-    m_tsy = (1 + tsy_short) ** (1 / 12.0) - 1.0
-    m_eq = (1 + eq - drag) ** (1 / 12.0) - 1.0
-    # Severe entry crash: -40% in year 1, -20% in year 2, then the baseline return.
-    # Stated as an annualised equivalent for the crash window.
-    crash_annual = -0.40
-    m_crash = (1 + crash_annual) ** (1 / 12.0) - 1.0
-    crash_months = crash_years * 12
+    lump = phased_engine(net, total_months, 0, 0, tsy_short, eq - drag,
+                         crash_annual, lump=True)
+    phased = phased_engine(net, total_months, park_months, phase_months,
+                            tsy_short, eq - drag, crash_annual)
 
-    # Lump sum: everything in equities from month 1.
-    lump_eq = net
-    for month in range(1, total_months + 1):
-        r = m_crash if month <= crash_months else m_eq
-        lump_eq *= (1 + r)
-
-    # Phased: treasury first, then DCA into equities.
-    treasury = net
-    equity = 0.0
-    for month in range(1, total_months + 1):
-        treasury *= (1 + m_tsy)
-        equity *= (1 + (m_crash if month <= crash_months else m_eq))
-        if phase_start <= month <= phase_end:
-            treasury -= phase_chunk
-            equity += phase_chunk
-
+    lump_terminal = money10(lump["terminal"])
+    phased_terminal = money10(phased["terminal"])
     return {
         "net_proceeds": money10(net),
-        "lump_sum_equities": money10(lump_eq),
-        "phased_terminal": money10(treasury + equity),
-        "phased_advantage": money10((treasury + equity) - lump_eq),
-        "crash_years": crash_years,
-        "park_months": park_months,
+        "lump_sum_equities": lump_terminal,
+        "phased_terminal": phased_terminal,
+        # Computed from the published figures, not from the unrounded ones, so
+        # the advantage a reader sees is exactly the difference of the two
+        # terminal values printed beside it.
+        "phased_advantage": phased_terminal - lump_terminal,
+        "crash_years": len(crash_annual or ()),
+        "crash_annual_returns": [round(r, 4) for r in (crash_annual or ())],
+        "park_months": phased["park_months"],
+        "phase_months": phased["phase_months"],
+    }
+
+
+def phased_entry_timing(inherit_year: int = 2045) -> dict:
+    """The entry-timing comparison published on the black-swan page.
+
+    Every row is priced by the one canonical engine, at the same modelled
+    sale proceeds, with one Treasury assumption and one crash scenario. The
+    table has three parts:
+
+      * `rows` - the parking length the owner named (24, 30 and 36 months),
+        each with and without the stated crash-at-entry sequence, against an
+        immediate equity entry in the same market case;
+      * `yield_rows` - the same baseline parking length priced at the low,
+        baseline and high points of the official 3-month-to-2-year Treasury
+        curve, so the reader sees what the yield assumption is worth;
+      * `comparators` - the immediate-entry figures the differences are
+        measured against.
+
+    The crash sequence is CRASH_SCENARIO, a stated scenario, not a historical
+    return.
+    """
+    g = ASM["house_growth"]["baseline"]
+    infl = ASM["inflation"]["baseline"]
+    eq = ASM["equity_return_nominal_gross"]["baseline"]
+    drag = ASM["equity_tax_drag"]["baseline"]
+    horizon = ASM["horizon_years"]
+    sell_pct = ASM["selling_cost_pct"]["baseline"]
+    gain_rate = ASM["combined_gain_tax_rate"]["baseline"]
+    rec_rate = ASM["depreciation_recapture_rate"]["baseline"]
+    tsy = ASM["treasury_short_yield_nominal"]
+    parks = [ASM["phased_investing_park_months"][k] for k in ("low", "baseline", "high")]
+    phase_months = int(ASM["phased_equity_phase_months"]["value"])
+    crash = tuple(ASM["phased_crash_scenario"]["annual_returns"])
+
+    k = inherit_year - 2026
+    value_at_death = A["estimated_market_value_2026"] * (1 + g) ** k
+    sale = sale_proceeds(value_at_death, value_at_death, sell_pct, gain_rate, rec_rate, 0.0)
+    net = sale["net"]
+    total_months = horizon * 12
+
+    def immediate(crash_on: bool, rate: float) -> float:
+        eng = phased_engine(net, total_months, 0, 0, rate, eq - drag,
+                             crash if crash_on else None, lump=True)
+        return eng["terminal"]
+
+    def phased(park: int, crash_on: bool, rate: float) -> float:
+        eng = phased_engine(net, total_months, park, phase_months, rate, eq - drag,
+                             crash if crash_on else None)
+        return eng["terminal"]
+
+    rows = []
+    for park in parks:
+        for crash_on in (False, True):
+            amount = phased(park, crash_on, tsy["baseline"])
+            comparator = immediate(crash_on, tsy["baseline"])
+            amount10 = money10(amount)
+            comparator10 = money10(comparator)
+            rows.append({
+                "park_months": int(park),
+                "phase_months": phase_months,
+                "crash": crash_on,
+                "tsy": tsy["baseline"],
+                "terminal": amount10,
+                "immediate": comparator10,
+                # Difference of the published figures, so the column can be
+                # checked by hand against the two columns beside it.
+                "difference": amount10 - comparator10,
+            })
+
+    base_park = int(ASM["phased_investing_park_months"]["baseline"])
+    yield_rows = []
+    for label in ("low", "baseline", "high"):
+        rate = tsy[label]
+        for crash_on in (False, True):
+            amount = phased(base_park, crash_on, rate)
+            comparator = immediate(crash_on, rate)
+            amount10 = money10(amount)
+            comparator10 = money10(comparator)
+            yield_rows.append({
+                "label": label,
+                "tsy": rate,
+                "crash": crash_on,
+                "terminal": amount10,
+                "immediate": comparator10,
+                "difference": amount10 - comparator10,
+            })
+
+    comparators = {
+        "no_crash": money10(immediate(False, tsy["baseline"])),
+        "crash": money10(immediate(True, tsy["baseline"])),
+    }
+    return {
+        "inherit_year": inherit_year,
+        "net_proceeds": money10(net),
+        "horizon_years": horizon,
+        "park_months": parks,
         "phase_months": phase_months,
+        "tsy": tsy,
+        "crash_annual_returns": [round(r, 4) for r in crash],
+        "rows": rows,
+        "yield_rows": yield_rows,
+        "comparators": comparators,
     }
 
 
@@ -534,22 +696,9 @@ def sensitivity(target_year: int):
                 maint_live=A["annual_costs"]["maintenance_pct_owner_occupied"]["value"],
                 maint_rent=A["annual_costs"]["maintenance_pct_rental"]["value"],
                 rent_income=RENT_INCOME)
+            # res["paths"] already carries the canonical phased path, so this
+            # grid does not price a second, differently-assumed version of it.
             terms = {k: v["terminal"] for k, v in res["paths"].items()}
-            phased = run_phased_path(
-                inherit_year=target_year, g=g, infl=ASM["inflation"]["baseline"], eq=eq,
-                drag=ASM["equity_tax_drag"]["baseline"], tsy_short=TSY_SHORT,
-                horizon=ASM["horizon_years"],
-                sell_pct=ASM["selling_cost_pct"]["baseline"],
-                gain_rate=ASM["combined_gain_tax_rate"]["baseline"],
-                rec_rate=ASM["depreciation_recapture_rate"]["baseline"],
-                exclusion=V["section121_exclusion_single"]["value"],
-                fixed_growth=INFL, fit_a=FIT_A, cost_a_base=COST_A_BASE,
-                maint_live=A["annual_costs"]["maintenance_pct_owner_occupied"]["value"],
-                maint_rent=A["annual_costs"]["maintenance_pct_rental"]["value"],
-                rent_income=RENT_INCOME,
-                park_months=ASM["phased_park_months"]["value"],
-                phase_months=ASM["phased_equity_phase_months"]["value"])
-            terms["sell_phased"] = phased["terminal"]
             best = max(terms, key=terms.get)
             rows.append({"house_growth": pct(g, 1), "equity_return": pct(eq, 1),
                          **{k: v for k, v in terms.items()}, "best": best})
@@ -789,28 +938,17 @@ def run_regime(regime: dict, horizon: int):
         maint_live=A["annual_costs"]["maintenance_pct_owner_occupied"]["value"],
         maint_rent=A["annual_costs"]["maintenance_pct_rental"]["value"],
         rent_income=RENT_INCOME)
-    phased = run_phased_path(
-        inherit_year=2045, g=g, infl=infl, eq=ASM["equity_return_nominal_gross"]["baseline"],
-        drag=ASM["equity_tax_drag"]["baseline"], tsy_short=TSY_SHORT,
-        horizon=horizon, sell_pct=ASM["selling_cost_pct"]["baseline"],
-        gain_rate=ASM["combined_gain_tax_rate"]["baseline"],
-        rec_rate=ASM["depreciation_recapture_rate"]["baseline"],
-        exclusion=V["section121_exclusion_single"]["value"],
-        fixed_growth=ASM["fixed_charge_growth"]["baseline"], fit_a=FIT_A, cost_a_base=COST_A_BASE,
-        maint_live=A["annual_costs"]["maintenance_pct_owner_occupied"]["value"],
-        maint_rent=A["annual_costs"]["maintenance_pct_rental"]["value"],
-        rent_income=RENT_INCOME,
-        park_months=ASM["phased_park_months"]["value"],
-        phase_months=ASM["phased_equity_phase_months"]["value"])
+    # The phased path comes from res["paths"], which uses the canonical
+    # engine. No second, differently-assumed copy is computed here.
+    phased = res["paths"]["sell_then_phase"]
     cpi_mult = (1 + infl) ** horizon
     paths = {k: v["terminal"] for k, v in res["paths"].items()}
-    paths["sell_phased"] = phased["terminal"]
     return {
         "terminal": {k: v["terminal"] for k, v in res["paths"].items()},
         "terminal_real": {k: money10(v["terminal"] / cpi_mult) for k, v in res["paths"].items()},
         "outflow": {k: v.get("outflow", 0) for k, v in res["paths"].items()},
         "phased_terminal": phased["terminal"],
-        "phased_net_proceeds": phased["net_proceeds"],
+        "phased_net_proceeds": phased["start"],
         "value_at_death": res["value_at_death"],
         "bill_if_live_year1": res["bill_if_live_year1"],
         "bill_if_rent_year1": res["bill_if_rent_year1"],
@@ -976,7 +1114,7 @@ def main() -> dict:
             exclusion=V["section121_exclusion_single"]["value"],
             fixed_growth=ASM["fixed_charge_growth"]["baseline"], fit_a=FIT_A, cost_a_base=COST_A_BASE,
             maint_live=maint_live, maint_rent=maint_rent, rent_income=RENT_INCOME,
-            park_months=ASM["phased_park_months"]["value"],
+            park_months=ASM["phased_investing_park_months"]["baseline"],
             phase_months=ASM["phased_equity_phase_months"]["value"])
         phased["inherit_year"] = year
         out["phased"].append(phased)
@@ -986,11 +1124,12 @@ def main() -> dict:
             exclusion=V["section121_exclusion_single"]["value"],
             fixed_growth=ASM["fixed_charge_growth"]["baseline"], fit_a=FIT_A, cost_a_base=COST_A_BASE,
             maint_live=maint_live, maint_rent=maint_rent, rent_income=RENT_INCOME,
-            park_months=ASM["phased_park_months"]["value"],
+            park_months=ASM["phased_investing_park_months"]["baseline"],
             phase_months=ASM["phased_equity_phase_months"]["value"])
         crash["inherit_year"] = year
         out["crash_entry"].append(crash)
 
+    out["phased_timing"] = phased_entry_timing(2045)
     for regime in regime_stress():
         out["regimes"].append({**regime, "run": run_regime(regime, horizon)})
 
