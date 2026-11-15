@@ -489,4 +489,3 @@ code {
 @media (max-width: 640px) {
   .chart-rows, .chart-axis { grid-template-columns: 64px 1fr; }
 }
->>>>>>> origin/main
