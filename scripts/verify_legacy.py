@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 # adding an exclusion is an error instead of silently making it publicly accessible.
 EXCLUDED = (
     "analysis", "plan", "scripts", "assets/data", "assets/privacy.json", "assets/sources.json",
-    "COORDINATION.md", "EXECUTIVE_SUMMARY.md", "README.md",
+    "COORDINATION.md", "EXECUTIVE_SUMMARY.md", "README.md", "PRIVACY_REMEDIATION.md",
 )
 CONFIG = (
     "# Safety boundary for GitHub Pages when its source is the repository root.\n"
