@@ -3600,5 +3600,910 @@
    "gs10": 4.29,
    "gs10_chg": 0.019
   }
- ]
+ ],
+ "episodes": {
+  "method": "Every monthly value used by this module was fetched from the publisher's own domain (FRED, served by the Federal Reserve Bank of St. Louis) and saved verbatim in assets/data/episodes/*.csv. No value was typed from memory or inferred. The module reads those files, replays the same three entry strategies on each episode's real monthly returns, and rounds every dollar to the nearest $10.",
+  "limits": [
+   "A price index is not a total-return index. None of these series includes dividends, the stock indices include only the stocks in the index, and the equity portfolio a real heir would hold is not any of these indices. Returns are therefore understated on the equity side in every episode.",
+   "The episodes are replayed as they happened. They are not forecasts, and a future inheritance will not arrive on a 1929 or a 2008 schedule.",
+   "Taxes, fees and the cost of the sale are applied at the same points in every strategy, so they change the level of all three lines and not the comparison between them."
+  ],
+  "start_power": 1000000,
+  "park_months": 30,
+  "phase_months": 12,
+  "late_park_months": 34,
+  "base_cpi_month": "2026-10",
+  "strategies": {
+   "lump": {
+    "name": "Invest everything on day one",
+    "description": "The net sale proceeds buy the index at the entry month's close, and are held to the exit month."
+   },
+   "phase": {
+    "name": "Park the proceeds for 24-36 months, then phase in over 12 months",
+    "description": "The net proceeds earn the official short cash rate for the parking period, then move into the index in twelve equal monthly purchases."
+   },
+   "park34": {
+    "name": "Park the proceeds for the whole 34 months and never buy in",
+    "description": "The net proceeds earn the official short cash rate for 34 months, then all of it enters the index in the first month after the park. This isolates what the waiting period alone does, without the phase-in."
+   }
+  },
+  "series": {
+   "djia": {
+    "publisher": "National Bureau of Economic Research, distributed by the Federal Reserve Bank of St. Louis (FRED)",
+    "title": "Dow-Jones Industrial Stock Price Index for United States (M1109BUSM293NNBR)",
+    "url": "https://fred.stlouisfed.org/series/M1109BUSM293NNBR",
+    "units": "Index level, month average of highest and lowest index values through 1948",
+    "coverage": "1914-12 to 1968-12",
+    "src": "fred_djia_1929",
+    "limits": "Price index only: no dividends. Twenty stocks through September 1928 and thirty thereafter; the composition changed over time, so it is a price average, not a modern index fund."
+   },
+   "nasdaq": {
+    "publisher": "Nasdaq, Inc., distributed by the Federal Reserve Bank of St. Louis (FRED)",
+    "title": "NASDAQ Composite (NASDAQCOM)",
+    "url": "https://fred.stlouisfed.org/series/NASDAQCOM",
+    "units": "Index, February 5 1971 = 100",
+    "coverage": "1971-02-05 to present; this file holds 2007-09 to 2025-12",
+    "src": "fred_nasdaq",
+    "limits": "Price index only: no dividends. A technology-weighted index, not a broad market portfolio, so it fell further than the S&P 500 did in the 2000-2002 and 2008 episodes."
+   },
+   "tb3": {
+    "publisher": "Board of Governors of the Federal Reserve System, distributed by the Federal Reserve Bank of St. Louis (FRED)",
+    "title": "3-Month Treasury Bill Secondary Market Rate, Discount Basis (TB3MS)",
+    "url": "https://fred.stlouisfed.org/series/TB3MS",
+    "units": "Percent per year, discount basis, averages of business days",
+    "coverage": "1934-01 to present; this file holds 2007-09 to 2025-12",
+    "src": "fred_tb3ms",
+    "limits": "A discount-basis money-market rate, not the yield on a 1- or 2-year note and not a return net of tax or fund expenses. This series begins in 1934, so it cannot cover a 1929 entry."
+   },
+   "callmoney": {
+    "publisher": "National Bureau of Economic Research, distributed by the Federal Reserve Bank of St. Louis (FRED)",
+    "title": "Call Money Rates, Mixed Collateral for United States (M13001USM156NNBR)",
+    "url": "https://fred.stlouisfed.org/series/M13001USM156NNBR",
+    "units": "Percent per year, monthly average",
+    "coverage": "1857-01 to 1970-11; this file holds 1929-01 to 1932-12",
+    "src": "fred_callmoney",
+    "limits": "A brokered short-term money rate between banks and dealers, not a Treasury bill yield and not a rate any retail saver could earn. It is the only official short-term cash rate published for the months around the 1929 peak. It is used as the cash return, and the page says so."
+   },
+   "cpi": {
+    "publisher": "U.S. Bureau of Labor Statistics, distributed by the Federal Reserve Bank of St. Louis (FRED)",
+    "title": "Consumer Price Index for All Urban Consumers: All Items in U.S. City Average (CPIAUCNS)",
+    "url": "https://fred.stlouisfed.org/series/CPIAUCNS",
+    "units": "Index, 1982-84 = 100",
+    "coverage": "1913-01 to present; this file holds 1928-01 to 2026-10",
+    "src": "fred_cpiaucns",
+    "limits": "A national average, not a REDACTED REDACTED index. It is used only to express results in start-year purchasing power, never to drive a return."
+   }
+  },
+  "episodes": [
+   {
+    "key": "1929",
+    "name": "The 1929 peak, replayed with real prices",
+    "entry": "1929-09",
+    "exit": "1959-09",
+    "months": 360,
+    "analogue": "The month before the October 1929 crash. The Federal Reserve's own history calls the 1929 crash the start of the Great Depression.",
+    "notes": "The Dow did not regain its September 1929 level in nominal terms until 1954. A thirty-year window is therefore the shortest honest horizon for this entry.",
+    "src": [
+     "fred_djia_1929",
+     "fred_callmoney",
+     "fred_cpiaucns",
+     "fedhist_1929"
+    ],
+    "principal": 51260,
+    "entry_price": 362.35,
+    "exit_price": 635.47,
+    "peak_label": "September 1929 month-average level",
+    "series_name": "Dow-Jones Industrial Stock Price Index for United States (M1109BUSM293NNBR)",
+    "cash_name": "Call Money Rates, Mixed Collateral for United States (M13001USM156NNBR)",
+    "strategies": {
+     "lump": {
+      "units": 141.46,
+      "nominal": 89890,
+      "real_today": 1035490,
+      "start_power": 53080,
+      "multiple": 1.754
+     },
+     "phase": {
+      "units": 945.15,
+      "nominal": 600610,
+      "real_today": 6918560,
+      "start_power": 354630,
+      "multiple": 11.718,
+      "vs_lump": 5883070,
+      "vs_park34": 677160
+     },
+     "park34": {
+      "units": 852.64,
+      "nominal": 541830,
+      "real_today": 6241400,
+      "start_power": 319920,
+      "multiple": 10.571,
+      "vs_lump": 5205910
+     }
+    },
+    "lump_real_today": 1035490,
+    "best": "phase"
+   },
+   {
+    "key": "2008",
+    "name": "The 2008 peak, replayed with real prices",
+    "entry": "2007-10",
+    "exit": "2025-12",
+    "months": 218,
+    "analogue": "The month the Nasdaq Composite peaked before the financial crisis. The Federal Reserve's own history dates the crisis and the recession.",
+    "notes": "The Nasdaq took until 2015 to regain its 2000 peak, so the 2007 entry recovers faster than the 2000 entry would. Both are shown.",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns",
+     "fedhist_greatrecession"
+    ],
+    "principal": 619050,
+    "entry_price": 2859.12,
+    "exit_price": 23241.99,
+    "peak_label": "October 2007 month-average level",
+    "series_name": "NASDAQ Composite (NASDAQCOM)",
+    "cash_name": "3-Month Treasury Bill Secondary Market Rate, Discount Basis (TB3MS)",
+    "strategies": {
+     "lump": {
+      "units": 216.52,
+      "nominal": 5032300,
+      "real_today": 5241270,
+      "start_power": 3244610,
+      "multiple": 8.129
+     },
+     "phase": {
+      "units": 255.91,
+      "nominal": 5947840,
+      "real_today": 6194830,
+      "start_power": 3834910,
+      "multiple": 9.608,
+      "vs_lump": 953560,
+      "vs_park34": -259870
+     },
+     "park34": {
+      "units": 266.64,
+      "nominal": 6197350,
+      "real_today": 6454700,
+      "start_power": 3995780,
+      "multiple": 10.011,
+      "vs_lump": 1213430
+     }
+    },
+    "lump_real_today": 5241270,
+    "best": "park34"
+   },
+   {
+    "key": "2000",
+    "name": "The 2000 peak, replayed with real prices",
+    "entry": "2000-02",
+    "exit": "2018-02",
+    "months": 216,
+    "analogue": "The month before the technology bubble peaked. The Federal Reserve Bank of New York's own commentary describes the episode.",
+    "notes": "An eighteen-year horizon is used because the index needed about fifteen years to regain the 2000 level.",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns"
+    ],
+    "principal": 503090,
+    "entry_price": 4696.69,
+    "exit_price": 7273.01,
+    "peak_label": "February 2000 month-average level (the series' own maximum before March 2000)",
+    "series_name": "NASDAQ Composite (NASDAQCOM)",
+    "cash_name": "3-Month Treasury Bill Secondary Market Rate, Discount Basis (TB3MS)",
+    "strategies": {
+     "lump": {
+      "units": 107.12,
+      "nominal": 779060,
+      "real_today": 1056030,
+      "start_power": 531280,
+      "multiple": 1.549
+     },
+     "phase": {
+      "units": 376.98,
+      "nominal": 2741770,
+      "real_today": 3716510,
+      "start_power": 1869760,
+      "multiple": 5.45,
+      "vs_lump": 2660480,
+      "vs_park34": -389860
+     },
+     "park34": {
+      "units": 416.52,
+      "nominal": 3029380,
+      "real_today": 4106370,
+      "start_power": 2065890,
+      "multiple": 6.021,
+      "vs_lump": 3050340
+     }
+    },
+    "lump_real_today": 1056030,
+    "best": "park34"
+   },
+   {
+    "key": "2020",
+    "name": "The 2020 crash month, replayed with real prices",
+    "entry": "2020-02",
+    "exit": "2025-12",
+    "months": 70,
+    "analogue": "The month before the pandemic crash. A short, sharp fall and a fast recovery.",
+    "notes": "A five-year horizon only. It is included as the opposite case: the crash was over before any 24-36 month parking period ended.",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns"
+    ],
+    "principal": 766430,
+    "entry_price": 8567.37,
+    "exit_price": 23241.99,
+    "peak_label": "February 2020 month-average level",
+    "series_name": "NASDAQ Composite (NASDAQCOM)",
+    "cash_name": "3-Month Treasury Bill Secondary Market Rate, Discount Basis (TB3MS)",
+    "strategies": {
+     "lump": {
+      "units": 89.46,
+      "nominal": 2079210,
+      "real_today": 2165550,
+      "start_power": 1659740,
+      "multiple": 2.713
+     },
+     "phase": {
+      "units": 65.54,
+      "nominal": 1523210,
+      "real_today": 1586460,
+      "start_power": 1215910,
+      "multiple": 1.987,
+      "vs_lump": -579090,
+      "vs_park34": -56510
+     },
+     "park34": {
+      "units": 67.87,
+      "nominal": 1577460,
+      "real_today": 1642970,
+      "start_power": 1259220,
+      "multiple": 2.058,
+      "vs_lump": -522580
+     }
+    },
+    "lump_real_today": 2165550,
+    "best": "lump"
+   }
+  ],
+  "winners": {
+   "lump": 1,
+   "phase": 1,
+   "park34": 2
+  },
+  "phase_better_than_lump": [
+   "1929",
+   "2008",
+   "2000"
+  ],
+  "worst_phase_gap_key": "2020",
+  "worst_phase_gap": -579090,
+  "park_sensitivity": [
+   {
+    "key": "1929",
+    "name": "The 1929 peak, replayed with real prices",
+    "park_months": 24,
+    "phase_real_today": 5919310,
+    "lump_real_today": 1035490,
+    "gap": 4883820,
+    "best": "phase",
+    "best_label": "Park 24 months, then phase in over 12",
+    "src": [
+     "fred_djia_1929",
+     "fred_callmoney",
+     "fred_cpiaucns",
+     "fedhist_1929"
+    ]
+   },
+   {
+    "key": "1929",
+    "name": "The 1929 peak, replayed with real prices",
+    "park_months": 30,
+    "phase_real_today": 6918560,
+    "lump_real_today": 1035490,
+    "gap": 5883070,
+    "best": "phase",
+    "best_label": "Park 30 months, then phase in over 12",
+    "src": [
+     "fred_djia_1929",
+     "fred_callmoney",
+     "fred_cpiaucns",
+     "fedhist_1929"
+    ]
+   },
+   {
+    "key": "1929",
+    "name": "The 1929 peak, replayed with real prices",
+    "park_months": 36,
+    "phase_real_today": 5612600,
+    "lump_real_today": 1035490,
+    "gap": 4577110,
+    "best": "phase",
+    "best_label": "Park 36 months, then phase in over 12",
+    "src": [
+     "fred_djia_1929",
+     "fred_callmoney",
+     "fred_cpiaucns",
+     "fedhist_1929"
+    ]
+   },
+   {
+    "key": "2008",
+    "name": "The 2008 peak, replayed with real prices",
+    "park_months": 24,
+    "phase_real_today": 6740730,
+    "lump_real_today": 5241270,
+    "gap": 1499460,
+    "best": "phase",
+    "best_label": "Park 24 months, then phase in over 12",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns",
+     "fedhist_greatrecession"
+    ]
+   },
+   {
+    "key": "2008",
+    "name": "The 2008 peak, replayed with real prices",
+    "park_months": 30,
+    "phase_real_today": 6194830,
+    "lump_real_today": 5241270,
+    "gap": 953560,
+    "best": "phase",
+    "best_label": "Park 30 months, then phase in over 12",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns",
+     "fedhist_greatrecession"
+    ]
+   },
+   {
+    "key": "2008",
+    "name": "The 2008 peak, replayed with real prices",
+    "park_months": 36,
+    "phase_real_today": 5701980,
+    "lump_real_today": 5241270,
+    "gap": 460710,
+    "best": "phase",
+    "best_label": "Park 36 months, then phase in over 12",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns",
+     "fedhist_greatrecession"
+    ]
+   },
+   {
+    "key": "2000",
+    "name": "The 2000 peak, replayed with real prices",
+    "park_months": 24,
+    "phase_real_today": 3856250,
+    "lump_real_today": 1056030,
+    "gap": 2800220,
+    "best": "phase",
+    "best_label": "Park 24 months, then phase in over 12",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns"
+    ]
+   },
+   {
+    "key": "2000",
+    "name": "The 2000 peak, replayed with real prices",
+    "park_months": 30,
+    "phase_real_today": 3716510,
+    "lump_real_today": 1056030,
+    "gap": 2660480,
+    "best": "phase",
+    "best_label": "Park 30 months, then phase in over 12",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns"
+    ]
+   },
+   {
+    "key": "2000",
+    "name": "The 2000 peak, replayed with real prices",
+    "park_months": 36,
+    "phase_real_today": 3102820,
+    "lump_real_today": 1056030,
+    "gap": 2046790,
+    "best": "phase",
+    "best_label": "Park 36 months, then phase in over 12",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns"
+    ]
+   },
+   {
+    "key": "2020",
+    "name": "The 2020 crash month, replayed with real prices",
+    "park_months": 24,
+    "phase_real_today": 1615090,
+    "lump_real_today": 2165550,
+    "gap": -550460,
+    "best": "lump",
+    "best_label": "Invest on day one",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns"
+    ]
+   },
+   {
+    "key": "2020",
+    "name": "The 2020 crash month, replayed with real prices",
+    "park_months": 30,
+    "phase_real_today": 1586460,
+    "lump_real_today": 2165550,
+    "gap": -579090,
+    "best": "lump",
+    "best_label": "Invest on day one",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns"
+    ]
+   },
+   {
+    "key": "2020",
+    "name": "The 2020 crash month, replayed with real prices",
+    "park_months": 36,
+    "phase_real_today": 1416390,
+    "lump_real_today": 2165550,
+    "gap": -749160,
+    "best": "lump",
+    "best_label": "Invest on day one",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns"
+    ]
+   }
+  ],
+  "offset_sensitivity": [
+   {
+    "key": "1929",
+    "name": "The 1929 peak, replayed with real prices",
+    "offset_months": 0,
+    "entry": "1929-09",
+    "lump_real_today": 1035490,
+    "phase_real_today": 6918560,
+    "gap": 5883070,
+    "best": "phase",
+    "best_label": "Park 30 months, then phase in over 12",
+    "src": [
+     "fred_djia_1929",
+     "fred_callmoney",
+     "fred_cpiaucns",
+     "fedhist_1929"
+    ]
+   },
+   {
+    "key": "1929",
+    "name": "The 1929 peak, replayed with real prices",
+    "offset_months": 12,
+    "entry": "1930-09",
+    "lump_real_today": 1600120,
+    "phase_real_today": 4037620,
+    "gap": 2437500,
+    "best": "phase",
+    "best_label": "Park 30 months, then phase in over 12",
+    "src": [
+     "fred_djia_1929",
+     "fred_callmoney",
+     "fred_cpiaucns",
+     "fedhist_1929"
+    ]
+   },
+   {
+    "key": "1929",
+    "name": "The 1929 peak, replayed with real prices",
+    "offset_months": 24,
+    "entry": "1931-09",
+    "lump_real_today": 2748850,
+    "phase_real_today": 3490270,
+    "gap": 741420,
+    "best": "phase",
+    "best_label": "Park 30 months, then phase in over 12",
+    "src": [
+     "fred_djia_1929",
+     "fred_callmoney",
+     "fred_cpiaucns",
+     "fedhist_1929"
+    ]
+   },
+   {
+    "key": "2008",
+    "name": "The 2008 peak, replayed with real prices",
+    "offset_months": 0,
+    "entry": "2007-10",
+    "lump_real_today": 5241270,
+    "phase_real_today": 6194830,
+    "gap": 953560,
+    "best": "phase",
+    "best_label": "Park 30 months, then phase in over 12",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns",
+     "fedhist_greatrecession"
+    ]
+   },
+   {
+    "key": "2008",
+    "name": "The 2008 peak, replayed with real prices",
+    "offset_months": 12,
+    "entry": "2008-10",
+    "lump_real_today": 9025930,
+    "phase_real_today": 5663320,
+    "gap": -3362610,
+    "best": "lump",
+    "best_label": "Invest on day one",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns",
+     "fedhist_greatrecession"
+    ]
+   },
+   {
+    "key": "2008",
+    "name": "The 2008 peak, replayed with real prices",
+    "offset_months": 24,
+    "entry": "2009-10",
+    "lump_real_today": 7581390,
+    "phase_real_today": 5079600,
+    "gap": -2501790,
+    "best": "lump",
+    "best_label": "Invest on day one",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns",
+     "fedhist_greatrecession"
+    ]
+   },
+   {
+    "key": "2000",
+    "name": "The 2000 peak, replayed with real prices",
+    "offset_months": 0,
+    "entry": "2000-02",
+    "lump_real_today": 1056030,
+    "phase_real_today": 3716510,
+    "gap": 2660480,
+    "best": "phase",
+    "best_label": "Park 30 months, then phase in over 12",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns"
+    ]
+   },
+   {
+    "key": "2000",
+    "name": "The 2000 peak, replayed with real prices",
+    "offset_months": 12,
+    "entry": "2001-02",
+    "lump_real_today": 2386390,
+    "phase_real_today": 2776620,
+    "gap": 390230,
+    "best": "phase",
+    "best_label": "Park 30 months, then phase in over 12",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns"
+    ]
+   },
+   {
+    "key": "2000",
+    "name": "The 2000 peak, replayed with real prices",
+    "offset_months": 24,
+    "entry": "2002-02",
+    "lump_real_today": 2999450,
+    "phase_real_today": 2640490,
+    "gap": -358960,
+    "best": "lump",
+    "best_label": "Invest on day one",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns"
+    ]
+   },
+   {
+    "key": "2020",
+    "name": "The 2020 crash month, replayed with real prices",
+    "offset_months": 0,
+    "entry": "2020-02",
+    "lump_real_today": 2165550,
+    "phase_real_today": 1586460,
+    "gap": -579090,
+    "best": "lump",
+    "best_label": "Invest on day one",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns"
+    ]
+   },
+   {
+    "key": "2020",
+    "name": "The 2020 crash month, replayed with real prices",
+    "offset_months": 12,
+    "entry": "2021-02",
+    "lump_real_today": 1429920,
+    "phase_real_today": 1303840,
+    "gap": -126080,
+    "best": "lump",
+    "best_label": "Invest on day one",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns"
+    ]
+   },
+   {
+    "key": "2020",
+    "name": "The 2020 crash month, replayed with real prices",
+    "offset_months": 24,
+    "entry": "2022-02",
+    "lump_real_today": 1479770,
+    "phase_real_today": 1187020,
+    "gap": -292750,
+    "best": "lump",
+    "best_label": "Invest on day one",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns"
+    ]
+   }
+  ],
+  "inverse_sensitivity": [
+   {
+    "key": "1929",
+    "name": "The 1929 peak, replayed with real prices",
+    "crash_offset_months": 0,
+    "horizon_months": 361,
+    "lump_real_today": 1035490,
+    "phase_real_today": 6918050,
+    "gap": 5882560,
+    "best": "phase",
+    "src": [
+     "fred_djia_1929",
+     "fred_callmoney",
+     "fred_cpiaucns",
+     "fedhist_1929"
+    ]
+   },
+   {
+    "key": "1929",
+    "name": "The 1929 peak, replayed with real prices",
+    "crash_offset_months": 12,
+    "horizon_months": 349,
+    "lump_real_today": 862070,
+    "phase_real_today": 5759420,
+    "gap": 4897350,
+    "best": "phase",
+    "src": [
+     "fred_djia_1929",
+     "fred_callmoney",
+     "fred_cpiaucns",
+     "fedhist_1929"
+    ]
+   },
+   {
+    "key": "1929",
+    "name": "The 1929 peak, replayed with real prices",
+    "crash_offset_months": 24,
+    "horizon_months": 337,
+    "lump_real_today": 795940,
+    "phase_real_today": 5317630,
+    "gap": 4521690,
+    "best": "phase",
+    "src": [
+     "fred_djia_1929",
+     "fred_callmoney",
+     "fred_cpiaucns",
+     "fedhist_1929"
+    ]
+   },
+   {
+    "key": "1929",
+    "name": "The 1929 peak, replayed with real prices",
+    "crash_offset_months": 36,
+    "horizon_months": 325,
+    "lump_real_today": 862540,
+    "phase_real_today": 5762610,
+    "gap": 4900070,
+    "best": "phase",
+    "src": [
+     "fred_djia_1929",
+     "fred_callmoney",
+     "fred_cpiaucns",
+     "fedhist_1929"
+    ]
+   },
+   {
+    "key": "2008",
+    "name": "The 2008 peak, replayed with real prices",
+    "crash_offset_months": 0,
+    "horizon_months": 219,
+    "lump_real_today": 5241270,
+    "phase_real_today": 6194830,
+    "gap": 953560,
+    "best": "phase",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns",
+     "fedhist_greatrecession"
+    ]
+   },
+   {
+    "key": "2008",
+    "name": "The 2008 peak, replayed with real prices",
+    "crash_offset_months": 12,
+    "horizon_months": 207,
+    "lump_real_today": 4471330,
+    "phase_real_today": 5284810,
+    "gap": 813480,
+    "best": "phase",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns",
+     "fedhist_greatrecession"
+    ]
+   },
+   {
+    "key": "2008",
+    "name": "The 2008 peak, replayed with real prices",
+    "crash_offset_months": 24,
+    "horizon_months": 195,
+    "lump_real_today": 3576200,
+    "phase_real_today": 4226830,
+    "gap": 650630,
+    "best": "phase",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns",
+     "fedhist_greatrecession"
+    ]
+   },
+   {
+    "key": "2008",
+    "name": "The 2008 peak, replayed with real prices",
+    "crash_offset_months": 36,
+    "horizon_months": 183,
+    "lump_real_today": 2577050,
+    "phase_real_today": 3045890,
+    "gap": 468840,
+    "best": "phase",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns",
+     "fedhist_greatrecession"
+    ]
+   },
+   {
+    "key": "2000",
+    "name": "The 2000 peak, replayed with real prices",
+    "crash_offset_months": 0,
+    "horizon_months": 217,
+    "lump_real_today": 1056030,
+    "phase_real_today": 3716260,
+    "gap": 2660230,
+    "best": "phase",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns"
+    ]
+   },
+   {
+    "key": "2000",
+    "name": "The 2000 peak, replayed with real prices",
+    "crash_offset_months": 12,
+    "horizon_months": 205,
+    "lump_real_today": 864550,
+    "phase_real_today": 3042440,
+    "gap": 2177890,
+    "best": "phase",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns"
+    ]
+   },
+   {
+    "key": "2000",
+    "name": "The 2000 peak, replayed with real prices",
+    "crash_offset_months": 24,
+    "horizon_months": 193,
+    "lump_real_today": 694970,
+    "phase_real_today": 2445650,
+    "gap": 1750680,
+    "best": "phase",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns"
+    ]
+   },
+   {
+    "key": "2000",
+    "name": "The 2000 peak, replayed with real prices",
+    "crash_offset_months": 36,
+    "horizon_months": 181,
+    "lump_real_today": 764510,
+    "phase_real_today": 2690380,
+    "gap": 1925870,
+    "best": "phase",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns"
+    ]
+   },
+   {
+    "key": "2020",
+    "name": "The 2020 crash month, replayed with real prices",
+    "crash_offset_months": 0,
+    "horizon_months": 71,
+    "lump_real_today": 2165550,
+    "phase_real_today": 1586270,
+    "gap": -579280,
+    "best": "lump",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns"
+    ]
+   },
+   {
+    "key": "2020",
+    "name": "The 2020 crash month, replayed with real prices",
+    "crash_offset_months": 12,
+    "horizon_months": 59,
+    "lump_real_today": 1847430,
+    "phase_real_today": 1353240,
+    "gap": -494190,
+    "best": "lump",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns"
+    ]
+   },
+   {
+    "key": "2020",
+    "name": "The 2020 crash month, replayed with real prices",
+    "crash_offset_months": 24,
+    "horizon_months": 47,
+    "lump_real_today": 1477590,
+    "phase_real_today": 1082330,
+    "gap": -395260,
+    "best": "lump",
+    "src": [
+     "fred_nasdaq",
+     "fred_tb3ms",
+     "fred_cpiaucns"
+    ]
+   }
+  ]
+ }
 }

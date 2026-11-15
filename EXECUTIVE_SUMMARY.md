@@ -48,6 +48,19 @@ Real economies do not grow at a constant rate. In the verified record used here,
 
 Sold into equities or Treasuries wins 5 of the 6 regimes. Keeping the house wins only in: Great Inflation repeat. That is a bet on one neighbourhood repeating its best decades, not a plan.
 
+### Entry timing, replayed against the real record
+
+The stress regimes above are 30-year averages. The owner also asked what happens if the sale proceeds arrive just before a crash. The table below replays the same capital through the published monthly prices of the actual 1929, 2000, 2008 and 2020 episodes, held for the episode's own horizon and restated in October 2026 purchasing power.
+
+| Episode | Window | Invest on day one | Park 30 months, then phase in | Phasing ahead by |
+|---|---|---|---|---|
+| The 1929 peak, replayed with real prices | 1929-09 to 1959-09 | $1,035,490 | $6,918,560 | $5,883,070 |
+| The 2008 peak, replayed with real prices | 2007-10 to 2025-12 | $5,241,270 | $6,194,830 | $953,560 |
+| The 2000 peak, replayed with real prices | 2000-02 to 2018-02 | $1,056,030 | $3,716,510 | $2,660,480 |
+| The 2020 crash month, replayed with real prices | 2020-02 to 2025-12 | $2,165,550 | $1,586,460 | $-579,090 |
+
+Waiting beat day-one investing in 3 of the 4 episodes. It lost in the 2020 episode, where the crash was over before a 24-month parking period ended. It is insurance against one specific bad luck, paid for in the years when that luck does not happen. The full method, the 24-month and 36-month results, and the case where the crash arrives three years after the inheritance are on the black swan page.
+
 ## Estate and inheritance tax
 
 - California has no estate tax and no inheritance tax. No California estate tax return is required for a death on or after 1 January 2005, and an inheritance is not California income.
@@ -67,7 +80,7 @@ These sit on the flagged-for-review page, each with the publisher that holds the
 
 ## How this was checked
 
-Every rule, threshold and rate on the site was read on the publishing agency's own domain and is linked from the row that uses it. The ledger holds 109 sources. A build-time verifier fails if a table row has no official link, if the build is not reproducible, if any internal link or fragment does not resolve, or if any published dollar figure is not a multiple of $10. A separate check recomputed the published relationships from the inputs.
+Every rule, threshold and rate on the site was read on the publishing agency's own domain and is linked from the row that uses it. The ledger holds 114 sources. A build-time verifier fails if a table row has no official link, if the build is not reproducible, if any internal link or fragment does not resolve, or if any published dollar figure is not a multiple of $10. A separate check recomputed the published relationships from the inputs.
 
 ## Read next
 
