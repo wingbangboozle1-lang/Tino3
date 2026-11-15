@@ -349,6 +349,7 @@ question A-1</a> before relying on any number here. {slink('rtc63_2_eligibility'
 <li><strong>A regime like the one in the stress cases recurs.</strong> Keeping the home wins in {len(keep_regs)} of {len(regs)} stress regimes: {esc(keep_names)}. <a href="black-swan.html">Black swan conditions</a>.</li>
 <li><strong>The crash arrives before the sale proceeds are invested.</strong> Replaying the real 1929, 2000 and 2008 records, parking the proceeds for 24-36 months and phasing into equities beat investing on day one; in the 2020 record it lost. <a href="black-swan.html#real-replays">Real entry-timing replays</a>.</li>
 <li><strong>The heir genuinely wants to live in the house.</strong> The one-line recommendation is conditional on that. <a href="suggestions.html">Suggestions for review</a>.</li>
+<li><strong>The living path is credited with no imputed rent.</strong> Closing the gap takes about {m(p45['housing_value_needed'])} a year of housing value - roughly {m(money10(p45['housing_value_needed'] / 12))} a month. The stated cases run from zero upward on the <a href="what-if.html#imputed-0">what-if page</a>: living wins only at {m(MODEL['imputed_rent']['rows'][-1]['monthly'])} a month or more, and the input that would hold a real figure is empty.</li>
 </ol>""")
     cards = []
     for group, pages in NAV_GROUPS:
@@ -540,7 +541,9 @@ def page_decision() -> str:
              "to compare against what the heir would otherwise pay, or could otherwise earn, for somewhere to live. "
              "A negative return means the sale proceeds beat the alternative even if they lose that much a year. "
              "\"Not reachable\" means the letting path has a negative terminal value even with zero rent, so no return on "
-             "the sale proceeds can match it.")
+             "the sale proceeds can match it. The living path is currently credited with no imputed rent at all: "
+             "the stated-level cases for that comparison are lever 3 on the "
+             "<a href=\"what-if.html#imputed-0\">what-if page</a>.")
 
     sens_rows = []
     for s in MODEL["sensitivity"]:
@@ -845,6 +848,7 @@ NEM 2.0 or on the net billing tariff is on the <a href="questions.html">question
 
 # --------------------------------------------------------------- property B --
 def page_property_b() -> str:
+    ph = MODEL["prop_h"]
     roll_rows = []
     for r in MODEL["roll_b"]:
         roll_rows.append(
@@ -869,6 +873,12 @@ def page_property_b() -> str:
         f'<td><span class="badge assumption">assumption</span></td>' + src_cell([], "No official source"),
         f"<td>Property tax, today</td><td>&mdash;</td><td>{m(MODEL['costs_b_now']['property_tax'])}</td>"
         f'<td><span class="badge derived">derived</span></td>' + src_cell([], "Local rate withheld for privacy"),
+        f"<td>Parcel tax approved November 2026, first due fiscal year {esc(ph['first_fiscal_year'])}</td>"
+        f"<td>{m(ph['base'])} a year for a multifamily parcel up to 5,000 sq ft; more if the building area "
+        f"is larger ({ph['rate_over_5000_sqft']} a sq ft over 5,000, capped at {m(ph['max_tax'])})</td>"
+        f"<td>not added to any total: the band is not determined</td>"
+        f'<td><span class="badge unverified">band not determined</span></td>'
+        + src_cell([], "Official city documents withheld for privacy"),
     ]
     inc = MODEL["costs_b_now"]
     net = inc["rent"] - sum(inc[k] for k in ("water", "electricity", "insurance", "maintenance", "property_tax"))
@@ -903,6 +913,68 @@ def page_property_b() -> str:
             + src_cell(["civ1947_12"], "Statewide rule"),
         ])
 
+    ph_terms = table(
+        "Parcel tax approved in Property B's city, November 2026 (Proposition H): official terms",
+        ["Term", "What the measure says", "Source"],
+        [
+            f"<td>Status</td><td>Approved at the election held on 3 November 2026. The local returns were "
+            f"still preliminary when these terms were read on 15 November 2026 (about 900 ballots left to "
+            f"count); the department of elections may take up to 30 days to certify the result.</td>"
+            + src_cell([], "Official city documents withheld for privacy"),
+            "<td>What it is</td><td>An annual parcel tax on real property in Property B's city, funding "
+            "public transit operations, for fifteen years.</td>"
+            + src_cell([], "Official city documents withheld for privacy"),
+            f"<td>First levy and expiry</td><td>First due for fiscal year {esc(ph['first_fiscal_year'])} on "
+            f"the property tax bill mailed in the fall of 2027, paid in the same two installments as the "
+            f"ordinary property tax. It expires on 30 June 2042 by its own terms.</td>"
+            + src_cell([], "Official city documents withheld for privacy"),
+            f"<td>Rate on a multifamily residential parcel</td><td>Building area up to 5,000 sq ft: "
+            f"{m(ph['base'])} a year for the first fiscal year. Above 5,000 sq ft: {m(ph['base'])} plus "
+            f"{ph['rate_over_5000_sqft']} a square foot, capped at {m(ph['max_tax'])} a parcel.</td>"
+            + src_cell([], "Official city documents withheld for privacy"),
+            "<td>Inflation adjustment</td><td>All dollar amounts adjust each year, first on 31 December "
+            "2027, by the change in the local all-items consumer price index published by the federal "
+            "statistics agency; per-square-foot amounts round down to the nearest tenth of a cent and other "
+            "amounts down to the nearest dollar.</td>"
+            + src_cell([], "Official city documents withheld for privacy"),
+            f"<td>Tenant pass-through</td><td>On a rent-controlled unit the landlord may pass through up to "
+            f"50% of the tax, capped at {m(ph['pass_through_unit_cap'])} a unit a year, and not at all if "
+            f"the base rent was set on or after 1 June {esc(ph['pass_through_cutoff'][:4])}. On the two let "
+            f"units that is at most {m(ph['pass_through_max_total'])} a year, if the units qualify.</td>"
+            + src_cell([], "Official city documents withheld for privacy"),
+            f"<td>Senior owner-occupant reduction</td><td>An owner aged 65 or older before 1 July of the "
+            f"fiscal year who occupies a unit as a principal residence gets {m(ph['senior_reduction_per_occupied_unit'])} "
+            f"off for each such unit, by application; the tax cannot go below zero.</td>"
+            + src_cell([], "Official city documents withheld for privacy"),
+            "<td>Which band applies here</td><td>Not determined. The tax depends on the parcel's building "
+            "area, which was not supplied.</td>"
+            + src_cell([], "Logged on the register"),
+        ],
+        note="The publisher of these terms is a city body. It is not named or linked on the public site, "
+             "because the jurisdiction identifies the properties; the terms were read on the publisher's own "
+             "domain on 15 November 2026 and are logged on the review register.")
+
+    ph_rows = []
+    for r in ph["rows"]:
+        ph_rows.append(f"<td>{esc(r['fy'])}</td>"
+                       f"<td>{m(r['low'])}</td><td>{m(r['baseline'])}</td><td>{m(r['high'])}</td>"
+                       + src_cell([], "Official city documents withheld for privacy"))
+    ph_rows.append(
+        f"<td><strong>Total to expiry, fifteen years</strong></td>"
+        f"<td>{m(ph['totals_to_expiry']['low'])}</td>"
+        f"<td>{m(ph['totals_to_expiry']['baseline'])}</td>"
+        f"<td>{m(ph['totals_to_expiry']['high'])}</td>"
+        + method_cell("#method", "Model output"))
+    ph_schedule = table(
+        "Property B parcel tax by fiscal year, at the modelled inflation band",
+        ["Fiscal year", "At 1.8% inflation", "At 2.5% inflation", "At 3.0% inflation", "Source"],
+        ph_rows,
+        note="The first row is the official amount for the first fiscal year, published verbatim; every "
+             "later row is that amount adjusted by the measure's own inflation rule at one of the three "
+             "inflation rates this site uses. The band that applies to the parcel is not determined, so no "
+             "figure in this table is added to the running-cost totals anywhere on this site. Nothing here "
+             "touches Property A, which sits in a different jurisdiction.")
+
     return (
         table("Property B at a glance",
               ["Fact", "Value", "Source"],
@@ -927,6 +999,8 @@ def page_property_b() -> str:
         + roll
         + costs
         + rules
+        + ph_terms
+        + ph_schedule
         + callout("why", "Why Property B shapes the Property A decision", """
 <p>Three things follow from the heir already owning this building.</p>
 <ol>
@@ -1016,7 +1090,11 @@ def page_costs() -> str:
                    "Maintenance", "Property tax", "Total"], rows_for("A"))
     tbl_b = table("Property B running costs, projected at the modelled inflation rate",
                   ["Year", "Water", "Electricity", "Insurance", "Maintenance",
-                   "Property tax", "Total"], rows_for("B"))
+                   "Property tax", "Total"], rows_for("B"),
+                  note="Not included in this table: the parcel tax approved in Property B's city at the "
+                       "November 2026 election, first levied for fiscal year 2027-2028 and expiring 30 June "
+                       "2042. Its band depends on the parcel's building area, which was not supplied, so it "
+                       "is published as a schedule on the Property B page and is not added to these totals.")
 
     net = MODEL["costs_b_now"]
     net_now = net["rent"] - sum(net[k] for k in ("water", "electricity", "insurance",
@@ -1452,6 +1530,14 @@ def page_laws() -> str:
          "SB 974, chaptered 27 September 2026, amends Revenue and Taxation Code section 63.2 so that a court-established special needs trust counts as an eligible medium of transfer.",
          "Relevant only if a transferee is a person with a disability. It does not change the value cap or the one-year occupation rule.",
          ["sb974"]),
+        ("A city parcel tax approved in November 2026 (Property B's city)",
+         "Voters approved a fifteen-year parcel tax funding public transit operations. First levy fiscal year 2027-2028 on the fall 2027 bill; expires 30 June 2042; dollar amounts adjust each 31 December from 2027 by the local all-items consumer price index. A multifamily parcel up to 5,000 sq ft pays $249 in the first year; above that $249 plus $0.195 a sq ft, capped at $50,000. Rent-controlled tenants can be charged up to 50% of the tax, capped at $65 a unit a year, where the base rent was set before 1 June 2027. Senior owner-occupants get $249 off per occupied unit, by application. Official terms read on 15 November 2026; local returns were still preliminary.",
+         "Adds a fixed charge to Property B of about $4,460 in total across the fifteen years at the modelled inflation rate, less any tenant pass-through of up to $130 a year on the two let units if they qualify. No figure from it is added to any total on this site until the parcel's building area fixes the band. It matters to the household budget only through mid-2042: still live for the first two years after a 2040 inheritance, already expired for the 2045 and 2050 cases, and never touching Property A.",
+         []),
+        ("A regional sales tax approved at the same election",
+         "A fourteen-year half-cent sales tax in four of the five counties covered by the measure and a full cent in Property B's city, passed at the same election on the returns of 3 November 2026.",
+         "Sales tax is consumption tax. It is not an input to any figure on this site, but it raises the cost of living in both jurisdictions and should be in the household budget.",
+         []),
     ]
     pending = [
         ("A city measure capping banked and capital-improvement rent increases",
@@ -1481,7 +1567,8 @@ included because Proposition 3 directly changes the tax on a property sale. Conf
 results before relying on any of them.</p>""")
         + table("Enacted or changed", ["Change", "What it does", "Why it matters here", "Source"],
                 [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td>"
-                 + src_cell(d, "Official source") for a, b, c, d in enacted])
+                 + src_cell(d, "Official source" if d else "Official city documents withheld for privacy")
+                 for a, b, c, d in enacted])
         + table("Proposed, not enacted", ["Measure", "What it would do", "Why it matters here", "Status", "Source"],
                 [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td>"
                  f'<td><span class="badge unverified">{esc(d)}</span></td>'
@@ -2555,6 +2642,20 @@ def page_review() -> str:
         ("City transfer tax reduction proposal", "Not used in any figure",
          "Reported publicly but not verified against an official city source on the public site",
          "Check the city's Board of Supervisors file before relying on it."),
+        ("Imputed rent on the living paths", "Not supplied; the input is empty",
+         "No market rent or rent opinion for Property A has been supplied, so the living paths are credited "
+         "with no imputed rent, which is the conservative direction for the sell recommendation. The "
+         "stated-level cases on the what-if page are scenarios, not estimates.",
+         "Obtain comparables or a documented rent opinion, enter it in the named input, and rebuild."),
+        ("Parcel tax on Property B approved November 2026",
+         "$249 a year for a multifamily parcel up to 5,000 sq ft, first fiscal year; the band for this parcel "
+         "is not determined",
+         "The official terms were read from the city's own measure text and the transit agency's own "
+         "parcel-tax page on 15 November 2026. The publisher is not named or linked on the public site, "
+         "because the jurisdiction identifies the properties. The parcel's building area was not supplied, "
+         "so no figure from the measure is added to any total on this site.",
+         "Read the building area from the assessor's records or the official parcel lookup when it opens on "
+         "1 December 2026, then price the correct band."),
     ]
     # Each row points only at the official source that actually bears on it. A row with no
     # matching official source says so, and links to the register, rather than borrowing a
@@ -2574,6 +2675,8 @@ def page_review() -> str:
         "Property B rent": [],
         "The inherited cash amount": [],
         "City transfer tax reduction proposal": [],
+        "Imputed rent on the living paths": [],
+        "Parcel tax on Property B approved November 2026": [],
     }
     assert set(UV_WHERE) == {a for a, _, _, _ in unverified}, "every unverified row needs a source decision"
     uv_rows = [f"<td><strong>{esc(a)}</strong></td><td>{b}</td>"
@@ -2596,7 +2699,10 @@ def page_review() -> str:
          f"The housing-value row prices the difference instead: on the 2045 baseline it is about "
          f"{m(next(p for p in MODEL['paths'] if p['inherit_year'] == 2045)['housing_value_needed'])} a year, a level "
          f"nominal amount. An earlier edition printed a figure about six times larger, because it used the "
-         f"present-value form of the annuity on a future-value gap; that is corrected."),
+         f"present-value form of the annuity on a future-value gap; that is corrected. The what-if page now "
+         f"carries stated-level imputed-rent cases for the living path as lever 3: those levels are scenarios, "
+         f"the imputed-rent input itself is empty, and the published baseline therefore credits nothing and "
+         f"does not move."),
         ("Depreciation follows a simple rule",
          "80% of value treated as improvements, straight line over 27.5 years, capped at the building's depreciable amount. Land is not depreciated. Real cost segregation would differ."),
         ("No mortgage, no 1031 exchange, no instalment sale, no gifting",
@@ -2989,6 +3095,33 @@ def page_what_if() -> str:
         [f"<td>{a}</td><td>{b}</td>" + method_cell("#method", "Model output") for a, b in be_rows],
         note="A negative return means selling still matches living even if the sale proceeds lose that much a year.")
 
+    # ---------------------------------------------------------------- imputed rent --
+    imr = MODEL["imputed_rent"]
+    im_rows = []
+    for r in imr["rows"]:
+        im_rows.append(
+            f"<td><a id='imputed-{r['monthly']}'></a>{m(r['monthly'])}</td>"
+            f"<td>{m(r['annual'])}</td>"
+            f"<td>{m(r['uplift'])}</td>"
+            f"<td>{m(r['live_terminal'])}</td>"
+            f"<td>{m(r['sell_terminal'])}</td>"
+            + ret_cell(r["return_required"])
+            + f"<td><strong>{esc(PATH_LABELS[r['best']])}</strong></td>"
+            + method_cell("#method", "Model output"))
+    im_table = table(
+        "Lever 3: imputed rent credited to the living path (2045 inheritance)",
+        ["Imputed rent a month (stated)", "A year", "Added to the living path",
+         "Living path terminal", "Sell and invest terminal",
+         "Return the proceeds must earn to match living", "Winner", "Basis"],
+        im_rows,
+        note="The levels are stated scenarios, not estimates: no market rent or rent opinion for Property A "
+             "has been supplied, so the real input in the data file is empty and the published baseline is "
+             "the zero row. Each level is credited to the living path over the whole thirty years, grown at "
+             "the modelled inflation rate and accumulated at the after-tax equity return, the same "
+             "convention as the letting path's rent, and it is not taxable income because it is never "
+             "received as cash. The gap only closes near the housing value the decision page reports as "
+             "needed; below that, selling still wins.")
+
     jump = ("<ul class='card-list'>"
             "<li><a href='#house-2.5'>House growth at 2.5%</a></li>"
             "<li><a href='#house-5.5'>House growth at 5.5%</a></li>"
@@ -3000,6 +3133,9 @@ def page_what_if() -> str:
             "<li><a href='#year-2050'>Inherit in 2050</a></li>"
             "<li><a href='#threshold-growth'>House growth needed</a></li>"
             "<li><a href='#threshold-rent'>Rent needed</a></li>"
+            f"<li><a href='#imputed-{imr['rows'][0]['monthly']}'>Imputed rent at zero (the baseline)</a></li>"
+            f"<li><a href='#imputed-{imr['rows'][-1]['monthly']}'>Imputed rent at "
+            f"{m(imr['rows'][-1]['monthly'])} a month</a></li>"
             "</ul>")
     return (
         callout("method", "How to use this page", f"""
@@ -3007,10 +3143,12 @@ def page_what_if() -> str:
 or read the tables in order. Change one lever at a time, and the other stays at the baseline. Every figure is rounded
 to the nearest $10 and comes from the same model that builds the rest of the site.</p>
 {jump}""")
-        + lever1 + lever2 + reg_table + yr_table + be_table
+        + lever1 + lever2 + im_table + reg_table + yr_table + be_table
         + callout("flag", "What the cases do not show", """
 <p>No case here credits the letting paths with a market rent, because none has been supplied. Read every letting row as
-the path at zero rent, which is a floor. The model also does not change the Proposition 19 eligibility question; if
+the path at zero rent, which is a floor. Lever 3 credits the <em>living</em> path instead, at stated levels that are
+scenarios rather than estimates; the input that would hold a real imputed rent is empty, so the published baseline
+stays the zero row. The model also does not change the Proposition 19 eligibility question; if
 that answer is no, the reassessment is full and every case here moves toward selling.</p>""")
     )
 
