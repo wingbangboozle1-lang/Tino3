@@ -417,7 +417,7 @@
    "baseline": 0.042,
    "low": 0.035,
    "high": 0.05,
-   "basis": "Short Treasury bills and notes (3 month to 2 year) anchor near the policy rate rather than the 10-year term yield. Baseline is a stated scenario, not an official forward rate; the band brackets the 2025-2026 short-end range. No official agency publishes a forward short-Treasury yield for 2040-2050.",
+   "basis": "Short Treasury bills and notes (3 month to 2 year) anchor near the policy rate rather than the 10-year term yield. Baseline is a stated scenario, not an official forward rate; the band brackets the 2025-2026 short-end range. No official agency publishes a forward short-Treasury yield for 2040-2050. This is the single parking yield used by every phased-investing figure on the site: the dashboard path, the regime and sensitivity runs, and the black-swan entry-timing stress table all call the one monthly engine with this key.",
    "src": []
   },
   "prop19_cap_growth": {
@@ -428,20 +428,6 @@
    "src": [
     "boe_lta25009"
    ]
-  },
-  "short_term_treasury_yield": {
-   "baseline": 0.04,
-   "low": 0.03,
-   "high": 0.05,
-   "basis": "Stated scenario for parking sale proceeds in 3-month to 2-year Treasury bills during the 24-36 month phased-investing period. No official source publishes forward short-term rates for the 2040s, so this is a stated assumption and not an official figure. The verified 10-year Treasury series anchors the long-rate pages; this row is used only by the phased-investing path on the black-swan page.",
-   "src": []
-  },
-  "phased_investing_park_months": {
-   "baseline": 30,
-   "low": 24,
-   "high": 36,
-   "basis": "Owner instruction: park sale proceeds in 3-month to 2-year Treasuries for 24-36 months after inheritance, then phase into stocks.",
-   "verified": false
   },
   "selling_cost_pct": {
    "baseline": 0.055,
