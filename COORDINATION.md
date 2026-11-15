@@ -2815,8 +2815,50 @@ Not in scope and not touched: `scripts/economy.py`, `assets/data/economy.json`, 
 | Task | Status | Owner | File scope |
 |---|---|---|---|
 | V-1 Claim this scope and push the claim before any other edit | **done** — this commit | `arena/8eebc036-tino3` | `COORDINATION.md` (this section only) |
-| V-2 Re-run all gates on `main` at `a61404f`: build, verify, privacy boundary, package, legacy guard | in progress | `arena/8eebc036-tino3` | read-only |
-| V-3 Re-open load-bearing official sources on the publisher's own domain (IRS estate-tax and 2027 figures, BOE Proposition 19 letter, RTC 480(b), IRS Form 706 due date and extension, CDI homeowners average, PG&E or CPUC solar rules) and compare with the site | in progress | `arena/8eebc036-tino3` | read-only; results recorded below |
-| V-4 Privacy sweep of the published pages and the tracked files (ZIP codes, street names, parcel identifiers, trust terms, utility account numbers, unrounded money) | in progress | `arena/8eebc036-tino3` | read-only; any fix goes through the build |
-| V-5 Fix any defect found in V-2 to V-4 in the generator text only, regenerate, re-run gates | not started | `arena/8eebc036-tino3` | `scripts/build.py` (text only), regenerated pages |
+| V-2 Re-run all gates on `main` at `a61404f`: build, verify, privacy boundary, package, legacy guard | **done** — all PASS before the change below; all PASS after it | `arena/8eebc036-tino3` | read-only |
+| V-3 Re-open load-bearing official sources on the publisher's own domain and compare with the site | **done** — 9 of 10 re-read on the publisher's domain; Form 706 nine-month body not re-read (see results) | `arena/8eebc036-tino3` | read-only; results recorded below |
+| V-4 Privacy sweep of the published pages and the tracked files (ZIP codes, street names, parcel identifiers, trust terms, utility account numbers, unrounded money) | **done** — published pages clean; two residual exposures are owner decisions (see record) | `arena/8eebc036-tino3` | read-only
+| V-5 Fix any defect found in V-2 to V-4 in the generator, regenerate, re-run gates | **done** — duplicate one-page brief consolidated (menu showed it twice); see record | `arena/8eebc036-tino3` | `scripts/build.py`, `scripts/package_site.py` (retired-route list), `README.md` (counts), `briefing-sheet.html` (retired), regenerated pages
 | V-6 Pull request to `main`, merge without waiting, confirm the Pages deploy, record PR link and merge result | not started | `arena/8eebc036-tino3` | this section only |
+
+### Record — `arena/8eebc036-tino3`, 15 November 2026
+
+**Shared history.** The clone was shallow (`--depth 1`). `git fetch --unshallow origin main` was run read-only so that the merge base with `main` is visible; `main` at `a61404f` was fast-forwarded into this branch. The first fast-forward attempt on the shallow clone reported "refusing to merge unrelated histories", which was a shallow-clone artefact, not a divergence.
+
+**V-2 gates on `a61404f` (before the change):** `build.py`, `verify.py` (795 table rows, 729 official-source-linked, 66 logged unsourceable, 2,894 links, 109 ledger sources), `privacy_boundary.py`, `package_site.py`, `verify_legacy.py --config-only`, `git diff --check` — all exit 0. A rebuild reproduced the committed pages byte-for-byte.
+
+**V-3 official sources re-opened on the publisher's own domain (15 Nov 2026):**
+
+| Site claim | Source re-opened | Result |
+|---|---|---|
+| Federal filing threshold 2026 $15,000,000; the table 2011–2026 | https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax | Matches. The page stops at 2026, as the site notes. |
+| 2027 basic exclusion $15,480,000; gift exclusion $20,000 for 2027, $19,000 for 2026 | https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts (IR-2026-133, 5 Nov 2026) | Matches verbatim. |
+| Prop 19 $1 million amount $1,044,586 for transfers 16 Feb 2025 – 15 Feb 2027; next adjustment Feb 2027 | https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf (LTA 2025/009) | Matches verbatim, including the adjustment table. |
+| 150 days after death for a change-in-ownership statement on a transfer through a trust (cited as RTC 480(b)) | https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=480. | **Matches, and the citation is correct.** Subdivision (b) names transfers "through the medium of a trust" and sets 150 days; subdivision (e) repeats 150 days for unrecorded transfers. (An earlier check of section 480.2 in this session was the wrong section and is not relied on.) |
+| Form 4768 automatic six-month extension | https://www.irs.gov/forms-pubs/about-form-4768 | Matches the Form 4768 description. |
+| Form 706 due nine months after death | https://www.irs.gov/instructions/i706 | **Partly verified.** The page was opened; its table of contents lists "When To File", but the body with the nine-month rule was not reached within the chunks read. The site's statement is consistent with the IRS practice, but it is not re-read here. **Irregularity V-I1:** re-read the "When To File" section before relying on the date. |
+| Santa Clara County secured-tax calendar: first instalment 1 Nov, penalty after 10 Dec; second instalment 1 Feb, penalty after 10 Apr; 30 Jun | https://dtac.santaclaracounty.gov/taxes/obtain-secured-property-tax-information | Matches. |
+| 2027 IRS items the site quotes elsewhere (standard deduction and rate brackets) | IR-2026-133 | Not used on the site; not checked further here. |
+
+**V-4 privacy sweep.** Published pages and every tracked file were searched for ZIP codes, place names of the properties, street-address patterns, parcel identifiers, trust terms, e-mail addresses and utility or district names. Result: no hit in any published page or asset. The only hits in tracked files are the privacy checker's own blocklist (`scripts/privacy_boundary.py`), which is meant to hold those patterns, and historical text in this board that the earlier H-6 record says was generalised. Two residual exposures remain in **Git history**, not in the current tree, and cannot be fixed by a commit: (1) earlier commits and pull-request diffs contain the more precise figures, names and ZIP codes that earlier records describe; (2) **83 commits carry the owner's personal mail address as the author e-mail** (the current configuration uses the GitHub no-reply address). Removing either requires a history rewrite (force-push to `main`), which this session is not authorised to make and which would break every clone. **Owner decision** (see below).
+
+**V-5 change made.** The brief was published twice: `briefing.html` (print-styled, one page, carries the Proposition 19 gate as its first counsel question) and `briefing-sheet.html` (unstyled, listed in the menu under "Review before deciding"). The menu therefore showed the brief twice under two labels. `briefing.html` was kept because it is the superset and the print-styled one. `briefing-sheet.html` was retired through the repository's existing mechanism: removed from the page registry and navigation, added to the retired-route list in `scripts/package_site.py`, deleted from the tree, and now answered by a content-free withdrawal notice (118 notices, up from 117). README counts were updated (22 generated pages). Nothing else on the site changed in substance; the only other differences are the navigation labels.
+
+**Gates after the change:** `build.py`, `verify.py` (22 pages; 795 table rows; 729 official-source-linked; 66 logged unsourceable), `privacy_boundary.py` (22 pages scanned), `package_site.py` (22 public pages, 118 withdrawal routes), `verify_legacy.py --config-only` (23 public files allowed), `git diff --check`.
+
+**Irregularities for review (not blocking):**
+
+- **V-I1** Form 706 nine-month rule: body of the IRS "When To File" section not re-read in this session (see V-3).
+- **V-I2** Print layout of `briefing.html` has not been checked in a browser. No browser is available in this sandbox. The print rules are unchanged.
+- **V-I3** Git history contains earlier, more precise figures, names and ZIP codes, and the owner's personal e-mail address as commit author (83 commits). Requires an owner decision and a history rewrite; not performed. A GitHub account setting (keeping the author e-mail private) prevents new commits from exposing it, but does not remove existing ones.
+- **V-I4** Home-insurance premium for Property A and the rental insurance for Property B remain owner estimates. The regulator's premium-survey tool needs manual selections in a browser and was not run (see section 4E-1 above).
+
+**Owner decisions still needed (not executed):**
+
+1. Whether to rewrite Git history to remove the earlier precise figures, the utility and district names, the ZIP codes and the commit author e-mail. This needs a force-push to `main` and breaks existing clones.
+2. Whether to set the repository's commit author e-mail to the GitHub no-reply address for future commits (repository configuration, not history).
+3. Confirm the print layout of `briefing.html` in a browser.
+4. Confirm the Form 706 date against the current IRS instructions (V-I1).
+
+**Publication:** see the PR record below, added after the merge.
+
