@@ -117,6 +117,8 @@ These sit on the flagged-for-review page, each with the publisher that holds the
 - A market rent for Property A, and the seller's actual selling costs.
 - Whether the trust actually holds title, and whether the transfer is between a parent and a child.
 
+**Two opened in this pass, both worked and both published.** The living path is credited with no housing at all, so it is charged every cost of owning and credited with the value of nothing; credited at the market rent it would otherwise cost, living and selling come level at about 100% of that rent. And the fixed charges inside Property B's tax bill are 44.7% of the bill and grew 8.12% a year over its roll, against a 2.5% assumption, so the 2% cap cannot bound that bill the way the tables imply.
+
 ## How this was checked
 
 Every rule, threshold and rate on the site was read on the publishing agency's own domain and is linked from the row that uses it. The ledger holds 104 sources. A build-time verifier fails if a table row has no official link, if the build is not reproducible, if any internal link or fragment does not resolve, or if any published dollar figure is not a multiple of $10. A separate check recomputed the published relationships from the inputs.

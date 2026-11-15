@@ -1,14 +1,36 @@
 # Property inheritance decision dashboard
 
-A privacy-conscious, source-linked planning dashboard for two California properties: **Property A**, a home expected to pass through a trust around 2040–2050, and **Property B**, a three-unit rental building already owned by the heir. The analysis distinguishes the inherited property from the existing property and compares living in Property A, renting it, or selling and reinvesting.
+A privacy-conscious, source-linked planning dashboard for two California properties:
+**Property A** is the home expected to pass through a trust around 2040–2050; **Property B** is a
+three-unit rental building already owned by the heir. The analysis keeps their ownership and tax
+positions separate while comparing living in, renting, and selling Property A, including mixed paths
+and reinvestment choices.
 
 **Live site:** <https://wingbangboozle1-lang.github.io/Tino3/>
 
-> **Privacy warning:** The public pages use placeholders and omit names, street addresses, ZIP codes, parcel identifiers, county and city names, trust particulars and account information. The county and city of each property are deliberately withheld: like the parcel, they identify the properties, and official county and city pages are not linked from the public site. Owner-supplied dollar figures are rounded to the nearest $10. Rounding is not anonymization: someone with prior knowledge or public records may still recognize a property. Earlier Git history and pull-request diffs in this public repository may contain more precise figures and jurisdiction names; the current site cannot erase or secure those copies. Do not add identifying information or treat this repository as private.
+> **Privacy warning.** The public site uses placeholders and omits names, street addresses, parcel
+> identifiers, ZIP codes, county and city names, trust details, beneficiary details and account
+> information. Owner-supplied dollar inputs shown on the site are rounded to the nearest $10, but
+> rounding is not anonymization: public records or prior knowledge may identify a property. The
+> repository is public. Earlier Git history and pull-request records may retain finer values or
+> identifying context; the current site cannot erase those copies. The owner-run history scrub
+> procedure and its limits are documented below and in `PRIVACY_REMEDIATION.md`.
 
-## Site map
+## Start here
 
-The site is a static, keyboard-accessible dashboard with section navigation:
+- `index.html` — executive dashboard, including the conditions that would change the answer and
+  reinvestment risk near the top.
+- `executive-summary.html` — concise summary of the conditional model result and major caveats.
+- `decision.html`, `what-if.html` — comparable transfer-date/horizon paths and selectable sensitivity
+  cases. Values are scenario outputs, not appraisals or forecasts.
+- `precommit.html` — the conditions that would choose each path, written and dated before the
+  figures arrive, so the outcome cannot be reverse-engineered from one projection; carries an
+  empty decision record to complete by hand.
+- `briefing.html` — one-page, printable Attorney & CPA discussion sheet.
+- `questions.html` — what is known, what is missing, who can verify it, and suggested next steps.
+- `suggestions.html` — proposals kept separate from implemented changes; each can be reviewed,
+  adopted, deferred or rejected before implementation.
+- `review.html` — flagged, assumed and unverified items.
 
 - **Start here:** Dashboard (the answer, its confidence, the date it was computed and the three checks that would move it, on the first screen), the **pre-commitment register** (`precommit.html`: the rules the household writes down before reading any figure, with empty decision columns), executive summary, decision analysis (including the mixed paths and the Proposition 19 clawback), the what-if cases page (one lever at a time, link-driven, no script), and a printable Attorney & CPA briefing sheet.
 - **Rules and the estate:** the trust steps, a dated deadlines timeline with official source links (`timeline.html`), thresholds and the law page.
@@ -19,42 +41,66 @@ The site is a static, keyboard-accessible dashboard with section navigation:
 - **Review:** Questions before deciding, suggestions for review, and Flagged for Review.
 - **Evidence:** Glossary and source ledger.
 
-The Black Swan page now tests the phased-investing choice with ONE canonical monthly engine and ONE parking-yield assumption (a 30-month park inside the owner's 24-36 month band, then equal monthly purchases over 12 months): a synthetic crash-at-entry stress AND a dated historical backtest that applies the realized S&P 500 total returns and 3-month Treasury bill returns that followed the 1929, 2000 and 2008 entries (NYU Stern academic series, cross-checked against its own cumulative columns, gross of taxes and costs). The immediate comparator buys in month 1, so its no-shock terminal equals the dashboard's sell-and-invest headline. The `briefing.html` page is the single print-formatted one-page adviser discussion sheet (its duplicate, `briefing-sheet.html`, was retired on 15 November 2026 and now returns a withdrawal notice), and `glossary.html` explains recurring tax and investment terms with official citations. The suggestions page is a review queue, not an implementation commitment. The questions page pairs known, unknown and action-needed facts. Unknown or unverified inputs are left blank where no confirmed figure is available and are flagged for follow-up.
+The remaining pages cover the distinct property profiles, carrying costs, projections, income and
+estate taxes, the inheritance process, deadlines, current law and proposals, black-swan scenarios,
+the historical economic record, a glossary and the source ledger. Navigation groups the material by
+purpose.
 
-## Published content and data boundary
+## Model boundaries and headline result
+
+The current model conditionally favours selling Property A soon after inheritance unless the heir
+actually wants to live there. This is not individualized legal, tax or investment advice. It depends
+on the beneficiary's eligibility for any property-tax exclusion, trust/title facts, date-of-death
+basis, actual sale costs, occupancy, rents, insurance, maintenance, utilities, debt, market returns
+and laws in force at transfer. Missing or unverified property-specific amounts are not presented as
+confirmed; they are identified on the relevant pages and on `review.html`.
 
 There are **23 generated HTML pages** and one stylesheet in the public allowlist. The pages show rounded owner-provided figures, model outputs and official-source-backed legal/economic information. The source ledger contains **104 entries**. Both property placeholders grow with the California state-level FHFA house-price index: the two metropolitan-area series were withdrawn on 15 November 2026 because the index publisher's own metadata crosswalked the placeholders to their metropolitan areas (an audit finding), and the privacy gate now rejects the withdrawn series identifiers and metro phrasing. The jurisdiction-specific entries (the two properties' county and city official pages) were also withdrawn, because their publishers identify the properties. A factual table row either links to an official source or is explicitly registered as unsourceable/unverified.
 
-`EXECUTIVE_SUMMARY.md` at the repository root is generated by `scripts/build.py` from the same
-data as the pages, and `scripts/verify.py` fails if it drifts, so the standalone brief can never
-describe a different edition from the site. It is excluded from the published site.
+The Black Swan analysis uses one canonical monthly park-and-phase engine and one short-Treasury
+parking-yield assumption. It includes synthetic stresses and historical entry replays, including
+1929, 2000, 2008 and 2020. Historical results are not forecasts; they do not ensure future Treasury
+rates, protect against every market path, or eliminate opportunity cost. The brief shows the
+reinvestment risk next to the staging result.
+The investment, legal, tax and property-law conditions expected in 2040–2050 are unknown. Current
+law and pending proposals are kept distinct on the law-watch page. Recheck official authorities and
+professional advice when dates, facts or laws change.
 
-The data files and build scripts are retained for reproducibility and audit but are not in the public-page allowlist. The downloadable tables `assets/data/property_a.csv`, `assets/data/property_b.csv` and `assets/data/decision.csv` are written by `scripts/build.py` from `assets/data/model.json` on every build and must not be edited by hand; they carry the same $10-rounded figures as the pages (the decision file is the 2045 inheritance sensitivity grid). The owner's roll and bill history is checked against the official Board of Equalization inflation factors on the Flagged for Review page, which lists the irregularities for the owner to resolve. The Actions artifact includes 129 content-free withdrawal notices for retired routes; those notices do not reproduce the old material. The repository-root Pages/Jekyll configuration is separately guarded and excludes the data, scripts, source ledger, coordination board, and internal Markdown documents.
+There are **23 generated HTML pages** and one stylesheet in the public allowlist. The source ledger contains **98 entries**. A factual table row either links to an official source or is explicitly registered as unsourceable/unverified.
 
-The baseline recommendation on the site is to sell Property A soon after inheritance unless the heir genuinely wants to live there. It is a conditional model result—not a professional appraisal, legal opinion, tax opinion, or investment recommendation. Actual market values, rent, insurance premiums, utility costs, trust terms, title, basis, taxes and future laws may change the result. The detailed assumptions, alternatives and counter-cases are on the site.
+## Published site and verification snapshot
 
-## Publication path
+The current generated edition contains **22 HTML pages**, **one runtime stylesheet**, **98 entries
+in the source ledger**, and **130 content-free withdrawal notices** for retired routes. The latest
+local verification reports **870 table rows**: **756 linked to official publishers** and **114
+explicitly registered as unsourceable or unverified**. A row without a confirming official source is
+not filled in by inference. The public site contains no source ledger or internal model data files;
+the Jekyll and Actions publication boundaries are checked separately.
 
-GitHub Pages is currently configured to build the `main` branch repository root with Jekyll (`build_type: legacy`). `_config.yml` is generated by `scripts/verify_legacy.py` and must not be edited manually. Do not add `.nojekyll`: it disables the Jekyll exclusion boundary. The `pages.yml` workflow also builds and deploys an allowlisted artifact, while CI audits the actual legacy Jekyll output. The Pages setting and workflow are distinct; confirm the live Pages status after changes.
+The model and pages are generated from `assets/data/` and `scripts/build.py`; do not edit generated
+HTML or CSV outputs by hand. `EXECUTIVE_SUMMARY.md` is generated from the same model data and is
+checked for drift. The source links and what they support are listed on `sources.html`.
 
-Older analysis and planning editions are retired from the working tree. The artifact writes generic withdrawal notices for their former routes. This does not remove their content from Git history, forks, caches, pull-request diffs or external copies. `scripts/history_scrub.sh` is the prepared scrub runbook for those copies: it audits every commit for the guarded identifier classes and for candidate unrounded figures (writing findings outside the repository), and documents the `git-filter-repo` rewrite and post-rewrite checklist. The rewrite itself force-pushes `main` and is therefore the repository owner's to run or authorise.
+## Privacy and Git history
 
-## Git history scrub (owner procedure)
+`privacy_boundary.py` checks the published artifact for prohibited identifiers and unrounded
+owner-supplied monetary values. The current page set passing that gate does **not** mean all public
+Git history is clean. Earlier commits, pull-request diffs, forks, caches and clones may retain
+previously exposed material.
 
-The published site is clean, but earlier commits and pull-request diffs in this public repository still contain the pre-rounding owner figures, the properties' place and district names, postal codes and a personal commit-author email. `scripts/history_scrub.py` audits and rewrites that history; the force-push itself is deliberately an owner action, because it rewrites `main` and breaks every existing clone:
+`scripts/history_scrub.py` and `scripts/history_scrub.sh` document audit and rewrite procedures. The
+rewrite is not performed by ordinary site builds. It changes Git history and requires a coordinated
+force-push; the owner must decide whether and when to run it. A rewrite cannot guarantee removal from
+forks, caches, clones or merged pull-request records. See `PRIVACY_REMEDIATION.md` for the internal
+remediation record. Do not add identifying data to this public repository.
 
-```bash
-python3 scripts/history_scrub.py --check            # audit; reports classes and counts, never token values
-python3 scripts/history_scrub.py --run \
-    --source https://github.com/<owner>/<repo>.git \
-    --out /tmp/Tino3-scrub-mirror                   # builds a scrubbed mirror; nothing is pushed
-# inspect the mirror, then push the rewrite yourself:
-git -C /tmp/Tino3-scrub-mirror push --force origin 'refs/heads/*:refs/heads/*' 'refs/tags/*:refs/tags/*'
-```
+## Publication
 
-What it replaces in every historical blob and commit message: every identifier class from the site's privacy gate (street addresses, emails, postal codes, parcel numbers, phone numbers, property-level place names including inside web addresses, person names, the withdrawn metro series identifiers and metro phrasing), every dollar amount not rounded to the nearest $10, and all multi-decimal numbers and percentages (the pre-rounding series values fingerprint the location). Commit identities outside the allow-list become the repository's no-reply placeholder. Blobs of the published tip (`--preserve-tip`, default `main`) pass through byte-for-byte so the site keeps building - the current tree is already clean and its numbers are load-bearing.
-
-The rewrite was verified end-to-end on a scratch mirror of this repository: every flagged class reports clean afterwards, the tip tree is byte-identical, and `build.py`/`verify.py`/`privacy_boundary.py` all pass from the scrubbed history. What a force-push cannot reach: merged pull-request commit lists, GitHub caches, forks and earlier clones - only GitHub Support can purge those.
+GitHub Pages currently builds the `main` branch repository root with Jekyll. `_config.yml` is
+maintained by `scripts/verify_legacy.py`; do not add `.nojekyll` or weaken its exclusion boundary.
+A separate Actions workflow packages and deploys an allowlisted artifact. These are separate
+publication paths, so check both after a publication change. The latest GitHub Pages status should
+be checked through the repository's Pages settings and Actions runs.
 
 ## Mixed paths, distributions and the clawback
 
@@ -82,7 +128,7 @@ The engine is validated against the existing model: an immediate sale and a thir
 
 ## Rebuild and verification
 
-The project uses only the Python standard library. From the repository root:
+The project uses the Python standard library only. From the repository root:
 
 ```bash
 python3 scripts/mixed.py
@@ -91,71 +137,30 @@ python3 scripts/verify.py
 python3 scripts/privacy_boundary.py
 python3 scripts/package_site.py
 python3 scripts/verify_legacy.py --config-only
+# CI also builds and audits the actual legacy Jekyll output:
+python3 scripts/verify_legacy.py --site _legacy_site
 ```
 
-`verify.py` checks reproducible page generation, page structure, table-row source links or a review-register entry, internal links and fragments, the official-host allowlist, the source ledger, and the packaged artifact's privacy boundary. `privacy_boundary.py` checks published output for prohibited identifiers and unrounded monetary values. `verify_legacy.py --config-only` checks the GitHub Pages/Jekyll source boundary. CI additionally builds the actual Jekyll output and audits it using `verify_legacy.py --site _legacy_site`.
+The checks cover deterministic generation, page structure, table-row source links or explicit
+review-register entries, internal links and fragments, official-host allowlisting, monetary rounding,
+privacy boundaries, packaged routes and the legacy Jekyll source boundary. CI additionally audits
+the actual Jekyll output. These mechanical checks do not prove a legal interpretation, validate an
+owner-supplied bill, quote an insurer, or predict a future market.
 
-These are mechanical checks. They do not prove that every legal interpretation is correct, that an insurer will quote a particular premium, or that a forecast will occur. Official documents and their stated limitations are linked in the relevant rows and in `sources.html`; unverified items are listed on `review.html`.
+## Limits to resolve before acting
 
-## Current review limits
+- Independently verify owner-provided values, tax bills, assessment history, rental income, leases,
+  utility charges, title, trust terms, debt and the date-of-death valuation.
+- Obtain real insurance quotations and comparable market-rent opinions; the site does not invent
+  property-specific premiums or rents.
+- Confirm Property A's applicable tax-rate area, Proposition 19 eligibility and occupancy plan with
+  the assessor and qualified counsel. Confirm Property B's leases and applicable local rules.
+- Obtain a five-year maintenance and capital plan for each building, and decide whether a like-kind
+  exchange is relevant before a sale.
+- Ask an estate attorney and tax adviser about estate liquidity, prior taxable gifts, portability,
+  basis, depreciation/recapture, and the transfer's actual tax-year consequences.
+- Set the household's written decision criteria and investment policy before the actual figures
+  arrive; rerun the model annually and whenever an input or law changes.
 
-- The property values, historic bill/assessment tables, rents, and several utility/insurance figures originate from the owner and have not been independently matched to parcel- or account-level official records. They are marked unverified.
-- Property-specific insurance quotes are not established. Statewide insurance averages are presented only as context, not as a quote for either building.
-- Property A's exact tax-rate area, water-provider tariff and certain local charges remain open; missing rates are not inferred.
-- Future inheritance, property-tax, income-tax and estate-tax rules cannot be known for 2040–2050. Projections are scenarios and law-watch items, not promises.
-- The deed, trust terms, total taxable estate, prior taxable gifts, beneficiary eligibility, and transfer-date facts have not been reviewed. A California estate attorney, CPA/tax attorney, insurer and qualified financial adviser should review the relevant facts before implementation.
-
-## Seventh verification pass of 13 November 2026
-
-Every source behind the highest-consequence claims was re-opened and compared with the published
-text. Five defects were found and fixed, and one input question was opened and closed. All of these
-were in the generated pages, so they are fixed in `scripts/build.py` rather than in the HTML.
-
-1. **The eligibility gate was missing, and it is the most serious defect found in this edition.**
-   Revenue and Taxation Code section 63.2 excludes a transfer from change of ownership only where it
-   is **between parents and their children**, or between grandparents and grandchildren whose parent
-   has died. The statute defines "children" to include a stepchild, a son-in-law or daughter-in-law,
-   a child adopted before 18, and a foster child of a licensed foster parent where adoption was
-   barred. Nothing on the site stated that condition. Every Proposition 19 figure was presented as
-   unconditional when it depends on a fact about the family that this repository has never been told.
-   The gate is now on the dashboard, the executive summary, the decision page, the step-by-step page
-   and the questions page; it is the first item on the question register (A-1); and it has its own
-   suggestion (S-19) and its own modelling caveat. If the relationship is different, the property is
-   reassessed to full market value and the case for selling gets stronger, not weaker.
-2. **The letting paths credited no rent.** `run_paths` charged every landlord cost to both rental
-   paths and credited none of the rental income, so they could not win under any assumption. Rent is
-   now an explicit input, `property_a.rent_income_annual`, and it is deliberately **empty**: no
-   official source publishes a market rent for a specific home, so no figure is invented. The paths
-   therefore still carry zero rent, but the decision page now says so in a dedicated callout, the
-   recommendation is worded as a floor rather than a comparison, and S-20 maps the route to fixing it.
-3. **The review page's "where to check" column repeated the same four links on every row.** Each row
-   now names the publisher that actually holds that record.
-4. **The trust steps overstated the transfer tax.** Step 3 said no city transfer tax applies to
-   Property A. That conclusion is right but the reason was wrong: RTC section 11930 exempts a deed
-   where property passes by reason of death or by inter vivos gift outright or in trust, so the
-   county documentary transfer tax does not reach it either. The step now says that and links the
-   statute.
-5. **A blank that was not blank.** An earlier pass left the city transfer-tax band at and above
-   $10,000,000 as "not published". Both remaining bands are published on the city's own fee page and
-   are now on the taxes page, with the published per-$500 rate beside the percentage.
-
-Also corrected: the review page still described `analysis/` and `plan/` as present in the tree and
-named four open pull requests, when both directories were removed on 13 November and two board-record
-pull requests remain open; two statements about Department of Insurance data contradicted each other
-and the correct position is that it publishes a statewide average and an online premium survey but
-not an average for a postal area; the site listed "what value is enrolled after a move-out" as an
-open question while quietly modelling the favourable reading of section 63.2(a)(1)(C), and it now
-states the statutory reading and flags it; and the step-by-step page now names the small-estate
-procedures and probate as the alternatives if the trust is not the route, with the effect on timing
-and cost.
-
-Sources re-opened for this pass: LTA 2025/009 (the Proposition 19 cap amounts), the full text of RTC
-sections 51, 63.2 and 11930, the IRS estate tax page and the tax-year-2027 inflation release, the SSA
-2026 Trustees assumptions table, the FTB gifts and inheritance page, and the Secretary of State's
-uncertified results page. The jurisdiction-specific sources named in earlier passes (the city
-treasurer's secured rate, the city's recorder fee and transfer-tax schedule) were later withdrawn from
-the public site entirely, because their publishers identify the properties; see the privacy note below
-and the session record of 15 November 2026. An independent reconciliation script recomputed 70 published relationships
-from the inputs — the shelter amount, the roll arithmetic, the sale-at-death tax, both investment
-terminals, the rental terminal as sale proceeds plus accumulated rent, the sensitivity and stress
-counts printed in the prose, the estate arithmetic and the $10 rounding rule — and all 70 passed.
+These are open verification tasks, not conclusions. The questions, suggestions, source ledger and
+flagged review register identify who can resolve each one and where the result belongs.

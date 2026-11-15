@@ -34,6 +34,7 @@ import model as model_mod  # noqa: E402
 
 NAV_GROUPS = [
     ("Start here", ["index.html", "precommit.html", "executive-summary.html", "decision.html",
+                    "decision-rules.html",
                     "what-if.html", "briefing.html"]),
     ("The two properties", ["property-a.html", "property-b.html", "ownership-distinction.html"]),
     ("Money over time", ["costs.html", "projections.html", "taxes.html"]),
@@ -46,6 +47,7 @@ PAGE_TITLES = {
     "index.html": "Dashboard",
     "precommit.html": "Decide before you read the numbers",
     "what-if.html": "What-if cases",
+    "decision-rules.html": "Decision rules and investment policy (unsigned draft)",
     "executive-summary.html": "Executive summary",
     "decision.html": "The decision",
     "briefing.html": "Attorney & CPA briefing sheet (one page, printable)",
@@ -442,6 +444,56 @@ def distribution_section(dist: dict, sell_share: float) -> str:
             + chart + hist + "</section>")
 
 
+# --------------------------------------------------------------------- chart --
+def dist_chart(chart: dict, title: str) -> str:
+    """A CSS-only range chart. No script, so the geometry is written at build time.
+
+    Each row is one year: a shaded p05-p95 band, a median tick, and a marker for
+    the single constant-rate line the rest of the site uses. The axis is shared
+    across rows so the bands are comparable down the page. The numbers are also
+    in the table beneath it, so the chart is not the only way to read them.
+    """
+    if not chart or not chart.get("years"):
+        return ""
+    # Round the axis top like every other published figure. The gate checks
+    # this, and it is right to: the axis label is a published number.
+    top = money10(max(y["p95"] for y in chart["years"]) * 1.02)
+    rows, ticks = [], [0]
+    years = chart["years"]
+    step = max(1, len(years) // 10)
+    for i, y in enumerate(years):
+        lo = 100.0 * y["p05"] / top
+        hi = 100.0 * y["p95"] / top
+        med = 100.0 * y["p50"] / top
+        const = 100.0 * y["constant"] / top
+        rows.append(
+            f'<div class="chart-year">{y["year"]}</div>'
+            f'<div class="chart-track" role="img" aria-label="{y["year"]}: low '
+            f'{m(y["p05"])}, middle {m(y["p50"])}, high {m(y["p95"])}, constant-rate line {m(y["constant"])}">'
+            f'<span class="chart-band" style="--lo:{lo:.2f};--hi:{hi:.2f}"></span>'
+            f'<span class="chart-const" style="--c:{const:.2f}"></span>'
+            f'<span class="chart-med" style="--m:{med:.2f}"></span>'
+            f'</div>')
+        if i % step == 0 or i == len(years) - 1:
+            ticks.append(i)
+    labels = "".join(
+        f'<span>{years[i]["year"]}: {m(years[i]["p05"])}</span>' if j == 0 else
+        f'<span style="text-align:center">{years[i]["year"]}</span>' if j == len(ticks) - 1 else
+        f'<span>{years[i]["year"]}</span>'
+        for j, i in enumerate(ticks))
+    return (
+        f'<div class="chart"><h3>{esc(title)}</h3>'
+        f'<p class="chart-note">{esc(chart["note"])}</p>'
+        f'<div class="chart-rows">{"".join(rows)}</div>'
+        f'<div class="chart-axis"><span></span><span>'
+        f'start {m(chart["start_value"])} &rarr; axis top {m(top)}</span></div>'
+        f'<div class="chart-key">'
+        f'<span><i class="k-band"></i>5th to 95th percentile of 2,000 resampled paths</span>'
+        f'<span><i class="k-med"></i>middle path</span>'
+        f'<span><i class="k-const"></i>the model\'s single constant rate</span>'
+        f'</div></div>')
+
+
 def page_index() -> str:
     p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
     best = p45["best_path"]
@@ -493,7 +545,8 @@ question A-1</a> before relying on any number here. {slink('rtc63_2_eligibility'
 <li><strong>The crash arrives before the sale proceeds are invested.</strong> Replaying the real 1929, 2000 and 2008 records, parking the proceeds for 24-36 months and phasing into equities beat investing on day one; in the 2020 record it lost. <a href="black-swan.html#real-replays">Real entry-timing replays</a>.</li>
 <li><strong>The heir genuinely wants to live in the house.</strong> The one-line recommendation is conditional on that. The <a href="precommit.html#imputed">imputed-rent break-even</a> prices what that preference has to be worth.</li>
 <li><strong>Moving out after moving in.</strong> The Proposition 19 exclusion is removed when the heir stops qualifying, and the model now costs that at about {m(MIXED['clawback']['difference'])} of extra property tax over thirty years. <a href="decision.html">Mixed paths</a>.</li>
-</ol>""")
+<li><strong>The housing the house provides is worth close to its full market rent to the heir.</strong> The published comparison credits the living path with no housing at all. Credited at about {pc(100.0)} of market rent, living and selling come level; below that, selling wins. <a href="decision.html#imputed-rent">The rent living does not pay itself</a>.</li>
+<li><strong>Property B's fixed charges keep growing at their own pace.</strong> The model assumes {pcf(ASM['fixed_charge_growth']['baseline'])} a year; the audited record is {pcf(ASM['fixed_charge_growth']['high'])} over nine years, and those charges are {esc(str(MODEL['roll_audit']['property_b']['fixed_share_latest_pct']))}% of that bill. The 2% cap cannot bound them. <a href="review.html#roll-audit">Roll audit</a>.</li></ol>""")
     cards = []
     for group, pages in NAV_GROUPS:
         if group == "Start here":
@@ -804,6 +857,7 @@ model rebuilt.</p>
 
     return (
         eligibility_callout()
+        + imputed_rent_section()
         + callout("recommend", "What this site recommends", f"""
 <p><strong>Sell soon after the inheritance.</strong> It leads in the baseline, in {sens_sell} of the {sens_total}
 sensitivity combinations, and in {reg_sell} of the {reg_total} stress regimes. It is also the only path that does
@@ -1733,8 +1787,19 @@ def page_projections() -> str:
 <p>Year-by-year projections from 2026 to 2076 on the baseline assumptions: house prices 4.0% a year, inflation
 2.5% a year, assessed values rising at the Proposition 13 cap of 2% a year. These tables exist so the shape of
 the arithmetic is visible. They are not a forecast; see the <a href="black-swan.html">black swan page</a>.</p>""")
-        + fan_section()
-        + table("Property A: value, assessed value and tax bill, if the assessment is never reset",
+        + dist_chart(ECON["bootstrap"].get("chart", {}),
+                     "Property A value, one year at a time: 2,000 resampled paths against the single line")
+        + callout("note", "Why there is a band and a line", """
+<p>The tables below are one line: 4.0% a year, every year. The chart above is the same property value drawn
+from the seeded block-bootstrap on the <a href="economy.html">historical record</a> page, which resamples the
+actual ten-year runs of California house prices and consumer prices instead of assuming they repeat. The band
+is wide, and the single line sits inside it rather than at its middle. Neither is a forecast; the chart's
+purpose is to stop a single line being read as one.</p>
+<p>The band is a 5th-to-95th percentile interval, so one path in ten ends outside it on each side. The
+distribution is skewed: the middle path is well above the constant line at the far end, because the bootstrap
+includes the high-growth decades of the record, while the low end is limited by how far a house price can
+fall.</p>""")
+        + fan_section()        + table("Property A: value, assessed value and tax bill, if the assessment is never reset",
                 ["Year", "Market value", "Assessed value", "Tax bill", "Effective rate on assessed value", "Basis"],
                 proj_rows(MODEL["projection_a"]))
         + table("Property B: value, assessed value and tax bill",
@@ -1938,10 +2003,11 @@ rules work, and it only exists at the moment of transfer.</p>""")
                      "The rate applies to the entire consideration, so a sale that crosses a threshold is not "
                      "taxed band by band. This matters for Property B only; Property A is in the county, and "
                      "no city transfer tax is charged there.")
+        + '<h2>The 1% surcharge above $1,000,000, computed</h2>'
+        + surcharge_block()
         + '<h2>What the model does and does not do</h2>'
         + callout("flag", "Not modelled, and flagged for a professional", """
 <ul>
-<li><strong>The additional 1% California tax above $1,000,000 of income.</strong> Revenue and Taxation Code section 17043 adds 1% to taxable income above $1,000,000. A large gain in the year of a sale can push income over that line, which would raise the effective state rate used here. It is not modelled.</li>
 <li><strong>A like-kind exchange under section 1031.</strong> Exchanges of real property are still available, but they defer rather than forgive tax, and they do not fix the property tax reassessment. Whether one makes sense depends on whether the heir wants to stay in real estate at all.</li>
 <li><strong>An instalment sale.</strong> Spreads the gain, but not the tax.</li>
 <li><strong>Gifting during life rather than at death.</strong> Removes the basis step-up. Almost always worse for an appreciated asset.</li>
@@ -1951,6 +2017,90 @@ rules work, and it only exists at the moment of transfer.</p>""")
 
 
 # -------------------------------------------------------------- inheritance --
+# --------------------------------------------------- section 17043 surcharge --
+def surcharge_block() -> str:
+    """The 1% surcharge, read from the statute and the FTB schedules, then computed.
+
+    An earlier edition said this tax was "not modelled". That was wrong in a way
+    worth recording: the 13.3% California rate already in the model is 12.3% top
+    bracket plus this 1%, so it was modelled all along and the page misdescribed
+    its own arithmetic. Worse, the arithmetic it described would have been the
+    wrong way round: the surcharge is a flat 1% above $1,000,000 for every filing
+    status, not a bracket that a joint return doubles.
+    """
+    ss = MODEL.get("surcharge_sensitivity") or {}
+    if not ss.get("rows"):
+        return ""
+    rows = []
+    for r in ss["rows"]:
+        rows.append(
+            f"<td>{esc(r['label'])}</td><td>{m(r['gain'])}</td>"
+            f"<td>{m(r['tax_without_surcharge'])}</td><td>{m(r['tax_with_surcharge'])}</td>"
+            f"<td>{m(r['difference'])}</td>"
+            + method_cell("#method", "Model output"))
+    tbl = table("What the surcharge does to the tax on each path, 2045 inheritance",
+                ["Path", "Taxable gain", "Tax at the rate without it",
+                 "Tax at the rate with it", "Surcharge effect", "Basis"],
+                rows,
+                note="The two rates are the ones in the inputs file: "
+                     f"{pcf(ss['rate_without'] * 100, 1)} without the surcharge and "
+                     f"{pcf(ss['rate_with'] * 100, 1)} with it. Both are applied to the whole gain, "
+                     "which is more conservative than a Form 540 computation, where the surcharge "
+                     "reaches only the part of taxable income above the threshold.")
+    return (
+        callout("key", "The 1% is not a bracket, and it is already in every figure on this site", f"""
+<p>Revenue and Taxation Code section 17043 imposes an additional <strong>1%</strong> on taxable income above
+<strong>$1,000,000</strong>. Two features of the statute matter here, and both are easy to get backwards:</p>
+<ul>
+<li><strong>It ignores filing status.</strong> Subsection (c) switches off the credit rules (section 17039), the
+filing-status and bracket-recomputation rules (section 17041) and the joint-return rules (section 17045). The
+threshold is therefore <strong>$1,000,000 for a single filer and $1,000,000 for a joint return</strong>, not
+$2,000,000.</li>
+<li><strong>It is not indexed.</strong> The statute sets a flat dollar amount with no inflation adjustment, while
+the brackets around it are indexed every year. Over a forty-year horizon the threshold reaches less and less
+income in today's money.</li>
+</ul>
+<p>The published 2025 Form 540 rate schedules end at <strong>{pcf(12.3, 1)}</strong> on all three
+filing-status schedules. Add the statute's 1% and the California layer is
+<strong>{pcf(13.3, 1)}</strong> - which is exactly the state rate this model has been using, so the surcharge
+was never missing from the numbers. What was missing was the statement that it is there, and the check that
+its arithmetic was described the right way round. Both are corrected here.</p>""")
+        + tbl
+        + callout("note", "Does it change the recommendation?", f"""
+<p>No, and the table says why. On the path this site recommends - sell at inheritance - the basis step-up
+leaves a gain of about zero, so a tax on gain has nothing to tax and the surcharge's effect is
+<strong>{m(next((r['difference'] for r in ss['rows'] if r['key'] == 'sell_equities'), 0))}</strong>. The
+surcharge bites on the two paths that hold the property for thirty years and then sell into a large gain. It
+makes those paths worse, so it pushes in the same direction as the recommendation rather than against it.
+The model's own check: selling at inheritance still beats living in it after thirty years is
+<strong>{'true' if ss.get('recommendation_unchanged') else 'false'}</strong>.</p>
+<p><strong>A limit on this.</strong> This is a sensitivity on one assumption, computed the same conservative
+way as the rest of the model: the rate is applied to the entire gain. A real Form 540 would apply the top
+bracket and the surcharge only to the slices of income that fall in them, and would deduct the gain basis and
+allowable expenses first. A CPA should compute the actual year-of-sale return; the direction of the result is
+robust, the magnitude is an upper bound.</p>""")
+        + table("The two rates, and where each comes from",
+                ["Layer", "Rate", "Applies to", "Source"],
+                [f"<td>Federal long-term capital gain, top</td><td>{pcf(20.0, 1)}</td>"
+                 f"<td>Net capital gain above the top threshold</td>" + src_cell(["irs_tc409"], "Official source"),
+                 f"<td>Net investment income tax</td><td>{pcf(3.8, 1)}</td>"
+                 f"<td>Investment income above the statutory threshold</td>"
+                 + src_cell(["irs_tc559"], "Official source"),
+                 f"<td>California top marginal bracket, 2025 schedules</td><td>{pcf(12.3, 1)}</td>"
+                 f"<td>Taxable income above the top bracket start, indexed annually</td>"
+                 + src_cell(["ftb_rates"], "Official source"),
+                 f"<td>California additional tax, section 17043</td><td>{pcf(1.0, 1)}</td>"
+                 f"<td>Taxable income above $1,000,000, not indexed, every filing status</td>"
+                 + src_cell(["rtc17043"], "Official source"),
+                 f"<td><strong>Combined rate in the model</strong></td>"
+                 f"<td><strong>{pcf(ss['rate_with'] * 100, 1)}</strong></td>"
+                 f"<td>The whole gain, with no federal deduction for state tax taken</td>"
+                 + method_cell("#method", "Model output")],
+                note="The top California bracket is indexed every year, so its start rises; section 17043's "
+                     "threshold does not. The model applies the combined rate to the entire gain, which "
+                     "overstates the tax rather than understating it."))
+
+
 def page_inheritance() -> str:
     steps = [
         ("1", "Before the transfer",
@@ -3271,15 +3421,16 @@ def history_audit_section() -> str:
         '<h2 id="history-audit">Privacy audit of this repository\'s own history</h2>'
         + callout("privacy", "What the history audit found, and what it did not do", """
 <p>The published site is scanned on every build for names, street addresses, postal codes, parcel numbers,
-telephone numbers, email addresses and property-level place names, and for any dollar figure that is not a
+telephone numbers, email addresses, property-level place names and the county and city names, and for any dollar
+figure that is not a
 multiple of ten. That scan covers the deployable artifact, not the Git history behind it.</p>
 <p>A separate read-only audit therefore walks every commit reachable in this repository and counts how many file
 versions carry the <em>shape</em> of each identifier. It reports counts only. It does not print a matching value,
 because publishing the value in order to disclose it would recreate exactly the exposure being disclosed.</p>
 <p><strong>The result is that the current published tree is clean on every class, and the history is not clean on
 three of them.</strong> No street address, parcel number or telephone number has ever been
-committed. Postal codes and property-level place names did appear in superseded file versions and in archive
-material, none of which is part of the published artifact. The full counts are below.</p>
+committed. Postal codes, property-level place names and the two jurisdiction names did appear in superseded file
+versions and in archive material, none of which is part of the published artifact. The full counts are below.</p>
 <p>Cleaning the history is a different operation from cleaning the site: it needs a rewrite and a force-push of a
 public branch, which invalidates every clone, every open pull request and every fork, and cannot recall copies
 already downloaded. That is the owner's decision, it is recorded as an open item, and the procedure and its costs
@@ -3305,6 +3456,250 @@ exempted exactly as the gate exempts them.</li>
 it cannot certify that a deleted object is unreachable on the hosting service.</li>
 </ul>
 </section>"""
+    )
+
+
+# --------------------------------------------- roll and bill line-by-line audit --
+def roll_audit_section() -> str:
+    """What the two roll tables do and do not prove, computed rather than asserted."""
+    ra = MODEL.get("roll_audit") or {}
+    if not ra:
+        return ""
+    pa, pb = ra["property_a"], ra["property_b"]
+
+    def fixed_rows(p: dict, label: str) -> list[str]:
+        out = []
+        for f in p["fixed"]:
+            out.append(
+                f"<td>{label}</td><td>{f['year']}</td><td>{m(f['bill'])}</td>"
+                f"<td>{m(f['assessed'])}</td><td>{m(f['ad_valorem'])}</td>"
+                f"<td>{m(f['fixed'])}</td><td>{f['fixed_pct']}%</td>"
+                + method_cell("#method", "Model output"))
+        return out
+
+    def finding(n, title, body, status):
+        return f'<div class="callout {status}"><div class="callout-title">R-{n}. {esc(title)}</div>{body}</div>'
+
+    return (
+        '<h2 id="roll-audit">Line-by-line audit of the two roll tables</h2>'
+        + callout("note", "What was checked, and what could not be", """
+<p>The two tables on the Property A and Property B pages are the owner's own records. This audit re-derives
+every number in them with arithmetic only. It does not compare them with the county's roll, because that
+record is held by the county, whose name and pages are deliberately withheld from this public site; ordering
+the assessor's parcel history is a task for the owner, and it is the first item on the list below.</p>""")
+        + finding("1", "Every published year-over-year percentage reproduces exactly",
+                  f"""<p>Each row's assessed value and bill were divided by the row above it. The resulting
+percentages match the owner's published changes in all {pa['year_pairs_checked']} Property A pairs and all
+{pb['year_pairs_checked']} Property B pairs. No transcription error was found in either table.</p>""",
+                  "good")
+        + finding("2", "The assessed value never exceeds the Proposition 13 cap",
+                  f"""<p>No year in either table grows faster than 2%. Property A grew 2.0% in ten of eleven
+pairs and 1.0% and 1.5% in two others; Property B grew 2.0% in eight of nine. This is what a long-held
+base-year value looks like, and it is consistent with the Proposition 13 cap having bound in every year
+shown. Property A's assessment of {m(pa['fixed'][-1]['assessed'])} on a house valued near
+{m(A['estimated_market_value_2026'])} is the single largest number in the analysis: it is the shelter.</p>""",
+                  "good")
+        + finding("3", "The 2% cap does not bound the whole bill, and on Property B it bounds barely half of it",
+                  f"""<p>Only the <em>ad valorem</em> part of a property tax bill is limited by the cap. The rest -
+fixed charges, special assessments and district levies - is set separately. Splitting each bill at the stated
+ad valorem rate shows the fixed part is <strong>{pa['fixed_share_latest_pct']}%</strong> of Property A's bill
+and <strong>{pb['fixed_share_latest_pct']}%</strong> of Property B's. The arithmetic ceiling follows: the cap
+can bound at most <strong>{pa['max_bound_share_pct']}%</strong> of Property A's bill and
+<strong>{pb['max_bound_share_pct']}%</strong> of Property B's.</p>
+<p>This matters most on the property the heir already owns. Property B's fixed charges rose from
+{m(pb['fixed'][0]['fixed'])} in {pb['fixed'][0]['year']} to {m(pb['fixed'][-1]['fixed'])} in
+{pb['fixed'][-1]['year']}, which is <strong>{pb['fixed_growth_full_pct']}% a year</strong> over that window -
+and the jump happened in one year, {pb['fixed'][2]['year']}, when the fixed part rose by
+{m(pb['fixed'][2]['fixed'] - pb['fixed'][1]['fixed'])}. The bill in that year rose
+<strong>{round((pb['fixed'][2]['bill'] / pb['fixed'][1]['bill'] - 1) * 100, 1)}%</strong> on an assessed value that rose 2.0%.</p>""",
+                  "flag")
+        + finding("4", "Reporting the growth in two windows gives two different answers, and both are true",
+                  f"""<p>The recent window is calm: over 2020-2025 the fixed part grew
+<strong>{pb['fixed_growth_2020_2025_pct']}%</strong> a year on Property B and
+<strong>{pa['fixed_growth_2020_2025_pct']}%</strong> on Property A. The long window is not:
+<strong>{pb['fixed_growth_full_pct']}%</strong> a year on Property B and
+<strong>{pa['fixed_growth_full_pct']}%</strong> on Property A. One of these is a level and one is a step, and
+the site publishes both so neither can be presented alone. A single growth rate chosen from the recent window
+would quietly assume the step never repeats.</p>""",
+                  "flag")
+        + finding("5", "The model's fixed-charge assumption sits between the two properties, not above both",
+                  f"""<p>The model grows the fixed part at <strong>{pa['assumption_used_pct']}%</strong> a year,
+slightly above Property A's eleven-year average of {pa['fixed_growth_full_pct']}% and well below Property B's
+nine-year average of {pb['fixed_growth_full_pct']}%. It is stated in the inputs file as deliberately conservative. The effect is
+that every projected bill on this site is more likely to be too low than too high, and Property B's bills are
+the ones most exposed, because it carries the larger fixed share. <strong>Not corrected in the model in this
+pass</strong>, because changing an assumption moves every published figure and the owner should choose the
+rate; the exposure is published instead.</p>""",
+                  "flag")
+        + finding("6", "The ad valorem rate cannot be identified from these bills, and the site must not pretend otherwise",
+                  f"""<p>The stated rate for Property A is {pcf(ASM['ad_valorem_rate_a']['value'], 2)}. With
+it, the fixed part of the bill works out between {m(min(f['fixed'] for f in pa['fixed']))} and
+{m(max(f['fixed'] for f in pa['fixed']))} across thirteen years: it does not trend, so the rate is consistent
+with the bills. But that is a test the rate passes, not a test that identifies it. Assessed value grows at
+2% and so does the bill, so a higher rate paired with a lower fixed part fits almost as well. The honest
+statement, which the inputs file now carries, is that the rate is a published-law figure and the fixed part is
+the residual.</p>""",
+                  "flag")
+        + finding("7", "The audit is of arithmetic, not of the county's record",
+                  f"""<p>Six findings above can be established from the tables alone. None of them confirms that
+the tables match the assessor's roll, that the bills were paid, or that either property's tax rate area is the
+one assumed. Those need the county record and are listed as open questions on the
+<a href="questions.html">questions page</a>.</p>""",
+                  "note")
+        + table("The fixed and ad valorem parts of each bill, re-derived",
+                ["Property", "Year", "Bill", "Assessed value", "Ad valorem at the stated rate",
+                 "Fixed charges (residual)", "Fixed share", "Basis"],
+                fixed_rows(pa, "Property A") + fixed_rows(pb, "Property B"),
+                note="The fixed part is the bill minus the rate times the assessed value. It is a residual, so "
+                     "an error in the rate appears here in full: this table shows the size of that exposure, "
+                     "not a measured fixed charge. Published figures are rounded to the nearest $10, so a "
+                     "residual shown as 0 is below the rounding step and not a measured zero.")
+    )
+
+
+# --------------------------------------------------------- assumption register --
+ASSUMPTION_LABELS = {
+    "ad_valorem_rate_a": ("Property A ad valorem rate", "pct"),
+    "ad_valorem_rate_b": ("Property B ad valorem rate", "pct"),
+    "fixed_charge_growth": ("Growth of the fixed part of a tax bill", "pct"),
+    "house_growth": ("House price growth", "pct"),
+    "inflation": ("Consumer price inflation", "pct"),
+    "equity_return_nominal_gross": ("Equity return, gross of tax", "pct"),
+    "equity_tax_drag": ("Tax drag on a taxable equity account", "pct"),
+    "treasury_yield_nominal": ("Treasury yield, 10-year", "pct"),
+    "treasury_short_yield_nominal": ("Treasury yield, 3 month to 2 year", "pct"),
+    "prop19_cap_growth": ("Growth of the Proposition 19 excluded amount", "pct"),
+    "selling_cost_pct": ("Cost of selling a house", "pct"),
+    "assessed_value_growth": ("Growth of assessed value", "pct"),
+    "combined_gain_tax_rate": ("Combined tax rate on a capital gain", "pct"),
+    "depreciation_recapture_rate": ("Rate on recaptured depreciation", "pct"),
+    "ca_1pct_surcharge": ("Section 17043 additional tax", "pct"),
+    "phased_park_months": ("Months sale proceeds sit in Treasuries first", "int"),
+    "phased_equity_phase_months": ("Months over which equities are bought", "int"),
+}
+
+
+def assumption_register() -> str:
+    """Every assumption, its baseline, its band, and whether the band is measured.
+
+    The owner's brief asks for ranges rather than round-number points. This table
+    is the answer for the model's own knobs: each row now carries a band, names the
+    evidence behind it, and says plainly whether that evidence is a measurement, a
+    published figure, or a stated scenario. A reader can see which assumptions are
+    load-bearing on evidence and which are judgement.
+    """
+    rows = []
+    measured = 0
+    for key, (label, kind) in ASSUMPTION_LABELS.items():
+        a = ASM.get(key)
+        if not isinstance(a, dict):
+            continue
+        base = a.get("baseline", a.get("value"))
+        low, high = a.get("low"), a.get("high")
+        band_basis = a.get("band_basis", "")
+
+        def fmt(x):
+            if x is None:
+                return '<span class="blank">no band</span>'
+            return f"{x * 100:.2f}%" if kind == "pct" else f"{int(x)} months"
+
+        if band_basis:
+            lower = band_basis.lower()
+            srcs = a.get("src") or []
+            if "no band" in lower:
+                how = "Fixed by statute"
+                source = src_cell(srcs, "Official source")
+            elif "diagnostic band" in lower:
+                how = "Diagnostic, not a measurement"
+                source = method_cell("#method", "Bounded by the audit", srcs)
+            elif any(k in lower for k in ("measured", "own audited",
+                                          "both ends are built from published",
+                                          "published for one fiscal year")):
+                measured += 1
+                how = "Measured from the record"
+                source = src_cell(srcs, "Where the band comes from") if srcs else method_cell("#method")
+            else:
+                how = "Stated scenario"
+                source = method_cell("#method", "Stated, not sourced")
+            basis = band_basis
+        else:
+            how = "Point input"
+            basis = a.get("basis", "")
+            source = method_cell("#method")
+        rows.append(
+            f"<td><strong>{esc(label)}</strong></td><td>{fmt(base)}</td>"
+            f"<td>{fmt(low)}</td><td>{fmt(high)}</td>"
+            f'<td><span class="badge {"verified" if how.startswith(("Measured", "Fixed")) else "unverified"}">'
+            f"{esc(how)}</span></td><td>{esc(basis)}</td>" + source)
+    return (
+        callout("key", "Every assumption now carries a band, and the band says what it is", f"""
+<p>The first edition of this analysis used round point values: 4% house growth, 7% equities, 5.5% selling costs.
+A single point value is read as a forecast even when it is labelled an assumption, and a decision that only
+works at one value is not a decision. Every assumption the model uses is listed below with a low and a high
+case. <strong>{measured} of them</strong> rest on a measurement or a published figure; the rest are stated
+scenarios.</p>
+<p>The distinction is the point of the table. A <em>measured</em> band can be checked against the source in the
+last column. A <em>stated scenario</em> cannot, and no amount of arithmetic will make it so - the honest
+treatment is to publish it as judgement and show how much the answer moves when it is wrong, which the what-if
+page and the black-swan page do.</p>""")
+        + table("The assumption register",
+                ["Assumption", "Baseline", "Low", "High", "Kind", "What the band rests on", "Source"],
+                rows,
+                note="A blank band is deliberate: where no defensible range exists, none is invented. The two "
+                     "assumptions with no band are the statutory surcharge rate, which does not vary, and "
+                     "phase-in length, which is published as three separate cases rather than one midpoint.")
+    )
+
+
+# --------------------------------------------------------- imputed rent -------
+def imputed_rent_section() -> str:
+    """What the living path is worth when the roof it provides is given a value.
+
+    The brief asks for an imputed-rent input on the living paths. The honest way to
+    supply one is to state the bias it removes and then show the size of the bias.
+    """
+    ir = MODEL.get("imputed_rent") or {}
+    if not ir.get("rows"):
+        return ""
+    rows = []
+    for r in ir["rows"]:
+        share = f"{r['share'] * 100:.0f}%"
+        verdict = ("Living wins" if r["living_wins"] else "Selling still wins")
+        rows.append(
+            f"<td>{share} of market rent</td><td>{m(r['annual_credit'])}</td>"
+            f"<td>{m(r['credit_fv'])}</td><td>{m(r['terminal'])}</td>"
+            f"<td>{m(r['gap_to_sell'])}</td>"
+            f'<td><span class="badge {"verified" if r["living_wins"] else "unverified"}">{verdict}</span></td>'
+            + method_cell("#method", "Model output"))
+    pct_needed = next((r["share"] for r in ir["rows"] if r["living_wins"]), None)
+    return (
+        '<h2 id="imputed-rent">The living path, and the rent it does not pay itself</h2>'
+        + callout("key", "The published comparison charges the living path for the house and credits it with nothing", f"""
+<p>If the heir lives in the house, the heir is also consuming housing. A comparison that charges every cost of
+owning and credits none of that consumption makes living look worse than it is by exactly the value of the
+roof. This site publishes that version - <strong>zero imputed rent</strong> - because it is the conservative
+one, and it says so rather than letting the omission hide inside a table.</p>
+<p>The table below prices the omission. The credit used is the same figure the letting path is measured
+against, <strong>{m(ir['rent_monthly'])} a month</strong> in {ir['year']} dollars, so both paths are judged on
+one piece of evidence instead of two different ones.</p>""")
+        + table("The living path with the housing it provides credited at a share of market rent",
+                ["Assumption about imputed rent", "Annual credit", "Future value of the credit",
+                 "Living path terminal value", "Gap still to close", "Outcome"],
+                rows,
+                note="The published baseline is the 0% row. Every row charges the same property tax, insurance, "
+                     "water, power and maintenance; only the credit for occupying the home changes. Figures are "
+                     "2045 dollars, thirty-year horizon, eight-point equity assumption less tax drag.")
+        + callout("flag", "What this changes, and what it does not", f"""
+<p><strong>It does not change the published recommendation</strong>, but it narrows it in a way worth stating.
+Selling still wins unless the housing is credited at about <strong>{'100%' if pct_needed == 1.0 else f'{pct_needed*100:.0f}%'}</strong>
+of market rent - that is, unless the heir values living in this particular house at essentially the full
+market rent it would fetch. At that point the two paths are level, and the decision stops being financial. A
+household that would genuinely pay {m(ir['rent_monthly'])} a month to live there has a different answer from
+one that would not, and neither answer is wrong.</p>
+<p><strong>What it does not fix.</strong> The credit is still an assumption about what the household would
+otherwise pay, and there is still no market rent for the home in the model. Filling both from one written
+rental opinion is the way to close it, and it is the first open question on the
+<a href="questions.html">questions page</a>.</p>""")
     )
 
 
@@ -3549,6 +3944,8 @@ each one is a reason to check before acting.</p>""")
                 ["Figure", "Value used", "Status", "What to do", "Where to look"],
                 uv_rows)
         + irregularity_section()
+        + roll_audit_section()
+        + assumption_register()
         + '<h2>Modelling caveats</h2>'
         + table("Shortcuts that matter", ["Caveat", "What it means", "Source"], cav_rows)
         + '<h2>Repository audit</h2>'
@@ -3816,8 +4213,88 @@ next year. Everything else is measured from the date of death or the date of tra
         + tl
         + callout("answer", "Which deadlines can move the answer",
 """<p>The three deadlines that can change the recommendation are: (1) whether the parent-child relationship is in place before the transfer, because without it the Proposition 19 shelter disappears; (2) the one-year homeowners' exemption and three-year exclusion-claim windows, because missing them costs the shelter; and (3) the nine-month estate-tax return, because portability is normally lost when no timely return is filed - although an estate not otherwise required to file can use the simplified late election of Rev. Proc. 2022-32 within five years of death. The estate page works entirely in anonymous scenario bands because the inherited cash amount is not published.</p>""")
-        + policy_section()
-        + callout("method", "Why the order matters", """
+        + '<h2 id="decision-calendar">The decision calendar, before the death</h2>'
+        + callout("key", "Most of these tasks have no statute behind them, and that is the point", """
+<p>Everything above is a legal clock that starts at a death. The clocks below start now, and they matter more,
+because each one changes a number the decision depends on. None is triggered by a statute; each is triggered
+by someone deciding to ask. They are listed with the latest sensible date and what the answer changes.</p>
+<p>The dates are planning advice, not law, so they carry no official source. That is the honest status: a
+timeline of your own actions cannot be "verified" against an official page, only against your own calendar.</p>""")
+        + table("What to settle before the transfer, and what each answer moves",
+                ["By when", "What to obtain", "From whom", "What it changes", "Status", "Register"],
+                [
+                    "<td>Now</td><td>Written confirmation of the parent-child relationship that Revenue and "
+                    "Taxation Code section 63.2 requires, and the trust's beneficial-interest terms</td>"
+                    "<td>The trustee and the estate attorney</td>"
+                    "<td>Every Proposition 19 figure on this site. Without it the property is reassessed in full "
+                    "and the case for selling is stronger.</td>"
+                    '<td><span class="badge flag">Blocking</span></td>'
+                     '<td><a class="src" href="review.html#register">Logged on the register</a></td>',
+
+                    "<td>Now</td><td>The written investment policy for the sale proceeds, before any money "
+                    "arrives</td><td>The heir and a fiduciary adviser</td>"
+                    "<td>Whether the phased path has a rule to follow at all. A policy written after the money "
+                    "lands is written by someone who already knows the market.</td>"
+                    '<td><span class="badge flag">Blocking</span></td>'
+                     '<td><a class="src" href="review.html#register">Logged on the register</a></td>',
+
+                    "<td>Now</td><td>Whether portability matters: the total estate, prior taxable gifts and "
+                    "the 706 history of the first spouse to die</td><td>The estate attorney and CPA</td>"
+                    "<td>The estate-tax exposure band on the estate page, and whether a 706 is needed at all.</td>"
+                    '<td><span class="badge unverified">Open</span></td>'
+                     '<td><a class="src" href="review.html#register">Logged on the register</a></td>',
+
+                    "<td>Before 2040</td><td>Three real insurance quotes for each property, and a rental policy "
+                    "quote for Property B</td><td>Licensed brokers</td>"
+                    "<td>The largest unverified cost input on both properties.</td>"
+                    '<td><span class="badge unverified">Open</span></td>'
+                     '<td><a class="src" href="review.html#register">Logged on the register</a></td>',
+
+                    "<td>Before 2040</td><td>A written rental opinion for Property A and for the vacant unit "
+                    "at Property B</td><td>Two local letting agents</td>"
+                    "<td>Turns the letting paths from a floor into a comparison. Today they credit no rent at all.</td>"
+                    '<td><span class="badge unverified">Open</span></td>'
+                     '<td><a class="src" href="review.html#register">Logged on the register</a></td>',
+
+                    "<td>Before 2040</td><td>The tax rate area and published rate for Property A; the current "
+                    "rate book for Property B's district</td><td>The county assessor's published rate book</td>"
+                    "<td>The ad valorem rate, which the bills themselves cannot identify.</td>"
+                    '<td><span class="badge unverified">Open</span></td>'
+                     '<td><a class="src" href="review.html#register">Logged on the register</a></td>',
+
+                    "<td>Before 2040</td><td>A five-year maintenance and capital plan for both buildings, with "
+                    "costs</td><td>A licensed contractor and an inspector</td>"
+                    "<td>The maintenance percentage, currently a 0.5% and 0.75% assumption, and the size of the "
+                    "first capital call after the transfer.</td>"
+                    '<td><span class="badge unverified">Open</span></td>'
+                     '<td><a class="src" href="review.html#register">Logged on the register</a></td>',
+
+                    "<td>At death</td><td>A written valuation of Property A as of the date of death</td>"
+                    "<td>A licensed appraiser</td>"
+                    "<td>The income-tax basis, the estate-tax value and the Proposition 19 claim, all from one "
+                    "document.</td>"
+                    '<td><span class="badge flag">Deadline</span></td>'
+                     '<td><a class="src" href="review.html#register">Logged on the register</a></td>',
+
+                    "<td>Before any sale</td><td>A decision on whether a like-kind exchange is wanted, taken "
+                    "with advice and before the property is marketed</td><td>The CPA and a qualified "
+                    "intermediary</td>"
+                    "<td>Once a sale closes the option is gone. It defers tax; it does not fix the property-tax "
+                    "reassessment.</td>"
+                    '<td><span class="badge flag">Deadline</span></td>'
+                     '<td><a class="src" href="review.html#register">Logged on the register</a></td>',
+
+                    "<td>Each year</td><td>A re-run of this model on updated inputs, and a check of the "
+                    "law-watch page</td><td>The heir</td>"
+                    "<td>Whether the recommendation has moved. Every figure here is a snapshot of 2026 law.</td>"
+                    '<td><span class="badge assumption">Recurring</span></td>'
+                     '<td><a class="src" href="review.html#register">Logged on the register</a></td>',
+                ],
+                note="The first two rows are labelled blocking because nothing below them can be decided without "
+                     "them. The rest are open questions with a date attached. A row with no official source is a "
+                     "task in the owner's calendar, not a legal requirement, and is marked as such rather than "
+                     "given a fabricated citation.")
+        + policy_section()        + callout("method", "Why the order matters", """
 <ol>
 <li>The trust notice (60 days) and the change-in-ownership statement (150 days) are the first two clocks after death.</li>
 <li>The federal return, if one is needed, comes at nine months, and Form 4768 is the only automatic way to extend it.</li>
@@ -3938,11 +4415,213 @@ that answer is no, the reassessment is full and every case here moves toward sel
     )
 
 
+def page_decision_rules() -> str:
+    """Rules written before the figures arrive: gates, pre-committed paths, a draft investment policy.
+
+    Nothing here is adopted. The sign-off and decision fields are blank on purpose: the owner and the
+    household complete them, with a date, before any figure is relied on.
+    """
+    p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
+    blank = '<span class="blank">pending, owner to complete</span>'
+
+    def row(cells, src):
+        return "".join(f"<td>{c}</td>" for c in cells) + src
+
+    gates = table(
+        "Gates, applied in order. A gate is met only on written evidence.",
+        ["#", "Gate", "Evidence needed", "If met", "If not met", "Model figure it is tested against", "Source"],
+        [
+            row(["G1", "Is the transfer between a parent and a child, or between a grandparent and a grandchild whose parent has died?",
+                 "The trust instrument and the recorded deed.",
+                 "The exclusion may apply. Keep the Proposition 19 steps on the timeline.",
+                 "No exclusion. Property A is reassessed to full value, every shelter figure on the site falls away, and the case for selling strengthens.",
+                 "The model assumes this gate is met.",
+                 ], src_cell(["rtc63_2_eligibility"], "Revenue and Taxation Code 63.2")),
+            row(["G2", "Will the heir occupy Property A as the principal residence and claim the exclusion in time?",
+                 "A written occupancy plan. The rules: occupy within one year of the transfer, claim within three years.",
+                 "The living path is an option.",
+                 "The living path is removed. The exclusion is not claimed.",
+                 "The living paths assume occupancy.",
+                 ], src_cell(["boe_prop19"], "BOE, Proposition 19")),
+            row(["G3", f"Is an independent written value at the date of death within 10% of the owner's estimate of {m(A['estimated_market_value_2026'])}?",
+                 "A written valuation as of the date of death.",
+                 "No change to the model.",
+                 "Re-run the model before deciding. The 10% band is a proposal for the owner to adopt or change.",
+                 "The model starts from the owner's estimate, unverified.",
+                 ], method_cell("decision.html", "Model input, unverified")),
+            row(["G4", "Does a documented rent opinion for comparable housing, where the heir would otherwise live, exceed the imputed-rent break-even for the year of inheritance?",
+                 "A written rent opinion for comparable housing in the place the heir would live, and the inheritance year.",
+                 "The living path beats selling and investing on the model's assumptions.",
+                 "Selling and investing (section 2, rule R2).",
+                 f"2045: about {m(p45['imputed_rent_breakeven_monthly'])} a month, in 2045 dollars, rising with inflation.",
+                 ], method_cell("decision.html", "Model output")),
+            row(["G5", "Does a documented market rent for Property A exceed the letting break-even?",
+                 "An independent rent opinion for Property A.",
+                 "Letting becomes a candidate to compare with selling.",
+                 "Letting stays a floor, not a comparison. The site credits no rent today.",
+                 f"2045: about {m(p45['breakeven_rent_monthly'])} a month, in 2045 dollars.",
+                 ], method_cell("decision.html", "Model output")),
+            row(["G6", "Does the best independent forecast of house growth over thirty years exceed the growth needed for keeping the home to match selling?",
+                 "A forecast with a stated source and a stated range.",
+                 "Keeping the home is a candidate.",
+                 "Sell.",
+                 f"2045: {pc(p45['breakeven_house_growth'])} a year. The model baseline is {pcf(ASM['house_growth']['baseline'], 1)}.",
+                 ], method_cell("decision.html", "Model output")),
+            row(["G7", "Does the gross estate, with adjusted taxable gifts, exceed the federal basic exclusion?",
+                 "An estate inventory, a record of prior taxable gifts and the portability decision.",
+                 "An estate liquidity plan and a review of the federal return are needed before the sale.",
+                 "The standard path applies.",
+                 f"Basic exclusion: {m(V['federal_basic_exclusion_2026']['value'])} for 2026; {m(V['federal_basic_exclusion_2027']['value'])} for 2027.",
+                 ], src_cell(["irs_estate"], "IRS, Estate tax")),
+            row(["G8", "Does the household want to reduce the chance of investing just before a crash?",
+                 "The household's stated preference, written before the proceeds arrive.",
+                 "Adopt the phased entry in the investment policy (section 3).",
+                 "Invest in one step.",
+                 "The black-swan page tests both on four real crashes and on synthetic sequences.",
+                 ], src_cell(["fred_djia_1929"], "FRED, Dow Jones 1929 episode")),
+            row(["G9", "Are the November 2026 results certified, for the state measure and for the local parcel tax?",
+                 "Certified results from the Secretary of State and the city elections office.",
+                 "Keep the rates in the model.",
+                 "Re-run the model without the affected rule.",
+                 "Top California rate, including the 1% surcharge: 13.3% (ledger ftb_540es_2026).",
+                 ], src_cell(["sos_results"], "Secretary of State, unofficial results")),
+        ],
+        note="G9 changes a rule, not a path. A measure that is not certified is not modelled as law.")
+
+    paths = table(
+        "Pre-committed paths. Each row states what will be chosen if its findings occur, and why.",
+        ["Rule", "If the findings are", "Path chosen", "Why", "Decision and date", "Source"],
+        [
+            row(["R1", "G1 met, G2 met and G4 met",
+                 "Live in Property A and claim the exclusion. Review each year.",
+                 "Living beats selling only when the rent avoided exceeds the break-even. The comparable-rent opinion is the test.",
+                 blank], src_cell([], "Logged on the register")),
+            row(["R2", "G1 met, and G2 or G4 not met",
+                 "Sell soon after inheritance. Invest the proceeds under the policy in section 3.",
+                 "Selling leads in the baseline run of the path table, and it does not depend on occupancy or on finding a tenant. The sensitivity and regime runs are on the what-if and black-swan pages.",
+                 blank], method_cell("decision.html", "Model output")),
+            row(["R3", "G1 not met",
+                 "Sell (no exclusion). Re-run the sale and tax figures with the attorney and the CPA.",
+                 "Without the exclusion the reassessment is to full value, which favours a sale.",
+                 blank], src_cell(["rtc63_2_eligibility"], "Revenue and Taxation Code 63.2")),
+            row(["R4", "G5 met",
+                 "Letting becomes a candidate. Compare it with selling on the rent opinion, not on the model's zero rent.",
+                 "The letting paths are a floor until a documented rent exists.",
+                 blank], method_cell("decision.html", "Model output")),
+            row(["R5", "G3 not met",
+                 "Re-run the model on the independent value. Re-test G4 and G6 before deciding.",
+                 "Every reassessment and sale figure scales with the value at death.",
+                 blank], src_cell([], "Logged on the register")),
+            row(["R6", "A mixed path is wanted (for example, part of the proceeds invested at once and the rest phased)",
+                 "Write the split as a percentage before the proceeds arrive. The black-swan page models the phased half and the immediate half separately.",
+                 "A mixed path is not a fourth answer. It is a way of spreading the entry risk, and it has to be written down to be tested.",
+                 blank], method_cell("black-swan.html", "Model output")),
+        ],
+        note="Rules R1 to R6 are proposals. They take effect only when the owner and the household sign section 5.")
+
+    pi = ASM["treasury_short_yield_nominal"]["baseline"]
+    policy = table(
+        "Investment policy for the sale proceeds (draft; choices left to the owner are marked)",
+        ["Item", "Draft rule", "Basis in this model", "Owner decision and date", "Source"],
+        [
+            row(["P1", "Purpose. Preserve the net proceeds first, then grow them for the household's stated goals. The goals are the owner's to state.",
+                 "No model input. The owner states the goals.", blank], src_cell([], "Owner statement")),
+            row(["P2", f"Entry method, chosen before the proceeds arrive: (a) invest in one step, or (b) park the net proceeds in short-term Treasuries for 24 to 36 months, then buy equities in equal monthly steps over {ASM['phased_equity_phase_months']['value']} months. The base case in the model parks for {ASM['phased_park_months']['value']} months.",
+                 "The black-swan page: four real crashes (1929, 2000, 2008, 2020) and the 24-, 30- and 36-month windows, with the synthetic stress table alongside.", blank],
+                 method_cell("black-swan.html", "Model output")),
+            row([f"P3", f"Parking yield. Short-term Treasuries from three months to two years. The model uses {pc(pi*100, 1)} nominal, within a band of {pc(ASM['treasury_short_yield_nominal']['low']*100, 1)} to {pc(ASM['treasury_short_yield_nominal']['high']*100, 1)}.",
+                 "A stated scenario, not an official forecast. No agency publishes a forward short-term yield for 2040 to 2050.", blank],
+                 src_cell(["fred_gs10"], "FRED, Treasury yields")),
+            row(["P4", f"Equity allocation. The owner sets the mix. The model uses one equity return ({pc(ASM['equity_return_nominal_gross']['baseline']*100, 1)} gross, less {pc(ASM['equity_tax_drag']['baseline']*100, 1)} a year for tax drag). It recommends no allocation.",
+                 f"Equity return and drag, from the inputs. The 7.0% is a stated scenario.", blank],
+                 src_cell(["ftb_cg"], "FTB, Capital gains")),
+            row(["P5", "Market moves during the phase-in. Keep the schedule. Do not stop buying after a fall, and do not speed up after a rise. Market timing is not part of the policy.",
+                 "The phased engine buys on a fixed schedule. Market timing is not modelled.", blank], src_cell([], "Model design")),
+            row(["P6", "Rebalancing. The owner chooses the frequency and the bands before the proceeds arrive.",
+                 "No model input.", blank], src_cell([], "Owner decision")),
+            row(["P7", "Cash reserve. The owner sets the months of spending held outside the portfolio.",
+                 "No model input.", blank], src_cell([], "Owner decision")),
+            row(["P8", "Tax. The account type decides the tax. A taxable account pays federal and California tax on dividends, interest and gains. A CPA advises on lot selection and on any harvesting.",
+                 f"The model deducts {pc(ASM['equity_tax_drag']['baseline']*100, 1)} a year for dividend and turnover tax in a taxable account. California taxes gains as ordinary income.",
+                 blank], src_cell(["ftb_cg"], "FTB, Capital gains")),
+            row(["P9", "Review. Once a year, and after any change on the law watch. Re-run the model from the inputs each time.",
+                 "The model rebuilds from its inputs and reports whether the recommendation moved.", blank],
+                 method_cell("#method", "Model output")),
+            row(["P10", "Records. Keep dated copies of this page, the gate decisions and the model version used.",
+                 "This page and the build version are the record.", blank], src_cell([], "Owner decision")),
+        ],
+        note="A policy written before the money arrives is the protection against deciding the rules after seeing the figures.")
+
+    open_items = table(
+        "Still open: items that need an outside party before a decision",
+        ["Item", "Why it matters", "Who can supply it", "Status", "Source"],
+        [
+            row(["Trust instrument and the relationship between the transferor and the heir (G1)",
+                 "It decides whether any exclusion applies at all.", "An estate attorney", "Open"],
+                src_cell(["rtc63_2_eligibility"], "Revenue and Taxation Code 63.2")),
+            row(["Written valuation of Property A at the date of death (G3)",
+                 "Every reassessment and sale figure scales with it.", "An independent appraiser", "Open"],
+                src_cell(["boe_pub29"], "BOE, Publication 29")),
+            row(["Documented market rent for Property A, and for comparable housing (G4, G5)",
+                 "It is the one missing input that could change the recommendation.", "A rent opinion from an independent appraiser or broker", "Open"],
+                src_cell(["hud_fmr"], "HUD, Fair Market Rents")),
+            row(["Comparable sales for Property A",
+                 "The owner's value estimate has not been checked against sales.", "A licensed broker or appraiser", "Open"],
+                src_cell([], "No official source applies")),
+            row(["Insurance quotes: a primary-residence policy for Property A, a rental policy for Property B",
+                 "The figure used is an owner estimate, and no quote exists.", "An insurer or broker", "Open"],
+                src_cell(["cdi_tips"], "CDI, shopping tips")),
+            row(["Finished living area of Property B's building (local parcel tax, G9)",
+                 "Each square foot above 5,000 adds $0.195 a year to the tax.", "The owner, from the plans or the assessor's record", "Open"],
+                src_cell([], "Official text withheld for privacy")),
+            row(["Rent-control status and base-rent dates for Property B's units",
+                 "Decides whether up to half of the parcel tax can be passed to tenants.", "The owner, from the leases and rent records", "Open"],
+                src_cell([], "Official text withheld for privacy")),
+            row(["Five-year maintenance and capital plan for both buildings",
+                 "The maintenance figures are assumptions, and nothing has been supplied.", "The owner and a licensed contractor", "Open"],
+                src_cell([], "No official source applies")),
+            row(["Estate inventory, prior taxable gifts and the portability decision (G7)",
+                 "Decides whether a federal return and a liquidity plan are needed.", "An estate attorney and a CPA", "Open"],
+                src_cell(["irs_estate"], "IRS, Estate tax")),
+            row(["Certification of the November 2026 results (Proposition 3 and the local parcel tax)",
+                 "A result that is not certified is not law. Proposition 3 is due for certification on 11 December 2026.",
+                 "The Secretary of State and the city elections office", "Due 11 December 2026"],
+                src_cell(["sos_results"], "Secretary of State, unofficial results")),
+            row(["Pre-rounding figures and place names in the public repository's earlier commits",
+                 "The site is clean; the history is not. Removing it needs a rewrite of main and a force-push.",
+                 "The repository owner, under the procedure on the review page", "Not performed in this session"],
+                src_cell([], "Logged on the register")),
+        ])
+
+    signoff = callout(
+        "flag", "Sign-off (blank until completed)",
+        "<p>These rules are not in force until the owner and the household sign them. Fill the lines below before any "
+        "figure is used to choose a path, and record the date.</p>"
+        "<p>Adopted by: <span class=\"blank\">pending, owner to complete</span> &nbsp; "
+        "Date: <span class=\"blank\">pending</span></p>"
+        "<p>Any change is a new, dated version of this page. The model is rebuilt from its inputs after each change, "
+        "and the recommendation is checked for movement.</p>")
+
+    return (
+        callout("note", "Status: draft, unsigned",
+                "<p>Written so that the outcome is not reverse-engineered from one projection. Each rule names the evidence "
+                "that triggers it, the path it selects, and the model figure it is measured against. Blank fields are for the "
+                "owner and household to complete with a date. Nothing here is a recommendation to a specific person, and nothing "
+                "here is legal, tax or investment advice.</p>")
+        + '<h2 id="gates">1. Gates</h2>' + gates
+        + '<h2 id="paths">2. Pre-committed paths</h2>' + paths
+        + '<h2 id="policy">3. Investment policy for the sale proceeds</h2>' + policy
+        + '<h2 id="open">4. Still open</h2>' + open_items
+        + '<h2 id="signoff">5. Sign-off</h2>' + signoff
+    )
+
+
 PAGE_BUILDERS = {
     "index.html": (page_index, "Two California properties, one decision. Every figure rounded to the nearest $10."),
     "precommit.html": (page_precommit, "The household's rules, written before the figures are read."),
     "executive-summary.html": (page_executive_summary,
                                "The important details, the recommendation, and what would change it."),
+    "decision-rules.html": (page_decision_rules, "Gates, pre-committed paths, an investment policy draft and what is still open. Unsigned."),
     "decision.html": (page_decision, "Five paths, priced, with the break-even numbers and the sensitivity."),
     "briefing.html": (page_briefing, "A printable one-page attorney and CPA discussion sheet."),
     "property-a.html": (page_property_a, "The home being inherited through a trust, planned 2040 to 2050."),
@@ -4153,6 +4832,16 @@ def executive_summary_markdown() -> str:
       "statewide average and an online premium survey, not an average for a postal area.")
     a("- A market rent for Property A, and the seller's actual selling costs.")
     a("- Whether the trust actually holds title, and whether the transfer is between a parent and a child.")
+    a("")
+    a(f"**Two opened in this pass, both worked and both published.** The living path is credited with no "
+      f"housing at all, so it is charged every cost of owning and credited with the value of nothing; credited "
+      f"at the market rent it would otherwise cost, living and selling come level at about "
+      f"{100 * (next((r['share'] for r in MODEL['imputed_rent']['rows'] if r['living_wins']), 1.0)):.0f}% of that "
+      f"rent. And the fixed charges inside Property B's tax bill are "
+      f"{MODEL['roll_audit']['property_b']['fixed_share_latest_pct']}% of the bill and grew "
+      f"{MODEL['roll_audit']['property_b']['fixed_growth_full_pct']}% a year over its roll, against a "
+      f"{ASM['fixed_charge_growth']['baseline'] * 100:.1f}% assumption, so the 2% cap cannot bound that bill "
+      f"the way the tables imply.")
     a("")
     a("## How this was checked")
     a("")
