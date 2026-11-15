@@ -672,7 +672,7 @@
    "verifies": [
     "For calendar year 2027 the basic exclusion amount under section 2010(c)(3) is $15,480,000"
    ],
-   "quote": ".44 Basic Exclusion Amount for Estate Tax. For calendar year 2027, the basic exclusion amount under \u00a7 2010(c)(3) is $15,480,000.",
+   "quote": ".44 Basic Exclusion Amount for Estate Tax. For calendar year 2027, the basic exclusion amount under § 2010(c)(3) is $15,480,000.",
    "checked": "official-domain search excerpt read in this session (full document not opened)",
    "id": "irs_rp2635",
    "supports": "For calendar year 2027 the basic exclusion amount under section 2010(c)(3) is $15,480,000",
@@ -686,7 +686,7 @@
     "Assets of an irrevocable grantor trust that are not included in the gross estate get no basis adjustment at death",
     "Property the decedent placed in a trust that stayed revocable is treated as acquired from the decedent (section 1014(b)(2) and (3))"
    ],
-   "quote": "the basis of Asset is not adjusted to its fair market value on the date of A's death under \u00a7 1014 because Asset was not acquired or passed from a decedent as defined in \u00a7 1014(b).",
+   "quote": "the basis of Asset is not adjusted to its fair market value on the date of A's death under § 1014 because Asset was not acquired or passed from a decedent as defined in § 1014(b).",
    "checked": "opened on the publisher's site in this session",
    "id": "irs_rr2023_2",
    "supports": "Assets of an irrevocable grantor trust that are not included in the gross estate get no basis adjustment at death | Property the decedent placed in a trust that stayed revocable is treated as acquired from the decedent (section 1014(b)(2) and (3))",
@@ -1137,8 +1137,8 @@
    "title": "Publication 551, Basis of Assets",
    "url": "https://www.irs.gov/forms-pubs/about-publication-551",
    "checked": "Opened on the publisher's official domain on 2026-11-15.",
-   "supports": "The basis of property acquired from a decedent is its fair market value at the date of death (or the alternate valuation date where elected); the publication also covers adjustments to basis for improvements and depreciation.",
-   "limits": "The publication states the general rule; the value has to be substantiated by an appraisal or other acceptable evidence, which this repository does not hold."
+   "supports": "Publication 551 covers cost basis, adjusted basis and basis other than cost. Its subject is how the investment in property is measured for tax, including the basis of property acquired from a decedent. The page linked is the publication's own current-revision page (12/2025).",
+   "limits": "Read from the publisher's description page, not the full PDF. The date-of-death value rule itself is also stated on the IRS inherited-property FAQ linked elsewhere in this ledger, and the value must be substantiated by evidence this repository does not hold."
   },
   {
    "id": "civ1102",
@@ -1146,8 +1146,8 @@
    "title": "Civil Code section 1102 - Real Estate Transfer Disclosure Statement",
    "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1102",
    "checked": "Opened on the publisher's official domain on 2026-11-15.",
-   "supports": "A seller of residential real property of one to four units must deliver a completed Real Estate Transfer Disclosure Statement, in the statutory form, to the prospective buyer before a transfer subject to the section.",
-   "limits": "The section exempts several transfers, including a sale by a fiduciary in the course of administering an estate; a trustee's sale may therefore fall outside it, which changes the paperwork and not the tax."
+   "supports": "Article 1.5 (sections 1102-1102.19) applies to a transfer by sale, exchange, land sale contract, lease with an option to purchase, or ground lease coupled with improvements, of any single-family residential property; the article requires the statutory Real Estate Transfer Disclosure Statement. Section 1102.2 lists the transfers the article does not apply to.",
+   "limits": "The section applies to single-family residential property, not to a multi-unit building, and section 1102.2 exempts several transfers including some by a fiduciary. It governs paperwork and disclosure, not tax."
   }
  ]
 }
