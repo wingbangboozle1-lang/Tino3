@@ -2344,10 +2344,23 @@ def page_review() -> str:
         ("Verification is a build-time check, not a legal review",
          "The verifier checks that every published table row carries a source link, that no forbidden identifier appears, and that the build is reproducible.",
          "It cannot check whether a legal reading is correct. That needs a professional."),
+        ("Form 706 filing date: the IRS instructions were opened, but the 'When To File' text was not re-read",
+         "The site gives nine months after death for Form 706 and an automatic six-month extension on Form 4768. The Form 4768 description was re-read on the IRS site. The contents page of the Form 706 instructions was opened, but the section with the nine-month rule was not reached.",
+         "Re-read the 'When To File' section of the current Form 706 instructions before relying on the date. Until then the date is unverified.",
+         ["irs_i706", "irs_i4768"]),
+        ("Two briefing pages were listed twice in the menu; one has been retired",
+         "The one-page Attorney & CPA brief appeared under two labels in the menu. The print-styled brief is kept. The duplicate route is retired and returns a content-free withdrawal notice on the packaged artifact, and a 404 on the Jekyll root publisher.",
+         "The menu shows one brief. Nothing in the substance of the brief changed."),
+        ("The one-page brief has not been print-checked in a browser",
+         "No browser is available in the build environment. The print rules were not changed in this pass, but their pagination was not seen.",
+         "Open the brief in a browser and print it to PDF before handing it to an adviser."),
+        ("A personal e-mail address appears in commit metadata",
+         "Git stores an author address with every commit. Earlier commits (83 of them) carry a personal e-mail address rather than the GitHub no-reply address now in use. It is not on any published page.",
+         "Removing it from history needs a rewrite, which is the owner's decision. For new commits, the account setting that keeps the address private is the owner's to change."),
     ]
     aud_rows = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td>"
-                + src_cell(["boe_lta25009", "irs_estate", "scc_ratebook"], "Related sources")
-                for a, b, c in audit]
+                + src_cell(rest[0] if rest else ["boe_lta25009", "irs_estate", "scc_ratebook"], "Related sources")
+                for a, b, c, *rest in audit]
 
     return (
         callout("note", "What this page is for", """
