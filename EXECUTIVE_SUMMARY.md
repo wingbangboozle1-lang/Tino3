@@ -24,6 +24,45 @@ Selling and investing the proceeds, against keeping the house. Baseline: house p
 
 The letting paths are credited with **no rent**, because no market rent for Property A has been supplied and no official source publishes one for a specific home. Read them as a floor, not as a comparison.
 
+## Mixed paths, and what moving out costs
+
+| Path | Terminal value | Selling at the inheritance leaves this much more |
+|---|---|---|
+| Let it out from the start, sell at the end | $-1,053,570 | $39,639,110 |
+| Live in it for 2 years, then sell | $36,740,930 | $1,844,610 |
+| Live in it for 2 years, then let it out | $-608,390 | $39,193,930 |
+| Live in it for 2 years, then let it out (low assessment kept after move-out) | $24,340 | $38,561,200 |
+| Live in it for 5 years, then sell | $32,796,990 | $5,788,550 |
+| Live in it for 5 years, then let it out | $197,200 | $38,388,340 |
+| Live in it for 5 years, then let it out (low assessment kept after move-out) | $836,890 | $37,748,640 |
+| Live in it for 10 years, then sell | $26,687,250 | $11,898,280 |
+| Live in it for 10 years, then let it out | $1,460,930 | $37,124,610 |
+| Live in it for 10 years, then let it out (low assessment kept after move-out) | $2,053,970 | $36,531,570 |
+| Live in it for 15 years, then sell | $21,255,740 | $17,329,800 |
+| Live in it for 20 years, then sell | $16,130,700 | $22,454,840 |
+| Live in it for the whole 30 years, then sell | $5,322,760 | $33,262,780 |
+
+The closest mixed path is a short occupancy followed by a sale, and it still ends behind selling at the inheritance. Moving out after claiming the Proposition 19 exclusion costs about $244,980 of extra property tax over thirty years on the live-then-let path, against the reading in which the low assessment survives; both readings are published.
+
+## How often the answer holds
+
+- Selling beats living in it for thirty years: **92.8%** of 2000 resampled histories.
+- Selling beats living in it ten years and then selling: **95.5%** of 2000 resampled histories.
+- Selling beats living ten years and then letting it out: **94.8%** of 2000 resampled histories.
+- Draws with falling nominal house prices over the thirty years: **0.2%** of 2000 resampled histories.
+
+The draws are ten-year blocks of the verified California house price index and consumer price index, drawn together so house and inflation history move as they did. The equity return is held at the published scenario, because no official series of forward equity returns exists.
+
+## Read this before the numbers
+
+The pre-commitment register on `precommit.html` states, in advance, the condition under which the household would choose each path, and the household's own priorities. It is meant to be filled in before any projection is read, so the answer cannot be reverse-engineered from one scenario.
+
+## Corrections in this edition
+
+- The combined depreciation recapture rate is corrected from 41.1% to **42.1%**. Its own stated components are 25% federal, 13.3% California and 3.8% net investment income tax, which sum to 42.1. Every figure that depends on recapture was rebuilt.
+- The transfer tax and recording fees on the sell path are itemised: about $5,520 on a $5,000,000 sale, about 2.0% of the modelled 5.5% selling cost. The $75 instrument fee does **not** apply, because Government Code section 27388.1(a)(2)(A) exempts an instrument recorded in connection with a transfer subject to the documentary transfer tax.
+- The initiative to repeal most of Proposition 19 **failed to qualify** for the November 2026 ballot (Secretary of State memorandum, 18 May 2026), so the shelter arithmetic is current law rather than law about to change. It is recorded as dead on the law page.
+
 ## The numbers that drive it
 
 - **The tax cliff.** The Property A bill is about $7,360 today. If the heir inherits in 2045 and does not move in, it becomes about $79,330. If the heir moves in and claims the exclusion, it becomes about $57,060.
