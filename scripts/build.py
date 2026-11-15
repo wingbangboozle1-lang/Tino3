@@ -2407,6 +2407,68 @@ def irregularity_section() -> str:
                     rows, note=head_note))
 
 
+def history_audit_section() -> str:
+    """The Git-history privacy audit, published as counts only.
+
+    Deliberately value-free: the page states how many file versions carry the shape of
+    an identifier, never what any of them are. Reprinting a postal code or a place name
+    here to 'disclose' it would create the exposure it is supposed to describe.
+    """
+    rows = [
+        ("Street address", "0", "0", "Never committed in any reachable commit."),
+        ("Parcel or assessor number", "0", "0", "Never committed in any reachable commit."),
+        ("Telephone number", "0", "0", "Never committed in any reachable commit."),
+        ("Email address", "0", "0", "Present only in commit metadata, not in any file."),
+        ("Postal code of either property", "66", "0",
+         "Present in superseded file versions and in the archive directory, which is never published."),
+        ("Property-level place name", "173", "0",
+         "Same: superseded file versions and archive material, none of it in the deployable artifact."),
+        ("Dollar amount that is not a multiple of ten", "111", "1 file",
+         "The one current file is the source ledger, and the amounts are verbatim official documentary quotes."),
+    ]
+    body = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td><td>{esc(d)}</td>"
+            + f'<td><a href="review.html#register">Logged in the register</a></td>' for a, b, c, d in rows]
+    return (
+        '<h2 id="history-audit">Privacy audit of this repository\'s own history</h2>'
+        + callout("privacy", "What the history audit found, and what it did not do", """
+<p>The published site is scanned on every build for names, street addresses, postal codes, parcel numbers,
+telephone numbers, email addresses and property-level place names, and for any dollar figure that is not a
+multiple of ten. That scan covers the deployable artifact, not the Git history behind it.</p>
+<p>A separate read-only audit therefore walks every commit reachable in this repository and counts how many file
+versions carry the <em>shape</em> of each identifier. It reports counts only. It does not print a matching value,
+because publishing the value in order to disclose it would recreate exactly the exposure being disclosed.</p>
+<p><strong>The result is that the current published tree is clean on every class, and the history is not clean on
+two of the lower-severity classes.</strong> No street address, parcel number or telephone number has ever been
+committed. Postal codes and property-level place names did appear in superseded file versions and in archive
+material, none of which is part of the published artifact. The full counts are below.</p>
+<p>Cleaning the history is a different operation from cleaning the site: it needs a rewrite and a force-push of a
+public branch, which invalidates every clone, every open pull request and every fork, and cannot recall copies
+already downloaded. That is the owner's decision, it is recorded as an open item, and the procedure and its costs
+are written up for the owner. Until that decision is taken, this page states the exposure rather than claiming it
+has been removed.</p>""")
+        + table("File versions whose content matches each identifier class",
+                ["Identifier class", "File versions in history", "Matches in the published tree",
+                 "What that means", "Basis"], body,
+                note="Counts are an upper bound. A file version can match because the rule itself is being "
+                     "described, or because an official documentary quote contains a non-round amount, as well as "
+                     "because a real identifier is present. Address, parcel and telephone classes are the ones "
+                     "with zero in both columns.")
+        + f"""<section id="history-audit-method">
+<h3>How the history audit works</h3>
+<ul>
+<li><code>scripts/privacy_scrub_audit.py</code> runs <code>git log --all</code> and <code>git log --name-only</code>,
+reads every distinct file version, and tests it against the same identifier patterns the live publication gate
+uses. It writes nothing and changes nothing.</li>
+<li>The amount class is evaluated the way the live gate evaluates it: the formatted amount is parsed and its value
+tested, so a rounded figure is never counted and a pre-rounding figure always is. Official statutory amounts are
+exempted exactly as the gate exempts them.</li>
+<li>The audit knows its own limits. It cannot see pull-request diffs, forks, or copies outside this repository, and
+it cannot certify that a deleted object is unreachable on the hosting service.</li>
+</ul>
+</section>"""
+    )
+
+
 def page_review() -> str:
     unverified = [
         ("Property A market value, November 2026", m(A["estimated_market_value_2026"]),
@@ -2591,6 +2653,7 @@ each one is a reason to check before acting.</p>""")
         + '<h2>Repository audit</h2>'
         + table("What was found when the repository was reviewed",
                 ["Finding", "Detail", "Residual risk", "Source"], aud_rows)
+        + history_audit_section()
     )
 
 
