@@ -491,7 +491,8 @@ question A-1</a> before relying on any number here. {slink('rtc63_2_eligibility'
 <li><strong>Market rent reaches {m(p45['breakeven_rent_monthly'])} a month in 2045 dollars.</strong> Then letting the home out matches selling. <a href="what-if.html#threshold-rent">Break-even case</a>.</li>
 <li><strong>A regime like the one in the stress cases recurs.</strong> Keeping the home wins in {len(keep_regs)} of {len(regs)} stress regimes: {esc(keep_names)}. <a href="black-swan.html">Black swan conditions</a>.</li>
 <li><strong>The crash arrives before the sale proceeds are invested.</strong> Replaying the real 1929, 2000 and 2008 records, parking the proceeds for 24-36 months and phasing into equities beat investing on day one; in the 2020 record it lost. <a href="black-swan.html#real-replays">Real entry-timing replays</a>.</li>
-<li><strong>The heir genuinely wants to live in the house.</strong> The one-line recommendation is conditional on that. <a href="suggestions.html">Suggestions for review</a>.</li>
+<li><strong>The heir genuinely wants to live in the house.</strong> The one-line recommendation is conditional on that. The <a href="precommit.html#imputed">imputed-rent break-even</a> prices what that preference has to be worth.</li>
+<li><strong>Moving out after moving in.</strong> The Proposition 19 exclusion is removed when the heir stops qualifying, and the model now costs that at about {m(MIXED['clawback']['difference'])} of extra property tax over thirty years. <a href="decision.html">Mixed paths</a>.</li>
 </ol>""")
     cards = []
     for group, pages in NAV_GROUPS:
@@ -1135,7 +1136,7 @@ def page_precommit() -> str:
             f"<td>{m(b['monthly_rent'])}</td>"
             f"<td>{pcf(b['share_of_value_at_death'], 1)} of the value at death</td>"
             + method_cell("review.html#register", "Model output, rent unverified"))
-    be_table = table(
+    be_table = '<h2 id="imputed">What living there has to be worth</h2>' + table(
         "The imputed-rent break-even: the market rent at which occupying the house matches selling",
         ["Path", "Rent needed per year", "Rent needed per month", "As a share of the value at death",
          "Basis"], be_rows,
