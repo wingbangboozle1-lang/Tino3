@@ -2790,11 +2790,14 @@ Not in scope and not touched: `scripts/economy.py`, `assets/data/economy.json`, 
 | R-1 Review the repository line by line; confirm every brief item is implemented on a page | done | `arena/83059c34-tino3` | read-only; all 23 pages present |
 | R-2 Run every local gate (build, verify, privacy boundary, package, legacy guard) | done | `arena/83059c34-tino3` | `scripts/*` |
 | R-3 Confirm GitHub Pages is built and serving the current commit | done | `arena/83059c34-tino3` | GitHub Pages API |
-| R-4 Open PR from this branch to `main`; merge without waiting; confirm Pages deploys; record result | in progress | `arena/83059c34-tino3` | `COORDINATION.md` (this section) |
+| R-4 Open PR from this branch to `main`; merge without waiting; confirm Pages deploys; record result | done | `arena/83059c34-tino3` | PR #100, `COORDINATION.md` (this section) |
 
 ### Result
 
-- **Repository state:** branch `arena/83059c34-tino3` == `main` == `a61404f`. Working tree clean.
+- **Pull request:** https://github.com/wingbangboozle1-lang/Tino3/pull/100 — merged to `main` without waiting for approval, merge commit `f0fc9c6f75336448fb4c2459df2027b6d90ec72c`.
+- **Repository state:** `main` is now at `b58a8259` (PR #100 merged at `f0fc9c6`, then parallel session PR #101 merged on top). This session's branch `arena/83059c34-tino3` is at `16ce58a`; `main` contains this session's changes. Working tree clean.
+- **GitHub Pages deploy:** confirmed. `Deploy GitHub Pages` workflow run 43672244042 completed `success` on `main` `b58a8259` (2026-11-15T03:25:21Z). Pages API: `build_type: legacy`, source `main:/`, status `built`. Live site: https://wingbangboozle1-lang.github.io/Tino3/ serves this session's changes. (The legacy Pages build for the isolated merge commit `f0fc9c6` errored once as a transient failure; the combined commit `b58a8259` built and deployed cleanly.)
+- **verify workflow:** run 43672221415 completed `success` on `main` `f0fc9c6`.
 - **All 23 pages build** (`scripts/build.py` exit 0): index, executive-summary, decision, briefing, briefing-sheet, property-a, property-b, ownership-distinction, costs, projections, taxes, inheritance, timeline, what-if, estate, laws, black-swan, economy, questions, suggestions, review, sources, glossary.
 - **verify.py PASS:** 23 pages, 795 table rows, 729 linked to an official publisher, 66 explicitly logged as unsourceable (left blank, never inferred), 2,894 links, 109 ledger sources.
 - **privacy_boundary.py PASS:** every published dollar figure rounded to nearest $10 or a published official amount; no identifiers in the served tree.
