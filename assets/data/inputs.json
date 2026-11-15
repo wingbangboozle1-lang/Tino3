@@ -127,10 +127,19 @@
     "hud_fmr"
    ]
   },
-  "imputed_rent_annual": {
+  "imputed_rent": {
    "value": null,
-   "basis": "Imputed rent: the annual housing value credited to the living paths - the market rent of the housing the heir consumes by occupying Property A instead of living in Property B and letting the vacant unit. Left empty because no market rent or rent opinion has been supplied for Property A; the site never invents one. While empty, the living paths are credited with no imputed rent, which is the conservative direction for the sell recommendation. A documented rent opinion (comparables) can be entered here and the whole model rebuilt. The stated-level sensitivity on the what-if page shows what any entered level would do.",
-   "verified": false
+   "basis": "The housing the heir would otherwise have to buy or rent if the home were sold. Leaving this empty means the living path is charged the full cost of keeping the house and is credited with no shelter at all, so its terminal value understates living by the value of the roof it provides - and the model then reads that understatement as evidence for selling. Filling it in the other direction is worse: crediting the living path with a market rent while the letting path is credited with nothing would bias the comparison the same way, in the opposite direction. Both must be filled from the same piece of evidence or neither is. The site therefore publishes the living path WITHOUT imputed rent, labels it a floor, and shows the break-even rent that would make the letting path match. A documented rent opinion (comparables) can be entered here and the whole model rebuilt: the run_paths credit reads this value when it is set, the decision page and the pre-commit register carry the share-of-market-rent cases, and the what-if page carries the stated absolute monthly levels.",
+   "sensitivity_pct_of_market_rent": [
+    0.0,
+    0.5,
+    0.75,
+    1.0
+   ],
+   "sensitivity_note": "What the living path would be worth if the housing it provides were credited at a share of market rent. 0% is the published baseline, which credits nothing. The three upper cases exist so a reader can see how much of the case for selling depends on valuing the use of the home at zero.",
+   "must_equal": "property_a.rent_income_annual",
+   "verified": false,
+   "src": []
   }
  },
  "property_b": {
@@ -407,6 +416,17 @@
    "value": 65,
    "src": [],
    "note": "Annual maximum a landlord may pass through to the tenant of a rent-controlled unit per unit, being 50 percent of the tax, where the base rent was set before 1 June 2027. Official amount of the parcel tax approved in Property B city. Read from the official measure text on 2026-11-15; publisher withheld for privacy."
+  },
+  "depreciation_recapture_rate": {
+   "value": 0.421,
+   "note": "An assumption built from published rates (25% federal unrecaptured section 1250, the 13.3% California top marginal rate, 3.8% net investment income tax). Registered here as an official amount so the published figure is not mistaken for an unrounded value.",
+   "src": [
+    "irs_tc409",
+    "irs_tc559",
+    "ftb_cg",
+    "ftb_rates"
+   ]
+
   }
  },
  "assumptions": {
@@ -415,19 +435,28 @@
    "basis": "Assumption, not a fitted result. The owner's own bills cannot separate the two parts of the bill: assessed value and the fixed charges both grow at about 2% a year, so any rate between roughly 1.05% and 1.60% fits the data almost equally well. 1.18% is used because Proposition 13 limits the rate to 1% plus voter-approved bond debt, because it matches the combined rate published for the other property's jurisdiction (that publisher is not named on the public site), and because it puts the fixed part of the bill at a plausible level. The property's tax rate area is not published on this site, so this is flagged for review.",
    "src": [
     "boe_pub29"
-   ]
+   ],
+   "low": 0.0105,
+   "high": 0.014,
+   "band_basis": "A diagnostic band, not a published one. The inputs' own note records that any rate between roughly 1.05% and 1.60% fits the supplied bills almost equally well, because assessed value and fixed charges both grow at about 2%. The band shown is the narrower range that keeps the implied fixed part positive and non-trending in every year of the audit. This is the widest genuine uncertainty on the site and it cannot be closed without the county's rate book for the property's tax rate area."
   },
   "ad_valorem_rate_b": {
    "value": 0.0118162182,
    "basis": "Published for the city's secured roll for fiscal year 2026-27. The publisher is not named or linked on the public site, because the jurisdiction identifies the property; the parcel's own bill is the controlling record.",
-   "src": []
+   "src": [],
+   "low": 0.0118,
+   "high": 0.0119,
+   "band_basis": "Published for one fiscal year only: 1.18162182% for 2026-27. The band is that rate rounded to the published precision either side. A rate book is republished every year, so the band will widen as the projection moves away from 2026."
   },
   "fixed_charge_growth": {
    "baseline": 0.025,
-   "basis": "Fixed charges are projected at the modelled inflation rate. Diagnostic: the fixed part of the Property B bill grew at 8.1% a year between 2016 and 2025, so this projection is deliberately conservative and understates the bill if that pace continues.",
+   "basis": "Fixed charges are projected at the modelled inflation rate. Measured counterparts, from the audit on the Flagged for Review page: the fixed part of the Property A bill grew 0.79% a year over 2014-2025, and the fixed part of the Property B bill grew 8.12% a year over 2016-2025, most of it in one 2018 step. The baseline sits between the two and below Property B's, so every projected bill here is more likely to be too low than too high. See roll_audit in model.json for the per-year table.",
    "src": [
     "ssa_trustees"
-   ]
+   ],
+   "low": 0.0079,
+   "high": 0.0812,
+   "band_basis": "The low and high cases are the two properties' own audited averages over the whole roll: 0.79% a year on Property A over 2014-2025 and 8.12% a year on Property B over 2016-2025. The baseline stays at the inflation rate, between them, and is what every published bill uses. Ranges are measured, not assumed."
   },
   "house_growth": {
    "baseline": 0.04,
@@ -460,7 +489,11 @@
    "basis": "Assumption for dividend and turnover tax on a taxable brokerage account.",
    "src": [
     "irs_tc409"
-   ]
+   ],
+   "low": 0.004,
+   "high": 0.01,
+   "band_basis": "A stated band - no official series publishes the tax drag on a managed taxable account, so this is judgement and not measurement. The low case is an index fund held with almost no turnover; the high case is an actively managed fund with meaningful distributions. The 0.7% baseline sits inside it.",
+   "verified": false
   },
   "treasury_yield_nominal": {
    "baseline": 0.047,
@@ -506,27 +539,46 @@
   },
   "combined_gain_tax_rate": {
    "baseline": 0.371,
-   "basis": "Assumption for a high-income California seller with no offsetting losses: 20% federal capital gains plus 3.8% net investment income tax plus the 13.3% California top marginal rate, with no federal deduction taken for the state tax. State and federal rates are simply added, which is deliberately conservative.",
+   "basis": "Assumption for a high-income California seller with no offsetting losses: 20% federal capital gains plus 3.8% net investment income tax plus 13.3% California, with no federal deduction taken for the state tax. The 13.3% is the sum of the 12.3% top bracket on every 2025 Form 540 rate schedule and the separate 1% imposed by Revenue and Taxation Code section 17043, so the surcharge IS included in this rate. The 1% is not a bracket: under section 17043(c) it ignores filing status, credits and joint returns, so it bites at the same $1,000,000 of taxable income for a single filer and for a joint return. Read with sensitivity.surcharge - the rate is applied to the whole gain in this model, which is a further conservatism, not an exact Form 540 computation.",
    "src": [
     "irs_tc409",
     "irs_tc559",
     "ftb_cg",
     "ftb_rates",
+    "rtc17043",
     "voterguide_p3"
-   ]
+   ],
+   "low": 0.361,
+   "low_basis": "Lower case: 20% federal + 3.8% net investment income tax + 12.3% California top bracket, i.e. a seller whose taxable income stays at or below $1,000,000 so that section 17043 does not apply.",
+   "high": 0.371,
+   "high_basis": "Upper case (the baseline): 20% federal + 3.8% + 12.3% + the section 17043 1%. The 1% applies to taxable income above $1,000,000 regardless of filing status, so this is the case for any seller whose taxable income crosses that line."
   },
   "depreciation_recapture_rate": {
-   "baseline": 0.411,
-   "basis": "Assumption: the components are published statutory rates - 25% federal unrecaptured section 1250 recapture, the California top marginal rate up to 13.3%, and the 3.8% net investment income tax where applicable - but only their combination here is an assumption; the site models 41.1% as a conservative planning figure.",
+   "baseline": 0.421,
+   "previous_edition": 0.411,
+   "basis": "Assumption, but one whose arithmetic is now shown. The components are published rates: up to 25% federal unrecaptured section 1250 tax (IRS Topic 409), the California tax on the same gain at the top marginal rate up to 13.3% because California allows no lower rate for long-term gains (Franchise Tax Board), and the 3.8% net investment income tax where the income threshold is met (IRS Topic 559). 25 + 13.3 + 3.8 = 42.1. Earlier editions published 41.1, which is 1.0 percentage point lower than its own stated components; the figure is corrected here and the change is recorded on the Flagged for Review page. No federal deduction is taken for the state tax, which is deliberately conservative.",
+   "components": {
+    "federal_unrecaptured_1250": 0.25,
+    "california_top_marginal": 0.133,
+    "net_investment_income_tax": 0.038
+   },
    "src": [
     "irs_tc409",
-    "ftb_cg"
-   ]
+    "irs_tc559",
+    "ftb_cg",
+    "ftb_rates"
+   ],
+   "low": 0.25,
+   "high": 0.421,
+   "band_basis": "Both ends are built from published statutory rates. Low: 25% federal unrecaptured section 1250 rate alone, for a seller below the California brackets and the net investment income threshold. High: 25% federal + 13.3% California (12.3% top bracket + 1% section 17043) + 3.8% net investment income tax. The baseline is the high end. The band high was published as 41.1 in earlier editions, one point below its own components; it is corrected to 42.1 here."
   },
   "phased_equity_phase_months": {
    "value": 12,
    "basis": "Months over which the parked proceeds are phased into equities by equal monthly purchases of the original proceeds. 12 everywhere on this edition: the dashboard path, the sensitivity runs and the black-swan stress table and backtest all use this one value.",
-   "src": []
+   "src": [],
+   "low": 6,
+   "high": 18,
+   "band_basis": "A stated band. The canonical run uses 12 equal monthly purchases; 6 and 18 are the plausible extremes and are not computed on every page, which is flagged."
   },
   "horizon_years": 30,
   "inheritance_years": [
@@ -537,7 +589,145 @@
   "phased_park_months": {
    "value": 30,
    "basis": "Months sale proceeds stay in short Treasuries before the equity phase-in begins. Baseline 30 is the midpoint of the owner's 24-36 month band; the band is recorded on the black-swan page. A stated scenario, not an official figure.",
-   "src": []
+   "src": [],
+   "low": 24,
+   "high": 36,
+   "band_basis": "The owner's stated 24-36 month band; the baseline is its midpoint. The black-swan page publishes the 24, 30 and 36 month cases side by side rather than only the midpoint."
+  },
+  "ca_1pct_surcharge": {
+   "value": 0.01,
+   "threshold": 1000000,
+   "threshold_indexed": false,
+   "schedules_checked": "2025",
+   "ignores_filing_status": true,
+   "basis": "Revenue and Taxation Code section 17043(a) imposes 1% on taxable income above $1,000,000, and subsection (c) excludes the section 17039 credit provisions, the section 17041 filing-status and bracket recomputation, and the section 17045 joint-return provisions. The published 2025 Form 540 rate schedules end at 12.3% on every one of the three filing-status schedules, so the 1% is additional to, not part of, the top bracket. The statute sets a flat $1,000,000 and provides no inflation indexing, unlike the brackets, which are indexed.",
+   "src": [
+    "rtc17043",
+    "ftb_rates"
+   ],
+   "low": 0.01,
+   "high": 0.01,
+   "band_basis": "No band: the rate is fixed in the statute and does not vary by filing status, unlike a bracket. The uncertainty is in the threshold's real value, not the rate, because it is not indexed. Any proposal to index or repeal it would be a law change, tracked on the Law page."
   }
+ },
+ "precommit": {
+  "meta": {
+   "purpose": "Rules the household writes down BEFORE reading any projection, so the outcome cannot be reverse-engineered from whichever projection is shown first.",
+   "how_to_use": "Each row states, in advance, the condition under which that path is the chosen one. The decision column is for a date and a name, entered by hand when the choice is made. Nothing in this repository fills it in.",
+   "status": "No path has been chosen. This page is the testing rule, not a recommendation."
+  },
+  "rules": [
+   {
+    "id": "P-1",
+    "path": "Sell at the inheritance, then invest",
+    "decides_if": "The net proceeds, invested on the household's written policy, are forecast to exceed the after-tax value of keeping the home, under the baseline AND under at least two thirds of the stress cases; and nobody in the household intends to live in the house for more than two years.",
+    "would_override_if": "A written rent opinion shows market rent above the published break-even rent, or the heir decides to make the house a long-term home.",
+    "decided_on": "",
+    "decided_by": "",
+    "evidence": "decision.html, precommit.html#rent"
+   },
+   {
+    "id": "P-2",
+    "path": "Sell, park the proceeds in short-term Treasuries, then phase into equities",
+    "decides_if": "The sale is chosen under P-1 AND the household's written investment policy requires a staged entry, because the proceeds arrive in a single year and the written policy caps the share that may be invested in any one month.",
+    "would_override_if": "The investment policy is changed to allow an immediate lump sum, or the measured cost of staging (published beside the headline) is larger than the household is willing to pay for the reduced entry risk.",
+    "decided_on": "",
+    "decided_by": "",
+    "evidence": "black-swan.html"
+   },
+   {
+    "id": "P-3",
+    "path": "Live in the house",
+    "decides_if": "The heir occupies it as a principal residence within one year of the transfer, intends to stay, and values the housing it provides at or above the published imputed-rent threshold; and the household accepts that the property-tax exclusion is conditional on continued occupation (RTC 63.2(a)(1)(B)).",
+    "would_override_if": "The heir does not move in within a year, or moves out - which removes the exclusion and enrols the change-of-ownership base year value.",
+    "decided_on": "",
+    "decided_by": "",
+    "evidence": "questions.html#rent"
+   },
+   {
+    "id": "P-4",
+    "path": "Live in it for a period, then sell",
+    "decides_if": "The heir wants to occupy it for a defined number of years and no longer; the published live-then-sell curve is the comparison, not the thirty-year hold.",
+    "would_override_if": "The planned occupancy lengthens past the point where letting it out at a documented market rent beats selling.",
+    "decided_on": "",
+    "decided_by": "",
+    "evidence": "precommit.html#mixed"
+   },
+   {
+    "id": "P-5",
+    "path": "Live in it for a period, then let it out",
+    "decides_if": "A documented market rent exceeds the published break-even rent AND the household accepts the clawback cost of moving out, which the model now prices.",
+    "would_override_if": "A written assessor answer removes the clawback, or the rent opinion comes in below the break-even.",
+    "decided_on": "",
+    "decided_by": "",
+    "evidence": "precommit.html#mixed"
+   },
+   {
+    "id": "P-6",
+    "path": "Keep it, but as a different asset (like-kind exchange)",
+    "decides_if": "An adviser confirms in writing that an exchange is available on these facts and that the replacement property is wanted for its own sake, not for the deferral.",
+    "would_override_if": "Advice says the exclusion and the exchange cannot both be used as hoped, or the replacement property would be in a less diversified position.",
+    "decided_on": "",
+    "decided_by": "",
+    "evidence": "questions.html"
+   }
+  ],
+  "household_goals": [
+   {
+    "id": "G-A",
+    "goal": "Do not become worse off than selling at the inheritance",
+    "definition": "The primary test: no path may be chosen unless it is forecast to leave the household at least as well off as an immediate sale, net of all taxes and costs, in the baseline case.",
+    "agreed_on": "",
+    "priority": 1
+   },
+   {
+    "id": "G-B",
+    "goal": "Keep a home in the family if someone will live in it",
+    "definition": "A stated preference, not a financial test. It has to be written down before the figures arrive, because it can legitimately outweigh a six-figure difference.",
+    "agreed_on": "",
+    "priority": 2
+   },
+   {
+    "id": "G-C",
+    "goal": "Avoid a forced sale for liquidity",
+    "definition": "No path may leave the household unable to pay an estate-tax bill, a capital improvement or a vacancy without borrowing.",
+    "agreed_on": "",
+    "priority": 3
+   },
+   {
+    "id": "G-D",
+    "goal": "Keep the analysis auditable and private",
+    "definition": "Every figure keeps its source, and no personal identifier is published; figures are rounded to the nearest $10 as a search deterrent, not as anonymity.",
+    "agreed_on": "",
+    "priority": 4
+   }
+  ],
+  "review_gates": [
+   {
+    "id": "RG-1",
+    "when": "Before any document is signed",
+    "what": "The written answers to the questions on questions.html, starting with A-1."
+   },
+   {
+    "id": "RG-2",
+    "when": "Before any money moves",
+    "what": "A written investment policy for the proceeds, an estate liquidity plan, and three insurance quotes."
+   },
+   {
+    "id": "RG-3",
+    "when": "Every year, in the same month",
+    "what": "Re-read the official sources on laws.html and sources.html, re-run the model, and record whether the recommendation moved."
+   },
+   {
+    "id": "RG-4",
+    "when": "If the recommendation moves",
+    "what": "Write down which input moved it and who verified the new input, before acting on it."
+   },
+   {
+    "id": "RG-5",
+    "when": "Before the proceeds of any sale are invested",
+    "what": "The written investing policy on timeline.html#policy, with all six lines answered and dated: the target allocation and rebalancing band, the maximum acceptable one-year loss, who decides and who is told, the spending rule, the liquidity floor, and the tax constraints."
+   }
+  ]
  }
 }
