@@ -34,13 +34,13 @@ OFFICIAL_HOSTS = {
     "leginfo.legislature.ca.gov", "boe.ca.gov", "www.boe.ca.gov", "cpuc.ca.gov", "www.cpuc.ca.gov",
     "insurance.ca.gov", "www.insurance.ca.gov", "content.naic.org", "federalreservehistory.org",
     "www.federalreservehistory.org", "libertystreeteconomics.newyorkfed.org",
-    "bls.gov", "www.bls.gov", "fred.stlouisfed.org", "REDACTED.legistar.com",
+    "bls.gov", "www.bls.gov", "fred.stlouisfed.org",
     "sos.ca.gov", "www.sos.ca.gov", "voterguide.sos.ca.gov", "electionresults.sos.ca.gov",
-    "REDACTED.org", "www.REDACTED", "REDACTED", "www.REDACTEDcounty.gov",
-    "clerkrecorder.REDACTEDcounty.gov", "files.REDACTEDcounty.gov", "dtac.REDACTEDcounty.gov",
+    # Jurisdiction-specific official hosts (the two properties' county and city sites) are
+    # deliberately absent: linking them would crosswalk the placeholders to their geographies.
     "ssa.gov", "www.ssa.gov", "govinfo.gov", "www.govinfo.gov",
     # added when the two independently maintained ledgers were merged
-    "www.REDACTED.gov", "REDACTED.archive.REDACTED", "elections.cdn.sos.ca.gov",
+    "elections.cdn.sos.ca.gov",
     "www.cbo.gov", "www.federalreserve.gov", "www.huduser.gov", "www.lao.ca.gov",
     "home.treasury.gov", "www.tsp.gov", "docs.github.com",
 }

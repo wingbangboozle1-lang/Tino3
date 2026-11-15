@@ -48,12 +48,25 @@ FORBIDDEN = {
         r"(?i)(cup" "ertino|sunny" "vale|sara" "toga|los[\s_-]*alt" "os|los[\s_-]*gat" "os|"
         r"monte[\s_-]*ser" "eno|san[\s_-]*jos" "e|sj" "water|sj" "wc)"),
     "person name pattern": re.compile(r"\b(?:Mr|Mrs|Ms|Dr)\.?\s+[A-Z][a-z]+\b"),
+    # The jurisdictions of the two properties. Any county or city name that narrows the
+    # search area, in prose or inside a web address, is a location disclosure. The
+    # literals are split across string fragments so this file never carries them.
+    "jurisdiction name": re.compile(
+        r"(?i)(sant" "a[\s_-]*cl" "ara|san[\s_-]*fran" "cisco|san[\s_-]*jos" "e|cup" "ertino|"
+        r"sunny" "vale|bay[\s_-]*ar" "ea|sil" r"icon[\s_-]*val" "ley)"),
+    # Official hosts for the withheld jurisdictions: a link to them crosswalks the
+    # placeholders to their geographies even when the prose does not.
+    "location-specific source host": re.compile(
+        r"(?i)(sant" "acl" "aracounty|sftre" "asurer|sfp" "uc|sfg" "ov|sfb" "os|sfass" "essor|"
+        r"sfw" r"ater|\bsf\." r"gov\b)"),
 }
 
-# County and city level names are published deliberately: they are the level at
-# which the property tax, rent and transfer rules in this analysis operate.
-ALLOWED_PLACE_NAMES = ("REDACTED County", "City and County of REDACTED",
-                       "REDACTED", "California", "REDACTED")
+# County and city level names are NOT published: they, like the parcel, identify the
+# properties, and official county and city pages are not linked from the public site
+# either (their web addresses name the jurisdiction). Only the state name appears,
+# because the state-level law is the level at which the main rules operate.
+# (The tuple is kept for documentation; the FORBIDDEN patterns below enforce it.)
+ALLOWED_PLACE_NAMES = ("California",)
 
 FORBIDDEN_ELEMENTS = re.compile(r"<(?:script|iframe|form|input|textarea|object|embed|img)\b", re.I)
 # A scale word after the figure means it is a quoted macroeconomic aggregate, not a
