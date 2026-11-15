@@ -339,6 +339,7 @@ code {
 /* The one-page attorney/CPA export. Links remain visible in print; all identity fields are placeholders. */
 .brief-toolbar { padding: 8px 12px; border: 1px solid var(--line); background: #f7fbff; border-radius: 6px; }
 .brief-confidential { font-size: 13px; border-bottom: 2px solid var(--ink); padding-bottom: 5px; }
+.brief-privacy { font-size: 11.5px; line-height: 1.35; border: 1px solid var(--line); background: #f7fbff; border-radius: 6px; padding: 7px 10px; margin: 8px 0; }
 .brief-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 18px; }
 .brief-grid section { break-inside: avoid; }
 .brief-grid h2 { margin: 10px 0 4px; font-size: 15px; }
@@ -361,6 +362,7 @@ code {
   body:has(.print-brief) main > h1 { font-size: 19pt; margin: 0 0 4px; }
   body:has(.print-brief) .lede { font-size: 9pt; margin: 0 0 6px; }
   body:has(.print-brief) .brief-confidential { font-size: 8pt; margin: 3px 0; }
+  body:has(.print-brief) .brief-privacy { font-size: 7pt; line-height: 1.15; padding: 4px 6px; margin: 3px 0; }
   body:has(.print-brief) .brief-grid { gap: 4px 12px; }
   body:has(.print-brief) .brief-grid h2 { font-size: 10pt; margin: 5px 0 2px; padding: 0; }
   body:has(.print-brief) .brief-grid p,

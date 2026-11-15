@@ -59,6 +59,10 @@ LEGACY_URLS = [
     # published under a place name, so the two former property-named pages are not
     # recreated here; the whole artifact replaces the previous deployment anyway.
     "audit.html", "black-swans.html", "stress.html",
+    # The second, overlapping adviser brief. Its content was folded into the
+    # surviving printable sheet, so the old route is withdrawn explicitly
+    # rather than left to return a stale figure or a 404.
+    "briefing-sheet.html",
     "data/sf_rental_pl.csv", "data/sources.csv",
 ]
 
