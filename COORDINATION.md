@@ -1,5 +1,21 @@
 # Coordination board
 
+## Session `arena/c1b491fb-tino3` — brief re-audit: recapture-rate correction, local parcel-tax terms, imputed-rent break-even, pre-committed decision rules, distribution chart · claimed 2026-11-15
+
+*Branch note:* Arena pins this session to `arena/c1b491fb-tino3`, based on `main` at `ee7082c` (PR #118). The board's `session-<id>/<task>` naming cannot be used; no other branch is created, switched to, or pushed, and `main` is not force-pushed. Board read in full before claiming.
+
+*Scope and limits:* the owner's brief repeats items already delivered by earlier sessions. This session re-checks each item against the built site, fixes what is wrong, and adds what is missing. Items that need an outside party (independent appraisal, rent opinion, comparables, insurer quote, written valuation at death, adviser review) stay open and are listed on the new `decision-rules.html`. The pre-rounding Git history scrub is an owner action (it needs a force-push to `main`), so it is not performed here.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| E-1 Correct the depreciation-recapture rate: the components the site cites (25% federal unrecaptured section 1250, 13.3% California including the 1% surcharge, 3.8% NIIT) sum to 42.1%, not the 41.1% in the model | **claimed** | `arena/c1b491fb-tino3` | `assets/data/inputs.json`, `assets/data/model.json` (regenerated), `scripts/build.py` (taxes text) |
+| E-2 Verify the 1% surcharge on FTB Form 540-ES and Form 540; correct the Proposition 3 wording (results unofficial, certification due 11 December 2026) | **claimed** | `arena/c1b491fb-tino3` | `scripts/build.py` (taxes, laws), `assets/sources.json` (append `ftb_540es_2026`) |
+| E-3 Model the local parcel tax approved on 3 November 2026 (Proposition H, parcel tax for transit operations, 1 July 2027 to 30 June 2042) with its official rates, floor and caps, on Property B | **claimed** | `arena/c1b491fb-tino3` | `assets/data/inputs.json`, `scripts/model.py` (costs_b_now), `scripts/build.py` (property B, timeline, laws, questions, review) |
+| E-4 Inflation-indexed imputed-rent break-even for the living paths (the rent a comparable home would cost, at which living equals selling and investing), shown beside the existing letting break-even | **claimed** | `arena/c1b491fb-tino3` | `scripts/model.py` (new output key), `scripts/build.py` (decision page) |
+| E-5 Pre-committed decision rules and a draft investment policy for the sale proceeds, written before any figure arrives; owner sign-off fields left blank | **claimed** | `arena/c1b491fb-tino3` | `scripts/build.py` (new page `decision-rules.html`), `scripts/package_site.py` (page list via builder) |
+| E-6 Distribution chart on the projections page: annual house-price changes in the verified state record, 1976 to 2025 | **claimed** | `arena/c1b491fb-tino3` | `scripts/build.py` (projections page) |
+| E-7 Gates, pull request to `main`, merge without waiting, confirm the Pages deploy, record the result | **claimed** | `arena/c1b491fb-tino3` | this section, `README.md` (counts), `EXECUTIVE_SUMMARY.md` (generated) |
+
 ## Session `arena/f8ab312e-tino3` — real 1929/2008 entry-timing replays, official-source re-verification, privacy audit and publication · claimed 2026-11-15
 
 *Branch note:* Arena pins this session to `arena/f8ab312e-tino3` (based on `main` at `f68fc30`). The board's `session-<id>/<task>` branch naming cannot be used; no other branch is created, switched to or pushed. Pushes go to this branch only; the pull request is opened from it to `main`.
