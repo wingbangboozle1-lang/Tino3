@@ -3546,6 +3546,84 @@ def page_briefing() -> str:
 
 
 # ------------------------------------------------------------ timeline page --
+def policy_section() -> str:
+    """The written investing policy, which has to exist before the money does.
+
+    The owner's instruction was to write the policy down before the money
+    arrives, because a policy written after a sale is a rationalisation of
+    whatever was already bought. This is a template of the questions a policy
+    has to answer, not a policy: the site cannot write the household's
+    tolerance, and any figure it invented for one would be an opinion dressed
+    as a rule. Every line is left for the household or its adviser.
+
+    The dates are the household's own gates, which is why they are proposed
+    rather than sourced: no statute imposes them.
+    """
+    rows = []
+    for when, item, why, gate in [
+        ("Before the sale closes",
+         "Target asset allocation, in writing: the percentage in cash, bonds and equities, and the "
+         "rebalancing band that will force an adjustment.",
+         "The phased entry needs a destination before it starts. Without one, the parking period becomes "
+         "a market-timing decision made one month at a time.",
+         "Gate RG-5"),
+        ("Before the sale closes",
+         "The maximum acceptable one-year loss, in dollars, and what the household would do if it "
+         "happened.",
+         "A policy that has never been tested against a number is a wish. The black swan page shows what "
+         "the same portfolios did in 1929, 2000, 2008 and 2020.",
+         "Gate RG-5"),
+        ("Before the sale closes",
+         "Who decides, and who is told. One named decision-maker, one named reviewer, and the date the "
+         "review happens.",
+         "Two people discovering they disagree after the money has been invested is the most common "
+         "failure in household portfolios.",
+         "Gate RG-5"),
+        ("Before the sale closes",
+         "The spending rule: how much may be drawn each year, and what happens in a year when the "
+         "portfolio falls.",
+         "A draw expressed as a percentage of the portfolio moves with the market; a fixed dollar draw "
+         "does not. Choosing which one was meant is easier before the money is spent.",
+         "Gate RG-5"),
+        ("Before the sale closes",
+         "The liquidity floor: how many months of household costs stay in cash or short Treasuries and "
+         "are never invested.",
+         "This is what stops a bad month becoming a forced sale. The phased plan parks in short "
+         "Treasuries for 24 to 36 months, which is longer than the floor needs to be.",
+         "Gate RG-5"),
+        ("Before the sale closes",
+         "The tax constraints: the holding period the household wants to reach, and any loss or gain "
+         "that must be realised in a particular year.",
+         "Basis and holding period are the only parts of the plan the tax code fixes. Changing the plan "
+         "later can move a gain into a worse year.",
+         "Gate RG-5"),
+        ("At the annual re-run",
+         "The review date, and the specific evidence that would justify a change to the allocation.",
+         "Without a written trigger, every market move becomes a reason to revisit, which is the same "
+         "thing as having no policy.",
+         "Gate RG-3"),
+    ]:
+        rows.append(f"<td>{esc(when)}</td><td><strong>{esc(item)}</strong></td><td>{esc(why)}</td>"
+                    f'<td><a href="precommit.html">{esc(gate)}</a></td>'
+                    + method_cell("precommit.html", "Household rule, not a figure"))
+    tbl = table(
+        "The written investing policy: what has to be decided before the money arrives",
+        ["When it is due", "What the policy must answer", "Why it cannot wait", "Gate", "Status"], rows,
+        note="A template, not a policy. Nothing in this table is filled in, because a risk tolerance "
+             "invented by a website would be an opinion published as a rule. The gates are the "
+             "household's own; no statute imposes them.")
+    return ('<h2 id="policy">The written investing policy, before the money arrives</h2>'
+            + callout("flag", "Write it down before the sale, not after", f"""
+<p>The recommendation on this site is to sell and invest. That creates a second decision the brief did not
+ask for but cannot avoid: what the proceeds are invested <em>in</em>, and by what rule. A policy written
+after the sale is a description of whatever was bought, not a constraint on it. The six lines below are the
+questions the policy has to answer, and they are deliberately left blank.</p>
+<p>The phased plan on the <a href="projections.html">projections page</a> parks the proceeds in short
+Treasuries for 24 to 36 months and phases into equities over the following 12. That plan is a schedule. It
+is not a policy, and it does not answer any of the lines below.</p>""")
+            + tbl)
+
+
 def page_timeline() -> str:
     """Every dated step in order. Each row names its official source or is not on the page."""
     rows_spec = [
@@ -3613,6 +3691,7 @@ next year. Everything else is measured from the date of death or the date of tra
         + tl
         + callout("answer", "Which deadlines can move the answer",
 """<p>The three deadlines that can change the recommendation are: (1) whether the parent-child relationship is in place before the transfer, because without it the Proposition 19 shelter disappears; (2) the one-year homeowners' exemption and three-year exclusion-claim windows, because missing them costs the shelter; and (3) the nine-month estate-tax return, because portability is normally lost when no timely return is filed - although an estate not otherwise required to file can use the simplified late election of Rev. Proc. 2022-32 within five years of death. The estate page works entirely in anonymous scenario bands because the inherited cash amount is not published.</p>""")
+        + policy_section()
         + callout("method", "Why the order matters", """
 <ol>
 <li>The trust notice (60 days) and the change-in-ownership statement (150 days) are the first two clocks after death.</li>

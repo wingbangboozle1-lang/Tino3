@@ -613,6 +613,11 @@
     "id": "RG-4",
     "when": "If the recommendation moves",
     "what": "Write down which input moved it and who verified the new input, before acting on it."
+   },
+   {
+    "id": "RG-5",
+    "when": "Before the proceeds of any sale are invested",
+    "what": "The written investing policy on timeline.html#policy, with all six lines answered and dated: the target allocation and rebalancing band, the maximum acceptable one-year loss, who decides and who is told, the spending rule, the liquidity floor, and the tax constraints."
    }
   ]
  }
