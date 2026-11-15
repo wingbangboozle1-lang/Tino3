@@ -3045,6 +3045,14 @@ This session claimed W-1 (location-crosswalk removal) and W-3 (Rev. Proc. 2022-3
 - Gates on the final tree: `build.py`, `verify.py` (22 pages; 778 table rows; 662 official-source-linked; 116 registered; 2,608 links; 90 ledger sources), `privacy_boundary.py`, `package_site.py` (118 withdrawal routes), `verify_legacy.py --config-only`, `git diff --check` - all exit 0. Model regeneration byte-identical across two runs; `economy.py` runs unchanged.
 - Rendered output read back: the black-swan stress table (4.2% assumption, engine values, same-market differences), the dashboard KPI (30 months parked, 18 months phased), the timeline's trustee-notice row, and the consolidated model outputs.
 
+### Publication result — session `arena/33fcb60a-tino3`, 15 November 2026
+
+- **PR #112** (`arena/33fcb60a-tino3` → `main`): https://github.com/wingbangboozle1-lang/Tino3/pull/112 — merged with a merge commit at `4a80c14` on 2026-11-15 after the `verify` check passed (run 43674293940). No auto-merge.
+- **Checks on the merge commit `4a80c14`:** `Verify static site` run 43674355440 success; `Deploy GitHub Pages` run 43674355395 success; legacy `pages build and deployment` run 43674355248 success. The Pages API reports `built`, `build_type: legacy`, source `main:/`, no error.
+- **Live checks (query-string fetches after the deploy):** the dashboard serves the consolidated phased KPI ("30 months in short-term Treasuries after inheritance, then equal monthly purchases over 18 months", $34,250,230) beside the real-crashes KPI (3 of 4) from PR #110; `black-swan.html` serves both the real-replays section and the consolidated entry-timing stress table (`#phased-method`, "Treasury yield assumption" column, stated 4.2% scenario); `timeline.html` serves the trustee-notice row qualified from Probate Code section 16061.7 and the Form 706 row with the Rev. Proc. 2022-32 fifth-anniversary qualification.
+- **PR #97** (`arena/1663e879-tino3`, the read-only audit) closed as superseded after the merge, with a comment mapping each of its four findings to the PR that implemented it (#103 duplication; #109 crosswalk and portability; #110 real replays; #112 phased consolidation and gate defence-in-depth). No open pull requests remain.
+- **Live site:** https://wingbangboozle1-lang.github.io/Tino3/
+
 
 ## Session `arena/cdca778f-tino3` — fresh verification pass, insurance research gap, briefing print hardening, history-scrub runbook, final publication · claimed 2026-11-15
 
