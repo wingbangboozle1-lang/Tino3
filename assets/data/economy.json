@@ -5,14 +5,14 @@
   "seed": 20261113,
   "draws": 2000,
   "block_years": 10,
-  "series_house": "ATNHPIUS41940Q",
+  "series_house": "withheld",
   "series_cpi": "CPIAUCSL",
   "rounding": "nearest $10",
   "method": "Seeded block bootstrap of the official FRED annual record; see the module docstring."
  },
  "bootstrap": {
   "series": {
-   "house": "ATNHPIUS41940Q",
+   "house": "withheld",
    "house_span": "1976-2025",
    "cpi": "CPIAUCSL",
    "cpi_span": "1975-2024"

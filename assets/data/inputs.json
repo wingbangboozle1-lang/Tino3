@@ -3,12 +3,12 @@
   "edition": "Anonymised quantitative decision edition",
   "built": "2026-11-13",
   "rounding": "Every dollar figure on the public site is rounded to the nearest $10. Owner-supplied figures are the owner's own records and are labelled unverified where no official public record was checked.",
-  "privacy": "No name, street address, parcel number, ZIP code, trust detail or utility account appears in this file. Placeholders: Property A (the home being inherited, in Santa Clara County), Property B (the three-unit building already owned by the heir, in the City and County of San Francisco)."
+  "privacy": "No name, street address, parcel number, ZIP code, county or city name, trust detail or utility account appears in this file. Placeholders: Property A (the home being inherited), Property B (the three-unit building already owned by the heir). The county and city of each property are deliberately withheld on the public site: they, like the parcel, identify the properties."
  },
  "property_a": {
   "label": "Property A",
   "role": "Inherited through a trust. Not currently owned by the heir.",
-  "jurisdiction": "Santa Clara County, California",
+  "jurisdiction": "A California county (name withheld on the public site)",
   "estimated_market_value_2026": 3100000,
   "value_basis": "Owner estimate, November 2026",
   "occupancy": "Currently occupied by the transferor as a principal residence",
@@ -131,7 +131,7 @@
  "property_b": {
   "label": "Property B",
   "role": "Already owned by the heir. Rental income is already flowing. The heir can also live here without losing rental income.",
-  "jurisdiction": "City and County of San Francisco, California",
+  "jurisdiction": "A California city and county (name withheld on the public site)",
   "estimated_market_value_2026": 1800000,
   "value_basis": "Owner estimate, November 2026",
   "units": 3,
@@ -279,29 +279,23 @@
   "prop13_base_rate": {
    "value": 0.01,
    "src": [
-    "boe_pub29",
-    "scc_ratebook"
+    "boe_pub29"
    ]
   },
   "prop13_inflation_cap": {
    "value": 0.02,
    "src": [
     "boe_pub29",
-    "scc_ratebook",
     "rtc51"
    ]
   },
   "sf_secured_rate_2026_27": {
    "value": 0.0118162182,
-   "src": [
-    "sf_treas_rate"
-   ]
+   "src": []
   },
   "sf_allowed_rent_increase_2026_27": {
    "value": 0.016,
-   "src": [
-    "sf_rent_increase"
-   ]
+   "src": []
   },
   "statewide_rent_cap_base": {
    "value": 0.05,
@@ -361,25 +355,20 @@
  "assumptions": {
   "ad_valorem_rate_a": {
    "value": 0.0118,
-   "basis": "Assumption, not a fitted result. The owner's own bills cannot separate the two parts of the bill: assessed value and the fixed charges both grow at about 2% a year, so any rate between roughly 1.05% and 1.60% fits the data almost equally well. 1.18% is used because Proposition 13 limits the rate to 1% plus voter-approved bond debt, because the published San Francisco rate is 1.18162182%, and because it puts the fixed part of the bill at a plausible level. The property's tax rate area is not published on this site, so this is flagged for review.",
+   "basis": "Assumption, not a fitted result. The owner's own bills cannot separate the two parts of the bill: assessed value and the fixed charges both grow at about 2% a year, so any rate between roughly 1.05% and 1.60% fits the data almost equally well. 1.18% is used because Proposition 13 limits the rate to 1% plus voter-approved bond debt, because it matches the combined rate published for the other property's jurisdiction (that publisher is not named on the public site), and because it puts the fixed part of the bill at a plausible level. The property's tax rate area is not published on this site, so this is flagged for review.",
    "src": [
-    "boe_pub29",
-    "scc_ratebook",
-    "sf_treas_rate"
+    "boe_pub29"
    ]
   },
   "ad_valorem_rate_b": {
    "value": 0.0118162182,
-   "basis": "Published by the City and County of San Francisco for fiscal year 2026-27.",
-   "src": [
-    "sf_treas_rate"
-   ]
+   "basis": "Published for the city's secured roll for fiscal year 2026-27. The publisher is not named or linked on the public site, because the jurisdiction identifies the property; the parcel's own bill is the controlling record.",
+   "src": []
   },
   "fixed_charge_growth": {
    "baseline": 0.025,
    "basis": "Fixed charges are projected at the modelled inflation rate. Diagnostic: the fixed part of the Property B bill grew at 8.1% a year between 2016 and 2025, so this projection is deliberately conservative and understates the bill if that pace continues.",
    "src": [
-    "sf_treas_rate",
     "ssa_trustees"
    ]
   },
@@ -388,10 +377,7 @@
    "low": 0.025,
    "high": 0.055,
    "basis": "Scenario band. The FHFA all-transactions index for Property A's area compounded at 6.9% a year from 1976 to 2025 but 3.3% a year over the last twenty years, so the baseline sits below the long run.",
-   "src": [
-    "fred_hpi_a",
-    "fred_hpi_b"
-   ]
+   "src": []
   },
   "inflation": {
    "baseline": 0.025,
@@ -430,7 +416,7 @@
   "treasury_short_yield_nominal": {
    "baseline": 0.042,
    "low": 0.035,
-   "high": 0.050,
+   "high": 0.05,
    "basis": "Short Treasury bills and notes (3 month to 2 year) anchor near the policy rate rather than the 10-year term yield. Baseline is a stated scenario, not an official forward rate; the band brackets the 2025-2026 short-end range. No official agency publishes a forward short-Treasury yield for 2040-2050.",
    "src": []
   },
@@ -444,9 +430,9 @@
    ]
   },
   "short_term_treasury_yield": {
-   "baseline": 0.040,
-   "low": 0.030,
-   "high": 0.050,
+   "baseline": 0.04,
+   "low": 0.03,
+   "high": 0.05,
    "basis": "Stated scenario for parking sale proceeds in 3-month to 2-year Treasury bills during the 24-36 month phased-investing period. No official source publishes forward short-term rates for the 2040s, so this is a stated assumption and not an official figure. The verified 10-year Treasury series anchors the long-rate pages; this row is used only by the phased-investing path on the black-swan page.",
    "src": []
   },
@@ -470,8 +456,7 @@
    "baseline": 0.02,
    "basis": "The Proposition 13 inflation cap has been binding in every year of both assessment rolls supplied by the owner.",
    "src": [
-    "boe_pub29",
-    "scc_ratebook"
+    "boe_pub29"
    ]
   },
   "combined_gain_tax_rate": {
