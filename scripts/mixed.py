@@ -349,7 +349,7 @@ def clawback_cost(inherit_year: int = INHERIT, **kw) -> dict:
 
 
 # --------------------------------------------------------------- distributions --
-def bootstrap_draws(seed: int = SEED, draws: int = 400) -> list[dict]:
+def bootstrap_draws(seed: int = SEED, draws: int = DRAWS) -> list[dict]:
     """Run every path against the same seeded bootstrap the economy page uses.
 
     Ten-year blocks are drawn with replacement from the windows where both the

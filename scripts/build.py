@@ -19,6 +19,8 @@ SOURCES = {s["id"]: s for s in SRC_DOC["sources"]}
 INPUTS = json.loads((DATA / "inputs.json").read_text(encoding="utf-8"))
 MODEL = json.loads((DATA / "model.json").read_text(encoding="utf-8"))
 ECON = json.loads((DATA / "economy.json").read_text(encoding="utf-8"))
+MIXED = json.loads((DATA / "mixed.json").read_text(encoding="utf-8"))
+PRECOMMIT = INPUTS.get("precommit", {"rules": [], "household_goals": [], "review_gates": [], "meta": {}})
 
 A = INPUTS["property_a"]
 B = INPUTS["property_b"]
@@ -31,7 +33,8 @@ BUILD_DATE = "15 November 2026"
 import model as model_mod  # noqa: E402
 
 NAV_GROUPS = [
-    ("Start here", ["index.html", "executive-summary.html", "decision.html", "what-if.html", "briefing.html"]),
+    ("Start here", ["index.html", "precommit.html", "executive-summary.html", "decision.html",
+                    "what-if.html", "briefing.html"]),
     ("The two properties", ["property-a.html", "property-b.html", "ownership-distinction.html"]),
     ("Money over time", ["costs.html", "projections.html", "taxes.html"]),
     ("Rules and the estate", ["inheritance.html", "timeline.html", "estate.html", "laws.html"]),
@@ -41,6 +44,7 @@ NAV_GROUPS = [
 ]
 PAGE_TITLES = {
     "index.html": "Dashboard",
+    "precommit.html": "Decide before you read the numbers",
     "what-if.html": "What-if cases",
     "executive-summary.html": "Executive summary",
     "decision.html": "The decision",
@@ -207,6 +211,100 @@ def callout(kind, title, body):
             f'<div class="callout-body">{body}</div></div>')
 
 
+# ---------------------------------------------------------------- charts ------
+# The published site carries no script element, so every chart is built from
+# divs and the values are printed beside it in text. The chart is a reading aid
+# for a table, never the only place a number appears.
+
+
+def _num(x) -> str:
+    """A money figure for chart axis labels and printed values."""
+    return f"{x:,}"
+
+
+def fan_chart(title: str, sub: str, unit: str, rows: list[dict], note: str) -> str:
+    """Decile fan chart: one row per decile across three compared series.
+
+    rows = [{"label": "p10", "values": [("sell", 123, "Sell"), ...]}, ...]
+    Bars are scaled to the largest absolute value in the whole chart, so the
+    three series are compared on one axis rather than three.
+    """
+    peak = max((abs(v) for r in rows for _, v, _ in r["values"]), default=1) or 1
+    body = []
+    for r in rows:
+        bars = []
+        for cls, v, name in r["values"]:
+            width = abs(v) / peak * 100.0
+            label = f"{_num(v)}" if unit == "money" else f"{v:.2f}%"
+            bars.append(f'<div class="track" title="{esc(name)} {esc(label)}">'
+                        f'<div class="fill {cls}" style="width:{width:.1f}%"></div></div>')
+        vals = " / ".join(
+            (f"{_num(v)}" if unit == "money" else f"{v:.2f}%") for _, v, _ in r["values"])
+        body.append(f'<div class="lbl">{esc(r["label"])}</div>' + "".join(bars)
+                    + f'<div class="val">{vals}</div>')
+    cols = 1 + len(rows[0]["values"]) + 1
+    legend = "".join(f'<span><i class="swatch {esc(cls)}"></i>{esc(name)}</span>'
+                     for cls, _, name in rows[0]["values"])
+    return (f'<div class="chart"><h3>{esc(title)}</h3><p class="chart-sub">{sub}</p>'
+            f'<div class="fan" style="grid-template-columns:92px repeat({len(rows[0]["values"])}, 1fr) 150px">'
+            + "".join(body) + "</div>"
+            f'<div class="chart-legend">{legend}</div>'
+            f'<p class="chart-sub" style="margin:8px 0 0">{note}</p></div>')
+
+
+def histogram(title: str, sub: str, counts: list[int], lo: int, hi: int,
+              zero_pos: float, share: float, note: str) -> str:
+    """Histogram of one distribution, with the zero line drawn on it."""
+    peak = max(counts) or 1
+    bars = []
+    n = len(counts)
+    for i, c in enumerate(counts):
+        centre = (i + 0.5) / n
+        cls = "win" if centre > zero_pos else "lose"
+        h = c / peak * 100.0
+        bars.append(f'<div class="bar {cls}" style="height:{h:.1f}%" '
+                    f'title="{c} draws"></div>')
+    zero = max(0.0, min(100.0, zero_pos * 100.0))
+    axis = (f'<div class="hist-axis"><span>{_num(lo)}</span>'
+            f'<span>zero at {_num(0)}</span><span>{_num(hi)}</span></div>')
+    return (f'<div class="chart"><h3>{esc(title)}</h3><p class="chart-sub">{sub}</p>'
+            f'<div class="hist">{"".join(bars)}'
+            f'<div class="hist-zero" style="left:{zero:.1f}%"></div></div>{axis}'
+            f'<div class="chart-legend">'
+            f'<span><i class="swatch sell"></i>Selling ahead</span>'
+            f'<span><i class="swatch zero"></i>Zero line</span>'
+            f'<span><i class="swatch live"></i>Keeping the home ahead</span></div>'
+            f'<p class="chart-sub" style="margin:8px 0 0">{note} '
+            f'Selling is ahead in <strong>{share*100:.1f}%</strong> of the draws.</p></div>')
+
+
+def meter_chart(title: str, sub: str, rows: list[tuple[str, int, str]], note: str) -> str:
+    """Horizontal bars for a handful of named values on one scale."""
+    peak = max((abs(v) for _, v, _ in rows), default=1) or 1
+    body = []
+    for name, v, cls in rows:
+        width = abs(v) / peak * 100.0
+        body.append(f'<div>{esc(name)}</div><div class="track">'
+                    f'<div class="fill {cls}" style="width:{width:.1f}%"></div></div>'
+                    f'<div class="val">{_num(v)}</div>')
+    return (f'<div class="chart"><h3>{esc(title)}</h3><p class="chart-sub">{sub}</p>'
+            f'<div class="meter">{"".join(body)}</div>'
+            f'<p class="chart-sub" style="margin:8px 0 0">{note}</p></div>')
+
+
+def decision_strip(headline: str, answer: str, confidence: str, confidence_label: str,
+                   built: str, changed_by: list[str]) -> str:
+    """The first screen: the answer, how sure it is, when it was computed, what moves it."""
+    items = "".join(f"<li>{c}</li>" for c in changed_by)
+    return f"""<section class="decision-strip">
+<h2>{esc(headline)}</h2>
+<p class="answer-line">{answer}</p>
+<p class="meta-line">Confidence: <span class="confidence {esc(confidence)}">{esc(confidence_label)}</span>
+ &middot; Computed {esc(built)} from the inputs on this site &middot; It moves only if one of these changes:</p>
+<ul class="change-list">{items}</ul>
+</section>"""
+
+
 METHOD_TEXT = (
     "A deterministic model, rebuilt from assets/data/inputs.json and assets/data/series.json by "
     "scripts/model.py. House prices grow at a stated nominal rate, the assessed value rolls forward under the "
@@ -306,6 +404,44 @@ def kpi(value, label, sub=""):
 
 
 # --------------------------------------------------------------------- index --
+def distribution_section(dist: dict, sell_share: float) -> str:
+    """The dashboard's distribution chart: deciles of the resampled histories."""
+    by_key = {s["key"]: s for s in dist["series"]}
+    sell = by_key["sell"]
+    live = by_key["live"]
+    mid = by_key["live10_sell"]
+    rows = []
+    for i in range(11):
+        rows.append({
+            "label": "p100" if i == 10 else f"p{i*10}",
+            "values": [("sell", sell["deciles"][i], "Sell and invest"),
+                       ("live", live["deciles"][i], "Live in it 30 years"),
+                       ("mid", mid["deciles"][i], "Live 10 years, then sell")],
+        })
+    chart = fan_chart(
+        "Thirty years later: the range of outcomes, not one line",
+        f"Deciles of {dist['draws']} resampled fifty-year histories of the verified record: the "
+        f"California house price index and consumer prices drawn together in ten-year blocks, "
+        f"each draw run through the same model. Bars and printed values are the same figures.",
+        "money", rows,
+        "The bottom of each distribution is a bad run: house prices compounding at about 2.8% a "
+        "year while the sell path still earns the modelled equity return. The top is a good one. "
+        "The point is the shape: the two distributions overlap below p60 and separate above it.")
+    hist = histogram(
+        "How often selling wins, and by how much",
+        "The sell-minus-keep gap over the same draws. Positive means selling at the inheritance "
+        "left the household ahead after thirty years.",
+        dist["histogram"]["counts"], dist["histogram"]["lo"], dist["histogram"]["hi"],
+        dist["histogram"]["zero_position"], sell_share, dist["histogram"]["note"])
+    return ('<section id="distribution"><h2>The whole range, not the headline number</h2>'
+            f'<p>Every headline on this site is one number from one set of assumptions. The charts '
+            f'below replace the single line with the distribution: {dist["draws"]} resampled '
+            f'histories of the verified record, each one put through the same model. Walk the '
+            f'<a href="projections.html#fan">year-by-year fan chart</a> as well, and read the method '
+            f'on the <a href="economy.html">economy page</a>.</p>'
+            + chart + hist + "</section>")
+
+
 def page_index() -> str:
     p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
     best = p45["best_path"]
@@ -358,16 +494,46 @@ question A-1</a> before relying on any number here. {slink('rtc63_2_eligibility'
             f'<li><a href="{esc(p)}"><strong>{esc(PAGE_TITLES[p])}</strong>'
             f'<span>{esc(SUMMARIES[p])}</span></a></li>' for p in pages)
         cards.append(f'<section class="card"><h2>{esc(group)}</h2><ul class="card-list">{items}</ul></section>')
+    # ---- the first screen: the answer, how sure, when, and what moves it -----------
+    dist = MIXED["distribution"]
+    sell_share = next(s["value"] for s in dist["shares"]
+                      if s["key"].startswith("Selling beats living in it for thirty"))
+    sens_sell = sum(1 for x in sens if x["best"].startswith("sell"))
+    confidence = ("high" if sell_share >= 0.9 and sens_sell == len(sens) else
+                  "medium" if sell_share >= 0.75 else "low")
+    confidence_label = {"high": "high", "medium": "moderate", "low": "low"}[confidence]
+    first_screen = decision_strip(
+        "The answer, first",
+        f"Sell Property A soon after it is inherited. Living in it, letting it out, and every mixed "
+        f"version of those two end behind selling in the baseline and in "
+        f"{sell_share*100:.0f}% of {dist['draws']} resampled histories of the "
+        f"verified record, on the <a href=\"#distribution\">distribution section</a>. The one "
+        f"exception the household controls is "
+        f"whether it wants to live in this particular house.",
+        confidence, confidence_label, BUILD_DATE,
+        [f'<strong>The transfer is not parent-to-child.</strong> Then there is no Proposition 19 '
+         f'exclusion, the property is reassessed in full, and selling wins by more. '
+         f'<a href="questions.html">Question A-1</a>.',
+         f'<strong>Market rent clears {m(p45["breakeven_rent_monthly"])} a month in 2045 dollars.</strong> '
+         f'Then letting it out matches selling. <a href="precommit.html">The pre-commitment rule P-5</a>.',
+         f'<strong>House prices grow faster than {pc(p45["breakeven_house_growth"])} a year for thirty '
+         f'years.</strong> Then keeping it matches selling at a 7% return. '
+         f'<a href="what-if.html#threshold-growth">Break-even</a>.',
+         f'<strong>The household decides it wants to live there.</strong> That is a legitimate reason, '
+         f'and it is the one input no model can price. <a href="precommit.html">Rule P-3</a>.'])
+
     return (
-        privacy_banner()
-        + gating
-        + wwc
-        + f'<section class="kpi-row">{kpis}</section>'
+        first_screen
         + callout("answer", "The one-line answer", f"""
 <p>Under every baseline this site can build, <strong>selling Property A soon after it is inherited beats living in it or letting it out</strong>, and it is not close. The reason is a one-off combination: the inheritance resets the income-tax basis to the value at death, so an immediate sale pays almost no capital gains tax, while the property tax assessment jumps to market value under Proposition 19. Waiting converts a tax-free asset into a taxed one and adds roughly {m(p45['bill_if_rent_year1'] - p45['bill_today_projected'])} a year of extra property tax if the home is let out.</p>
 <p>The break-even house growth needed to make keeping the home beat selling is <strong>{pc(p45['breakeven_house_growth'])} a year for thirty years</strong>. The verified California state house price index compounded at 6.4% a year over the fifty years to 2025 and 2.6% a year over the last twenty. Read the <a href="decision.html">full decision</a>, then the <a href="black-swan.html">cases where this flips</a>.</p>
 <p class="reinvest"><strong>Reinvestment risk beside the headline.</strong> Selling and investing assumes the proceeds can be reinvested at the modelled equity return. Inheriting into a 1929- or 2008-style crash means buying equities at the top. The phased path on the black-swan page parks the proceeds in short-term Treasuries for 24-36 months, then moves them into stocks, which softens crash-entry risk - at the cost of missing out while equities rally. On the 2045 baseline the proceeds could lose {pc(-p45['breakeven_return_vs_live'])} a year and selling would still match living, so the case for selling does not need a high return. <a href="what-if.html#threshold-return">Break-even case</a>.</p>
 """)
+        + f'<section class="kpi-row">{kpis}</section>'
+        + distribution_section(dist, sell_share)
+        + '<h2>The three checks that come before any number</h2>'
+        + gating
+        + wwc
         + '<section class="card-grid">' + "".join(cards) + "</section>"
         + callout("method", "How to read this site", """
 <ol>
@@ -380,6 +546,7 @@ question A-1</a> before relying on any number here. {slink('rtc63_2_eligibility'
 
 
 SUMMARIES = {
+    "precommit.html": "Write the rules down first, so the projection cannot pick the answer.",
     "executive-summary.html": "The important details on one page.",
     "decision.html": "Five paths, the break-evens, and the recommendation.",
     "briefing.html": "Print-ready attorney and CPA discussion sheet.",
@@ -692,6 +859,133 @@ PATH_LABELS = {
     "live_then_rent": "Live in it, then let it",
     "rent_out": "Let it out",
 }
+
+
+# ------------------------------------------------------ pre-commit register --
+def page_precommit() -> str:
+    """The rules written down before the figures are read.
+
+    The owner asked for this explicitly: agree in writing what would make the
+    household choose each path before the figures arrive, so the outcome is not
+    reverse-engineered from one projection. The page therefore states the test
+    for each path first, and puts the numbers second - and the decision column
+    is empty on purpose, because no path has been chosen.
+    """
+    p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
+    rules = PRECOMMIT["rules"]
+    goals = PRECOMMIT["household_goals"]
+    gates = PRECOMMIT["review_gates"]
+
+    blank = '<span class="blank">not yet decided</span>'
+    rule_rows = []
+    for r in rules:
+        by = esc(r["decided_by"]) if r["decided_by"] else blank
+        on = esc(r["decided_on"]) if r["decided_on"] else blank
+        rule_rows.append(
+            f"<td><strong>{esc(r['id'])}</strong></td>"
+            f"<td><strong>{esc(r['path'])}</strong></td>"
+            f"<td>{esc(r['decides_if'])}</td>"
+            f"<td>{esc(r['would_override_if'])}</td>"
+            f"<td>{on}</td><td>{by}</td>"
+            + method_cell("review.html#register", "Household rule, not a figure"))
+    rule_table = table(
+        "The pre-commitment register: what decides each path, written before the figures",
+        ["Rule", "Path", "The household chooses this path if...", "...but this would override it",
+         "Decided on", "Decided by", "Where the figure is"],
+        rule_rows,
+        note="The two decision columns are deliberately empty. No path has been chosen. Fill them in "
+             "by hand when the household decides, with the date, and keep the rule beside the decision "
+             "so a future reader can see whether the rule was followed or changed.")
+
+    goal_rows = []
+    for g in goals:
+        goal_rows.append(
+            f"<td><strong>{esc(g['id'])}</strong></td><td><strong>{esc(g['goal'])}</strong></td>"
+            f"<td>{esc(g['definition'])}</td>"
+            f"<td>{g['priority']}</td>"
+            f'<td><span class="blank">not yet agreed</span></td>'
+            + method_cell("review.html#register", "Household objective, not a figure"))
+    goal_table = table(
+        "The household's own objectives, in priority order",
+        ["Goal", "Objective", "What it means in this decision", "Priority", "Agreed on"],
+        goal_rows,
+        note="A financial model cannot rank these. A stated preference to keep a home in the family "
+             "is legitimate and can outweigh a six-figure difference; the point of writing it down "
+             "first is that the figures are then tested against the preference instead of the other "
+             "way round.")
+
+    gate_rows = []
+    for g in gates:
+        gate_rows.append(
+            f"<td><strong>{esc(g['id'])}</strong></td><td>{esc(g['when'])}</td>"
+            f"<td>{esc(g['what'])}</td>"
+            f'<td><span class="badge assumption">not yet held</span></td>'
+            + method_cell("review.html#register", "Procedure, not a figure"))
+    gate_table = table(
+        "The gates: what must be true before any step is taken",
+        ["Gate", "When", "What has to be true", "Status", "Source"], gate_rows,
+        note="Each gate is a stop, not a task. Nothing on this site has been signed, filed or "
+             "implemented, so every gate is still open.")
+
+    # ---- the numbers the rules refer to, printed after the rules -----------------
+    rent_rows = []
+    for point in MIXED["rent_sensitivity"]:
+        cells = []
+        for p in point["paths"]:
+            adj = p["opportunity_adjusted"]
+            shown = m(adj) if adj is not None else "no credit"
+            cells.append(f"<td>{shown}</td>")
+        rent_rows.append(f"<td>{m(point['rent'])} a year</td>" + "".join(cells)
+                         + method_cell("#method", "Scenario, not a quote"))
+    rent_table = table(
+        "The imputed-rent test: what living in the house has to be worth",
+        ["Assumed market rent", "Live in it 30 years, then sell: value including the rent saved",
+         "Live in it 10 years, then sell", "Live in it 10 years, then let it out"],
+        rent_rows,
+        note="Each column adds the market rent saved while the heir occupies the house, compounded at "
+             "the same after-tax return as every other cash flow, to the path's terminal value. No "
+             "official source publishes a market rent for a specific home and the input is still "
+             "empty, so these are scenarios across a range, not a rent opinion. Compare the 30-year "
+             f"column with selling at the inheritance, which is {m(p45['paths']['sell_equities']['terminal'])} "
+             "in the same money.")
+
+    bvs = [(a["key"], round(a["p50"] / a["constant"], 2) if a["constant"] else None)
+           for a in []]
+    return (
+        callout("flag", "Read this page before any other page", f"""
+<p>This page is the household's own rulebook, and it is meant to be read <em>before</em> the
+projections. The owner's instruction was explicit: agree in writing what would make the household
+choose each path <strong>before the figures arrive</strong>, so the outcome cannot be
+reverse-engineered from whichever projection is shown first. Read the rules below, fill in the two
+decision columns when the household decides, and only then read the numbers.</p>
+<p>Nothing here has been decided. The register is a testing rule, not a recommendation, and the
+recommendation on the <a href="decision.html">decision page</a> is what the model says
+<em>after</em> the test, not instead of it.</p>""")
+        + rule_table
+        + goal_table
+        + callout("note", "Why the rules come before the numbers", """
+<p>A single projection can be made to support almost any path, because it depends on a handful of
+assumptions that nobody can verify: house prices over thirty years, the return on the reinvested
+money, market rent, and the cost of holding the building. Writing the rule down first changes the
+question from &ldquo;which path does this projection favour?&rdquo; to &ldquo;does the evidence clear
+the bar the household set in advance?&rdquo;. That is the only defence against choosing a path and
+then finding the assumptions that justify it.</p>""")
+        + rent_table
+        + callout("method", "How the test is applied", """
+<ol>
+<li><strong>Clear the first gate.</strong> Answer question A-1 on the <a href="questions.html">questions
+page</a>: is the transfer between a parent and a child? If it is not, the Proposition 19 exclusion does
+not exist and the rules below are re-read with a full reassessment.</li>
+<li><strong>State the goals</strong> in the order they actually matter to the household, not in the
+order the model ranks them.</li>
+<li><strong>Set the rules</strong> - the conditions under which each path is the chosen one.</li>
+<li><strong>Only then read the projections</strong>, and ask whether they clear the rules, not whether
+they look favourable.</li>
+<li><strong>Record the decision and its date</strong> beside the rule, and re-read the rules every year
+at gate RG-3.</li>
+</ol>""")
+        + gate_table
+    )
 
 
 # --------------------------------------------------------------- property A --
@@ -1129,6 +1423,7 @@ def page_projections() -> str:
 <p>Year-by-year projections from 2026 to 2076 on the baseline assumptions: house prices 4.0% a year, inflation
 2.5% a year, assessed values rising at the Proposition 13 cap of 2% a year. These tables exist so the shape of
 the arithmetic is visible. They are not a forecast; see the <a href="black-swan.html">black swan page</a>.</p>""")
+        + fan_section()
         + table("Property A: value, assessed value and tax bill, if the assessment is never reset",
                 ["Year", "Market value", "Assessed value", "Tax bill", "Effective rate on assessed value", "Basis"],
                 proj_rows(MODEL["projection_a"]))
@@ -1150,6 +1445,42 @@ neutral.</p>""")
 
 
 # -------------------------------------------------------------------- taxes --
+def fan_section() -> str:
+    """Year-by-year fan chart: the constant 4% line against the resampled deciles."""
+    by_key = {s["key"]: s for s in MIXED["distribution"]["series"]}
+    vod = next(s for s in MIXED["distribution"]["series"]
+               if s["key"] == "value_at_death")
+    rows = []
+    proj = MODEL["projection_a"]
+    for yr, idx in ((2036, None), (2046, None), (2056, None), (2066, None), (2076, None)):
+        p = next((x for x in proj if x["year"] == yr), None)
+        rows.append((yr, p["value"] if p else None))
+    decile_rows = []
+    for i in range(11):
+        decile_rows.append({
+            "label": "p100" if i == 10 else f"p{i*10}",
+            "values": [("sell", vod["deciles"][i], "Value at the 2045 inheritance"),
+                       ("band", vod["deciles"][i], "Same, shown as the band")],
+        })
+    chart = fan_chart(
+        "Property A's value at the 2045 inheritance: the constant line against the record",
+        f"The constant 4% a year the tables use gives {m(next((x['value'] for x in proj if x['year'] == 2045), 0))}. "
+        f"The {MIXED['distribution']['draws']} resampled histories put the same value anywhere from "
+        f"{m(vod['deciles'][0])} to {m(vod['deciles'][10])}.",
+        "money", decile_rows,
+        "The table below the chart is the constant case and is deliberately kept: it is the arithmetic "
+        "the break-even figures are built on. The fan is what that arithmetic looks like when house "
+        "prices and consumer prices move as they actually have, in the same ten-year blocks.")
+    return ('<section id="fan"><h2>Year by year, with the record\'s own variation</h2>'
+            f'<p>The tables on this page use one constant growth rate so the arithmetic is legible. '
+            f'That is not what the record looks like: annual house price growth in the California '
+            f'record has run from minus 20.0% to plus 25.3%. The fan below redraws the 2045 value '
+            f'using {MIXED["distribution"]["draws"]} resampled fifty-year histories of the verified '
+            f'series, drawn in ten-year blocks so house prices and consumer prices move together as '
+            f'they did. The method is the <a href="economy.html">economy page</a>\'s.</p>'
+            + chart + "</section>")
+
+
 def page_taxes() -> str:
     p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
     now_sale = p45["paths"]["sell_equities"]["sale"]
@@ -3017,6 +3348,7 @@ that answer is no, the reassessment is full and every case here moves toward sel
 
 PAGE_BUILDERS = {
     "index.html": (page_index, "Two California properties, one decision. Every figure rounded to the nearest $10."),
+    "precommit.html": (page_precommit, "The household's rules, written before the figures are read."),
     "executive-summary.html": (page_executive_summary,
                                "The important details, the recommendation, and what would change it."),
     "decision.html": (page_decision, "Five paths, priced, with the break-even numbers and the sensitivity."),

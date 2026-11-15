@@ -372,3 +372,55 @@ code {
   body:has(.print-brief) a { color: #111; text-decoration: underline; }
   body:has(.print-brief) a::after { content: none; }
 }
+
+/* ------------------------------------------------------------ static charts --
+   Every chart on this site is drawn with divs and CSS, because the build
+   refuses to publish a <script> element. Each chart is decorative markup over
+   figures that are also printed in a table beside it, so the chart is never the
+   only way to read the number. */
+.chart { margin: 18px 0 6px; padding: 14px 16px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; }
+.chart h3 { margin: 0 0 2px; font-size: 15px; }
+.chart .chart-sub { margin: 0 0 12px; color: var(--ink-soft); font-size: 13px; }
+.chart-legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--ink-soft); margin: 8px 0 0; }
+.chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.swatch { width: 12px; height: 12px; border-radius: 2px; display: inline-block; }
+.swatch.sell { background: var(--accent); }
+.swatch.live { background: #b8703c; }
+.swatch.mid { background: #6d8f45; }
+.swatch.band { background: var(--accent-soft); border: 1px solid #b9d4ec; }
+.swatch.zero { background: var(--risk); }
+
+/* A fan chart: one row per decile, bars scaled against the widest value. */
+.fan { display: grid; grid-template-columns: 92px 1fr 130px; gap: 4px 10px; align-items: center; font-size: 12px; }
+.fan .lbl { color: var(--ink-soft); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.fan .track { position: relative; height: 16px; background: var(--line-soft); border-radius: 3px; }
+.fan .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; opacity: .85; }
+.fan .fill.sell { background: var(--accent); }
+.fan .fill.live { background: #b8703c; }
+.fan .fill.mid { background: #6d8f45; }
+.fan .val { font-variant-numeric: tabular-nums; text-align: right; font-family: var(--mono); }
+
+/* A histogram: bars from a zero baseline, with the zero line marked. */
+.hist { position: relative; display: flex; align-items: flex-end; gap: 2px; height: 140px; padding: 0 2px; border-bottom: 2px solid var(--line); }
+.hist .bar { flex: 1 1 0; background: #b9d4ec; border-radius: 2px 2px 0 0; min-height: 1px; }
+.hist .bar.win { background: var(--accent); }
+.hist .bar.lose { background: #d9b3b3; }
+.hist-zero { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--risk); opacity: .55; }
+.hist-axis { display: flex; justify-content: space-between; font-size: 11px; color: var(--ink-soft); margin-top: 4px; font-variant-numeric: tabular-nums; }
+
+/* A simple horizontal comparison meter for three or four named values. */
+.meter { display: grid; grid-template-columns: 210px 1fr 120px; gap: 6px 10px; align-items: center; font-size: 13px; }
+.meter .track { position: relative; height: 15px; background: var(--line-soft); border-radius: 3px; }
+.meter .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; background: var(--accent); }
+.meter .fill.bad { background: var(--risk); opacity: .75; }
+.meter .val { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+/* The decision strip at the top of the dashboard. */
+.decision-strip { border-left: 5px solid var(--good); background: var(--card); padding: 14px 18px; border-radius: 8px; margin: 16px 0 20px; }
+.decision-strip h2 { margin: 0 0 6px; font-size: 22px; }
+.decision-strip .answer-line { font-size: 17px; margin: 0 0 8px; }
+.decision-strip .meta-line { font-size: 13px; color: var(--ink-soft); margin: 0; }
+.confidence { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 12px; font-weight: 600; vertical-align: middle; }
+.confidence.high { background: #e3f3ea; color: var(--good); border: 1px solid #b9dfc9; }
+.confidence.medium { background: #fbf0dd; color: var(--warn); border: 1px solid #ecd6ac; }
+.confidence.low { background: #fbe6e6; color: var(--risk); border: 1px solid #eec3c3; }
