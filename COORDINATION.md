@@ -2805,3 +2805,18 @@ Not in scope and not touched: `scripts/economy.py`, `assets/data/economy.json`, 
 - **Brief coverage:** every item in the owner's brief is implemented on a page: phased investing (black-swan.html), Attorney & CPA briefing sheet (briefing.html / briefing-sheet.html), what-would-change + reinvestment risk (index.html), what-if controls (what-if.html), mixed paths (decision.html, projections.html), deadlines timeline (timeline.html), grouped menu + glossary (glossary.html), executive summary (executive-summary.html), suggestions (suggestions.html), questions (questions.html), irregularities (review.html), property tables (property-a.html, property-b.html), inheritance thresholds (estate.html, laws.html, taxes.html), black-swan economics (black-swan.html, economy.html), step-by-step trust process (inheritance.html).
 - **Irregularities flagged (pre-existing, not blocking; none were filled in):** Property A water utility tariff and sanitary-district sewer rates not publishable under the privacy rule; Property A market rent not supplied (break-even rent reported instead); property-specific insurance premiums blank (CDI statewide benchmark only); city transfer-tax band detail and Santa Clara tax-rate-area tables beyond page one flagged. All left blank per the no-inference rule.
 - **Git history:** earlier commits and PR diffs retain unrounded owner figures and names; scrubbing history is an owner decision (requires a force-push to `main`) and was not performed.
+
+## Session `arena/8eebc036-tino3` — fresh verification pass on `main` (a61404f), gap check against the owner's brief, publication record · claimed 2026-11-15
+
+*Branch note:* Arena pins this session to `arena/8eebc036-tino3`, based on `main` at `a61404f` (PR #98). The local clone was shallow; history was unshallowed read-only so the merge base is visible. No other branch is created, switched to or pushed. The board's `session-<id>/<task>` naming is not used. No history is rewritten.
+
+*Scope note:* the owner's brief is already published on `main` (see the G-1 mapping in the `ec37bb6a` section). This session does not duplicate that build. It re-verifies load-bearing facts on the publisher's own domain, re-runs every gate on the current head, checks the privacy surface of the published pages, and records the owner-only items.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| V-1 Claim this scope and push the claim before any other edit | **done** — this commit | `arena/8eebc036-tino3` | `COORDINATION.md` (this section only) |
+| V-2 Re-run all gates on `main` at `a61404f`: build, verify, privacy boundary, package, legacy guard | in progress | `arena/8eebc036-tino3` | read-only |
+| V-3 Re-open load-bearing official sources on the publisher's own domain (IRS estate-tax and 2027 figures, BOE Proposition 19 letter, RTC 480(b), IRS Form 706 due date and extension, CDI homeowners average, PG&E or CPUC solar rules) and compare with the site | in progress | `arena/8eebc036-tino3` | read-only; results recorded below |
+| V-4 Privacy sweep of the published pages and the tracked files (ZIP codes, street names, parcel identifiers, trust terms, utility account numbers, unrounded money) | in progress | `arena/8eebc036-tino3` | read-only; any fix goes through the build |
+| V-5 Fix any defect found in V-2 to V-4 in the generator text only, regenerate, re-run gates | not started | `arena/8eebc036-tino3` | `scripts/build.py` (text only), regenerated pages |
+| V-6 Pull request to `main`, merge without waiting, confirm the Pages deploy, record PR link and merge result | not started | `arena/8eebc036-tino3` | this section only |
