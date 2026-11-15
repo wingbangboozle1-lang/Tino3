@@ -1478,6 +1478,117 @@ rule. That makes "move in for a while, then let it out" a risky structure, not a
 
 
 # -------------------------------------------------------------------- costs --
+def capital_plan_section() -> str:
+    """The five-year maintenance and capital plan the brief asks for.
+
+    The model charges maintenance as a percentage of value, which spreads a
+    roof over thirty years and hides the fact that a roof arrives in one year.
+    This section republishes the same money as a schedule: the percentage,
+    converted into a five-year budget for each path, and the component list a
+    contractor actually quotes against. No component cost is invented - the
+    schedule says which items are unquoted and what the allowance has to cover,
+    because a made-up roof price would be worse than an honest blank.
+
+    The allowance for Property A is the owner-occupied rate; the rental rate is
+    shown beside it because the same house costs more to keep when a tenant
+    lives in it and a landlord pays for turnover.
+    """
+    a = INPUTS["property_a"]["estimated_market_value_2026"]
+    b = INPUTS["property_b"]["estimated_market_value_2026"]
+    own = INPUTS["property_a"]["annual_costs"]["maintenance_pct_owner_occupied"]["value"]
+    rental = INPUTS["property_a"]["annual_costs"]["maintenance_pct_rental"]["value"]
+    b_rate = INPUTS["property_b"]["annual_costs"]["maintenance_pct"]["value"]
+    infl = INPUTS["assumptions"]["inflation"]["baseline"]
+    growth = INPUTS["assumptions"]["house_growth"]["baseline"]
+
+    def five_year_budget(value: float, rate: float, label: str) -> list[str]:
+        rows = []
+        total = 0.0
+        for i in range(5):
+            amt = money10(value * rate * ((1 + infl) ** i))
+            total += amt
+            rows.append(f"<td>{2026 + i}</td><td>{m(money10(value * ((1 + growth) ** i)))}</td>"
+                        f"<td>{pcf(rate, 2)}</td><td>{m(amt)}</td><td>{m(total)}</td>"
+                        + method_cell("#method", "Assumption, no quote"))
+        return rows
+
+    a_rows = five_year_budget(a, own, "Property A, owner-occupied")
+    b_rows = five_year_budget(b, b_rate, "Property B")
+    plan = table(
+        "The five-year maintenance allowance, year by year, as the model charges it",
+        ["Year", "Value the percentage is applied to", "Rate", "Allowance that year",
+         "Cumulative five-year budget", "Basis"],
+        a_rows + b_rows,
+        note="The model charges maintenance as a percentage of value, which is the only defensible way to "
+             "project it without quotes. Read as a budget, that is the money available to spend. It is a "
+             "sinking fund, not a schedule of works: the percentage does not know when the roof is due.")
+
+    comps = table(
+        "The components the allowance has to cover, and which of them are quoted",
+        ["Component", "Typical interval", "Quoted for either property?", "What the allowance has to absorb"],
+        [
+            "<td>Roof covering and flashings</td><td>20 to 30 years</td><td>No quote</td>"
+            "<td>The largest single item in most five-year windows. A replacement landing inside the window "
+            "can consume several years of the allowance at once.</td>"
+            + method_cell("#method", "Assumption, no quote"),
+            "<td>Exterior paint and siding</td><td>7 to 10 years</td><td>No quote</td>"
+            "<td>Predictable and deferrable, which is what makes it the usual casualty of a tight year.</td>"
+            + method_cell("#method", "Assumption, no quote"),
+            "<td>Water heater</td><td>10 to 15 years</td><td>No quote</td>"
+            "<td>Emergency replacement; cannot be deferred and does not improve value.</td>"
+            + method_cell("#method", "Assumption, no quote"),
+            "<td>Furnace and ductwork</td><td>15 to 25 years</td><td>No quote</td>"
+            "<td>An efficiency-driven replacement is larger than a like-for-like repair.</td>"
+            + method_cell("#method", "Assumption, no quote"),
+            "<td>Solar inverter and monitoring</td><td>10 to 15 years</td><td>No quote</td>"
+            "<td>Property A has solar. The panels outlast the inverter, so an inverter replacement is likely "
+            "inside a long hold and the net electricity benefit in the projection does not include it.</td>"
+            + method_cell("#method", "Assumption, no quote"),
+            "<td>Windows and doors</td><td>20 to 30 years</td><td>No quote</td>"
+            "<td>Usually deferred to sale, which means a buyer discounts for it instead of the owner paying for it.</td>"
+            + method_cell("#method", "Assumption, no quote"),
+            "<td>Unit turnover: paint, flooring, appliances (Property B only)</td><td>On vacancy</td><td>No quote</td>"
+            "<td>This is why a rental carries a higher rate than an owner-occupied home. It is also the item "
+            "the letting path is most sensitive to, because it arrives when the tenant leaves, not on a schedule.</td>"
+            + method_cell("#method", "Assumption, no quote"),
+        ],
+        note="A list of what the allowance is for, not a quote for any of it. No component cost is published "
+             "because none has been quoted, and a fabricated roof price would be worse than a blank.")
+
+    rental_rows = []
+    for path, label in (("live_in", "Live in Property A for thirty years"),
+                        ("live_then_rent", "Live in it, then let it"),
+                        ("rent_out", "Let Property A for thirty years")):
+        p45 = {x["inherit_year"]: x for x in MODEL["paths"]}[2045]
+        terminal = p45["paths"][path]["terminal"]
+        rental_rows.append(
+            f"<td>{label}</td><td>{pcf(own, 2)}</td><td>{pcf(rental, 2)}</td>"
+            f"<td>{m(money10(a * (rental - own)))} a year, rising with inflation</td>"
+            f"<td>{m(money10(a * (rental - own) * 5))} over five years</td><td>{m(terminal)}</td>"
+            + method_cell("#method", "Model output"))
+    switch = table(
+        "What the same house costs to keep when a tenant lives in it",
+        ["Path", "Owner-occupied rate", "Rental rate used by this site",
+         "Difference in the first year", "Difference over five years", "Terminal value at 2045"],
+        rental_rows,
+        note=f"A house costs more to keep when it is let: turnover, longer hours of use and a landlord's "
+             f"obligations. Moving from {pcf(own, 2)} to {pcf(rental, 2)} of value is the assumption "
+             f"this site makes, and it is unverified. If it is too low, the letting path is flattered; if it "
+             f"is too high, occupying and then letting looks worse than it is.")
+
+    return ('<h2 id="capital">The five-year maintenance and capital plan</h2>'
+            + callout("flag", "A percentage of value is a budget, not a plan", f"""
+<p>The brief asks for a five-year maintenance and capital plan. The model has maintenance as
+{pcf(own, 2)} of value a year for an owner-occupied home and {pcf(b_rate, 2)} for the three-unit
+building, growing with inflation. That is the right shape for a thirty-year projection and the wrong shape for
+planning five years of work, because a roof is not spread evenly. Below, the same money is written as a
+five-year budget, and the components it has to cover are listed with their typical intervals. Nothing in the
+component list is priced: nothing has been quoted, so a figure would be invented.</p>""")
+            + plan
+            + comps
+            + switch)
+
+
 def page_costs() -> str:
     infl = ASM["inflation"]["baseline"]
     years = [2026, 2030, 2040, 2045, 2050, 2060, 2076]
@@ -1582,6 +1693,7 @@ for either building appears on this site; both remain owner estimates flagged un
                 note="A constant rate is used for the year-by-year page because it is the only way to show a "
                      "readable table. It is not a forecast. The <a href=\"black-swan.html\">black swan page</a> "
                      "shows what happens when growth and inflation are not constant.")
+        + capital_plan_section()
         + callout("flag", "Three cost numbers that need replacing", """
 <ol>
 <li><strong>Insurance on both properties.</strong> The state-level benchmark is the NAIC Homeowners Insurance
@@ -1591,7 +1703,8 @@ Department nor the NAIC publishes an average for this postal area. Get three quo
 one of which should be a rental policy. See <a href="suggestions.html">suggestion S-01</a>.</li>
 <li><strong>Maintenance.</strong> No figure was supplied. This site assumes 0.5% of value a year for an
 owner-occupied home, 0.75% for Property A as a rental and 1.5% for the older three-unit building. Replace these
-with the actual five-year repair history.</li>
+with the actual five-year repair history. The <a href="#capital">five-year capital plan</a> above writes the
+same allowance out year by year and lists the components it has to cover.</li>
 <li><strong>Water.</strong> The provider and tariff for Property A are not confirmed, so the owner's range is
 used as supplied.</li>
 </ol>""")
