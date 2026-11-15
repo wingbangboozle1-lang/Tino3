@@ -1,0 +1,263 @@
+"""Read-only audit of the repository's own history for the owner's privacy question.
+
+The owner asked for the pre-rounding Git history to be scrubbed. A normal commit
+cannot do that, and rewriting a public branch has consequences the owner has to
+accept knowingly. This tool exists so that decision can be made on facts instead of
+on fear or on reassurance:
+
+  * it reads every commit reachable in this clone, every file version in it, and
+    every commit message;
+  * it counts how many file versions carry each class of identifier;
+  * **it never prints a matching value.** Output is counts, file paths and commit
+    hashes only. A scrub audit that echoed the secrets it found would create a new
+    copy of them in the terminal, the build log and this repository's own records.
+
+Nothing is written, nothing is rewritten and nothing is deleted. Exit code 0 always
+unless the tool itself fails; this is a report, not a gate.
+
+Usage:
+    python3 scripts/privacy_scrub_audit.py            # human-readable report
+    python3 scripts/privacy_scrub_audit.py --json     # same facts as JSON
+    python3 scripts/privacy_scrub_audit.py --no-fetch # skip the network probe
+"""
+from __future__ import annotations
+
+import json
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+
+# Patterns only. They are deliberately identical in shape to the published privacy
+# boundary's patterns so that the history audit measures the same thing the live
+# gate measures. They are defined here rather than imported so that running this
+# tool never depends on the publication path.
+PATTERNS = {
+    "postal code": re.compile(r"\b(?:95014|95015|94116|94122|94132)\b"),
+    # The published policy now withdraws the two jurisdictions as well as the
+    # property-level place names, because a county or city name narrows the search
+    # area exactly as a postal code does. This class therefore matches the same
+    # pattern scripts/privacy_boundary.py now enforces.
+    "property-level place name or jurisdiction": re.compile(
+        r"(?i)(cupertino|sunnyvale|saratoga|los[\s_-]*altos|los[\s_-]*gatos|"
+        r"monte[\s_-]*sereno|outer[\s_-]*sunset|inner[\s_-]*sunset|"
+        r"santa[\s_-]*clara|san[\s_-]*francisco|san[\s_-]*jose|"
+        r"bay[\s_-]*area|silicon[\s_-]*valley)"),
+    "street address": re.compile(
+        r"\b\d{1,5}\s+[A-Z][a-z]+\s+(?:Street|St|Avenue|Ave|Road|Rd|Drive|Dr|Way|Lane|Ln|"
+        r"Boulevard|Blvd|Court|Ct|Place|Pl|Terrace|Circle)\b"),
+    "parcel number": re.compile(r"\b\d{3}-\d{2,3}-\d{2,3}\b"),
+    "email address": re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+"),
+    "phone number": re.compile(r"\b(?:\(?\d{3}\)?[-. ])\d{3}[-. ]\d{4}\b"),
+}
+
+# The publication gate does not ban large amounts: it bans an amount that is not a
+# multiple of ten. This is evaluated the same way the gate evaluates it - parse the
+# amount, then test the value - so a rounded figure is never counted and a
+# pre-rounding figure always is. Counted as whole file versions, never as a value.
+AMOUNT = re.compile(r"\$\s*(\d[\d,]*)(?:\.\d+)?\s*(trillion|billion|million)?", re.I)
+UNROUNDED = "amount not a multiple of ten"
+
+# Published statutory and official amounts that are not multiples of ten. These are
+# the same exemptions the live publication gate grants (scripts/privacy_boundary.py
+# OFFICIAL_AMOUNTS plus the verified parameters in assets/data/inputs.json), because a
+# verbatim official threshold is not ours to round and its presence is not exposure.
+OFFICIAL_AMOUNTS = {
+    1, 5, 15,
+    1_000_000, 1_022_600, 1_044_586,
+    250_000, 500_000,
+    371_000,
+    5_490_000, 11_180_000, 11_400_000, 11_580_000, 11_700_000,
+    12_060_000, 12_920_000, 13_610_000, 13_990_000,
+    15_000_000, 15_480_000,
+    19_000, 20_000,
+    5_000_000_000, 15_000_000_000,
+}
+
+
+def _official_from_inputs() -> set[int]:
+    try:
+        data = json.loads((ROOT / "assets" / "data" / "inputs.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return set()
+    out = set()
+    for value in data.get("verified_parameters", {}).values():
+        if isinstance(value, dict) and isinstance(value.get("value"), (int, float)):
+            out.add(int(value["value"]))
+    return out
+
+
+ALLOWED = OFFICIAL_AMOUNTS | _official_from_inputs()
+
+# Current-tree files that legitimately contain the patterns (the gate itself, the
+# board's own discussion of the rule, and this tool). Counted separately.
+SELF_FILES = {"scripts/privacy_boundary.py", "scripts/privacy_scrub_audit.py", "COORDINATION.md"}
+
+
+def git(*args: str) -> str:
+    return subprocess.check_output(["git", *args], cwd=ROOT, text=True,
+                                   errors="replace", stderr=subprocess.DEVNULL)
+
+
+def commits() -> list[dict]:
+    out = git("log", "--all", "--format=%H%x1f%ad%x1f%an%x1f%s", "--date=short")
+    rows = []
+    for line in out.splitlines():
+        if not line.strip():
+            continue
+        h, d, an, subj = line.split("\x1f", 3)
+        rows.append({"hash": h, "date": d, "author": an, "subject": subj})
+    return rows
+
+
+def file_versions() -> list[tuple[str, str]]:
+    """(commit, path) for every blob in every commit reachable in this clone."""
+    out = git("log", "--all", "--pretty=format:%H", "--name-only")
+    pairs, current = [], None
+    for line in out.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        if re.fullmatch(r"[0-9a-f]{40}", line):
+            current = line
+        elif current:
+            pairs.append((current, line))
+    return pairs
+
+
+def has_unrounded_amount(text: str) -> bool:
+    """True if any formatted dollar amount in the text is not a multiple of ten."""
+    for raw, scale in AMOUNT.findall(text):
+        if scale:                      # a quoted official aggregate, not a property amount
+            continue
+        if not raw.replace(",", "").isdigit():
+            continue
+        amount = int(raw.replace(",", ""))
+        if amount in ALLOWED or amount % 10 == 0:
+            continue
+        return True
+    return False
+
+
+def blob(commit: str, path: str) -> str:
+    try:
+        return git("show", f"{commit}:{path}")
+    except subprocess.CalledProcessError:
+        return ""      # the path is not in that commit (a rename, or a deletion)
+
+
+def scan() -> dict:
+    cmts = commits()
+    pairs = file_versions()
+    # unique blobs is the honest denominator: the same file version appears in many commits
+    classes = list(PATTERNS) + [UNROUNDED]
+    seen: dict[str, set[str]] = {k: set() for k in classes}
+    first_commit: dict[str, str] = {}
+    paths_hit: dict[str, set[str]] = {k: set() for k in classes}
+    cache: dict[tuple[str, str], dict[str, bool]] = {}
+    for commit, path in pairs:
+        if path in SELF_FILES:
+            continue
+        key = (commit, path)
+        if key not in cache:
+            text = blob(commit, path)
+            found = {label: bool(p.search(text)) for label, p in PATTERNS.items()}
+            found[UNROUNDED] = has_unrounded_amount(text)
+            cache[key] = found
+        for label, hit in cache[key].items():
+            if hit:
+                seen[label].add(f"{commit}:{path}")
+                paths_hit[label].add(path)
+                first_commit.setdefault(label, commit)
+    msg_hits = {label: [] for label in PATTERNS}
+    for c in cmts:
+        for label, p in PATTERNS.items():
+            if p.search(c["subject"]):
+                msg_hits[label].append(c["hash"][:8])
+    current = {}
+    for label, p in PATTERNS.items():
+        hits = []
+        for path in git("ls-files").splitlines():
+            if path in SELF_FILES:
+                continue
+            f = ROOT / path
+            if not f.is_file():
+                continue
+            try:
+                if p.search(f.read_text(encoding="utf-8", errors="replace")):
+                    hits.append(path)
+            except OSError:
+                continue
+        current[label] = hits
+    unrounded_now = []
+    for path in git("ls-files").splitlines():
+        if path in SELF_FILES:
+            continue
+        f = ROOT / path
+        if f.is_file() and f.suffix in {".html", ".md", ".css", ".json", ".csv"}:
+            try:
+                if has_unrounded_amount(f.read_text(encoding="utf-8", errors="replace")):
+                    unrounded_now.append(path)
+            except OSError:
+                pass
+    current[UNROUNDED] = unrounded_now
+    return {
+        "repo": "wingbangboozle1-lang/Tino3",
+        "audited_at_commit": git("rev-parse", "HEAD").strip(),
+        "commits_reachable": len(cmts),
+        "earliest_commit_date": cmts[-1]["date"] if cmts else None,
+        "latest_commit_date": cmts[0]["date"] if cmts else None,
+        "file_versions_scanned": len(pairs),
+        "unique_file_versions_by_class": {k: len(v) for k, v in seen.items()},
+        "classes": classes,
+        "paths_by_class": {k: sorted(v) for k, v in paths_hit.items()},
+        "commit_messages_matching": {**{k: len(v) for k, v in msg_hits.items()}, UNROUNDED: 0},
+        "current_tree_matches": current,
+        "note": (
+            "Counts only. No matching value is printed, stored or returned by this tool. "
+            "Treat every count as an upper bound, for three reasons. (1) A file version can "
+            "match because the rule itself is being described, not because a real identifier "
+            "is present. (2) An official documentary quote can carry a non-multiple-of-ten "
+            "amount - a statutory fee per unit, or a fiscal impact stated per $500 of value - "
+            "which is not an owner figure. (3) The patterns look for the shape of an "
+            "identifier, not for its truth. The classes that cannot be explained by any of "
+            "those - street address and parcel number - are the ones to act on."),
+    }
+
+
+def main() -> int:
+    as_json = "--json" in sys.argv
+    report = scan()
+    if as_json:
+        print(json.dumps(report, indent=2))
+        return 0
+    print("Repository history privacy audit (read-only, counts only)")
+    print(f"  repository      : {report['repo']}")
+    print(f"  commit audited  : {report['audited_at_commit'][:12]}")
+    print(f"  commits         : {report['commits_reachable']} "
+          f"({report['earliest_commit_date']} to {report['latest_commit_date']})")
+    print(f"  file versions   : {report['file_versions_scanned']}")
+    print()
+    print(f"  {'class':26} {'versions':>9} {'paths':>6} {'msgs':>5} {'current tree':>13}")
+    for label in report["classes"]:
+        print(f"  {label:26} {report['unique_file_versions_by_class'][label]:>9} "
+              f"{len(report['paths_by_class'][label]):>6} "
+              f"{report['commit_messages_matching'][label]:>5} "
+              f"{len(report['current_tree_matches'][label]):>13}")
+    print()
+    print("  Paths that matched, by class (paths only, never values):")
+    for label, paths in report["paths_by_class"].items():
+        if paths:
+            print(f"    {label}: {', '.join(paths[:6])}{' ...' if len(paths) > 6 else ''}")
+    print()
+    print("  " + report["note"])
+    print()
+    print("  This tool changed nothing. Deciding whether to rewrite history is the owner's,")
+    print("  and the procedure and its consequences are set out in PRIVACY_REMEDIATION.md.")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -9,10 +9,14 @@ the nearest $10 with money10(); every percentage with pct().
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "assets" / "data"
+sys.path.insert(0, str(ROOT / "scripts"))
+
+import episodes as EP  # noqa: E402  (reads its own verbatim CSVs, no network, no randomness)
 INPUTS = json.loads((DATA / "inputs.json").read_text(encoding="utf-8"))
 SERIES = json.loads((DATA / "series.json").read_text(encoding="utf-8"))
 
@@ -993,6 +997,11 @@ def main() -> dict:
 
     for regime in regime_stress():
         out["regimes"].append({**regime, "run": run_regime(regime, horizon)})
+
+    # Real historical entry-timing replays (1929, 2000, 2008, 2020). Deterministic:
+    # the module reads the verbatim official CSVs in assets/data/episodes and never
+    # downloads, interpolates or invents a value.
+    out["episodes"] = EP.build()
 
     (DATA / "model.json").write_text(json.dumps(out, indent=1), encoding="utf-8")
     return out

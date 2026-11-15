@@ -672,7 +672,7 @@
       "verifies": [
         "For calendar year 2027 the basic exclusion amount under section 2010(c)(3) is $15,480,000"
       ],
-      "quote": ".44 Basic Exclusion Amount for Estate Tax. For calendar year 2027, the basic exclusion amount under \u00a7 2010(c)(3) is $15,480,000.",
+      "quote": ".44 Basic Exclusion Amount for Estate Tax. For calendar year 2027, the basic exclusion amount under § 2010(c)(3) is $15,480,000.",
       "checked": "official-domain search excerpt read in this session (full document not opened)",
       "id": "irs_rp2635",
       "supports": "For calendar year 2027 the basic exclusion amount under section 2010(c)(3) is $15,480,000",
@@ -686,7 +686,7 @@
         "Assets of an irrevocable grantor trust that are not included in the gross estate get no basis adjustment at death",
         "Property the decedent placed in a trust that stayed revocable is treated as acquired from the decedent (section 1014(b)(2) and (3))"
       ],
-      "quote": "the basis of Asset is not adjusted to its fair market value on the date of A's death under \u00a7 1014 because Asset was not acquired or passed from a decedent as defined in \u00a7 1014(b).",
+      "quote": "the basis of Asset is not adjusted to its fair market value on the date of A's death under § 1014 because Asset was not acquired or passed from a decedent as defined in § 1014(b).",
       "checked": "opened on the publisher's site in this session",
       "id": "irs_rr2023_2",
       "supports": "Assets of an irrevocable grantor trust that are not included in the gross estate get no basis adjustment at death | Property the decedent placed in a trust that stayed revocable is treated as acquired from the decedent (section 1014(b)(2) and (3))",
@@ -1021,6 +1021,51 @@
       "checked": "Opened on the publisher domain on 2026-11-15 and read to Section 4.",
       "supports": "A simplified method, in lieu of a letter ruling, for an estate not required to file an estate tax return under section 6018(a) to elect portability: a complete and properly prepared Form 706 must be filed on or before the fifth annual anniversary of the decedent's date of death. Not available where a return was timely filed, and not available to an estate that has a section 6018(a) filing requirement, because in that case the election deadline is set by statute.",
       "limits": "Scope is limited to estates with no section 6018(a) filing requirement; it does not change the nine-month due date for estates that must file."
+    },
+    {
+      "id": "fred_djia_1929",
+      "publisher": "Federal Reserve Bank of St. Louis (FRED), series from the National Bureau of Economic Research",
+      "title": "Dow-Jones Industrial Stock Price Index for United States (M1109BUSM293NNBR)",
+      "url": "https://fred.stlouisfed.org/series/M1109BUSM293NNBR",
+      "checked": "Fetched from the publisher's own CSV endpoint on 2026-11-15; the monthly values used are stored verbatim in assets/data/episodes/djia_monthly.csv.",
+      "supports": "Monthly index level of the Dow-Jones Industrial average from 1914-12 to 1968-12: 362.35 for September 1929, 46.85 for June 1932 and 375.75 for November 1954. The series notes state that 20 stocks are used through September 1928 and 30 thereafter, and that monthly values average the highest and lowest index values through 1948.",
+      "limits": "A price index, not a total-return index: it excludes dividends. The 30-stock average's composition changed over time, so it is not a modern broad-market fund. The monthly figure is an average of the month's high and low, not a single closing price."
+    },
+    {
+      "id": "fred_nasdaq",
+      "publisher": "Federal Reserve Bank of St. Louis (FRED), series from Nasdaq, Inc.",
+      "title": "NASDAQ Composite (NASDAQCOM)",
+      "url": "https://fred.stlouisfed.org/series/NASDAQCOM",
+      "checked": "Fetched from the publisher's own CSV endpoint on 2026-11-15 with end-of-period monthly aggregation; stored verbatim in assets/data/episodes/nasdaq_monthly.csv.",
+      "supports": "Month-end closing levels of the NASDAQ Composite: 2859.12 at October 2007, 4696.69 at February 2000, 8567.37 at February 2020 and 23241.99 at December 2025.",
+      "limits": "A price index of more than 3,000 Nasdaq-listed securities and no dividends. It is a technology-weighted index, not a broad market portfolio, which is why it fell further than the S&P 500 in 2000-2002 and 2008."
+    },
+    {
+      "id": "fred_tb3ms",
+      "publisher": "Federal Reserve Bank of St. Louis (FRED), series from the Board of Governors of the Federal Reserve System",
+      "title": "3-Month Treasury Bill Secondary Market Rate, Discount Basis (TB3MS)",
+      "url": "https://fred.stlouisfed.org/series/TB3MS",
+      "checked": "Fetched from the publisher's own CSV endpoint on 2026-11-15; stored verbatim in assets/data/episodes/tb3ms_monthly.csv.",
+      "supports": "Monthly average 3-month Treasury bill rate on a discount basis: 3.89 percent at September 2007, 0.03 percent at December 2008, 0.09 percent for most of 2020-2021 and 5.34 percent at October 2023.",
+      "limits": "A discount-basis money-market rate, not the yield on a 1-year or 2-year note, and not a return net of fund expenses or tax. The series begins in January 1934, so it cannot price a 1929 entry."
+    },
+    {
+      "id": "fred_callmoney",
+      "publisher": "Federal Reserve Bank of St. Louis (FRED), series from the National Bureau of Economic Research",
+      "title": "Call Money Rates, Mixed Collateral for United States (M13001USM156NNBR)",
+      "url": "https://fred.stlouisfed.org/series/M13001USM156NNBR",
+      "checked": "Fetched from the publisher's own CSV endpoint on 2026-11-15; stored verbatim in assets/data/episodes/callmoney_monthly.csv.",
+      "supports": "Monthly average call money rate on mixed collateral from 1857-01 to 1970-11: 8.50 percent at September 1929, 6.43 percent at October 1929, and between 1.00 and 2.70 percent through 1931-1932.",
+      "limits": "A brokered short-term rate between banks and dealers, not a Treasury bill yield and not a rate a household could earn on deposits. It is used only because no official Treasury bill series exists for 1929."
+    },
+    {
+      "id": "fred_cpiaucns",
+      "publisher": "Federal Reserve Bank of St. Louis (FRED), series from the U.S. Bureau of Labor Statistics",
+      "title": "Consumer Price Index for All Urban Consumers: All Items in U.S. City Average (CPIAUCNS)",
+      "url": "https://fred.stlouisfed.org/series/CPIAUCNS",
+      "checked": "Fetched from the publisher's own CSV endpoint on 2026-11-15; stored verbatim in assets/data/episodes/cpiaucns_monthly.csv.",
+      "supports": "Monthly CPI-U index (1982-84 = 100) from 1913-01: 17.3 for September 1929, 13.1 for December 1932, 210.0 for October 2007 and 337.511 for October 2026.",
+      "limits": "A national urban average, not a local index. It is used only to restate a result in constant purchasing power, never to drive a return."
     }
   ]
 }
