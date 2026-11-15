@@ -23,6 +23,9 @@ and reinvestment choices.
 - `executive-summary.html` — concise summary of the conditional model result and major caveats.
 - `decision.html`, `what-if.html` — comparable transfer-date/horizon paths and selectable sensitivity
   cases. Values are scenario outputs, not appraisals or forecasts.
+- `precommit.html` — the conditions that would choose each path, written and dated before the
+  figures arrive, so the outcome cannot be reverse-engineered from one projection; carries an
+  empty decision record to complete by hand.
 - `briefing.html` — one-page, printable Attorney & CPA discussion sheet.
 - `questions.html` — what is known, what is missing, who can verify it, and suggested next steps.
 - `suggestions.html` — proposals kept separate from implemented changes; each can be reviewed,
@@ -34,8 +37,6 @@ estate taxes, the inheritance process, deadlines, current law and proposals, bla
 the historical economic record, a glossary and the source ledger. Navigation groups the material by
 purpose.
 
-`decision-rules.html` holds the gates, the pre-committed paths, a draft investment policy and the open items. It is an unsigned draft until the owner and household sign its last section.
-
 ## Model boundaries and headline result
 
 The current model conditionally favours selling Property A soon after inheritance unless the heir
@@ -44,8 +45,6 @@ on the beneficiary's eligibility for any property-tax exclusion, trust/title fac
 basis, actual sale costs, occupancy, rents, insurance, maintenance, utilities, debt, market returns
 and laws in force at transfer. Missing or unverified property-specific amounts are not presented as
 confirmed; they are identified on the relevant pages and on `review.html`.
-
-There are **23 generated HTML pages** and one stylesheet in the public allowlist. The pages show rounded owner-provided figures, model outputs and official-source-backed legal/economic information. The source ledger contains **99 entries**; the jurisdiction-specific entries (the two properties' county and city official pages) and the two metro-area house-price series were removed on 15 November 2026 because their publishers identify the properties. A factual table row either links to an official source or is explicitly registered as unsourceable/unverified. Both property placeholders grow with the California state-level FHFA house-price index: the two metropolitan-area series were withdrawn on 15 November 2026 because the index publisher's own metadata crosswalked the placeholders to their metropolitan areas (an audit finding), and the privacy gate now rejects the withdrawn series identifiers and metro phrasing.
 
 The Black Swan analysis uses one canonical monthly park-and-phase engine and one short-Treasury
 parking-yield assumption. It includes synthetic stresses and historical entry replays, including
@@ -57,14 +56,16 @@ The investment, legal, tax and property-law conditions expected in 2040–2050 a
 law and pending proposals are kept distinct on the law-watch page. Recheck official authorities and
 professional advice when dates, facts or laws change.
 
+There are **23 generated HTML pages** and one stylesheet in the public allowlist. The source ledger contains **98 entries**. A factual table row either links to an official source or is explicitly registered as unsourceable/unverified.
+
 ## Published site and verification snapshot
 
-The current generated edition contains **23 HTML pages**, **one runtime stylesheet**, **99 entries
+The current generated edition contains **22 HTML pages**, **one runtime stylesheet**, **98 entries
 in the source ledger**, and **130 content-free withdrawal notices** for retired routes. The latest
-local verification reports **930 table rows**: **788 linked to official publishers** and **142
+local verification reports **870 table rows**: **756 linked to official publishers** and **114
 explicitly registered as unsourceable or unverified**. A row without a confirming official source is
-not filled in by inference. The public site publishes the source ledger (`sources.html`) but no internal
-model data files; the Jekyll and Actions publication boundaries are checked separately.
+not filled in by inference. The public site contains no source ledger or internal model data files;
+the Jekyll and Actions publication boundaries are checked separately.
 
 The model and pages are generated from `assets/data/` and `scripts/build.py`; do not edit generated
 HTML or CSV outputs by hand. `EXECUTIVE_SUMMARY.md` is generated from the same model data and is
