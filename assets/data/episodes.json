@@ -1,0 +1,142 @@
+{
+  "meta": {
+    "edition": "Real historical entry-timing replays",
+    "built": "2026-11-15",
+    "method": "Every monthly value used by this module was fetched from the publisher's own domain (FRED, served by the Federal Reserve Bank of St. Louis) and saved verbatim in assets/data/episodes/*.csv. No value was typed from memory or inferred. The module reads those files, replays the same three entry strategies on each episode's real monthly returns, and rounds every dollar to the nearest $10.",
+    "privacy": "Placeholders only: Property A is the inherited single-family home, Property B is the three-unit building already owned by the heir. No name, street address, postal code, parcel number, account or trust detail appears in this file or in its output.",
+    "limits": [
+      "A price index is not a total-return index. None of these series includes dividends, the stock indices include only the stocks in the index, and the equity portfolio a real heir would hold is not any of these indices. Returns are therefore understated on the equity side in every episode.",
+      "The episodes are replayed as they happened. They are not forecasts, and a future inheritance will not arrive on a 1929 or a 2008 schedule.",
+      "Taxes, fees and the cost of the sale are applied at the same points in every strategy, so they change the level of all three lines and not the comparison between them."
+    ]
+  },
+  "series": {
+    "djia": {
+      "file": "djia_monthly.csv",
+      "column": "M1109BUSM293NNBR",
+      "publisher": "National Bureau of Economic Research, distributed by the Federal Reserve Bank of St. Louis (FRED)",
+      "title": "Dow-Jones Industrial Stock Price Index for United States (M1109BUSM293NNBR)",
+      "url": "https://fred.stlouisfed.org/series/M1109BUSM293NNBR",
+      "units": "Index level, month average of highest and lowest index values through 1948",
+      "coverage": "1914-12 to 1968-12",
+      "src": "fred_djia_1929",
+      "quote": "End of month, index level",
+      "limits": "Price index only: no dividends. Twenty stocks through September 1928 and thirty thereafter; the composition changed over time, so it is a price average, not a modern index fund."
+    },
+    "nasdaq": {
+      "file": "nasdaq_monthly.csv",
+      "column": "NASDAQCOM",
+      "publisher": "Nasdaq, Inc., distributed by the Federal Reserve Bank of St. Louis (FRED)",
+      "title": "NASDAQ Composite (NASDAQCOM)",
+      "url": "https://fred.stlouisfed.org/series/NASDAQCOM",
+      "units": "Index, February 5 1971 = 100",
+      "coverage": "1971-02-05 to present; this file holds 2007-09 to 2025-12",
+      "src": "fred_nasdaq",
+      "quote": "End of month close",
+      "limits": "Price index only: no dividends. A technology-weighted index, not a broad market portfolio, so it fell further than the S&P 500 did in the 2000-2002 and 2008 episodes."
+    },
+    "tb3": {
+      "file": "tb3ms_monthly.csv",
+      "column": "TB3MS",
+      "publisher": "Board of Governors of the Federal Reserve System, distributed by the Federal Reserve Bank of St. Louis (FRED)",
+      "title": "3-Month Treasury Bill Secondary Market Rate, Discount Basis (TB3MS)",
+      "url": "https://fred.stlouisfed.org/series/TB3MS",
+      "units": "Percent per year, discount basis, averages of business days",
+      "coverage": "1934-01 to present; this file holds 2007-09 to 2025-12",
+      "src": "fred_tb3ms",
+      "quote": "Monthly average",
+      "limits": "A discount-basis money-market rate, not the yield on a 1- or 2-year note and not a return net of tax or fund expenses. This series begins in 1934, so it cannot cover a 1929 entry."
+    },
+    "callmoney": {
+      "file": "callmoney_monthly.csv",
+      "column": "M13001USM156NNBR",
+      "publisher": "National Bureau of Economic Research, distributed by the Federal Reserve Bank of St. Louis (FRED)",
+      "title": "Call Money Rates, Mixed Collateral for United States (M13001USM156NNBR)",
+      "url": "https://fred.stlouisfed.org/series/M13001USM156NNBR",
+      "units": "Percent per year, monthly average",
+      "coverage": "1857-01 to 1970-11; this file holds 1929-01 to 1932-12",
+      "src": "fred_callmoney",
+      "quote": "Monthly average",
+      "limits": "A brokered short-term money rate between banks and dealers, not a Treasury bill yield and not a rate any retail saver could earn. It is the only official short-term cash rate published for the months around the 1929 peak. It is used as the cash return, and the page says so."
+    },
+    "cpi": {
+      "file": "cpiaucns_monthly.csv",
+      "column": "CPIAUCNS",
+      "publisher": "U.S. Bureau of Labor Statistics, distributed by the Federal Reserve Bank of St. Louis (FRED)",
+      "title": "Consumer Price Index for All Urban Consumers: All Items in U.S. City Average (CPIAUCNS)",
+      "url": "https://fred.stlouisfed.org/series/CPIAUCNS",
+      "units": "Index, 1982-84 = 100",
+      "coverage": "1913-01 to present; this file holds 1928-01 to 2026-10",
+      "src": "fred_cpiaucns",
+      "quote": "Monthly index level",
+      "limits": "A national average, not a REDACTED REDACTED index. It is used only to express results in start-year purchasing power, never to drive a return."
+    }
+  },
+  "episodes": [
+    {
+      "key": "1929",
+      "name": "The 1929 peak, replayed with real prices",
+      "entry": "1929-09",
+      "exit": "1959-09",
+      "eq": "djia",
+      "cash": "callmoney",
+      "peak_label": "September 1929 month-average level",
+      "analogue": "The month before the October 1929 crash. The Federal Reserve's own history calls the 1929 crash the start of the Great Depression.",
+      "src": ["fred_djia_1929", "fred_callmoney", "fred_cpiaucns", "fedhist_1929"],
+      "notes": "The Dow did not regain its September 1929 level in nominal terms until 1954. A thirty-year window is therefore the shortest honest horizon for this entry."
+    },
+    {
+      "key": "2008",
+      "name": "The 2008 peak, replayed with real prices",
+      "entry": "2007-10",
+      "exit": "2025-12",
+      "eq": "nasdaq",
+      "cash": "tb3",
+      "peak_label": "October 2007 month-average level",
+      "analogue": "The month the Nasdaq Composite peaked before the financial crisis. The Federal Reserve's own history dates the crisis and the recession.",
+      "src": ["fred_nasdaq", "fred_tb3ms", "fred_cpiaucns", "fedhist_greatrecession"],
+      "notes": "The Nasdaq took until 2015 to regain its 2000 peak, so the 2007 entry recovers faster than the 2000 entry would. Both are shown."
+    },
+    {
+      "key": "2000",
+      "name": "The 2000 peak, replayed with real prices",
+      "entry": "2000-02",
+      "exit": "2018-02",
+      "eq": "nasdaq",
+      "cash": "tb3",
+      "peak_label": "February 2000 month-average level (the series' own maximum before March 2000)",
+      "analogue": "The month before the technology bubble peaked. The Federal Reserve Bank of New York's own commentary describes the episode.",
+      "src": ["fred_nasdaq", "fred_tb3ms", "fred_cpiaucns"],
+      "notes": "An eighteen-year horizon is used because the index needed about fifteen years to regain the 2000 level."
+    },
+    {
+      "key": "2020",
+      "name": "The 2020 crash month, replayed with real prices",
+      "entry": "2020-02",
+      "exit": "2025-12",
+      "eq": "nasdaq",
+      "cash": "tb3",
+      "peak_label": "February 2020 month-average level",
+      "analogue": "The month before the pandemic crash. A short, sharp fall and a fast recovery.",
+      "src": ["fred_nasdaq", "fred_tb3ms", "fred_cpiaucns"],
+      "notes": "A five-year horizon only. It is included as the opposite case: the crash was over before any 24-36 month parking period ended."
+    }
+  ],
+  "strategies": [
+    {
+      "key": "lump",
+      "name": "Invest everything on day one",
+      "description": "The net sale proceeds buy the index at the entry month's close, and are held to the exit month."
+    },
+    {
+      "key": "phase",
+      "name": "Park the proceeds for 24-36 months, then phase in over 12 months",
+      "description": "The net proceeds earn the official short cash rate for the parking period, then move into the index in twelve equal monthly purchases."
+    },
+    {
+      "key": "park34",
+      "name": "Park the proceeds for the whole 34 months and never buy in",
+      "description": "The net proceeds earn the official short cash rate for 34 months, then all of it enters the index in the first month after the park. This isolates what the waiting period alone does, without the phase-in."
+    }
+  ]
+}
