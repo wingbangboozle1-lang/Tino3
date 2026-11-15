@@ -18,6 +18,19 @@
 | E-6 Distribution chart on the projections page: annual house-price changes in the verified state record, 1976 to 2025 | **done** (commit `459ade0` and follow-ups in the PR) | `arena/c1b491fb-tino3` | `scripts/build.py` (projections page) |
 | E-7 Gates, pull request to `main`, merge without waiting, confirm the Pages deploy, record the result | **in progress** (PR and merge below) | `arena/c1b491fb-tino3` | this section, `README.md` (counts), `EXECUTIVE_SUMMARY.md` (generated) |
 
+## Session `arena/1ca458e9-tino3` — reconcile current project documentation and re-run final checks · claimed 2026-11-15
+
+*Branch note:* Arena pins this session to `arena/1ca458e9-tino3`, branched from `main` at `ee7082c`. Work remains on this branch only; the pinned branch name is used instead of the requested session/task branch convention.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| R-1 Reconcile root README against the current generated edition, clarify outstanding privacy and decision limits, and verify the published-site gates; no model inputs, source claims or site pages changed | **done** — PR #119 merged; Pages deployment and all verification checks passed | `arena/1ca458e9-tino3` | `README.md`, `COORDINATION.md` (this section only) |
+
+**Work and verification (15 November 2026).** Replaced the stale root README with a single description of the current generated site and model boundaries. The old README contained duplicate, conflicting source-ledger totals (97, 109) and a stale withdrawal-route count; current values were taken from a fresh build, not inferred: 22 HTML pages, 98 source-ledger entries, 870 table rows (756 linked to official publishers; 114 explicitly registered as unsourceable/unverified), and 130 content-free withdrawal routes. No generated website page, model input, source ledger entry, or substantive factual claim changed. The history-rewrite limitation remains explicit: prior public Git and pull-request records are not erased by this documentation change, and rewriting `main` is outside this branch's authority.
+
+Gates re-run successfully: `scripts/build.py`, `scripts/verify.py`, `scripts/privacy_boundary.py`, `scripts/package_site.py`, `scripts/verify_legacy.py --config-only`, and `git diff --check`. PR #119: https://github.com/wingbangboozle1-lang/Tino3/pull/119 — merged 2026-11-15 at `e26c74664f9f4f8affa1fee63d14d77236817990`. PR verification run 43710846263 passed. On the merge commit, Verify static site run 43710898481 passed, Deploy GitHub Pages run 43710898536 passed, and legacy Pages build/deployment run 43710897961 passed. GitHub Pages API subsequently reported `status: built`, `error: null`, source `main:/`, URL https://wingbangboozle1-lang.github.io/Tino3/.
+
+
 ## Session `arena/f8ab312e-tino3` — real 1929/2008 entry-timing replays, official-source re-verification, privacy audit and publication · claimed 2026-11-15
 
 *Branch note:* Arena pins this session to `arena/f8ab312e-tino3` (based on `main` at `f68fc30`). The board's `session-<id>/<task>` branch naming cannot be used; no other branch is created, switched to or pushed. Pushes go to this branch only; the pull request is opened from it to `main`.
