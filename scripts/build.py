@@ -24,7 +24,7 @@ A = INPUTS["property_a"]
 B = INPUTS["property_b"]
 V = INPUTS["verified_parameters"]
 ASM = INPUTS["assumptions"]
-BUILD_DATE = "13 November 2026"
+BUILD_DATE = "15 November 2026"
 
 NAV_GROUPS = [
     ("Start here", ["index.html", "executive-summary.html", "decision.html", "what-if.html", "briefing.html"]),
@@ -244,7 +244,7 @@ def page(name: str, body: str, lede: str = "") -> str:
 <meta name="description" content="Anonymised quantitative decision analysis for an inherited California home and an already-owned rental building. Every figure rounded to the nearest $10.">
 <link rel="stylesheet" href="assets/style.css">
 </head>
-<body>
+<body class="{'print-brief-page' if name in ('briefing.html', 'briefing-sheet.html') else ''}">
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header">
   <div class="wrap">
@@ -256,7 +256,7 @@ def page(name: str, body: str, lede: str = "") -> str:
   <nav class="site-nav" aria-label="Sections">
     {"".join(nav)}
   </nav>
-  <main id="main" class="{'print-brief' if name == 'briefing.html' else ''}">
+  <main id="main" class="{'print-brief' if name in ('briefing.html', 'briefing-sheet.html') else ''}">
     <h1>{esc(PAGE_TITLES[name])}</h1>
     {lede_html}
     {body}
@@ -273,7 +273,8 @@ def page(name: str, body: str, lede: str = "") -> str:
       <p>Full method and inputs: <a href="review.html#method-detail">how the model works</a>.
         Every official source used anywhere on the site: <a href="sources.html">the source ledger</a>.</p>
     </section>
-    <p class="page-footer">Built {esc(BUILD_DATE)}. Sources were checked on 13 November 2026 and are listed on the
+    <p class="page-footer">Built {esc(BUILD_DATE)}. Sources were last checked between 13 and 15 November 2026;
+      each entry's own check date is listed on the
       <a href="sources.html">source ledger</a>. Nothing here is legal, tax or investment advice.</p>
   </main>
 </div>
@@ -452,7 +453,7 @@ def page_executive_summary() -> str:
         + callout("risk", "Five things that could change the answer", """
 <ol>
 <li><strong>The heir wants to live there.</strong> That is worth the whole gap if it is true. It also has to be true for the whole time: moving out removes the Proposition 19 exclusion.</li>
-<li><strong>Law changes.</strong> On unofficial results as of 12 November 2026, California voters approved Proposition 3, which makes the high-income tax rates permanent (60.7% yes), and rejected Proposition 40, the one-time billionaire tax (52.4% no). Certification is due by 11 December 2026. Both are on the <a href="laws.html">law page</a>. A future measure could cut the other way.</li>
+<li><strong>Law changes.</strong> On unofficial results as of 14 November 2026 (5:16 p.m.; counting continues), California voters approved Proposition 3, which makes the high-income tax rates permanent (60.7% yes), and rejected Proposition 40, the one-time billionaire tax (52.2% no). Certification is due by 11 December 2026. Both are on the <a href="laws.html">law page</a>. A future measure could cut the other way.</li>
 <li><strong>The house outgrows everything.</strong> See the <a href="black-swan.html">stress cases</a>.</li>
 <li><strong>The estate is large enough to matter federally.</strong> See the <a href="estate.html">estate page</a>: the 2026 exclusion is high, but it is indexed and can be cut by Congress.</li>
 <li><strong>An input is wrong.</strong> Every owner-supplied figure is flagged. The <a href="questions.html">questions page</a> is the list of what to confirm and how.</li>
@@ -992,15 +993,38 @@ the modelled inflation rate of 2.5% a year.</p>""")
         + tbl_a
         + tbl_b
         + callout("note", "What an insurance benchmark does and does not tell you", f"""
-<p>The California Department of Insurance publishes average written premiums from its Residential Property
-Insurance Report. The statewide average for an owner-occupied homeowners policy was about <strong>$1,070</strong>
-in experience year 2017. Both properties here are carried at {m(MODEL['costs_a_now']['insurance'])} a year,
+<p>Two official series exist. The <strong>NAIC Homeowners Insurance Report</strong> (2023 data, published July
+2026) is the state-level statistical series regulators use: average premium is written premium divided by written
+exposures in house-years, as reported to statistical agents, for the dwelling fire and homeowners policy forms
+separately. {slink('naic_hmr_2023')} The California Department of Insurance publishes its own statewide average
+written premium from its Residential Property Insurance Report: about <strong>$1,070</strong> for an owner-occupied
+homeowners policy in experience year 2017, which is the newest figure in that series read for this site.
+{slink('cdi_homeowners_avg')} Both properties here are carried at {m(MODEL['costs_a_now']['insurance'])} a year,
 which is an <strong>owner estimate</strong> and is flagged unverified.</p>
-<p>The benchmark is statewide and across all amounts of insurance. It is <strong>not</strong> a premium for
-either building, and it must not be read as one: a three-unit rental in the city and a single-family home in the
-county are priced on entirely different bases. It is published here only so the owner estimate can be seen
-against something official, which is the most this source can support. A property-specific premium remains
-blank until it is quoted.</p>""")
+<p>Neither series is a premium for either building and neither must be read as one: a three-unit rental in the
+city is written on a dwelling fire form and a single-family home in the county on a homeowners form, at entirely
+different amounts of insurance. The NAIC report itself warns that average premium rises with the amount of
+insurance and that dwelling fire premiums are generally lower than homeowners package premiums because the
+coverage is more limited. A statewide average therefore <strong>understates</strong> a high-value home. The
+report's own by-state averages sit in Table 4 (page 30 onward) and Table 5 (page 135); those pages were not
+machine-readable in this build, so no average-premium figure from them is published here, under the rule that
+nothing is inferred or copied second-hand. A property-specific premium remains blank until it is quoted.</p>""")
+        + table("Insurance market context, officially published",
+                ["Item", "Published figure", "Source"],
+                [
+                    "<td>California dwelling fire policies, 2023 (the form a landlord policy is written on)</td>"
+                    "<td>329,584.8 house-years, 3.1% of the state market</td>" + src_cell(["naic_hmr_2023"], "NAIC report, Table 1"),
+                    "<td>California owner-occupied homeowners policies, 2023</td>"
+                    "<td>6,237,525.5 house-years, 58.8% of the state market</td>" + src_cell(["naic_hmr_2023"], "NAIC report, Table 1"),
+                    "<td>California dwelling fire and owner-occupied policies carrying $1,000,000 or more of insurance, 2023</td>"
+                    "<td>8.4% of exposures. Property A sits above this band, so statewide averages understate it.</td>" + src_cell(["naic_hmr_2023"], "NAIC report, Table 3"),
+                    "<td>Statewide average premiums by form and amount of insurance</td>"
+                    "<td>Table 4 (dwelling fire and owner-occupied, page 30 onward) and Table 5 (tenant and condominium, page 135) are the official by-state averages. Those pages were not machine-readable in this build, so the figures are left blank here and flagged, not inferred.</td>" + src_cell(["naic_hmr_2023"], "NAIC report, Tables 4 and 5"),
+                    "<td>California statewide average, owner-occupied homeowners policy, experience year 2017</td>"
+                    "<td>About $1,070 a year</td>" + src_cell(["cdi_homeowners_avg"], "Department of Insurance report"),
+                ],
+                note="These are market-wide published figures, not quotes and not estimates for either building. "
+                     "The owner estimate used in the model is flagged unverified and should be replaced with quotes.")
         + table("Property B net income today",
                 ["Item", "Amount", "Source"],
                 [
@@ -1027,8 +1051,10 @@ blank until it is quoted.</p>""")
                      "shows what happens when growth and inflation are not constant.")
         + callout("flag", "Three cost numbers that need replacing", """
 <ol>
-<li><strong>Insurance on both properties.</strong> The California Department of Insurance does not publish an
-average premium by area, so no official figure exists to check these against. Get three quotes for each building,
+<li><strong>Insurance on both properties.</strong> The state-level benchmark is the NAIC Homeowners Insurance
+Report: the by-state averages for the correct policy form sit in its Table 4 (dwelling fire for Property B,
+owner-occupied homeowners for Property A), but no average is a premium for either building, and neither the
+Department nor the NAIC publishes an average for this postal area. Get three quotes for each building,
 one of which should be a rental policy. See <a href="suggestions.html">suggestion S-01</a>.</li>
 <li><strong>Maintenance.</strong> No figure was supplied. This site assumes 0.5% of value a year for an
 owner-occupied home, 0.75% for Property A as a rental and 1.5% for the older three-unit building. Replace these
@@ -1357,23 +1383,23 @@ def page_laws() -> str:
          "Confirms the exclusion is indexing upward.",
          ["irs_2027"]),
         ("California high-income tax rates: Proposition 3 (unofficial)",
-         "Proposition 3 is approved on unofficial results (60.7% yes as of 12 November 2026). It makes permanent the voter-approved rates on individuals earning over $371,000, adjusted for inflation, that would otherwise expire in 2031.",
+         "Proposition 3 is approved on unofficial results (60.7% yes as of 14 November 2026, 5:16 p.m.). It makes permanent the voter-approved rates on individuals earning over $371,000, adjusted for inflation, that would otherwise expire in 2031.",
          "Removes a scheduled state tax cut. A large gain on a California property sale will be taxed at the top state rate for the foreseeable future.",
          ["sos_results", "voterguide_p3"]),
         ("One-time tax on certain taxpayers rejected",
-         "Proposition 40 failed on unofficial results (52.4% no as of 12 November 2026).",
+         "Proposition 40 failed on unofficial results (52.2% no as of 14 November 2026, 5:16 p.m.).",
          "No state wealth tax. Recorded because a later version could return.",
          ["sos_results", "voterguide_p40"]),
         ("Countermeasure to Proposition 40 rejected",
-         "Proposition 41 failed on unofficial results (55.1% no as of 12 November 2026). It would have prohibited new state taxes that exclude revenues from the state spending limit.",
+         "Proposition 41 failed on unofficial results (55.2% no as of 14 November 2026, 5:16 p.m.). It would have prohibited new state taxes that exclude revenues from the state spending limit.",
          "Its failure removes one of the two measures that could have voided the one-time tax if both had passed.",
          ["sos_results", "voterguide_p40"]),
         ("New state personal property taxes barred",
-         "Proposition 42 is leading on unofficial results (51.4% yes as of 12 November 2026).",
+         "Proposition 42 is ahead on unofficial results (51.3% yes as of 14 November 2026, 5:16 p.m.). The margin is close and counting continues, so the outcome is not final.",
          "Narrows one route for a future state tax, but does not touch real property tax.",
          ["sos_results"]),
         ("Local revenue vote threshold rejected",
-         "Proposition 43 failed on unofficial results (57.5% no as of 12 November 2026).",
+         "Proposition 43 failed on unofficial results (57.6% no as of 14 November 2026, 5:16 p.m.).",
          "Local parcel and transfer taxes remain possible without the stricter vote the measure would have required.",
          ["sos_results"]),
         ("Proposition 19 shelter adjusted",
@@ -1406,7 +1432,9 @@ def page_laws() -> str:
     return (
         callout("warn", "Read the election results carefully", """
 <p>The November 2026 California results on this page are <strong>unofficial</strong>, published by the Secretary
-of State with all precincts partially reporting, and they are not certified until 11 December 2026. They are
+of State with all 23,860 precincts partially reporting as of 14 November 2026, 5:16 p.m. Vote-by-mail,
+provisional and other ballots continue to be processed and counted during the canvass, and the results are not
+certified until 11 December 2026. They are
 included because Proposition 3 directly changes the tax on a property sale. Confirm against the certified
 results before relying on any of them.</p>""")
         + table("Enacted or changed", ["Change", "What it does", "Why it matters here", "Source"],
@@ -2226,7 +2254,7 @@ def page_review() -> str:
         ("Property B electricity", f"{m(B['annual_costs']['electricity']['low'])} to {m(B['annual_costs']['electricity']['high'])} a year",
          "Owner estimate", "Read the bills."),
         ("Insurance on both properties", m(A["annual_costs"]["insurance"]["mid"]) + " a year each",
-         "Owner estimate. The Department publishes a statewide average and an online premium survey, not an average for this postal area, so it can be compared against sample rates but not verified as the premium for this building.",
+         "Owner estimate. The state and industry benchmarks are statewide and across all amounts of insurance, not an average for this postal area, so the figure can be compared against published averages but not verified as the premium for this building. The NAIC by-state averages (Table 4 of the Homeowners Insurance Report) were not machine-readable in this build and are left blank on the costs page, not inferred.",
          "Get three quotes per building."),
         ("Maintenance on both properties", "0.5% / 0.75% of value for Property A, 1.5% for Property B",
          "Assumption. No figure was supplied.",
@@ -2254,7 +2282,7 @@ def page_review() -> str:
         "Property A electricity, net of solar": ["cpuc_nem"],
         "Property B water": ["REDACTED_rates"],
         "Property B electricity": [],
-        "Insurance on both properties": ["cdi_homeowners_avg"],
+        "Insurance on both properties": ["cdi_homeowners_avg", "naic_hmr_2023"],
         "Maintenance on both properties": [],
         "Property B rent": ["sf_rent_increase"],
         "The inherited cash amount": [],
@@ -2272,7 +2300,7 @@ def page_review() -> str:
         ("Fixed charges are projected at the inflation rate",
          "On Property B the fixed part of the bill grew at 8.1% a year between 2016 and 2025. Projecting at 2.5% is deliberately conservative and understates future bills if that pace continues."),
         ("The November 2026 California election results are unofficial",
-         "They are published with all precincts partially reporting and are not certified until 11 December 2026. Proposition 3 is treated as approved (60.7% yes on unofficial results as of 12 November 2026) because it changes the tax rate on a sale, but the result must be confirmed at certification."),
+         "They are published with all precincts partially reporting and are not certified until 11 December 2026. Proposition 3 is treated as approved (60.7% yes on unofficial results as of 14 November 2026, 5:16 p.m.) because it changes the tax rate on a sale, but the result must be confirmed at certification."),
         ("Combined tax rates are added, not interacted",
          "State and federal rates are added and no federal deduction is taken for state tax paid. That overstates the tax on a sale and therefore understates the case for selling, which is the conservative direction."),
         ("The housing value of living in the home is priced, not added",
