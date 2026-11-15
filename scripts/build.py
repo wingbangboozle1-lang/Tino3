@@ -39,7 +39,7 @@ NAV_GROUPS = [
     ("Money over time", ["costs.html", "projections.html", "taxes.html"]),
     ("Rules and the estate", ["inheritance.html", "timeline.html", "estate.html", "laws.html"]),
     ("Black swan economics", ["black-swan.html", "economy.html"]),
-    ("Review before deciding", ["questions.html", "suggestions.html", "review.html", "briefing-sheet.html"]),
+    ("Review before deciding", ["questions.html", "suggestions.html", "review.html"]),
     ("Evidence", ["glossary.html", "sources.html"]),
 ]
 PAGE_TITLES = {
@@ -62,7 +62,6 @@ PAGE_TITLES = {
     "questions.html": "Questions to answer before deciding",
     "suggestions.html": "Suggestions for review",
     "review.html": "Flagged for review and repository audit",
-    "briefing-sheet.html": "Attorney & CPA Briefing Sheet (printable)",
     "glossary.html": "Glossary of terms",
     "timeline.html": "Deadlines and key dates",
     "sources.html": "Source ledger",
@@ -397,7 +396,6 @@ SUMMARIES = {
     "questions.html": "What is known, what is missing, and how to find it.",
     "suggestions.html": "A review queue of proposals. Nothing implemented yet.",
     "review.html": "Unverified figures, modelling caveats and the repository audit.",
-    "briefing-sheet.html": "A one-page printable brief for the attorney and the tax adviser.",
     "glossary.html": "Plain-language terms with official citations.",
     "timeline.html": "The deadlines and key dates that shape the inheritance decision.",
     "sources.html": "Every official source used, with what it supports.",
@@ -1220,7 +1218,7 @@ def page_inheritance() -> str:
          "Supplemental bills are issued after the reassessment.",
          ["boe_pub29", "sf_treas_rate"]),
         ("8", "Federal estate tax, if the estate is large enough",
-         "If the gross estate plus adjusted taxable gifts exceeds the exclusion for the year of death, an estate tax return is due and tax is paid. Portability of a unused exclusion is elected on a timely return.",
+         "If the gross estate plus adjusted taxable gifts exceeds the exclusion for the year of death, an estate tax return is due and tax is paid. Portability of an unused exclusion is elected on a timely filed return. An estate that is not normally required to file may use the simplified procedure in Revenue Procedure 2022-32 to file on or before the fifth anniversary of death.",
          "The executor or the trustee.",
          "The return and any tax are due nine months after death, with an available extension.",
          ["irs_estate", "irs_i706", "irs_whatsnew"]),
@@ -2464,7 +2462,7 @@ def page_glossary() -> str:
         ("Section 121 exclusion", "Up to $250,000 ($500,000 for a couple) of gain on the sale of a principal residence can be excluded from federal income tax, subject to ownership and use tests.", ["irs_p523"]),
         ("Depreciation recapture", "Depreciation claimed while a property was rented is taxed back when it is sold, at up to 25% federally plus state tax.", ["irs_tc409", "ftb_cg"]),
         ("Net investment income tax (NIIT)", "A 3.8% federal tax on investment income for higher earners, layered on top of capital gains tax.", ["irs_tc559"]),
-        ("Portability", "A surviving spouse may be able to use a deceased spouse's unused federal estate-tax exclusion if the required estate-tax return is timely and correctly filed.", ["irs_estate", "irs_i706"]),
+        ("Portability", "A surviving spouse may be able to use a deceased spouse's unused federal estate-tax exclusion if the required estate-tax return is timely and correctly filed. An estate that is not normally required to file may use the simplified procedure in Revenue Procedure 2022-32 to file on or before the fifth anniversary of death.", ["irs_estate", "irs_i706", "irs_rev_proc_2022_32"]),
         ("Proposition 13", "California's rule that property tax is 1% of assessed value plus voter-approved bonds, with assessed value rising no more than 2% a year until ownership changes.", ["boe_pub29", "rtc51"]),
         ("Proposition 19", "The rule that the parent-child property-tax exclusion now applies only when the child makes the inherited home their principal residence, and shelters only value above the prior taxable value plus a biennial adjustment amount.", ["rtc63_2", "boe_prop19", "boe_lta25009"]),
         ("Proposition 19 parent-child exclusion", "A conditional California change-in-ownership exclusion, limited by statute and generally requiring the eligible transferee to use the transferred home as a principal residence and file a claim.", ["rtc63_2_eligibility", "boe_prop19"]),
@@ -2491,16 +2489,32 @@ def page_glossary() -> str:
 
 # -------------------------------------------------- adviser briefing sheet --
 def page_briefing() -> str:
+    """The single printable Attorney & CPA briefing sheet.
+
+    This page absorbed the separate printable sheet that used to sit beside it.
+    Two pages doing one job was a defect found in the integration audit: the
+    owner asked for one one-page brief for the attorney and the tax adviser,
+    and the site was serving two overlapping ones.
+    """
     p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
     value = p45["value_at_death"]
     cash_net = p45["paths"]["sell_equities"]["sale"]["net"]
     summary = f"""
 <div class="brief-toolbar"><p><strong>Print / save as PDF:</strong> use your browser's Print command. This sheet is formatted for one letter-size page.</p></div>
 <p class="brief-confidential"><strong>Planning brief — placeholders only; no personal names, addresses, parcel IDs, trust terms or account figures.</strong></p>
+<p class="brief-privacy"><strong>What is published:</strong> market values, assessed values, tax bills, rent and running costs, rounded to the nearest $10, plus the model outputs computed from them. <strong>What is never published:</strong> any name, street address, parcel number, ZIP code, trust term, beneficiary detail or utility account. <strong>Rounding is not anonymity</strong> — it defeats a search for an exact figure, not a reader who already holds the county record; that residual risk is disclosed on the <a href="review.html">flagged for review</a> page rather than hidden. Owner figures are labelled <span class="badge unverified">unverified</span> unless an official public record was checked. The amount of the inherited cash is not published; the estate page works entirely in anonymous scenario bands.</p>
 <div class="brief-grid">
 <section><h2>Decision in front of the family</h2>
 <p>Property A is expected to pass through a trust around 2040–2050; Property B is already owned by the heir and currently has two rented units plus one available unit. Do not treat the inherited home as already owned or assume Property B rent is displaced by living there.</p>
 <p>Current model direction: sell Property A soon after inheritance unless the heir genuinely wants to live in it. This is conditional—not advice—and depends on eligibility, title, tax basis, actual carrying costs, market rent and updated law. A 2045 illustration puts inherited-home value around {m(value)} and after-sale proceeds before reinvestment around {m(cash_net)}; both are model outputs, not appraisals or quotes.</p>
+</section>
+<section><h2>What to confirm before anything is implemented</h2>
+<ul>
+<li><strong>Client matter.</strong> Anonymised inheritance decision: Property A (home to be inherited through a trust, planned 2040–2050) versus Property B (three-unit rental building already owned by the heir).</li>
+<li><strong>Estimated values (November 2026).</strong> Property A {m(A['estimated_market_value_2026'])} (owner estimate, unverified). Property B {m(B['estimated_market_value_2026'])} (owner estimate, unverified). Neither address nor parcel is published.</li>
+<li><strong>First gate.</strong> Is the transfer between a parent and a child, or a grandparent and a grandchild whose parent has died? Without that relationship there is no Proposition 19 exclusion: Property A is reassessed to full market value and every shelter figure here disappears. The trust document settles it. {slink('rtc63_2_eligibility')}</li>
+<li><strong>Next step.</strong> A California estate attorney and a CPA should review the trust document, the deed, the tax bill and the county records before anything is implemented. Use the <a href="timeline.html">deadlines timeline</a> and the <a href="questions.html">questions register</a> as the checklist.</li>
+</ul>
 </section>
 <section><h2>First questions for counsel and tax adviser</h2>
 <ol>
@@ -2508,6 +2522,7 @@ def page_briefing() -> str:
 <li>What are the trust's distribution, sale, occupancy, debt and trustee powers? Confirm deed, trust amendments, successor-trustee process and authority to sell.</li>
 <li>What is the date-of-death basis, appraisal standard and allocation between land/building? What is the cash estate, prior taxable gifts, marital portability and federal Form 706 filing position? {slink('irs_basis')} {slink('irs_estate')} {slink('irs_i706')}</li>
 <li>Which home will be the heir's principal residence after transfer, and can occupancy/claim deadlines be met? Confirm eligibility and filing sequence with the assessor. {slink('boe_lta25009')}</li>
+<li>Is the estate required to file a federal estate tax return? If it is, the nine-month date governs and the portability election is made on a timely filed return. If it is not normally required to file, Revenue Procedure 2022-32 allows a simplified filing on or before the fifth anniversary of death to make the election. Which rule applies turns on the facts. {slink('irs_rev_proc_2022_32')}</li>
 </ol>
 </section>
 <section><h2>Known / unknown before choosing</h2>
@@ -2515,16 +2530,16 @@ def page_briefing() -> str:
 <p>Obtain certified tax bills and assessor records, title report, trust copy, date-of-death appraisal, insurer quotes for owner-occupied and rental uses, utility bills, property-condition inspection and a local rent opinion. Do not publish source documents or identifiers.</p>
 </section>
 <section><h2>Options and material risks</h2>
-<ul><li>Live in Property A: possible reassessment shelter only if eligible and occupancy requirements are met; higher concentration and maintenance exposure.</li><li>Rent Property A: full reassessment may apply; income, vacancy, repairs, landlord rules and depreciation/recapture need a CPA-grade model.</li><li>Sell and reinvest: basis step-up may limit immediate gain, but confirm sale costs and tax; reinvestment risk remains. The Black Swan page models 24/36-month Treasury parking and phased equity entry as a synthetic stress test, not a historical backtest. Reinvestment yield may decline at maturity.</li><li>Property B remains an independent owned asset: include its net operating costs, insurance, rent/legal rules and available unit in household liquidity planning.</li></ul>
+<ul><li>Live in Property A: possible reassessment shelter only if eligible and occupancy requirements are met; higher concentration and maintenance exposure.</li><li>Rent Property A: full reassessment may apply; income, vacancy, repairs, landlord rules and depreciation/recapture need a CPA-grade model.</li><li>Sell and reinvest: basis step-up may limit immediate gain, but confirm sale costs and tax; reinvestment risk remains. The Black Swan page models {PARK_LOW}–{PARK_HIGH}-month Treasury parking and phased equity entry as a synthetic stress test, not a historical backtest. Reinvestment yield may decline at maturity.</li><li>Property B remains an independent owned asset: include its net operating costs, insurance, rent/legal rules and available unit in household liquidity planning.</li></ul>
 </section>
 <section><h2>Timing / action sequence</h2>
 <p>Before transfer: verify trust/deed, relationship eligibility, estate liquidity and insurance. At death/transfer: secure property, contact trustee/assessor/insurer, obtain date-of-death valuation, inventory expenses and confirm tax filing calendar. After title transfer: have counsel/CPA calendar assessor claim deadlines, income/estate returns, insurance endorsements and rental notices; model live/rent/sell choices with actual quotes before signing or distributing proceeds. Exact dates depend on transfer and filing facts.</p>
 </section>
-<section class="brief-glossary"><h2>Glossary</h2>
+<section><h2>Glossary</h2>
 <p><strong>Basis step-up</strong>: generally resets inherited property tax basis to date-of-death value, subject to exceptions. <strong>Prop 19 exclusion</strong>: conditional California parent-child reassessment exclusion subject to statutory value and occupancy rules. <strong>Estate tax</strong>: federal tax on taxable estate, not a California inheritance tax. <strong>Reinvestment risk</strong>: future short-term Treasury proceeds may earn lower yields at maturity.</p>
 </section>
 </div>
-<p class="brief-footer">For attorney / CPA discussion only. Laws and projections may change before 2040–2050. Sources and full assumptions: <a href="sources.html">source ledger</a>, <a href="questions.html">question register</a>, <a href="review.html">unverified items</a>, <a href="black-swan.html">phased-investing stress test</a>. No legal, tax or investment advice.</p>
+<p class="brief-footer">For attorney / CPA discussion only. Laws and projections may change before 2040–2050. Sources and full assumptions: <a href="sources.html">source ledger</a>, <a href="questions.html">question register</a>, <a href="review.html">unverified items</a>, <a href="black-swan.html">phased-investing stress test</a>, <a href="timeline.html">deadlines timeline</a>. No legal, tax or investment advice.</p>
 """
     return summary
 
@@ -2547,7 +2562,16 @@ def page_timeline() -> str:
         ("Within 9 months after death, if a federal estate tax return is required",
          "Form 706 is due. Filing Form 4768 by that date gives an automatic six-month extension of the filing "
          "date. Part III of the same form is a separate request for more time to pay.",
-         "The executor. The portability election is made on this return if the gross estate is above the filing threshold.", ["irs_i706", "irs_i4768"]),
+         "The executor. Where the estate is required to file, the portability election is made on this return, "
+         "and the election is made on a timely filed return.", ["irs_i706", "irs_i4768"]),
+        ("By the fifth anniversary of death, if no estate tax return is required",
+         "If the gross estate and adjusted taxable gifts are below the filing threshold, the estate is not "
+         "normally required to file. Revenue Procedure 2022-32 provides a simplified method to obtain an "
+         "extension of time and file on or before the fifth anniversary of the decedent's death to elect "
+         "portability. So a late return does not always lose the election: which rule applies turns on whether "
+         "the estate was required to file, and on the facts. Ask the tax adviser which estate this is.",
+         "The executor, on the simplified procedure in Revenue Procedure 2022-32.",
+         ["irs_rev_proc_2022_32", "irs_i706"]),
         ("Within 1 year after the transfer, if the exclusion is claimed",
          "Occupy the house as the principal residence, and file the homeowners' exemption.",
          "The heir.", ["rtc63_2", "boe_lta26026", "boe_prop19"]),
@@ -2577,7 +2601,9 @@ def page_timeline() -> str:
         note="Day 0 is the date of death, which is not yet known, so the clocks are shown from it. "
              "A row without an official source is not on this page. The county calendar applies to Property A "
              "only while it is held in the trust; after the transfer, the heir's own bills follow the same calendar. "
-             "Every date here is a deadline to check, not advice on when to act.")
+             "Every date here is a deadline to check, not advice on when to act. The two Form 706 rows read together: "
+             "the nine-month due date governs an estate that must file, and the fifth-anniversary route in Revenue "
+             "Procedure 2022-32 governs an estate that is not normally required to file.")
     return (
         eligibility_callout()
         + callout("answer", "The next dated item", """
@@ -2587,7 +2613,7 @@ next year. Everything else is measured from the date of death or the date of tra
         + '<p class="lede">Read in order. Each row is a legal or tax clock, and each names the official text it comes from.</p>'
         + tl
         + callout("answer", "Which deadlines can move the answer",
-"""<p>The three deadlines that can change the recommendation are: (1) whether the parent-child relationship is in place before the transfer, because without it the Proposition 19 shelter disappears; (2) the one-year homeowners' exemption and three-year exclusion-claim windows, because missing them costs the shelter; and (3) the nine-month estate-tax return, because a late return loses the portability election. The estate page works entirely in anonymous scenario bands because the inherited cash amount is not published.</p>""")
+"""<p>The three deadlines that can change the recommendation are: (1) whether the parent-child relationship is in place before the transfer, because without it the Proposition 19 shelter disappears; (2) the one-year homeowners' exemption and three-year exclusion-claim windows, because missing them costs the shelter; and (3) the federal estate-tax return. Where the estate is required to file, the nine-month due date governs and the portability election is made on a timely filed return; where the estate is not normally required to file, Revenue Procedure 2022-32 allows a simplified filing on or before the fifth anniversary of death to make the election. Which rule applies turns on the facts, so it is a question for the tax adviser rather than an assumption to make here. The estate page works entirely in anonymous scenario bands because the inherited cash amount is not published.</p>""")
         + callout("method", "Why the order matters", """
 <ol>
 <li>The trust notice (60 days) and the change-in-ownership statement (150 days) are the first two clocks after death.</li>
@@ -2709,23 +2735,6 @@ that answer is no, the reassessment is full and every case here moves toward sel
     )
 
 # ------------------------------------------------------------------- briefing --
-def page_briefing_sheet() -> str:
-    rows = [
-        f"<td><strong>Client matter</strong></td><td>Anonymised inheritance decision: Property A (home to be inherited through a trust, planned 2040-2050) versus Property B (three-unit rental building already owned by the heir). <a class=\"src\" href=\"review.html#register\">Follow up on the register</a></td>",
-        f"<td><strong>Estimated values (Nov 2026)</strong></td><td>Property A {m(A['estimated_market_value_2026'])} (owner estimate, unverified). Property B {m(B['estimated_market_value_2026'])} (owner estimate, unverified). Neither address nor parcel is published. <a class=\"src\" href=\"review.html#register\">Follow up on the register</a></td>",
-        f"<td><strong>First gate to confirm</strong></td><td>Is the transfer between a parent and a child (or grandparent and grandchild whose parent has died)? Without it there is no Proposition 19 exclusion: Property A is reassessed to full market value and every shelter figure here disappears. The trust document settles it. {slink('rtc63_2_eligibility')} <a class=\"src\" href=\"review.html#register\">Follow up on the register</a></td>",
-        f"<td><strong>Next step</strong></td><td>A California estate attorney and a CPA should review the trust document, the deed, the tax bill and the county records before anything is implemented. Use the deadlines timeline page and the questions page as the checklist. <a class=\"src\" href=\"review.html#register\">Follow up on the register</a></td>",
-    ]
-    return (
-        privacy_banner()
-        + callout("note", "Attorney & CPA Briefing Sheet - printable one page", """
-<p>Print this page (Ctrl+P / Cmd+P). It contains no names, addresses, parcel numbers, ZIP codes, trust terms, beneficiary details, account numbers or unrounded owner figures. Every dollar is rounded to the nearest $10. It is a briefing aid, not legal or tax advice.</p>""")
-        + table("Briefing sheet", ["Item", "What to confirm"], rows,
-              note="The full figures, assumptions and source links are on the decision, black-swan, estate and sources pages. Nothing on this page substitutes for a review of the trust document, the deed, the tax bill and the county records by a California estate attorney and a CPA.")
-    )
-
-
-
 PAGE_BUILDERS = {
     "index.html": (page_index, "Two California properties, one decision. Every figure rounded to the nearest $10."),
     "executive-summary.html": (page_executive_summary,
@@ -2748,7 +2757,6 @@ PAGE_BUILDERS = {
     "questions.html": (page_questions, "What is known, what is missing, and how to find it."),
     "suggestions.html": (page_suggestions, "A review queue of proposals. Nothing implemented yet."),
     "review.html": (page_review, "Unverified figures, modelling caveats and the repository audit."),
-    "briefing-sheet.html": (page_briefing_sheet, "A one-page printable brief for the attorney and the tax adviser."),
     "glossary.html": (page_glossary, "Plain-language definitions of the terms used on this site."),
     "sources.html": (page_sources, "Every official source used, with what it supports."),
 }
