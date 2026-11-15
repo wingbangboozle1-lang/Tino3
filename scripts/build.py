@@ -1008,6 +1008,12 @@ rule. That makes "move in for a while, then let it out" a risky structure, not a
 
 
 # -------------------------------------------------------------------- costs --
+def state_cagr(y0: int, y1: int) -> float:
+    """Compound annual growth (per cent) of the California state house-price index, from the verified series."""
+    vals = SERIES["hpi_a"]["values"]
+    return ((float(vals[str(y1)]) / float(vals[str(y0)])) ** (1 / (y1 - y0)) - 1) * 100
+
+
 def local_parcel_tax_for(year: int) -> float:
     """Floor of the local parcel tax in a given calendar year (zero before the first levy year)."""
     if year < 2027:
@@ -3423,7 +3429,7 @@ def executive_summary_markdown() -> str:
     regs = MODEL["regimes"]
     sens_sell = sum(1 for s in sens if s["best"].startswith("sell"))
     reg_sell = sum(1 for r in regs if r["run"]["best"].startswith("sell"))
-    cash = lambda v: f"${v:,}"
+    cash = lambda v: (f"−${abs(v):,}" if v < 0 else f"${v:,}")
     out = []
     a = out.append
     a("# Executive summary")
@@ -3484,8 +3490,8 @@ def executive_summary_markdown() -> str:
       f"{cash(p45['paths']['live_in']['sale']['tax'])} after the section 121 exclusion; let it out as well and "
       f"depreciation recapture pushes that to about {cash(p45['paths']['rent_out']['sale']['tax'])}.")
     a(f"- **The break-even.** Keeping the home beats selling only if it appreciates "
-      f"{pc(p45['breakeven_house_growth'])} a year for thirty years. The verified index for this area compounded "
-      "at 6.9% over fifty years and 3.3% over the last twenty.")
+      f"{pc(p45['breakeven_house_growth'])} a year for thirty years. The verified California state index compounded "
+      f"at {pc(state_cagr(1975, 2025), 1)} over fifty years and {pc(state_cagr(2005, 2025), 1)} over the last twenty.")
     a(f"- **The break-even rent.** Letting would need about {cash(p45['breakeven_rent_monthly'])} a month, "
       f"{cash(p45['breakeven_rent_annual'])} a year, in 2045, to match selling and investing.")
     a("")
