@@ -11,6 +11,29 @@
 | F-3 Privacy: audit the pre-rounding Git history read-only, publish the findings without the values, and write the owner decision and remediation procedure | **in progress** | `arena/f8ab312e-tino3` | `PRIVACY_REMEDIATION.md` (new, internal, excluded from publication), `scripts/privacy_scrub_audit.py` (new), `scripts/build.py` (review page audit rows) |
 | F-4 Rebuild, run every gate, open the PR from this branch, merge, confirm the Pages deploy | not started | `arena/f8ab312e-tino3` | `COORDINATION.md` (this section only) |
 
+
+### F-2 Source re-verification, 15 November 2026
+
+Every entry below was re-opened on the publisher's own domain in this session. "Verdict" compares what the record now says against what the source ledger claims it says.
+
+| Source id | Publisher and document | Verdict | Note |
+|---|---|---|---|
+| `irs_estate` | IRS, Estate tax | **Confirmed** | Filing-threshold table ends at 2026 / $15,000,000, matching the ledger's 2026 figure. The page also states that a filing is required where the gross estate plus adjusted taxable gifts exceeds the year-of-death threshold. |
+| `irs_whatsnew` | IRS, What's new — Estate and gift tax | **Confirmed, and strengthened** | "The Working Families Tax Cuts Bill (WFTC) was signed into law on July 4, 2025 as Public Law 119-21 … increasing the basic exclusion amount to $15,000,000 for calendar year 2026." The ledger's 2026 figure has a statutory basis, not only a revenue-procedure one. |
+| `ftb_inheritance` | California FTB, Gifts and inheritance | **Confirmed** | "If you received a gift or inheritance, **do not** include it in your income." The page also lists the income an inheritance later produces (interest, dividends, rent, gain on sale) as taxable. Ledger wording matches. |
+| `sco_estate` | California State Controller, California Estate Tax | **Confirmed** | "For decedents that die on or after January 1, 2005, there is no longer a requirement to file a California Estate Tax Return." No California estate or inheritance tax is collected for current deaths. |
+| `boe_lta25009` | BOE Letter to Assessors 2025/009 | **Confirmed** | Value cap is the factored base year value plus **$1,044,586** for transfers 16 Feb 2025 – 15 Feb 2027; prior amounts $1,000,000 and $1,022,600 exactly as the ledger states; next adjustment February 2027. |
+| `boe_prop19` | BOE, Proposition 19 | **Confirmed** | Current law: principal residence of transferor **and transferee**, value limit "current taxable value plus $1,000,000 (as biennially adjusted)", claim for exclusion within 3 years, homeowners' exemption within 1 year. |
+| `civ1947_12` | California Civil Code 1947.12 (leginfo) | **Confirmed** | "5 percent plus the percentage change in the cost of living, or 10 percent, whichever is lower", over any 12-month period; single-family and condominium exemption where the owner is not a REIT, corporation or LLC. |
+| `sf_rent_increase` | SF Rent Board, Learn about rent increases | **Confirmed, and updated context** | 1.6% effective 1 March 2026 – 28 February 2027, based on 60% of the REDACTED CPI; no limit on the initial rent for an empty unit; rent-increase licence required. The page now also carries a **posted 9 November 2026** notice that the Board of Supervisors is considering File No. 261020 (a temporary 10% combined cap on banked and capital-improvement increases). That file is already in the ledger as `cityb_261020` / `sf_file261020` and is described on the laws and Property B pages as pending, not law. |
+| `sf_treas_rate` | SF Treasurer and Tax Collector, Secured Property Taxes | **Confirmed** | "The secured property tax rate for Fiscal Year 2026-27 is 1.18162182%"; supplemental assessment after a change in ownership on the difference between new and prior value. |
+| `ssa_trustees` | SSA, 2026 OASDI Trustees Report, Assumptions about the future | **Confirmed** | Table II.C1: intermediate annual CPI-W change **2.4%**, low-cost 3.0%, high-cost 1.8%; trust fund new-issue real interest rate for 2044 and later **2.3%** intermediate (2.8% / 1.8%). Exactly the figures the model uses. |
+
+**One dead link found and closed.** `https://www.boe.ca.gov/lawguides/letters/2025/09/lta-2025-09.html` returns a 404. It was a guessed URL, not one in the ledger. The ledger's actual entry, the PDF at `/proptaxes/pdf/lta25009.pdf`, resolves and confirms the figure. No page links to the dead path.
+
+**Verdict on this batch: all 10 confirmed, 0 contradictions, 1 new development (SF File 261020) already correctly classified as pending.**
+
+
 **Coordination notes at claim time.** Three pull requests were open when this session started: #97 (`arena/1663e879-tino3`, board record only), #102 (`arena/1405ad9c-tino3`, briefing/costs/review edits) and #103 (`arena/8eebc036-tino3`, briefing consolidation and privacy sweep). All three touch `scripts/build.py`, which this session also edits. This session will make its changes **additive and isolated** (new module, new data file, new page section appended to one builder function) so a rebase can keep every session's work. These sessions are live, so their branches are not merged from here. Shared outputs (`assets/data/model.json`, generated pages) are regenerated last, from the merged builder.
 
 ## Session `arena/0dcaf9f7-tino3` — open-item completion: ledger research, economy reconciliation, stale-PR disposition, final publication · claimed 2026-11-13
