@@ -26,6 +26,10 @@ V = INPUTS["verified_parameters"]
 ASM = INPUTS["assumptions"]
 BUILD_DATE = "13 November 2026"
 
+# The phased-investing figures are computed by the model's one monthly engine, so the
+# stress table on the black-swan page and the dashboard path cannot drift apart again.
+import model as model_mod  # noqa: E402
+
 NAV_GROUPS = [
     ("Start here", ["index.html", "executive-summary.html", "decision.html", "what-if.html", "briefing.html"]),
     ("The two properties", ["property-a.html", "property-b.html", "ownership-distinction.html"]),
@@ -318,7 +322,8 @@ def page_index() -> str:
         kpi(m(p45["breakeven_rent_monthly"]), "Monthly rent needed to justify letting it",
             "In 2045 dollars, on zero rent credited to the letting paths"),
         kpi(m(p45["paths"]["sell_then_phase"]["terminal"]), "Phased path: sell, park in Treasuries, then equities",
-            "24-36 months in short-term Treasuries after inheritance, then stocks - softens 1929/2008 crash entry"),
+            f"{ASM['phased_park_months']['value']} months in short-term Treasuries after inheritance, then equal "
+            f"monthly purchases over {ASM['phased_equity_phase_months']['value']} months - softens 1929/2008 crash entry"),
         kpi(f"{EPI['winners']['phase'] + EPI['winners']['park34']} of {len(EPI['episodes'])}",
             "Real crashes where waiting beat investing on day one",
             "Replayed with published monthly prices for 1929, 2000, 2008 and 2020 - not a synthetic sequence"),
@@ -491,7 +496,9 @@ def page_decision() -> str:
     for p in MODEL["paths"]:
         for key, label in (("sell_equities", "Sell at inheritance, invest in equities"),
                            ("sell_treasury", "Sell at inheritance, reinvest at Treasuries"),
-                           ("sell_then_phase", "Sell at inheritance, park in short-term Treasuries for 30 months, then phase into equities"),
+                           ("sell_then_phase", f"Sell at inheritance, park in short-term Treasuries for "
+                                               f"{ASM['phased_park_months']['value']} months, then phase into equities "
+                                               f"over {ASM['phased_equity_phase_months']['value']} months"),
                            ("live_in", "Move in and hold for 30 years"),
                            ("live_then_rent", "Move in two years, then let it out"),
                            ("rent_out", "Let it out from the start")):
@@ -606,8 +613,8 @@ model rebuilt.</p>
         "What-if map: which path wins at each house-growth / equity-return combination (2045 inheritance)",
         ["House growth"] + eq_headers, what_rows,
         note="Each cell prices all six paths at that combination and names the winner. Sell\u2192phase is the "
-             "phased-investing path: sale proceeds park in short-term Treasuries for 24-36 months, then move into "
-             "equities. Cells where a sell path wins are shaded. All figures come from scripts/model.py; change "
+             "phased-investing path: sale proceeds park in short-term Treasuries for the 24-36-month park window, "
+             "then move into equities by equal monthly purchases. Cells where a sell path wins are shaded. All figures come from scripts/model.py; change "
              "assets/data/inputs.json and rebuild to explore other assumptions. "
              + method_cell("#method", "Model output"))
 
@@ -1732,73 +1739,69 @@ inheritance will not arrive on a 1929 or a 2008 schedule. The point is to size t
 
 
 # ------------------------------------------------ phased entry stress test --
-def phased_terminal(proceeds: float, wait_years: int, annual_treasury: float,
-                    shock: bool, horizon: int = 30, phase_months: int = 12) -> int:
-    """Monthly deterministic illustration; shock path is synthetic, not a backtest."""
-    cash_balance = float(proceeds)
-    equity_balance = 0.0
-    phase_start = wait_years * 12
-    shock_returns = [-0.40, 0.25, 0.10]
-    baseline_net = ASM["equity_return_nominal_gross"]["baseline"] - ASM["equity_tax_drag"]["baseline"]
-    for month in range(horizon * 12):
-        year = month // 12
-        if shock:
-            annual_stock_return = shock_returns[year] if year < len(shock_returns) else baseline_net
-        else:
-            annual_stock_return = baseline_net
-        equity_balance *= (1 + annual_stock_return) ** (1 / 12)
-        cash_balance *= (1 + annual_treasury) ** (1 / 12)
-        phase_month = month - phase_start
-        if 0 <= phase_month < phase_months:
-            months_left = phase_months - phase_month
-            contribution = cash_balance / months_left
-            cash_balance -= contribution
-            equity_balance += contribution
-    return money10(equity_balance + cash_balance)
-
-
 def page_phased_rows() -> str:
+    """Entry-timing stress table. Every figure comes from the model's one monthly
+    phased engine with the model's one short-Treasury yield key; the shock path is
+    the stated synthetic sequence, applied to the phased and lump-sum paths alike."""
     p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
     proceeds = p45["paths"]["sell_equities"]["sale"]["net"]
-    base_tsy = ASM["treasury_yield_nominal"]["baseline"]
-    direct_no_crash = phased_terminal(proceeds, 0, base_tsy, False)
-    direct_crash = phased_terminal(proceeds, 0, base_tsy, True)
+    base_tsy = ASM["treasury_short_yield_nominal"]["baseline"]
+    crash = [-0.40, 0.25, 0.10]
+    phase_months = 12
+    horizon = ASM["horizon_years"]
+
+    def run(wait_months: int, shock: bool) -> dict:
+        return model_mod.phased_engine(proceeds, wait_months, phase_months, base_tsy,
+                                       ASM["equity_return_nominal_gross"]["baseline"],
+                                       ASM["equity_tax_drag"]["baseline"], horizon,
+                                       crash_annual=crash if shock else None)
+
+    direct_no_crash = run(0, False)["terminal"]
+    direct_crash = run(0, True)["terminal"]
     cases = [
         ("Immediate equity; no shock", 0, False, "Reference case"),
         ("Immediate equity; synthetic crash-at-entry stress", 0, True, "Shared stylized stress; not a dated replay"),
-        ("Treasuries 24 months, then phase to equities over 12 months; no shock", 2, False, "No-crash opportunity-cost case"),
-        ("Treasuries 24 months, then phase to equities over 12 months; synthetic crash stress", 2, True, "Shared stylized stress; not a dated replay"),
-        ("Treasuries 36 months, then phase to equities over 12 months; no shock", 3, False, "No-crash opportunity-cost case"),
-        ("Treasuries 36 months, then phase to equities over 12 months; synthetic crash stress", 3, True, "Shared stylized stress; not a dated replay"),
+        ("Treasuries 24 months, then phase to equities over 12 months; no shock", 24, False, "No-crash opportunity-cost case"),
+        ("Treasuries 24 months, then phase to equities over 12 months; synthetic crash stress", 24, True, "Shared stylized stress; not a dated replay"),
+        ("Treasuries 36 months, then phase to equities over 12 months; no shock", 36, False, "No-crash opportunity-cost case"),
+        ("Treasuries 36 months, then phase to equities over 12 months; synthetic crash stress", 36, True, "Shared stylized stress; not a dated replay"),
     ]
     rows = []
     for label, wait, shock, context in cases:
-        amount = phased_terminal(proceeds, wait, base_tsy, shock)
+        amount = run(wait, shock)["terminal"]
         comparator = direct_crash if shock else direct_no_crash
-        srcs = (["fedhist_1929", "fedhist_greatrecession"] if shock else ["ssa_trustees", "fred_gs10"])
-        rows.append(f"<td><strong>{esc(label)}</strong></td><td>{wait * 12} months</td>"
+        srcs = (["fedhist_1929", "fedhist_greatrecession"] if shock
+                else ["ssa_trustees", "fred_gs10"])
+        rows.append(f"<td><strong>{esc(label)}</strong></td><td>{wait} months</td>"
                     f"<td>{pcf(base_tsy, 1)}</td><td>{m(amount)}</td>"
                     f"<td>{m(amount - comparator)}</td><td>{esc(context)}</td>"
                     + method_cell("#phased-method", "Illustrative model", srcs))
+    short = ASM["treasury_short_yield_nominal"]
     return table("2045 sale-proceeds entry-timing stress test (30-year nominal terminal value)",
-                  ["Path", "Treasury wait", "Treasury yield proxy", "Terminal value", "Difference vs immediate entry in same market case", "Reading", "Method and sources"], rows,
-                  note="Rounded to $10. Outputs are conditional illustrations, not recommendations or forecasts. The 4.7% proxy is the model's long-run 10-year-yield anchor, not a current 3-month-to-2-year Treasury quote.")
+                  ["Path", "Treasury wait", "Treasury yield assumption", "Terminal value",
+                   "Difference vs immediate entry in same market case", "Reading", "Method and sources"], rows,
+                  note=f"Rounded to $10. Outputs are conditional illustrations, not recommendations or forecasts. "
+                       f"The Treasury yield is the model's stated short-Treasury scenario (baseline {pcf(short['baseline'], 1)}, "
+                       f"band {pcf(short['low'], 1)} to {pcf(short['high'], 1)}), the same key every phased path uses; "
+                       f"it is not a current 3-month-to-2-year quote and no official source publishes forward short rates "
+                       f"for the 2040s. The rate-context links in the last column are historical context only.")
 
 
 def page_phased_stress() -> str:
-    return callout("key", "What this test does and does not say", """
-<p>It tests the requested choice: after a hypothetical 2045 inheritance and sale, keep proceeds in short-dated Treasuries for 24 or 36 months, then move equal monthly portions into equities over the following 12 months. It compares that path with investing immediately.</p>
+    short = ASM["treasury_short_yield_nominal"]
+    return callout("key", "What this test does and does not say", f"""
+<p>It tests the requested choice: after a hypothetical 2045 inheritance and sale, keep proceeds in short-dated Treasuries for 24 or 36 months, then move equal monthly portions into equities over the following 12 months. It compares that path with investing immediately. Every figure comes from the model's one monthly phased engine - the same engine the dashboard's phased path uses - with the model's one short-Treasury yield key.</p>
 <p>The crash sequence is explicitly <strong>synthetic</strong>: an assumed -40% equity year, then +25%, then +10%, followed by the baseline 6.3% net nominal equity return. The 36-month wait therefore ends just as that invented three-year sequence ends; that coincidence is a scenario artifact, not evidence that a three-year wait avoids real crashes. It is not a reconstruction of 1929 or 2008 market returns. The Federal Reserve History links document the events and their timing, not these assumed percentages. The repository does not contain a source-verified S&amp;P total-return series for those episodes; a true historical backtest is flagged as a data gap.</p>
-<p>The treasury rate shown is a 4.7% long-run proxy derived from the Social Security Trustees' real-rate and inflation assumptions and historical 10-year yields. It is <strong>not</strong> a 3-month, 1-year or 2-year yield forecast. The actual bill/note yield, reinvestment rates, taxes on interest, transaction costs, and the chosen equity allocation must be refreshed with a fiduciary before implementation.</p>""") + page_phased_rows() + f"""
+<p>The Treasury rate shown is the model's stated short-Treasury scenario (baseline {pcf(short['baseline'], 1)}, band {pcf(short['low'], 1)} to {pcf(short['high'], 1)}), not a 3-month, 1-year or 2-year yield quote and not a forecast. The actual bill/note yield, reinvestment rates, taxes on interest, transaction costs, and the chosen equity allocation must be refreshed with a fiduciary before implementation.</p>""") + page_phased_rows() + f"""
 <section id="phased-method">
 <h2>Interpretation and reinvestment risk</h2>
 <ul>
 <li>Waiting reduces the dollars exposed to an immediate hypothetical crash, but it does not eliminate market risk: equity purchases still face subsequent losses.</li>
-<li>With no crash, waiting has an opportunity cost if equities outperform the Treasury proxy. The no-shock rows make that cost visible rather than showing only the favorable case.</li>
+<li>With no crash, waiting has an opportunity cost if equities outperform the Treasury assumption. The no-shock rows make that cost visible rather than showing only the favorable case.</li>
 <li>Short Treasuries mature frequently. If market yields are lower at maturity, proceeds must be reinvested at lower rates; if rates rise, existing notes' market value can fall before maturity. Neither future yield nor ladder is known today.</li>
 <li>All terminal values omit estate-level investment tax details, a personalized asset allocation, withdrawals, fees beyond the model's stated drag, and changes in future law. Ask the CPA and investment fiduciary to rerun with an actual sale estimate and current Treasury quotes.</li>
 </ul>
-<p>Official event context: {slink('fedhist_1929')} &middot; {slink('fedhist_greatrecession')}. Treasury proxy basis: {slink('ssa_trustees')} &middot; {slink('fred_gs10')}.</p>
+<p>Official event context: {slink('fedhist_1929')} &middot; {slink('fedhist_greatrecession')}. Long-rate history (context only; the parking yield is a stated scenario): {slink('fred_gs10')} &middot; {slink('ssa_trustees')}.</p>
 </section>"""
 
 
@@ -2783,8 +2786,12 @@ def page_briefing() -> str:
 def page_timeline() -> str:
     """Every dated step in order. Each row names its official source or is not on the page."""
     rows_spec = [
-        ("Within 60 days after the trust becomes irrevocable",
-         "The trustee sends the heirs and beneficiaries the notice the statute requires.",
+        ("Within 60 days after the event requiring the notice",
+         "The trustee serves the statutory notification on each beneficiary of the irrevocable trust or portion "
+         "and each heir of the deceased settlor, at their last known address. The 60 days run from the event - or "
+         "from when the trustee becomes aware of a person entitled to notice who was not known at the event, or "
+         "from when a new trustee commences to serve if the office was vacant. No copy is owed to a beneficiary or "
+         "heir who cannot be located after reasonable diligence or is unknown to the trustee.",
          "The trustee.", ["prob16061_7"]),
         ("At the transfer of Property A by reason of death, in trust",
          "Exempt from the documentary transfer tax, whether the transfer is outright or in trust. The exemption is "
