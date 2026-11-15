@@ -2656,6 +2656,82 @@ Not in scope and not touched: `scripts/economy.py`, `assets/data/economy.json`, 
 - **Publication:** PR #95 (`arena/e0151d56-tino3` → `main`), merged with a merge commit at `6b7afb5`, no auto-merge. The `verify` check passed before merge. Pages status: `built` for `6b7afb5`. A first live fetch of the dashboard returned a stale copy (from before the merge, with 7.72%); a re-fetch with a query string returned the corrected page. Live pages checked: dashboard, what-if, timeline.
 - **Remaining for the owner:** (1) decide on a Git-history scrub of the utility, sanitary-district, city and ZIP tokens (requires a force-push to `main`, not performed); (2) review the briefing sheet print layout in a browser; (3) confirm the 2026/27 DTAC penalty date against the bill itself.
 
+## Session `arena/1dc4d646-tino3` — final integration, verification and publication confirmation · 2026-11-15
+
+*Branch note:* Arena pins this session to `arena/1dc4d646-tino3`, based on `main` at `b72eef7` (merge of PR #96, `arena/e0151d56-tino3`). This branch is byte-for-byte identical to `main`; no separate branch was created or switched. All work below is verification and publication confirmation of the already-integrated tree.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| J-1 Full repo review: confirm every user-brief requirement is present in the built edition | done | `arena/1dc4d646-tino3` | root `*.html`, `scripts/model.py`, `scripts/build.py`, `assets/data/inputs.json`, `assets/data/series.json` |
+| J-2 Line-by-line verification: run all gates, confirm every table row source-linked or explicitly flagged, privacy scan, rounding | done | `arena/1dc4d646-tino3` | `scripts/build.py`, `scripts/verify.py`, `scripts/privacy_boundary.py`, `scripts/package_site.py`, `scripts/verify_legacy.py` |
+| J-3 Confirm GitHub Pages deployment live on `main` | done | `arena/1dc4d646-tino3` | GitHub Pages API, Actions workflow runs |
+| J-4 Cross-check built output for identifiers (ZIP codes, addresses, personal names, unrounded roll figures) | done | `arena/1dc4d646-tino3` | built root `*.html` |
+| J-5 Record session result; no PR needed because branch == main and everything is already merged and deployed | done | `arena/1dc4d646-tino3` | this section of COORDINATION.md |
+
+### J-1 · requirement cross-check (every item in the owner's brief is implemented)
+
+| Brief item | Where it lives | Status |
+|---|---|---|
+| Phased-investing path (sell, park 3M–2Y Treasuries 24–36 mo, then equities; softens 1929/2008 crash entry) | `black-swan.html` (`page_phased_stress`), `model.py` (`run_phased_path`, `crash_entry_comparison`) | implemented |
+| One-page printable Attorney & CPA Briefing Sheet | `briefing.html`, `briefing-sheet.html` (print CSS, letter size) | implemented |
+| "What would change the answer" on first screen | `index.html` (`page_index`) | implemented |
+| Mixed paths, not only pure choices | `decision.html` (`live_then_rent` mixed path) | implemented |
+| Reinvestment risk beside headline | `index.html` reinvestment callout; `black-swan.html` interpretation | implemented |
+| What-if controls (link-driven, no script) | `what-if.html` | implemented |
+| Deadlines as a timeline | `timeline.html` | implemented |
+| Grouped menu + glossary | `NAV_GROUPS`, `glossary.html` | implemented |
+| Executive summary | `executive-summary.html` + generated `EXECUTIVE_SUMMARY.md` | implemented |
+| Suggestions section (review queue, nothing implemented by building) | `suggestions.html` | implemented |
+| Questions / information / answers register | `questions.html` (39 questions, A–G, each with source) | implemented |
+| Privacy: placeholders only, no names/addresses/ZIP/parcel/trust/account | privacy banner on every page; Property A / Property B | implemented |
+| REDACTED (inherited) vs SF (already owned) distinction | `ownership-distinction.html` | implemented |
+| Black swan / real economic conditions section | `black-swan.html`, `economy.html` (verified FRED record) | implemented |
+| Rounding to nearest $10 | `money10()` throughout; `verify.py` enforces | implemented |
+| Inheritance years 2040–2050 | `inputs.json` `inheritance_years` [2040, 2045, 2050] | implemented |
+| Property & tax law research (federal/state/local) | `taxes.html`, `estate.html`, `laws.html`, source ledger | implemented |
+| Live / rent / sell-and-reinvest decision | `decision.html` six paths + recommendation | implemented |
+| Step-by-step trust inheritance | `inheritance.html` 12 phases + deadlines | implemented |
+| Cost projections (water, power, insurance, maintenance, tax) | `costs.html`, `projections.html` | implemented |
+| Property values ($3.1M A, $1.8M B) | `assets/data/inputs.json` | implemented |
+| Property tax & assessment history tables | `property-a.html`, `property-b.html` roll tables | implemented |
+| SF rental income ($7,150/mo, 2 of 3 units) | `inputs.json` `property_b.rent` | implemented |
+| Inheritance tax thresholds (federal $15M 2026, $15.48M 2027; no CA estate tax) | `estate.html` | implemented |
+| Deterministic, no manual input | `scripts/model.py`, no network, no randomness | implemented |
+
+### J-2 · verification results (all gates PASS)
+
+- `scripts/build.py` — writes all 23 public pages + data CSVs + `EXECUTIVE_SUMMARY.md`, exit 0
+- `scripts/verify.py` — PASS: 23 pages; 795 table rows; 729 linked to an official source; 66 explicitly logged as unsourceable; 2,918 links (1,847 external), all resolve; 109 ledger sources; privacy scan and $10 rounding clean
+- `scripts/privacy_boundary.py` — PASS: 23 pages + 1 asset scanned; every published dollar figure is $10-rounded or a published official amount; 117 non-allowlisted routes carry content-free notices
+- `scripts/package_site.py` — PASS: 23 public pages, 1 runtime asset, 117 withdrawal routes
+- `scripts/verify_legacy.py --config-only` — PASS (guard fails closed on any bypass)
+
+### J-3 · GitHub Pages deployment (confirmed via api.github.com)
+
+- Pages API: `status: built`, `build_type: legacy`, `source: main:/`, `https_enforced: true`, public URL `https://wingbangboozle1-lang.github.io/Tino3/`
+- Deploy GitHub Pages workflow: completed, success, on `main` at `b72eef70`, 2026-11-14T22:30:43Z
+- Verify static site workflow: completed, success, on `main` at `b72eef70`
+- Legacy pages build and deployment: completed, success
+- Note: the sandbox cannot fetch github.io directly (outbound internet limited to api.github.com and the registry hosts), so live HTML was not fetched from the sandbox; deployment status is confirmed through the GitHub API, which is the authoritative source.
+
+### J-4 · privacy cross-check of built output
+
+- `grep` for ZIP codes `REDACTED` / `REDACTED` across all built HTML: none found
+- `grep` for personal-name tokens: none found
+- Published property values ($3,100,000 / $1,800,000) are the owner's own $10-rounded estimates, flagged unverified, and pass the rounding rule
+- County names (REDACTED County, City and County of REDACTED) appear only in jurisdiction labels and official-source URLs; this residual traceability is disclosed on the review page and privacy banner
+
+### J-5 · publication decision
+
+No pull request was created or merged in this session because this branch is identical to `main` and every feature requested in the brief is already integrated, verified, and deployed. If the owner later decides to scrub Git history (force-push) or change repository visibility, that is a separate owner action outside this session.
+
+### Open items carried forward (owner decisions, not blocking)
+
+1. **Git history scrub / repository visibility.** Earlier commits and PR diffs contain unrounded owner figures and (in older editions) utility/sewer links that identified Property A's area. The current tree is clean, but history is not. Rewriting history requires a force-push to `main` and is the owner's decision (disclosed as an irregularity on the review page).
+2. **Pages source.** Still the legacy `main:/` publisher; switching to GitHub Actions returned HTTP 403 (needs `pages=write`, an owner/administrator action).
+3. **Three ledger gaps remain blank and flagged** (never inferred): Property A water utility tariff, Property A sanitary-district sewer rates, city transfer-tax band above $10,000,000 (the latter is now published on the taxes page per the city's own schedule).
+4. Browser print-pagination of the briefing sheet was not validated in this environment.
+
 ## Session `arena/ec37bb6a-tino3` — gap check against the owner's full brief, menu de-duplication, publication record · claimed 2026-11-15
 
 *Branch note:* Arena pins this session to `arena/ec37bb6a-tino3` (based on `main` at `b72eef7`, PR #96). No other branch is created, switched to or pushed. The board's `session-<id>/<task>` naming is not used.
