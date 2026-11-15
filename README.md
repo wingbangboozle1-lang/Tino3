@@ -32,6 +32,15 @@ and reinvestment choices.
   adopted, deferred or rejected before implementation.
 - `review.html` — flagged, assumed and unverified items.
 
+- **Start here:** Dashboard (the answer, its confidence, the date it was computed and the three checks that would move it, on the first screen), the **pre-commitment register** (`precommit.html`: the rules the household writes down before reading any figure, with empty decision columns), executive summary, decision analysis (including the mixed paths and the Proposition 19 clawback), the what-if cases page (one lever at a time, link-driven, no script), and a printable Attorney & CPA briefing sheet.
+- **Rules and the estate:** the trust steps, a dated deadlines timeline with official source links (`timeline.html`), thresholds and the law page.
+- **Properties:** Property A, Property B, and the ownership distinction.
+- **Costs and projections:** Running costs, year-by-year projections, income tax by path.
+- **Rules and estate:** Inheritance process, estate/inheritance tax thresholds, law watch.
+- **Economic uncertainty:** Black-swan conditions and the historical economy record.
+- **Review:** Questions before deciding, suggestions for review, and Flagged for Review.
+- **Evidence:** Glossary and source ledger.
+
 The remaining pages cover the distinct property profiles, carrying costs, projections, income and
 estate taxes, the inheritance process, deadlines, current law and proposals, black-swan scenarios,
 the historical economic record, a glossary and the source ledger. Navigation groups the material by
@@ -46,12 +55,13 @@ basis, actual sale costs, occupancy, rents, insurance, maintenance, utilities, d
 and laws in force at transfer. Missing or unverified property-specific amounts are not presented as
 confirmed; they are identified on the relevant pages and on `review.html`.
 
+There are **23 generated HTML pages** and one stylesheet in the public allowlist. The pages show rounded owner-provided figures, model outputs and official-source-backed legal/economic information. The source ledger contains **104 entries**. Both property placeholders grow with the California state-level FHFA house-price index: the two metropolitan-area series were withdrawn on 15 November 2026 because the index publisher's own metadata crosswalked the placeholders to their metropolitan areas (an audit finding), and the privacy gate now rejects the withdrawn series identifiers and metro phrasing. The jurisdiction-specific entries (the two properties' county and city official pages) were also withdrawn, because their publishers identify the properties. A factual table row either links to an official source or is explicitly registered as unsourceable/unverified.
+
 The Black Swan analysis uses one canonical monthly park-and-phase engine and one short-Treasury
 parking-yield assumption. It includes synthetic stresses and historical entry replays, including
 1929, 2000, 2008 and 2020. Historical results are not forecasts; they do not ensure future Treasury
 rates, protect against every market path, or eliminate opportunity cost. The brief shows the
 reinvestment risk next to the staging result.
-
 The investment, legal, tax and property-law conditions expected in 2040–2050 are unknown. Current
 law and pending proposals are kept distinct on the law-watch page. Recheck official authorities and
 professional advice when dates, facts or laws change.
@@ -92,11 +102,36 @@ A separate Actions workflow packages and deploys an allowlisted artifact. These 
 publication paths, so check both after a publication change. The latest GitHub Pages status should
 be checked through the repository's Pages settings and Actions runs.
 
+## Mixed paths, distributions and the clawback
+
+`scripts/mixed.py` writes `assets/data/mixed.json` and is the only new analysis engine this edition. It does
+four things the pure-path model could not:
+
+- **Mixed paths.** "Live in it for five years, then sell" occupies for five years, sells in year five, and
+  compounds the net proceeds for the remaining twenty-five. That is not the same thing as selling in year
+  thirty after five years of occupancy, which is what the pure paths implied. Eleven mixed cases are priced,
+  plus the favourable reading of each live-then-let case.
+- **The Proposition 19 clawback.** Revenue and Taxation Code section 63.2(a)(1)(C) enrols the base year value
+  established at the change in ownership when the eligible transferee stops qualifying for the homeowners'
+  exemption. Moving out is therefore not free, and the site now prices both the strict reading and the
+  favourable one that `model.py`'s `live_then_rent` path quietly assumed.
+- **Opportunity cost.** Living in the house produces somewhere to live. The imputed-rent table prices that
+  benefit across a range of hypothetical market rents, each labelled a scenario: no official source publishes
+  a market rent for a specific home and the input is still empty.
+- **Distributions.** Every path is run against the same seeded fifty-year block bootstrap of the verified FRED
+  record that the economy page uses, and published as deciles plus a histogram of the sell-minus-keep gap. The
+  charts are divs and CSS, because the build refuses to publish a `<script>` element.
+
+The engine is validated against the existing model: an immediate sale and a thirty-year occupation reproduce
+`model.json`'s `sell_equities` and `live_in` terminals exactly, and a thirty-year letting reproduces
+`rent_out`.
+
 ## Rebuild and verification
 
 The project uses the Python standard library only. From the repository root:
 
 ```bash
+python3 scripts/mixed.py
 python3 scripts/build.py
 python3 scripts/verify.py
 python3 scripts/privacy_boundary.py
