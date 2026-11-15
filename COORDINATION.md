@@ -2822,7 +2822,8 @@ Not in scope and not touched: `scripts/economy.py`, `assets/data/economy.json`, 
 | V-3 Re-open load-bearing official sources on the publisher's own domain and compare with the site | **done** — 9 of 10 re-read on the publisher's domain; Form 706 nine-month body not re-read (see results) | `arena/8eebc036-tino3` | read-only; results recorded below |
 | V-4 Privacy sweep of the published pages and the tracked files (ZIP codes, street names, parcel identifiers, trust terms, utility account numbers, unrounded money) | **done** — published pages clean; two residual exposures are owner decisions (see record) | `arena/8eebc036-tino3` | read-only
 | V-5 Fix any defect found in V-2 to V-4 in the generator, regenerate, re-run gates | **done** — duplicate one-page brief consolidated (menu showed it twice); see record | `arena/8eebc036-tino3` | `scripts/build.py`, `scripts/package_site.py` (retired-route list), `README.md` (counts), `briefing-sheet.html` (retired), regenerated pages
-| V-6 Pull request to `main`, merge without waiting, confirm the Pages deploy, record PR link and merge result | not started | `arena/8eebc036-tino3` | this section only |
+| V-6 Pull request to `main`, merge without waiting, confirm the Pages deploy, record PR link and merge result | **done** — PR #103 merged at `a35e281`; Pages `built`; live checks passed; see publication record | `arena/8eebc036-tino3` | this section only |
+| V-7 Publish the irregularities of this pass on the Flagged for Review page (repository audit table, with source links where one exists); follow-up pull request; merge; Pages check | **done** — four rows added to the audit table on `review.html`; follow-up pull request and its result recorded below | `arena/8eebc036-tino3` | `scripts/build.py` (audit table only), `review.html` (regenerated), this section |
 
 ### Record — `arena/8eebc036-tino3`, 15 November 2026
 
@@ -2864,6 +2865,24 @@ Not in scope and not touched: `scripts/economy.py`, `assets/data/economy.json`, 
 4. Confirm the Form 706 date against the current IRS instructions (V-I1).
 
 **Publication:** see the PR record below, added after the merge.
+
+### Publication record — `arena/8eebc036-tino3`
+
+- **PR #103** (`arena/8eebc036-tino3` → `main`): merged with a merge commit, `a35e281`, at 2026-11-15T03:27:00Z. No auto-merge. Before merging, the `verify` check had passed (run 43672353146), and the PR was `MERGEABLE` / `CLEAN`.
+- **Pages:** the legacy build for `a35e281` reports `built` with no error; the Actions runs `Verify static site`, `Deploy GitHub Pages` and `pages build and deployment` succeeded on `a35e281`. (The earlier run for `554bb20`, PR #104, was cancelled because it was superseded by `a35e281`; `a35e281` contains #104 as its first parent.)
+- **Live checks** (fetched with a query string to avoid the stale-cache issue recorded earlier): `index.html` serves this edition, with the single "What would change the answer" block and the 8.66% break-even. `briefing-sheet.html` now returns 404 on the Jekyll root publisher, as expected for a deleted file; on the Actions artifact it is a content-free withdrawal notice.
+- **Gates on the merged tree:** all PASS (see above).
+
+### Follow-up — the Flagged for Review rows
+
+Four rows were added to the repository-audit table on `review.html`, so the irregularities of this pass are published with their sources, as the owner asked:
+
+1. Form 706 filing date (the nine-month rule): the "When To File" text was not re-read. Sources: IRS Form 706 instructions and Form 4768 description.
+2. The two briefing pages listed twice in the menu; one retired, with its route returning a content-free notice.
+3. The one-page brief has not been print-checked in a browser.
+4. A personal e-mail address appears in commit metadata on 83 earlier commits; removing it is the owner's decision. The address itself is not written on the site.
+
+Gates after this follow-up: `build.py`, `verify.py` (22 pages; 795 table rows; 732 official-source-linked; 63 logged unsourceable; 2,842 links), `privacy_boundary.py`, `package_site.py`, `verify_legacy.py --config-only`, `git diff --check` — all exit 0.
 
 
 ### Publication record · `arena/ec37bb6a-tino3` · 15 November 2026
