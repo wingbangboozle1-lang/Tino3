@@ -93,6 +93,9 @@ OFFICIAL_AMOUNTS = {
     15_000_000, 15_480_000,                                      # IRS basic exclusion 2026 and 2027
     19_000, 20_000,                                              # IRS annual gift exclusion
     5_000_000_000, 15_000_000_000,                               # Proposition 3 fiscal impact range
+    # Recording and instrument fees, published as statute-set amounts and quoted
+    # verbatim from Government Code sections 27361 and 27388.1.
+    3, 10, 75, 225,
 }
 
 

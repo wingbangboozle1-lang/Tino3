@@ -1094,6 +1094,60 @@
    "checked": "Table read on the publisher's domain on 2026-11-15 (table updated 5 January 2026). The S&P 500 total-return and 3-month T-bill columns were transcribed for 1929-1958 and 2000-2024 and every row was cross-checked against the table's own cumulative $100 columns; all rows consistent.",
    "supports": "The dated historical backtest on the black-swan page: the realized annual equity and bill returns that followed the 1929, 2000 and 2008 entries, applied to the hypothetical 2045 sale proceeds.",
    "limits": "An academic compilation, not a government publication; pre-1957 rows use the S&P composite that predates the 500-stock index; gross of taxes, costs and fees; entry at the start of a calendar year, not the exact peak day."
+  },
+  {
+   "id": "gov27388_1",
+   "publisher": "California Legislative Information",
+   "title": "Government Code section 27388.1 - $75 fee on real estate instruments",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=27388.1",
+   "checked": "Opened on the publisher's official domain on 2026-11-15.",
+   "supports": "A fee of $75 is paid at recording of every real estate instrument, up to $225 per single transaction per parcel, BUT subdivision (a)(2)(A) exempts any instrument recorded in connection with a transfer subject to the documentary transfer tax, and (a)(2)(B) exempts a transfer of a residential dwelling to an owner-occupier. A sale that pays the county transfer tax therefore owes no $75 fee.",
+   "limits": "The exemption is a condition of the transfer, not of the property, so a later refinance of the same property would owe it."
+  },
+  {
+   "id": "gov27361",
+   "publisher": "California Legislative Information",
+   "title": "Government Code section 27361 - county recorder's fees",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=27361",
+   "checked": "Opened on the publisher's official domain on 2026-11-15.",
+   "supports": "The fee for recording and indexing an instrument shall not exceed $10 for the first page and $3 for each additional page, plus the extra charges in paragraphs (1) and (2) for non-conforming printing and page size.",
+   "limits": "A maximum set by statute; each county fixes its own schedule at or below it. The county's own schedule is not linked because it names the jurisdiction."
+  },
+  {
+   "id": "lao_250017_status",
+   "publisher": "California Secretary of State",
+   "title": "County Clerk memorandum 26138 - initiative 1994, failure to qualify",
+   "url": "https://elections.cdn.sos.ca.gov/ccrov/2026/may/26138jh.pdf",
+   "checked": "Opened on the publisher's official domain on 2026-11-15.",
+   "supports": "Dated 18 May 2026: 'the total number of signatures ... is less than 100 percent of the number of qualified voters required ... therefore, the petition has failed.' The title given is 'Repeals voter-enacted changes to property tax rules for transfers between family members', the measure the Legislative Analyst's Office analysed as A.G. File No. 25-0017.",
+   "limits": "The memorandum gives the failed petition's internal number 1994, not the Attorney General file number; the identification of 1994 with 25-0017 is by title and summary date, not by number."
+  },
+  {
+   "id": "sos_initiative_status",
+   "publisher": "California Secretary of State",
+   "title": "Initiative and Referendum Qualification Status",
+   "url": "https://www.sos.ca.gov/elections/ballot-measures/initiative-and-referendum-status",
+   "checked": "Opened on the publisher's official domain on 2026-11-15; page states its status as of 20 October 2026.",
+   "supports": "The live qualification dashboard: initiatives pending at the Attorney General, cleared for circulation, in verification, eligible for the 2028 general election, qualified for the ballot, and withdrawn or failed to qualify. It is the page to re-read every year rather than relying on a snapshot.",
+   "limits": "A status page. It shows counts and titles, not the text of any measure; the text and the fiscal analysis live on the Attorney General's and the Legislative Analyst's sites."
+  },
+  {
+   "id": "irs_p551",
+   "publisher": "Internal Revenue Service",
+   "title": "Publication 551, Basis of Assets",
+   "url": "https://www.irs.gov/forms-pubs/about-publication-551",
+   "checked": "Opened on the publisher's official domain on 2026-11-15.",
+   "supports": "The basis of property acquired from a decedent is its fair market value at the date of death (or the alternate valuation date where elected); the publication also covers adjustments to basis for improvements and depreciation.",
+   "limits": "The publication states the general rule; the value has to be substantiated by an appraisal or other acceptable evidence, which this repository does not hold."
+  },
+  {
+   "id": "civ1102",
+   "publisher": "California Legislative Information",
+   "title": "Civil Code section 1102 - Real Estate Transfer Disclosure Statement",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1102",
+   "checked": "Opened on the publisher's official domain on 2026-11-15.",
+   "supports": "A seller of residential real property of one to four units must deliver a completed Real Estate Transfer Disclosure Statement, in the statutory form, to the prospective buyer before a transfer subject to the section.",
+   "limits": "The section exempts several transfers, including a sale by a fiduciary in the course of administering an estate; a trustee's sale may therefore fall outside it, which changes the paperwork and not the tax."
   }
  ]
 }
