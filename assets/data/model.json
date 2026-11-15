@@ -974,6 +974,7 @@
      "terminal": 4440110,
      "outflow": 3170370,
      "carry_fv": 7993540,
+     "imputed_credit": 0,
      "tax_total": 1868170,
      "cost_total": 1302200,
      "sale": {
@@ -1029,6 +1030,7 @@
      "terminal": -605480,
      "outflow": 4503570,
      "carry_fv": -11231120,
+     "imputed_credit": 0,
      "tax_total": 2612180,
      "cost_total": 1891390,
      "rent_income_total": 0,
@@ -1104,6 +1106,7 @@
      "terminal": 5322760,
      "outflow": 3880030,
      "carry_fv": 9784590,
+     "imputed_credit": 0,
      "tax_total": 2322530,
      "cost_total": 1557500,
      "sale": {
@@ -1159,6 +1162,7 @@
      "terminal": -715440,
      "outflow": 5459830,
      "carry_fv": -13623070,
+     "imputed_credit": 0,
      "tax_total": 3185490,
      "cost_total": 2274350,
      "rent_income_total": 0,
@@ -1234,6 +1238,7 @@
      "terminal": 6375070,
      "outflow": 4751940,
      "carry_fv": 11985230,
+     "imputed_credit": 0,
      "tax_total": 2883820,
      "cost_total": 1868110,
      "sale": {
@@ -1289,6 +1294,7 @@
      "terminal": -854840,
      "outflow": 6625070,
      "carry_fv": -16538850,
+     "imputed_credit": 0,
      "tax_total": 3884810,
      "cost_total": 2740270,
      "rent_income_total": 0,
@@ -3833,6 +3839,209 @@
   "phased_wins_at_10_years": 3,
   "record_end_year": 2024,
   "note": "Realized annual returns from an academic source (NYU Stern, Damodaran), spread evenly across the months of each year; gross of taxes, costs and fees; applied to the same hypothetical 2045 net sale proceeds as the synthetic stress table. Terminal values are rounded to $10."
+ },
+ "prop_h": {
+  "approved": "2026-11-03",
+  "status": "Approved at the election; local returns still preliminary when read on 2026-11-15",
+  "first_fiscal_year": "2027-2028",
+  "expires": "2042-06-30",
+  "base": 249,
+  "rate_over_5000_sqft": 0.195,
+  "max_tax": 50000,
+  "pass_through_share": 0.5,
+  "pass_through_unit_cap": 65,
+  "pass_through_units": 2,
+  "pass_through_max_total": 130,
+  "pass_through_cutoff": "2027-06-01",
+  "senior_reduction_per_occupied_unit": 249,
+  "band_determined": false,
+  "band_note": "The parcel tax depends on the building area of the parcel. The building area was not supplied, so the band is not determined: a multifamily parcel up to 5,000 sq ft pays the base amount; above that the base plus a rate per square foot, capped. Read the building area from the assessor records or the official parcel lookup before pricing it into any figure.",
+  "source_note": "Terms read from the measure own legal text (Business and Tax Regulations Code Article 18 as added) and the transit agency official parcel-tax page, both on the publisher own domain, 2026-11-15. The publisher is a city body and is not named or linked on the public site, because the jurisdiction identifies the properties. Logged on the review register.",
+  "rows": [
+   {
+    "fy": "2027-28",
+    "adjustments": 0,
+    "official": true,
+    "low": 249,
+    "baseline": 249,
+    "high": 249
+   },
+   {
+    "fy": "2028-29",
+    "adjustments": 1,
+    "official": false,
+    "low": 250,
+    "baseline": 260,
+    "high": 260
+   },
+   {
+    "fy": "2029-30",
+    "adjustments": 2,
+    "official": false,
+    "low": 260,
+    "baseline": 260,
+    "high": 260
+   },
+   {
+    "fy": "2030-31",
+    "adjustments": 3,
+    "official": false,
+    "low": 260,
+    "baseline": 270,
+    "high": 270
+   },
+   {
+    "fy": "2031-32",
+    "adjustments": 4,
+    "official": false,
+    "low": 270,
+    "baseline": 270,
+    "high": 280
+   },
+   {
+    "fy": "2032-33",
+    "adjustments": 5,
+    "official": false,
+    "low": 270,
+    "baseline": 280,
+    "high": 290
+   },
+   {
+    "fy": "2033-34",
+    "adjustments": 6,
+    "official": false,
+    "low": 280,
+    "baseline": 290,
+    "high": 300
+   },
+   {
+    "fy": "2034-35",
+    "adjustments": 7,
+    "official": false,
+    "low": 280,
+    "baseline": 300,
+    "high": 310
+   },
+   {
+    "fy": "2035-36",
+    "adjustments": 8,
+    "official": false,
+    "low": 290,
+    "baseline": 300,
+    "high": 320
+   },
+   {
+    "fy": "2036-37",
+    "adjustments": 9,
+    "official": false,
+    "low": 290,
+    "baseline": 310,
+    "high": 320
+   },
+   {
+    "fy": "2037-38",
+    "adjustments": 10,
+    "official": false,
+    "low": 300,
+    "baseline": 320,
+    "high": 330
+   },
+   {
+    "fy": "2038-39",
+    "adjustments": 11,
+    "official": false,
+    "low": 300,
+    "baseline": 330,
+    "high": 340
+   },
+   {
+    "fy": "2039-40",
+    "adjustments": 12,
+    "official": false,
+    "low": 310,
+    "baseline": 330,
+    "high": 360
+   },
+   {
+    "fy": "2040-41",
+    "adjustments": 13,
+    "official": false,
+    "low": 310,
+    "baseline": 340,
+    "high": 370
+   },
+   {
+    "fy": "2041-42",
+    "adjustments": 14,
+    "official": false,
+    "low": 320,
+    "baseline": 350,
+    "high": 380
+   }
+  ],
+  "totals_to_expiry": {
+   "low": 4240,
+   "baseline": 4460,
+   "high": 4640
+  }
+ },
+ "imputed_rent_levels": {
+  "input_annual": null,
+  "inherit_year": 2045,
+  "rows": [
+   {
+    "monthly": 0,
+    "annual": 0,
+    "uplift": 0,
+    "live_terminal": 5322760,
+    "sell_terminal": 38585540,
+    "gap": -33262780,
+    "return_required": -0.49,
+    "best": "sell_equities"
+   },
+   {
+    "monthly": 5000,
+    "annual": 60000,
+    "uplift": 6559150,
+    "live_terminal": 11881910,
+    "sell_terminal": 38585540,
+    "gap": -26703630,
+    "return_required": 2.21,
+    "best": "sell_equities"
+   },
+   {
+    "monthly": 10000,
+    "annual": 120000,
+    "uplift": 13118300,
+    "live_terminal": 18441060,
+    "sell_terminal": 38585540,
+    "gap": -20144480,
+    "return_required": 3.72,
+    "best": "sell_equities"
+   },
+   {
+    "monthly": 20000,
+    "annual": 240000,
+    "uplift": 26236610,
+    "live_terminal": 31559370,
+    "sell_terminal": 38585540,
+    "gap": -7026170,
+    "return_required": 5.59,
+    "best": "sell_equities"
+   },
+   {
+    "monthly": 30000,
+    "annual": 360000,
+    "uplift": 39354910,
+    "live_terminal": 44677670,
+    "sell_terminal": 38585540,
+    "gap": 6092130,
+    "return_required": 6.82,
+    "best": "live_in"
+   }
+  ],
+  "housing_value_needed": 399020,
+  "breakeven_rent_monthly": 30220
  },
  "episodes": {
   "method": "Every monthly value used by this module was fetched from the publisher's own domain (FRED, served by the Federal Reserve Bank of St. Louis) and saved verbatim in assets/data/episodes/*.csv. No value was typed from memory or inferred. The module reads those files, replays the same three entry strategies on each episode's real monthly returns, and rounds every dollar to the nearest $10.",

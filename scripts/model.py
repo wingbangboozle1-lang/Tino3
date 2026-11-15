@@ -228,7 +228,8 @@ def run_paths(inherit_year: int, g: float, infl: float, eq: float, drag: float,
               gain_rate: float, rec_rate: float, exclusion: float,
               fixed_growth: float, fit_a: dict, cost_a_base: float,
               maint_live: float, maint_rent: float,
-              rent_income: float | None = None) -> dict:
+              rent_income: float | None = None,
+              imputed_rent: float | None = None) -> dict:
     k = inherit_year - 2026
     value_at_death = A["estimated_market_value_2026"] * (1 + g) ** k
     byv = A["roll"][0]["assessed"] * (1 + 0.02) ** k
@@ -277,6 +278,21 @@ def run_paths(inherit_year: int, g: float, infl: float, eq: float, drag: float,
         for j in range(years):
             tot += rent0 * (1 + infl) ** j * (1 + eq - drag) ** (years - 1 - j)
         return tot
+
+    # Imputed rent on the living paths: the housing the heir consumes by occupying
+    # the house instead of living in Property B and letting the vacant unit. The
+    # input (property_a.imputed_rent) is empty unless a documented rent
+    # opinion is supplied, so the published baseline credits zero and does not
+    # move. When set, it is credited gross over the years of occupancy, the same
+    # convention as the letting path's rent, and it is not taxable income because
+    # it is never received as cash.
+    imp0 = float(imputed_rent or 0.0)
+
+    def imputed_fv(years: int, compound_after: int = 0) -> float:
+        tot = 0.0
+        for j in range(years):
+            tot += imp0 * (1 + infl) ** j * (1 + eq - drag) ** (years - 1 - j)
+        return tot * (1 + eq - drag) ** compound_after
 
     # Path 4: let it out from the start, then sell
     bills_rent = annual_bills(taxable_rent, fit_T, inherit_year, infl, horizon)
@@ -352,9 +368,10 @@ def run_paths(inherit_year: int, g: float, infl: float, eq: float, drag: float,
                               "start": sale["net"], "sale": sale},
             # Holding paths: the terminal value is the sale net less the compounded future
             # value of every year's property tax and running costs (carry_fv).
-            "live_in": {"terminal": money10(live["net"] - live_carry_fv),
+            "live_in": {"terminal": money10(live["net"] - live_carry_fv + imputed_fv(horizon)),
                         "outflow": money10(tax_live + cost_live),
                         "carry_fv": money10(live_carry_fv),
+                        "imputed_credit": money10(imputed_fv(horizon)),
                         "tax_total": money10(tax_live),
                         "cost_total": money10(cost_live), "sale": live},
             "rent_out": {"terminal": money10(rent_sale["net"] + rent_carry_fv),
@@ -370,9 +387,11 @@ def run_paths(inherit_year: int, g: float, infl: float, eq: float, drag: float,
                                 "park_months": PARK_MONTHS,
                                 "phase_months": PHASE_MONTHS,
                                 "invest_years": invest_years},
-            "live_then_rent": {"terminal": money10(hybrid_sale["net"] + hybrid_carry_fv),
+            "live_then_rent": {"terminal": money10(hybrid_sale["net"] + hybrid_carry_fv
+                                                   + imputed_fv(2, horizon - 2)),
                                "outflow": money10(tax_h1 + tax_h2 + cost_h),
                                "carry_fv": money10(hybrid_carry_fv),
+                               "imputed_credit": money10(imputed_fv(2, horizon - 2)),
                                "tax_total": money10(tax_h1 + tax_h2),
                                "cost_total": money10(cost_h),
                                "rent_income_total": money10(hybrid_cash),
@@ -631,7 +650,8 @@ def sensitivity(target_year: int):
                 cost_a_base=COST_A_BASE,
                 maint_live=A["annual_costs"]["maintenance_pct_owner_occupied"]["value"],
                 maint_rent=A["annual_costs"]["maintenance_pct_rental"]["value"],
-                rent_income=RENT_INCOME)
+                rent_income=RENT_INCOME,
+                imputed_rent=IMPUTED_RENT)
             terms = {k: v["terminal"] for k, v in res["paths"].items()}
             phased = run_phased_path(
                 inherit_year=target_year, g=g, infl=ASM["inflation"]["baseline"], eq=eq,
@@ -677,7 +697,8 @@ def sensitivity_fine():
                             fixed_growth=INFL, fit_a=FIT_A, cost_a_base=COST_A_BASE,
                             maint_live=A["annual_costs"]["maintenance_pct_owner_occupied"]["value"],
                             maint_rent=A["annual_costs"]["maintenance_pct_rental"]["value"],
-                            rent_income=RENT_INCOME)
+                            rent_income=RENT_INCOME,
+                            imputed_rent=IMPUTED_RENT)
             terms = {k: v["terminal"] for k, v in res["paths"].items()}
             best = max(terms, key=terms.get)
             cells.append({"eq": pct(eq, 0), "best": best})
@@ -697,7 +718,8 @@ def breakeven_house_growth(inherit_year: int, eq: float, drag: float, cap_growth
                         fixed_growth=ASM["fixed_charge_growth"]["baseline"], fit_a=FIT_A,
                         cost_a_base=COST_A_BASE, maint_live=maint_live,
                         maint_rent=A["annual_costs"]["maintenance_pct_rental"]["value"],
-                        rent_income=RENT_INCOME)
+                        rent_income=RENT_INCOME,
+                        imputed_rent=IMPUTED_RENT)
         return res["paths"]["live_in"]["terminal"] - res["paths"]["sell_equities"]["terminal"]
     lo, hi = 0.0, 0.30
     if live_gap(hi) < 0:
@@ -885,7 +907,8 @@ def run_regime(regime: dict, horizon: int):
         fixed_growth=ASM["fixed_charge_growth"]["baseline"], fit_a=FIT_A, cost_a_base=COST_A_BASE,
         maint_live=A["annual_costs"]["maintenance_pct_owner_occupied"]["value"],
         maint_rent=A["annual_costs"]["maintenance_pct_rental"]["value"],
-        rent_income=RENT_INCOME)
+        rent_income=RENT_INCOME,
+        imputed_rent=IMPUTED_RENT)
     phased = run_phased_path(
         inherit_year=2045, g=g, infl=infl, eq=ASM["equity_return_nominal_gross"]["baseline"],
         drag=ASM["equity_tax_drag"]["baseline"], tsy_short=PARK_TSY,
@@ -965,6 +988,112 @@ def prop19_cap_projection():
     return rows
 
 
+# --------------------------------------------------- parcel tax, Property B --
+def prop_h_schedule() -> dict:
+    """Official terms and inflation-scenario projection of the parcel tax approved
+    in Property B's city at the November 2026 election (Proposition H).
+
+    The terms were read from the measure's own legal text (the Business and Tax
+    Regulations Code Article 18 it adds) and from the transit agency's official
+    parcel-tax page, both on the publisher's own domain, on 2026-11-15. The
+    publisher is a city body and is not named or linked on the public site,
+    because the jurisdiction identifies the properties, so the published rows
+    point at the review register instead. The band that applies to the parcel is
+    not determined: the building area was not supplied. Nothing here touches
+    Property A, which sits in a different jurisdiction.
+    """
+    ph = B["parcel_tax_approved_2026"]
+    base = ph["multifamily_base_2027_28"]
+    infl_lo = ASM["inflation"]["low"]
+    infl_mid = ASM["inflation"]["baseline"]
+    infl_hi = ASM["inflation"]["high"]
+    rows = []
+    # Fiscal years 2027-28 (unadjusted, the official amount) to 2041-42, the last
+    # year before the tax expires on 30 June 2042. Dollar amounts adjust each
+    # 31 December from 2027, first affecting fiscal year 2028-29 (SEC. 1804(b)),
+    # by the local all-items Consumer Price Index published by the federal
+    # statistics agency. The three columns are the site's inflation band.
+    for start in range(2027, 2042):
+        n = start - 2027
+        fy = f"{start}-{str(start + 1)[2:]}"
+        if n == 0:
+            rows.append({"fy": fy, "adjustments": 0, "official": True,
+                         "low": base, "baseline": base, "high": base})
+        else:
+            rows.append({"fy": fy, "adjustments": n, "official": False,
+                         "low": money10(base * (1 + infl_lo) ** n),
+                         "baseline": money10(base * (1 + infl_mid) ** n),
+                         "high": money10(base * (1 + infl_hi) ** n)})
+    totals = {k: money10(sum(r[k] for r in rows))
+              for k in ("low", "baseline", "high")}
+    return {
+        "approved": ph["approved"],
+        "status": ph["status"],
+        "first_fiscal_year": ph["first_fiscal_year"],
+        "expires": ph["expires"],
+        "base": base,
+        "rate_over_5000_sqft": ph["multifamily_rate_over_5000_sqft"],
+        "max_tax": ph["multifamily_max"],
+        "pass_through_share": ph["pass_through_share"],
+        "pass_through_unit_cap": ph["pass_through_unit_cap_annual"],
+        "pass_through_units": B["units_rented"],
+        "pass_through_max_total": money10(B["units_rented"] * ph["pass_through_unit_cap_annual"]),
+        "pass_through_cutoff": ph["pass_through_base_rent_cutoff"],
+        "senior_reduction_per_occupied_unit": ph["senior_reduction_per_occupied_unit"],
+        "band_determined": ph["band_determined"],
+        "band_note": ph["band_note"],
+        "source_note": ph["source_note"],
+        "rows": rows,
+        "totals_to_expiry": totals,
+    }
+
+
+# -------------------------------------------------------- imputed rent ------
+def imputed_rent_level_cases(p45: dict, infl: float, eq: float, drag: float,
+                             g: float, cap_growth: float, sell_pct: float,
+                             horizon: int, gain_rate: float, rec_rate: float,
+                             levels=(0, 5000, 10000, 20000, 30000)) -> dict:
+    """What each stated monthly imputed rent would do to the 2045 living path.
+
+    The levels are stated scenarios, not estimates: no market rent or rent
+    opinion for Property A has been supplied, so the real input
+    (property_a.imputed_rent) stays empty and the published baseline is
+    the zero row. Each level is credited gross to the living path over the whole
+    horizon, grown with inflation and accumulated at the after-tax equity return,
+    the same convention as the letting path's rent; it is not taxable income
+    because it is never received as cash. The return column is the annual return
+    the sale proceeds would then need to match living in the house.
+    """
+    live0 = p45["paths"]["live_in"]["terminal"]
+    sell = p45["paths"]["sell_equities"]["terminal"]
+    rows = []
+    for monthly in levels:
+        annual = monthly * 12.0
+        uplift = 0.0
+        for j in range(horizon):
+            uplift += annual * (1 + infl) ** j * (1 + eq - drag) ** (horizon - 1 - j)
+        live = money10(live0 + uplift)
+        req = breakeven_return(2045, g, cap_growth, sell_pct, horizon,
+                               gain_rate, rec_rate, live)
+        rows.append({
+            "monthly": monthly,
+            "annual": money10(annual),
+            "uplift": money10(uplift),
+            "live_terminal": live,
+            "sell_terminal": sell,
+            "gap": money10(live - sell),
+            "return_required": req,
+            "best": "live_in" if live > sell else "sell_equities",
+        })
+    return {
+        "input_annual": IMPUTED_RENT,
+        "inherit_year": 2045,
+        "rows": rows,
+        "housing_value_needed": p45["housing_value_needed"],
+        "breakeven_rent_monthly": p45["breakeven_rent_monthly"],
+    }
+
+
 # ------------------------------------------------------------------ main ----
 FIT_A = fit_bill(A["roll"], ASM["ad_valorem_rate_a"]["value"])
 FIT_B = fit_bill(B["roll"], ASM["ad_valorem_rate_b"]["value"])
@@ -973,6 +1102,12 @@ FIT_B = fit_bill(B["roll"], ASM["ad_valorem_rate_b"]["value"])
 # which is the conservative case, and it is labelled as such everywhere it is shown.
 RENT_INCOME = A.get("rent_income_annual", {}).get("value") \
     if isinstance(A.get("rent_income_annual"), dict) else None
+# Imputed rent credited to the living paths. None unless the owner supplies a
+# documented rent opinion, for the same reason as RENT_INCOME above: the site
+# never invents a rent figure. The stated-level sensitivity published on the
+# what-if page shows what any entered level would do.
+IMPUTED_RENT = A.get("imputed_rent", {}).get("value") \
+    if isinstance(A.get("imputed_rent"), dict) else None
 COST_A_BASE = (A["annual_costs"]["water"]["mid"] + A["annual_costs"]["electricity"]["mid"]
                + A["annual_costs"]["insurance"]["mid"])
 COST_B_BASE = (B["annual_costs"]["water"]["mid"] + B["annual_costs"]["electricity"]["mid"]
@@ -1274,7 +1409,8 @@ def main() -> dict:
                         exclusion=V["section121_exclusion_single"]["value"],
                         fixed_growth=ASM["fixed_charge_growth"]["baseline"], fit_a=FIT_A, cost_a_base=COST_A_BASE,
                         maint_live=maint_live, maint_rent=maint_rent,
-                        rent_income=RENT_INCOME)
+                        rent_income=RENT_INCOME,
+                        imputed_rent=IMPUTED_RENT)
         t_eq = res["paths"]["sell_equities"]["terminal"]
         res["breakeven_rent_annual"] = breakeven_rent(
             year, g, infl, eq, drag, cap_growth, sell_pct, horizon, gain_rate,
@@ -1312,6 +1448,13 @@ def main() -> dict:
     proceeds45 = p45["paths"]["sell_equities"]["sale"]["net"]
     out["phased_stress"] = phased_stress(proceeds45)
     out["backtest"] = crash_entry_backtest(proceeds45)
+
+    # Parcel tax approved in Property B's city (official terms, publisher
+    # withheld for privacy) and the stated-level imputed-rent sensitivity on the
+    # living paths (levels are scenarios; the real input is empty).
+    out["prop_h"] = prop_h_schedule()
+    out["imputed_rent_levels"] = imputed_rent_level_cases(
+        p45, infl, eq, drag, g, cap_growth, sell_pct, horizon, gain_rate, rec_rate)
 
     for regime in regime_stress():
         out["regimes"].append({**regime, "run": run_regime(regime, horizon)})

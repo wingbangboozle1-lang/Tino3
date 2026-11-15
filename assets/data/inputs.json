@@ -129,7 +129,7 @@
   },
   "imputed_rent": {
    "value": null,
-   "basis": "The housing the heir would otherwise have to buy or rent if the home were sold. Leaving this empty means the living path is charged the full cost of keeping the house and is credited with no shelter at all, so its terminal value understates living by the value of the roof it provides - and the model then reads that understatement as evidence for selling. Filling it in the other direction is worse: crediting the living path with a market rent while the letting path is credited with nothing would bias the comparison the same way, in the opposite direction. Both must be filled from the same piece of evidence or neither is. The site therefore publishes the living path WITHOUT imputed rent, labels it a floor, and shows the break-even rent that would make the letting path match.",
+   "basis": "The housing the heir would otherwise have to buy or rent if the home were sold. Leaving this empty means the living path is charged the full cost of keeping the house and is credited with no shelter at all, so its terminal value understates living by the value of the roof it provides - and the model then reads that understatement as evidence for selling. Filling it in the other direction is worse: crediting the living path with a market rent while the letting path is credited with nothing would bias the comparison the same way, in the opposite direction. Both must be filled from the same piece of evidence or neither is. The site therefore publishes the living path WITHOUT imputed rent, labels it a floor, and shows the break-even rent that would make the letting path match. A documented rent opinion (comparables) can be entered here and the whole model rebuilt: the run_paths credit reads this value when it is set, the decision page and the pre-commit register carry the share-of-market-rent cases, and the what-if page carries the stated absolute monthly levels.",
    "sensitivity_pct_of_market_rent": [
     0.0,
     0.5,
@@ -235,6 +235,28 @@
     "basis": "assumption; owner states repairs run higher here than at Property A",
     "verified": false
    }
+  },
+  "parcel_tax_approved_2026": {
+   "approved": "2026-11-03",
+   "status": "Approved at the election; local returns still preliminary when read on 2026-11-15",
+   "first_fiscal_year": "2027-2028",
+   "first_bill": "fall 2027",
+   "expires": "2042-06-30",
+   "multifamily_base_2027_28": 249,
+   "multifamily_rate_over_5000_sqft": 0.195,
+   "multifamily_max": 50000,
+   "single_family_base_2027_28": 129,
+   "nonres_base_2027_28": 799,
+   "unimproved_base_2027_28": 392,
+   "pass_through_share": 0.5,
+   "pass_through_unit_cap_annual": 65,
+   "pass_through_base_rent_cutoff": "2027-06-01",
+   "senior_reduction_per_occupied_unit": 249,
+   "cpi_adjustment_first_date": "2027-12-31",
+   "cpi_index": "BLS CPI-U, local area, all items",
+   "band_determined": false,
+   "band_note": "The parcel tax depends on the building area of the parcel. The building area was not supplied, so the band is not determined: a multifamily parcel up to 5,000 sq ft pays the base amount; above that the base plus a rate per square foot, capped. Read the building area from the assessor records or the official parcel lookup before pricing it into any figure.",
+   "source_note": "Terms read from the measure own legal text (Business and Tax Regulations Code Article 18 as added) and the transit agency official parcel-tax page, both on the publisher own domain, 2026-11-15. The publisher is a city body and is not named or linked on the public site, because the jurisdiction identifies the properties. Logged on the review register."
   }
  },
  "verified_parameters": {
@@ -365,6 +387,36 @@
     "ssa_trustees"
    ]
   },
+  "prop_h_sfr_base_2027_28": {
+   "value": 129,
+   "src": [],
+   "note": "Single-family parcel up to 3,000 sq ft, first fiscal year. Official amount of the parcel tax approved in Property B city at the November 2026 election. Read from the official measure text on 2026-11-15; publisher withheld for privacy."
+  },
+  "prop_h_multifamily_base_2027_28": {
+   "value": 249,
+   "src": [],
+   "note": "Multifamily residential parcel up to 5,000 sq ft, first fiscal year. Official amount of the parcel tax approved in Property B city at the November 2026 election. Read from the official measure text on 2026-11-15; publisher withheld for privacy."
+  },
+  "prop_h_nonres_base_2027_28": {
+   "value": 799,
+   "src": [],
+   "note": "Non-residential and mixed-use parcel up to 5,000 sq ft, first fiscal year. Official amount of the parcel tax approved in Property B city at the November 2026 election. Read from the official measure text on 2026-11-15; publisher withheld for privacy."
+  },
+  "prop_h_sfr_step_base_2027_28": {
+   "value": 969,
+   "src": [],
+   "note": "Single-family parcel of 5,001 sq ft or more: the maximum under the 3,001-5,000 sq ft band ($129 plus $0.42 over 3,000 sq ft). Official amount of the parcel tax approved in Property B city. Read from the official measure text on 2026-11-15; publisher withheld for privacy."
+  },
+  "prop_h_unimproved_base_2027_28": {
+   "value": 392,
+   "src": [],
+   "note": "Unimproved parcel over 2,000 sq ft of land, first fiscal year. Official amount of the parcel tax approved in Property B city. Read from the official measure text on 2026-11-15; publisher withheld for privacy."
+  },
+  "prop_h_pass_through_unit_cap": {
+   "value": 65,
+   "src": [],
+   "note": "Annual maximum a landlord may pass through to the tenant of a rent-controlled unit per unit, being 50 percent of the tax, where the base rent was set before 1 June 2027. Official amount of the parcel tax approved in Property B city. Read from the official measure text on 2026-11-15; publisher withheld for privacy."
+  },
   "depreciation_recapture_rate": {
    "value": 0.421,
    "note": "An assumption built from published rates (25% federal unrecaptured section 1250, the 13.3% California top marginal rate, 3.8% net investment income tax). Registered here as an official amount so the published figure is not mistaken for an unrounded value.",
@@ -374,6 +426,7 @@
     "ftb_cg",
     "ftb_rates"
    ]
+
   }
  },
  "assumptions": {
