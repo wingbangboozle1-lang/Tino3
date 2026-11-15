@@ -445,6 +445,10 @@ def distribution_section(dist: dict, sell_share: float) -> str:
 def page_index() -> str:
     p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
     best = p45["best_path"]
+    # What staging costs when no crash arrives: the phased terminal against immediate
+    # investment, both computed by the one monthly engine.
+    phase_cost = (p45["paths"]["sell_equities"]["terminal"]
+                  - p45["paths"]["sell_then_phase"]["terminal"])
     kpis = "".join([
         kpi(m(A["estimated_market_value_2026"]), "Property A, estimated value",
             "Owner estimate, November 2026 &middot; unverified"),
@@ -460,7 +464,10 @@ def page_index() -> str:
             "In 2045 dollars, on zero rent credited to the letting paths"),
         kpi(m(p45["paths"]["sell_then_phase"]["terminal"]), "Phased path: sell, park in Treasuries, then equities",
             f"{ASM['phased_park_months']['value']} months in short-term Treasuries after inheritance, then equal "
-            f"monthly purchases over {ASM['phased_equity_phase_months']['value']} months - softens 1929/2008 crash entry"),
+            f"monthly purchases over {ASM['phased_equity_phase_months']['value']} months - softens 1929/2008 crash entry. "
+            f"Reinvestment risk sits on both sides: the {m(phase_cost)} gap against investing at once is what "
+            f"staging costs if the crash does <em>not</em> come, and the parking yield is an assumption that may "
+            f"not be available in 2045."),
         kpi(f"{EPI['winners']['phase'] + EPI['winners']['park34']} of {len(EPI['episodes'])}",
             "Real crashes where waiting beat investing on day one",
             "Replayed with published monthly prices for 1929, 2000, 2008 and 2020 - not a synthetic sequence"),
@@ -800,6 +807,8 @@ or finding a tenant at an implausible rent.</p>""")
         + rent_callout
         + be_table
         + sens_table
+        + mixed_section()
+        + reinvestment_section()
         + '<h2>What the model does and does not do</h2>'
         + table("Model inputs and their status",
                 ["Input", "Value used", "Status", "Basis"],
@@ -849,6 +858,170 @@ or finding a tenant at an implausible rent.</p>""")
 <li><strong>Transaction costs of moving house, and the cost of capital gains tax on any other asset that would have to be sold.</strong> Not modelled.</li>
 </ul>""")
     )
+
+
+def reinvestment_section() -> str:
+    """Reinvestment risk, printed beside the staging headline rather than under it."""
+    p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
+    imm = p45["paths"]["sell_equities"]["terminal"]
+    ph = p45["paths"]["sell_then_phase"]["terminal"]
+    tres = p45["paths"]["sell_treasury"]["terminal"]
+    stress = MODEL["phased_stress"]
+    bt = MODEL["backtest"]
+    rows = []
+    for r in stress["rows"]:
+        rows.append(f"<td>{esc(r['label'])}</td><td>{m(r['terminal'])}</td>"
+                    f"<td>{m(r['difference'])}</td><td>{esc(r['reading'])}</td>"
+                    + method_cell("black-swan.html", "Model output"))
+    stress_tbl = table(
+        "The staging choice, priced on the same engine as the headline",
+        ["Case", "What the money becomes", "Difference from the same case without staging",
+         "What the case is", "Basis"], rows,
+        note=f"Parking yield {stress['parking_yield']}% a year (band "
+             f"{stress['parking_yield_low']}% to {stress['parking_yield_high']}%), the single "
+             f"canonical assumption every phased figure on the site uses. The synthetic crash is a "
+             f"stated sequence, not a dated replay; the dated replays are on the black swan page.")
+    per_stage = {
+        "at_once": imm,
+        "phased": ph,
+        "treasuries": tres,
+    }
+    meter = meter_chart(
+        "Immediate, staged, or parked: the same proceeds on the baseline",
+        "No crash in this case. The staged path is the price of insurance against one.",
+        [("Invest everything at once", imm, ""),
+         ("Park 30 months, then phase over 12", ph, ""),
+         ("Park it and leave it in Treasuries", tres, "bad")],
+        "The middle bar is the recommendation's staging option and the third is the safe but "
+        "low-return version of it.")
+    return ('<h2>Reinvestment risk, beside the staging number</h2>'
+            + callout("flag", "The other side of the staged-entry trade", f"""
+<p>Every staged figure on this site is a <em>risk</em> result, not a free improvement. On the
+2045 baseline the sale proceeds are {m(imm)} if invested at once and {m(ph)} if parked in
+short-term Treasuries for {ASM['phased_park_months']['value']} months and then phased in over
+{ASM['phased_equity_phase_months']['value']} - a cost of <strong>{m(imm - ph)}</strong> paid as
+insurance against inheriting into a 1929- or 2008-style peak. When the crash does come, the same
+staging is worth more than it cost; the dated replays on the
+<a href="black-swan.html#real-replays">black swan page</a> show it winning in three of four
+episodes and losing in the 2020 one.</p>
+<p>Two assumptions carry that result and neither is guaranteed. The parking yield - currently
+{ASM['treasury_short_yield_nominal']['baseline']*100:.1f}% a year, band
+{ASM['treasury_short_yield_nominal']['low']*100:.1f}% to
+{ASM['treasury_short_yield_nominal']['high']*100:.1f}% - is a stated scenario, not a published
+forward rate, and short Treasury yields in 2045 may be far lower. And the proceeds have to be
+<em>reinvested</em> on a written policy, which is a decision the household makes at the worst
+possible moment unless it writes one in advance (<a href="precommit.html">rule P-2</a>).</p>""")
+            + meter
+            + stress_tbl)
+
+
+def mixed_section() -> str:
+    """Mixed paths, the Prop 19 clawback, and the opportunity cost of living in it.
+
+    The pure paths tell the household what happens if it commits to one thing for
+    thirty years. Almost nobody does. This section prices the paths a household
+    actually takes, and it prices the two things the pure paths leave out: the
+    property-tax clawback when the heir moves out, and the housing value of the
+    years the heir lives in the house.
+    """
+    paths = MIXED["paths"]
+    cb = MIXED["clawback"]
+    h = MIXED["distribution"]["histogram"]
+    sell_share = next(s["value"] for s in MIXED["distribution"]["shares"]
+                      if s["key"].startswith("Selling beats living in it for thirty"))
+
+    rows = []
+    for r in paths:
+        if r["occupy_years"] == 0 and r["mode"] == "sell":
+            continue                     # the comparator is on the table above
+        terminal = r["asset_terminal"]
+        gap = r["gap_vs_sell_now"]
+        opened = '<td class="best">' if gap <= 0 else "<td>"
+        rows.append(
+            f"<td>{esc(r['label'])}</td>"
+            f"<td>{r['occupy_years']} years</td>"
+            f"<td>{m(r['property_tax_total'])}</td>"
+            f"<td>{m(r['terminal_price'])}</td>"
+            f"{opened}{m(terminal)}</td>"
+            f"<td>{m(gap)}</td>"
+            + method_cell("precommit.html#method", "Model output"))
+    mixed_tbl = table(
+        "Mixed paths: what happens if the household does one thing and then another",
+        ["Path", "Years occupied", "Property tax paid over the period", "Sale price at the end",
+         "Terminal value", "Selling at the inheritance leaves this much more", "Basis"],
+        rows,
+        note="A positive figure in the last column means selling at the inheritance left the "
+             "household ahead of that mixed path; a negative one would mean the mixed path won. "
+             "No mixed path gets close in the baseline: the inheritance-step-up sale is hard to "
+             "beat on these inputs. Every row carries every cost including the section 121 "
+             "exclusion where the heir occupied the house for two of the last five years, and "
+             "depreciation recapture where it was let.")
+
+    gap_rows = []
+    for i in range(11):
+        gap_rows.append({"label": "p100" if i == 10 else f"p{i*10}",
+                         "values": [("sell", path_decile(i, "gap_live"), "Sell minus live 30 years"),
+                                    ("mid", path_decile(i, "gap_live10_sell"),
+                                     "Sell minus live 10 years then sell")]})
+    gap_chart = fan_chart(
+        "How much selling is worth over keeping it, across the record",
+        "Deciles of the gap, over the same resampled histories. Positive means selling wins.",
+        "money", gap_rows,
+        "The two distributions sit mostly to the right of zero, and the extremes are wide: in the "
+        "worst draw the household that kept the house is ahead by a quarter of a billion dollars in "
+        "nominal 2075 money, because house prices there compounded near the top of the record. That "
+        "tail is why the recommendation is a share of draws and not a certainty.")
+
+    hist = histogram(
+        "Every draw, selling against living in it for thirty years",
+        "The same gap as the chart above, as a histogram. Each bar is one twentieth of the range.",
+        h["counts"], h["lo"], h["hi"], h["zero_position"], sell_share, h["note"])
+
+    clawback_rows = [
+        ("Property tax paid over the thirty years, strict reading of section 63.2(a)(1)(C)",
+         m(cb["tax_with_clawback"])),
+        ("Property tax paid if the low assessment survives the move-out",
+         m(cb["tax_without_clawback"])),
+        ("Extra property tax the clawback costs, over the thirty years", m(cb["difference"])),
+    ]
+    claw_rows = [f"<td>{esc(a)}</td><td><strong>{esc(b)}</strong></td>"
+                 + method_cell("review.html#register", "Model output, condition unverified")
+                 for a, b in clawback_rows]
+    claw_tbl = table(
+        "The Proposition 19 clawback: what moving out costs on the live-then-let path",
+        ["Line", "Amount", "Basis"], claw_rows,
+        note=esc(cb["rule"]) + " The model now prices both readings. The existing live-then-rent "
+             "figure on the table above uses the favourable one; the difference is shown here so "
+             "neither reading is silent. Year one's bill after the move-out is "
+             f"{m(cb['year_one_bill_after_move_out'])} on the strict reading against "
+             f"{m(cb['year_one_bill_if_kept'])} if the low assessment survives.")
+
+    return (
+        '<h2>Mixed paths: what households actually do</h2>'
+        + callout("note", "Why pure paths are not enough", """
+<p>The five paths above assume the household commits to one thing for thirty years. That is a
+useful way to price the extremes, and it is not what anybody does. A household may live in the
+house for five years and then sell, or live in it and later let it out. Those paths are priced
+here on the same engine and the same conventions, so &ldquo;how long would we have to live there
+before it pays?&rdquo; is answerable rather than rhetorical.</p>""")
+        + mixed_tbl
+        + claw_tbl
+        + callout("warn", "The two things the pure paths leave out", """
+<p><strong>Living in it has value.</strong> The terminal-value columns on this page do not credit
+the years the heir spends housed. The <a href="precommit.html#method">imputed-rent table</a> on
+the pre-commitment page prices that benefit across a range of market rents, and the rent needed to
+close the gap is in the break-even table above.</p>
+<p><strong>The property-tax relief can be taken back.</strong> Moving out is not free: section
+63.2(a)(1)(C) enrols the change-of-ownership base year value once the heir stops qualifying. The
+clawback table prices it. It does not change the recommendation, but it moves the live-then-let
+path by six figures and it would be a mistake to model that path without it.</p>""")
+        + gap_chart + hist
+    )
+
+
+def path_decile(i: int, key: str) -> int:
+    s = next(x for x in MIXED["distribution"]["series"] if x["key"] == key)
+    return s["deciles"][i]
 
 
 PATH_LABELS = {
@@ -1801,6 +1974,16 @@ def page_laws() -> str:
         ("AB 1157", "Would have amended Civil Code sections 1946.2, 1947.12 and 1947.13 on just cause and rent increases.",
          "Failed passage 13 January 2026 and died 31 January 2026. Recorded because it is often reported as law.",
          ["ab1157"]),
+        ("The Proposition 19 repeal initiative (A.G. File No. 25-0017)",
+         "Would have reinstated most of the pre-2021 rules from 1 January 2027, including for transfers "
+         "since February 2021: a principal residence to a child regardless of value or continued "
+         "occupation, and $1 million of other property. The Legislative Analyst estimated the revenue "
+         "cost at around $1 billion a year at first, growing to around $2 billion.",
+         "Failed to qualify for the November 2026 ballot. The Secretary of State's memorandum of "
+         "18 May 2026 records that the signatures filed were fewer than the number of qualified voters "
+         "required. This is the measure that would have removed the shelter arithmetic on this page; "
+         "it is recorded as dead so it is not mistaken for law, and it can be filed again.",
+         ["lao_250017", "lao_250017_status"]),
     ]
     return (
         callout("warn", "Read the election results carefully", """
@@ -1809,7 +1992,12 @@ of State with all 23,860 precincts partially reporting as of 14 November 2026, 5
 provisional and other ballots continue to be processed and counted during the canvass, and the results are not
 certified until 11 December 2026. They are
 included because Proposition 3 directly changes the tax on a property sale. Confirm against the certified
-results before relying on any of them.</p>""")
+results before relying on any of them.</p>
+<p><strong>The measure that would have mattered most did not reach the ballot.</strong> The initiative to
+repeal most of Proposition 19's inheritance changes failed to qualify, so the shelter arithmetic on this
+site is current law rather than a law about to change. The failure memo and the Secretary of State's live
+qualification dashboard are both linked below; the dashboard is the page to re-read every year at review
+gate RG-3, because a replacement measure can be filed at any time.</p>""")
         + table("Enacted or changed", ["Change", "What it does", "Why it matters here", "Source"],
                 [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td>"
                  + src_cell(d, "Official source") for a, b, c, d in enacted])
@@ -1822,6 +2010,14 @@ results before relying on any of them.</p>""")
                 ["Bill", "What it would have done", "Status", "Source"],
                 [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td>"
                  + src_cell(d, "Official source") for a, b, c, d in dead])
+        + callout("method", "How this page is kept current", """
+<p>The owner asked for the official federal, state and local authorities to be rechecked periodically and
+for enacted changes to be kept apart from proposals. The rule this page follows: an entry is
+<strong>enacted</strong> only when a statute, a chaptered bill or a certified election result supports it,
+<strong>proposed</strong> only while a live official filing supports it, and <strong>dead</strong> once the
+publisher records that it failed. Nothing is moved between those groups on the strength of a news report.
+The recheck happens at review gate RG-3 on the <a href="precommit.html">pre-commitment page</a>: once a
+year, in the same month, re-open the links below and record whether anything moved.</p>""")
         + table("What would actually change the recommendation",
                 ["Change", "Direction of the effect", "Source"],
                 [
