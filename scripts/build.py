@@ -32,7 +32,7 @@ NAV_GROUPS = [
     ("Money over time", ["costs.html", "projections.html", "taxes.html"]),
     ("Rules and the estate", ["inheritance.html", "timeline.html", "estate.html", "laws.html"]),
     ("Black swan economics", ["black-swan.html", "economy.html"]),
-    ("Review before deciding", ["questions.html", "suggestions.html", "review.html", "briefing-sheet.html", "glossary.html"]),
+    ("Review before deciding", ["questions.html", "suggestions.html", "review.html", "briefing-sheet.html"]),
     ("Evidence", ["glossary.html", "sources.html"]),
 ]
 PAGE_TITLES = {
