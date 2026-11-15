@@ -6,10 +6,10 @@
 
 | Task | Status | Owner | File scope |
 |---|---|---|---|
-| F-1 Replace the synthetic-only crash-entry stress with **real, official-source 1929 and 2008 replays** of lump-sum versus park-then-phase entry | **in progress** | `arena/f8ab312e-tino3` | `assets/data/episodes.json` (new), `scripts/episodes.py` (new), `scripts/model.py` (append only), `scripts/build.py` (black-swan section + index line), `assets/sources.json` (append only), `scripts/verify.py` (host allowlist, append only) |
-| F-2 Re-open and re-verify every source behind the phased-investing, inheritance-tax, property-tax and insurance claims; record the result | **in progress** | `arena/f8ab312e-tino3` | `COORDINATION.md` (this section only) |
-| F-3 Privacy: audit the pre-rounding Git history read-only, publish the findings without the values, and write the owner decision and remediation procedure | **in progress** | `arena/f8ab312e-tino3` | `PRIVACY_REMEDIATION.md` (new, internal, excluded from publication), `scripts/privacy_scrub_audit.py` (new), `scripts/build.py` (review page audit rows) |
-| F-4 Rebuild, run every gate, open the PR from this branch, merge, confirm the Pages deploy | not started | `arena/f8ab312e-tino3` | `COORDINATION.md` (this section only) |
+| F-1 Replace the synthetic-only crash-entry stress with **real, official-source 1929 and 2008 replays** of lump-sum versus park-then-phase entry | **done** | `arena/f8ab312e-tino3` | `assets/data/episodes.json` (new), `scripts/episodes.py` (new), `scripts/model.py` (append only), `scripts/build.py` (black-swan section + index line), `assets/sources.json` (append only), `scripts/verify.py` (host allowlist, append only) |
+| F-2 Re-open and re-verify every source behind the phased-investing, inheritance-tax, property-tax and insurance claims; record the result | **done** | `arena/f8ab312e-tino3` | `COORDINATION.md` (this section only) |
+| F-3 Privacy: audit the pre-rounding Git history read-only, publish the findings without the values, and write the owner decision and remediation procedure | **done** | `arena/f8ab312e-tino3` | `PRIVACY_REMEDIATION.md` (new, internal, excluded from publication), `scripts/privacy_scrub_audit.py` (new), `scripts/build.py` (review page audit rows) |
+| F-4 Rebuild, run every gate, open the PR from this branch, merge, confirm the Pages deploy | **in progress** | `arena/f8ab312e-tino3` | `COORDINATION.md` (this section only) |
 
 
 ### F-2 Source re-verification, 15 November 2026
