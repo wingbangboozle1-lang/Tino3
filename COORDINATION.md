@@ -2825,7 +2825,7 @@ Not in scope and not touched: `scripts/economy.py`, `assets/data/economy.json`, 
 
 **Shared history.** The clone was shallow (`--depth 1`). `git fetch --unshallow origin main` was run read-only so that the merge base with `main` is visible; `main` at `a61404f` was fast-forwarded into this branch. The first fast-forward attempt on the shallow clone reported "refusing to merge unrelated histories", which was a shallow-clone artefact, not a divergence.
 
-**V-2 gates on `a61404f` (before the change):** `build.py`, `verify.py` (795 table rows, 729 official-source-linked, 66 logged unsourceable, 2,894 links, 109 ledger sources), `privacy_boundary.py`, `package_site.py`, `verify_legacy.py --config-only`, `git diff --check` — all exit 0. A rebuild reproduced the committed pages byte-for-byte.
+**V-2 gates on `a61404f` (before the change; row counts were 795 / 729 / 66):** `build.py`, `verify.py` (795 table rows, 729 official-source-linked, 66 logged unsourceable, 2,894 links, 109 ledger sources), `privacy_boundary.py`, `package_site.py`, `verify_legacy.py --config-only`, `git diff --check` — all exit 0. A rebuild reproduced the committed pages byte-for-byte.
 
 **V-3 official sources re-opened on the publisher's own domain (15 Nov 2026):**
 
@@ -2844,7 +2844,7 @@ Not in scope and not touched: `scripts/economy.py`, `assets/data/economy.json`, 
 
 **V-5 change made.** The brief was published twice: `briefing.html` (print-styled, one page, carries the Proposition 19 gate as its first counsel question) and `briefing-sheet.html` (unstyled, listed in the menu under "Review before deciding"). The menu therefore showed the brief twice under two labels. `briefing.html` was kept because it is the superset and the print-styled one. `briefing-sheet.html` was retired through the repository's existing mechanism: removed from the page registry and navigation, added to the retired-route list in `scripts/package_site.py`, deleted from the tree, and now answered by a content-free withdrawal notice (118 notices, up from 117). README counts were updated (22 generated pages). Nothing else on the site changed in substance; the only other differences are the navigation labels.
 
-**Gates after the change:** `build.py`, `verify.py` (22 pages; 795 table rows; 729 official-source-linked; 66 logged unsourceable), `privacy_boundary.py` (22 pages scanned), `package_site.py` (22 public pages, 118 withdrawal routes), `verify_legacy.py --config-only` (23 public files allowed), `git diff --check`.
+**Gates after the change (re-run on `main` at `b58a825`, the head after PRs #99–#101 merged mid-session, rebased onto it):** `build.py`, `verify.py` (22 pages; 791 table rows; 728 official-source-linked; 63 logged unsourceable; 2,831 links; 109 ledger sources), `privacy_boundary.py` (22 pages scanned), `package_site.py` (22 public pages, 118 withdrawal routes), `verify_legacy.py --config-only` (23 public files allowed), `git diff --check`.
 
 **Irregularities for review (not blocking):**
 
