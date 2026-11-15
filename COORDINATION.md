@@ -1,5 +1,65 @@
 # Coordination board
 
+## Session `arena/f8ab312e-tino3` — real 1929/2008 entry-timing replays, official-source re-verification, privacy audit and publication · claimed 2026-11-15
+
+*Branch note:* Arena pins this session to `arena/f8ab312e-tino3` (based on `main` at `f68fc30`). The board's `session-<id>/<task>` branch naming cannot be used; no other branch is created, switched to or pushed. Pushes go to this branch only; the pull request is opened from it to `main`.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| F-1 Replace the synthetic-only crash-entry stress with **real, official-source 1929 and 2008 replays** of lump-sum versus park-then-phase entry | **done** | `arena/f8ab312e-tino3` | `assets/data/episodes.json` (new), `scripts/episodes.py` (new), `scripts/model.py` (append only), `scripts/build.py` (black-swan section + index line), `assets/sources.json` (append only), `scripts/verify.py` (host allowlist, append only) |
+| F-2 Re-open and re-verify every source behind the phased-investing, inheritance-tax, property-tax and insurance claims; record the result | **done** | `arena/f8ab312e-tino3` | `COORDINATION.md` (this section only) |
+| F-3 Privacy: audit the pre-rounding Git history read-only, publish the findings without the values, and write the owner decision and remediation procedure | **done** | `arena/f8ab312e-tino3` | `PRIVACY_REMEDIATION.md` (new, internal, excluded from publication), `scripts/privacy_scrub_audit.py` (new), `scripts/build.py` (review page audit rows) |
+| F-4 Rebuild, run every gate, open the PR from this branch, merge, confirm the Pages deploy | **in progress** | `arena/f8ab312e-tino3` | `COORDINATION.md` (this section only) |
+
+
+### F-2 Source re-verification, 15 November 2026
+
+Every entry below was re-opened on the publisher's own domain in this session. "Verdict" compares what the record now says against what the source ledger claims it says.
+
+| Source id | Publisher and document | Verdict | Note |
+|---|---|---|---|
+| `irs_estate` | IRS, Estate tax | **Confirmed** | Filing-threshold table ends at 2026 / $15,000,000, matching the ledger's 2026 figure. The page also states that a filing is required where the gross estate plus adjusted taxable gifts exceeds the year-of-death threshold. |
+| `irs_whatsnew` | IRS, What's new — Estate and gift tax | **Confirmed, and strengthened** | "The Working Families Tax Cuts Bill (WFTC) was signed into law on July 4, 2025 as Public Law 119-21 … increasing the basic exclusion amount to $15,000,000 for calendar year 2026." The ledger's 2026 figure has a statutory basis, not only a revenue-procedure one. |
+| `ftb_inheritance` | California FTB, Gifts and inheritance | **Confirmed** | "If you received a gift or inheritance, **do not** include it in your income." The page also lists the income an inheritance later produces (interest, dividends, rent, gain on sale) as taxable. Ledger wording matches. |
+| `sco_estate` | California State Controller, California Estate Tax | **Confirmed** | "For decedents that die on or after January 1, 2005, there is no longer a requirement to file a California Estate Tax Return." No California estate or inheritance tax is collected for current deaths. |
+| `boe_lta25009` | BOE Letter to Assessors 2025/009 | **Confirmed** | Value cap is the factored base year value plus **$1,044,586** for transfers 16 Feb 2025 – 15 Feb 2027; prior amounts $1,000,000 and $1,022,600 exactly as the ledger states; next adjustment February 2027. |
+| `boe_prop19` | BOE, Proposition 19 | **Confirmed** | Current law: principal residence of transferor **and transferee**, value limit "current taxable value plus $1,000,000 (as biennially adjusted)", claim for exclusion within 3 years, homeowners' exemption within 1 year. |
+| `civ1947_12` | California Civil Code 1947.12 (leginfo) | **Confirmed** | "5 percent plus the percentage change in the cost of living, or 10 percent, whichever is lower", over any 12-month period; single-family and condominium exemption where the owner is not a REIT, corporation or LLC. |
+| `sf_rent_increase` | SF Rent Board, Learn about rent increases | **Confirmed, and updated context** | 1.6% effective 1 March 2026 – 28 February 2027, based on 60% of the REDACTED CPI; no limit on the initial rent for an empty unit; rent-increase licence required. The page now also carries a **posted 9 November 2026** notice that the Board of Supervisors is considering File No. 261020 (a temporary 10% combined cap on banked and capital-improvement increases). That file is already in the ledger as `cityb_261020` / `sf_file261020` and is described on the laws and Property B pages as pending, not law. |
+| `sf_treas_rate` | SF Treasurer and Tax Collector, Secured Property Taxes | **Confirmed** | "The secured property tax rate for Fiscal Year 2026-27 is 1.18162182%"; supplemental assessment after a change in ownership on the difference between new and prior value. |
+| `ssa_trustees` | SSA, 2026 OASDI Trustees Report, Assumptions about the future | **Confirmed** | Table II.C1: intermediate annual CPI-W change **2.4%**, low-cost 3.0%, high-cost 1.8%; trust fund new-issue real interest rate for 2044 and later **2.3%** intermediate (2.8% / 1.8%). Exactly the figures the model uses. |
+
+**One dead link found and closed.** `https://www.boe.ca.gov/lawguides/letters/2025/09/lta-2025-09.html` returns a 404. It was a guessed URL, not one in the ledger. The ledger's actual entry, the PDF at `/proptaxes/pdf/lta25009.pdf`, resolves and confirms the figure. No page links to the dead path.
+
+**Verdict on this batch: all 10 confirmed, 0 contradictions, 1 new development (SF File 261020) already correctly classified as pending.**
+
+
+
+### Session status at push time (F-1, F-2, F-3 complete; F-4 in progress)
+
+**F-1 complete — real replays replace the synthetic-only stress test.**
+
+- New deterministic module `scripts/episodes.py` and data file `assets/data/episodes.json`, reading five verbatim official CSVs stored in `assets/data/episodes/` with a provenance note (`README.md` in that directory).
+- Five series added to `assets/sources.json` (ledger now 114): `fred_djia_1929`, `fred_nasdaq`, `fred_tb3ms`, `fred_callmoney`, `fred_cpiaucns`. Each fetched from FRED's own CSV endpoint on 2026-11-15.
+- Published on `black-swan.html` under a new `#real-replays` section: the four-episode main table, the 24/30/36-month window table, a later-entry table, the realistic "inherit first, crash later" table, and a series table. A compact version is on `executive-summary.html`, `EXECUTIVE_SUMMARY.md` and the dashboard.
+- **Findings, published as they are:** waiting beat day-one investing in 3 of 4 episodes; it lost in the 2020 episode; the 34-month whole-balance variant beat the 30-month phased entry in 3 of 4; and once the entry moves past the peak the advantage shrinks or reverses (2008 entered 12 months later: day-one investing wins by a wide margin). No cherry-picking.
+- **Validation:** the stored 1954-11 index level (375.75) sits above the stored 1929-09 level (362.35), which independently reproduces the Federal Reserve History essay's statement that the index did not regain its September 1929 high until 23 November 1954.
+
+**F-2 complete — ten official sources re-opened and confirmed, zero contradictions.**
+
+- `irs_estate`, `irs_whatsnew`, `ftb_inheritance`, `sco_estate`, `boe_lta25009`, `boe_prop19`, `civ1947_12`, `sf_rent_increase`, `sf_treas_rate`, `ssa_trustees`, `rtc480`. Detail table above.
+- **Gap found and fixed:** `timeline.html` stated the RTC §480 150-day change-of-ownership deadline but not the statutory penalty for an unanswered assessor request ($100 or 10% of the new base-year tax, capped at $5,000). The statute was read in this session and the penalty row updated.
+- **One dead guessed URL closed:** `boe.ca.gov/lawguides/letters/2025/09/lta-2025-09.html` 404s. It was never in the ledger; the ledger's PDF resolves and confirms $1,044,586.
+
+**F-3 complete — history audit performed, read-only, disclosed without values.**
+
+- New `scripts/privacy_scrub_audit.py` walks every reachable commit and reports counts, paths and hashes, never a matching value.
+- New `PRIVACY_REMEDIATION.md` for the owner: the facts, why a scrub is an owner decision, and a nine-step safe procedure with costs.
+- `review.html` now carries a value-free summary plus the audit method.
+- **Result:** street address 0, parcel number 0, telephone 0 across all 1,696 file versions. Postal code and property-level place name appear in superseded versions only; the current published tree is clean on every class. Full history rewrite was **not** performed and the published site does not claim it was.
+
+**Coordination notes at claim time.** Three pull requests were open when this session started: #97 (`arena/1663e879-tino3`, board record only), #102 (`arena/1405ad9c-tino3`, briefing/costs/review edits) and #103 (`arena/8eebc036-tino3`, briefing consolidation and privacy sweep). All three touch `scripts/build.py`, which this session also edits. This session will make its changes **additive and isolated** (new module, new data file, new page section appended to one builder function) so a rebase can keep every session's work. These sessions are live, so their branches are not merged from here. Shared outputs (`assets/data/model.json`, generated pages) are regenerated last, from the merged builder.
+
 ## Session `arena/0dcaf9f7-tino3` — open-item completion: ledger research, economy reconciliation, stale-PR disposition, final publication · claimed 2026-11-13
 
 *Branch note:* Arena pins this session to `arena/0dcaf9f7-tino3` (based on `main` at `19e5ccf`, fast-forwarded to `d977882`, then rebased on `469d1d5` when PRs #79–#83 landed mid-session). The board's `session-<id>/<task>` naming cannot be used; no other branch is created, switched to or pushed.
@@ -2958,6 +3018,33 @@ Verification before any ledger write: Rev. Proc. 2022-32 read on `www.irs.gov/pu
 **Sources read on the publisher's own domain on 15 November 2026 and added or extended in the ledger:** Rev. Proc. 2022-32 (`rp_2022_32`, https://www.irs.gov/pub/irs-drop/rp-22-32.pdf — simplified late portability: complete Form 706 filed by the fifth anniversary of death, available only where the executor is not required to file under IRC 6018(a) and did not timely file; not available where a 6018(a) requirement exists); BOE Publication 29, March 2025 edition (`boe_pub29` supports extended — the "Important property tax dates" table states December 10 and April 10 as the last days to pay the first and second installments without penalty).
 
 **Irregularities and open items recorded, not blocking:** (1) rows whose only source was a county or city page are registered unsourceable; the public policy figures stay because they are law, but a reader combining several city-specific policy rates could still infer the jurisdiction — full removal would end the rent, transfer-tax and rate analysis and is the owner's decision, stated as a caveat on the review page; (2) the phased-path consolidation recommended by PR #97 is open (three implementations, different Treasury assumptions); (3) the pre-rounding Git history still contains earlier finer figures, jurisdiction names and the commit-author e-mail — the documented risk assessment (PR #97) stands and the rewrite remains an owner decision; (4) `inputs.json` retains the numeric `sf_secured_rate_2026_27` parameter value in the public repository (needed by the model; its published display is rounded); (5) `COORDINATION.md` itself is a public file that names jurisdictions in older sections — it is excluded from the site, and cleaning it is part of the same owner history decision.
+## Session `arena/33fcb60a-tino3` — amended claim after the PR #109 collision: phased-path consolidation on the integrated edition · 2026-11-15
+
+*Branch note:* Arena pins this session to `arena/33fcb60a-tino3`. The branch was re-based onto `main` at `214fe4c` (PR #109) and its history rewritten to drop this session's overlapping privacy edits; the earlier pushed claim section above stands as the record of what was attempted before the collision.
+
+### Collision, and how it was resolved (logged per the board rule)
+
+This session claimed W-1 (location-crosswalk removal) and W-3 (Rev. Proc. 2022-32 portability qualification) from the open audit (PR #97) and implemented both. While the work was in progress, PR #109 (`arena/268e7ea9-tino3`, PRIV-1..PRIV-6) landed on `main` with a **stricter implementation of the same two findings**: jurisdiction names withdrawn everywhere including web addresses, every jurisdiction-specific official source deleted from the ledger with rows re-registered, the location hosts removed from the verifier's allowlist, the metro series and their identifiers deleted from the ledger and the data files, and the same Rev. Proc. 2022-32 qualification applied to the timeline. Per the collision rule, **their implementation is kept in full** and this session's overlapping W-1/W-3 edits were withdrawn in the rebase; nothing of their work is discarded, and the rebase conflict was resolved as a union of the two sessions' board sections. Their board entry also explicitly left "the phased-path consolidation (three implementations, PR #97's recommendation)" unclaimed - that is this session's remaining task, below.
+
+### W-2 result: one phased-investing method, one yield key (done on the integrated edition)
+
+- `scripts/model.py` now has a single canonical engine, `phased_engine(net, park_months, phase_months, tsy_short, eq, drag, horizon, crash_annual=None)`: park the whole balance in short Treasuries for `park_months`, then buy equities with equal monthly amounts of the original net proceeds over `phase_months` (standard dollar-cost averaging; Treasury interest stays in the Treasury bucket); each purchase compounds at the equity rate minus drag; an optional `crash_annual` list applies a stated synthetic annual equity sequence to both the phased and the lump-sum path, so the sequencing benefit is isolated and the opportunity cost stays visible. `run_phased_path` is a thin wrapper; `run_paths`' phased path calls the same engine.
+- **One yield.** The duplicate assumptions `short_term_treasury_yield` (4.0%) and `phased_investing_park_months` are removed from `inputs.json`; every parking figure now uses `treasury_short_yield_nominal` (baseline 4.2%, band 3.5%-5.0%), whose basis states it is the single parking yield for the dashboard path, the regime and sensitivity runs and the stress table.
+- **The black-swan stress table** is rebuilt on the same engine: waits of 0/24/36 months, 12-month phase-in, the same 4.2% short-Treasury scenario (previously a 4.7% long-rate proxy), the same synthetic -40%/+25%/+10% sequence, clearly labelled. Its note distinguishes the stated scenario from the rate-context links.
+- **`crash_entry_comparison()` retired.** The unused helper (comment described -40%/-20% over two years; code applied -40% for three) is deleted from the model and from `model.json`.
+- **Numbers changed, and honestly so.** The dashboard's phased path is now genuine monthly phasing, so its terminal value fell: 2040 $30,026,780 to $28,151,230; 2045 $36,532,110 to $34,250,230; 2050 $44,469,300 to $41,670,670. The dashboard's phased figure now equals the model's phased output for the same year exactly (28,151,230 / 34,250,230 / 41,670,670), which is the one-method proof. The old figure was a mislabelled park-then-lump path; the phasing cost is the honest figure the owner asked for. Break-evens and the sell/live/let comparisons are unchanged (they do not depend on the phased path).
+
+### Kept additions that were not part of PRIV-1..PRIV-6
+
+- **Trustee notice qualified from the statute.** Probate Code section 16061.7 was read on leginfo on 15 November 2026: the 60-day clock runs from the event, or from when the trustee becomes aware of a person entitled to notice who was not known at the event, or from when a new trustee commences to serve if the office was vacant; notice goes to each beneficiary of the irrevocable portion and each heir of the deceased settlor at their last known address; no copy is owed to a person who cannot be located after reasonable diligence or is unknown to the trustee. The timeline row now says this (PR #109 had qualified the portability claim and re-sourced the county calendar rows, but not this row).
+- **Gate defence in depth.** `privacy_boundary.py` gained a pattern rejecting the metro-series identifiers (`atnhpi`, the two metro codes) in the built artifact, so the withdrawn identifiers cannot return silently. PRIV-4's stricter jurisdiction and host patterns are unchanged.
+
+### Verification performed (15 November 2026)
+
+- Sources opened on their publishers' own domains today: the IRS Form 706 instructions ("When To File", "Portability election", "Extension to elect portability" - the nine-month rule, the timely-filing portability requirement and the Rev. Proc. 2022-32 fifth-anniversary extension were read verbatim); Internal Revenue Bulletin 2022-30 (Rev. Proc. 2022-32 synopsis); Probate Code section 16061.7 (full text).
+- Gates on the final tree: `build.py`, `verify.py` (22 pages; 778 table rows; 662 official-source-linked; 116 registered; 2,608 links; 90 ledger sources), `privacy_boundary.py`, `package_site.py` (118 withdrawal routes), `verify_legacy.py --config-only`, `git diff --check` - all exit 0. Model regeneration byte-identical across two runs; `economy.py` runs unchanged.
+- Rendered output read back: the black-swan stress table (4.2% assumption, engine values, same-market differences), the dashboard KPI (30 months parked, 18 months phased), the timeline's trustee-notice row, and the consolidated model outputs.
+
 
 ## Session `arena/cdca778f-tino3` — fresh verification pass, insurance research gap, briefing print hardening, history-scrub runbook, final publication · claimed 2026-11-15
 
