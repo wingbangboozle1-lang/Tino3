@@ -18,20 +18,59 @@ Selling and investing the proceeds, against keeping the house. Baseline: house p
 
 | Inherited | Sell, equities | Sell, Treasuries | Live in it | Let it out |
 |---|---|---|---|---|
-| 2040 | $31,714,550 | $20,121,530 | $4,440,110 | $-867,860 |
-| 2045 | $38,585,540 | $24,480,880 | $5,322,760 | $-1,001,320 |
-| 2050 | $46,945,240 | $29,784,760 | $6,375,070 | $-1,167,130 |
+| 2040 | $31,714,550 | $20,121,530 | $4,440,110 | $-910,810 |
+| 2045 | $38,585,540 | $24,480,880 | $5,322,760 | $-1,053,570 |
+| 2050 | $46,945,240 | $29,784,760 | $6,375,070 | $-1,230,700 |
 
 The letting paths are credited with **no rent**, because no market rent for Property A has been supplied and no official source publishes one for a specific home. Read them as a floor, not as a comparison.
+
+## Mixed paths, and what moving out costs
+
+| Path | Terminal value | Selling at the inheritance leaves this much more |
+|---|---|---|
+| Let it out from the start, sell at the end | $-1,053,570 | $39,639,110 |
+| Live in it for 2 years, then sell | $36,740,930 | $1,844,610 |
+| Live in it for 2 years, then let it out | $-608,390 | $39,193,930 |
+| Live in it for 2 years, then let it out (low assessment kept after move-out) | $24,340 | $38,561,200 |
+| Live in it for 5 years, then sell | $32,796,990 | $5,788,550 |
+| Live in it for 5 years, then let it out | $197,200 | $38,388,340 |
+| Live in it for 5 years, then let it out (low assessment kept after move-out) | $836,890 | $37,748,640 |
+| Live in it for 10 years, then sell | $26,687,250 | $11,898,280 |
+| Live in it for 10 years, then let it out | $1,460,930 | $37,124,610 |
+| Live in it for 10 years, then let it out (low assessment kept after move-out) | $2,053,970 | $36,531,570 |
+| Live in it for 15 years, then sell | $21,255,740 | $17,329,800 |
+| Live in it for 20 years, then sell | $16,130,700 | $22,454,840 |
+| Live in it for the whole 30 years, then sell | $5,322,760 | $33,262,780 |
+
+The closest mixed path is a short occupancy followed by a sale, and it still ends behind selling at the inheritance. Moving out after claiming the Proposition 19 exclusion costs about $244,980 of extra property tax over thirty years on the live-then-let path, against the reading in which the low assessment survives; both readings are published.
+
+## How often the answer holds
+
+- Selling beats living in it for thirty years: **92.8%** of 2000 resampled histories.
+- Selling beats living in it ten years and then selling: **95.5%** of 2000 resampled histories.
+- Selling beats living ten years and then letting it out: **94.8%** of 2000 resampled histories.
+- Draws with falling nominal house prices over the thirty years: **0.2%** of 2000 resampled histories.
+
+The draws are ten-year blocks of the verified California house price index and consumer price index, drawn together so house and inflation history move as they did. The equity return is held at the published scenario, because no official series of forward equity returns exists.
+
+## Read this before the numbers
+
+The pre-commitment register on `precommit.html` states, in advance, the condition under which the household would choose each path, and the household's own priorities. It is meant to be filled in before any projection is read, so the answer cannot be reverse-engineered from one scenario.
+
+## Corrections in this edition
+
+- The combined depreciation recapture rate is corrected from 41.1% to **42.1%**. Its own stated components are 25% federal, 13.3% California and 3.8% net investment income tax, which sum to 42.1. Every figure that depends on recapture was rebuilt.
+- The transfer tax and recording fees on the sell path are itemised: about $5,520 on a $5,000,000 sale, about 2.0% of the modelled 5.5% selling cost. The $75 instrument fee does **not** apply, because Government Code section 27388.1(a)(2)(A) exempts an instrument recorded in connection with a transfer subject to the documentary transfer tax.
+- The initiative to repeal most of Proposition 19 **failed to qualify** for the November 2026 ballot (Secretary of State memorandum, 18 May 2026), so the shelter arithmetic is current law rather than law about to change. It is recorded as dead on the law page.
 
 ## The numbers that drive it
 
 - **The tax cliff.** The Property A bill is about $7,360 today. If the heir inherits in 2045 and does not move in, it becomes about $79,330. If the heir moves in and claims the exclusion, it becomes about $57,060.
 - **The shelter is smaller than the growth.** On a 2045 inheritance the exclusion shelters the old taxable value plus $1,886,640 against a market value of $6,531,230. Everything above the sum is reassessed.
 - **The tax-free window.** Property acquired from a decedent takes a basis equal to its value at death, so a sale soon afterwards pays about zero capital gains tax. In the 2045 baseline a $6,531,230 sale carries $0 of tax.
-- **What waiting costs.** Hold the same house thirty years and the tax on the eventual sale is about $4,910,950 after the section 121 exclusion; let it out as well and depreciation recapture pushes that to about $7,151,170.
+- **What waiting costs.** Hold the same house thirty years and the tax on the eventual sale is about $4,910,950 after the section 121 exclusion; let it out as well and depreciation recapture pushes that to about $7,203,420.
 - **The break-even.** Keeping the home beats selling only if it appreciates 8.66% a year for thirty years. The verified index for this area compounded at 6.9% over fifty years and 3.3% over the last twenty.
-- **The break-even rent.** Letting would need about $30,180 a month, $362,120 a year, in 2045, to match selling and investing.
+- **The break-even rent.** Letting would need about $30,220 a month, $362,600 a year, in 2045, to match selling and investing.
 
 ## The black swans, and what they do to the answer
 
@@ -78,9 +117,11 @@ These sit on the flagged-for-review page, each with the publisher that holds the
 - A market rent for Property A, and the seller's actual selling costs.
 - Whether the trust actually holds title, and whether the transfer is between a parent and a child.
 
+**Two opened in this pass, both worked and both published.** The living path is credited with no housing at all, so it is charged every cost of owning and credited with the value of nothing; credited at the market rent it would otherwise cost, living and selling come level at about 100% of that rent. And the fixed charges inside Property B's tax bill are 44.7% of the bill and grew 8.12% a year over its roll, against a 2.5% assumption, so the 2% cap cannot bound that bill the way the tables imply.
+
 ## How this was checked
 
-Every rule, threshold and rate on the site was read on the publishing agency's own domain and is linked from the row that uses it. The ledger holds 98 sources. A build-time verifier fails if a table row has no official link, if the build is not reproducible, if any internal link or fragment does not resolve, or if any published dollar figure is not a multiple of $10. A separate check recomputed the published relationships from the inputs.
+Every rule, threshold and rate on the site was read on the publishing agency's own domain and is linked from the row that uses it. The ledger holds 104 sources. A build-time verifier fails if a table row has no official link, if the build is not reproducible, if any internal link or fragment does not resolve, or if any published dollar figure is not a multiple of $10. A separate check recomputed the published relationships from the inputs.
 
 ## Read next
 

@@ -281,7 +281,7 @@ def run_paths(inherit_year: int, g: float, infl: float, eq: float, drag: float,
 
     # Imputed rent on the living paths: the housing the heir consumes by occupying
     # the house instead of living in Property B and letting the vacant unit. The
-    # input (property_a.imputed_rent_annual) is empty unless a documented rent
+    # input (property_a.imputed_rent) is empty unless a documented rent
     # opinion is supplied, so the published baseline credits zero and does not
     # move. When set, it is credited gross over the years of occupancy, the same
     # convention as the letting path's rent, and it is not taxable income because
@@ -1049,7 +1049,7 @@ def prop_h_schedule() -> dict:
 
 
 # -------------------------------------------------------- imputed rent ------
-def imputed_rent_sensitivity(p45: dict, infl: float, eq: float, drag: float,
+def imputed_rent_level_cases(p45: dict, infl: float, eq: float, drag: float,
                              g: float, cap_growth: float, sell_pct: float,
                              horizon: int, gain_rate: float, rec_rate: float,
                              levels=(0, 5000, 10000, 20000, 30000)) -> dict:
@@ -1057,7 +1057,7 @@ def imputed_rent_sensitivity(p45: dict, infl: float, eq: float, drag: float,
 
     The levels are stated scenarios, not estimates: no market rent or rent
     opinion for Property A has been supplied, so the real input
-    (property_a.imputed_rent_annual) stays empty and the published baseline is
+    (property_a.imputed_rent) stays empty and the published baseline is
     the zero row. Each level is credited gross to the living path over the whole
     horizon, grown with inflation and accumulated at the after-tax equity return,
     the same convention as the letting path's rent; it is not taxable income
@@ -1106,12 +1106,239 @@ RENT_INCOME = A.get("rent_income_annual", {}).get("value") \
 # documented rent opinion, for the same reason as RENT_INCOME above: the site
 # never invents a rent figure. The stated-level sensitivity published on the
 # what-if page shows what any entered level would do.
-IMPUTED_RENT = A.get("imputed_rent_annual", {}).get("value") \
-    if isinstance(A.get("imputed_rent_annual"), dict) else None
+IMPUTED_RENT = A.get("imputed_rent", {}).get("value") \
+    if isinstance(A.get("imputed_rent"), dict) else None
 COST_A_BASE = (A["annual_costs"]["water"]["mid"] + A["annual_costs"]["electricity"]["mid"]
                + A["annual_costs"]["insurance"]["mid"])
 COST_B_BASE = (B["annual_costs"]["water"]["mid"] + B["annual_costs"]["electricity"]["mid"]
                + B["annual_costs"]["insurance"]["mid"])
+
+
+
+# ---------------------------------------------------------------------------
+# Section 17043 surcharge sensitivity, and the projections distribution.
+#
+# Both functions are APPENDED deliberately: earlier sessions own the body of
+# main() and concurrent edits to it are the main source of merge conflicts.
+# main() calls them through _append_extras() at the end of this file.
+# ---------------------------------------------------------------------------
+CA_SURCHARGE = ASM.get("ca_1pct_surcharge", {})
+GAIN_RATE = ASM["combined_gain_tax_rate"]
+
+
+def surcharge_sensitivity(year: int = 2045) -> dict:
+    """What the section 17043 1% does to the one sale the site recommends.
+
+    The gain tax rate is a point assumption elsewhere in the model. This function
+    re-runs the sale that decides the recommendation - sell at inheritance, where
+    the basis step-up makes the gain about zero - and then re-runs the two paths
+    that DO carry a large taxable gain 30 years later, at the rate without the
+    surcharge and at the rate with it. The point is to show that the surcharge
+    changes the size of the tax on the late-sale and letting paths, and does not
+    change whether selling at inheritance wins.
+    """
+    p = next(x for x in MAIN_RESULT["paths"] if x["inherit_year"] == year)
+    low, high = float(GAIN_RATE["low"]), float(GAIN_RATE["high"])
+    rc_low = high - 0.01
+    rows = []
+    for key, label in (("sell_equities", "Sell at inheritance, invest in equities"),
+                       ("sell_treasury", "Sell at inheritance, hold Treasuries"),
+                       ("live_in", "Live in it, sell after 30 years"),
+                       ("rent_out", "Let it out, sell after 30 years"),
+                       ("live_then_rent", "Live in it 2 years, then let it out")):
+        path = p["paths"][key]
+        s_high = path["sale"]
+        base = dict(price=s_high["price"], basis=s_high["basis"])
+        s_low = sale_proceeds(base["price"], base["basis"], ASM["selling_cost_pct"]["baseline"],
+                              low, rc_low, (path.get("depreciation") or 0) / 1.0,
+                              V["section121_exclusion_single"]["value"])
+        rows.append({
+            "key": key, "label": label,
+            "gain": s_high["gain"],
+            "tax_without_surcharge": s_low["tax"],
+            "tax_with_surcharge": s_high["tax"],
+            "difference": s_high["tax"] - s_low["tax"],
+            "terminal_with_surcharge": path["terminal"],
+        })
+    return {
+        "year": year,
+        "surcharge_rate": float(CA_SURCHARGE.get("value", 0.01)),
+        "threshold": int(CA_SURCHARGE.get("threshold", 1000000)),
+        "threshold_indexed": bool(CA_SURCHARGE.get("threshold_indexed", False)),
+        "rate_without": low, "rate_with": high,
+        "rows": rows,
+        "recommendation_unchanged": (
+            p["paths"]["sell_equities"]["terminal"] > p["paths"]["live_in"]["terminal"]),
+    }
+
+
+def projections_distribution(span: int = 30) -> dict:
+    """The block-bootstrap range for the inherited property's value, one year at a time.
+
+    Reads the bootstrap already computed in economy.py (assets/data/economy.json):
+    40 overlapping ten-year blocks of the California state-level all-transactions
+    annual growth record, resampled without randomness by walking the block
+    sequence. Nothing new is estimated here; this only re-expresses the published
+    distribution as a per-year band so the projections page can draw it.
+    """
+    econ = json.loads((DATA / "economy.json").read_text(encoding="utf-8"))
+    bs = econ.get("bootstrap", {})
+    start = A["estimated_market_value_2026"]
+    bands = bs.get("bands") or bs.get("percentiles") or []
+    out = {"start_value": money10(start), "span": span, "source": "economy.json bootstrap",
+           "bands": [], "draws": bs.get("draws") or bs.get("n") or bs.get("count")}
+    # If economy.json exposes per-year growth paths, build a value band directly.
+    paths = bs.get("paths") or bs.get("growth_paths") or []
+    if paths:
+        for year in range(1, span + 1):
+            vals = []
+            for gp in paths:
+                v = start
+                for g in gp[:year]:
+                    v *= (1 + g)
+                vals.append(v)
+            vals.sort()
+            n = len(vals)
+            out["bands"].append({
+                "year": 2026 + year,
+                "p10": money10(vals[int(0.10 * (n - 1))]),
+                "p50": money10(vals[int(0.50 * (n - 1))]),
+                "p90": money10(vals[int(0.90 * (n - 1))]),
+                "n": n,
+            })
+    return out
+
+
+def imputed_rent_breakeven(gap: float, infl: float, rate: float, horizon: int) -> float:
+    """First-year rent avoided, growing with inflation, whose accumulation at `rate` equals `gap`.
+
+    `gap` is the terminal-wealth shortfall of living in the home against selling and investing
+    (sell path minus live path, both at the horizon). Read as: the housing a comparable home would
+    cost, if the heir lived there instead, at which living and selling end level. Rent avoided is
+    not taxed, consistent with the letting paths.
+    """
+    factor = sum((1 + infl) ** j * (1 + rate) ** (horizon - 1 - j) for j in range(horizon))
+    return gap / factor
+
+
+def roll_audit() -> dict:
+    """Line-by-line audit of the two published roll tables.
+
+    Answers four questions with arithmetic only, and admits what it cannot answer:
+
+      1. Does each year's owner-supplied growth percentage reproduce from the row
+         above it? (Yes, everywhere.)
+      2. Does the assessed value ever exceed the Proposition 13 2% cap? (No.)
+      3. How much of each bill is fixed charges rather than ad valorem tax? The
+         model's bill fit assumes the fixed part grows with inflation; the bills
+         themselves say it has moved at a very different pace, and it is a large
+         share of the bill, so the 2% cap does not bound the whole bill.
+      4. Can the ad valorem rate be identified from the bills? (No - assessed value
+         and the fixed part both grow at about 2%, so the rate and the fixed part
+         trade off almost exactly. The rate is a published-law figure, not a fit.)
+    """
+    rA, rB = ASM["ad_valorem_rate_a"]["value"], ASM["ad_valorem_rate_b"]["value"]
+
+    def audit(rows: list[dict], rate: float, cap: float = 0.02) -> dict:
+        have = sorted([r for r in rows if r.get("bill")], key=lambda r: r["year"])
+        fixed, cap_breach, growth_ok = [], [], []
+        prev = None
+        for r in rows:  # newest-first in the file
+            if prev is not None:
+                g = r["assessed"] / prev["assessed"] - 1
+                if g > cap + 1e-9:
+                    cap_breach.append({"year": prev["year"], "growth_pct": round(g * 100, 3)})
+                if r.get("bill") and prev.get("bill"):
+                    growth_ok.append({
+                        "year": prev["year"],
+                        "assessed_pct": round(g * 100, 2),
+                        "bill_pct": round((r["bill"] / prev["bill"] - 1) * 100, 2),
+                    })
+            prev = r
+        for r in have:
+            fx = r["bill"] - rate * r["assessed"]
+            fixed.append({"year": r["year"], "bill": money10(r["bill"]),
+                          "assessed": money10(r["assessed"]),
+                          "ad_valorem": money10(rate * r["assessed"]),
+                          "fixed": money10(fx),
+                          "fixed_pct": round(fx / r["bill"] * 100, 1)})
+        y0, y1 = fixed[0]["year"], fixed[-1]["year"]
+        # Compare the SAME years on both properties, so a rate change and a
+        # different window length cannot be mistaken for a trend.
+        shared = sorted({f["year"] for f in fixed} & {f["year"] for f in
+                         (fixed if y1 - y0 <= 6 else fixed)})
+        fmap = {f["year"]: f["fixed"] for f in fixed}
+        w0, w1 = (2020, 2025) if 2020 in fmap and 2025 in fmap else (y0, y1)
+        g_shared = ((fmap[w1] / fmap[w0]) ** (1 / (w1 - w0)) - 1) if fmap.get(w0) else None
+        g_full = ((fixed[-1]["fixed"] / fixed[0]["fixed"]) ** (1 / (y1 - y0)) - 1)
+        return {
+            "rate_used": rate,
+            "base_year": y1,
+            "fixed": fixed,
+            "fixed_share_latest_pct": fixed[-1]["fixed_pct"],
+            "fixed_share_first_pct": fixed[0]["fixed_pct"],
+            "window": [y0, y1],
+            "fixed_growth_full_pct": round(g_full * 100, 2),
+            "fixed_growth_2020_2025_pct": round(g_shared * 100, 2) if g_shared is not None else None,
+            "cap_breaches": cap_breach,
+            "year_pairs_checked": len(growth_ok),
+            "assumption_used_pct": round(ASM["fixed_charge_growth"]["baseline"] * 100, 2),
+            "max_bound_share_pct": round((1 - fixed[-1]["fixed"] / fixed[-1]["bill"]) * 100, 1),
+        }
+
+    return {"property_a": audit(A["roll"], rA), "property_b": audit(B["roll"], rB)}
+
+
+def imputed_rent_sensitivity(year: int = 2045) -> dict:
+    """What the living path is worth if the roof it provides is given a value.
+
+    The published baseline credits the living path with NOTHING for the shelter it
+    provides, while charging it every cost of owning. That is deliberately
+    conservative, and it is also a bias: it makes living look worse than it is by
+    the value of the housing consumed. This function re-runs the living path with
+    the housing credited at 0%, 50%, 75% and 100% of the SAME market rent that
+    would make the letting path break even. Both paths then use one piece of
+    evidence, which is the only way the comparison is fair.
+
+    The result is a sensitivity, not a new headline: the published recommendation
+    still rests on the zero-credit case.
+    """
+    p = next(x for x in MAIN_RESULT["paths"] if x["inherit_year"] == year)
+    rent_annual = float(p["breakeven_rent_annual"])
+    base_terminal = p["paths"]["live_in"]["terminal"]
+    sell = p["paths"]["sell_equities"]["terminal"]
+    horizon = 30
+    rate = ASM["equity_return_nominal_gross"]["baseline"] - ASM["equity_tax_drag"]["baseline"]
+    rows = []
+    for share in (0.0, 0.5, 0.75, 1.0):
+        credit = 0.0
+        for j in range(horizon):
+            credit += rent_annual * share * (1 + INFL) ** j * (1 + rate) ** (horizon - 1 - j)
+        rows.append({
+            "share": share,
+            "annual_credit": money10(rent_annual * share),
+            "credit_fv": money10(credit),
+            "terminal": money10(base_terminal + credit),
+            "gap_to_sell": money10(sell - (base_terminal + credit)),
+            "living_wins": (base_terminal + credit) > sell,
+        })
+    return {"year": year, "rent_annual": money10(rent_annual),
+            "rent_monthly": money10(rent_annual / 12),
+            "publish_zero": True, "rows": rows}
+
+
+MAIN_RESULT = {}
+
+
+def _append_extras(out: dict) -> dict:
+    """Run after main() has built `out`, without editing main()'s body."""
+    global MAIN_RESULT
+    MAIN_RESULT = out
+    out["surcharge_sensitivity"] = surcharge_sensitivity(2045)
+    out["projections_distribution"] = projections_distribution(30)
+    out["roll_audit"] = roll_audit()
+    out["imputed_rent"] = imputed_rent_sensitivity(2045)
+    return out
 
 
 def main() -> dict:
@@ -1189,6 +1416,10 @@ def main() -> dict:
             year, g, infl, eq, drag, cap_growth, sell_pct, horizon, gain_rate,
             rec_rate, infl, FIT_A, COST_A_BASE, maint_rent, t_eq)
         res["breakeven_rent_monthly"] = money10(res["breakeven_rent_annual"] / 12)
+        gap_live = res["paths"]["sell_equities"]["terminal"] - res["paths"]["live_in"]["terminal"]
+        res["imputed_rent_breakeven_annual"] = money10(
+            imputed_rent_breakeven(gap_live, infl, eq - drag, horizon))
+        res["imputed_rent_breakeven_monthly"] = money10(res["imputed_rent_breakeven_annual"] / 12)
         res["breakeven_return_vs_live"] = breakeven_return(
             year, g, cap_growth, sell_pct, horizon, gain_rate, rec_rate,
             res["paths"]["live_in"]["terminal"])
@@ -1222,7 +1453,7 @@ def main() -> dict:
     # withheld for privacy) and the stated-level imputed-rent sensitivity on the
     # living paths (levels are scenarios; the real input is empty).
     out["prop_h"] = prop_h_schedule()
-    out["imputed_rent"] = imputed_rent_sensitivity(
+    out["imputed_rent_levels"] = imputed_rent_level_cases(
         p45, infl, eq, drag, g, cap_growth, sell_pct, horizon, gain_rate, rec_rate)
 
     for regime in regime_stress():
@@ -1233,6 +1464,9 @@ def main() -> dict:
     # downloads, interpolates or invents a value.
     out["episodes"] = EP.build()
 
+    # Extras are attached by the appended block at the end of this file, so that
+    # concurrent sessions editing main() do not collide with new sections.
+    _append_extras(out)
     (DATA / "model.json").write_text(json.dumps(out, indent=1), encoding="utf-8")
     return out
 

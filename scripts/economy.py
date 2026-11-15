@@ -68,6 +68,7 @@ SELL_PCT = ASM["selling_cost_pct"]["baseline"]
 RATE_A = ASM["ad_valorem_rate_a"]["value"]
 RATE_B = V["sf_secured_rate_2026_27"]["value"]
 HOLD_YEARS = 30                      # the decision horizon used elsewhere on the site
+CHART_YEARS = 30                     # years drawn on the projections distribution chart
 INHERIT_YEAR = 2045
 VALUE_A_2026 = A["estimated_market_value_2026"]
 
@@ -120,6 +121,10 @@ def build() -> dict:
     base_b = B["roll"][0]["assessed"]
     less_years_below_a = []
     save_a, save_b = [], []
+    # Per-year value bands for the projections page chart (added 2026-11-15).
+    # Kept separate from the horizon rows below so every existing output stays
+    # byte-identical; only a new list is appended to the result.
+    year_paths = [[] for _ in range(CHART_YEARS)]
 
     for _ in range(DRAWS):
         picks = [rng.randrange(len(starts)) for _ in range(5)]
@@ -177,6 +182,10 @@ def build() -> dict:
                 tot_a += (cap_a - idx_a) * RATE_A
             if idx_b < cap_b:
                 tot_b += (cap_b - idx_b) * RATE_B
+        _m = 1.0
+        for _j, _ch in enumerate(h50[:CHART_YEARS]):
+            _m *= 1.0 + _ch
+            year_paths[_j].append(VALUE_A_2026 * _m)
         less_years_below_a.append(years_below_a / 50.0)
         save_a.append(tot_a)
         save_b.append(tot_b)
@@ -185,6 +194,26 @@ def build() -> dict:
     s_val45, s_val76, s_real76 = sorted(val_2045), sorted(val_2076), sorted(real_2076)
     s_n50, s_r50, s_r30 = sorted(nom50_cagr), sorted(real50_cagr), sorted(real30_cagr)
     s_below_a, s_save_a, s_save_b = sorted(less_years_below_a), sorted(save_a), sorted(save_b)
+
+    chart = {
+        "start_year": 2026,
+        "start_value": money10(VALUE_A_2026),
+        "draws": DRAWS,
+        "note": ("Block-bootstrap band for the inherited property's value, one year at a time, "
+                 "drawn from the same seeded 2,000-path resample as the horizon rows. p05-p95 is "
+                 "the shaded band, so it is a ninetieth-percent interval, not a ninth; p50 is the "
+                 "middle path and the constant line is the model's single "
+                 f"{G * 100:.0f}% a year. Every value is rounded to the nearest $10."),
+        "years": [],
+    }
+    for _i in range(CHART_YEARS):
+        _d = p3(sorted(year_paths[_i]))
+        chart["years"].append({
+            "year": 2026 + _i + 1,
+            "p05": money10(_d["p05"]), "p50": money10(_d["p50"]),
+            "p95": money10(_d["p95"]),
+            "constant": money10(VALUE_A_2026 * (1.0 + G) ** (_i + 1)),
+        })
 
     def money_row(key: str, vals: list[float], constant: float, note: str) -> dict:
         d = p3(sorted(vals))
@@ -240,6 +269,7 @@ def build() -> dict:
                    "count of blocks is smaller than the house record alone allows. Each draw is "
                    "five blocks: fifty years."),
         "rows": rows,
+        "chart": chart,
         "shares": shares,
         "wins": {"case": f"Sell at {INHERIT_YEAR} and invest at {((EQ - DRAG) * 100):.2f}% net, "
                          f"against holding the house for {HOLD_YEARS} years",
