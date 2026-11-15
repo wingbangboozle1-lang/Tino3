@@ -2699,3 +2699,22 @@ Not in scope and not touched: `scripts/economy.py`, `assets/data/economy.json`, 
 ### Gates (this branch, after G-2)
 
 `build.py`, `verify.py`, `privacy_boundary.py`, `package_site.py`, `verify_legacy.py --config-only` — all exit 0. Navigation check: 23 links, no duplicates.
+
+## Session `arena/8f239007-tino3` — final integration: phased-method consolidation, source corrections, privacy hardening, publication · claimed 2026-11-15
+
+*Branch note:* Arena pins this session to `arena/8f239007-tino3`, based on `main` at `a61404f` (PR #98). No other branch is created, switched to or pushed. This block is appended at the end of the file, as the board convention requires. The whole board was read before this claim was written; PR #97 (`arena/1663e879-tino3`, open) is a documentation-only audit whose findings are the input to F-1, F-2 and F-4 below.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| F-1 Consolidate the phased-investing method to one canonical implementation with one labelled yield assumption; make the dashboard headline, the decision paths, the sensitivity grid and the Black Swan entry-timing table all read from it; correct the `crash_entry_comparison` comment/code disagreement | **claimed** | `arena/8f239007-tino3` | `scripts/model.py`, `assets/data/inputs.json`, `scripts/build.py`, regenerated root pages |
+| F-2 Qualify the Form 706 / portability wording on the timeline with the relief the IRS instructions and Rev. Proc. 2022-32 actually provide, after re-opening both on the IRS domain | **claimed** | `arena/8f239007-tino3` | `scripts/build.py`, `assets/sources.json` (append only), regenerated root pages |
+| F-3 Consolidate the two overlapping adviser-brief pages into one printable sheet and keep the navigation free of duplicates | **claimed** | `arena/8f239007-tino3` | `scripts/build.py`, `assets/style.css`, `scripts/package_site.py`, regenerated root pages |
+| F-4 Privacy hardening: extend the mechanical gate to the jurisdiction-granularity class the audit found, replace the vague privacy notice with a specific re-identification disclosure, and publish the location-crosswalk item on the Flagged for Review page | **claimed** | `arena/8f239007-tino3` | `scripts/privacy_boundary.py`, `scripts/build.py`, regenerated root pages |
+| F-5 Gap check of the remaining brief items against the published edition; publish the outcome rather than leaving it implicit | **claimed** | `arena/8f239007-tino3` | `scripts/build.py`, `README.md` |
+| F-6 Integrate PR #97, run every gate, open the pull request from this branch to `main`, merge without waiting for approval, confirm the GitHub Pages deploy, record the result here | **claimed** | `arena/8f239007-tino3` | this section; the deployment |
+
+Not touched: every other session's board section, `assets/data/model.json` beyond what `scripts/model.py` regenerates, `.github/workflows/*`, `_config.yml`, Git history, repository visibility.
+
+**Boundary on F-4, stated up front.** The owner's brief asks for anonymisation with placeholders, but it also asks for the local-law analysis and an official source link on every table row. A county and a city are not personal information, and the property-tax, rent and transfer rules in this analysis are jurisdictional, so the county and city names stay published. What this session does instead is remove the marginal disclosures that add no analysis value, enforce mechanically that nothing finer than county/city level can be published, and replace the current general privacy wording with a specific statement of what a reader holding the county's public roll can do. The decision to go further (withdraw the jurisdiction, or withdraw the property-level figures) is published as a ranked owner option on the Flagged for Review page rather than taken silently.
+
+**Boundary on the Git-history scrub.** The brief asks for pre-rounding history to be scrubbed. This session is pinned to one branch and may push only to it; rewriting `main`'s history is a force-push to another ref and is therefore outside this session's mechanics. The scrub is instead specified here as an exact, ready-to-run owner procedure with its residual risks, and published on the Flagged for Review page as the highest-priority owner action. No claim of erasure is made anywhere.
