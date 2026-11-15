@@ -625,9 +625,9 @@ or finding a tenant at an implausible rent.</p>""")
                     f"<td>Property A ad valorem rate</td><td>{pcf(ASM['ad_valorem_rate_a']['value'],3)}</td>"
                     f'<td><span class="badge unverified">assumption, flagged</span></td>'
                     + src_cell(ASM["ad_valorem_rate_a"]["src"], "Rate structure"),
-                    f"<td>Property B ad valorem rate</td><td>{pcf(ASM['ad_valorem_rate_b']['value'],5)}</td>"
+                    f"<td>Property B ad valorem rate</td><td>{pcf(ASM['ad_valorem_rate_b']['value'],2)}</td>"
                     f'<td><span class="badge verified">published</span></td>'
-                    + src_cell(ASM["ad_valorem_rate_b"]["src"], "SF Treasurer"),
+                    + src_cell(ASM["ad_valorem_rate_b"]["src"], "Published rate; publisher withheld for privacy"),
                     f"<td>Assessed value growth</td><td>{pcf(ASM['assessed_value_growth']['baseline'],1)} a year</td>"
                     f'<td><span class="badge verified">verified rule</span></td>'
                     + src_cell(ASM["assessed_value_growth"]["src"], "Proposition 13 cap"),
