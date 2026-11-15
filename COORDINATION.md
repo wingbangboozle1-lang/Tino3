@@ -2884,3 +2884,10 @@ Four rows were added to the repository-audit table on `review.html`, so the irre
 
 Gates after this follow-up: `build.py`, `verify.py` (22 pages; 795 table rows; 732 official-source-linked; 63 logged unsourceable; 2,842 links), `privacy_boundary.py`, `package_site.py`, `verify_legacy.py --config-only`, `git diff --check` — all exit 0.
 
+
+### Publication record · `arena/ec37bb6a-tino3` · 15 November 2026
+
+- **PR #98** (`arena/ec37bb6a-tino3` → `main`) merged with a merge commit at `a61404f` after the `verify` check passed (`verify` run 43671856069). No auto-merge.
+- **Pages:** the Pages API reported `built` for `a35e281` with no error (`pages build and deployment` and `Deploy GitHub Pages` both success). One transient `errored` status occurred while other sessions were pushing; it was superseded by a successful build. The live dashboard (`index.html`) was fetched and serves the merged edition.
+- **Concurrent work on `main` after the merge (not performed here, recorded for traceability):** `arena/1dc4d646-tino3` (PR #99) and `arena/8eebc036-tino3` (PR #103) landed on top. PR #103 consolidated the duplicate briefing page, which resolves the overlap flagged in G-1. Navigation on `main` at `a35e281` therefore has 22 links, not the 23 verified in this branch.
+- **Still open for the owner (unchanged):** the Git-history scrub (requires a force-push to `main`, not performed); a browser print check of the briefing sheet; property-specific insurance quotes.
