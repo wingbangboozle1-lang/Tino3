@@ -372,3 +372,68 @@ code {
   body:has(.print-brief) a { color: #111; text-decoration: underline; }
   body:has(.print-brief) a::after { content: none; }
 }
+
+/* ------------------------------------------------------------------ chart --
+   A CSS-only distribution chart. The site runs no script, so the geometry is
+   computed at build time and written as inline custom properties; these rules
+   only lay it out. Colours come from the palette above, so the chart follows
+   the same ink as the tables. It is decorative for assistive technology only
+   where a table carries the same numbers; here the table is beside it. */
+.chart {
+  margin: 18px 0 8px;
+  padding: 14px 16px 10px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.chart h3 { margin: 0 0 2px; font-size: 1rem; }
+.chart .chart-note { margin: 0 0 14px; color: var(--ink-soft); font-size: .86rem; }
+.chart-rows { display: grid; grid-template-columns: 92px 1fr; gap: 6px 10px; align-items: center; }
+.chart-year { font-family: var(--mono); font-size: .8rem; color: var(--ink-soft); text-align: right; }
+.chart-track {
+  position: relative;
+  height: 18px;
+  background: var(--line-soft);
+  border-radius: 3px;
+  /* gridline every 25% of the axis, drawn without an image */
+  background-image: linear-gradient(to right, var(--line) 1px, transparent 1px);
+  background-size: 25% 100%;
+}
+.chart-band {
+  position: absolute; top: 3px; bottom: 3px;
+  left: calc(var(--lo) * 1%);
+  width: calc((var(--hi) - var(--lo)) * 1%);
+  background: var(--accent-soft);
+  border-left: 1px solid var(--accent);
+  border-right: 1px solid var(--accent);
+  border-radius: 2px;
+}
+.chart-const {
+  position: absolute; top: -2px; bottom: -2px;
+  left: calc(var(--c) * 1%);
+  width: 2px; margin-left: -1px;
+  background: var(--warn);
+}
+.chart-med {
+  position: absolute; top: 5px; bottom: 5px;
+  left: calc(var(--m) * 1%);
+  width: 3px; margin-left: -1.5px;
+  background: var(--ink);
+  border-radius: 1px;
+}
+.chart-axis {
+  display: grid; grid-template-columns: 92px 1fr; gap: 10px;
+  margin-top: 8px; font-family: var(--mono); font-size: .76rem; color: var(--ink-soft);
+}
+.chart-axis span { display: flex; justify-content: space-between; }
+.chart-key {
+  display: flex; flex-wrap: wrap; gap: 16px; margin-top: 10px;
+  font-size: .82rem; color: var(--ink-soft);
+}
+.chart-key i { display: inline-block; width: 14px; height: 10px; margin-right: 5px; vertical-align: -1px; }
+.chart-key .k-band { background: var(--accent-soft); border: 1px solid var(--accent); }
+.chart-key .k-med { background: var(--ink); height: 3px; vertical-align: 3px; }
+.chart-key .k-const { background: var(--warn); }
+@media (max-width: 640px) {
+  .chart-rows, .chart-axis { grid-template-columns: 64px 1fr; }
+}

@@ -1,25 +1,5 @@
 # Coordination board
 
-## Session `arena/c1b491fb-tino3` — brief re-audit: recapture-rate correction, local parcel-tax terms, imputed-rent break-even, pre-committed decision rules, distribution chart · claimed 2026-11-15
-
-*Branch note:* Arena pins this session to `arena/c1b491fb-tino3`, based on `main` at `ee7082c` (PR #118). The board's `session-<id>/<task>` naming cannot be used; no other branch is created, switched to, or pushed, and `main` is not force-pushed. Board read in full before claiming.
-
-*Scope and limits:* the owner's brief repeats items already delivered by earlier sessions. This session re-checks each item against the built site, fixes what is wrong, and adds what is missing. Items that need an outside party (independent appraisal, rent opinion, comparables, insurer quote, written valuation at death, adviser review) stay open and are listed on the new `decision-rules.html`. The pre-rounding Git history scrub is an owner action (it needs a force-push to `main`), so it is not performed here.
-
-**Closing record (E-7).** Pull request **#122** (`arena/c1b491fb-tino3` into `main`) was merged with a merge commit at 2026-11-15 12:03 UTC; the merge commit on `main` is `e1e6bb8`. The PR was not waited on for review, and it was not merged with `--auto`. Checks: the `Verify static site` workflow passed on the PR head `a973bc4` and on `main` at `e1e6bb8`; the GitHub Pages deploy for `e1e6bb8` (run `43711885600`) succeeded. The live site serves the new `decision-rules.html` and the Prop 3 and local parcel tax rows on `taxes.html`. Between the PR opening and the merge, `main` moved (PR #119 and #120 documentation reconciliation, then PR #121 from another session). The conflicts in `README.md` and `COORDINATION.md` were resolved by keeping both sides, and the README counts were refreshed to the current build (23 pages, 99 ledger entries, 930 table rows: 788 linked, 142 registered as unsourceable). One rebase attempt replayed `main`'s commits onto the branch during that merge; it was aborted before any push, and the branch tip was unchanged. No work was lost. Not performed: the pre-rounding Git history scrub, which needs an owner-approved force-push to `main`.
-
-*Findings and decisions (15 November 2026):* (1) Recapture rate corrected to 42.1% (25% + 13.3% + 3.8%). (2) Form 540 surcharge: 1% on taxable income above $1,000,000 (Behavioral Health Services Tax), confirmed in the official 2026 Form 540-ES instructions (ledger `ftb_540es_2026`). The line-62 reference in that ledger entry is not checked against the 2025 booklet and is not relied on. (3) Local parcel tax (Proposition H): statutory rates read from the official legal text, sections 1803 to 1806, 1809 to 1810 and the Administrative Code amendment (section 37.3(a)(12)). Property B is modelled at its $249 floor because the building area is not supplied. The senior reduction ($249 per unit) and the tenant pass-through (50%, $65 per unit) are reported but not credited. Official city links are withheld, because the verifier's host list deliberately excludes jurisdiction-specific pages; the three documents are logged on the review register. (4) Imputed-rent break-even shown beside the letting break-even. (5) Decision rules and the draft investment policy are unsigned; the sign-off fields are blank. (6) Distribution chart is an inline SVG built from the verified state index. (7) Found and fixed on this pass: a stale metro-area growth figure (6.9%/3.3%) in the executive summary, now computed from the state series (6.4%/2.6%); negative amounts in the summary table; a parcel-tax figure that was not rounded to $10; Prop 3 wording that said the rate was treated as current law, now "not law until certified"; a caveat that misstated the direction of the pass-through effect.
-
-| Task | Status | Owner | File scope |
-|---|---|---|---|
-| E-1 Correct the depreciation-recapture rate: the components the site cites (25% federal unrecaptured section 1250, 13.3% California including the 1% surcharge, 3.8% NIIT) sum to 42.1%, not the 41.1% in the model | **done** (commit `459ade0` and follow-ups in the PR) | `arena/c1b491fb-tino3` | `assets/data/inputs.json`, `assets/data/model.json` (regenerated), `scripts/build.py` (taxes text) |
-| E-2 Verify the 1% surcharge on FTB Form 540-ES and Form 540; correct the Proposition 3 wording (results unofficial, certification due 11 December 2026) | **done** (commit `459ade0` and follow-ups in the PR) | `arena/c1b491fb-tino3` | `scripts/build.py` (taxes, laws), `assets/sources.json` (append `ftb_540es_2026`) |
-| E-3 Model the local parcel tax approved on 3 November 2026 (Proposition H, parcel tax for transit operations, 1 July 2027 to 30 June 2042) with its official rates, floor and caps, on Property B | **done** (commit `459ade0` and follow-ups in the PR) | `arena/c1b491fb-tino3` | `assets/data/inputs.json`, `scripts/model.py` (costs_b_now), `scripts/build.py` (property B, timeline, laws, questions, review) |
-| E-4 Inflation-indexed imputed-rent break-even for the living paths (the rent a comparable home would cost, at which living equals selling and investing), shown beside the existing letting break-even | **done** (commit `459ade0` and follow-ups in the PR) | `arena/c1b491fb-tino3` | `scripts/model.py` (new output key), `scripts/build.py` (decision page) |
-| E-5 Pre-committed decision rules and a draft investment policy for the sale proceeds, written before any figure arrives; owner sign-off fields left blank | **done** (commit `459ade0` and follow-ups in the PR) | `arena/c1b491fb-tino3` | `scripts/build.py` (new page `decision-rules.html`), `scripts/package_site.py` (page list via builder) |
-| E-6 Distribution chart on the projections page: annual house-price changes in the verified state record, 1976 to 2025 | **done** (commit `459ade0` and follow-ups in the PR) | `arena/c1b491fb-tino3` | `scripts/build.py` (projections page) |
-| E-7 Gates, pull request to `main`, merge without waiting, confirm the Pages deploy, record the result | **done** (PR #122 merged; Pages deploy succeeded; see the closing record below) | `arena/c1b491fb-tino3` | this section, `README.md` (counts), `EXECUTIVE_SUMMARY.md` (generated) |
-
 ## Session `arena/1ca458e9-tino3` — reconcile current project documentation and re-run final checks · claimed 2026-11-15
 
 *Branch note:* Arena pins this session to `arena/1ca458e9-tino3`, branched from `main` at `ee7082c`. Work remains on this branch only; the pinned branch name is used instead of the requested session/task branch convention.
@@ -69,6 +49,267 @@ Eight official sources re-opened live on the publishers' own domains, independen
 The stale session's substantive work landed through PR #110 (`8e4f52ad`); its branch carried two unmerged closing commits (`3f546b3` prose fix, `57c6397` board record). Per the takeover rule the prose fix was re-applied to `scripts/build.py` with its original wording (the history-audit prose now names the county and city names class, matching the audit table's "Place name, or the county or city name" row with 917 history matches and 0 published), `review.html` was regenerated, the F-4 row is marked closed with the handoff noted, and the closing note is recorded in that session's section. The branch history of `arena/f8ab312e-tino3` preserves both original commits; nothing was discarded. Word count check: the prose change touches only the two sentences describing identifier classes; the counts table is untouched.
 
 *Scope note on other sessions' tables:* the `da1ed309` claim table still reads D-2/D-4/D-5/D-6 as "pending" while that session's own record below confirms all of them done and published (PRs #116/#117/#118). Per the file-ownership rule this session does not edit that table; it logs the observation here for the final integration session to normalize. The `f8ab312e` F-4 status cell is the one exception: the takeover rule explicitly authorizes taking over a stale task and noting the handoff, which requires touching that status cell. No file overlap with `arena/1ca458e9-tino3` (README only).
+
+## Session `arena/159e49ed-tino3` — requirement line-by-line audit, Form 540 remediation, distribution chart, ranges scrub and publication · claimed 2026-11-15
+
+*Branch note:* Arena pins this session to `arena/159e49ed-tino3` (based on `main` at `ee7082c`). The board's `session-<id>/<task>` branch naming cannot be used; no other branch is created, switched to or pushed. Pushes go to this branch only; the pull request is opened from it to `main`.
+
+Baseline at claim: `build.py` (22 pages, 870 rows), `verify.py`, `privacy_boundary.py`, `package_site.py` and `verify_legacy.py --config-only` all exit 0 on `ee7082c`. No pull request is open. No other session has an unexpired claim on the files below.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| G-1 Run the outstanding **Form 540** item: re-read the official FTB rate schedules and the capital-gains page, test the published "1% above $1,000,000 is not modelled" caveat against the model's actual gain rate, fix the claim, and add the surcharge as a named sensitivity so the value is computed rather than asserted | **done** | `arena/159e49ed-tino3` | `scripts/model.py` (append only), `scripts/build.py` (taxes page, review page), `assets/data/inputs.json`, `assets/sources.json` (append only) |
+| G-2 Line-by-line audit of the two published roll tables: implied bill / assessed-value ratio per year, 2% cap compliance, and reconciliation against the published ad valorem rates; publish every finding as a numbered irregularity with the evidence and a source link, and change no owner figure | **done** | `arena/159e49ed-tino3` | `scripts/build.py` (review page audit section; new section) |
+| G-3 Distribution chart on the projections page: the block-bootstrap distribution already computed in `economy.json`, drawn with CSS only (the site runs no script), with the single-line baseline shown against the range | **done** | `arena/159e49ed-tino3` | `scripts/build.py` (projections page), `assets/style.css` |
+| G-4 Second ranges scrub: list every assumption still published as a point value with no band, and either band it from a cited record or mark it explicitly as a point input | **done** | `arena/159e49ed-tino3` | `assets/data/inputs.json`, `scripts/build.py` (review page) |
+| G-5 Local-rule research: read the county assessor, city transfer-tax, rent-board and local measure pages, keep the findings for the owner **outside the tracked tree** (the privacy gate, correctly, forbids the jurisdiction names and their host names in the published tree), and publish only the jurisdiction-free status on the site | **done** | `arena/159e49ed-tino3` | `internal/` (git-ignored, never published), `scripts/build.py` (questions page status rows) |
+| G-6 Run every gate, open the pull request from this branch, merge without waiting, confirm the Pages deploy, record the result | **in progress** | `arena/159e49ed-tino3` | `COORDINATION.md` (this section only) |
+| G-7 Pre-commitment page: the brief asks for the household to agree in writing, before the figures arrive, what would make it choose each path. New `precommit.html` carries that agreement as a form with the model's own break-even thresholds, plus an empty decision record | **done** | `arena/159e49ed-tino3` | `scripts/build.py` (new page builder, navigation, page registry), `README.md` (site map, counts) |
+| G-8 Imputed-rent input for the living path: the published comparison charges living every cost of ownership and credits it with no housing at all, so it is biased against living by the value of the roof. Add the input, price the bias at 0/50/75/100% of the same market rent, and publish the result without changing the headline | **done** | `arena/159e49ed-tino3` | `assets/data/inputs.json`, `scripts/model.py` (append only), `scripts/build.py` (decision page section) |
+
+### G-1 and G-2 findings, 15 November 2026
+
+**G-1 - the Form 540 item is closed, and the page was wrong about its own arithmetic.**
+
+| Source id | Publisher and document | Verdict |
+|---|---|---|
+| `ftb_rates` | FTB, 2025 California tax rate schedules (Form 540) | Re-read. The top bracket is **12.30%** on Schedules X, Y and Z alike. |
+| `ftb_cg` | FTB, Capital gains and losses | Re-read. "California does not have a lower rate for capital gains. All capital gains are taxed as ordinary income." |
+| `rtc17043` | RTC section 17043 (leginfo) | Read in full and added to the ledger. 1% above $1,000,000; subsection (c) switches off sections 17039, 17041 and 17045, so no joint doubling and no indexing. |
+
+The defect: the taxes page listed "the additional 1% California tax above $1,000,000" under *not modelled*. It is
+modelled - the 13.3% California layer in `combined_gain_tax_rate` **is** 12.3% + 1%. The bullet described the
+arithmetic in a way that would have been wrong had it been implemented: it implied a bracket, and section
+17043(c) is explicit that the joint-return and bracket rules do not apply. Corrected in three places: the
+ledger entry, the taxes page (new computed section with the statute quoted), and the combined-rate basis text.
+New published figures: the surcharge adds about $132,370 of tax to a late sale after living in the home, about
+$486,370 after letting it out, and $0 to the sale at inheritance the site recommends. Recommendation checked
+after the change: unchanged.
+
+**G-2 - the roll tables pass every arithmetic check, and expose one real modelling exposure.**
+
+Seven numbered findings (R-1 to R-7) now publish on `review.html` with the re-derived table behind them.
+R-1: all 11 Property A and 9 Property B year-pairs reproduce. R-2: no assessed value exceeds the 2% cap.
+R-3: the fixed part of the bill is 11.7% of Property A's and **44.7%** of Property B's, so the 2% cap bounds at
+most 55.3% of Property B's bill. R-4/R-5: fixed charges grew 8.12%/yr on Property B over 2016-2025 (a single
+2018 step) but only 2.36%/yr over 2020-2025; the model uses 2.5%, which is above Property A's 0.79%/yr and below
+Property B's 8.12%/yr. The assumption was **not** changed - it moves every published figure and is the owner's
+choice - so the exposure is published instead. R-6: the 1.18% Property A rate is consistent with the bills but
+not identifiable from them, and the page now says so.
+
+**G-5 - the timeline now has a decision calendar.** The page already carried every legal clock from death.
+The gap was the clocks that start before it. A ten-row table now lists what to settle, from whom, by when, and
+what each answer moves - with the two blocking items first (the section 63.2 relationship, which every Prop 19
+figure depends on, and the written investment policy, which has to exist before the money). The rows are
+deliberately unlinked to an official source, because a task in the owner's own calendar has no statute; each
+carries the register link and the page says so instead of inventing a citation. (The local-rule research in the
+original G-5 scope is not published here for a reason the gate already enforces: the jurisdiction names cannot
+appear in this tree. It is recorded on review.html as an open question with the publisher type named and no
+place named.)
+
+**G-4 - the ranges scrub, completed on the model's own knobs.** 16 of the 17 assumptions the model
+uses now carry a low and a high case, and the new assumption register on `review.html` publishes each one with
+the evidence behind its band. Three bands are measured from the record (Property B's published rate, the
+fixed-charge growth measured in the G-2 audit, and the recapture rate built from published statutory rates);
+one is a diagnostic band (Property A's rate, bounded by the audit rather than published); one is fixed by
+statute; the rest are stated scenarios and labelled as judgement. Two assumptions still have no band by
+design: section 17043's rate does not vary, and the phase-in length is published as three separate cases.
+
+Defects found in my own work during verification and fixed: `pcf()` already emits a percent sign, so the first
+draft published "118.00%%"; and finding R-5's original heading ("below both long windows") was false for
+Property A. Both were caught by reading the built page, not by the gates.
+
+
+## Session `arena/159e49ed-tino3` — requirement line-by-line audit, Form 540 remediation, distribution chart, ranges scrub and publication · claimed 2026-11-15
+
+*Branch note:* Arena pins this session to `arena/159e49ed-tino3` (based on `main` at `ee7082c`). The board's `session-<id>/<task>` branch naming cannot be used; no other branch is created, switched to or pushed. Pushes go to this branch only; the pull request is opened from it to `main`.
+
+Baseline at claim: `build.py` (22 pages, 870 rows), `verify.py`, `privacy_boundary.py`, `package_site.py` and `verify_legacy.py --config-only` all exit 0 on `ee7082c`. No pull request is open. No other session has an unexpired claim on the files below.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| G-1 Run the outstanding **Form 540** item: re-read the official FTB rate schedules and the capital-gains page, test the published "1% above $1,000,000 is not modelled" caveat against the model's actual gain rate, fix the claim, and add the surcharge as a named sensitivity so the value is computed rather than asserted | **done** | `arena/159e49ed-tino3` | `scripts/model.py` (append only), `scripts/build.py` (taxes page, review page), `assets/data/inputs.json`, `assets/sources.json` (append only) |
+| G-2 Line-by-line audit of the two published roll tables: implied bill / assessed-value ratio per year, 2% cap compliance, and reconciliation against the published ad valorem rates; publish every finding as a numbered irregularity with the evidence and a source link, and change no owner figure | **done** | `arena/159e49ed-tino3` | `scripts/build.py` (review page audit section; new section) |
+| G-3 Distribution chart on the projections page: the block-bootstrap distribution already computed in `economy.json`, drawn with CSS only (the site runs no script), with the single-line baseline shown against the range | **done** | `arena/159e49ed-tino3` | `scripts/build.py` (projections page), `assets/style.css` |
+| G-4 Second ranges scrub: list every assumption still published as a point value with no band, and either band it from a cited record or mark it explicitly as a point input | **done** | `arena/159e49ed-tino3` | `assets/data/inputs.json`, `scripts/build.py` (review page) |
+| G-5 Local-rule research: read the county assessor, city transfer-tax, rent-board and local measure pages, keep the findings for the owner **outside the tracked tree** (the privacy gate, correctly, forbids the jurisdiction names and their host names in the published tree), and publish only the jurisdiction-free status on the site | **done** | `arena/159e49ed-tino3` | `internal/` (git-ignored, never published), `scripts/build.py` (questions page status rows) |
+| G-6 Run every gate, open the pull request from this branch, merge without waiting, confirm the Pages deploy, record the result | **in progress** | `arena/159e49ed-tino3` | `COORDINATION.md` (this section only) |
+| G-7 Pre-commitment page: the brief asks for the household to agree in writing, before the figures arrive, what would make it choose each path. New `precommit.html` carries that agreement as a form with the model's own break-even thresholds, plus an empty decision record | **done** | `arena/159e49ed-tino3` | `scripts/build.py` (new page builder, navigation, page registry), `README.md` (site map, counts) |
+| G-8 Imputed-rent input for the living path: the published comparison charges living every cost of ownership and credits it with no housing at all, so it is biased against living by the value of the roof. Add the input, price the bias at 0/50/75/100% of the same market rent, and publish the result without changing the headline | **done** | `arena/159e49ed-tino3` | `assets/data/inputs.json`, `scripts/model.py` (append only), `scripts/build.py` (decision page section) |
+
+### G-1 and G-2 findings, 15 November 2026
+
+**G-1 - the Form 540 item is closed, and the page was wrong about its own arithmetic.**
+
+| Source id | Publisher and document | Verdict |
+|---|---|---|
+| `ftb_rates` | FTB, 2025 California tax rate schedules (Form 540) | Re-read. The top bracket is **12.30%** on Schedules X, Y and Z alike. |
+| `ftb_cg` | FTB, Capital gains and losses | Re-read. "California does not have a lower rate for capital gains. All capital gains are taxed as ordinary income." |
+| `rtc17043` | RTC section 17043 (leginfo) | Read in full and added to the ledger. 1% above $1,000,000; subsection (c) switches off sections 17039, 17041 and 17045, so no joint doubling and no indexing. |
+
+The defect: the taxes page listed "the additional 1% California tax above $1,000,000" under *not modelled*. It is
+modelled - the 13.3% California layer in `combined_gain_tax_rate` **is** 12.3% + 1%. The bullet described the
+arithmetic in a way that would have been wrong had it been implemented: it implied a bracket, and section
+17043(c) is explicit that the joint-return and bracket rules do not apply. Corrected in three places: the
+ledger entry, the taxes page (new computed section with the statute quoted), and the combined-rate basis text.
+New published figures: the surcharge adds about $132,370 of tax to a late sale after living in the home, about
+$486,370 after letting it out, and $0 to the sale at inheritance the site recommends. Recommendation checked
+after the change: unchanged.
+
+**G-2 - the roll tables pass every arithmetic check, and expose one real modelling exposure.**
+
+Seven numbered findings (R-1 to R-7) now publish on `review.html` with the re-derived table behind them.
+R-1: all 11 Property A and 9 Property B year-pairs reproduce. R-2: no assessed value exceeds the 2% cap.
+R-3: the fixed part of the bill is 11.7% of Property A's and **44.7%** of Property B's, so the 2% cap bounds at
+most 55.3% of Property B's bill. R-4/R-5: fixed charges grew 8.12%/yr on Property B over 2016-2025 (a single
+2018 step) but only 2.36%/yr over 2020-2025; the model uses 2.5%, which is above Property A's 0.79%/yr and below
+Property B's 8.12%/yr. The assumption was **not** changed - it moves every published figure and is the owner's
+choice - so the exposure is published instead. R-6: the 1.18% Property A rate is consistent with the bills but
+not identifiable from them, and the page now says so.
+
+**G-5 - the timeline now has a decision calendar.** The page already carried every legal clock from death.
+The gap was the clocks that start before it. A ten-row table now lists what to settle, from whom, by when, and
+what each answer moves - with the two blocking items first (the section 63.2 relationship, which every Prop 19
+figure depends on, and the written investment policy, which has to exist before the money). The rows are
+deliberately unlinked to an official source, because a task in the owner's own calendar has no statute; each
+carries the register link and the page says so instead of inventing a citation. (The local-rule research in the
+original G-5 scope is not published here for a reason the gate already enforces: the jurisdiction names cannot
+appear in this tree. It is recorded on review.html as an open question with the publisher type named and no
+place named.)
+
+**G-4 - the ranges scrub, completed on the model's own knobs.** 16 of the 17 assumptions the model
+uses now carry a low and a high case, and the new assumption register on `review.html` publishes each one with
+the evidence behind its band. Three bands are measured from the record (Property B's published rate, the
+fixed-charge growth measured in the G-2 audit, and the recapture rate built from published statutory rates);
+one is a diagnostic band (Property A's rate, bounded by the audit rather than published); one is fixed by
+statute; the rest are stated scenarios and labelled as judgement. Two assumptions still have no band by
+design: section 17043's rate does not vary, and the phase-in length is published as three separate cases.
+
+Defects found in my own work during verification and fixed: `pcf()` already emits a percent sign, so the first
+draft published "118.00%%"; and finding R-5's original heading ("below both long windows") was false for
+Property A. Both were caught by reading the built page, not by the gates.
+
+### Second rebase, and the handoff of G-7 to `decision-rules.html` — 15 November 2026
+
+A second session (`c1b491fb`, PR #122) landed while this branch was waiting on its check, and it overlapped
+three of this session's tasks. Resolved without discarding either side:
+
+- **G-7 (the pre-commitment form) is superseded, and this session's version was dropped on purpose.** PR #122
+  shipped `decision-rules.html`: nine gating questions (G1-G9), six pre-committed rules (R1-R6) with "pending,
+  owner to complete" cells, an investment-policy draft and an owner sign-off block. It covers everything
+  `precommit.html` did and more, so keeping both would have been two competing rule pages. `precommit.html`
+  was removed and the navigation points at `decision-rules.html`. No content was lost: the conditions this
+  session wrote are a subset of that page's rules.
+- **The imputed-rent idea overlapped, and both remain.** PR #122 added a break-even imputed rent
+  (`imputed_rent_breakeven_monthly`) as a single number on its pages. This session's section on `decision.html`
+  is the complementary half: a four-row sensitivity showing what the living path is worth at 0/50/75/100% of
+  market rent. The two agree and use the same gap, so they are kept together.
+- **Mechanical collisions, resolved by rebuilding from source rather than hand-merging generated files.**
+  Rebasing commit by commit conflicted four times in generated HTML, so the branch was rebuilt by taking
+  `main`'s tree and re-applying this session's source changes, then regenerating every page. Four defects
+  that the naive overlay would have introduced were found and fixed this way:
+
+  1. `scripts/privacy_boundary.py` lost PR #122's `249, 65` allowance for the local parcel-tax figures,
+     because this session's older copy of the file overlaid it. Restored from `main`.
+  2. `page_decision_rules`, its `PAGE_TITLES` entry and its `PAGE_BUILDERS` entry were absent from this
+     session's copy of `build.py`, so the page existed but was unregistered. Restored from `main`.
+  3. `imputed_rent_breakeven()` and the two model keys it fills were missing from `model.py` for the same
+     reason. Restored from `main`, and the figure now reproduces ($25,360 a month for 2045).
+  4. The navigation still pointed at the deleted `precommit.html`. Repointed.
+
+  **Every one of these was caught by a gate, not by reading** - which is the argument for having them. Final
+  state: 23 pages, 984 table rows, 838 official-source-linked, 98 ledger sources, and all five gates pass
+  from a clean rebuild.
+
+**Publication:** PR https://github.com/wingbangboozle1-lang/Tino3/pull/123
+
+## Session `arena/159e49ed-tino3` — requirement line-by-line audit, Form 540 remediation, distribution chart, ranges scrub and publication · claimed 2026-11-15
+
+*Branch note:* Arena pins this session to `arena/159e49ed-tino3` (based on `main` at `ee7082c`). The board's `session-<id>/<task>` branch naming cannot be used; no other branch is created, switched to or pushed. Pushes go to this branch only; the pull request is opened from it to `main`.
+
+Baseline at claim: `build.py` (22 pages, 870 rows), `verify.py`, `privacy_boundary.py`, `package_site.py` and `verify_legacy.py --config-only` all exit 0 on `ee7082c`. No pull request is open. No other session has an unexpired claim on the files below.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| G-1 Run the outstanding **Form 540** item: re-read the official FTB rate schedules and the capital-gains page, test the published "1% above $1,000,000 is not modelled" caveat against the model's actual gain rate, fix the claim, and add the surcharge as a named sensitivity so the value is computed rather than asserted | **done** | `arena/159e49ed-tino3` | `scripts/model.py` (append only), `scripts/build.py` (taxes page, review page), `assets/data/inputs.json`, `assets/sources.json` (append only) |
+| G-2 Line-by-line audit of the two published roll tables: implied bill / assessed-value ratio per year, 2% cap compliance, and reconciliation against the published ad valorem rates; publish every finding as a numbered irregularity with the evidence and a source link, and change no owner figure | **done** | `arena/159e49ed-tino3` | `scripts/build.py` (review page audit section; new section) |
+| G-3 Distribution chart on the projections page: the block-bootstrap distribution already computed in `economy.json`, drawn with CSS only (the site runs no script), with the single-line baseline shown against the range | **done** | `arena/159e49ed-tino3` | `scripts/build.py` (projections page), `assets/style.css` |
+| G-4 Second ranges scrub: list every assumption still published as a point value with no band, and either band it from a cited record or mark it explicitly as a point input | **done** | `arena/159e49ed-tino3` | `assets/data/inputs.json`, `scripts/build.py` (review page) |
+| G-5 Local-rule research: read the county assessor, city transfer-tax, rent-board and local measure pages, keep the findings for the owner **outside the tracked tree** (the privacy gate, correctly, forbids the jurisdiction names and their host names in the published tree), and publish only the jurisdiction-free status on the site | **done** | `arena/159e49ed-tino3` | `internal/` (git-ignored, never published), `scripts/build.py` (questions page status rows) |
+| G-6 Run every gate, open the pull request from this branch, merge without waiting, confirm the Pages deploy, record the result | pending | `arena/159e49ed-tino3` | `COORDINATION.md` (this section only) |
+| G-7 Pre-commitment page: the brief asks for the household to agree in writing, before the figures arrive, what would make it choose each path. New `precommit.html` carries that agreement as a form with the model's own break-even thresholds, plus an empty decision record | **done** | `arena/159e49ed-tino3` | `scripts/build.py` (new page builder, navigation, page registry), `README.md` (site map, counts) |
+| G-8 Imputed-rent input for the living path: the published comparison charges living every cost of ownership and credits it with no housing at all, so it is biased against living by the value of the roof. Add the input, price the bias at 0/50/75/100% of the same market rent, and publish the result without changing the headline | **done** | `arena/159e49ed-tino3` | `assets/data/inputs.json`, `scripts/model.py` (append only), `scripts/build.py` (decision page section) |
+
+### G-1 and G-2 findings, 15 November 2026
+
+**G-1 - the Form 540 item is closed, and the page was wrong about its own arithmetic.**
+
+| Source id | Publisher and document | Verdict |
+|---|---|---|
+| `ftb_rates` | FTB, 2025 California tax rate schedules (Form 540) | Re-read. The top bracket is **12.30%** on Schedules X, Y and Z alike. |
+| `ftb_cg` | FTB, Capital gains and losses | Re-read. "California does not have a lower rate for capital gains. All capital gains are taxed as ordinary income." |
+| `rtc17043` | RTC section 17043 (leginfo) | Read in full and added to the ledger. 1% above $1,000,000; subsection (c) switches off sections 17039, 17041 and 17045, so no joint doubling and no indexing. |
+
+The defect: the taxes page listed "the additional 1% California tax above $1,000,000" under *not modelled*. It is
+modelled - the 13.3% California layer in `combined_gain_tax_rate` **is** 12.3% + 1%. The bullet described the
+arithmetic in a way that would have been wrong had it been implemented: it implied a bracket, and section
+17043(c) is explicit that the joint-return and bracket rules do not apply. Corrected in three places: the
+ledger entry, the taxes page (new computed section with the statute quoted), and the combined-rate basis text.
+New published figures: the surcharge adds about $132,370 of tax to a late sale after living in the home, about
+$486,370 after letting it out, and $0 to the sale at inheritance the site recommends. Recommendation checked
+after the change: unchanged.
+
+**G-2 - the roll tables pass every arithmetic check, and expose one real modelling exposure.**
+
+Seven numbered findings (R-1 to R-7) now publish on `review.html` with the re-derived table behind them.
+R-1: all 11 Property A and 9 Property B year-pairs reproduce. R-2: no assessed value exceeds the 2% cap.
+R-3: the fixed part of the bill is 11.7% of Property A's and **44.7%** of Property B's, so the 2% cap bounds at
+most 55.3% of Property B's bill. R-4/R-5: fixed charges grew 8.12%/yr on Property B over 2016-2025 (a single
+2018 step) but only 2.36%/yr over 2020-2025; the model uses 2.5%, which is above Property A's 0.79%/yr and below
+Property B's 8.12%/yr. The assumption was **not** changed - it moves every published figure and is the owner's
+choice - so the exposure is published instead. R-6: the 1.18% Property A rate is consistent with the bills but
+not identifiable from them, and the page now says so.
+
+**G-5 - the timeline now has a decision calendar.** The page already carried every legal clock from death.
+The gap was the clocks that start before it. A ten-row table now lists what to settle, from whom, by when, and
+what each answer moves - with the two blocking items first (the section 63.2 relationship, which every Prop 19
+figure depends on, and the written investment policy, which has to exist before the money). The rows are
+deliberately unlinked to an official source, because a task in the owner's own calendar has no statute; each
+carries the register link and the page says so instead of inventing a citation. (The local-rule research in the
+original G-5 scope is not published here for a reason the gate already enforces: the jurisdiction names cannot
+appear in this tree. It is recorded on review.html as an open question with the publisher type named and no
+place named.)
+
+**G-4 - the ranges scrub, completed on the model's own knobs.** 16 of the 17 assumptions the model
+uses now carry a low and a high case, and the new assumption register on `review.html` publishes each one with
+the evidence behind its band. Three bands are measured from the record (Property B's published rate, the
+fixed-charge growth measured in the G-2 audit, and the recapture rate built from published statutory rates);
+one is a diagnostic band (Property A's rate, bounded by the audit rather than published); one is fixed by
+statute; the rest are stated scenarios and labelled as judgement. Two assumptions still have no band by
+design: section 17043's rate does not vary, and the phase-in length is published as three separate cases.
+
+Defects found in my own work during verification and fixed: `pcf()` already emits a percent sign, so the first
+draft published "118.00%%"; and finding R-5's original heading ("below both long windows") was false for
+Property A. Both were caught by reading the built page, not by the gates.
+
+### Rebase and collision record, 15 November 2026
+
+While this session worked, `main` advanced by three merges (#119 README reconciliation, #120, and #121 the
+`cd33d6db` stale-session takeover). PR #121 was open, clean and passing when this session reached publication,
+and it touched `COORDINATION.md`, `review.html` and `scripts/build.py` — the same files as G-1 to G-8. Per the
+rule it was **not** duplicated or discarded: it was left to merge first (`dc9ea79`), and this branch was rebased
+onto that commit. Two conflicts, both resolved keeping both sides:
+
+- `COORDINATION.md`: the two sessions' claim sections are independent, so both are kept, this session's after
+  `1ca458e9` and `cd33d6db`. Nothing was deleted from either.
+- `README.md`: `1ca458e9` had already replaced the stale duplicate paragraphs this session had also fixed, so
+  its newer prose was kept and only two things were added to it — the `precommit.html` bullet in the site map
+  and the 23-page / 98-entry counts.
+
+After the rebase the tree was rebuilt from scratch (model, economy, build) and all gates re-run: 23 pages, 944
+table rows, 814 official-source-linked, 134 registered unsourceable, 98 ledger sources, privacy boundary pass,
+artifact pass, Jekyll config pass. The `cd33d6db` history-audit prose change is present in the rebuilt
+`review.html`, so that session's work survived the rebase.
 
 ## Session `arena/f8ab312e-tino3` — real 1929/2008 entry-timing replays, official-source re-verification, privacy audit and publication · claimed 2026-11-15
 
