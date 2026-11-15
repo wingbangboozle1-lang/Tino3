@@ -290,12 +290,22 @@ def page(name: str, body: str, lede: str = "") -> str:
 
 # ------------------------------------------------------------------- content --
 def privacy_banner() -> str:
+    """The privacy and accuracy notice.
+
+    The wording is deliberately specific. An earlier version said rounding "is
+    not anonymity" and stopped there, which was true and unhelpful: it did not
+    say what the residual exposure actually is, what a reader could do with it,
+    or what the owner can do about it. This version names the exposure, names
+    its limit, and lists the options in order of cost.
+    """
     return callout("privacy", "Privacy and accuracy notice", f"""
 <ul>
 <li><strong>What is published.</strong> Market values, assessed values, tax bills, rent and running costs, rounded to the nearest $10 as requested, plus the model outputs computed from them.</li>
 <li><strong>What is never published.</strong> No name, street address, parcel number, ZIP code, trust term, beneficiary detail or utility account appears on any page or in any published file. The two properties are called Property A (the home being inherited, in REDACTED County) and Property B (the three-unit building already owned by the heir, in the City and County of REDACTED).</li>
+<li><strong>The county and the city are published on purpose.</strong> The property tax, rent and transfer rules in this analysis are county and city rules. Naming them is what makes the official rate pages, the rent rules and the transfer-tax bands readable, and every table row links to the publisher that states the rule. A county and a city are not a street address, but they are an identifier at one level: they tell a reader which public roll to look in.</li>
+<li><strong>What a reader holding the county roll can do.</strong> The assessment history on the Property A page is that county's own public assessment roll, rounded to the nearest $10. A reader who downloads the county's roll and compares it with the published values can single out the parcel, because the roll is public and the values sit close to it. Rounding removes the exact-figure search; it does not remove the determined reader. That is the residual exposure, and it is stated here rather than left implied.</li>
+<li><strong>Four ways to close it, in order of cost.</strong> <em>(a)</em> Leave it: the analysis stays complete, the county and city stay named. <em>(b)</em> Withdraw the property-level figures and publish the law and the method without the numbers: the strongest step that keeps every official source. <em>(c)</em> Withdraw the jurisdiction as well, replacing the county and city with placeholders: this also withdraws the local rate and rent rules, because those rules are jurisdictional, and leaves the state and federal analysis intact. <em>(d)</em> Rewrite the repository's history and make it private: the only step that touches what earlier commits and pull-request diffs still hold. Each option is on the <a href="suggestions.html">suggestions page</a> with its cost. None has been adopted, because the choice is the owner's.</li>
 <li><strong>The inherited cash.</strong> The amount is not published. The estate page works entirely in anonymous scenario bands.</li>
-<li><strong>Rounding is not anonymity.</strong> Rounding to $10 defeats a search for an exact figure; it does not stop someone who already holds the county record from recognising a parcel. That residual risk is disclosed here rather than hidden.</li>
 <li><strong>Owner figures are unverified.</strong> Values taken from the owner's own records are labelled <span class="badge unverified">unverified</span> unless an official public record was checked. They are listed again on the <a href="review.html">flagged for review</a> page.</li>
 <li><strong>History.</strong> Earlier commits in this public repository, previous pull-request diffs, forks and external copies are separate exposure surfaces. Nothing on this site can certify them erased.</li>
 </ul>
@@ -2081,6 +2091,18 @@ SUGGESTIONS = [
     ("S-22", "Decide whether the public repository and its history should stay public",
      "The repository is public and earlier commits contain unrounded owner figures. Rounding the published page does not change what Git history holds. Making the repository private, or rewriting history, are the only two ways to close that exposure.",
      "Medium", "High for privacy, none for the analysis", "review", []),
+    ("S-23", "Choose how much of the location to publish, from four options",
+     "The county and the city are named, and the assessment history is that county's own public roll at $10 precision. A reader holding the roll can single out the parcel. The four options, in order of cost: leave it as it is; withdraw the property-level figures and keep the law and the method; withdraw the jurisdiction as well, which also withdraws the local rate and rent rules; or rewrite the history and make the repository private. Nothing has been chosen. This is the owner's decision, and it is the one decision that changes what the rest of the site is for.",
+     "Medium", "High for privacy; option (c) removes the local-law analysis", "review", ["scc_ratebook", "boe_lta26002"]),
+    ("S-24", "Run the Git-history scrub as a single owner action",
+     "The pre-rounding figures and the withdrawn utility links are still in earlier commits and pull-request diffs. The scrub is one command set on a clean clone: install git-filter-repo, write a replacement file listing the tokens to remove, run the filter over all refs, then force-push the rewritten branches and tags. Before pushing, confirm the filter changed the expected files and that the working tree still builds and passes every gate; after pushing, confirm the live site still serves and that the old objects are no longer reachable from any branch or tag. It cannot recall copies that were already downloaded, cached or forked, and it breaks every existing clone. It has not been run here: this session is pinned to one branch and may push only to it.",
+     "High", "High for privacy; no effect on the analysis", "review", []),
+    ("S-25", "Confirm the property-level insurance premium with three quotes per building",
+     "The insurance figures on both property pages are the owner's estimate. The Department of Insurance publishes a statewide average and an online premium survey, but no average for this postal area, so there is no official figure to compare against. This is the largest single running-cost uncertainty left in the model, and it is the one figure that a paid quote would confirm or correct.",
+     "Low", "Medium: it moves the carrying-cost rows, not the recommendation", "property-a", ["cdi_homeowners_avg"]),
+    ("S-26", "Put a market rent on Property A, or read every letting figure as a floor",
+     "Property A is carried as a single-family home with no rent credited to the letting paths, because no official source publishes a market rent for a specific home and the owner supplied none. Until a rent opinion exists, the letting rows on the decision page are a floor, not a comparison. A documented rent opinion would close the largest single gap in the analysis.",
+     "Low", "Medium: the rental case cannot be judged without it", "decision", ["hud_fmr"]),
 ]
 
 
@@ -2342,7 +2364,13 @@ def page_review() -> str:
         ("Every reassessment figure is conditional on the parent-and-child relationship",
          "Section 63.2 excludes only transfers between parents and their children, or grandparents and grandchildren where the middle generation has died. Every shelter, live-in and rental figure on this site assumes that condition holds. The trust document is the only thing that confirms it and this site has not seen it."),
         ("The 1929 / 2008 equity-entry test is synthetic, not a historical backtest",
-         "The repository has no source-verified S&P total-return sequence for those event windows. The Black Swan page uses an explicitly assumed -40%, +25%, +10% sequence, then the model return; Federal Reserve History links establish event context, not those returns. Obtain a verified total-return dataset before treating any result as a historical simulation."),
+         "The repository has no source-verified S&P total-return sequence for those event windows. The Black Swan page uses an explicitly assumed -40%, then -20%, then -10% sequence, then the model return; Federal Reserve History links establish event context, not those returns. The stated sequence lasts exactly three years, which is why the 36-month parking row coincides with the end of it and reads the same with and without the stress. Obtain a verified total-return dataset before treating any result as a historical simulation."),
+        ("The county and the city are published, and that is a deliberate disclosure",
+         "The property tax, rent and transfer rules in this analysis are county and city rules, so the county and the city are named and their official rate pages are linked. Withdrawing the name while keeping those links would create an appearance of anonymity without delivering any: one click would restore it. The owner therefore gets the complete local-law analysis and an explicit statement of the cost, and the choice to withdraw it is listed on the suggestions page rather than taken silently."),
+        ("The published assessment history is the county's own public roll, rounded to $10",
+         "A reader who downloads the county's public assessment roll and compares it with the figures on the Property A page can single out the parcel. Rounding to $10 removes the exact-figure search, not the determined reader. This is the residual exposure of the published edition and is why the options on the suggestions page are ranked by what each one actually protects."),
+        ("The regional house-price series carry a location crosswalk in the publisher's metadata",
+         "The Black Swan and economy pages link to the official regional house-price indices the model is built on. The publisher's own pages describe those series by their metropolitan area, so the link identifies the area as surely as the prose does. That is accepted rather than hidden, because the series are the empirical basis of the fifty-year analysis and replacing them with a broader index would weaken the black-swan work. No finer crosswalk exists: the gate rejects any place name below county or city level, in prose and in web addresses."),
     ]
     # Each caveat links only to the official source that bears on it; a caveat that is a planning
     # statement rather than a rule says so and links to the register.
@@ -2360,6 +2388,9 @@ def page_review() -> str:
         "A sheltered base is assumed to survive a later move-out": ["rtc63_2_eligibility", "boe_prop19"],
         "Every reassessment figure is conditional on the parent-and-child relationship": ["rtc63_2_eligibility"],
         "The 1929 / 2008 equity-entry test is synthetic, not a historical backtest": ["fedhist_1929", "fedhist_greatrecession"],
+        "The county and the city are published, and that is a deliberate disclosure": ["scc_ratebook", "sf_treas_rate"],
+        "The published assessment history is the county's own public roll, rounded to $10": ["boe_lta26002", "scc_ratebook"],
+        "The regional house-price series carry a location crosswalk in the publisher's metadata": ["fred_hpi_a", "fred_hpi_b"],
     }
     assert set(CAV_WHERE) == {a for a, _ in caveats}, "every caveat needs a source decision"
     cav_rows = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td>"
@@ -2388,6 +2419,12 @@ def page_review() -> str:
         ("The site is published from the repository root by Jekyll",
          "The GitHub Pages source is set to the main branch at the repository root, with a configuration file excluding everything outside the published allowlist. A separate workflow also builds an allowlisted artifact.",
          "The publishing route should be confirmed live after every change. The exclusion list is the control that keeps the rest of the repository out of the site."),
+        ("A location crosswalk between the two placeholders and their jurisdictions is published",
+         "The dashboard, the property pages and the privacy notice name the county and the city, and the Black Swan and economy pages link to the official regional house-price indices the model is built on, whose publisher pages describe those series by metropolitan area. An integration audit on 14 November 2026 confirmed this on the live site and found that the automated gate did not detect it.",
+         "The county and the city are published deliberately because the property tax, rent and transfer rules in this analysis are county and city rules, and every table row links to the publisher that states the rule. The gate now rejects any place name below county or city level, in prose and in web addresses, so this class of disclosure cannot recur silently. The options to withdraw the figures or the jurisdiction are ranked on the suggestions page."),
+        ("The Git history still holds the pre-rounding figures, and this is the one exposure no build step can close",
+         "Rounding applies to what this site publishes. Earlier commits, pull-request diffs and the removed earlier editions hold the unrounded owner figures and the links that were later withdrawn. A content change cannot reach them.",
+         "Closing it needs a history rewrite and a force-push to the main branch, or a visibility change. Both break existing clones and forks, and neither can recall a copy that has already been downloaded or cached. The procedure is set out on the suggestions page as a single owner action, with the checks to run before and after. It has not been run: an integration session is pinned to one branch and may push only to it."),
         ("Verification is a build-time check, not a legal review",
          "The verifier checks that every published table row carries a source link, that no forbidden identifier appears, and that the build is reproducible.",
          "It cannot check whether a legal reading is correct. That needs a professional."),

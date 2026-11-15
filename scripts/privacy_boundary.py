@@ -33,9 +33,22 @@ FORBIDDEN = {
     "bare postal code": re.compile(r"\b(?:REDACTED|REDACTED|REDACTED|REDACTED|REDACTED)\b"),
     "parcel or APN": re.compile(r"\b\d{3}-\d{2,3}-\d{2,3}\b"),
     "phone number": re.compile(r"\b(?:\+?1[-. ]?)?\(?\d{3}\)?[-. ]\d{3}[-. ]\d{4}\b"),
+    # Every place name that would narrow the property below the county or the
+    # city. The list covers the other cities in the two jurisdictions, their
+    # districts and the neighbourhood names inside them. It was extended after
+    # an integration audit found that the gate passed a live page carrying a
+    # location crosswalk, and the list is now checked in prose and in web
+    # addresses alike.
     "property level place name": re.compile(
         r"\b(REDACTED|REDACTED|Outer\s+Sunset|Los\s+Altos|REDACTED|Mountain\s+View|"
-        r"REDACTED|Monte\s+Sereno|Los\s+Gatos|Inner\s+Sunset|REDACTED|Sunset\s+District)\b", re.I),
+        r"REDACTED|Monte\s+Sereno|Los\s+Gatos|Inner\s+Sunset|REDACTED|Sunset\s+District|"
+        r"Milpitas|Gilroy|Morgan\s+Hill|Palo\s+Alto|Menlo\s+Park|East\s+Palo\s+Alto|"
+        r"Alum\s+Rock|Cambrian|Stanford|Los\s+Altos\s+Hills|"
+        r"Richmond|Sunset|Mission|Noe\s+Valley|Bernal\s+Hills|Glen\s+Park|Excelsior|"
+        r"Oceanview|West\s+Portal|Potrero\s+Hill|Dogpatch|Hayes\s+Valley|Nob\s+Hill|"
+        r"Russian\s+Hill|Telegraph\s+Hill|North\s+Beach|Chinatown|Financial\s+District|"
+        r"Marina|Presidio|Cow\s+Hollow|Lone\s+Mountain|Balboa\s+Park|Ingleside|Miraloma|"
+        r"Forest\s+Hill|Stonestown|Claremont|Ashbury|Cole\s+Valley|Haight|Castro|Alameda)\b", re.I),
     # No word boundary on purpose: the place name also appears inside web addresses
     # and utility domains (for example a sanitary district's host name). Those are
     # property-level identifiers too.
@@ -49,6 +62,20 @@ FORBIDDEN = {
 # which the property tax, rent and transfer rules in this analysis operate.
 ALLOWED_PLACE_NAMES = ("REDACTED County", "City and County of REDACTED",
                        "REDACTED", "California", "REDACTED")
+
+# The same idea, enforced rather than asserted. Any jurisdiction-shaped phrase
+# on a published page - "X County", "City and County of Y", "X District" - must
+# be made only of the words that spell the two published jurisdictions. A new
+# county, city, district or service area therefore fails the build rather than
+# reaching the site, which is the failure mode the integration audit found.
+ALLOWED_JURISDICTION_WORDS = {"Santa", "Clara", "San", "Francisco", "County", "City"}
+JURISDICTION_PATTERN = re.compile(
+    r"\b(?:[A-Z][A-Za-z]+|and|of|the){1,4}[ \t]+"
+    r"(?:County|City|District|Borough)\b"
+    r"(?:[ \t]+of[ \t]+(?:[A-Z][A-Za-z]+[ \t]+)*[A-Z][A-Za-z]+)?")
+# The same jurisdiction written with the place after the suffix: "City of X".
+JURISDICTION_OF_PATTERN = re.compile(
+    r"\b(?:[A-Z][A-Za-z]+[ \t]+){0,2}(?:County|City|District|Borough)[ \t]+of[ \t]+[A-Z][A-Za-z]+")
 
 FORBIDDEN_ELEMENTS = re.compile(r"<(?:script|iframe|form|input|textarea|object|embed|img)\b", re.I)
 # A scale word after the figure means it is a quoted macroeconomic aggregate, not a
@@ -104,6 +131,25 @@ def check_identifiers(text: str, where: str) -> list[str]:
     return problems
 
 
+def check_jurisdiction(text: str, where: str) -> list[str]:
+    """Reject any jurisdiction name finer than the two the analysis operates in."""
+    problems = []
+    seen = set()
+    for pattern in (JURISDICTION_PATTERN, JURISDICTION_OF_PATTERN):
+        for match in pattern.finditer(text):
+            phrase = match.group(0)
+            if phrase in seen:
+                continue
+            seen.add(phrase)
+            words = set(re.findall(r"[A-Z][A-Za-z]+", phrase))
+            extra = sorted(words - ALLOWED_JURISDICTION_WORDS)
+            if extra:
+                problems.append(
+                    f"{where}: jurisdiction outside the published allowlist "
+                    f"({phrase[:40]!r}; unexpected words {extra})")
+    return problems
+
+
 def scan_pages() -> tuple[list[str], list[str]]:
     problems: list[str] = []
     scaled: list[str] = []
@@ -114,6 +160,7 @@ def scan_pages() -> tuple[list[str], list[str]]:
             continue
         text = path.read_text(encoding="utf-8")
         problems.extend(check_identifiers(text, name))
+        problems.extend(check_jurisdiction(text, name))
         problems.extend(check_identifiers(name, f"path {name}"))
         page_problems, page_scaled = check_money(text, name)
         problems.extend(page_problems)
@@ -149,6 +196,7 @@ def scan_artifact() -> tuple[list[str], list[str]]:
     for name in sorted(files & set(pack.PAGES + pack.ASSETS)):
         text = (site / name).read_text(encoding="utf-8")
         problems.extend(check_identifiers(text, f"artifact/{name}"))
+        problems.extend(check_jurisdiction(text, f"artifact/{name}"))
         art_problems, art_scaled = check_money(text, f"artifact/{name}")
         problems.extend(art_problems)
         scaled.extend(art_scaled)
@@ -167,6 +215,7 @@ def main() -> int:
     print(
         f"PASS privacy boundary: {len(pack.PAGES)} pages and {len(pack.ASSETS)} asset scanned; "
         f"every published dollar figure is rounded to $10 or is a published official amount; "
+        f"no jurisdiction finer than the published county and city; "
         f"{len(pack.retired_paths())} non-allowlisted routes carry content-free notices."
     )
     return 0
