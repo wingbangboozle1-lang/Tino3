@@ -333,7 +333,6 @@ code {
   .no-print, .nav-group, .card-grid { display: none; }
   .briefing-head { border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 14px; }
   .briefing-head h1 { font-size: 19px; margin: 0 0 4px; }
-  @page { size: letter; margin: 14mm 16mm; }
 }
 
 /* The one-page attorney/CPA export. Links remain visible in print; all identity fields are placeholders. */
@@ -346,8 +345,10 @@ code {
 .brief-grid ol, .brief-grid ul { padding-left: 18px; margin: 4px 0; }
 .brief-footer { font-size: 11px; margin-top: 8px; border-top: 1px solid var(--line); padding-top: 5px; }
 
-@page { size: letter; margin: 0.38in; }
+@page { size: letter; margin: 14mm 16mm; }
+@page brief { size: letter; margin: 0.38in; }
 @media print {
+  body.print-brief-page main { page: brief; }
   body:has(.print-brief) { background: #fff; font-size: 9pt; line-height: 1.25; }
   body:has(.print-brief) .site-header,
   body:has(.print-brief) .site-nav,
