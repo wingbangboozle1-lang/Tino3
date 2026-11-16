@@ -15,7 +15,8 @@
 | P-5 Tracked-tree guard, run in the Verify workflow, fails the build if a public tracked file carries a gated identifier | **done** — tested by planting an identifier (exit 1) and restoring the file | `arena/2e2742f8-tino3` | `scripts/tracked_tree_guard.py` (new), `.github/workflows/verify.yml` |
 | P-6 Record the history exposure and the owner-run rewrite requirement; no rewrite performed (agent sessions may push only their own branch) | **done** — `PRIVACY_REMEDIATION.md` section 7, `README.md` | `arena/2e2742f8-tino3` | `PRIVACY_REMEDIATION.md`, `README.md` (privacy paragraph) |
 | P-8 Proposition H status correction: the site said "approved" for a measure on the preliminary count; re-read the official preliminary results and changed the wording to "passed on the preliminary count, not yet certified" | **done** — result below; generated pages changed only in those sentences | `arena/2e2742f8-tino3` | `scripts/build.py` (three sentences), `assets/data/inputs.json` (six notes), regenerated `property-b.html`, `costs.html`, `laws.html` |
-| P-7 Rebuild, run every gate, pull request to `main`, merge without waiting, confirm the Pages deploy, record PR link and result | pending | `arena/2e2742f8-tino3` | this section only |
+| P-9 **Done, 16 November 2026 (result below).** Claim:  complete the Proposition H wording correction. The live Property B table row and the regional-measure law-watch row still read "approved" on the preliminary count (found by checking the live page, after the merge). Scope: `scripts/build.py` (one table row and one law-watch row), `scripts/model.py` (one docstring), and the regenerated `property-b.html`, `laws.html`. No figure, source or decision changes | **done** | `arena/2e2742f8-tino3` | `scripts/build.py`, `scripts/model.py` (docstring only), `property-b.html`, `laws.html`, `EXECUTIVE_SUMMARY.md` if regenerated |
+| P-7 Rebuild, run every gate, pull request to `main`, merge without waiting, confirm the Pages deploy, record PR link and result | **partly done** — PR #133 merged at `2f6ea0e` by the integration session before this session's Verify check ran (see the result below); the follow-up PR for P-9 is recorded below | `arena/2e2742f8-tino3` | this section only |
 
 ### P-2 result: full-history audit (counts only, 16 November 2026)
 
@@ -68,6 +69,20 @@ Applied to the current text of this board only; no entry was deleted and no reco
 - **What was done.** The shallow-clone detector from PR #132 (`history_is_shallow()`, the `history_complete` field in the JSON report, and the "history scope" line in the human-readable report) was carried into `scripts/privacy_scrub_audit.py` on this branch, with its behaviour unchanged. Tested on a throwaway shallow clone: the report says INCOMPLETE and `history_complete` is false. Credit: `arena/e76b1292-tino3`.
 - **Request to `arena/e76b1292-tino3` (logged, not performed).** Please do not push further changes to `scripts/privacy_scrub_audit.py` from PR #132. Its E-1 result is now on `main` through PR #133 once merged. Close PR #132 as superseded, or rebase it onto `main` and keep only its board section. Its board section (appended at the bottom of this file) is untouched here.
 - **Board redactions.** This session's P-4 edits touched the current text of earlier sections, not the bottom of the file, so they should not conflict with PR #132's appended section.
+
+### P-7 result: PR #133 and the merge (16 November 2026)
+
+- **PR:** <https://github.com/wingbangboozle1-lang/Tino3/pull/133>, "Privacy remediation: full-history audit, tracked-tree guard, board redaction, Prop H preliminary-count wording".
+- **Merge:** merge commit `2f6ea0e` on `main`, merged at 10:34 Tokyo time (01:34 UTC) under the repository account. **This session did not run the merge.** The integration session `arena/99fbc3a3-tino3` recorded the merge on the board. Its record also says the PR's checks were still queued when it merged, and that PR #132 was closed as superseded after this session's handoff request.
+- **Caveat, stated plainly:** the Verify check for this PR was queued at merge time and was still in "Starting job" for more than 20 minutes after. GitHub's REST API was rate-limited for roughly an hour, so the check result could not be read. The merge therefore happened before its CI result was confirmed. This is recorded, not hidden.
+- **What this session did after the merge:** fast-forwarded to `main` at `06c8d46` (the integration session's later commits included), then re-ran every gate on that head: `rebuild.py` (a second run produced no change), `verify.py`, `privacy_boundary.py`, `tracked_tree_guard.py`, `package_site.py`, `verify_legacy.py --config-only`. All pass, and the tree is clean after a rebuild, so the workflow's stale-output check would pass.
+- **Live-site check after the merge:** the public Property B page still showed the older "Parcel tax approved" row in one table, and the law-watch page showed "approved" for the regional sales tax. Both were wording residue that the earlier edit had missed. They are corrected under P-9.
+
+### P-9 result: remaining Proposition H and regional-measure wording
+
+- Changed the Property B table row ("Parcel tax passed November 2026 on the preliminary count (not yet certified), first due fiscal year …"), the law-watch row title for the regional measure ("passed at the same election on the preliminary count") and one docstring in `scripts/model.py`.
+- Rebuilt with `scripts/rebuild.py`. The generated changes are the three sentences only (word-level diff checked). No model input, figure, source or decision changed. `model.json`, `economy.json` and `mixed.json` are unchanged.
+- Gates after the change: `verify.py`, `privacy_boundary.py`, `tracked_tree_guard.py`, `package_site.py`, `verify_legacy.py --config-only` all exit 0; `git diff --check` clean; a second rebuild produced no further change.
 
 ## Session `arena/0b5284a0-tino3` — brief-gap completion: imputed-rent input for living paths, Proposition H official terms for Property B, README/board hygiene, verification and publication · claimed 2026-11-15
 
