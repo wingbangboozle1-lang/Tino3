@@ -3603,3 +3603,42 @@ While PR #126 was open, main advanced twice: PR #123 and PR #125 (sessions `aren
 
 1. The ledger's Proposition 19 entry `prop19_value_cap_2025_2027` cites `boe_lta25009` and `rtc63_2`; both are correct for the period stated. No irregularity, recorded for completeness.
 2. No value in this session was changed, because every checked figure matched its official source. Nothing was inferred or filled in.
+
+## Session `arena/f242bbd7-tino3` — final integration, verification and publication confirmation · claimed 2026-11-16
+
+*Branch note:* Arena pins this session to `arena/f242bbd7-tino3`, based on `main` at `1cfed92` (merge of PR #128). No other branch is created, switched to, or pushed. Pushes go to this branch only; any pull request is opened from it to `main`. The board was read first: no pull request is open, so no live session currently holds `scripts/build.py`, `assets/data/*` or `assets/sources.json`.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| F-1 Claim this scope and push before any other edit | **done** — this commit | `arena/f242bbd7-tino3` | `COORDINATION.md` (this section only) |
+| F-2 Final line-by-line review of the published edition against the owner brief; confirm every requirement is present or explicitly registered as open | done | `arena/f242bbd7-tino3` | read-only; result recorded below |
+| F-3 Run every gate: build.py, verify.py, privacy_boundary.py, package_site.py, verify_legacy.py --config-only | **done** — all exit 0 | `arena/f242bbd7-tino3` | all scripts, all generated pages |
+| F-4 Confirm GitHub Pages is built and live | **done** — Pages API reports `built`, error `null`, source `main:/`, URL https://wingbangboozle1-lang.github.io/Tino3/ | `arena/f242bbd7-tino3` | GitHub Pages settings |
+| F-5 Record final state, sources and irregularities; mark done | **done** — see record below | `arena/f242bbd7-tino3` | `COORDINATION.md` (this section only) |
+
+### F-2 result: requirement coverage of the published edition
+
+Every item in the owner brief was checked against the 24 published pages, the data files, the source ledger and the suggestion register:
+
+**Implemented and published:** phased-investing path in Black swan with 3M-2Y Treasury parking and 24-36 month band; privacy-first $10 rounding and anonymisation; printable Attorney & CPA Briefing Sheet (briefing.html); low/baseline/high ranges on every modelled assumption; "what would change the answer" on the dashboard's first screen; mixed paths (live-then-sell, live-then-let, sell-then-phase) alongside pure choices in decision.html and mixed.json; reinvestment risk shown beside the staging headline; what-if controls (what-if.html); deadlines timeline (timeline.html); grouped menu and glossary (glossary.html); same-dates/same-horizons comparison with taxes, debt, occupancy changes, capital costs and liquidity (decision.html); enacted-vs-proposed law watch distinguishing status (laws.html); pre-decision agreement register with empty decision columns (precommit.html); private estate inventory and estate questions (estate.html, questions.html); independent property and rental estimate guidance (questions.html, suggestions.html); Proposition 19 eligibility gate with the $1,044,586 cap carried forward at three inflation rates; depreciation and recapture modelled at 42.1% with components shown (taxes.html); B's leases and local rules flagged for review (questions.html); documented investing policy register (timeline.html policy section); tax-aware sensitivities (decision page grid); annual re-run discipline (review gates RG-3/RG-4); legislation tracking (laws page, failed Proposition 19 repeal recorded); dashboard explanations (index.html); imputed-rent input for living paths, blank by default with break-even table (what-if.html lever 3); primary-residence section 121 exclusion on living paths (model exclusion parameter); Proposition H modelled with official terms from the measure text (property-b.html, laws.html); transfer tax and recording fees priced into the sell path (sale-charge itemisation); Form 540 1% surcharge above $1,000,000 included in the combined 37.1% gain rate (rtc17043 in ledger, taxes page); market-rent break-even instead of an invented rent (property_a.rent_income_annual null, break-even published); distribution chart as CSS decile fan and histogram (projections.html); estate tax / income-tax basis / property-tax assessment kept separate (model and taxes); executive summary (EXECUTIVE_SUMMARY.md + page); suggestions register with implement/defer/reject status (suggestions.html); clear questions/information/answers list (questions.html); privacy as top priority with placeholders (all pages, privacy_boundary.py gate); ownership distinction Property A (inherited) vs Property B (already owned) (ownership-distinction.html); black-swan economic conditions section with 1929/2000/2008/2020 replays (black-swan.html); real economic baseline from SSA Trustees and FRED state-level CASTHPI (economy.html); step-by-step inheritance process (inheritance.html); water/electricity/insurance cost inputs flagged owner-estimate/unverified where no official source (costs.html); REDACTED and REDACTED property tables with assessed values and bills (property-a.html, property-b.html); inheritance tax thresholds federal $15,000,000 / California none (estate.html); portability and prior gifts (questions F); five-year maintenance and capital plan register (suggestions); like-kind exchange decision register (suggestions S-12); written valuation at date of death register.
+
+**Registered as open / not solvable from public sources:** Property A tax-rate area (county rate book withheld for privacy, register row); market rent on Property A (no comparable supplied, break-even used instead); Property B building area for Proposition H band (not supplied, band-not-determined schedule); property-specific insurance premiums (no official source publishes them, NAIC statewide context published); Property A water retailer (could not be established from an official source); written date-of-death valuation (to be obtained); five-year maintenance capital plans (to be obtained); written investment policy (to be completed by hand on precommit.html); estate liquidity plan if estate exceeds federal exclusion (to be prepared with counsel).
+
+**Irregularities:** none new in this session. All previously logged irregularities remain on review.html with their source links. No hand edits to generated HTML; all 24 pages regenerated from `scripts/build.py` and byte-identical to the committed copies.
+
+### F-3 gate results (16 November 2026)
+
+- `python3 scripts/build.py` — exit 0, 24 pages written, data files and EXECUTIVE_SUMMARY.md regenerated
+- `python3 scripts/verify.py` — PASS: 1,115 table rows, 948 linked to official publishers, 167 registered unsourceable/unverified, 3,915 links (2,530 external), 104 ledger sources, every internal link and fragment resolves
+- `python3 scripts/privacy_boundary.py` — PASS: 24 pages and 1 asset scanned; every published dollar figure rounded to $10 or a published official amount; no name, street address, parcel number, ZIP code, county, city, trust or beneficiary detail
+- `python3 scripts/package_site.py` — PASS: 24 public pages, 1 runtime asset, 132 content-free withdrawal routes
+- `python3 scripts/verify_legacy.py --config-only` — PASS: 25 public files allowed, legacy Jekyll source guarded
+- `git diff --check` — clean, no conflict markers, no whitespace errors
+
+### F-4 GitHub Pages
+
+Pages API: `status: built`, `error: null`, `build_type: legacy`, `source: {branch: main, path: /}`, `https_enforced: true`, live URL https://wingbangboozle1-lang.github.io/Tino3/. No open pull requests; `main` is the current production source.
+
+### F-5 record
+
+No changes were required to any source file: the working tree is clean at `1cfed92` and the live site already serves the fully verified edition. This session's only change is this board section. Nothing is left open on this session's board; no pull request is needed because `arena/f242bbd7-tino3` is identical to `main` at `1cfed92`. The live site is confirmed deployed.
