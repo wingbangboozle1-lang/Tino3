@@ -533,6 +533,15 @@
    "limits": "This is the 2025 form. Later-year schedules must be used for a later-year sale."
   },
   {
+   "id": "ftb_rates_2026",
+   "publisher": "California Franchise Tax Board",
+   "title": "2026 California tax rate schedules (Form 540)",
+   "url": "https://www.ftb.ca.gov/forms/2026/2026-540-tax-rate-schedules.pdf",
+   "checked": "Read at the publisher on 2026-11-16 (this session). The current-year schedule shows the same bracket structure as the 2025 form: the top printed bracket is 12.3 percent (taxable income over $768,213 single / $1,536,426 joint), and the schedule itself states it applies to Form 540 line 19 amounts; the additional 1 percent above $1,000,000 is imposed separately by Revenue and Taxation Code section 17043.",
+   "supports": "The California marginal rate structure used to price a gain on sale, confirmed on the current-year schedule.",
+   "limits": "This is the 2026 form. A sale in a later inheritance year must be priced on that year's schedule; the 1 percent surcharge above one million dollars is not part of the printed schedule and is read from section 17043."
+  },
+  {
    "publisher": "GitHub",
    "title": "Configuring a publishing source for your GitHub Pages site",
    "url": "https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site",

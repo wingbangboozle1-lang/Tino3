@@ -55,7 +55,7 @@ basis, actual sale costs, occupancy, rents, insurance, maintenance, utilities, d
 and laws in force at transfer. Missing or unverified property-specific amounts are not presented as
 confirmed; they are identified on the relevant pages and on `review.html`.
 
-There are **24 generated HTML pages** and one stylesheet in the public allowlist. The pages show rounded owner-provided figures, model outputs and official-source-backed legal/economic information. The source ledger contains **104 entries**. Both property placeholders grow with the California state-level FHFA house-price index: the two metropolitan-area series were withdrawn on 15 November 2026 because the index publisher's own metadata crosswalked the placeholders to their metropolitan areas (an audit finding), and the privacy gate now rejects the withdrawn series identifiers and metro phrasing. The jurisdiction-specific entries (the two properties' county and city official pages) were also withdrawn, because their publishers identify the properties. A factual table row either links to an official source or is explicitly registered as unsourceable/unverified.
+There are **24 generated HTML pages** and one stylesheet in the public allowlist. The pages show rounded owner-provided figures, model outputs and official-source-backed legal/economic information. The source ledger contains **105 entries**. Both property placeholders grow with the California state-level FHFA house-price index: the two metropolitan-area series were withdrawn on 15 November 2026 because the index publisher's own metadata crosswalked the placeholders to their metropolitan areas (an audit finding), and the privacy gate now rejects the withdrawn series identifiers and metro phrasing. The jurisdiction-specific entries (the two properties' county and city official pages) were also withdrawn, because their publishers identify the properties. A factual table row either links to an official source or is explicitly registered as unsourceable/unverified.
 
 The Black Swan analysis uses one canonical monthly park-and-phase engine and one short-Treasury
 parking-yield assumption. It includes synthetic stresses and historical entry replays, including
@@ -68,9 +68,9 @@ professional advice when dates, facts or laws change.
 
 ## Published site and verification snapshot
 
-The current generated edition contains **24 HTML pages**, **one runtime stylesheet**, **104 entries
+The current generated edition contains **24 HTML pages**, **one runtime stylesheet**, **105 entries
 in the source ledger**, and **134 content-free withdrawal notices** for retired routes. The latest
-local verification reports **1117 table rows**: **950 linked to official publishers** and **167
+local verification reports **1118 table rows**: **951 linked to official publishers** and **167
 explicitly registered as unsourceable or unverified**. A row without a confirming official source is
 not filled in by inference. The public site contains no source ledger or internal model data files;
 the Jekyll and Actions publication boundaries are checked separately.
