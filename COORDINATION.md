@@ -3603,3 +3603,12 @@ While PR #126 was open, main advanced twice: PR #123 and PR #125 (sessions `aren
 
 1. The ledger's Proposition 19 entry `prop19_value_cap_2025_2027` cites `boe_lta25009` and `rtc63_2`; both are correct for the period stated. No irregularity, recorded for completeness.
 2. No value in this session was changed, because every checked figure matched its official source. Nothing was inferred or filled in.
+## Session `arena/e76b1292-tino3` — history-audit completeness guard · 2026-11-16
+
+The board was read first. The latest merged edition already contains the requested decision dashboard, pages, model, privacy controls, and scrub tooling; no other active claim was found for the privacy-audit tool. This session will address one concrete privacy-audit gap only.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| E-1 Detect and disclose shallow/incomplete Git history in the read-only privacy audit; verify against the fetched full history; record results and irregularities | **in progress** | `arena/e76b1292-tino3` | `scripts/privacy_scrub_audit.py`, this section of `COORDINATION.md` |
+
+The checked-out repository initially reported as shallow, so its first history-audit result represented only the single checked-out commit. A read-only fetch of `origin/main` completed the local history; the subsequent full-history audit covered the reachable history without printing token values. No history was rewritten or force-pushed. The published-tree gates pass. The history still contains previously exposed postal/locality material in superseded file versions; the repository owner's documented mirror-rewrite and GitHub-side purge process remains necessary to remove copies from public refs/PR records, forks, caches, or clones. No address/APN/phone-pattern hits were reported by the full-history audit. Counts are kept out of the public site.
