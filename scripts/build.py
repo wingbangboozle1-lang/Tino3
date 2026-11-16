@@ -1417,7 +1417,7 @@ def page_property_b() -> str:
         f'<td><span class="badge assumption">assumption</span></td>' + src_cell([], "No official source"),
         f"<td>Property tax, today</td><td>&mdash;</td><td>{m(MODEL['costs_b_now']['property_tax'])}</td>"
         f'<td><span class="badge derived">derived</span></td>' + src_cell([], "Local rate withheld for privacy"),
-        f"<td>Parcel tax approved November 2026, first due fiscal year {esc(ph['first_fiscal_year'])}</td>"
+        f"<td>Parcel tax passed November 2026 on the preliminary count (not yet certified), first due fiscal year {esc(ph['first_fiscal_year'])}</td>"
         f"<td>{m(ph['base'])} a year for a multifamily parcel up to 5,000 sq ft; more if the building area "
         f"is larger ({ph['rate_over_5000_sqft']} a sq ft over 5,000, capped at {m(ph['max_tax'])})</td>"
         f"<td>not added to any total: the band is not determined</td>"
@@ -2394,7 +2394,7 @@ def page_laws() -> str:
          "Voters passed, on the preliminary count not yet certified, a fifteen-year parcel tax funding public transit operations. First levy fiscal year 2027-2028 on the fall 2027 bill; expires 30 June 2042; dollar amounts adjust each 31 December from 2027 by the local all-items consumer price index. A multifamily parcel up to 5,000 sq ft pays $249 in the first year; above that $249 plus $0.195 a sq ft, capped at $50,000. Rent-controlled tenants can be charged up to 50% of the tax, capped at $65 a unit a year, where the base rent was set before 1 June 2027. Senior owner-occupants get $249 off per occupied unit, by application. Official terms read on 15 November 2026; local returns were still preliminary.",
          "Adds a fixed charge to Property B of about $4,460 in total across the fifteen years at the modelled inflation rate, less any tenant pass-through of up to $130 a year on the two let units if they qualify. No figure from it is added to any total on this site until the parcel's building area fixes the band. It matters to the household budget only through mid-2042: still live for the first two years after a 2040 inheritance, already expired for the 2045 and 2050 cases, and never touching Property A.",
          []),
-        ("A regional sales tax approved at the same election",
+        ("A regional sales tax passed at the same election on the preliminary count",
          "A fourteen-year half-cent sales tax in four of the five counties covered by the measure and a full cent in Property B's city, passed at the same election on the returns of 3 November 2026.",
          "Sales tax is consumption tax. It is not an input to any figure on this site, but it raises the cost of living in both jurisdictions and should be in the household budget.",
          []),
