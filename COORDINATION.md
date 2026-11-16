@@ -3587,7 +3587,7 @@ While PR #126 was open, main advanced twice: PR #123 and PR #125 (sessions `aren
 | V-2 Rebuild from source and confirm the committed pages are reproduced byte for byte (no hand edits, no stale output) | **done** — result below | `arena/bdeaf496-tino3` | read-only |
 | V-3 Run every gate: `model.py`, `economy.py`, `mixed.py`, `build.py`, `verify.py`, `privacy_boundary.py`, `package_site.py`, `verify_legacy.py --config-only` | **done** — all exit 0 | `arena/bdeaf496-tino3` | read-only |
 | V-4 Spot-check the load-bearing official parameters against the official publisher, not only the ledger | **done** — result below; no value changed | `arena/bdeaf496-tino3` | read-only |
-| V-5 Publish: pull request to `main`, merge without waiting, confirm the GitHub Pages deploy, record the PR link and result | pending | `arena/bdeaf496-tino3` | this section only |
+| V-5 Publish: pull request to `main`, merge without waiting, confirm the GitHub Pages deploy, record the PR link and result | **done** — PR #129 merged 2026-11-16 01:06 UTC as `18183fe`; live site serves the current edition (checked by fetch on the public URL); see the publication record below | `arena/bdeaf496-tino3` | this section only |
 
 ### V-2 and V-3 result
 
@@ -3642,3 +3642,10 @@ Pages API: `status: built`, `error: null`, `build_type: legacy`, `source: {branc
 ### F-5 record
 
 No changes were required to any source file: the working tree is clean at `1cfed92` and the live site already serves the fully verified edition. This session's only change is this board section. Nothing is left open on this session's board; no pull request is needed because `arena/f242bbd7-tino3` is identical to `main` at `1cfed92`. The live site is confirmed deployed.
+
+### V-5 publication record
+
+- **Pull request:** https://github.com/wingbangboozle1-lang/Tino3/pull/129 — merged to `main` with a merge commit (`18183fe`) at 2026-11-16 01:06:37 UTC, without waiting for approval, no `--auto`.
+- **Pages deploy:** the `Verify static site`, `Deploy GitHub Pages` and `pages build and deployment` runs for `18183fe` were cancelled by a newer push to `main` (merge `3884a6f`, PR #131 from `arena/f242bbd7-tino3`, a board-only change by another session). That is a normal supersession, not a failure. The GitHub API then returned HTTP 403 rate-limit responses, so the status of the `3884a6f` run could not be read from the API in this session. The public site was fetched directly and serves the current dashboard.
+- **Content impact of PR #129:** none. Only `COORDINATION.md` changed; the generated pages and data were already byte-identical to a fresh build.
+- **Open for the next session:** confirm the `3884a6f` Pages deploy has reached `built` once the API rate limit resets.
