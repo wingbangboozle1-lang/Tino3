@@ -1,5 +1,21 @@
 # Coordination board
 
+## Session `arena/2e2742f8-tino3` — privacy remediation of the public repository, full-history audit, tracked-tree guard, publication · claimed 2026-11-16
+
+*Branch note:* Arena pins this session to `arena/2e2742f8-tino3`, branched from `main` at `1cfed92` and fast-forwarded to `main` at `18183fe` (PR #129) before any edit. No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. `gh pr list --state open` returned nothing when this session started, so no other session holds `scripts/build.py`, `assets/data/*` or `assets/sources.json`.
+
+**Finding that changed this session's scope.** The clone was *shallow* (3 commits). The earlier history audit therefore read only three commits. After `git fetch --unshallow origin` (398 commits), the full-history audit found identifiers in earlier published editions, and the current-tree scan exempted this board from its own check. Both are fixed here.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| P-1 Claim this scope and push before any other edit | **done** — this section | `arena/2e2742f8-tino3` | `COORDINATION.md` (this section only) |
+| P-2 Full-history privacy audit (counts only; clone unshallowed first) | **done** — result below | `arena/2e2742f8-tino3` | read-only |
+| P-3 Audit tool uses the publication gate's patterns (no literal identifier list in a public file); the board is no longer exempt from the current-tree scan | pending | `arena/2e2742f8-tino3` | `scripts/privacy_scrub_audit.py` |
+| P-4 Redact identifiers from the board's current text (ZIP codes, property-linked place names, jurisdiction-specific source hosts, a withdrawn metro series identifier, unrounded owner figures) — counts logged, values not repeated | pending | `arena/2e2742f8-tino3` | `COORDINATION.md` (text only; no entries deleted) |
+| P-5 Tracked-tree guard, run in the Verify workflow, fails the build if a public tracked file carries a gated identifier | pending | `arena/2e2742f8-tino3` | `scripts/tracked_tree_guard.py` (new), `.github/workflows/verify.yml` |
+| P-6 Record the history exposure and the owner-run rewrite requirement; no rewrite performed (agent sessions may push only their own branch) | pending | `arena/2e2742f8-tino3` | `PRIVACY_REMEDIATION.md`, `README.md` (privacy paragraph) |
+| P-7 Rebuild, run every gate, pull request to `main`, merge without waiting, confirm the Pages deploy, record PR link and result | pending | `arena/2e2742f8-tino3` | this section only |
+
 ## Session `arena/0b5284a0-tino3` — brief-gap completion: imputed-rent input for living paths, Proposition H official terms for Property B, README/board hygiene, verification and publication · claimed 2026-11-15
 
 *Branch note:* Arena pins this session to `arena/0b5284a0-tino3` (based on `main` at `ee7082c`, the merge of PR #118). No other branch is created, switched on or pushed; the pull request is opened from this branch to `main`. The board was read first: no pull request is open, so no live session currently holds `scripts/build.py`, `assets/data/*` or `assets/sources.json`.
