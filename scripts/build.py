@@ -2166,9 +2166,9 @@ robust, the magnitude is an upper bound.</p>""")
                  f"<td>Net investment income tax</td><td>{pcf(3.8, 1)}</td>"
                  f"<td>Investment income above the statutory threshold</td>"
                  + src_cell(["irs_tc559"], "Official source"),
-                 f"<td>California top marginal bracket, 2025 schedules</td><td>{pcf(12.3, 1)}</td>"
-                 f"<td>Taxable income above the top bracket start, indexed annually</td>"
-                 + src_cell(["ftb_rates"], "Official source"),
+                 f"<td>California top marginal bracket, 2025 and 2026 schedules</td><td>{pcf(12.3, 1)}</td>"
+                 f"<td>Taxable income above the top bracket start, indexed annually; the 2026 schedule shows the same structure</td>"
+                 + src_cell(["ftb_rates", "ftb_rates_2026"], "Official source"),
                  f"<td>California additional tax, section 17043</td><td>{pcf(1.0, 1)}</td>"
                  f"<td>Taxable income above $1,000,000, not indexed, every filing status</td>"
                  + src_cell(["rtc17043"], "Official source"),
@@ -3899,7 +3899,7 @@ def page_review() -> str:
         "Property A market rent, and therefore the imputed-rent credit": ["hud_fmr"],
         "Parcel tax on Property B approved November 2026": [],
         "The Proposition 19 clawback on the live-then-let path": ["rtc63_2_eligibility", "boe_lta26026"],
-        "Combined recapture rate, corrected from 41.1% to 42.1%": ["irs_tc409", "irs_tc559", "ftb_cg", "ftb_rates"],
+        "Combined recapture rate, corrected from 41.1% to 42.1%": ["irs_tc409", "irs_tc559", "ftb_cg", "ftb_rates", "ftb_rates_2026"],
         "Mixed paths and the distributions behind the headline": ["fred_casthpi", "fred_cpi"],
     }
     assert set(UV_WHERE) == {a for a, _, _, _ in unverified}, "every unverified row needs a source decision"
