@@ -990,7 +990,7 @@ def prop19_cap_projection():
 
 # --------------------------------------------------- parcel tax, Property B --
 def prop_h_schedule() -> dict:
-    """Official terms and inflation-scenario projection of the parcel tax approved
+    """Official terms and inflation-scenario projection of the parcel tax passed on the preliminary count
     in Property B's city at the November 2026 election (Proposition H).
 
     The terms were read from the measure's own legal text (the Business and Tax
