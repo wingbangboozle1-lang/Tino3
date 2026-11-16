@@ -1,5 +1,5 @@
 {
- "as_of": "2026-11-15",
+ "as_of": "2026-11-16",
  "edition": "Anonymised quantitative decision edition; every published figure rounded to the nearest $10.",
  "scope": "Union of two independently maintained ledgers, merged on 13 November 2026. Entries kept verbatim from whichever ledger supplied them; where an entry had no 'supports' field its 'verifies' list was carried across, and 'limits' was filled from 'limit' or 'caveat' when present. Neither ledger was rewritten to match the other.",
  "sources": [
@@ -114,7 +114,7 @@
    "publisher": "California State Board of Equalization",
    "title": "Proposition 19 - The Home Protection for Seniors, Severely Disabled, Families, and Victims of Wildfire or Natural Disasters Act",
    "url": "https://www.boe.ca.gov/prop19/",
-   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "checked": "Opened on the publisher's official domain on 2026-11-13 and re-read on 2026-11-16, including the filing-requirements checklist table that lists the applicable $1 million amount by date of transfer and the note that the next biennial adjustment falls due on 16 February 2027.",
    "supports": "The comparison between former Proposition 58/193 and current Proposition 19, including: the exclusion now applies only to a principal residence or family home; the value limit is the current taxable value plus $1,000,000 as biennially adjusted; the homeowners' exemption must be filed within one year of transfer and the exclusion claim within three years.",
    "limits": "The BOE states this is general summary information and not official legal guidance."
   },
@@ -170,7 +170,7 @@
    "publisher": "California Department of Insurance",
    "title": "FAIR Plan - California's insurer of last resort",
    "url": "https://www.insurance.ca.gov/0400-news/0100-press-releases/2019/release089-19.cfm",
-   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "checked": "Opened on the publisher's official domain on 2026-11-13 and re-read on 2026-11-16: the order raised the FAIR Plan's combined dwelling coverage limit from 1.5 million dollars to 3 million dollars effective 1 April 2020.",
    "supports": "The FAIR Plan is the state's insurer of last resort for property owners unable to obtain coverage in the voluntary market.",
    "limits": "A FAIR Plan policy is more limited than a standard homeowners policy; a difference-in-conditions wrap is normally needed."
   },
@@ -179,11 +179,12 @@
    "title": "Residential Property Insurance Report: Homeowners Multi-Peril data by experience year, 2001-2017",
    "url": "https://www.insurance.ca.gov/0400-news/0200-studies-reports/0250-homeowners-study/upload/A-Homeowners-2_v1-2.pdf",
    "verifies": [
-    "The statewide average written premium for an owner-occupied homeowners policy was about $1,070 in experience year 2017",
+    "The statewide average written premium for an owner-occupied homeowners multi-peril policy was $1,074 in experience year 2017, the newest year in the series",
+    "The same series starts at $620 for experience year 2001, so the statewide average for this form rose about 73% over sixteen years",
     "The average is statewide and across all amounts of insurance; it is not a premium for any one home"
    ],
-   "quote": "HOMEOWNERS POLICY FORM - OWNER OCCUPIED (ISO HO1, HO2, HO3, HO5, HO8 or Equivalent)",
-   "checked": "opened on the publisher's site on 13 November 2026: the 2001-2017 average written premium column was read; the figure is displayed rounded to the nearest $10",
+   "quote": "HOMEOWNERS POLICY FORM - OWNER OCCUPIED (ISO HO1, HO2, HO3, HO5, HO8 or Equivalent) | 2017 | Written premium 6,421,591,892 | Written exposure 5,979,589 | Average written premium $1,074",
+   "checked": "Opened on the publisher's official domain on 2026-11-13 and re-read in full on 2026-11-16. The table is machine-readable; every year from 2001 to 2017 was taken from it directly, not from a summary.",
    "id": "cdi_homeowners_avg",
    "supports": "The statewide average written premium for an owner-occupied homeowners policy was about $1,070 in experience year 2017 | The average is statewide and across all amounts of insurance; it is not a premium for any one home",
    "limits": ""
@@ -679,10 +680,11 @@
    "title": "Revenue Procedure 2026-35, section 3.44",
    "url": "https://www.irs.gov/pub/irs-drop/rp-26-35.pdf",
    "verifies": [
-    "For calendar year 2027 the basic exclusion amount under section 2010(c)(3) is $15,480,000"
+    "For calendar year 2027 the basic exclusion amount under section 2010(c)(3) is $15,480,000 (section 3.44)",
+    "For calendar year 2027 the first $20,000 of gifts to any person is not included in total taxable gifts (section 3.46(1))"
    ],
    "quote": ".44 Basic Exclusion Amount for Estate Tax. For calendar year 2027, the basic exclusion amount under § 2010(c)(3) is $15,480,000.",
-   "checked": "official-domain search excerpt read in this session (full document not opened)",
+   "checked": "Read on the publisher's official domain on 2026-11-13 (search excerpt) and read in full on 2026-11-16: section 3.44 and section 3.46 were opened directly in the published PDF, and both sentences are quoted from it.",
    "id": "irs_rp2635",
    "supports": "For calendar year 2027 the basic exclusion amount under section 2010(c)(3) is $15,480,000",
    "limits": ""
@@ -836,7 +838,7 @@
     "The additional tax is imposed in addition to any other taxes imposed by Part 10"
    ],
    "quote": "in addition to any other taxes imposed by this part, an additional tax shall be imposed at the rate of 1 percent on that portion of a taxpayer's taxable income in excess of one million dollars ($1,000,000).",
-   "checked": "opened on the publisher's site on 12 November 2026 (arena/593368ef-tino3): the 1% rate and the $1,000,000 threshold, added to the graduated rates; the published sensitivity applies it to the taxable gain alone, a lower bound",
+   "checked": "Opened on the publisher's official domain on 2026-11-13 and re-read on 2026-11-16. The section text is unchanged from what this site cites: added by Proposition 63 on 2 November 2004, operative 1 January 2005.",
    "id": "rtc17043",
    "supports": "For taxable years beginning on or after 1 January 2005 an additional tax of 1% applies to the portion of taxable income above $1,000,000 | The additional tax is imposed in addition to any other taxes imposed by Part 10",
    "limits": ""
@@ -1037,7 +1039,7 @@
    "publisher": "National Association of Insurance Commissioners",
    "title": "Dwelling Fire, Homeowners Owner-Occupied, and Homeowners Tenant and Condominium/Cooperative Unit Owners Insurance: Data for 2023 (published July 2026)",
    "url": "https://content.naic.org/sites/default/files/publication-hmr-zu-homeowners-report.pdf",
-   "checked": "Opened on the publisher's official domain on 15 November 2026; the report narrative and Tables 1 to 3 were read in full. Tables 4 and 5 (the by-state average premiums, report pages 30 to 134 and 135 onward) begin beyond the pages this build could machine-read, so no average-premium figure from them is published anywhere on this site.",
+   "checked": "Opened on the publisher's official domain on 2026-11-15 and re-read on 2026-11-16. Tables 1 to 3 are machine-readable and were taken from the report itself: California dwelling fire 329,584.8 house-years; California owner-occupied forms 6,237,525.5 house-years (58.8% of the state total); California exposures carrying $1,000,000 or more of insurance 8.4% of the state total. Tables 4 and 5 (the by-state average premiums by amount of insurance) still begin beyond the pages this build can machine-read, so no average-premium figure from them is published anywhere on this site.",
    "supports": "The official state-level insurance benchmark series. Average premium is written premium divided by written exposures in house-years as reported to statistical agents. California 2023 exposures read from Tables 1 and 3: dwelling fire 329,584.8 house-years (3.1% of the state market); owner-occupied homeowners 6,237,525.5 (58.8%); tenants and condominium 4,036,912.8 (38.1%); HO-3 alone 5,227,903.4. Only 8.4% of California dwelling fire and owner-occupied policies carry $1,000,000 or more of insurance. The report states that average premium increases with the amount of insurance and that dwelling fire premiums are generally lower than the five homeowners form premiums because the coverage is more limited.",
    "limits": "Statewide and across all amounts of insurance. Not a premium for any building and not an average for any postal area. The report covers non-commercial dwelling fire and homeowners package forms; it is not a quote. The by-state average-premium tables (Tables 4 and 5) were not machine-read in this build and their figures are therefore left blank on the site, not inferred."
   },
@@ -1157,6 +1159,24 @@
    "checked": "Opened on the publisher's official domain on 2026-11-15.",
    "supports": "Article 1.5 (sections 1102-1102.19) applies to a transfer by sale, exchange, land sale contract, lease with an option to purchase, or ground lease coupled with improvements, of any single-family residential property; the article requires the statutory Real Estate Transfer Disclosure Statement. Section 1102.2 lists the transfers the article does not apply to.",
    "limits": "The section applies to single-family residential property, not to a multi-unit building, and section 1102.2 exempts several transfers including some by a fiduciary. It governs paperwork and disclosure, not tax."
+  },
+  {
+   "id": "cdi_df_rental",
+   "publisher": "California Department of Insurance",
+   "title": "Residential Property Insurance Report: Dwelling Fire (Rental Dwelling) data - premiums, exposures and annual average written premiums by experience year, 2001-2017",
+   "url": "https://www.insurance.ca.gov/0400-news/0200-studies-reports/0250-homeowners-study/upload/A-DF-Rental-2_v1.pdf",
+   "checked": "Opened on the publisher's official domain on 2026-11-16 and read in full; the single table is machine-readable and $519 is quoted from it verbatim (written premium divided by 1,645,304 house-years for experience year 2017).",
+   "supports": "The Department publishes a statewide average written premium for the policy form it describes as \"DWELLING POLICY FORM, RENTAL DWELLING OR LANDLORD POLICY FORM - UP TO 4 UNITS\". The newest year in the series is experience year 2017, and the published average for that year is $519. The same table gives the exposure count and the premium total it is computed from, and every year from 2001 to 2017.",
+   "limits": "A statewide average across every landlord policy on the form and every amount of insurance, not a premium for any one building and not a quote. It is 2017 experience, nine years before the valuation date on this site; the Department's later Part I summary carries the same measures to 2023 in a spreadsheet this build could not read, so no 2023 figure is published from it. A three-unit building is written on this form family; the average therefore understates or overstates it for reasons the average cannot separate."
+  },
+  {
+   "id": "uscode1701j3",
+   "publisher": "U.S. Government Publishing Office",
+   "title": "12 U.S.C. 1701j-3, Preemption of due-on-sale prohibitions (Garn-St Germain Depository Institutions Act of 1982), 2024 edition of the United States Code",
+   "url": "https://www.govinfo.gov/content/pkg/USCODE-2024-title12/pdf/USCODE-2024-title12-chap13-sec1701j-3.pdf",
+   "checked": "Opened on the publisher's official domain on 2026-11-16; subsection (d) read in full from the 2024 edition and quoted from it.",
+   "supports": "Subsection (d): with respect to a real property loan secured by a lien on residential real property containing fewer than five dwelling units, a lender may not exercise its option pursuant to a due-on-sale clause upon, among other transfers, \"(5) a transfer to a relative resulting from the death of a borrower\"; \"(6) a transfer where the spouse or children of the borrower become an owner of the property\"; and \"(8) a transfer into an inter vivos trust in which the borrower is and remains a beneficiary and which does not relate to a transfer of rights of occupancy in the property\".",
+   "limits": "The section limits when a lender may accelerate on a transfer; it does not forgive the debt, does not decide who must make the payments, and does not reach a loan secured by five or more dwelling units. The loan contract and State law still govern everything else, and subsection (d)(8) protects a transfer into a trust only while the borrower remains the beneficiary."
   }
  ]
 }

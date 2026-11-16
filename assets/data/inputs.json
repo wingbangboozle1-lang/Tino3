@@ -3,7 +3,8 @@
   "edition": "Anonymised quantitative decision edition",
   "built": "2026-11-13",
   "rounding": "Every dollar figure on the public site is rounded to the nearest $10. Owner-supplied figures are the owner's own records and are labelled unverified where no official public record was checked.",
-  "privacy": "No name, street address, parcel number, ZIP code, county or city name, trust detail or utility account appears in this file. Placeholders: Property A (the home being inherited), Property B (the three-unit building already owned by the heir). The county and city of each property are deliberately withheld on the public site: they, like the parcel, identify the properties."
+  "privacy": "No name, street address, parcel number, ZIP code, county or city name, trust detail or utility account appears in this file. Placeholders: Property A (the home being inherited), Property B (the three-unit building already owned by the heir). The county and city of each property are deliberately withheld on the public site: they, like the parcel, identify the properties.",
+  "insurance_band": "Both insurance figures are now bands rather than round-number points. The floor of each band is the official statewide average written premium for that policy form, read from the Department's own table; the middle is the owner's estimate; the ceiling is a stated scenario. The what-if page prices the whole band through the paths."
  },
  "property_a": {
   "label": "Property A",
@@ -98,11 +99,19 @@
     "verified": false
    },
    "insurance": {
-    "low": 1500,
-    "high": 1500,
+    "low": 1074,
     "mid": 1500,
-    "basis": "owner estimate for a primary-residence policy",
-    "verified": false
+    "high": 3500,
+    "form": "Homeowners multi-peril, owner-occupied (the form a primary residence is written on)",
+    "low_basis": "The published statewide average written premium for this form in experience year 2017, read from the Department's own table on 2026-11-16. It is used as a floor because it is an average across all amounts of insurance in a market where the median home carries far less insurance than this one.",
+    "high_basis": "A stated upper scenario, not an estimate: about twice the owner's figure and about 3.3 times the official form average. It is carried because the industry report warns that average premium rises with the amount of insurance, because this home's value sits above the $1,000,000-and-over coverage band that covers 8.4% of the state's exposures, and because the state's insurer of last resort caps a residential dwelling at $3,000,000 combined - so cover for a home of this value may be hard to place at any price. No quote exists.",
+    "basis": "Owner estimate for a primary-residence policy, carried as the middle of the band. No official source publishes a premium for a specific home, so the figure cannot be verified; the two ends of the band are what the model tests.",
+    "verified": false,
+    "src": [
+     "cdi_homeowners_avg",
+     "naic_hmr_2023",
+     "cdi_fairplan"
+    ]
    },
    "maintenance_pct_owner_occupied": {
     "value": 0.005,
@@ -140,6 +149,17 @@
    "must_equal": "property_a.rent_income_annual",
    "verified": false,
    "src": []
+  },
+  "encumbrance": {
+   "balance_at_transfer": null,
+   "monthly_payment": null,
+   "stated_by_owner": false,
+   "basis": "Not supplied. Nothing in the material this site was built from says whether Property A carries a mortgage, a deed of trust, a tax lien, an assessment lien or any other encumbrance at the date of transfer, so every figure on this site is computed as if it carries none. That is an assumption, and it is not neutral: an encumbrance reduces the net proceeds of a sale dollar for dollar, and adds a monthly payment to every path that keeps the building, which is the path this edition already charges with the least. What an encumbrance does NOT change is the income-tax basis, which is the fair market value at the date of death whether or not debt sits on the property, and it does not, for a loan on fewer than five dwelling units, let a lender call the loan due on a transfer to a relative resulting from the borrower's death.",
+   "verified": false,
+   "src": [
+    "uscode1701j3",
+    "irs_basis"
+   ]
   }
  },
  "property_b": {
@@ -224,11 +244,18 @@
     "verified": false
    },
    "insurance": {
-    "low": 1500,
-    "high": 1500,
+    "low": 519,
     "mid": 1500,
-    "basis": "owner estimate for a rental policy",
-    "verified": false
+    "high": 3000,
+    "form": "Dwelling fire, rental dwelling or landlord form, up to 4 units (three units here, so within the form family)",
+    "low_basis": "The published statewide average written premium for this form in experience year 2017, read from the Department's own table on 2026-11-16. It is a floor for the same reason as Property A's: it averages every landlord policy in the state across every amount of insurance.",
+    "high_basis": "A stated upper scenario, not an estimate: twice the owner's figure and about 5.8 times the official form average. A three-unit building with two tenancies carries landlord liability and a larger replacement value than the average single structure on the form, and a building of five or more units would leave this form family and be written commercially, which prices differently again.",
+    "basis": "Owner estimate for a rental policy, carried as the middle of the band, and flagged unverified: no quote was supplied and no official source publishes a premium for a specific building.",
+    "verified": false,
+    "src": [
+     "cdi_df_rental",
+     "naic_hmr_2023"
+    ]
    },
    "maintenance_pct": {
     "value": 0.015,
@@ -257,6 +284,17 @@
    "band_determined": false,
    "band_note": "The parcel tax depends on the building area of the parcel. The building area was not supplied, so the band is not determined: a multifamily parcel up to 5,000 sq ft pays the base amount; above that the base plus a rate per square foot, capped. Read the building area from the assessor records or the official parcel lookup before pricing it into any figure.",
    "source_note": "Terms read from the measure own legal text (Business and Tax Regulations Code Article 18 as added) and the transit agency official parcel-tax page, both on the publisher own domain, 2026-11-15. The publisher is a city body and is not named or linked on the public site, because the jurisdiction identifies the properties. Logged on the review register."
+  },
+  "encumbrance": {
+   "balance_at_transfer": null,
+   "monthly_payment": null,
+   "stated_by_owner": false,
+   "basis": "Not supplied. Nothing in the material this site was built from says whether Property B carries a mortgage, a deed of trust, a tax lien, an assessment lien or any other encumbrance at the date of transfer, so every figure on this site is computed as if it carries none. That is an assumption, and it is not neutral: an encumbrance reduces the net proceeds of a sale dollar for dollar, and adds a monthly payment to every path that keeps the building, which is the path this edition already charges with the least. What an encumbrance does NOT change is the income-tax basis, which is the fair market value at the date of death whether or not debt sits on the property, and it does not, for a loan on fewer than five dwelling units, let a lender call the loan due on a transfer to a relative resulting from the borrower's death.",
+   "verified": false,
+   "src": [
+    "uscode1701j3",
+    "irs_basis"
+   ]
   }
  },
  "verified_parameters": {
@@ -440,7 +478,20 @@
     "ftb_cg",
     "ftb_rates"
    ]
-
+  },
+  "cdi_ho_owner_occupied_avg_2017": {
+   "value": 1074,
+   "src": [
+    "cdi_homeowners_avg"
+   ],
+   "note": "Statewide average written premium for the owner-occupied homeowners multi-peril form, experience year 2017, the newest year in the Department's published series. Quoted verbatim; it is a statewide average across all amounts of insurance, not a premium for any one home."
+  },
+  "cdi_df_rental_landlord_avg_2017": {
+   "value": 519,
+   "src": [
+    "cdi_df_rental"
+   ],
+   "note": "Statewide average written premium for the dwelling policy form the Department describes as 'rental dwelling or landlord policy form - up to 4 units', experience year 2017, the newest year in that series. Property B is a three-unit building, which is on this form family. Quoted verbatim; not a premium for any one building."
   }
  },
  "assumptions": {
