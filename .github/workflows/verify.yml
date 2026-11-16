@@ -12,8 +12,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Rebuild the public pages from data and the source ledger
-        run: python scripts/build.py
+      - name: Rebuild the model and public site from source inputs
+        run: python scripts/rebuild.py
       - name: Verify sources, links, rounding and privacy
         run: |
           set -o pipefail
@@ -27,11 +27,12 @@ jobs:
         run: python scripts/tracked_tree_guard.py
       - name: Build the Actions artifact
         run: python scripts/package_site.py
-      - name: Generated pages are not stale
+      - name: Generated outputs are not stale
         run: |
-          if ! git diff --quiet -- '*.html' assets/data; then
-            git --no-pager diff --stat -- '*.html' assets/data
-            echo "::error::committed generated pages differ from a fresh build; run scripts/build.py and commit"
+          paths=( '*.html' EXECUTIVE_SUMMARY.md assets/data/model.json assets/data/economy.json assets/data/mixed.json assets/data/property_a.csv assets/data/property_b.csv assets/data/decision.csv )
+          if ! git diff --quiet HEAD -- "${paths[@]}"; then
+            git --no-pager diff --stat HEAD -- "${paths[@]}"
+            echo "::error::committed generated outputs differ from a fresh rebuild; run scripts/rebuild.py and commit the derived files"
             exit 1
           fi
       - name: Check the legacy source boundary
