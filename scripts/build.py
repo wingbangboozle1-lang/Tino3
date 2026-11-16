@@ -19,6 +19,7 @@ SOURCES = {s["id"]: s for s in SRC_DOC["sources"]}
 INPUTS = json.loads((DATA / "inputs.json").read_text(encoding="utf-8"))
 MODEL = json.loads((DATA / "model.json").read_text(encoding="utf-8"))
 ECON = json.loads((DATA / "economy.json").read_text(encoding="utf-8"))
+SERIES = json.loads((DATA / "series.json").read_text(encoding="utf-8"))
 MIXED = json.loads((DATA / "mixed.json").read_text(encoding="utf-8"))
 PRECOMMIT = INPUTS.get("precommit", {"rules": [], "household_goals": [], "review_gates": [], "meta": {}})
 
@@ -4895,18 +4896,30 @@ def executive_summary_markdown() -> str:
     a(f"- **What waiting costs.** Hold the same house thirty years and the tax on the eventual sale is about "
       f"{cash(p45['paths']['live_in']['sale']['tax'])} after the section 121 exclusion; let it out as well and "
       f"depreciation recapture pushes that to about {cash(p45['paths']['rent_out']['sale']['tax'])}.")
+    hpi = {int(y): float(v) for y, v in SERIES["hpi_a"]["values"].items()}
+    hpi_first, hpi_last = min(hpi), max(hpi)
+    hpi_fifty = ((hpi[hpi_last] / hpi[hpi_first]) ** (1 / (hpi_last - hpi_first)) - 1) * 100
+    hpi_twenty_start = hpi_last - 20
+    hpi_twenty = ((hpi[hpi_last] / hpi[hpi_twenty_start]) ** (1 / 20) - 1) * 100
+    hpi_annual = [(hpi[y] / hpi[y - 1] - 1) * 100 for y in range(hpi_first + 1, hpi_last + 1)]
+    cpi = {int(y): float(v) for y, v in SERIES["cpi"]["values"].items()}
+    cpi_years = sorted(cpi)
+    cpi_annual = [(cpi[y] / cpi[y - 1] - 1) * 100 for y in cpi_years[1:]]
     a(f"- **The break-even.** Keeping the home beats selling only if it appreciates "
-      f"{pc(p45['breakeven_house_growth'])} a year for thirty years. The verified index for this area compounded "
-      "at 6.9% over fifty years and 3.3% over the last twenty.")
+      f"{pc(p45['breakeven_house_growth'])} a year for thirty years. The verified California state house-price "
+      f"index compounded at {hpi_fifty:.1f}% a year from {hpi_first} to {hpi_last} and "
+      f"{hpi_twenty:.1f}% a year over the latest twenty years in the record "
+      f"([FRED CASTHPI]({SERIES['hpi_a']['src']})).")
     a(f"- **The break-even rent.** Letting would need about {cash(p45['breakeven_rent_monthly'])} a month, "
       f"{cash(p45['breakeven_rent_annual'])} a year, in 2045, to match selling and investing.")
     a("")
     a("## The black swans, and what they do to the answer")
     a("")
     a("Real economies do not grow at a constant rate. In the verified record used here, annual consumer price "
-      "inflation ran from minus 0.3% to plus 13.5%, and annual house price growth in Property A's area from "
-      "minus 12.3% to plus 30.2%. The regimes below replay the worst stretches of that record against a 2045 "
-      "inheritance over thirty years.")
+      f"inflation ranged from {min(cpi_annual):.1f}% to {max(cpi_annual):.1f}%, and annual house-price growth "
+      f"in the California state-level index ranged from {min(hpi_annual):.1f}% to {max(hpi_annual):.1f}% "
+      f"([FRED CASTHPI]({SERIES['hpi_a']['src']})). CPI figures use [FRED CPIAUCSL]({SOURCES['fred_cpi']['url']}). "
+      "The regimes below replay the worst stretches of that record against a 2045 inheritance over thirty years.")
     a("")
     a("| Regime | Inflation | House growth | Treasury | Best path |")
     a("|---|---|---|---|---|")
@@ -4915,7 +4928,7 @@ def executive_summary_markdown() -> str:
           f"{PATH_LABELS[r['run']['best']]} |")
     a("")
     a(f"Sold into equities or Treasuries wins {RF['sell']} of the {RF['n']} regimes. Keeping the house wins only in: "
-      f"{RF['keep_names']}. That is a bet on one neighbourhood repeating its best decades, not a plan.")
+      f"{RF['keep_names']}. These are scenario results, not forecasts for a particular neighborhood.")
     a("")
     a("### Entry timing, replayed against the real record")
     a("")
