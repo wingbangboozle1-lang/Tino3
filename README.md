@@ -69,7 +69,7 @@ professional advice when dates, facts or laws change.
 ## Published site and verification snapshot
 
 The current generated edition contains **24 HTML pages**, **one runtime stylesheet**, **104 entries
-in the source ledger**, and **132 content-free withdrawal notices** for retired routes. The latest
+in the source ledger**, and **134 content-free withdrawal notices** for retired routes. The latest
 local verification reports **1115 table rows**: **948 linked to official publishers** and **167
 explicitly registered as unsourceable or unverified**. A row without a confirming official source is
 not filled in by inference. The public site contains no source ledger or internal model data files;
@@ -134,25 +134,37 @@ The engine is validated against the existing model: an immediate sale and a thir
 
 ## Rebuild and verification
 
-The project uses the Python standard library only. From the repository root:
+The project uses the Python standard library only. From the repository root, after changing any
+model input or historical series, run the complete deterministic pipeline before reviewing or
+publishing a recommendation:
 
 ```bash
-python3 scripts/mixed.py
-python3 scripts/build.py
+python3 scripts/rebuild.py
 python3 scripts/verify.py
 python3 scripts/privacy_boundary.py
 python3 scripts/tracked_tree_guard.py
 python3 scripts/package_site.py
 python3 scripts/verify_legacy.py --config-only
-# CI also builds and audits the actual legacy Jekyll output:
-python3 scripts/verify_legacy.py --site _legacy_site
 ```
 
-The checks cover deterministic generation, page structure, table-row source links or explicit
-review-register entries, internal links and fragments, official-host allowlisting, monetary rounding,
-privacy boundaries, packaged routes and the legacy Jekyll source boundary. CI additionally audits
-the actual Jekyll output. These mechanical checks do not prove a legal interpretation, validate an
-owner-supplied bill, quote an insurer, or predict a future market.
+`rebuild.py` runs `model.py`, `economy.py`, `model.py` again, `mixed.py`, and `build.py` in that
+order. The first model pass supplies break-even values used by the economy bootstrap; the second
+model pass embeds the freshly rebuilt bootstrap. The mixed-path model then consumes both current
+outputs. The pipeline writes the derived JSON/CSV tables, 24 pages, and `EXECUTIVE_SUMMARY.md`.
+Its generator output is suppressed to keep detailed property diagnostics out of CI logs; run an
+individual component locally if a failure needs diagnosis.
+
+CI runs this same pipeline on pull requests and before deployment, then checks that every generated
+page, summary, model, distribution, mixed-path file, and projection table matches the committed
+version. Source inputs (`inputs.json`, the checked-in series, and the dated episode record) are not
+mistaken for generated output by that check. Commit regenerated outputs alongside any input change,
+and review the rebuilt dashboard's answer and the conditions that would change it before merge.
+
+The verification checks cover deterministic generation, page structure, table-row source links or
+explicit review-register entries, internal links and fragments, official-host allowlisting, monetary
+rounding, privacy boundaries, packaged routes, and the legacy Jekyll source boundary. CI also builds
+and audits the actual legacy Jekyll output. These mechanical checks do not prove a legal
+interpretation, validate an owner-supplied bill, quote an insurer, or predict a future market.
 
 ## Limits to resolve before acting
 
