@@ -1458,12 +1458,14 @@ def page_property_b() -> str:
         ])
 
     ph_terms = table(
-        "Parcel tax approved in Property B's city, November 2026 (Proposition H): official terms",
+        "Parcel tax passed in Property B's city, November 2026, on the preliminary count (Proposition H): official terms",
         ["Term", "What the measure says", "Source"],
         [
-            f"<td>Status</td><td>Approved at the election held on 3 November 2026. The local returns were "
-            f"still preliminary when these terms were read on 15 November 2026 (about 900 ballots left to "
-            f"count); the department of elections may take up to 30 days to certify the result.</td>"
+            f"<td>Status</td><td>Passed at the election held on 3 November 2026 on the preliminary count, not yet "
+            f"certified, so it is not yet final. The local returns were still preliminary when these terms were "
+            f"read on 15 November 2026 (about 900 ballots left to count) and were re-checked on 16 November 2026 "
+            f"against the official preliminary results; the department of elections may take up to 30 days to "
+            f"certify the result.</td>"
             + src_cell([], "Official city documents withheld for privacy"),
             "<td>What it is</td><td>An annual parcel tax on real property in Property B's city, funding "
             "public transit operations, for fifteen years.</td>"
@@ -1746,7 +1748,7 @@ def page_costs() -> str:
     tbl_b = table("Property B running costs, projected at the modelled inflation rate",
                   ["Year", "Water", "Electricity", "Insurance", "Maintenance",
                    "Property tax", "Total"], rows_for("B"),
-                  note="Not included in this table: the parcel tax approved in Property B's city at the "
+                  note="Not included in this table: the parcel tax passed on the preliminary count (not yet certified) in Property B's city at the "
                        "November 2026 election, first levied for fiscal year 2027-2028 and expiring 30 June "
                        "2042. Its band depends on the parcel's building area, which was not supplied, so it "
                        "is published as a schedule on the Property B page and is not added to these totals.")
@@ -2388,8 +2390,8 @@ def page_laws() -> str:
          "SB 974, chaptered 27 September 2026, amends Revenue and Taxation Code section 63.2 so that a court-established special needs trust counts as an eligible medium of transfer.",
          "Relevant only if a transferee is a person with a disability. It does not change the value cap or the one-year occupation rule.",
          ["sb974"]),
-        ("A city parcel tax approved in November 2026 (Property B's city)",
-         "Voters approved a fifteen-year parcel tax funding public transit operations. First levy fiscal year 2027-2028 on the fall 2027 bill; expires 30 June 2042; dollar amounts adjust each 31 December from 2027 by the local all-items consumer price index. A multifamily parcel up to 5,000 sq ft pays $249 in the first year; above that $249 plus $0.195 a sq ft, capped at $50,000. Rent-controlled tenants can be charged up to 50% of the tax, capped at $65 a unit a year, where the base rent was set before 1 June 2027. Senior owner-occupants get $249 off per occupied unit, by application. Official terms read on 15 November 2026; local returns were still preliminary.",
+        ("A city parcel tax passed in November 2026 on the preliminary count (Property B's city)",
+         "Voters passed, on the preliminary count not yet certified, a fifteen-year parcel tax funding public transit operations. First levy fiscal year 2027-2028 on the fall 2027 bill; expires 30 June 2042; dollar amounts adjust each 31 December from 2027 by the local all-items consumer price index. A multifamily parcel up to 5,000 sq ft pays $249 in the first year; above that $249 plus $0.195 a sq ft, capped at $50,000. Rent-controlled tenants can be charged up to 50% of the tax, capped at $65 a unit a year, where the base rent was set before 1 June 2027. Senior owner-occupants get $249 off per occupied unit, by application. Official terms read on 15 November 2026; local returns were still preliminary.",
          "Adds a fixed charge to Property B of about $4,460 in total across the fifteen years at the modelled inflation rate, less any tenant pass-through of up to $130 a year on the two let units if they qualify. No figure from it is added to any total on this site until the parcel's building area fixes the band. It matters to the household budget only through mid-2042: still live for the first two years after a 2040 inheritance, already expired for the 2045 and 2050 cases, and never touching Property A.",
          []),
         ("A regional sales tax approved at the same election",
