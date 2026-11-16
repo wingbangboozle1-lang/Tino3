@@ -3998,3 +3998,40 @@ Cross-checked the dashboard's headline figures against `assets/data/model.json` 
 - **Site impact:** none. The public edition and recommendation were unchanged; the source ledger remains at 105 entries, including the 2026 California rate-schedule citation addition from PR #143. The local inventory remains ignored and absent from the public artifact.
 
 **Scope boundary:** This is a private working inventory, not a new public data source. No estate balance, street address, title, lease, debt, tax-lot or other missing information was guessed or added to the website. It does not replace an estate inventory filed by a personal representative or a valuation by a qualified professional.
+
+## Session `arena/8ce55489-tino3` — gate re-run, federal exclusion spot-check, live-site check, publication · 16 November 2026
+
+*Branch note:* Work stays on the Arena-pinned branch `arena/8ce55489-tino3`, based on `main` at `82bac652acce32009dc99818710b63694857a1bf`. No other branch is created, switched to, or pushed. No open pull request existed when this session started, so no live session held `scripts/build.py`, `assets/data/*` or `assets/sources.json`. Location details and owner figures supplied in the latest brief are not written to any tracked file; they stay out of the repository.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| Q-1 Claim this scope before any other edit | **done** — this section | `arena/8ce55489-tino3` | `COORDINATION.md` (this section only) |
+| Q-2 Re-run the deterministic build and every gate on the current head | **done** — result below; no generated drift | `arena/8ce55489-tino3` | read-only |
+| Q-3 Spot-check the federal basic exclusion figures on the site against IRS primary pages | **done** — both figures match; no site change needed | `arena/8ce55489-tino3` | read-only |
+| Q-4 Confirm the public Pages site is live and serving the current edition | **done** — result below | `arena/8ce55489-tino3` | read-only |
+| Q-5 Publish this record through a pull request to `main`, merge without approval, confirm the Pages deploy | **pending at time of writing** — see the publication record below if present | `arena/8ce55489-tino3` | `COORDINATION.md` (this section only) |
+
+### Q-2 result: gates on the current head (16 November 2026)
+
+- `scripts/rebuild.py` — PASS (model, economy, mixed paths, pages, tables and executive summary rebuilt; no tracked drift).
+- `scripts/verify.py` — PASS: 24 public pages, every table row source-linked or explicitly registered, all internal links and fragments resolve.
+- `scripts/privacy_boundary.py` — PASS: 24 pages and one asset scanned; every published dollar figure is rounded to $10 or is a published official amount; 134 retired routes carry content-free notices.
+- `scripts/tracked_tree_guard.py` — PASS: 62 tracked text files scanned, no gated identifier.
+- `scripts/package_site.py` — PASS: 24 pages, one runtime asset, 134 withdrawal routes.
+- `scripts/verify_legacy.py --config-only` — PASS: legacy Jekyll source guarded; 25 public files allowed.
+
+### Q-3 result: federal basic exclusion (primary sources)
+
+- **Enacted, 2026:** IRS "What's new — Estate and gift tax" states that Public Law 119-21 (the Working Families Tax Cuts Bill, signed 4 July 2025) amends section 2010(c)(3) to set the basic exclusion at **$15,000,000** for calendar year 2026. Source: <https://www.irs.gov/businesses/small-businesses-self-employed/whats-new-estate-and-gift-tax>. The site's estate table and dashboard agree.
+- **Enacted, 2027:** IRS news release IR-2026-133 (5 November 2026) states the basic exclusion for decedents dying in 2027 is **$15,480,000**, and the 2027 annual gift exclusion is $20,000 (up from $19,000 for 2026). Source: <https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts>. The site's filing-threshold table (`scripts/build.py`) and the dashboard agree.
+- **Irregularity noted, not changed:** none found for these two figures. The dashboard's 2027 wording is correct; the estate table's 2027 row cites the IRS newsroom, which is the correct primary source.
+
+### Q-4 result: live site
+
+- The public dashboard at <https://wingbangboozle1-lang.github.io/Tino3/> loads and shows the current edition, computed 15 November 2026, with the reinvestment-risk note and the phased-path result beside the headline.
+
+### Open items and limitations (not silently treated as verified)
+
+- Items that need owner-supplied facts or third-party quotes were not advanced in this session because no such inputs were provided: insurance quotes, rent and sale comparables, Property B lease and local-rule records, the Property A tax-rate-area and bill, the date-of-death valuation, a cash balance, and a written trust relationship for the Proposition 19 test (question A-1). These remain on the Questions and Flagged for Review pages.
+- The repository history still contains earlier unscrubbed content. No history rewrite or force push was performed by this session; the owner-run procedure is in `PRIVACY_REMEDIATION.md`, section 7.
+- This is a planning model, not tax, legal or appraisal advice. The household's attorney and CPA review the briefing sheet before any decision.
