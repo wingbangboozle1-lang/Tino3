@@ -11,7 +11,7 @@
 | N-3 **Insurance: replace the round-number point assumptions with researched ranges** (the brief's "Replace round-number assumptions with ranges or real figures"; `insurance` was the one cost carried as low = high = $1,500 for both properties): read the published statewide premium data, publish a low/high band per property with its anchor and its limits, keep the owner figure as the centre, and price the band through the carrying-cost rows | **done** — see the completion record below | `arena/5feeee8b-tino3` | `assets/data/inputs.json`, `scripts/model.py`, `scripts/build.py`, regenerated pages, `assets/sources.json` (append only) |
 | N-4 **Debt and encumbrances stated explicitly** (the brief's "Compare all choices at the same transfer dates and horizons, with taxes, debt, occupancy changes, capital costs and liquidity"): publish the free-and-clear assumption as a labelled input row rather than a silence, the four ways an encumbrance changes the ranking, and the official rule that a transfer at death to a relative is not a due-on-sale trigger; register the missing fact (whether either property is encumbered) as an owner question | **done** — see the completion record below | `arena/5feeee8b-tino3` | `assets/data/inputs.json`, `scripts/build.py` (decision / costs / property pages / questions / precommit sections), `assets/sources.json` (append only), regenerated pages |
 | N-5 Re-check the law-watch entries whose status this edition says is pending (the local parcel tax certification, the 2027 federal inflation adjustments now published, the statewide rent cap, the state measure that the site says was chaptered) and distinguish enacted from proposed; update the read dates and any changed status | **done** — the only entry still marked pending is the parcel-tax certification (due 11 December 2026), which is correct: the 2027 federal amounts are recorded as published (Rev. Proc. 2026-35 read in full), the crash-replay prose was re-checked against the data and stands, and the Proposition 19 wording is now precise | `arena/5feeee8b-tino3` | `scripts/build.py`, `assets/data/inputs.json` (notes only), regenerated pages, `assets/sources.json` |
-| N-6 Rebuild, run all five gates, open the pull request from this branch to `main`, merge without waiting, confirm the Pages deploy, record the result | in progress → this commit | `arena/5feeee8b-tino3` | this section only; `EXECUTIVE_SUMMARY.md` (generated) |
+| N-6 Rebuild, run all five gates, open the pull request from this branch to `main`, merge without waiting, confirm the Pages deploy, record the result | **done** — PR **#148** merged into `main` as `7430ead` at 18:16 UTC on 16 November 2026; `Deploy GitHub Pages` and `Verify static site` both succeeded on the merge commit and the Pages build/deploy run finished `success` (an earlier deploy was superseded by PR #149 landing first, which is normal queue behaviour) | `arena/5feeee8b-tino3` | this section only; `EXECUTIVE_SUMMARY.md` (generated) |
 
 **Why these tasks.** A gap check against the owner's brief, run on the current tree, found that every brief item is published except two that are genuinely incomplete rather than deliberately withheld: the insurance figures are the only owner-supplied cost still carried as a single round number with no band (the brief asks for ranges or real figures), and the comparison tables never state the debt assumption at all (the brief asks for the comparison to carry debt). Both are model-visible and cheap to close honestly. Everything else in the brief either has a page, a register entry, or a documented privacy withholding decision.
 
@@ -59,6 +59,26 @@ nothing is inferred, and where a document could not be read the row says so inst
 
 **Privacy commitments for this session.** No name, street address, postal code, parcel identifier, county or city name, utility or account identifier, or jurisdiction-specific publisher host appears in any file this session writes, including this board. Owner-supplied money is published only as a multiple of ten; official amounts are published verbatim where the official document prints them. Every new ledger entry links to a host already on the approved list in `scripts/verify.py`, never to a county or city domain. Claims that cannot be anchored to an official source are labelled and sent to the register on `review.html`, not printed as fact.
 
+**Result and hand-off.**
+- Merged: `main` head `7430ead` (merge of #148, branch `arena/5feeee8b-tino3`, from `2a8687c` +
+  `5f61522`). All five gates exit 0 on the rebased tree, `git status` is clean immediately after
+  `rebuild.py`, so the build is deterministic, and the deployed pages were re-read live:
+  `costs.html` carries the insurance-band section and the $1,074 / $519 / $620 anchors, and
+  `decision.html` carries the "Debt, occupancy, capital costs and liquidity" section.
+- Rebase note for the next session: `main` had moved while this work was in flight (PR #146, #147
+  and #149 from other sessions touched `COORDINATION.md`, `scripts/build.py`, `review.html`,
+  `sources.html`, `assets/sources.json` and `assets/data/inputs.json`). Conflicts arose only in
+  generated files; the resolution is to take the merged `build.py` and data and re-run
+  `rebuild.py`, never to hand-merge the HTML.
+- Ledger is now **107 entries** (this session added `cdi_df_rental` and `uscode1701j3`; #149 added
+  `ftb_rates_2026`). Every ledger id is cited from a page, which `verify.py` enforces — a new id
+  with no page reference fails the gate, so append the citation in the same commit.
+- Left for the owner, unchanged by this session: the public-history rewrite or making the
+  repository private (suggestion S-22), the account e-mail and author fields in the private
+  register, restoring the withheld jurisdiction links privately, the parcel-tax recheck after
+  certification on **11 December 2026**, and completing `precommit.html`. Three inputs would each
+  close a flagged item and none changes the ranking: three insurance quotes per building
+  (S-01), a written date-of-death valuation (S-02), and either building's payoff statement (S-28).
 ## Session `arena/2e2742f8-tino3` — privacy remediation of the public repository, full-history audit, tracked-tree guard, publication · claimed 2026-11-16
 
 *Branch note:* Arena pins this session to `arena/2e2742f8-tino3`, branched from `main` at `1cfed92` and fast-forwarded to `main` at `18183fe` (PR #129) before any edit. No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. `gh pr list --state open` returned nothing when this session started, so no other session holds `scripts/build.py`, `assets/data/*` or `assets/sources.json`.
