@@ -1,5 +1,64 @@
 # Coordination board
 
+## Session `arena/5feeee8b-tino3` — independent re-verification pass, insurance bands replacing the round-number point assumptions, explicit debt and encumbrance treatment, publication · claimed 2026-11-16
+
+*Branch note:* Arena pins this session to `arena/5feeee8b-tino3`, branched from `main` at `5005a72` (the merge of PR #137). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. At claim time `gh pr list --state open` returned nothing, so no other session holds `scripts/build.py`, `scripts/model.py`, `assets/data/*` or `assets/sources.json`. The board's newest section (`arena/2e2742f8-tino3`, 16 November) is merged and live, so this session starts from a clean tree: `python3 scripts/rebuild.py` produced no diff and all five gates exit 0 before any edit.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| N-1 Claim this scope and push before any other edit | **done** (`e278701`, pushed) | `arena/5feeee8b-tino3` | `COORDINATION.md` (this section only) |
+| N-2 Independent line-by-line re-verification of the decision-critical official figures (federal transfer-tax amounts, Prop 19 shelter cap, property-tax rate and caps, capital-gain and surcharge treatment, rent cap, insurance market data, the four crash replays) against the official sources, read this session; correct anything stale, record every confirmation with its source | **done** — see the completion record below | `arena/5feeee8b-tino3` | read-only; results recorded here and on `review.html` via `scripts/build.py` |
+| N-3 **Insurance: replace the round-number point assumptions with researched ranges** (the brief's "Replace round-number assumptions with ranges or real figures"; `insurance` was the one cost carried as low = high = $1,500 for both properties): read the published statewide premium data, publish a low/high band per property with its anchor and its limits, keep the owner figure as the centre, and price the band through the carrying-cost rows | **done** — see the completion record below | `arena/5feeee8b-tino3` | `assets/data/inputs.json`, `scripts/model.py`, `scripts/build.py`, regenerated pages, `assets/sources.json` (append only) |
+| N-4 **Debt and encumbrances stated explicitly** (the brief's "Compare all choices at the same transfer dates and horizons, with taxes, debt, occupancy changes, capital costs and liquidity"): publish the free-and-clear assumption as a labelled input row rather than a silence, the four ways an encumbrance changes the ranking, and the official rule that a transfer at death to a relative is not a due-on-sale trigger; register the missing fact (whether either property is encumbered) as an owner question | **done** — see the completion record below | `arena/5feeee8b-tino3` | `assets/data/inputs.json`, `scripts/build.py` (decision / costs / property pages / questions / precommit sections), `assets/sources.json` (append only), regenerated pages |
+| N-5 Re-check the law-watch entries whose status this edition says is pending (the local parcel tax certification, the 2027 federal inflation adjustments now published, the statewide rent cap, the state measure that the site says was chaptered) and distinguish enacted from proposed; update the read dates and any changed status | **done** — the only entry still marked pending is the parcel-tax certification (due 11 December 2026), which is correct: the 2027 federal amounts are recorded as published (Rev. Proc. 2026-35 read in full), the crash-replay prose was re-checked against the data and stands, and the Proposition 19 wording is now precise | `arena/5feeee8b-tino3` | `scripts/build.py`, `assets/data/inputs.json` (notes only), regenerated pages, `assets/sources.json` |
+| N-6 Rebuild, run all five gates, open the pull request from this branch to `main`, merge without waiting, confirm the Pages deploy, record the result | in progress → this commit | `arena/5feeee8b-tino3` | this section only; `EXECUTIVE_SUMMARY.md` (generated) |
+
+**Why these tasks.** A gap check against the owner's brief, run on the current tree, found that every brief item is published except two that are genuinely incomplete rather than deliberately withheld: the insurance figures are the only owner-supplied cost still carried as a single round number with no band (the brief asks for ranges or real figures), and the comparison tables never state the debt assumption at all (the brief asks for the comparison to carry debt). Both are model-visible and cheap to close honestly. Everything else in the brief either has a page, a register entry, or a documented privacy withholding decision.
+
+**Completion record, 16 November 2026 (N-2 to N-5).** Everything below was read at source in this session;
+nothing is inferred, and where a document could not be read the row says so instead of filling the gap.
+- **N-3 insurance.** Owner-occupied homeowners multi-peril, experience year 2017: **$1,074** (written premium
+  $6,421,591,892 over 5,979,589 house-years); the same series opens at $620 in 2001, so the statewide average
+  rose about 73% in sixteen years. Rental dwelling / landlord form on up to four units, 2017: **$519**
+  ($853,257,243 over 1,645,304 house-years); $328 in 2001. Both are now the floors of the two bands, recorded as
+  `verified_parameters.cdi_ho_owner_occupied_avg_2017` and `cdi_df_rental_landlord_avg_2017` so the privacy gate
+  accepts them as published figures rather than as unrounded owner money; the owner's $1,500 stays as the centre
+  of each band and the ceilings ($3,500, $3,000) are labelled stated scenarios. NAIC 2023 Tables 4 and 5 were
+  re-tried and are still beyond the pages this build can read, so the by-state average stays blank and flagged;
+  the readable exposure counts are published instead (California dwelling fire 329,584.8 house-years; 8.4% of
+  owner-occupied exposures at $1,000,000 or more of insurance). New ledger id `cdi_df_rental`.
+- **N-4 debt.** Published as an assumption rather than a silence: `encumbrance` blocks on both properties in
+  `inputs.json` (`balance` and `payment` null, `stated_by_owner` false), a new decision-page section
+  "Debt, occupancy, capital costs and liquidity" covering encumbrance, occupancy changes, capital costs and
+  liquidity, question A-7, suggestion S-28, three glossary entries, and rows on both property pages. The
+  authority is **12 U.S.C. §1701j-3(d)**, read from the 2024 Code at govinfo (new ledger id `uscode1701j3`):
+  (d)(5) a transfer to a relative resulting from the death of a borrower, (d)(6) a transfer where the spouse or
+  children become owners, (d)(8) a transfer into an inter vivos trust where the borrower remains a beneficiary,
+  limited to residential property with fewer than five dwelling units, and (b)(1) preempting contrary State law.
+  **Correction recorded:** an earlier draft of this session cited "Revenue and Taxation Code §51/§59500" for the
+  no-acceleration rule. That is the wrong code; the rule is federal and the section is (d)(5), not (d)(6), for a
+  transfer at death. The ledger and the pages now carry the right citation.
+- **Model.** `scripts/model.py` gained `insurance_and_encumbrance_cases()`, whose output is published as
+  `model.json.cost_cases` on the costs page, the decision page and as levers 4 and 5 on the what-if page, and it
+  re-runs the whole path engine at each rung rather than scaling a total.
+- **Findings, stated honestly.** Insurance across its entire published band moves the thirty-year living path by
+  $265,210 against a $33,262,780 selling-versus-living gap: **0.8% of it**, with the best path unchanged at every
+  rung. Debt service is one-directional — $500, $1,000 and $2,000 a month cost the living path $655,920,
+  $1,311,830 and $2,623,660 respectively and cost the sale paths nothing, and no level tested flips the ranking.
+  Both are printed on the first screen as tested-and-ruled-out, so the household is not sent off to find a figure
+  that cannot change the answer; the quotes and the payoff statement are still asked for, because they change the
+  size of the bill and the household's own capacity to carry it.
+- **Proposition 19 wording.** The shelter is now stated the way the Board states it: the new assessed value is
+  capped at the transferor's factored base year value plus an indexed amount, **$1,044,586** for a transfer
+  between 16 February 2025 and 15 February 2027 (up from $1,022,600), with the next statutory adjustment due
+  **16 February 2027**; the pre-2021 exclusion for $1,000,000 of "other property, such as residential rental
+  property" was removed, which is why Property B has no carry-forward to model.
+- **Gates.** `rebuild.py`, `verify.py` (24 pages, 1,163 rows, 995 linked to an official site, 168 logged, 106
+  ledger sources), `privacy_boundary.py`, `tracked_tree_guard.py` and `package_site.py` all exit 0, and
+  `git status` is clean after a rebuild, so the build is deterministic.
+
+**Privacy commitments for this session.** No name, street address, postal code, parcel identifier, county or city name, utility or account identifier, or jurisdiction-specific publisher host appears in any file this session writes, including this board. Owner-supplied money is published only as a multiple of ten; official amounts are published verbatim where the official document prints them. Every new ledger entry links to a host already on the approved list in `scripts/verify.py`, never to a county or city domain. Claims that cannot be anchored to an official source are labelled and sent to the register on `review.html`, not printed as fact.
+
 ## Session `arena/2e2742f8-tino3` — privacy remediation of the public repository, full-history audit, tracked-tree guard, publication · claimed 2026-11-16
 
 *Branch note:* Arena pins this session to `arena/2e2742f8-tino3`, branched from `main` at `1cfed92` and fast-forwarded to `main` at `18183fe` (PR #129) before any edit. No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. `gh pr list --state open` returned nothing when this session started, so no other session holds `scripts/build.py`, `assets/data/*` or `assets/sources.json`.

@@ -547,7 +547,17 @@ question A-1</a> before relying on any number here. {slink('rtc63_2_eligibility'
 <li><strong>The heir genuinely wants to live in the house.</strong> The one-line recommendation is conditional on that. The <a href="precommit.html#imputed">imputed-rent break-even</a> prices what that preference has to be worth.</li>
 <li><strong>Moving out after moving in.</strong> The Proposition 19 exclusion is removed when the heir stops qualifying, and the model now costs that at about {m(MIXED['clawback']['difference'])} of extra property tax over thirty years. <a href="decision.html">Mixed paths</a>.</li>
 <li><strong>The housing the house provides is worth close to its full market rent to the heir.</strong> The published comparison credits the living path with no housing at all. Credited at about {pc(100.0)} of market rent, living and selling come level; below that, selling wins. <a href="decision.html#imputed-rent">The rent living does not pay itself</a>.</li>
-<li><strong>Property B's fixed charges keep growing at their own pace.</strong> The model assumes {pcf(ASM['fixed_charge_growth']['baseline'])} a year; the audited record is {pcf(ASM['fixed_charge_growth']['high'])} over nine years, and those charges are {esc(str(MODEL['roll_audit']['property_b']['fixed_share_latest_pct']))}% of that bill. The 2% cap cannot bound them. <a href="review.html#roll-audit">Roll audit</a>.</li></ol>""")
+<li><strong>Property B's fixed charges keep growing at their own pace.</strong> The model assumes {pcf(ASM['fixed_charge_growth']['baseline'])} a year; the audited record is {pcf(ASM['fixed_charge_growth']['high'])} over nine years, and those charges are {esc(str(MODEL['roll_audit']['property_b']['fixed_share_latest_pct']))}% of that bill. The 2% cap cannot bound them. <a href="review.html#roll-audit">Roll audit</a>.</li></ol>
+<p class="muted">Two candidates were tested for this edition and do <em>not</em> belong on that list, which is why
+they are recorded as ruled out rather than as open questions. The insurance premium at Property A, taken across
+its whole published band, moves the thirty-year living figure by {m((MODEL.get('cost_cases') or {}).get('band', {}).get('effect_on_live', 0))} - about
+{(MODEL.get('cost_cases') or {}).get('band_share_of_gap', 0)}% of the gap between selling and living. And no debt
+service the model was given - each $1,000 a month of payment costs the keeping paths about
+{m(next((-r['live_delta'] for r in (MODEL.get('cost_cases') or {}).get('debt_rows', []) if r.get('monthly') == 1000), 0))} -
+ever puts keeping the house ahead of selling it, because a house sold in the year of inheritance carries no
+payment stream. Both are on the <a href="costs.html#insurance-band">insurance band</a> and the
+<a href="decision.html#debt">debt section</a>, and both are on the <a href="what-if.html">what-if page</a> as
+levers 4 and 5.</p>""")
     cards = []
     for group, pages in NAV_GROUPS:
         if group == "Start here":
@@ -685,7 +695,10 @@ def page_executive_summary() -> str:
         ("Property A", f"Inherited through a trust, planned 2040 to 2050. Worth about {m(A['estimated_market_value_2026'])}. Not owned by the heir today."),
         ("Property B", f"Already owned by the heir. Worth about {m(B['estimated_market_value_2026'])}, three units, two let at {m(B['rent']['monthly'])} a month. The heir can live here without losing that rent."),
         ("The tax cliff at transfer", f"Today the Property A bill is about {m(MODEL['costs_a_now']['property_tax'])}. If the heir inherits in 2045 and does not move in, the bill becomes about {m(p45['bill_if_rent_year1'])}. If the heir does move in and claims the Proposition 19 exclusion, it becomes about {m(p45['bill_if_live_year1'])}."),
-        ("Why moving in only half-helps", f"The Proposition 19 exclusion shelters the old assessed value plus an indexed {m(V['prop19_value_cap_2025_2027']['value'])}. Everything above that is reassessed. In 2045 the sheltered slice is about {m(p45['prop19_cap'])} against a market value of {m(p45['value_at_death'])}."),
+        ("Why moving in only half-helps", f"Proposition 19 does not freeze the old assessment: it limits the new one to the prior factored base year "
+             f"value plus an indexed amount - {m(V['prop19_value_cap_2025_2027']['value'])} for a transfer between "
+             f"16 February 2025 and 15 February 2027, adjusted again by statute on 16 February 2027. Everything "
+             f"above that is reassessed. In 2045 the sheltered slice is about {m(p45['prop19_cap'])} against a market value of {m(p45['value_at_death'])}."),
         ("The tax-free sale window", "Property acquired from a decedent takes a basis equal to its value at death, so a sale soon after the inheritance pays close to zero capital gains tax. Holding it for thirty years turns the appreciation into a gain taxed at roughly 37% combined federal and California."),
         ("The equity comparison", f"To match selling and investing at 7%, the home must appreciate {pc(p45['breakeven_house_growth'])} a year for thirty years. The verified California state index compounded at 6.4% over fifty years and 2.6% over the last twenty."),
         ("The rental comparison", f"Letting the home out would need about {m(p45['breakeven_rent_monthly'])} a month in 2045 to match selling and investing. That is over 5% of the property's value per year in gross rent."),
@@ -873,6 +886,7 @@ or finding a tenant at an implausible rent.</p>""")
         + sens_table
         + mixed_section()
         + reinvestment_section()
+        + debt_section()
         + '<h2>What the model does and does not do</h2>'
         + table("Model inputs and their status",
                 ["Input", "Value used", "Status", "Basis"],
@@ -918,10 +932,232 @@ or finding a tenant at an implausible rent.</p>""")
 <li><strong>Housing value.</strong> Living in the house produces somewhere to live. The break-even table prices that value; the terminal-value table does not add it in.</li>
 <li><strong>Taxes on the invested money.</strong> The equity path already carries an annual drag. A further tax on final liquidation is not charged, because the same treatment would have to be applied to the property paths and would be avoided anyway if the portfolio is held until death.</li>
 <li><strong>State and federal interaction.</strong> The combined gain tax rate simply adds the two rates and takes no federal deduction for the state tax. That is deliberately conservative.</li>
-<li><strong>Mortgages, 1031 exchanges, instalment sales, gifting and trust restructuring.</strong> None are modelled. Each is on the <a href="questions.html">questions page</a>.</li>
+<li><strong>Mortgages and other encumbrances, 1031 exchanges, instalment sales, gifting and trust restructuring.</strong> None is assumed away silently: the debt assumption is stated and priced per $1,000 a month of payment in <a href="#debt">Debt, occupancy, capital costs and liquidity</a>, and the rest are on the <a href="questions.html">questions page</a> and the <a href="suggestions.html">suggestion queue</a>.</li>
 <li><strong>Transaction costs of moving house, and the cost of capital gains tax on any other asset that would have to be sold.</strong> Not modelled.</li>
 </ul>""")
     )
+
+
+
+
+# ------------------------------------------------------- insurance and debt --
+# Two sections added on the owner's instruction of 16 November 2026: a round-number
+# cost assumption is replaced by a range with an evidence class at each end, and the
+# silence about debt in the comparison is replaced by an explicit statement of the
+# assumption, what it does to each path, and what no model can price.
+
+def _rung(r):
+    """Model labels arrive lower-case (they are keys as much as prose); pages print them as cells."""
+    label = (r or {}).get("label") or ""
+    return (label[0].upper() + label[1:]) if label else ""
+
+
+def insurance_band_section() -> str:
+    """The insurance band, its two published anchors, and what the whole band is worth."""
+    cc = MODEL.get("cost_cases") or {}
+    band = cc.get("band", {})
+    rung = _rung
+    rows = []
+    for r in cc.get("rows", []):
+        term = r["terminals"]
+        rows.append(
+            f"<td>{esc(rung(r))}</td>"
+            f"<td>${r['annual']:,}</td>"
+            f"<td>{m(term['sell_equities'])}</td>"
+            f"<td>{m(term['live_in'])}</td>"
+            f"<td>{m(term['rent_out'])}</td>"
+            f"<td>{m(r['live_gap'])}</td>"
+            f"<td><strong>{esc(PATH_LABELS[r['best']])}</strong></td>"
+            + (src_cell([r["kind"]], "Published figure") if r["kind"] in SOURCES
+               else method_cell("review.html#register", "Owner figure or stated scenario")))
+    band_tbl = table(
+        "Every path re-run at each rung of the Property A insurance band (2045 inheritance, thirty years)",
+        ["Insurance carried", "A year", "Sell and invest", "Live in it", "Let it out",
+         "Change to the living path", "Best path", "Basis"],
+        rows,
+        note="Selling is charged nothing, because a house sold at the inheritance pays no premium "
+             "after that. That is the whole shape of this table: a higher premium makes keeping the "
+             "house worse, never better, so the band moves the size of the gap and not its direction.")
+
+    a_ins = A["annual_costs"]["insurance"]
+    b_ins = B["annual_costs"]["insurance"]
+    srcs = table(
+        "The insurance figures, and what each end of the band rests on",
+        ["Figure", "Amount", "What it is", "Source"],
+        [
+            f"<td>Statewide average written premium, owner-occupied homeowners form, "
+            f"experience year {band.get('official_floor_year', 2017)}</td>"
+            f"<td>${band.get('official_floor', 1074):,} a year</td>"
+            f"<td>The published figure the low end of Property A's band is taken from. It averages "
+            f"every policy on the form across every amount of insurance in the state.</td>"
+            + src_cell(["cdi_homeowners_avg"], "Department of Insurance table"),
+            f"<td>Statewide average written premium, dwelling fire (rental dwelling or landlord, "
+            f"up to 4 units) form, experience year 2017</td>"
+            f"<td>${band.get('landlord_official_floor', 519):,} a year</td>"
+            f"<td>The published figure the low end of Property B's band is taken from. A three-unit "
+            f"building is on this form family; five or more units would leave it and be written "
+            f"commercially.</td>"
+            + src_cell(["cdi_df_rental"], "Department of Insurance table"),
+            f"<td>Property A band carried by the model</td>"
+            f"<td>{m(a_ins['low'])} to {m(a_ins['high'])} a year, {m(a_ins['mid'])} used</td>"
+            f"<td>Owner's estimate in the middle, published averages at the floor, a stated upper "
+            f"scenario at the ceiling.</td>"
+            + method_cell("review.html#register", "Band, owner estimate flagged"),
+            f"<td>Property B band carried by the model</td>"
+            f"<td>{m(b_ins['low'])} to {m(b_ins['high'])} a year, {m(b_ins['mid'])} used</td>"
+            f"<td>Same construction. Property B's insurance is not charged to any Property A path, "
+            f"because this building is already owned and already let; it enters the comparison only "
+            f"through the value of the housing the household would consume by living there.</td>"
+            + method_cell("review.html#register", "Band, owner estimate flagged"),
+            f"<td>What the whole band is worth on the living path</td>"
+            f"<td>{m(band.get('effect_on_live', 0))} of terminal value</td>"
+            f"<td>The difference between the bottom and the top of the band, run through thirty years "
+            f"of the model. Against the {m(cc.get('gap_live_at_baseline', 0))} gap between selling and "
+            f"living, that is {cc.get('band_share_of_gap', 0)}%.</td>"
+            + method_cell("#method", "Model output"),
+            "<td>Share of California dwelling fire and owner-occupied exposures carrying $1,000,000 or "
+            "more of insurance, 2023</td><td>8.4%</td>"
+            f"<td>The reason the published average is treated as a floor rather than an estimate: "
+            f"Property A's value puts it in a small minority of exposures, and the report states that "
+            f"average premium rises with the amount of insurance.</td>"
+            + src_cell(["naic_hmr_2023"], "NAIC report, Table 3"),
+            "<td>Combined dwelling coverage limit, the state's insurer of last resort</td>"
+            "<td>$3,000,000</td>"
+            f"<td>Raised from 1.5 million by order of the Insurance Commissioner, effective 1 April "
+            f"2020. Property A's owner-estimated value of {m(A['estimated_market_value_2026'])} is above "
+            f"that limit, so if cover cannot be placed in the standard market the shortfall is not a "
+            f"pricing question but an availability one.</td>"
+            + src_cell(["cdi_fairplan"], "Department of Insurance order"),
+        ],
+        note="No figure in this table is a quote for either building. The two official averages are "
+             "statewide and are computed as written premium divided by house-years of exposure; the "
+             "owner's figures are what the household has been paying or expects to pay; the upper "
+             "scenario is a stated test, not an estimate.")
+    return ('<h2 id="insurance-band">Insurance: the band, and what it is worth</h2>'
+            + callout("note", "Why this replaced a single number", f"""
+<p>The owner's brief asks for ranges in place of round-number assumptions. Insurance was the one
+running cost carried as a single figure at both properties - {m(a_ins['mid'])} a year each, the same
+number for a primary residence and for a three-unit rental, which cannot both be right. It is now a
+band, and each end says where it came from: the published statewide average for the matching policy
+form at the bottom, the owner's figure in the middle, and a stated upper scenario at the top.</p>
+<p>The band matters less than it looks. Run through thirty years of the model, the whole spread from
+floor to ceiling moves the living path's terminal value by {m(band.get('effect_on_live', 0))} against
+a selling-versus-living gap of {m(cc.get('gap_live_at_baseline', 0))} - about
+{cc.get('band_share_of_gap', 0)}% of it. Insurance is therefore <strong>not</strong> a load-bearing
+assumption on this decision, and getting three quotes is about the size of the bill, not about which
+path to choose. The quotes still have to be obtained: they are what turns a band into a number.</p>""")
+            + srcs + band_tbl)
+
+
+def debt_section() -> str:
+    """Debt, occupancy, capital costs and liquidity: what the comparison carries."""
+    cc = MODEL.get("cost_cases") or {}
+    enc = A.get("encumbrance", {})
+    rows = [
+        ("Mortgage, deed of trust or other lien on either building",
+         f"<span class=\"badge unverified\">{esc('not supplied')}</span> &mdash; both properties are "
+         f"modelled free and clear, and that is an assumption, not a fact. Nothing in the material this "
+         f"site was built from states whether anything is registered against either parcel.",
+         "The balance owed at the date of transfer, the payment, the rate and whether any assessment or "
+         "tax lien is outstanding.",
+         ["uscode1701j3", "irs_basis"]),
+        ("What an encumbrance does to the sale path",
+         "Nothing to the ranking, and everything to the amount. A sale pays the balance out of the "
+         "proceeds, so the sum invested falls by exactly that much; the income-tax basis is the fair "
+         "market value at the date of death whether or not debt sits on the property, so the near-zero "
+         "gain on an immediate sale is unaffected.",
+         "The lender's payoff statement dated at or near the transfer.",
+         ["irs_basis"]),
+        ("What an encumbrance does to the keeping paths",
+         "It is the one input here that only makes keeping worse. Each stated monthly payment is "
+         "modelled below: at $1,000 a month the living path loses $1,311,830 of terminal value and "
+         "the sale path loses nothing, because a house sold in the year of inheritance carries no "
+         "payment stream.",
+         "The amortisation schedule and the interest portion of it, which is the part that is a real "
+         "cost rather than a transfer between pockets.",
+         []),
+        ("Whether the lender could call the loan due on the transfer",
+         "For a loan on a building of fewer than five dwelling units, federal law stops a lender "
+         "exercising a due-on-sale clause on a transfer to a relative resulting from the borrower's "
+         "death, or on a transfer where the borrower's spouse or children become owners. Property A is "
+         "one unit and Property B is three, so both are inside that limit if they are encumbered at all.",
+         "The note and deed of trust, to confirm the loan is residential and the transfer is the "
+         "protected kind. The statute limits acceleration; it does not decide who must pay.",
+         ["uscode1701j3"]),
+        ("Occupancy changes",
+         "Priced. Living there and later letting it out is its own path, because the Proposition 19 "
+         "exclusion falls away when the home stops being the heir's principal residence and the "
+         "assessor re-enrols the change-of-ownership value; both readings of that rule are published on "
+         "the decision page rather than assumed away.",
+         "Nothing further: this one is a question of what the household intends, which the "
+         "pre-commitment register asks it to write down before the figures are read.",
+         ["rtc63_2_eligibility", "boe_prop19"]),
+        ("Capital and repair costs",
+         "Priced as a percentage of value and written out year by year in the five-year capital plan on "
+         "the running-costs page, which lists the components an allowance of that size has to cover.",
+         "Five years of actual spend and a licensed inspection, which is what turns the percentage into "
+         "a schedule.",
+         []),
+        ("Liquidity",
+         "Partly priced: a federal estate tax is payable in cash nine months after death, so an estate "
+         "whose wealth is in two buildings has to sell something or borrow, and the model's sell path is "
+         "the only one that produces cash on that clock.",
+         "The estate inventory and the liquid balance outside the trust, which are kept off this site by "
+         "the household's own instruction.",
+         ["irs_i706", "irs_estate"]),
+    ]
+    body = []
+    for item, status, needed, srcs in rows:
+        cell = (src_cell(srcs, "Official source") if srcs
+                else method_cell("review.html#register", "No official source applies"))
+        body.append(f"<td><strong>{esc(item)}</strong></td><td>{status}</td><td>{esc(needed)}</td>" + cell)
+    tbl = table("What the comparison carries, and what it does not",
+                ["Element", "Status in this edition", "What is still needed", "Basis"], body,
+                note="Every row states its own condition. A row that says 'priced' is computed by the "
+                     "model from the inputs on this site; a row that says 'not supplied' is a gap in the "
+                     "record, and the model is running on the assumption named in it.")
+
+    debt_rows = []
+    for r in cc.get("debt_rows", []):
+        term = r["terminals"]
+        debt_rows.append(
+            f"<td>{m(r['monthly'])} a month</td><td>{m(r['annual'])} a year</td>"
+            f"<td>{m(term['sell_equities'])}</td><td>{m(term['live_in'])}</td>"
+            f"<td>{m(term['rent_out'])}</td><td>{m(r['live_delta'])}</td>"
+            f"<td><strong>{esc(PATH_LABELS[r['best']])}</strong></td>"
+            + method_cell("#method", "Model output"))
+    per_1000 = next((-r["live_delta"] for r in cc.get("debt_rows", [])
+                     if r.get("monthly") == 1000), 0)
+    cases = ""
+    if debt_rows:
+        cases = ('<h3>If there is a payment to carry: what $500, $1,000 and $2,000 a month does</h3>'
+                 + table("Stated debt-service levels added to the keeping paths (2045 inheritance, thirty years)",
+                         ["Payment", "A year", "Sell and invest", "Live in it", "Let it out",
+                          "Change to the living path", "Best path", "Basis"], debt_rows,
+                         note=f"These are stated scenarios, not estimates: no balance, rate or payment "
+                              f"for either property has been supplied, so nothing here pretends to know "
+                              f"whether either building is encumbered. What the table shows is the direction "
+                              f"and the rate: the first $1,000 a month of payment a holder would take on "
+                              f"costs the living path {m(per_1000)} of terminal value, and the sale path "
+                              f"nothing. A mortgage therefore never turns keeping the house into the better "
+                              f"choice; it only makes it worse, and the household's own capacity to carry "
+                              f"the payment is a second-order question the model does not ask."))
+    return ('<h2 id="debt">Debt, occupancy, capital costs and liquidity</h2>'
+            + callout("note", "Why this section exists", f"""
+<p>The comparison the owner asked for is to carry taxes, debt, occupancy changes, capital costs and
+liquidity. Taxes, occupancy, capital costs and liquidity are all priced somewhere in this edition; debt
+was not - it simply was not mentioned, which is the worst way for a model to make an assumption, because
+a reader cannot see it. This section states the assumption in the open: <strong>both buildings are
+modelled free and clear, because no encumbrance was reported either way</strong>. It also prices what
+an encumbrance would do, per $1,000 a month of payment, so the household can read its own balance off
+the table without the model guessing at it: each $1,000 a month of payment carried while the house is
+kept is {m(per_1000)} of terminal value, and nothing at all on the sale path.</p>
+<p>The direction of the effect is worth stating plainly, because it is counter-intuitive and it favours
+the recommendation. Debt reduces what a sale puts in the bank, but it also reduces what keeping the
+building is worth, by more: the holder pays the interest as well as the principal, and pays it out of
+money that would otherwise have been invested. So an encumbrance never makes keeping the house the better
+choice; it can only make it worse. That is why the ranking below does not change at any payment level.</p>""")
+            + tbl + cases)
 
 
 def reinvestment_section() -> str:
@@ -1271,9 +1507,13 @@ def page_property_a() -> str:
             f"<td>Assessed value if nothing changes, grown at the 2% cap</td>"
             f"<td>{m(p45['factored_base_year_value'])}</td>"
             + src_cell(["boe_pub29", "rtc51"], "Proposition 13"),
-            f"<td>Proposition 19 shelter, the indexed $1,000,000 amount</td>"
+            f"<td>Proposition 19: the indexed amount added to the prior factored base year value</td>"
             f"<td>{m(p45['prop19_cap'])}</td>"
-            + src_cell(["boe_lta25009", "rtc63_2"], "BOE and statute"),
+            f"<td>Published as {m(V['prop19_value_cap_2025_2027']['value'])} for a transfer between 16 February "
+            f"2025 and 15 February 2027, adjusted by statute every two years and next on 16 February 2027. The "
+            f"figure in this row is that official amount projected forward to the modelled transfer year at the "
+            f"assumed adjustment rate: a projection of an official figure, not one.</td>"
+            + src_cell(["boe_lta25009", "boe_prop19", "rtc63_2"], "BOE table and statute"),
             f"<td>New assessed value if the heir moves in and claims the exclusion</td>"
             f"<td><strong>{m(p45['taxable_if_live'])}</strong></td>"
             + src_cell(["rtc63_2"], "Statutory formula"),
@@ -1287,9 +1527,14 @@ def page_property_a() -> str:
             f"<td>Tax bill from 2045, heir does not move in</td><td>{m(p45['bill_if_rent_year1'])}</td>"
             + method_cell("projections.html#method", "Model output"),
         ],
-        note="The Proposition 19 formula means the new assessed value when the exclusion applies is simply "
-             "the market value at transfer minus the indexed shelter amount. That is the whole of the "
-             "benefit, and it is why the shelter matters less the longer the transfer is delayed.")
+        note="The statute enrols the inherited home at the transferor's factored base year value plus the "
+             "indexed amount, and adds to that the excess of the market value over the two; the rows above are "
+             "those three terms, so the new assessed value is the prior value plus everything the market value "
+             "puts above the sheltered ceiling. That is the whole of the benefit, and it is why the shelter buys "
+             "less the longer the transfer is delayed: the ceiling grows on a two-year statutory schedule while "
+             "the market value of the house does not wait for it. The exclusion has never covered a rental "
+             "building as such - before 2021 it reached $1,000,000 of \"other property\", and Proposition 19 "
+             "removed that too, which is why Property B has no carry-forward to model.")
 
     cost_rows = [
         f"<td>Water</td><td>{m(A['annual_costs']['water']['low'])} to {m(A['annual_costs']['water']['high'])}</td><td>{m(A['annual_costs']['water']['mid'])}</td>"
@@ -1298,9 +1543,15 @@ def page_property_a() -> str:
         f"<td>Electricity, net of solar export credit</td><td>{m(A['annual_costs']['electricity']['low'])} to {m(A['annual_costs']['electricity']['high'])}</td><td>{m(A['annual_costs']['electricity']['mid'])}</td>"
         f'<td><span class="badge unverified">owner estimate</span></td>'
         + src_cell(["cpuc_nem"], "Tariff rules"),
-        f"<td>Home insurance, primary residence</td><td>{m(A['annual_costs']['insurance']['low'])}</td><td>{m(A['annual_costs']['insurance']['mid'])}</td>"
-        f'<td><span class="badge unverified">owner estimate</span></td>'
-        + src_cell(["cdi_tips"], "Where to get a quote"),
+        f"<td>Home insurance, primary residence</td>"
+        f"<td>{m(A['annual_costs']['insurance']['low'])} to {m(A['annual_costs']['insurance']['high'])} a year</td>"
+        f"<td>{m(A['annual_costs']['insurance']['mid'])}</td>"
+        f'<td><span class="badge unverified">owner estimate, now in a band</span></td>'
+        + src_cell(["cdi_homeowners_avg", "cdi_tips"], "Published average for the form; where to quote"),
+        f"<td>Mortgage, deed of trust or lien at the transfer</td><td>{BLANK_CELL}</td>"
+        f"<td>none: modelled free and clear</td>"
+        f'<td><span class="badge assumption">not supplied</span></td>'
+        + src_cell(["uscode1701j3"], "What an encumbrance changes; publisher's rule"),
         f"<td>Maintenance and repair</td><td>not supplied</td><td>{m(MODEL['costs_a_now']['maintenance'])}</td>"
         f'<td><span class="badge assumption">assumption</span></td>'
         + src_cell([], "No official source"),
@@ -1412,8 +1663,15 @@ def page_property_b() -> str:
         f'<td><span class="badge unverified">owner estimate</span></td>' + src_cell([], "No official rate checked"),
         f"<td>Electricity</td><td>{m(B['annual_costs']['electricity']['low'])} to {m(B['annual_costs']['electricity']['high'])}</td><td>{m(B['annual_costs']['electricity']['mid'])}</td>"
         f'<td><span class="badge unverified">owner estimate</span></td>' + src_cell([], "No official rate checked"),
-        f"<td>Insurance, rental policy</td><td>{m(B['annual_costs']['insurance']['low'])}</td><td>{m(B['annual_costs']['insurance']['mid'])}</td>"
-        f'<td><span class="badge unverified">owner estimate</span></td>' + src_cell(["cdi_tips"], "Where to get a quote"),
+        f"<td>Insurance, rental policy</td>"
+        f"<td>{m(B['annual_costs']['insurance']['low'])} to {m(B['annual_costs']['insurance']['high'])} a year</td>"
+        f"<td>{m(B['annual_costs']['insurance']['mid'])}</td>"
+        f'<td><span class="badge unverified">owner estimate, now in a band</span></td>'
+        + src_cell(["cdi_df_rental", "cdi_tips"], "Published average for the landlord form; where to quote"),
+        f"<td>Mortgage, deed of trust or lien on the building</td><td>{BLANK_CELL}</td>"
+        f"<td>none: modelled free and clear</td>"
+        f'<td><span class="badge assumption">not supplied</span></td>'
+        + src_cell(["uscode1701j3"], "A loan on fewer than five units is inside the federal rule"),
         f"<td>Maintenance and repair</td><td>not supplied</td><td>{m(MODEL['costs_b_now']['maintenance'])}</td>"
         f'<td><span class="badge assumption">assumption</span></td>' + src_cell([], "No official source"),
         f"<td>Property tax, today</td><td>&mdash;</td><td>{m(MODEL['costs_b_now']['property_tax'])}</td>"
@@ -1770,18 +2028,24 @@ the modelled inflation rate of 2.5% a year.</p>""")
 2026) is the state-level statistical series regulators use: average premium is written premium divided by written
 exposures in house-years, as reported to statistical agents, for the dwelling fire and homeowners policy forms
 separately. {slink('naic_hmr_2023')} The California Department of Insurance publishes its own statewide average
-written premium from its Residential Property Insurance Report: about <strong>$1,070</strong> for an owner-occupied
-homeowners policy in experience year 2017, which is the newest figure in that series read for this site.
-{slink('cdi_homeowners_avg')} Both properties here are carried at {m(MODEL['costs_a_now']['insurance'])} a year,
-which is an <strong>owner estimate</strong> and is flagged unverified.</p>
+written premium for each policy form, and the newest year of the series read for this site, experience year 2017,
+gives <strong>$1,074</strong> for an owner-occupied homeowners multi-peril policy {slink('cdi_homeowners_avg')}
+and <strong>$519</strong> for the form the Department describes as a rental dwelling or landlord policy on up to
+four units {slink('cdi_df_rental')} - the form family a three-unit building like Property B is written on. The
+owner-occupied average for that form has itself risen from <strong>$620</strong> in 2001, so a statewide average
+is a moving thing as well as a blended one. Until this edition neither building's insurance was compared with
+anything: both were carried at a single {m(MODEL['costs_a_now']['insurance'])} figure, which is the middle of a
+band now rather than the whole assumption.</p>
 <p>Neither series is a premium for either building and neither must be read as one: a three-unit rental in the
 city is written on a dwelling fire form and a single-family home in the county on a homeowners form, at entirely
 different amounts of insurance. The NAIC report itself warns that average premium rises with the amount of
 insurance and that dwelling fire premiums are generally lower than homeowners package premiums because the
 coverage is more limited. A statewide average therefore <strong>understates</strong> a high-value home. The
-report's own by-state averages sit in Table 4 (page 30 onward) and Table 5 (page 135); those pages were not
-machine-readable in this build, so no average-premium figure from them is published here, under the rule that
-nothing is inferred or copied second-hand. A property-specific premium remains blank until it is quoted.</p>
+report's own by-state averages sit in Table 4 (page 30 onward) and Table 5 (page 135). Those pages were
+re-tried on 16 November 2026 and are still not machine-readable in this build, so no average-premium figure from
+them is published here, under the rule that nothing is inferred or copied second-hand. A premium for either
+building remains blank until it is quoted: what the published form averages can do is bound an assumption, not
+replace it.</p>
 <p>One coverage limit is worth the adviser's attention: the California FAIR Plan, the state's insurer of last
 resort, caps a residential dwelling policy at <strong>$3,000,000 combined</strong> (official CDI figure). Property A's
 owner-estimated value is $3,100,000, and that estimate is itself unverified. If standard-market cover cannot be
@@ -1799,10 +2063,18 @@ for either building appears on this site; both remain owner estimates flagged un
                     "<td>Statewide average premiums by form and amount of insurance</td>"
                     "<td>Table 4 (dwelling fire and owner-occupied, page 30 onward) and Table 5 (tenant and condominium, page 135) are the official by-state averages. Those pages were not machine-readable in this build, so the figures are left blank here and flagged, not inferred.</td>" + src_cell(["naic_hmr_2023"], "NAIC report, Tables 4 and 5"),
                     "<td>California statewide average, owner-occupied homeowners policy, experience year 2017</td>"
-                    "<td>About $1,070 a year</td>" + src_cell(["cdi_homeowners_avg"], "Department of Insurance report"),
+                    "<td>$1,074 a year, quoted as published</td>" + src_cell(["cdi_homeowners_avg"], "Department of Insurance report"),
+                    "<td>California statewide average, rental dwelling or landlord policy on up to 4 units, experience year 2017</td>"
+                    "<td>$519 a year, quoted as published; this is the form family Property B's policy belongs to</td>"
+                    + src_cell(["cdi_df_rental"], "Department of Insurance report"),
+                    "<td>The same owner-occupied series at its first published year, 2001</td>"
+                    "<td>$620 a year, so this statewide average rose about 73% over sixteen years</td>"
+                    + src_cell(["cdi_homeowners_avg"], "Department of Insurance report"),
                 ],
                 note="These are market-wide published figures, not quotes and not estimates for either building. "
-                     "The owner estimate used in the model is flagged unverified and should be replaced with quotes.")
+                     "The owner estimate used in the model is flagged unverified and should be replaced with "
+                     "quotes; the published form averages bound it, which is the most an official series can do "
+                     "for a property nobody has quoted.")
         + table("Property B net income today",
                 ["Item", "Amount", "Source"],
                 [
@@ -1827,14 +2099,18 @@ for either building appears on this site; both remain owner estimates flagged un
                 note="A constant rate is used for the year-by-year page because it is the only way to show a "
                      "readable table. It is not a forecast. The <a href=\"black-swan.html\">black swan page</a> "
                      "shows what happens when growth and inflation are not constant.")
+        + insurance_band_section()
         + capital_plan_section()
         + callout("flag", "Three cost numbers that need replacing", """
 <ol>
-<li><strong>Insurance on both properties.</strong> The state-level benchmark is the NAIC Homeowners Insurance
-Report: the by-state averages for the correct policy form sit in its Table 4 (dwelling fire for Property B,
-owner-occupied homeowners for Property A), but no average is a premium for either building, and neither the
-Department nor the NAIC publishes an average for this postal area. Get three quotes for each building,
-one of which should be a rental policy. See <a href="suggestions.html">suggestion S-01</a>.</li>
+<li><strong>Insurance on both properties.</strong> This was one round number at each building - the same number
+for a primary residence and for a three-unit rental, which cannot both be right - and it is now a band, floored
+by the Department's published statewide average for the matching policy form and capped by a stated scenario: see
+<a href="#insurance-band">Insurance: the band, and what it is worth</a>. The industry benchmark is the NAIC
+Homeowners Insurance Report, whose by-state averages for the correct forms sit in Table 4, beyond the pages this
+build can read, so they are left blank rather than copied from a secondary source. No official source publishes a
+premium for this postal area or for either building. Get three quotes for each building, one of which should be a
+landlord policy. See <a href="suggestions.html">suggestion S-01</a>.</li>
 <li><strong>Maintenance.</strong> No figure was supplied. This site assumes 0.5% of value a year for an
 owner-occupied home, 0.75% for Property A as a rental and 1.5% for the older three-unit building. Replace these
 with the actual five-year repair history. The <a href="#capital">five-year capital plan</a> above writes the
@@ -2936,6 +3212,23 @@ QUESTIONS = [
        "Read the trust instrument and the deed. This is the first thing to confirm, before any other question on this page.",
        "Revenue and Taxation Code section 63.2 allows the intergenerational exclusion only between parents and their children, or grandparents and grandchildren where the middle generation has died. If the relationship is different, there is no exclusion, the property is reassessed to full market value on the transfer, and every Proposition 19 figure on this site falls away. It is the single condition the whole analysis rests on.",
        ["rtc63_2_eligibility", "boe_prop19"]),
+      ("Is either building encumbered at the transfer, and on what terms?",
+       "Nothing. The material this site was built from does not say whether a mortgage, deed of trust, tax "
+       "lien or assessment lien is registered against either property, so both are modelled free and clear "
+       "and the decision page says so.",
+       "The payoff balance at the date of transfer, the monthly payment, the interest portion of it, and "
+       "whether any special assessment or unpaid tax is attached to the parcel.",
+       "Ask the lender for a payoff statement dated near the transfer, and read the recorded deed of trust; "
+       "the county recorder's index shows every lien of record. For the assessment lien, read the bond "
+       "or district's own schedule.",
+       "It is the one gap that changes the cash flow of every keeping path. A sale pays the balance out of "
+       "the proceeds, so the sum invested simply falls; a holder pays the balance over time with interest "
+       "on top, and that interest is a cost the sale path never incurs. The decision page prices each $1,000 "
+       "a month of payment at about $1,311,830 of terminal value on the living path and nothing on the sale "
+       "path. Federal law also settles the question nobody asks first: a lender cannot accelerate a loan on "
+       "a building of fewer than five units merely because the property passes to a relative at the "
+       "borrower's death.",
+       ["uscode1701j3", "irs_basis"]),
       ("Is the house actually titled in the trust today?",
        "The owner states the inheritance will come through a trust around 2040 to 2050.",
        "No deed, no parcel number, no trust document.",
@@ -3069,8 +3362,13 @@ QUESTIONS = [
     ("E", "Running costs",
      [
       ("What does insurance actually cost for each property?",
-       "Owner estimate of about $1,500 a year for each, unverified.",
-       "Real quotes.",
+       f"An owner estimate of {m(A['annual_costs']['insurance']['mid'])} a year at each building, now carried "
+       f"as a band rather than a point: {m(A['annual_costs']['insurance']['low'])} to "
+       f"{m(A['annual_costs']['insurance']['high'])} for Property A and {m(B['annual_costs']['insurance']['low'])} "
+       f"to {m(B['annual_costs']['insurance']['high'])} for Property B. The two floors are published figures - the "
+       f"statewide average written premium for the matching policy form in the Department's own table - and the "
+       f"two ceilings are stated scenarios.",
+       "Real quotes, which are the only thing that turns either band into a number.",
        "Get three quotes per building from admitted insurers, and check the FAIR Plan as a fallback. The "
        "FAIR Plan is the state's insurer of last resort and is not limited to a bare fire policy: it also "
        "offers a comprehensive homeowners form. Treat it as a fallback, not as a comparable quote.",
@@ -3190,8 +3488,13 @@ Proposition 19 figure on this site is conditional.</p>""")
 
 # -------------------------------------------------------------- suggestions --
 SUGGESTIONS = [
-    ("S-01", "Replace both insurance estimates with three real quotes each",
-     "Removes the largest block of unverified cost inputs. A rental policy on Property B is priced very differently from a primary-residence policy.",
+    ("S-01", "Replace both insurance bands with three real quotes each",
+     "Insurance was the last owner-supplied cost carried as a single round number, and it is now a band: "
+     "published statewide averages for the matching policy form at the floor, the owner's figure in the middle, "
+     "a stated scenario at the ceiling. Quotes are still needed, because they are what turns a band into a "
+     "number - and because a three-unit rental policy and a primary-residence policy are priced on different "
+     "forms and cannot share a figure. The whole band moves the living path by under 1% of the gap to selling, "
+     "so this closes a gap in the record rather than changing the recommendation.",
      "Low", "Low", "costs", "cdi_tips"),
     ("S-02", "Look up Property A's tax rate area and read the published rate",
      "Replaces the assumed 1.18% with the rate the county actually applies, and itemises the fixed charges.",
@@ -3272,6 +3575,14 @@ SUGGESTIONS = [
     ("S-27", "Decide whether a city transfer tax applies before relying on the 5.5% sale cost",
      "Only the county documentary transfer tax is modelled. Section 11911(b) lets a city add half the county rate again, and whether it applies to this property cannot be published without naming the city. The difference is small in dollars but it is an unverified part of the sale cost.",
      "Low", "Low", "taxes", ["rtc11911"])
+    ,
+    ("S-28", "Disclose whether either building is encumbered, and on what payment",
+     "The comparison is meant to carry debt alongside taxes, occupancy, capital costs and liquidity; nothing in "
+     "the record says whether anything is registered against either parcel, so both are modelled free and clear. "
+     "The decision page now prices each stated payment level, so one payoff statement is enough to place the "
+     "household on the right row of that table. It changes the size of every keeping path's bill and never its "
+     "ranking, which is exactly why the assumption needed to be visible rather than silent.",
+     "Low", "Medium: it is the only modelled input the household can answer from a single letter", "decision", ["uscode1701j3"])
     ,
     ("S-22", "Decide whether the public repository and its history should stay public",
      "The repository is public and earlier commits contain unrounded owner figures. Rounding the published page does not change what Git history holds. Making the repository private, or rewriting history, are the only two ways to close that exposure.",
@@ -3479,6 +3790,89 @@ def irregularity_section() -> str:
             + table("Items for the owner to check. These are questions, not findings of error.",
                     ["Item", "What the figures show", "What the official table or rule says", "What to do", "Source"],
                     rows, note=head_note))
+
+
+# ------------------------------------------------------------- recheck log ---
+def recheck_section() -> str:
+    """The 16 November 2026 official-source recheck, published so the reader can repeat it.
+
+    Each row records what was read again, whether the site's figure still matches the
+    document, and what could not be checked at all. Nothing here is asserted that was
+    not read on the publisher's own domain on the date shown.
+    """
+    rows = [
+        ("Federal estate and gift amounts for 2027",
+         "Rev. Proc. 2026-35 was opened in full and read at source. Section 3.44 states the 2027 basic "
+         "exclusion as $15,480,000 and section 3.46(1) states the 2027 annual gift exclusion as $20,000. "
+         "Both match the figures this site models. The earlier ledger note recorded the section 3.44 "
+         "sentence as taken from a search excerpt; it is now taken from the document itself.",
+         ["irs_rp2635"]),
+        ("Proposition 19 shelter amount and its next adjustment",
+         "The Board's own comparison table and filing-requirements checklist were read again. The amount "
+         "applicable to a transfer between 16 February 2025 and 15 February 2027 is $1,044,586, and the "
+         "Board states the next biennial adjustment falls due on 16 February 2027. The site's projection of "
+         "the allowance forward at an assumed rate is therefore anchored on the right starting figure, and "
+         "the 2027 update is a known future date rather than a guess.",
+         ["boe_prop19", "boe_lta25009"]),
+        ("The 1% surcharge above one million dollars",
+         "Revenue and Taxation Code section 17043 was read again from the statute: an additional 1% on the "
+         "portion of taxable income above $1,000,000, imposed in addition to other taxes in Part 10, with "
+         "the credit provisions, the filing-status recomputation and the joint-return provisions "
+         "disapplied. That is what the model's combined rate assumes, so the sensitivity that uses it is "
+         "unchanged.",
+         ["rtc17043"]),
+        ("Statewide insurance averages, by policy form",
+         "Two tables were read directly from the insurance department's own published files for the first "
+         "time on this site: the owner-occupied homeowners multi-peril series, whose newest year gives "
+         "$1,074 for experience year 2017, and the rental dwelling and landlord series, which gives $519 "
+         "for the same year. Both figures are now the floors of the two insurance bands, and both are "
+         "quoted as published. The department's later Part I workbook, which extends the same measures to "
+         "2023, is a spreadsheet and could not be read by this build: that is recorded as a limit, not "
+         "filled in.",
+         ["cdi_homeowners_avg", "cdi_df_rental"]),
+        ("Industry averages by state and by amount of insurance",
+         "The industry report was re-read. Tables 1 to 3 are machine-readable and the three California rows "
+         "this site publishes were confirmed against them, including the 8.4% share of exposures carrying "
+         "$1,000,000 or more of insurance. Tables 4 and 5, the by-state averages, begin beyond the pages "
+         "this build can read, so they remain blank and flagged here rather than copied from a secondary "
+         "summary - the same disposition an earlier session recorded, now independently reproduced.",
+         ["naic_hmr_2023"]),
+        ("Residual-market coverage limit",
+         "The order that raised the state's insurer of last resort from a 1.5 million dollar combined "
+         "dwelling limit to $3,000,000, effective 1 April 2020, was read again on the department's own "
+         "page. Property A's owner-estimated value exceeds that limit, which is why the coverage-availability "
+         "warning stays on the costs page.",
+         ["cdi_fairplan"]),
+        ("What a lender may do when the borrower dies",
+         "The federal statute on due-on-sale clauses was read at source, subsection (d) in full, from the "
+         "2024 edition of the United States Code. The exemptions this site now cites - a transfer to a "
+         "relative resulting from the borrower's death, a transfer where the borrower's children become "
+         "owners, and a transfer into an inter vivos trust in which the borrower remains a beneficiary - are "
+         "quoted from it, together with the limit of the protection: buildings of fewer than five dwelling "
+         "units.",
+         ["uscode1701j3"]),
+        ("Figures this session could not check at all",
+         "Three. The ad valorem rate used for Property B is published by a city body whose web address names "
+         "the jurisdiction, so it is not linked here and remains flagged; the local parcel tax is recorded on "
+         "the register with its result pending certification; and the rate area for Property A is withheld "
+         "for the same crosswalk reason, which is why the site runs an assumed rate with a diagnostic band "
+         "instead. Each is a known hole, not a silent one.",
+         []),
+    ]
+    body = []
+    for item, detail, srcs in rows:
+        cell = (src_cell(srcs, "Official source") if srcs
+                else method_cell("review.html#register", "Withheld for privacy, logged on the register"))
+        body.append(f"<td><strong>{esc(item)}</strong></td><td>{detail}</td>" + cell)
+    return ('<h2 id="recheck">Official-source recheck, 16 November 2026</h2>'
+            + callout("note", "Why this is published", """
+<p>The brief asks for the authorities to be re-checked periodically and for enacted changes to be told apart
+from proposals. This is that re-check, recorded as a table rather than as a claim, so a reader can open the
+same document and see the same sentence. Two things follow from doing it in the open: where a figure was
+previously taken from a summary or a search excerpt, this says so and says whether the document itself has
+now been read; and where a document could not be read at all, the row is left blank rather than filled with
+an inference.</p>""")
+            + table("What was re-read, and what it showed", ["Figure or rule", "What the source says today", "Source"], body))
 
 
 def history_audit_section() -> str:
@@ -3816,9 +4210,15 @@ def page_review() -> str:
          "Owner estimate", "Read the bills."),
         ("Property B electricity", f"{m(B['annual_costs']['electricity']['low'])} to {m(B['annual_costs']['electricity']['high'])} a year",
          "Owner estimate", "Read the bills."),
-        ("Insurance on both properties", m(A["annual_costs"]["insurance"]["mid"]) + " a year each",
-         "Owner estimate. The state and industry benchmarks are statewide and across all amounts of insurance, not an average for this postal area, so the figure can be compared against published averages but not verified as the premium for this building. The NAIC by-state averages (Table 4 of the Homeowners Insurance Report) were not machine-readable in this build and are left blank on the costs page, not inferred.",
-         "Get three quotes per building."),
+        ("Insurance on both properties", f"{m(A['annual_costs']['insurance']['mid'])} a year each, inside a band",
+         "Owner estimate, now carried as a range rather than a point: the floor of each band is the published statewide average written premium for the matching policy form (the Department's own table, read 16 November 2026), the middle is the owner's figure, and the ceiling is a stated scenario. Neither building has a quote, so no premium is claimed for either. The by-state averages in Table 4 of the industry report were re-checked on 16 November 2026 and are still beyond the pages this build can machine-read, so they are left blank on the costs page rather than copied from a secondary source.",
+         "Get three quotes per building, one of which is a landlord policy for Property B; then narrow the band and rebuild."),
+        ("Whether either building is encumbered at the transfer", "Modelled free and clear",
+         "Not supplied in either direction, and stated as an assumption on the decision page rather than left "
+         "out. A balance would reduce the proceeds of a sale and add a payment to every path that keeps the "
+         "building; the site prices each stated payment level instead of guessing one. The federal rule on "
+         "due-on-sale clauses was read at source and is cited where the assumption is stated.",
+         "Ask the lender for a payoff statement dated near the transfer and read the recorder's index for liens."),
         ("Maintenance on both properties", "0.5% / 0.75% of value for Property A, 1.5% for Property B",
          "Assumption. No figure was supplied.",
          "Assemble five years of actual spend and a capital plan."),
@@ -3889,7 +4289,8 @@ def page_review() -> str:
         "Property A electricity, net of solar": ["cpuc_nem"],
         "Property B water": [],
         "Property B electricity": [],
-        "Insurance on both properties": ["cdi_homeowners_avg", "naic_hmr_2023"],
+        "Insurance on both properties": ["cdi_homeowners_avg", "cdi_df_rental", "naic_hmr_2023", "cdi_fairplan"],
+        "Whether either building is encumbered at the transfer": ["uscode1701j3", "irs_basis"],
         "Maintenance on both properties": [],
         "Property B rent": [],
         "The inherited cash amount": [],
@@ -4044,6 +4445,7 @@ each one is a reason to check before acting.</p>""")
         + '<h2>Repository audit</h2>'
         + table("What was found when the repository was reviewed",
                 ["Finding", "Detail", "Residual risk", "Source"], aud_rows)
+        + recheck_section()
         + history_audit_section()
     )
 
@@ -4061,16 +4463,19 @@ def page_sources() -> str:
             f"<td>{esc(s['checked'])}</td>")
     return (
         callout("note", "How the ledger works", f"""
-<p>There are {len(SRC_DOC['sources'])} sources. Every one was opened on the publisher's own domain on 13 November
-2026, or is recorded as carried from the repository's earlier ledger and re-checked on the same date. The
-"supports" column says exactly what the source is cited for; the "limits" column says what it does not cover.
-Sources are cited only for what they actually state.</p>""")
+<p>There are {len(SRC_DOC['sources'])} sources. The date in the last column is when the entry was last read on the
+publisher's own domain. The ledger was opened on 13 November 2026 and has since been re-read in stages, most
+recently on 16 November 2026, when the figures listed in the <a href="review.html#recheck">recheck table</a> were
+taken from the documents themselves rather than from any summary of them. The "supports" column says exactly what
+the source is cited for; the "limits" column says what it does not cover. Sources are cited only for what they
+actually state, and an official publisher whose name or address would identify one of the two properties is
+deliberately not linked here: it is recorded on the register instead.</p>""")
         + table("Source ledger", ["ID", "Publisher", "Document", "What it supports",
                                   "Limits", "How it was checked"], rows)
         + callout("limit", "What this ledger does not do", """
 <ul>
 <li>It does not reproduce the rate schedules, thresholds or forms. Those change; read the linked document.</li>
-<li>It does not cover local ordinances beyond the two cities named, and it does not verify which rules apply to which building.</li>
+<li>It does not cover local ordinances and local measures affecting the two properties, whose official publishers are withheld because naming them would identify the buildings; those are recorded on the register with the date they were read. Nor does it verify which rules apply to which building.</li>
 <li>It contains no paid, paywalled or secondary source. Everything here is an official publisher or an official government site.</li>
 <li>It was checked on one date. Statutory sections are amended; letters to assessors are superseded; election results are certified after the fact.</li>
 </ul>""")
@@ -4095,10 +4500,24 @@ def page_glossary() -> str:
         ("Net investment income tax (NIIT)", "A 3.8% federal tax on investment income for higher earners, layered on top of capital gains tax.", ["irs_tc559"]),
         ("Portability", "A surviving spouse may be able to use a deceased spouse's unused federal estate-tax exclusion if the required estate-tax return is timely and correctly filed.", ["irs_estate", "irs_i706"]),
         ("Proposition 13", "California's rule that property tax is 1% of assessed value plus voter-approved bonds, with assessed value rising no more than 2% a year until ownership changes.", ["boe_pub29", "rtc51"]),
-        ("Proposition 19", "The rule that the parent-child property-tax exclusion now applies only when the child makes the inherited home their principal residence, and shelters only value above the prior taxable value plus a biennial adjustment amount.", ["rtc63_2", "boe_prop19", "boe_lta25009"]),
+        ("Proposition 19", "The rule that the parent-child property-tax exclusion now applies only when the child makes the inherited home their principal residence, and caps the new assessed value at the prior factored base year value plus an amount adjusted every two years ($1,044,586 for a transfer between 16 February 2025 and 15 February 2027, next adjusted 16 February 2027). It shelters only the value below that ceiling, and since 1 January 2021 it has not covered rental property at all: the pre-2021 exclusion for $1,000,000 of other property was removed.", ["rtc63_2", "boe_prop19", "boe_lta25009"]),
         ("Proposition 19 parent-child exclusion", "A conditional California change-in-ownership exclusion, limited by statute and generally requiring the eligible transferee to use the transferred home as a principal residence and file a claim.", ["rtc63_2_eligibility", "boe_prop19"]),
         ("Reinvestment risk", "The risk that sale proceeds must be reinvested at lower returns than expected - for example, inheriting just before a stock-market crash and buying equities at the top. The phased-investing path on the black-swan page tests parking proceeds in short-term Treasuries for 24-36 months before buying stocks, with a synthetic stress and a dated backtest of the realized 1929, 2000 and 2008 returns.", ["fred_gs10", "damodaran_histret"]),
         ("Phased investing", "Selling the inherited home, holding the proceeds in 3-month to 2-year Treasury bills for 24-36 months, then buying equities in equal monthly pieces over the following 12 months. It softens the risk of entering the stock market at a 1929- or 2008-style peak; the black-swan page tests it synthetically and against realized returns.", ["fred_gs10", "damodaran_histret"]),
+        ("Encumbrance", "A mortgage, deed of trust, tax lien, assessment lien or other claim registered against "
+         "a property. Nothing in the record says whether either building here carries one, so the model runs both "
+         "free and clear and the decision page states that as an assumption rather than a fact.",
+         []),
+        ("Due-on-sale clause", "A loan term letting a lender demand full repayment when the property is "
+         "transferred. Federal law stops a lender exercising one on a transfer to a relative resulting from the "
+         "borrower's death, or on a transfer where the borrower's children become owners, for a loan on fewer than "
+         "five dwelling units. It limits acceleration; it does not decide who has to pay.",
+         ["uscode1701j3"]),
+        ("Dwelling fire and landlord forms", "The policy family a rental house or a building of up to four units is "
+         "usually written on, as distinct from the owner-occupied homeowners multi-peril form. The state "
+         "insurance department publishes a statewide average written premium for each form, and the two averages "
+         "differ by a factor of about three, which is why one number cannot cover both buildings here.",
+         ["cdi_df_rental", "cdi_homeowners_avg"]),
         ("Break-even", "The rent, return or house-growth rate at which one path ties another. Below it, selling and investing wins; above it, keeping the home can win.", []),
         ("Horizon", "The 30 years after the inheritance over which each path is valued.", []),
         ("Outflow", "The total property tax and carrying cost paid over the horizon on a path (rental paths also credit rent received).", []),
@@ -4142,7 +4561,15 @@ def page_briefing() -> str:
 <section><h2>Mixed paths and the clawback</h2>
 <p>Living there for a period and then selling is the closest mixed path, and it still ends behind an immediate sale by {m(next(x for x in MIXED['paths'] if x['occupy_years'] == 5 and x['mode'] == 'sell')['gap_vs_sell_now'])} after five years. Moving out after claiming the Proposition 19 exclusion removes it: section 63.2(a)(1)(C) enrols the change-of-ownership base year value, costing about {m(MIXED['clawback']['difference'])} of extra property tax over thirty years on the live-then-let path. Both readings are published; ask counsel which applies.</p></section>
 <section><h2>Known / unknown before choosing</h2>
-<p><strong>Known from the supplied brief, not independently verified:</strong> owner-reported values, Property B rent and utilities, Property A water/solar estimate and historic tax-roll figures. <strong>Unknown:</strong> actual deed/title and trust terms, relationship eligibility, current insurance quotes, property-specific utilities, repairs/capital work, exact tax-rate areas, Property A market rent, selling costs, total taxable estate and future law.</p>
+<p><strong>Known from the supplied brief, not independently verified:</strong> owner-reported values, Property B rent and utilities, Property A water/solar estimate and historic tax-roll figures. <strong>Unknown:</strong> actual deed/title and trust terms, relationship eligibility, current insurance quotes, whether anything is registered against either parcel, property-specific utilities, repairs/capital work, exact tax-rate areas, Property A market rent, selling costs, total taxable estate and future law.</p>
+<p><strong>Two assumptions are now banded and tested instead of left as round numbers.</strong> Insurance: each
+building carries a band whose floor is the published statewide average for the matching policy form ($1,074
+owner-occupied, $519 landlord on up to four units, newest year published 2017) and whose ceiling is a stated
+scenario; the whole band moves the thirty-year living figure by under 1% of the gap to selling, so a quote sizes
+the bill and does not decide the path. Encumbrance: nothing was reported either way, so both are modelled free and
+clear, and $1,000 a month of debt service costs a keeping path about $1,311,830 and the sale path nothing.
+Counsel's question is what is owed, not whether the transfer triggers repayment: on a building of fewer than five
+units, federal law does not let a lender accelerate because the property passed to a relative at death.</p>
 <p>Obtain certified tax bills and assessor records, title report, trust copy, date-of-death appraisal, insurer quotes for owner-occupied and rental uses, utility bills, property-condition inspection and a local rent opinion. Do not publish source documents or identifiers.</p>
 </section>
 <section><h2>Options and material risks</h2>
@@ -4152,7 +4579,7 @@ def page_briefing() -> str:
 <p>Before transfer: verify trust/deed, relationship eligibility, estate liquidity and insurance. At death/transfer: secure property, contact trustee/assessor/insurer, obtain date-of-death valuation, inventory expenses and confirm tax filing calendar. After title transfer: have counsel/CPA calendar assessor claim deadlines, income/estate returns, insurance endorsements and rental notices; model live/rent/sell choices with actual quotes before signing or distributing proceeds. Exact dates depend on transfer and filing facts.</p>
 </section>
 <section class="brief-glossary"><h2>Glossary</h2>
-<p><strong>Basis step-up</strong>: generally resets inherited property tax basis to date-of-death value, subject to exceptions. <strong>Prop 19 exclusion</strong>: conditional California parent-child reassessment exclusion subject to statutory value and occupancy rules. <strong>Estate tax</strong>: federal tax on taxable estate, not a California inheritance tax. <strong>Reinvestment risk</strong>: future short-term Treasury proceeds may earn lower yields at maturity.</p>
+<p><strong>Basis step-up</strong>: generally resets inherited property tax basis to date-of-death value, subject to exceptions. <strong>Prop 19 exclusion</strong>: conditional California parent-child reassessment exclusion subject to statutory value and occupancy rules. <strong>Estate tax</strong>: federal tax on taxable estate, not a California inheritance tax. <strong>Reinvestment risk</strong>: future short-term Treasury proceeds may earn lower yields at maturity. <strong>Encumbrance</strong>: a mortgage, deed of trust or lien on a property; unknown for both buildings here, so both are modelled free and clear, with the limit on acceleration set by 12 U.S.C. section 1701j-3(d).</p>
 </section>
 </div>
 <p class="brief-footer">For attorney / CPA discussion only. Laws and projections may change before 2040–2050. Sources and full assumptions: <a href="sources.html">source ledger</a>, <a href="questions.html">question register</a>, <a href="review.html">unverified items</a>, <a href="black-swan.html">phased-investing stress test</a>. No legal, tax or investment advice.</p>
@@ -4527,6 +4954,64 @@ def page_what_if() -> str:
              "received as cash. The gap only closes near the housing value the decision page reports as "
              "needed; below that, selling still wins.")
 
+
+    # ---------------------------------------------------------------- cost levers --
+    # Levers 4 and 5 price the two owner-side cost uncertainties the brief asked to
+    # see as ranges rather than round numbers: the insurance premium on Property A,
+    # and the debt service that would exist if either building turns out to be
+    # encumbered. Both re-run the same engine; neither invents a figure for the
+    # household. The official rung is published at the figure the Department prints.
+    cc = MODEL.get("cost_cases") or {}
+    ins_rows = []
+    for i, r in enumerate(cc.get("rows", [])):
+        t = r["terminals"]
+        anchor = f"insurance-{r['annual']}"
+        ins_rows.append(
+            f"<td><a id='{anchor}'></a>{esc(_rung(r))}</td>"
+            f"<td>${r['annual']:,}</td>"
+            f"<td>{m(t['sell_equities'])}</td><td>{m(t['sell_treasury'])}</td>"
+            f"<td>{m(t['live_in'])}</td><td>{m(t['rent_out'])}</td>"
+            f"<td>{m(r['live_gap'])}</td>"
+            f"<td><strong>{esc(PATH_LABELS[r['best']])}</strong></td>"
+            + (src_cell([r["kind"]], "Published figure") if r.get("kind") in SOURCES
+               else method_cell("review.html#register", "Owner figure or stated scenario")))
+    ins_table = table(
+        "Lever 4: the insurance premium on Property A, across the whole band (2045 inheritance)",
+        ["Rung", "A year", "Sell, equities", "Sell, Treasuries", "Live in it", "Let it out",
+         "Change to the living path", "Best path", "Basis"],
+        ins_rows,
+        note=f"The floor rung is the published statewide average written premium for the owner-occupied "
+             f"homeowners form in experience year {cc.get('band', {}).get('official_floor_year', 2017)}, "
+             f"which is the newest year of that series and is quoted as published, not rounded. The middle "
+             f"is the owner's estimate, which is what the rest of this site runs. The top is a stated "
+             f"scenario, not an estimate. Across the whole band the living path moves by "
+             f"{m(cc.get('band', {}).get('effect_on_live', 0))} of terminal value against a "
+             f"{m(cc.get('gap_live_at_baseline', 0))} selling-versus-living gap, which is "
+             f"{cc.get('band_share_of_gap', 0)}% of it: insurance changes the size of the bill, not the "
+             f"ranking, because a house sold in the year of inheritance pays no premium afterwards.")
+
+    debt_rows2 = []
+    for r in cc.get("debt_rows", []):
+        t = r["terminals"]
+        debt_rows2.append(
+            f"<td><a id='debt-{r['monthly']}'></a>{m(r['monthly'])} a month</td>"
+            f"<td>{m(r['annual'])}</td><td>{m(t['sell_equities'])}</td>"
+            f"<td>{m(t['live_in'])}</td><td>{m(t['rent_out'])}</td>"
+            f"<td>{m(r['live_delta'])}</td>"
+            f"<td><strong>{esc(PATH_LABELS[r['best']])}</strong></td>"
+            + method_cell("#method", "Model output"))
+    debt_table = table(
+        "Lever 5: a debt service added to the keeping paths, if either building is encumbered (2045 inheritance)",
+        ["Stated payment", "A year", "Sell, equities", "Live in it", "Let it out",
+         "Change to the living path", "Best path", "Basis"],
+        debt_rows2,
+        note="The zero row is the published baseline: nothing in the record says whether either building "
+             "carries a mortgage, deed of trust or lien, so the model runs both free and clear and says so. "
+             "Each further row adds that payment to the paths that keep the house and leaves the sale paths "
+             "alone, which is the effect on the ranking rather than on the balance sheet, because a sale pays "
+             "the balance off out of the proceeds and a holder pays it off over time with interest on top. "
+             "The ranking does not move at any of these levels.")
+
     jump = ("<ul class='card-list'>"
             "<li><a href='#house-2.5'>House growth at 2.5%</a></li>"
             "<li><a href='#house-5.5'>House growth at 5.5%</a></li>"
@@ -4541,19 +5026,25 @@ def page_what_if() -> str:
             f"<li><a href='#imputed-{imr['rows'][0]['monthly']}'>Imputed rent at zero (the baseline)</a></li>"
             f"<li><a href='#imputed-{imr['rows'][-1]['monthly']}'>Imputed rent at "
             f"{m(imr['rows'][-1]['monthly'])} a month</a></li>"
-            "</ul>")
+            + ("".join(f"<li><a href='#insurance-{r['annual']}'>Insurance at ${r['annual']:,} a year</a></li>"
+                       for r in (cc.get("rows") or []))
+               + "".join(f"<li><a href='#debt-{r['monthly']}'>Debt service at {m(r['monthly'])} a month</a></li>"
+                         for r in (cc.get("debt_rows") or [])))
+            + "</ul>")
     return (
         callout("method", "How to use this page", f"""
 <p>There are no sliders, because this site runs no script. Each case below is a link target. Choose one from the list,
 or read the tables in order. Change one lever at a time, and the other stays at the baseline. Every figure is rounded
 to the nearest $10 and comes from the same model that builds the rest of the site.</p>
 {jump}""")
-        + lever1 + lever2 + im_table + reg_table + yr_table + be_table
+        + lever1 + lever2 + im_table + ins_table + debt_table + reg_table + yr_table + be_table
         + callout("flag", "What the cases do not show", """
 <p>No case here credits the letting paths with a market rent, because none has been supplied. Read every letting row as
 the path at zero rent, which is a floor. Lever 3 credits the <em>living</em> path instead, at stated levels that are
 scenarios rather than estimates; the input that would hold a real imputed rent is empty, so the published baseline
-stays the zero row. The model also does not change the Proposition 19 eligibility question; if
+stays the zero row. Levers 4 and 5 change a <em>cost</em> rather than a return, and they are there to show what does
+<em>not</em> move the answer: neither the insurance band nor any debt service tested here puts keeping the house
+ahead of selling it. The model also does not change the Proposition 19 eligibility question; if
 that answer is no, the reassessment is full and every case here moves toward selling.</p>""")
     )
 
@@ -4984,7 +5475,15 @@ def executive_summary_markdown() -> str:
       "insurance estimates are the owner's own records, not checked against a county roll or a quote.")
     a("- Property A's tax rate area and its published ad valorem rate. 1.18% is assumed and flagged.")
     a("- A property-specific insurance premium for either building. The Department of Insurance publishes a "
-      "statewide average and an online premium survey, not an average for a postal area.")
+      "statewide average written premium for each policy form - the newest year read gives $1,074 for an "
+      "owner-occupied homeowners form and $519 for a rental dwelling or landlord form on up to four units - and "
+      "an online premium survey, not an average for a postal area. Both buildings are now carried as bands "
+      "bounded by those figures instead of one shared estimate, and the whole band moves the thirty-year living "
+      "figure by under 1% of the gap to selling, so it is a bill to be sized rather than a decision to be made.")
+    a("- Whether either building carries a mortgage, deed of trust or lien at the transfer. Nothing in the "
+      "record says either way, so both are modelled free and clear and the decision page states that as an "
+      "assumption and prices each stated payment level. An encumbrance changes the size of every keeping path's "
+      "bill and never the ranking, because a holder pays the interest as well as the principal.")
     a("- A market rent for Property A, and the seller's actual selling costs.")
     a("- Whether the trust actually holds title, and whether the transfer is between a parent and a child.")
     a("")
