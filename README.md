@@ -55,7 +55,7 @@ basis, actual sale costs, occupancy, rents, insurance, maintenance, utilities, d
 and laws in force at transfer. Missing or unverified property-specific amounts are not presented as
 confirmed; they are identified on the relevant pages and on `review.html`.
 
-There are **24 generated HTML pages** and one stylesheet in the public allowlist. The pages show rounded owner-provided figures, model outputs and official-source-backed legal/economic information. The source ledger contains **105 entries**. Both property placeholders grow with the California state-level FHFA house-price index: the two metropolitan-area series were withdrawn on 15 November 2026 because the index publisher's own metadata crosswalked the placeholders to their metropolitan areas (an audit finding), and the privacy gate now rejects the withdrawn series identifiers and metro phrasing. The jurisdiction-specific entries (the two properties' county and city official pages) were also withdrawn, because their publishers identify the properties. A factual table row either links to an official source or is explicitly registered as unsourceable/unverified.
+There are **25 generated HTML pages** and one stylesheet in the public allowlist. The pages show rounded owner-provided figures, model outputs and official-source-backed legal/economic information. The source ledger contains **112 entries**. Both property placeholders grow with the California state-level FHFA house-price index: the two metropolitan-area series were withdrawn on 15 November 2026 because the index publisher's own metadata crosswalked the placeholders to their metropolitan areas (an audit finding), and the privacy gate now rejects the withdrawn series identifiers and metro phrasing. The jurisdiction-specific entries (the two properties' county and city official pages) were also withdrawn, because their publishers identify the properties. A factual table row either links to an official source or is explicitly registered as unsourceable/unverified.
 
 The Black Swan analysis uses one canonical monthly park-and-phase engine and one short-Treasury
 parking-yield assumption. It includes synthetic stresses and historical entry replays, including
@@ -68,9 +68,9 @@ professional advice when dates, facts or laws change.
 
 ## Published site and verification snapshot
 
-The current generated edition contains **24 HTML pages**, **one runtime stylesheet**, **105 entries
-in the source ledger**, and **134 content-free withdrawal notices** for retired routes. The latest
-local verification reports **1118 table rows**: **951 linked to official publishers** and **167
+The current generated edition contains **25 HTML pages**, **one runtime stylesheet**, **110 entries
+in the source ledger**, and **136 content-free withdrawal notices** for retired routes. The latest
+local verification reports **1238 table rows**: **1061 linked to official publishers** and **177
 explicitly registered as unsourceable or unverified**. A row without a confirming official source is
 not filled in by inference. The public site contains no source ledger or internal model data files;
 the Jekyll and Actions publication boundaries are checked separately.
@@ -107,6 +107,31 @@ maintained by `scripts/verify_legacy.py`; do not add `.nojekyll` or weaken its e
 A separate Actions workflow packages and deploys an allowlisted artifact. These are separate
 publication paths, so check both after a publication change. The latest GitHub Pages status should
 be checked through the repository's Pages settings and Actions runs.
+
+## Estate liquidity and the two-person case
+
+`scripts/liquidity.py` writes `assets/data/liquidity.json` and answers a question the path model does not:
+if the estate owes federal estate tax, when is it due and how is it paid? The estate's own size is
+deliberately not published and not modelled as a figure, so the engine works in anonymous bands of the
+amount above the exclusion.
+
+- **The clock.** The tax is 40% of the amount above the exclusion and is due nine months after death. A
+  six-month extension of time to *file* is not an extension of time to *pay*; interest runs from the original
+  due date whether or not an extension was granted.
+- **The interest rate.** Federal short-term rate plus three percentage points, set quarterly and compounded
+  daily. The published rate for the fourth quarter of 2026 is 7%, on a 4% short-term rate. The published
+  range across 2022-2026 is 3% to 8%.
+- **Deferral.** Section 6161(a)(2) allows a discretionary extension of time to pay, one year at a time for up
+  to ten years, and only for the amount of the actual cash shortage. The page prices one, three, five and ten
+  years, both as a single payment at the end and as equal annual instalments, against the return the cash
+  would have earned if it had stayed invested.
+- **Section 6166.** The fifteen-year instalment election exists, but it requires an interest in a closely
+  held business exceeding 35% of the adjusted gross estate. A home occupied as a personal residence is not
+  that on the face of the statute, so the site does not assume it is available; the rule and the 2% rate are
+  still published, with the eligibility question flagged for the attorney.
+- **The two-person case.** Two exclusions with portability at each inheritance year, and the joint
+  section 121 amount repriced against every mixed path. The pure-path model still runs on single-filer
+  assumptions, which is the conservative case.
 
 ## Mixed paths, distributions and the clawback
 
@@ -150,7 +175,7 @@ python3 scripts/verify_legacy.py --config-only
 `rebuild.py` runs `model.py`, `economy.py`, `model.py` again, `mixed.py`, and `build.py` in that
 order. The first model pass supplies break-even values used by the economy bootstrap; the second
 model pass embeds the freshly rebuilt bootstrap. The mixed-path model then consumes both current
-outputs. The pipeline writes the derived JSON/CSV tables, 24 pages, and `EXECUTIVE_SUMMARY.md`.
+outputs. The pipeline writes the derived JSON/CSV tables, 25 pages, and `EXECUTIVE_SUMMARY.md`.
 Its generator output is suppressed to keep detailed property diagnostics out of CI logs; run an
 individual component locally if a failure needs diagnosis.
 
