@@ -3576,3 +3576,30 @@ While PR #126 was open, main advanced twice: PR #123 and PR #125 (sessions `aren
 **Verification after resolution:** 24 pages (this session's 23 plus main's `decision-rules.html`), 1,083 table rows, 943 official-source-linked, 140 logged unsourceable, 3,856 links of which 2,507 external, 104 ledger sources, 132 withdrawal routes. `build.py`, `verify.py`, `privacy_boundary.py`, `package_site.py`, `verify_legacy.py --config-only` all exit 0. Both chart systems render from the merged stylesheet; every class used by a page is defined in it.
 
 **Nothing was discarded and no recommendation changed.** The merge only adds main's roll audit, decision-rules page, decision calendar, percentile band and local parcel-tax allow-list to this session's work.
+
+## Session `arena/bdeaf496-tino3` — independent re-verification of the published edition, spot-check of official parameters, publication record · claimed 2026-11-16
+
+*Branch note:* Arena pins this session to `arena/bdeaf496-tino3`, branched from `main` at `1cfed92` (merge of PR #128). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. `gh pr list --state open` returned nothing when this session started, so no other session holds `scripts/build.py`, `assets/data/*` or `assets/sources.json`.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| V-1 Claim this scope and push before any other edit | **done** — this section | `arena/bdeaf496-tino3` | `COORDINATION.md` (this section only) |
+| V-2 Rebuild from source and confirm the committed pages are reproduced byte for byte (no hand edits, no stale output) | **done** — result below | `arena/bdeaf496-tino3` | read-only |
+| V-3 Run every gate: `model.py`, `economy.py`, `mixed.py`, `build.py`, `verify.py`, `privacy_boundary.py`, `package_site.py`, `verify_legacy.py --config-only` | **done** — all exit 0 | `arena/bdeaf496-tino3` | read-only |
+| V-4 Spot-check the load-bearing official parameters against the official publisher, not only the ledger | **done** — result below; no value changed | `arena/bdeaf496-tino3` | read-only |
+| V-5 Publish: pull request to `main`, merge without waiting, confirm the GitHub Pages deploy, record the PR link and result | pending | `arena/bdeaf496-tino3` | this section only |
+
+### V-2 and V-3 result
+
+`scripts/build.py` regenerated every page, data file and `EXECUTIVE_SUMMARY.md` from source; `git status` after the rebuild was clean, so the committed edition is exactly what the builder produces. `verify.py` passed (build reproducible, every table row source-linked, links resolve, artifact inside the privacy boundary). `privacy_boundary.py` passed (24 pages and 1 asset scanned; every published dollar figure is rounded to $10 or is a published official amount). `package_site.py` packaged 24 public pages, 1 runtime asset and 132 content-free withdrawal routes. `verify_legacy.py --config-only` passed. Ledger: 104 entries; pages: 24.
+
+### V-4 result: official parameters re-read at source
+
+- **Federal basic exclusion, 2027 — $15,480,000; annual gift exclusion, 2027 — $20,000; 2026 exclusion — $15,000,000.** Re-read at <https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts> (IR-2026-133, 5 November 2026), section "Estate Tax Exclusion" and "Annual Exclusion for Gifts". **Confirmed.**
+- **Proposition 19 value cap — $1,044,586 for transfers from 16 February 2025 to 15 February 2027.** Re-read at <https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf> (Letter to Assessors 2025/009, 7 March 2025), with the full adjustment table. **Confirmed.** Consequence for the model: the cap is official only to 15 February 2027. The next adjustment is due February 2027 under section 2.1(c)(4) and has not been published, so every later cap in the projections is a modelled figure, not an official one. The site should keep labelling it that way; it does.
+- **Proposition 19 guidance currency.** The BOE FAQ at <https://www.boe.ca.gov/proptaxes/pdf/lta26026.pdf> (Letter 2026/026, 3 August 2026) restates the family-home definition (the exclusion requires the transferee to keep the home as a principal residence — the continual-use requirement), the excluded amount and the clawback on ineligibility. The model's clawback treatment (section 63.2, enrolment of the new base-year value when the eligible transferee stops qualifying) matches that letter's description of the "new base year value".
+
+### Irregularities for review (not changed in this session)
+
+1. The ledger's Proposition 19 entry `prop19_value_cap_2025_2027` cites `boe_lta25009` and `rtc63_2`; both are correct for the period stated. No irregularity, recorded for completeness.
+2. No value in this session was changed, because every checked figure matched its official source. Nothing was inferred or filled in.
