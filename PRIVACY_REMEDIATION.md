@@ -174,3 +174,65 @@ Do these in order. Do not skip step 2.
 
 Either way, the published site is unaffected: it is already clean, and the controls in
 section 2 keep it clean on every build.
+
+---
+
+## 7. Re-measurement, 16 November 2026, on the full history (session `arena/2e2742f8-tino3`)
+
+**Why a re-measurement.** The session's clone started *shallow* (three commits). An audit of
+three commits says nothing about the history, so the clone was unshallowed first
+(`git fetch --unshallow origin`, read-only on the remote). The table above was measured
+on a larger clone and is kept as recorded; this section supersedes it for the classes it
+covers, and its pattern set is the publication gate's own (`scripts/privacy_boundary.py`),
+which is now the audit's only pattern source.
+
+**Result (counts only; no value is recorded here).** Scope: 401 commits across all refs,
+1,660 file versions.
+
+| Class (gate pattern) | Distinct file versions | Paths | Commit messages | Current tracked tree |
+|---|---|---|---|---|
+| Postal code, bare and prefixed | 14 and 86 | 6 and 25 | 0 | **0** |
+| Property-level place name | 245 | 49 | 1 | **0** |
+| Place name, including inside web addresses | 265 | 53 | 1 | **0** |
+| County or city (jurisdiction) name | 729 | 102 | 1 | **0** |
+| Location-specific source host | 674 | 77 | 0 | **0** |
+| Metro series identifier (withdrawn) and metro phrasing | 197 and 82 | 16 and 9 | 0 | **0** |
+| Amount not a multiple of ten | 230 | 37 | 0 | 7 (verbatim official quotes) |
+| Street address, parcel number, phone, person name | **0** | 0 | 0 | **0** |
+| Personal mail-service address (author or committer) | **115 commits** | — | — | this section only |
+
+The per-class counts overlap (one file version can match several patterns), so they are
+not additive.
+
+**What changed on the current tree in this session.**
+
+1. `scripts/privacy_scrub_audit.py` no longer holds its own list of postal codes and place
+   names. It imports the publication gate's patterns, so the audit and the gate cannot
+   disagree. It no longer exempts `COORDINATION.md`, which had been the one file the
+   current-tree check never read.
+2. `COORDINATION.md`: the current text was redacted in place (74 replacements across eleven
+   rule types, counts recorded on the board): postal codes; property-linked place names;
+   county and city names; jurisdiction-specific source hosts and their links; the withdrawn
+   metro series prefix and codes; two unrounded owner figures; three cents-level tax
+   components derived from them. No board entry was deleted and no decision was changed.
+   The **history still holds the original text** until the owner runs the rewrite.
+3. `scripts/tracked_tree_guard.py` is new. It runs the gate's patterns over every tracked
+   text file and fails on a hit. It prints the file, the line and the class, never a value.
+   It is wired into the Verify workflow. It was tested by planting an identifier in a
+   tracked file (the guard failed, exit 1), then restoring the file from Git.
+
+**What is still open, and why it is the owner's.**
+
+- **History rewrite: not performed.** Agent sessions may push only their own branch, and a
+  rewrite of `main` is a force-push to the public default branch. The runbook
+  (`scripts/history_scrub.sh`) is the procedure. Its steps 1 to 8 still apply, and the
+  count above is the scope it would act on.
+- **Personal mail-service address on 115 commits.** This is the author or committer field
+  of earlier commits, including merge commits GitHub writes under the account's primary
+  address. Fixing history needs a mailmap rewrite (runbook step 3). Future GitHub-written
+  merges will keep using the account's primary address until the owner changes the
+  account's e-mail privacy setting. That setting is outside this repository and was not
+  changed.
+- **Jurisdiction source links.** Their links were removed from the board's current text.
+  The owner keeps the mapping outside the repository. The links are still in history until
+  the rewrite runs.

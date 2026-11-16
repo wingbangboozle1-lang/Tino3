@@ -81,6 +81,14 @@ checked for drift. The source links and what they support are listed on `sources
 
 ## Privacy and Git history
 
+`scripts/tracked_tree_guard.py` runs the publication gate's identifier patterns over every tracked text
+file (including the coordination board) and fails the Verify workflow on a hit; it prints file, line and
+class only. `scripts/privacy_scrub_audit.py` uses the same patterns for the history audit. The audit
+must be run on a full clone (`git fetch --unshallow`): a shallow clone silently under-reports history.
+On 16 November 2026 the full history (401 commits) still held postal codes, place and county names,
+and an earlier-edition file set, and 115 commits carry a personal mail-service address; counts are in
+`PRIVACY_REMEDIATION.md` section 7. Only the owner can run the rewrite.
+
 `privacy_boundary.py` checks the published artifact for prohibited identifiers and unrounded
 owner-supplied monetary values. The current page set passing that gate does **not** mean all public
 Git history is clean. Earlier commits, pull-request diffs, forks, caches and clones may retain
@@ -133,6 +141,7 @@ python3 scripts/mixed.py
 python3 scripts/build.py
 python3 scripts/verify.py
 python3 scripts/privacy_boundary.py
+python3 scripts/tracked_tree_guard.py
 python3 scripts/package_site.py
 python3 scripts/verify_legacy.py --config-only
 # CI also builds and audits the actual legacy Jekyll output:

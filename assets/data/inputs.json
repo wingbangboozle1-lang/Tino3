@@ -390,32 +390,32 @@
   "prop_h_sfr_base_2027_28": {
    "value": 129,
    "src": [],
-   "note": "Single-family parcel up to 3,000 sq ft, first fiscal year. Official amount of the parcel tax approved in Property B city at the November 2026 election. Read from the official measure text on 2026-11-15; publisher withheld for privacy."
+   "note": "Single-family parcel up to 3,000 sq ft, first fiscal year. Official amount of the parcel tax passed, on the preliminary count not yet certified, in Property B city at the November 2026 election. Read from the official measure text on 2026-11-15; publisher withheld for privacy."
   },
   "prop_h_multifamily_base_2027_28": {
    "value": 249,
    "src": [],
-   "note": "Multifamily residential parcel up to 5,000 sq ft, first fiscal year. Official amount of the parcel tax approved in Property B city at the November 2026 election. Read from the official measure text on 2026-11-15; publisher withheld for privacy."
+   "note": "Multifamily residential parcel up to 5,000 sq ft, first fiscal year. Official amount of the parcel tax passed, on the preliminary count not yet certified, in Property B city at the November 2026 election. Read from the official measure text on 2026-11-15; publisher withheld for privacy."
   },
   "prop_h_nonres_base_2027_28": {
    "value": 799,
    "src": [],
-   "note": "Non-residential and mixed-use parcel up to 5,000 sq ft, first fiscal year. Official amount of the parcel tax approved in Property B city at the November 2026 election. Read from the official measure text on 2026-11-15; publisher withheld for privacy."
+   "note": "Non-residential and mixed-use parcel up to 5,000 sq ft, first fiscal year. Official amount of the parcel tax passed, on the preliminary count not yet certified, in Property B city at the November 2026 election. Read from the official measure text on 2026-11-15; publisher withheld for privacy."
   },
   "prop_h_sfr_step_base_2027_28": {
    "value": 969,
    "src": [],
-   "note": "Single-family parcel of 5,001 sq ft or more: the maximum under the 3,001-5,000 sq ft band ($129 plus $0.42 over 3,000 sq ft). Official amount of the parcel tax approved in Property B city. Read from the official measure text on 2026-11-15; publisher withheld for privacy."
+   "note": "Single-family parcel of 5,001 sq ft or more: the maximum under the 3,001-5,000 sq ft band ($129 plus $0.42 over 3,000 sq ft). Official amount of the parcel tax passed, on the preliminary count not yet certified, in Property B city. Read from the official measure text on 2026-11-15; publisher withheld for privacy."
   },
   "prop_h_unimproved_base_2027_28": {
    "value": 392,
    "src": [],
-   "note": "Unimproved parcel over 2,000 sq ft of land, first fiscal year. Official amount of the parcel tax approved in Property B city. Read from the official measure text on 2026-11-15; publisher withheld for privacy."
+   "note": "Unimproved parcel over 2,000 sq ft of land, first fiscal year. Official amount of the parcel tax passed, on the preliminary count not yet certified, in Property B city. Read from the official measure text on 2026-11-15; publisher withheld for privacy."
   },
   "prop_h_pass_through_unit_cap": {
    "value": 65,
    "src": [],
-   "note": "Annual maximum a landlord may pass through to the tenant of a rent-controlled unit per unit, being 50 percent of the tax, where the base rent was set before 1 June 2027. Official amount of the parcel tax approved in Property B city. Read from the official measure text on 2026-11-15; publisher withheld for privacy."
+   "note": "Annual maximum a landlord may pass through to the tenant of a rent-controlled unit per unit, being 50 percent of the tax, where the base rent was set before 1 June 2027. Official amount of the parcel tax passed, on the preliminary count not yet certified, in Property B city. Read from the official measure text on 2026-11-15; publisher withheld for privacy."
   },
   "depreciation_recapture_rate": {
    "value": 0.421,

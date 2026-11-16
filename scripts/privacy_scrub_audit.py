@@ -30,28 +30,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
-# Patterns only. They are deliberately identical in shape to the published privacy
-# boundary's patterns so that the history audit measures the same thing the live
-# gate measures. They are defined here rather than imported so that running this
-# tool never depends on the publication path.
-PATTERNS = {
-    "postal code": re.compile(r"\b(?:95014|95015|94116|94122|94132)\b"),
-    # The published policy now withdraws the two jurisdictions as well as the
-    # property-level place names, because a county or city name narrows the search
-    # area exactly as a postal code does. This class therefore matches the same
-    # pattern scripts/privacy_boundary.py now enforces.
-    "property-level place name or jurisdiction": re.compile(
-        r"(?i)(cupertino|sunnyvale|saratoga|los[\s_-]*altos|los[\s_-]*gatos|"
-        r"monte[\s_-]*sereno|outer[\s_-]*sunset|inner[\s_-]*sunset|"
-        r"santa[\s_-]*clara|san[\s_-]*francisco|san[\s_-]*jose|"
-        r"bay[\s_-]*area|silicon[\s_-]*valley)"),
-    "street address": re.compile(
-        r"\b\d{1,5}\s+[A-Z][a-z]+\s+(?:Street|St|Avenue|Ave|Road|Rd|Drive|Dr|Way|Lane|Ln|"
-        r"Boulevard|Blvd|Court|Ct|Place|Pl|Terrace|Circle)\b"),
-    "parcel number": re.compile(r"\b\d{3}-\d{2,3}-\d{2,3}\b"),
-    "email address": re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+"),
-    "phone number": re.compile(r"\b(?:\(?\d{3}\)?[-. ])\d{3}[-. ]\d{4}\b"),
-}
+# Patterns come from the publication gate itself, so the history audit measures exactly
+# what the live gate measures and no identifier list is duplicated in this public file.
+# (The gate keeps its literals split across string fragments, so its own text never
+# carries an identifier.) Importing the gate is safe: it only reads the artifact at run time.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from privacy_boundary import FORBIDDEN as _GATE_PATTERNS  # noqa: E402
+
+PATTERNS = dict(_GATE_PATTERNS)
 
 # The publication gate does not ban large amounts: it bans an amount that is not a
 # multiple of ten. This is evaluated the same way the gate evaluates it - parse the
@@ -93,12 +79,24 @@ ALLOWED = OFFICIAL_AMOUNTS | _official_from_inputs()
 
 # Current-tree files that legitimately contain the patterns (the gate itself, the
 # board's own discussion of the rule, and this tool). Counted separately.
-SELF_FILES = {"scripts/privacy_boundary.py", "scripts/privacy_scrub_audit.py", "COORDINATION.md"}
+# Only the gate file itself is exempt: its identifiers are split across string fragments, so
+# it does not carry a single identifier, and the exemption is kept for its regex text only.
+SELF_FILES = {"scripts/privacy_boundary.py"}
 
 
 def git(*args: str) -> str:
     return subprocess.check_output(["git", *args], cwd=ROOT, text=True,
                                    errors="replace", stderr=subprocess.DEVNULL)
+
+
+def history_is_shallow() -> bool:
+    """A shallow checkout cannot support a whole-history privacy conclusion."""
+    try:
+        return git("rev-parse", "--is-shallow-repository").strip().lower() == "true"
+    except subprocess.CalledProcessError:
+        # Fail closed: if Git cannot establish completeness, report the audit as
+        # incomplete rather than implying that only reachable commits exist.
+        return True
 
 
 def commits() -> list[dict]:
@@ -149,6 +147,7 @@ def blob(commit: str, path: str) -> str:
 
 
 def scan() -> dict:
+    shallow = history_is_shallow()
     cmts = commits()
     pairs = file_versions()
     # unique blobs is the honest denominator: the same file version appears in many commits
@@ -206,6 +205,7 @@ def scan() -> dict:
     return {
         "repo": "wingbangboozle1-lang/Tino3",
         "audited_at_commit": git("rev-parse", "HEAD").strip(),
+        "history_complete": not shallow,
         "commits_reachable": len(cmts),
         "earliest_commit_date": cmts[-1]["date"] if cmts else None,
         "latest_commit_date": cmts[0]["date"] if cmts else None,
@@ -236,6 +236,10 @@ def main() -> int:
     print("Repository history privacy audit (read-only, counts only)")
     print(f"  repository      : {report['repo']}")
     print(f"  commit audited  : {report['audited_at_commit'][:12]}")
+    if report["history_complete"]:
+        print("  history scope   : complete for refs reachable in this clone")
+    else:
+        print("  history scope   : INCOMPLETE (shallow Git checkout; fetch full history to audit all commits)")
     print(f"  commits         : {report['commits_reachable']} "
           f"({report['earliest_commit_date']} to {report['latest_commit_date']})")
     print(f"  file versions   : {report['file_versions_scanned']}")
