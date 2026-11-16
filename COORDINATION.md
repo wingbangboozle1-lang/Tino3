@@ -4138,3 +4138,28 @@ Cross-checked the dashboard's headline figures against `assets/data/model.json` 
 
 **Privacy constraint:** no property-specific identifier, name, address, parcel number, postal code, county or city name, trust term, estate size or unrounded owner amount is added to any public page or to this board. The estate's actual size is deliberately not published and not modelled as a figure; the liquidity engine works in anonymous bands and reports ratios. Every dollar figure on the public site is rounded to the nearest $10.
 >>>>>>> 5b8d8fa (Board: claim arena/0069abd3-tino3 scope (estate liquidity model, joint-filer case, liquidity page))
+
+### X-6 result: gates, pull request and deployment
+
+- **Local gates on the integrated branch (16 November 2026):** `scripts/rebuild.py` PASS, and a second run leaves the working tree byte-identical; `scripts/verify.py` PASS (25 pages, **1,238 table rows**, **1,061 linked to official publishers**, **177 explicitly registered as unsourceable**, **112 ledger sources**, 4,305 links, every internal link and fragment resolves); `scripts/privacy_boundary.py` PASS; `scripts/tracked_tree_guard.py` PASS (65 tracked text files); `scripts/package_site.py` PASS (25 public pages, 1 runtime asset, 136 withdrawal routes); `scripts/verify_legacy.py --config-only` PASS; `git diff --check` clean.
+- **Pull request:** https://github.com/wingbangboozle1-lang/Tino3/pull/152 — merged to `main` with a merge commit (`cb00294`) at 2026-11-16 18:26:16 UTC, without waiting for approval, no `--auto`. The `Verify static site` check on the pull request head passed (32s) before the merge.
+- **Pages deploy:** the `Verify static site`, `Deploy GitHub Pages` and `pages build and deployment` runs for `cb00294` all completed **success**. The new page was then fetched from the live site and serves the current content: https://wingbangboozle1-lang.github.io/Tino3/liquidity.html
+
+### Rebase collisions logged
+
+Four `git pull --rebase origin main` operations conflicted during this session, every one of them only in `COORDINATION.md` or in a generated file. Each was resolved by keeping the main-side file and re-applying this session's change, never by discarding another session's work:
+
+1. `5005a72` to `aca4b7d` — COORDINATION.md only. Resolved by taking the main-side board and re-appending this session's section.
+2. `aca4b7d` to `d657afd` — COORDINATION.md only; same resolution.
+3. `83650f9` onto `82bac65` — COORDINATION.md (claim), then `EXECUTIVE_SUMMARY.md`, `README.md` and `sources.html`. Generated files were resolved to the main side and then regenerated from the merged source; the README counts were re-applied and corrected to the numbers the merged build actually reports.
+4. `d0533b2` onto `46d9960` (after PR #151) — COORDINATION.md only; same resolution.
+
+One further conflict inside the rebase onto `82bac65` was in `scripts/build.py`: another session had added glossary terms at the same place this session added its three. Both sets were kept. `assets/sources.json` also conflicted; it was resolved to the main side and this session's five ledger entries re-inserted by script (112 entries after the merge, not 110, because another session had added entries in the same window). README counts follow the merged build: 112 ledger entries, not the 110 this session predicted before the last two rebases.
+
+### Still open after this session (not blocking)
+
+- The Git history scrub remains an owner action and is not attempted here; it requires a coordinated, backed-up force-push of `main`.
+- Property A's tax rate area and its published ad valorem rate: still flagged, and unobtainable without publishing an identifier.
+- A market rent for Property A: still flagged. The letting paths remain a floor, and the break-even rent is published instead.
+- The section 6166 instalment election: published as a rule with its 35% test, and explicitly **not** assumed available.
+- A keep-and-borrow path end to end: the carrying cost is priced, the path is not modelled, and the suggestions register says so.
