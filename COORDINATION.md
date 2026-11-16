@@ -3718,3 +3718,20 @@ No changes were required to any source file: the working tree is clean at `1cfed
 - **Pages deploy:** the `Verify static site`, `Deploy GitHub Pages` and `pages build and deployment` runs for `18183fe` were cancelled by a newer push to `main` (merge `3884a6f`, PR #131 from `arena/f242bbd7-tino3`, a board-only change by another session). That is a normal supersession, not a failure. The GitHub API then returned HTTP 403 rate-limit responses, so the status of the `3884a6f` run could not be read from the API in this session. The public site was fetched directly and serves the current dashboard.
 - **Content impact of PR #129:** none. Only `COORDINATION.md` changed; the generated pages and data were already byte-identical to a fresh build.
 - **Open for the next session:** confirm the `3884a6f` Pages deploy has reached `built` once the API rate limit resets.
+
+## Session `arena/99fbc3a3-tino3` — final independent audit and publication close-out · claimed 2026-11-16
+
+*Branch note:* This session is pinned to `arena/99fbc3a3-tino3`, based on `main` at `1cfed92ebb28f0a68efe84546cd48538c00c3dfd`. Work remains on this branch only. `gh pr list --state open` returned no open PRs at claim time. Older board rows marked in progress are historical; their later merge/publication records are checked before treating them as active.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| Q-1 Independent final check of the integrated edition against the user's full request: run every build/privacy/source/link/publication gate, inspect the live task/PR board for unmerged work, and audit the existing privacy and source boundaries. Do not modify site/data before logging any discovered defect and extending this claim. | **in progress** | `arena/99fbc3a3-tino3` | `COORDINATION.md` (this section only; audit is read-only until a scoped follow-up is recorded) |
+| Q-2 Record actual gate results, any verified defect or unresolved owner decision, and the final PR/Pages outcome; never mark a fact verified without an official source. | pending | `arena/99fbc3a3-tino3` | this section only unless a Q-1 finding is separately claimed before editing |
+
+**Rebase collision logged:** before this claim could be pushed, `git pull --rebase origin main` fetched PR #129 (`arena/bdeaf496-tino3`) and conflicted only at the end of `COORDINATION.md`. Both independently maintained session records were retained in full; no work was dropped. The final audit will treat the merged PR #129 verification as evidence already present and avoid duplicating it.
+
+**Second rebase collision logged:** while pushing the Q-3 claim, `git pull --rebase origin main` fetched PR #131 (`arena/f242bbd7-tino3`) and again conflicted only in the appended `COORDINATION.md` session records. The full PR #131 final-integration record and this session record are both retained; no content was discarded. The merged PR #131 verification is being checked as evidence and is not being duplicated.
+
+**Third rebase collision logged:** after PR #133 merged at `2f6ea0e`, the rebase conflicted only in `COORDINATION.md`. Resolution retained the entire latest main-side board, including its privacy redactions and session records, and appended only this session’s own section from its claim commit. No pre-redaction board text was reintroduced and no other session’s work was discarded. PR #133’s privacy changes are now part of the integration baseline; PR #132 was closed as superseded per the published handoff.
+
+**Privacy constraint:** No property-specific identifiers, personal names, addresses, postal codes, account details, or unrounded owner-provided amounts will be added to the public pages or new board text. The known historical exposure is not rewritten without the owner's decision and a coordinated, backed-up force-push; the scrub kit remains audit-only until then.
