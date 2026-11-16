@@ -5264,5 +5264,134 @@
     "living_wins": true
    }
   ]
+ },
+ "cost_cases": {
+  "inherit_year": 2045,
+  "horizon_years": 30,
+  "band": {
+   "low": 1070,
+   "mid": 1500,
+   "high": 3500,
+   "spread": 2430,
+   "effect_on_live": 265210,
+   "official_floor": 1074,
+   "official_floor_year": 2017,
+   "landlord_official_floor": 519,
+   "b_low": 520,
+   "b_mid": 1500,
+   "b_high": 3000
+  },
+  "rows": [
+   {
+    "label": "official floor, 2017 statewide average for the form",
+    "annual": 1074,
+    "kind": "cdi_homeowners_avg",
+    "terminals": {
+     "sell_equities": 38585540,
+     "sell_treasury": 24480880,
+     "live_in": 5369330,
+     "live_then_rent": -668870,
+     "rent_out": -1007000
+    },
+    "best": "sell_equities",
+    "live_gap": 46570,
+    "sell_live_gap": 33216210,
+    "letting_gap": 39592540
+   },
+   {
+    "label": "owner's estimate, the published baseline",
+    "annual": 1500,
+    "kind": "owner",
+    "terminals": {
+     "sell_equities": 38585540,
+     "sell_treasury": 24480880,
+     "live_in": 5322760,
+     "live_then_rent": -715440,
+     "rent_out": -1053570
+    },
+    "best": "sell_equities",
+    "live_gap": 0,
+    "sell_live_gap": 33262780,
+    "letting_gap": 39639110
+   },
+   {
+    "label": "stated upper scenario",
+    "annual": 3500,
+    "kind": "scenario",
+    "terminals": {
+     "sell_equities": 38585540,
+     "sell_treasury": 24480880,
+     "live_in": 5104120,
+     "live_then_rent": -934080,
+     "rent_out": -1272210
+    },
+    "best": "sell_equities",
+    "live_gap": -218640,
+    "sell_live_gap": 33481420,
+    "letting_gap": 39857750
+   }
+  ],
+  "gap_live_at_baseline": 33262780,
+  "band_share_of_gap": 0.8,
+  "debt_rows": [
+   {
+    "monthly": 0,
+    "annual": 0,
+    "terminals": {
+     "sell_equities": 38585540,
+     "sell_treasury": 24480880,
+     "live_in": 5322760,
+     "live_then_rent": -715440,
+     "rent_out": -1053570
+    },
+    "best": "sell_equities",
+    "live_delta": 0,
+    "letting_delta": 0
+   },
+   {
+    "monthly": 500,
+    "annual": 6000,
+    "terminals": {
+     "sell_equities": 38585540,
+     "sell_treasury": 24480880,
+     "live_in": 4666840,
+     "live_then_rent": -1371350,
+     "rent_out": -1709490
+    },
+    "best": "sell_equities",
+    "live_delta": -655920,
+    "letting_delta": -655920
+   },
+   {
+    "monthly": 1000,
+    "annual": 12000,
+    "terminals": {
+     "sell_equities": 38585540,
+     "sell_treasury": 24480880,
+     "live_in": 4010930,
+     "live_then_rent": -2027270,
+     "rent_out": -2365400
+    },
+    "best": "sell_equities",
+    "live_delta": -1311830,
+    "letting_delta": -1311830
+   },
+   {
+    "monthly": 2000,
+    "annual": 24000,
+    "terminals": {
+     "sell_equities": 38585540,
+     "sell_treasury": 24480880,
+     "live_in": 2699100,
+     "live_then_rent": -3339100,
+     "rent_out": -3677230
+    },
+    "best": "sell_equities",
+    "live_delta": -2623660,
+    "letting_delta": -2623660
+   }
+  ],
+  "encumbrance_stated": false,
+  "note": "Insurance is charged to the keeping paths only, so a higher premium widens the gap in favour of selling rather than narrowing it. Debt service is charged the same way for the same reason."
  }
 }

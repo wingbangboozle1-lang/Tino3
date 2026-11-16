@@ -1330,6 +1330,120 @@ def imputed_rent_sensitivity(year: int = 2045) -> dict:
 MAIN_RESULT = {}
 
 
+
+# ---------------------------------------------------------------------------
+# Insurance band and encumbrance cases. Appended by the 16 November session on
+# the owner's instruction to replace round-number assumptions with ranges, and
+# to make the debt assumption in the comparison explicit instead of silent.
+# Neither function changes a published input: they re-run the same engine at
+# other values and report what moves.
+# ---------------------------------------------------------------------------
+INSURANCE_A = A["annual_costs"]["insurance"]
+INSURANCE_B = B["annual_costs"]["insurance"]
+
+
+def _base_args() -> dict:
+    """The published baseline arguments, assembled exactly as main() assembles them."""
+    return dict(
+        g=ASM["house_growth"]["baseline"], infl=INFL,
+        eq=ASM["equity_return_nominal_gross"]["baseline"],
+        drag=ASM["equity_tax_drag"]["baseline"],
+        tsy=ASM["treasury_yield_nominal"]["baseline"],
+        cap_growth=ASM["prop19_cap_growth"]["baseline"],
+        sell_pct=ASM["selling_cost_pct"]["baseline"], horizon=ASM["horizon_years"],
+        gain_rate=ASM["combined_gain_tax_rate"]["baseline"],
+        rec_rate=ASM["depreciation_recapture_rate"]["baseline"],
+        exclusion=V["section121_exclusion_single"]["value"],
+        fixed_growth=ASM["fixed_charge_growth"]["baseline"], fit_a=FIT_A,
+        maint_live=A["annual_costs"]["maintenance_pct_owner_occupied"]["value"],
+        maint_rent=A["annual_costs"]["maintenance_pct_rental"]["value"],
+        rent_income=RENT_INCOME, imputed_rent=IMPUTED_RENT)
+
+
+def _rerun(year: int, cost_a_base: float) -> dict:
+    return run_paths(inherit_year=year, cost_a_base=cost_a_base, **_base_args())
+
+
+def insurance_and_encumbrance_cases(year: int = 2045) -> dict:
+    """Re-run every path at each rung of the insurance band, and at four debt-service levels.
+
+    Insurance is a carrying cost, so it lands on the paths that keep the building
+    and not on the path that sells it. The point of publishing the whole band is to
+    show how much of the recommendation that cost carries - and how much a mortgage
+    would, if one exists. Nothing here is an estimate of the household's own premium
+    or balance: the rungs are the published statewide average for the policy form,
+    the owner's figure, and a stated upper scenario.
+    """
+    base = next(x for x in MAIN_RESULT["paths"] if x["inherit_year"] == year)
+    mid = float(INSURANCE_A["mid"])
+    rungs = [("official floor, 2017 statewide average for the form",
+              float(INSURANCE_A["low"]), "cdi_homeowners_avg"),
+             ("owner's estimate, the published baseline", mid, "owner"),
+             ("stated upper scenario", float(INSURANCE_A["high"]), "scenario")]
+    KEYS = ("sell_equities", "sell_treasury", "live_in", "live_then_rent", "rent_out")
+    rows = []
+    for label, amount, kind in rungs:
+        res = _rerun(year, COST_A_BASE + (amount - mid))
+        term = {k: res["paths"][k]["terminal"] for k in KEYS}
+        best = max(term, key=lambda k: term[k])
+        rows.append({
+            # The official rung is printed as the published figure, verbatim; the
+            # owner's figure and the stated scenario are rounded like every other
+            # dollar amount on the site.
+            "label": label,
+            "annual": money10(amount) if kind in ("owner", "scenario") else int(amount),
+            "kind": kind,
+            "terminals": term, "best": best,
+            "live_gap": money10(term["live_in"] - base["paths"]["live_in"]["terminal"]),
+            "sell_live_gap": money10(term["sell_equities"] - term["live_in"]),
+            "letting_gap": money10(term["sell_equities"] - term["rent_out"]),
+        })
+    band_spread = money10(float(INSURANCE_A["high"]) - float(INSURANCE_A["low"]))
+    # The whole band, measured on the model rather than approximated: the low rung and
+    # the high rung are both run above, so the difference between them IS the cost of
+    # being wrong about insurance, and the gap is what it would have to close.
+    gap_live = base["paths"]["sell_equities"]["terminal"] - base["paths"]["live_in"]["terminal"]
+    band_effect = rows[0]["terminals"]["live_in"] - rows[-1]["terminals"]["live_in"]
+    share_of_gap = round(100.0 * band_effect / gap_live, 2) if gap_live else None
+
+    # Encumbrance cases. The principal is borne on every path - a sale pays it off out
+    # of the proceeds, a holder pays it off over time - so what the model can price is
+    # the cost of carrying it: interest and the payment stream. These rows add a stated
+    # monthly payment to the keeping paths and leave the sale paths alone, which is the
+    # effect of a mortgage on the RANKING, not on the wealth of either party.
+    debt_rows = []
+    for monthly in (0, 500, 1000, 2000):
+        extra = monthly * 12.0
+        res = _rerun(year, COST_A_BASE + extra) if extra else base
+        term = {k: res["paths"][k]["terminal"] for k in KEYS}
+        best = max(term, key=lambda k: term[k])
+        debt_rows.append({
+            "monthly": money10(monthly), "annual": money10(extra),
+            "terminals": term, "best": best,
+            "live_delta": money10(term["live_in"] - base["paths"]["live_in"]["terminal"]),
+            "letting_delta": money10(term["rent_out"] - base["paths"]["rent_out"]["terminal"]),
+        })
+    return {
+        "inherit_year": year,
+        "horizon_years": ASM["horizon_years"],
+        "band": {"low": money10(INSURANCE_A["low"]), "mid": money10(INSURANCE_A["mid"]),
+                 "high": money10(INSURANCE_A["high"]), "spread": band_spread,
+                 "effect_on_live": money10(band_effect),
+                 "official_floor": int(V["cdi_ho_owner_occupied_avg_2017"]["value"]),
+                 "official_floor_year": 2017,
+                 "landlord_official_floor": int(V["cdi_df_rental_landlord_avg_2017"]["value"]),
+                 "b_low": money10(INSURANCE_B["low"]), "b_mid": money10(INSURANCE_B["mid"]),
+                 "b_high": money10(INSURANCE_B["high"])},
+        "rows": rows,
+        "gap_live_at_baseline": money10(gap_live),
+        "band_share_of_gap": share_of_gap,
+        "debt_rows": debt_rows,
+        "encumbrance_stated": bool(A.get("encumbrance", {}).get("stated_by_owner")),
+        "note": ("Insurance is charged to the keeping paths only, so a higher premium "
+                 "widens the gap in favour of selling rather than narrowing it. Debt "
+                 "service is charged the same way for the same reason."),
+    }
+
 def _append_extras(out: dict) -> dict:
     """Run after main() has built `out`, without editing main()'s body."""
     global MAIN_RESULT
@@ -1338,6 +1452,7 @@ def _append_extras(out: dict) -> dict:
     out["projections_distribution"] = projections_distribution(30)
     out["roll_audit"] = roll_audit()
     out["imputed_rent"] = imputed_rent_sensitivity(2045)
+    out["cost_cases"] = insurance_and_encumbrance_cases(2045)
     return out
 
 
