@@ -24,7 +24,7 @@ jobs:
         run: python scripts/verify.py
       - name: Require committed generated outputs
         run: |
-          paths=( '*.html' EXECUTIVE_SUMMARY.md assets/data/model.json assets/data/economy.json assets/data/mixed.json assets/data/property_a.csv assets/data/property_b.csv assets/data/decision.csv )
+          paths=( '*.html' EXECUTIVE_SUMMARY.md assets/data/model.json assets/data/economy.json assets/data/mixed.json assets/data/liquidity.json assets/data/property_a.csv assets/data/property_b.csv assets/data/decision.csv )
           if ! git diff --quiet HEAD -- "${paths[@]}"; then
             git --no-pager diff --stat HEAD -- "${paths[@]}"
             echo "::error::committed generated outputs differ from a fresh rebuild; refusing to deploy stale or uncommitted results"

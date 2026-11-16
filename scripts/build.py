@@ -21,13 +21,14 @@ MODEL = json.loads((DATA / "model.json").read_text(encoding="utf-8"))
 ECON = json.loads((DATA / "economy.json").read_text(encoding="utf-8"))
 SERIES = json.loads((DATA / "series.json").read_text(encoding="utf-8"))
 MIXED = json.loads((DATA / "mixed.json").read_text(encoding="utf-8"))
+LIQ = json.loads((DATA / "liquidity.json").read_text(encoding="utf-8"))
 PRECOMMIT = INPUTS.get("precommit", {"rules": [], "household_goals": [], "review_gates": [], "meta": {}})
 
 A = INPUTS["property_a"]
 B = INPUTS["property_b"]
 V = INPUTS["verified_parameters"]
 ASM = INPUTS["assumptions"]
-BUILD_DATE = "15 November 2026"
+BUILD_DATE = "16 November 2026"
 
 # The phased-investing figures are computed by the model's one monthly engine, so the
 # stress table on the black-swan page and the dashboard path cannot drift apart again.
@@ -39,7 +40,8 @@ NAV_GROUPS = [
                     "what-if.html", "briefing.html"]),
     ("The two properties", ["property-a.html", "property-b.html", "ownership-distinction.html"]),
     ("Money over time", ["costs.html", "projections.html", "taxes.html"]),
-    ("Rules and the estate", ["inheritance.html", "timeline.html", "estate.html", "laws.html"]),
+    ("Rules and the estate", ["inheritance.html", "timeline.html", "estate.html", "liquidity.html",
+                    "laws.html"]),
     ("Black swan economics", ["black-swan.html", "economy.html"]),
     ("Review before deciding", ["questions.html", "suggestions.html", "review.html"]),
     ("Evidence", ["glossary.html", "sources.html"]),
@@ -60,6 +62,7 @@ PAGE_TITLES = {
     "taxes.html": "Income tax on each path",
     "inheritance.html": "Inheriting through a trust, step by step",
     "estate.html": "Estate and inheritance tax thresholds",
+    "liquidity.html": "Estate liquidity and borrowing",
     "laws.html": "What the law says now, and what may change",
     "black-swan.html": "Black swan conditions",
     "economy.html": "The verified historical record",
@@ -74,6 +77,29 @@ PAGE_TITLES = {
 
 # ------------------------------------------------------------------ helpers --
 BLANK_CELL = '<span class="blank">not supplied</span>'
+
+# Deferral terms published on the liquidity page, longest first is not used: the page
+# prints them in the order below so the reader can watch the cost grow with the term.
+TERMS_LIQ = [1, 3, 5, 10]
+
+# Lines of a blank estate-inventory worksheet. Every cell the household fills in stays
+# private: nothing here carries a value, and nothing here is ever published.
+INVENTORY_ITEMS = [
+    "The home being inherited (Property A)",
+    "Any other real property",
+    "Cash, chequing and savings",
+    "Marketable securities",
+    "Retirement accounts",
+    "Life insurance",
+    "Business interests",
+    "Personal property and vehicles",
+    "Debts, mortgages and other liabilities",
+    "Prior taxable gifts already made (these reduce the exclusion)",
+]
+
+# The largest tax the joint return saves anywhere in the model, read from the data rather
+# than typed, so the executive summary cannot drift from the liquidity engine.
+JOINT_121_MAX_SAVING = max(r["saving"] for r in LIQ["joint_case"]["rows"])
 
 
 def esc(x) -> str:
@@ -377,7 +403,7 @@ def page(name: str, body: str, lede: str = "") -> str:
       <p>Full method and inputs: <a href="review.html#method-detail">how the model works</a>.
         Every official source used anywhere on the site: <a href="sources.html">the source ledger</a>.</p>
     </section>
-    <p class="page-footer">Built {esc(BUILD_DATE)}. Sources were last checked between 13 and 15 November 2026;
+    <p class="page-footer">Built {esc(BUILD_DATE)}. Sources were last checked between 13 and 16 November 2026;
       each entry's own check date is listed on the
       <a href="sources.html">source ledger</a>. Nothing here is legal, tax or investment advice.</p>
   </main>
@@ -640,6 +666,7 @@ SUMMARIES = {
     "glossary.html": "Plain-language terms with official citations.",
     "timeline.html": "The deadlines and key dates that shape the inheritance decision.",
     "sources.html": "Every official source used, with what it supports.",
+    "liquidity.html": "The nine-month payment clock, what deferring costs, and the two-person case.",
 }
 
 
@@ -2603,6 +2630,13 @@ Board confirms that a gift or inheritance is not California income.</p>
 a couple can shelter {m(est['exclusion_2026'] * 2)} between them if that election is made on a timely return.</p>""")
         + hist
         + scen
+        + callout("method", "If the estate does exceed the exclusion", f"""
+<p>The threshold is only half the question. Federal estate tax is due <strong>in cash, nine months after the
+date of death</strong>, and a six-month extension of time to file is not an extension of time to pay. A house is
+not a liquid asset. The <a href="liquidity.html">estate liquidity page</a> prices what the tax is in anonymous
+bands, what deferring one, three, five and ten years costs at the published underpayment rate, and what each
+route to raising the cash costs - including borrowing against the property instead of selling it.</p>
+<p class="callout-src">{slink('irs_filing_eg')} &middot; {slink('irs_i4768')} &middot; {slink('irs_interest')}</p>""")
         + table("What is and is not taxed on the way in",
                 ["Receipt", "Federal", "California", "Source"],
                 [
@@ -2622,10 +2656,159 @@ a couple can shelter {m(est['exclusion_2026'] * 2)} between them if that electio
         + callout("flag", "What this page cannot tell you", """
 <ul>
 <li><strong>Whether the estate exceeds the exclusion.</strong> The amount of the cash inheritance is deliberately not published here and not modelled as a specific figure. Use the scenario table and compare it with the estate's own numbers privately.</li>
+<li><strong>How the tax would be paid if it is owed.</strong> That is a separate question from how much it is, and it is answered on the <a href="liquidity.html">estate liquidity page</a>.</li>
 <li><strong>Whether prior taxable gifts have already used part of the exclusion.</strong> Lifetime taxable gifts are added back in the computation.</li>
 <li><strong>Whether any of the estate is a retirement account.</strong> Those are taxed differently and are the most common surprise.</li>
 <li><strong>What the law will be in 2040 to 2050.</strong> The exclusion has moved in both directions historically; it was $5,490,000 in 2017 and $15,000,000 in 2026. See the <a href="laws.html">law page</a>.</li>
 </ul>"""))
+
+
+# ---------------------------------------------------------------- liquidity --
+def page_liquidity() -> str:
+    clock = LIQ["clock"]
+    bands = LIQ["excess_bands"]
+    years_rows = LIQ["at_inheritance"]
+    borrow = LIQ["borrowing"]
+    joint = LIQ["joint_case"]
+
+    head = callout("answer", "The nine-month clock", f"""
+<p>Federal estate tax is <strong>{pcf(clock['estate_tax_rate'], 0)} of the amount above the exclusion</strong>, and it is
+due <strong>{clock['due_months_after_death']} months after the date of death</strong>. A six-month extension of time to
+<em>file</em> the return is available on request, but it is not an extension of time to <em>pay</em>: interest runs on
+anything unpaid from the original due date, whether or not an extension was granted.</p>
+<p>The interest rate is not a penalty rate and not a fixed one. It is the <strong>federal short-term rate plus three
+percentage points</strong>, set every quarter, and it compounds daily. The rate published for the fourth quarter of
+2026 is {pcf(clock['underpayment_rate'], 0)}, on a federal short-term rate of {pcf(clock['federal_short_term_rate'], 0)}.
+The published range across 2022 to 2026 runs from {pcf(clock['underpayment_low'], 0)} to
+{pcf(clock['underpayment_high'], 0)}.</p>
+<p class="callout-src">{slink('irs_filing_eg')} &middot; {slink('irs_i4768')} &middot; {slink('irs_interest')}
+&middot; {slink('uscode6621')} &middot; {slink('uscode6622')} &middot; {slink('uscode6601')}</p>""")
+
+    tax_table = table(
+        "The tax itself, in anonymous bands of the amount above the exclusion",
+        ["Amount above the exclusion", "Federal estate tax at 40%", "Due", "Source"],
+        [(f"<td>{m(b['excess'])}</td><td>{m(b['tax'])}</td>"
+          f"<td>Within {b['due_months']} months of the date of death</td>"
+          + src_cell(b["src"])) for b in bands],
+        note=("The estate's own size is deliberately not published and not modelled as a figure. Read down the "
+              "first column for the band that matches the estate and read across: the tax is 40% of it. "
+              "California adds nothing - it has no estate tax and no inheritance tax."))
+
+    defer_tables = []
+    for years in TERMS_LIQ:
+        rows = []
+        for b in bands:
+            t_ = next(x for x in b["terms"] if x["years"] == years)
+            rows.append(
+                f"<td>{m(b['excess'])}</td><td>{m(b['tax'])}</td>"
+                f"<td>{m(t_['balloon_paid'])}<br><span class='sub'>interest {m(t_['balloon_interest'])}</span></td>"
+                f"<td>{m(t_['instalment_paid'])}<br><span class='sub'>interest {m(t_['instalment_interest'])}</span></td>"
+                f"<td>{m(t_['return_given_up'])}</td>"
+                f"<td>{m(t_['deferral_advantage'])}</td>"
+                + src_cell(["irs_i4768", "irs_interest", "uscode6622"]))
+        defer_tables.append(table(
+            f"What deferring {years} year{'s' if years > 1 else ''} costs, under section 6161(a)(2)",
+            ["Amount above the exclusion", "Tax", "Paid in one sum at the end",
+             "Paid in equal annual instalments", "Return the same cash would have earned",
+             "Net advantage of deferring", "Source"],
+            rows,
+            note=("The last two columns are the trade. Deferring keeps the cash invested at the short Treasury "
+                  "yield this site assumes; the deferral is worth it only where the return given up exceeds the "
+                  "interest charged. Interest compounds daily at the published underpayment rate. "
+                  "A section 6161(a)(2) extension is discretionary, is granted one year at a time for up to ten "
+                  "years, and is granted only for the amount of the actual cash shortage.")))
+
+    house_table = table(
+        "What the house itself can create, at each inheritance year",
+        ["Inherited", "Projected exclusion, one person", "Projected exclusion, a couple with portability",
+         "House value at that date", "The house as a share of one exclusion",
+         "Tax if the house were the whole amount above the exclusion", "Source"],
+        [(f"<td>{r['inherit_year']}</td><td>{m(r['exclusion_projected'])}</td>"
+          f"<td>{m(r['couple_exclusion_projected'])}</td><td>{m(r['house_value_at_death'])}</td>"
+          f"<td>{pcf(r['house_share_of_exclusion'])}</td>"
+          f"<td>{m(r['tax_if_house_is_the_excess'])}</td>"
+          + src_cell(r["src"])) for r in years_rows],
+        note=("The projected exclusions are mechanical indexation of the published 2026 amount at the modelled "
+              "inflation rate. They are not law and not a forecast: the exclusion is set by statute and has moved "
+              "in both directions. The last column is the largest tax the house can by itself create, if it were "
+              "the only thing in the estate above the exclusion."))
+
+    cash_table = table(
+        "Where the cash can come from, and what each route costs",
+        ["Route", "The rule", "What it costs", "Source"],
+        [(f"<td>{esc(c['source'])}</td><td>{esc(c['rule'])}</td><td>{esc(c['cost'])}</td>"
+          + src_cell(c["src"])) for c in LIQ["cash_sources"]],
+        note=("Nothing here requires a sale. But a house is not a liquid asset, and the tax is due in cash on a "
+              "fixed date, so the decision about which route to use has to be made before the date arrives rather "
+              "than during the nine months."))
+
+    borrow_table = table(
+        f"Borrowing {m(borrow['principal'])} instead of selling, at the published mortgage average",
+        ["Term", "Rate", "Interest, at the published average", "Low", "High", "Principal plus interest", "Source"],
+        [(f"<td>{r['years']} year{'s' if r['years'] > 1 else ''}</td><td>{pcf(r['rate'], 2)}</td>"
+          f"<td>{m(r['interest'])}</td><td>{m(r['interest_low'])}</td><td>{m(r['interest_high'])}</td>"
+          f"<td>{m(r['total_paid'])}</td>" + src_cell(borrow["src"])) for r in borrow["rows"]],
+        note=(f"{esc(borrow['method'])}. {esc(borrow['rate_basis'])}. {esc(borrow['limit'])}"))
+
+    exclusions_table = table(
+        "Two exclusions instead of one, on the estate side",
+        ["Inherited", "One exclusion", "Two exclusions with portability", "Extra that passes free", "Source"],
+        [(f"<td>{r['inherit_year']}</td><td>{m(r['one_exclusion'])}</td><td>{m(r['two_exclusions'])}</td>"
+          f"<td>{m(r['difference'])}</td>" + src_cell(r["src"])) for r in LIQ["estate_exclusions"]],
+        note=("Portability is not automatic. It requires a timely estate tax return making the election, and the "
+              "amount carried over is the deceased spouse's unused exclusion. The projected figures are mechanical "
+              "indexation at the modelled inflation rate, not law."))
+
+    joint_table = table(
+        "The two-person household case, on the income tax side",
+        ["Path", "Gain at sale", "Exclusion, single", "Exclusion, joint",
+         "Tax, single", "Tax, joint", "What the joint return saves",
+         "Do both spouses have to live there?", "Source"],
+        [(f"<td>{esc(r['label'])}</td><td>{m(r['gain'])}</td><td>{m(r['exclusion_single'])}</td>"
+          f"<td>{m(r['exclusion_joint'])}</td><td>{m(r['tax_single'])}</td><td>{m(r['tax_joint'])}</td>"
+          f"<td>{m(r['saving'])}</td>"
+          f"<td>{'Yes - both must meet the use test' if r['both_spouses_must_occupy'] else 'No exclusion is available on this path'}</td>"
+          + src_cell(joint["src"])) for r in joint["rows"]],
+        note=("The model elsewhere runs on single-filer assumptions throughout, which is the conservative case. "
+              + esc(joint["rule"]) + " " + esc(joint["limit"])))
+
+    limits = callout("flag", "What this page cannot tell you", f"""
+<ul>
+<li><strong>Whether the estate owes anything at all.</strong> The estate's size is not published and not modelled.
+Read the bands and apply the estate's own number privately.</li>
+<li><strong>Whether prior taxable gifts have already used part of the exclusion.</strong> Lifetime taxable gifts are
+added back in the computation, so the published exclusion is the most the estate can shelter, not necessarily what it
+will shelter. <a href="estate.html">Question F on the questions page</a>.</li>
+<li><strong>Whether the section 6166 installment election is available.</strong> It requires an interest in a
+closely held business exceeding 35% of the adjusted gross estate. A home occupied as a personal residence is not
+that on the face of the statute, so this site does not assume the election - but if any part of the estate is an
+operating business, ask the attorney before assuming it is not.</li>
+<li><strong>Whether a lender will lend against a property held in trust.</strong> That is a question for the lender
+and the trustee, and the answer decides whether the borrowing rows above are available at all.</li>
+<li><strong>What any of these rates will be in the 2040s.</strong> Every rate on this page is the published rate
+today, or a published range. None of them is a forecast.</li>
+<li><strong>Whether interest on borrowed money is deductible.</strong> This site assumes no deduction, which is the
+conservative reading. The actual answer depends on what the borrowing is secured by and what it is used for.</li>
+<li><strong>What is in the estate.</strong> The <a href="#inventory">blank inventory at the foot of this page</a> is
+deliberately empty. Filling it in is the household's work, and it stays private.</li>
+</ul>""")
+
+    inventory = table(
+        "A blank private estate inventory to complete off this site",
+        ["Item", "Where it is held", "How it is titled", "Value at the date of death",
+         "Income-tax basis", "How fast it can become cash", "Notes", "Source"],
+        [(f"<td><strong>{esc(item)}</strong></td>" + BLANK_CELL * 6
+          + src_cell([], "No official source applies")) for item in INVENTORY_ITEMS],
+        note=("Print this and fill it in by hand, or keep it in a private file that is never committed to this "
+              "repository. Nothing typed here should ever appear on a public page: the whole point of the "
+              "inventory is that it exists somewhere the site cannot publish. Two rows do the most work - the "
+              "row for prior taxable gifts, because gifts are added back in computing the exclusion, and the "
+              "row for how fast each asset can become cash, because the tax is due on a fixed date and a house "
+              "is not a liquid asset."))
+
+    return (head + tax_table + "".join(defer_tables) + house_table + cash_table
+            + borrow_table + exclusions_table + joint_table + limits
+            + '<h2 id="inventory">The private estate inventory</h2>' + inventory)
 
 
 # --------------------------------------------------------------------- laws --
@@ -3622,16 +3805,16 @@ def page_suggestions() -> str:
 
     # Status per proposal. The owner asked for a section where suggestions can be
     # reviewed and chosen before anything is implemented; this map is the record of
-    # what the 15 November 2026 build actually did, so a reader can see which items
+    # what the 16 November 2026 build actually did, so a reader can see which items
     # are still open rather than assuming the whole list is untouched.
     improve_status = {
         "Add a distribution chart to the projections": ("done", "Implemented: decile fan charts on the dashboard and the projections page, a histogram of the sell-minus-keep gap on the dashboard and the decision page, and the same distributions behind every headline share."),
         "Add a real rental opinion for Property A": ("open", "Still open. The site now publishes the rent at which occupying and letting each match selling, which is the closest substitute available without a rent opinion."),
         "Add a real rental opinion for Property A (imputed rent)": ("done", "Implemented as a range of rent scenarios plus a solved break-even, because no rent opinion exists yet."),
         "Add the itemised tax bills": ("open", "Still open: needs the parcel's own bill, which is not on the site."),
-        "Add a liquidity model for the estate": ("open", "Still open: the scenario bands on the estate page are the current substitute."),
-        "Add a two-person household case": ("open", "Still open."),
-        "Add a mortgage case": ("open", "Still open."),
+        "Add a liquidity model for the estate": ("done", "Implemented on the estate liquidity page: the nine-month payment clock, the tax in anonymous bands, what deferring one, three, five and ten years costs at the published underpayment rate compounded daily, and the five routes to raise the cash."),
+        "Add a two-person household case": ("done", "Implemented on the estate liquidity page: two exclusions with portability at each inheritance year, and the joint section 121 exclusion repriced against every mixed path. The pure-path model still runs on single-filer assumptions, which is the conservative case."),
+        "Add a mortgage case": ("open", "Still open as a path. The estate liquidity page prices the carrying cost of borrowing at the published mortgage average, but the model does not yet run a keep-and-borrow case end to end."),
         "Add per-unit detail for Property B": ("open", "Still open."),
         "Add a maintenance and capital schedule": ("open", "Still open."),
         "Model mixed paths, not only the three pure choices": ("done", "Implemented: eleven mixed cases priced on their own engine, with the Proposition 19 clawback and the imputed-rent break-even."),
@@ -3650,9 +3833,9 @@ def page_suggestions() -> str:
                    "Add a real rental opinion for Property A": [],
                    "Add a maintenance and capital schedule": [],
                    "Add the itemised tax bills": [],
-                   "Add a liquidity model for the estate": ["irs_estate", "irs_i706"],
-                   "Add a two-person household case": ["irs_tc409", "irs_estate"],
-                   "Add a mortgage case": [],
+                   "Add a liquidity model for the estate": ["irs_estate", "irs_i706", "irs_interest", "uscode6166"],
+                   "Add a two-person household case": ["irs_tc701", "irs_estate"],
+                   "Add a mortgage case": ["fred_mortgage"],
                    "Add a distribution chart to the projections": []}
     def improve_badge(a: str) -> str:
         state = improve_status.get(a, ("proposed", ""))
@@ -4518,6 +4701,9 @@ def page_glossary() -> str:
          "insurance department publishes a statewide average written premium for each form, and the two averages "
          "differ by a factor of about three, which is why one number cannot cover both buildings here.",
          ["cdi_df_rental", "cdi_homeowners_avg"]),
+        ("Underpayment rate", "The interest rate charged on tax that is paid after its due date: the federal short-term rate plus three percentage points, set every quarter by the IRS and compounded daily. It applies to unpaid estate tax from the original due date, whether or not an extension of time to file was granted.", ["irs_interest", "uscode6621", "uscode6622"]),
+        ("Extension of time to pay (section 6161)", "A discretionary extension, granted one year at a time for up to ten years, and only for the amount of the estate's actual cash shortage. It is not an extension of time to file, and interest runs from the original due date in any case.", ["irs_i4768", "uscode6601"]),
+        ("Section 6166 instalment election", "A deferral of estate tax for an estate that is largely an interest in a closely held business: payment may be deferred for five years and then made in up to ten equal annual instalments, with interest at 2% on a limited portion and at 45% of the underpayment rate on the rest. It requires the business interest to exceed 35% of the adjusted gross estate, so a home occupied as a personal residence does not qualify on the face of the statute.", ["uscode6166", "uscode6601"]),
         ("Break-even", "The rent, return or house-growth rate at which one path ties another. Below it, selling and investing wins; above it, keeping the home can win.", []),
         ("Horizon", "The 30 years after the inheritance over which each path is valued.", []),
         ("Outflow", "The total property tax and carrying cost paid over the horizon on a path (rental paths also credit rent received).", []),
@@ -4573,7 +4759,7 @@ units, federal law does not let a lender accelerate because the property passed 
 <p>Obtain certified tax bills and assessor records, title report, trust copy, date-of-death appraisal, insurer quotes for owner-occupied and rental uses, utility bills, property-condition inspection and a local rent opinion. Do not publish source documents or identifiers.</p>
 </section>
 <section><h2>Options and material risks</h2>
-<ul><li>Live in Property A: possible reassessment shelter only if eligible and occupancy requirements are met; higher concentration and maintenance exposure.</li><li>Rent Property A: full reassessment may apply; income, vacancy, repairs, landlord rules and depreciation/recapture need a CPA-grade model.</li><li>Sell and reinvest: basis step-up may limit immediate gain, but confirm sale costs and tax. The published transfer tax and recording fees come to {m(MIXED['fees_example']['published_total'])} on a {m(MIXED['fees_example']['price'])} sale - about {MIXED['fees_example']['published_share_of_modelled']}% of the modelled 5.5% selling cost - and the $75 instrument fee does not apply to a sale that pays the transfer tax; reinvestment risk remains. The Black Swan page models 24/36-month Treasury parking and phased equity entry through one canonical monthly path: a synthetic stress test and a dated backtest of the realized 1929, 2000 and 2008 returns. Reinvestment yield may decline at maturity.</li><li>Property B remains an independent owned asset: include its net operating costs, insurance, rent/legal rules and available unit in household liquidity planning.</li></ul>
+<ul><li>Live in Property A: possible reassessment shelter only if eligible and occupancy requirements are met; higher concentration and maintenance exposure.</li><li>Rent Property A: full reassessment may apply; income, vacancy, repairs, landlord rules and depreciation/recapture need a CPA-grade model.</li><li>Sell and reinvest: basis step-up may limit immediate gain, but confirm sale costs and tax. The published transfer tax and recording fees come to {m(MIXED['fees_example']['published_total'])} on a {m(MIXED['fees_example']['price'])} sale - about {MIXED['fees_example']['published_share_of_modelled']}% of the modelled 5.5% selling cost - and the $75 instrument fee does not apply to a sale that pays the transfer tax; reinvestment risk remains. The Black Swan page models 24/36-month Treasury parking and phased equity entry through one canonical monthly path: a synthetic stress test and a dated backtest of the realized 1929, 2000 and 2008 returns. Reinvestment yield may decline at maturity.</li><li>Property B remains an independent owned asset: include its net operating costs, insurance, rent/legal rules and available unit in household liquidity planning.</li><li>If the taxable estate may exceed the federal exclusion: the tax is {pcf(LIQ['clock']['estate_tax_rate'], 0)} of the excess and is due in cash {LIQ['clock']['due_months_after_death']} months after death. An extension of time to file is not an extension of time to pay, and interest runs from the due date at the federal short-term rate plus three points, compounded daily. Ask whether the section 6166 instalment election is available. <a href='liquidity.html'>Estate liquidity page</a>. {slink('irs_i4768')} {slink('uscode6621')}</li></ul>
 </section>
 <section><h2>Timing / action sequence</h2>
 <p>Before transfer: verify trust/deed, relationship eligibility, estate liquidity and insurance. At death/transfer: secure property, contact trustee/assessor/insurer, obtain date-of-death valuation, inventory expenses and confirm tax filing calendar. After title transfer: have counsel/CPA calendar assessor claim deadlines, income/estate returns, insurance endorsements and rental notices; model live/rent/sell choices with actual quotes before signing or distributing proceeds. Exact dates depend on transfer and filing facts.</p>
@@ -4582,7 +4768,7 @@ units, federal law does not let a lender accelerate because the property passed 
 <p><strong>Basis step-up</strong>: generally resets inherited property tax basis to date-of-death value, subject to exceptions. <strong>Prop 19 exclusion</strong>: conditional California parent-child reassessment exclusion subject to statutory value and occupancy rules. <strong>Estate tax</strong>: federal tax on taxable estate, not a California inheritance tax. <strong>Reinvestment risk</strong>: future short-term Treasury proceeds may earn lower yields at maturity. <strong>Encumbrance</strong>: a mortgage, deed of trust or lien on a property; unknown for both buildings here, so both are modelled free and clear, with the limit on acceleration set by 12 U.S.C. section 1701j-3(d).</p>
 </section>
 </div>
-<p class="brief-footer">For attorney / CPA discussion only. Laws and projections may change before 2040–2050. Sources and full assumptions: <a href="sources.html">source ledger</a>, <a href="questions.html">question register</a>, <a href="review.html">unverified items</a>, <a href="black-swan.html">phased-investing stress test</a>. No legal, tax or investment advice.</p>
+<p class="brief-footer">For attorney / CPA discussion only. Laws and projections may change before 2040–2050. Sources and full assumptions: <a href="sources.html">source ledger</a>, <a href="questions.html">question register</a>, <a href="review.html">unverified items</a>, <a href="black-swan.html">phased-investing stress test</a>, <a href="liquidity.html">estate liquidity</a>. No legal, tax or investment advice.</p>
 """
     return summary
 
@@ -4831,7 +5017,7 @@ timeline of your own actions cannot be "verified" against an official page, only
         + policy_section()        + callout("method", "Why the order matters", """
 <ol>
 <li>The trust notice (60 days) and the change-in-ownership statement (150 days) are the first two clocks after death.</li>
-<li>The federal return, if one is needed, comes at nine months, and Form 4768 is the only automatic way to extend it.</li>
+<li>The federal return, if one is needed, comes at nine months, and Form 4768 is the only automatic way to extend it. An extension of time to file is not an extension of time to pay: see the <a href="liquidity.html">estate liquidity page</a>.</li>
 <li>The exclusion claim has a three-year window, but the occupancy and homeowners' exemption steps are one year.
 Missing the one-year steps is the most expensive mistake that can be made on the timeline.</li>
 </ol>""")
@@ -5268,6 +5454,7 @@ PAGE_BUILDERS = {
     "timeline.html": (page_timeline, "Every legal and tax clock in order, from death and from transfer, with its official source."),
     "what-if.html": (page_what_if, "Change one lever at a time. Each case is a link; no script is used."),
     "estate.html": (page_estate, "Federal thresholds, California's position, scenario bands."),
+    "liquidity.html": (page_liquidity, "What the estate tax costs, when it is due, and how it can be paid without a forced sale."),
     "laws.html": (page_laws, "Enacted, dead and proposed rules that could move the answer."),
     "black-swan.html": (page_black_swan, "Regimes where the answer changes, and by how much."),
     "economy.html": (page_economy, "Fifty years of verified inflation, house price and yield data."),
@@ -5466,6 +5653,29 @@ def executive_summary_markdown() -> str:
       "with Form 706 nine months after death, with an extension available.")
     a("- The cash inheritance is deliberately not published and not modelled as a figure; the estate page works "
       "in anonymous scenario bands instead.")
+    a("")
+    a("### If the estate does exceed the exclusion, the tax is due in cash on a fixed date")
+    a("")
+    a(f"- Federal estate tax is {pcf(LIQ['clock']['estate_tax_rate'], 0)} of the amount above the exclusion and is "
+      f"due {LIQ['clock']['due_months_after_death']} months after the date of death. A six-month extension of time "
+      f"to file the return is not an extension of time to pay.")
+    a(f"- Interest on anything unpaid runs from the original due date at the federal short-term rate plus three "
+      f"percentage points, compounded daily. That rate was {pcf(LIQ['clock']['underpayment_rate'], 0)} in the fourth "
+      f"quarter of 2026 and has ranged from {pcf(LIQ['clock']['underpayment_low'], 0)} to "
+      f"{pcf(LIQ['clock']['underpayment_high'], 0)} across 2022 to 2026.")
+    a(f"- On the {cash(LIQ['excess_bands'][2]['excess'])} band, deferring five years costs "
+      f"{cash(next(x for x in LIQ['excess_bands'][2]['terms'] if x['years'] == 5)['instalment_interest'])} in "
+      f"interest against {cash(next(x for x in LIQ['excess_bands'][2]['terms'] if x['years'] == 5)['return_given_up'])} "
+      f"of return the same cash would have earned, so deferral is close to break-even at five years and only "
+      f"clearly worthwhile at ten.")
+    a(f"- The two-person case changes the estate side, not the recommendation: two exclusions with portability "
+      f"would shelter {cash(LIQ['estate_exclusions'][1]['two_exclusions'])} in 2045 against "
+      f"{cash(LIQ['estate_exclusions'][1]['one_exclusion'])} for one person. The joint section 121 exclusion is "
+      f"worth {cash(JOINT_121_MAX_SAVING)} at most, and nothing at all on a sale soon after inheritance.")
+    a(f"- Full bands, the five routes to raising the cash, and the cost of borrowing instead of selling: the "
+      f"estate liquidity page. Whether the section 6166 instalment election is available is a question for the "
+      f"attorney; this site does not assume it, because a home occupied as a personal residence is not an "
+      f"interest in a closely held business on the face of the statute.")
     a("")
     a("## What is still open")
     a("")

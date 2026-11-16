@@ -1,6 +1,6 @@
 # Executive summary
 
-Built 15 November 2026 from the same deterministic model as the site. Every dollar figure is rounded to the nearest $10. Anonymised throughout: **Property A** is the single-family home being inherited through a trust; **Property B** is the three-unit building the heir already owns. No name, street address, postal parcel number, postal code, county or city name, trust term or utility account appears here or on the site; the county and city are deliberately withheld because they identify the properties.
+Built 16 November 2026 from the same deterministic model as the site. Every dollar figure is rounded to the nearest $10. Anonymised throughout: **Property A** is the single-family home being inherited through a trust; **Property B** is the three-unit building the heir already owns. No name, street address, postal parcel number, postal code, county or city name, trust term or utility account appears here or on the site; the county and city are deliberately withheld because they identify the properties.
 
 Planning analysis, not legal, tax or investment advice.
 
@@ -107,6 +107,14 @@ Waiting beat day-one investing in 3 of the 4 episodes. It lost in the 2020 episo
 - Above the exclusion the federal rate reaches 40%. The tax is on the estate, not on the heir, and is due with Form 706 nine months after death, with an extension available.
 - The cash inheritance is deliberately not published and not modelled as a figure; the estate page works in anonymous scenario bands instead.
 
+### If the estate does exceed the exclusion, the tax is due in cash on a fixed date
+
+- Federal estate tax is 40% of the amount above the exclusion and is due 9 months after the date of death. A six-month extension of time to file the return is not an extension of time to pay.
+- Interest on anything unpaid runs from the original due date at the federal short-term rate plus three percentage points, compounded daily. That rate was 7% in the fourth quarter of 2026 and has ranged from 3% to 8% across 2022 to 2026.
+- On the $5,000,000 band, deferring five years costs $455,260 in interest against $456,790 of return the same cash would have earned, so deferral is close to break-even at five years and only clearly worthwhile at ten.
+- The two-person case changes the estate side, not the recommendation: two exclusions with portability would shelter $48,287,040 in 2045 against $24,143,520 for one person. The joint section 121 exclusion is worth $92,750 at most, and nothing at all on a sale soon after inheritance.
+- Full bands, the five routes to raising the cash, and the cost of borrowing instead of selling: the estate liquidity page. Whether the section 6166 instalment election is available is a question for the attorney; this site does not assume it, because a home occupied as a personal residence is not an interest in a closely held business on the face of the statute.
+
 ## What is still open
 
 These sit on the flagged-for-review page, each with the publisher that holds the record:
@@ -122,7 +130,7 @@ These sit on the flagged-for-review page, each with the publisher that holds the
 
 ## How this was checked
 
-Every rule, threshold and rate on the site was read on the publishing agency's own domain and is linked from the row that uses it. The ledger holds 107 sources. A build-time verifier fails if a table row has no official link, if the build is not reproducible, if any internal link or fragment does not resolve, or if any published dollar figure is not a multiple of $10. A separate check recomputed the published relationships from the inputs.
+Every rule, threshold and rate on the site was read on the publishing agency's own domain and is linked from the row that uses it. The ledger holds 112 sources. A build-time verifier fails if a table row has no official link, if the build is not reproducible, if any internal link or fragment does not resolve, or if any published dollar figure is not a multiple of $10. A separate check recomputed the published relationships from the inputs.
 
 ## Read next
 
