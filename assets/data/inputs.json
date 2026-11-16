@@ -318,6 +318,20 @@
     "boe_pub29"
    ]
   },
+  "ftb_top_bracket_start_2026_single": {
+   "value": 768213,
+   "note": "Published bracket start of the top bracket on the 2026 Form 540 tax rate schedule, Schedule X (single). Not owner money; registered so the privacy gate recognises it as a verbatim official figure.",
+   "src": [
+    "ftb_rates_2026"
+   ]
+  },
+  "ftb_top_bracket_start_2026_joint": {
+   "value": 1536426,
+   "note": "Published bracket start of the top bracket on the 2026 Form 540 tax rate schedule, Schedule Y (married filing jointly). Not owner money; registered so the privacy gate recognises it as a verbatim official figure.",
+   "src": [
+    "ftb_rates_2026"
+   ]
+  },
   "prop13_inflation_cap": {
    "value": 0.02,
    "src": [
