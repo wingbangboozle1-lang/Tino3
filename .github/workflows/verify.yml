@@ -23,6 +23,8 @@ jobs:
           fi
       - name: Privacy boundary
         run: python scripts/privacy_boundary.py
+      - name: Tracked-tree identifier guard
+        run: python scripts/tracked_tree_guard.py
       - name: Build the Actions artifact
         run: python scripts/package_site.py
       - name: Generated pages are not stale
