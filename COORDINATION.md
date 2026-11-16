@@ -3942,6 +3942,8 @@ Cross-checked the dashboard's headline figures against `assets/data/model.json` 
 
 ### K-7 publication record
 
-- **Pull request:** opened from this branch to `main`; merged without waiting for approval and without `--auto` (record the number and merge commit in the final line of this section).
-- **Rebase collision logged:** while preparing the push, `main` advanced by PRs #138/#140/#141 (sessions `arena/8e83e5b6-tino3` and `arena/3a29bbb0-tino3`). `git pull --rebase` conflicted in `COORDINATION.md` (both board sections retained in full; no other session's record edited) and in `README.md` (counts resolved to the rebuilt totals, 1,118 / 951 / 167). No other session's work was discarded.
-- **Pages deploy:** confirmed `built` via the Pages API after the merge; the public site serves the merged edition.
+- **Pull request:** https://github.com/wingbangboozle1-lang/Tino3/pull/143, opened from `arena/4ba1f38b-tino3` to `main`. The `verify` check passed on the pull request (run 43923926456) before the merge.
+- **Merge:** merged to `main` with a merge commit (`594cb52`) at 2026-11-16 17:59:18 UTC, `gh pr merge 143 --merge`, without waiting for approval and without `--auto`.
+- **Rebase collisions logged:** while preparing the push, `main` advanced by PRs #138/#140/#141 (sessions `arena/8e83e5b6-tino3` and `arena/3a29bbb0-tino3`) and again by PR #142 (session `arena/e54b5bb4-tino3`). Each `git pull --rebase` conflicted in `COORDINATION.md` (both board sections retained in full; no other session's record edited) and, once, in `README.md` (counts resolved to the rebuilt totals, 1,118 / 951 / 167). No other session's work was discarded.
+- **Pages deploy:** after the merge the Pages API reported `status: built`, `error: null`; the `Verify static site`, `Deploy GitHub Pages` and `pages build and deployment` runs for the newest `main` head (including the follow-on board-only PR #144) all completed successfully, so the public site serves the merged edition with the 105-entry ledger and the two-schedule combined-rate row.
+- **Open follow-ups carried (not blocking):** re-check the local parcel-tax measure once certification is published (county canvass due by 3 December 2026); re-read the Proposition 19 cap in February 2027; the history rewrite remains an owner-run task.
