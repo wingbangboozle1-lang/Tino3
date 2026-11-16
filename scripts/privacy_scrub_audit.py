@@ -89,6 +89,16 @@ def git(*args: str) -> str:
                                    errors="replace", stderr=subprocess.DEVNULL)
 
 
+def history_is_shallow() -> bool:
+    """A shallow checkout cannot support a whole-history privacy conclusion."""
+    try:
+        return git("rev-parse", "--is-shallow-repository").strip().lower() == "true"
+    except subprocess.CalledProcessError:
+        # Fail closed: if Git cannot establish completeness, report the audit as
+        # incomplete rather than implying that only reachable commits exist.
+        return True
+
+
 def commits() -> list[dict]:
     out = git("log", "--all", "--format=%H%x1f%ad%x1f%an%x1f%s", "--date=short")
     rows = []
@@ -137,6 +147,7 @@ def blob(commit: str, path: str) -> str:
 
 
 def scan() -> dict:
+    shallow = history_is_shallow()
     cmts = commits()
     pairs = file_versions()
     # unique blobs is the honest denominator: the same file version appears in many commits
@@ -194,6 +205,7 @@ def scan() -> dict:
     return {
         "repo": "wingbangboozle1-lang/Tino3",
         "audited_at_commit": git("rev-parse", "HEAD").strip(),
+        "history_complete": not shallow,
         "commits_reachable": len(cmts),
         "earliest_commit_date": cmts[-1]["date"] if cmts else None,
         "latest_commit_date": cmts[0]["date"] if cmts else None,
@@ -224,6 +236,10 @@ def main() -> int:
     print("Repository history privacy audit (read-only, counts only)")
     print(f"  repository      : {report['repo']}")
     print(f"  commit audited  : {report['audited_at_commit'][:12]}")
+    if report["history_complete"]:
+        print("  history scope   : complete for refs reachable in this clone")
+    else:
+        print("  history scope   : INCOMPLETE (shallow Git checkout; fetch full history to audit all commits)")
     print(f"  commits         : {report['commits_reachable']} "
           f"({report['earliest_commit_date']} to {report['latest_commit_date']})")
     print(f"  file versions   : {report['file_versions_scanned']}")
