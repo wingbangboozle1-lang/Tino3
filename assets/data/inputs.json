@@ -665,14 +665,24 @@
    "threshold_indexed": false,
    "schedules_checked": "2025",
    "ignores_filing_status": true,
-   "basis": "Revenue and Taxation Code section 17043(a) imposes 1% on taxable income above $1,000,000, and subsection (c) excludes the section 17039 credit provisions, the section 17041 filing-status and bracket recomputation, and the section 17045 joint-return provisions. The published 2025 Form 540 rate schedules end at 12.3% on every one of the three filing-status schedules, so the 1% is additional to, not part of, the top bracket. The statute sets a flat $1,000,000 and provides no inflation indexing, unlike the brackets, which are indexed.",
+   "basis": "Revenue and Taxation Code section 17043(a) imposes 1% on taxable income above $1,000,000, and subsection (c) excludes the section 17039 credit provisions, the section 17041 filing-status and bracket recomputation, and the section 17045 joint-return provisions. The 2025 Form 540 tax rate schedules were re-read on the publisher's site on 16 November 2026 and every one of the three filing-status schedules ends at 12.30%, so the 1% is additional to, not part of, the top bracket. The Franchise Tax Board also confirms that California has no lower rate for capital gains, so the same graduated rates apply to the gain on sale. The statute sets a flat $1,000,000 and provides no inflation indexing, unlike the brackets, which are indexed.",
    "src": [
     "rtc17043",
     "ftb_rates"
    ],
    "low": 0.01,
    "high": 0.01,
-   "band_basis": "No band: the rate is fixed in the statute and does not vary by filing status, unlike a bracket. The uncertainty is in the threshold's real value, not the rate, because it is not indexed. Any proposal to index or repeal it would be a law change, tracked on the Law page."
+   "band_basis": "No band: the rate is fixed in the statute and does not vary by filing status, unlike a bracket. The uncertainty is in the threshold's real value, not the rate, because it is not indexed. Any proposal to index or repeal it would be a law change, tracked on the Law page.",
+   "schedules_rechecked": "2026-11-16"
+  },
+  "capital_gain_treatment": {
+   "rule": "California taxes capital gain as ordinary income; there is no lower long-term rate",
+   "src": [
+    "ftb_cg",
+    "ftb_rates",
+    "rtc17043"
+   ],
+   "checked": "2026-11-16"
   }
  },
  "precommit": {

@@ -1,0 +1,719 @@
+{
+ "meta": {
+  "built_from": "scripts/liquidity.py",
+  "deterministic": true,
+  "rounding": "every dollar figure rounded to the nearest $10",
+  "privacy": "No estate size, no name, no property, no parcel, no postal code, no county and no city. The engine works in anonymous bands of the amount above the exclusion."
+ },
+ "clock": {
+  "estate_tax_rate": 0.4,
+  "due_months_after_death": 9,
+  "file_extension_months": 6,
+  "pay_extension_max_years": 10,
+  "underpayment_rate": 0.07,
+  "federal_short_term_rate": 0.04,
+  "underpayment_low": 0.03,
+  "underpayment_high": 0.08,
+  "rate_formula": "federal short-term rate plus 3 percentage points",
+  "compounding": "daily",
+  "src": [
+   "irs_filing_eg",
+   "irs_i4768",
+   "irs_interest",
+   "uscode6621",
+   "uscode6622"
+  ],
+  "interest_runs_from": "the original due date, whether or not an extension of time to file or to pay has been granted",
+  "interest_src": [
+   "irs_i4768",
+   "uscode6601"
+  ]
+ },
+ "excess_bands": [
+  {
+   "excess": 1000000,
+   "tax": 400000,
+   "tax_rate": 0.4,
+   "due_months": 9,
+   "terms": [
+    {
+     "years": 1,
+     "balloon_paid": 429000,
+     "balloon_interest": 29000,
+     "instalment_paid": 429000,
+     "instalment_interest": 29000,
+     "return_given_up": 16800,
+     "deferral_advantage": -12200,
+     "balloon_low": 412180,
+     "balloon_high": 433310
+    },
+    {
+     "years": 3,
+     "balloon_paid": 493460,
+     "balloon_interest": 93460,
+     "instalment_paid": 459350,
+     "instalment_interest": 59350,
+     "return_given_up": 52550,
+     "deferral_advantage": -6800,
+     "balloon_low": 437670,
+     "balloon_high": 508490
+    },
+    {
+     "years": 5,
+     "balloon_paid": 567610,
+     "balloon_interest": 167610,
+     "instalment_paid": 491050,
+     "instalment_interest": 91050,
+     "return_given_up": 91360,
+     "deferral_advantage": 310,
+     "balloon_low": 464730,
+     "balloon_high": 596700
+    },
+    {
+     "years": 10,
+     "balloon_paid": 805450,
+     "balloon_interest": 405450,
+     "instalment_paid": 576110,
+     "instalment_interest": 176110,
+     "return_given_up": 203580,
+     "deferral_advantage": 27470,
+     "balloon_low": 539940,
+     "balloon_high": 890140
+    }
+   ],
+   "src": [
+    "irs_estate",
+    "irs_i706",
+    "irs_interest",
+    "uscode6621",
+    "uscode6622"
+   ]
+  },
+  {
+   "excess": 2500000,
+   "tax": 1000000,
+   "tax_rate": 0.4,
+   "due_months": 9,
+   "terms": [
+    {
+     "years": 1,
+     "balloon_paid": 1072500,
+     "balloon_interest": 72500,
+     "instalment_paid": 1072500,
+     "instalment_interest": 72500,
+     "return_given_up": 42000,
+     "deferral_advantage": -30500,
+     "balloon_low": 1030450,
+     "balloon_high": 1083280
+    },
+    {
+     "years": 3,
+     "balloon_paid": 1233650,
+     "balloon_interest": 233650,
+     "instalment_paid": 1148380,
+     "instalment_interest": 148380,
+     "return_given_up": 131370,
+     "deferral_advantage": -17010,
+     "balloon_low": 1094170,
+     "balloon_high": 1271220
+    },
+    {
+     "years": 5,
+     "balloon_paid": 1419020,
+     "balloon_interest": 419020,
+     "instalment_paid": 1227630,
+     "instalment_interest": 227630,
+     "return_given_up": 228400,
+     "deferral_advantage": 770,
+     "balloon_low": 1161830,
+     "balloon_high": 1491760
+    },
+    {
+     "years": 10,
+     "balloon_paid": 2013620,
+     "balloon_interest": 1013620,
+     "instalment_paid": 1440280,
+     "instalment_interest": 440280,
+     "return_given_up": 508960,
+     "deferral_advantage": 68680,
+     "balloon_low": 1349840,
+     "balloon_high": 2225350
+    }
+   ],
+   "src": [
+    "irs_estate",
+    "irs_i706",
+    "irs_interest",
+    "uscode6621",
+    "uscode6622"
+   ]
+  },
+  {
+   "excess": 5000000,
+   "tax": 2000000,
+   "tax_rate": 0.4,
+   "due_months": 9,
+   "terms": [
+    {
+     "years": 1,
+     "balloon_paid": 2145000,
+     "balloon_interest": 145000,
+     "instalment_paid": 2145000,
+     "instalment_interest": 145000,
+     "return_given_up": 84000,
+     "deferral_advantage": -61000,
+     "balloon_low": 2060910,
+     "balloon_high": 2166560
+    },
+    {
+     "years": 3,
+     "balloon_paid": 2467310,
+     "balloon_interest": 467310,
+     "instalment_paid": 2296760,
+     "instalment_interest": 296760,
+     "return_given_up": 262730,
+     "deferral_advantage": -34030,
+     "balloon_low": 2188340,
+     "balloon_high": 2542430
+    },
+    {
+     "years": 5,
+     "balloon_paid": 2838040,
+     "balloon_interest": 838040,
+     "instalment_paid": 2455260,
+     "instalment_interest": 455260,
+     "return_given_up": 456790,
+     "deferral_advantage": 1530,
+     "balloon_low": 2323650,
+     "balloon_high": 2983520
+    },
+    {
+     "years": 10,
+     "balloon_paid": 4027240,
+     "balloon_interest": 2027240,
+     "instalment_paid": 2880560,
+     "instalment_interest": 880560,
+     "return_given_up": 1017920,
+     "deferral_advantage": 137360,
+     "balloon_low": 2699680,
+     "balloon_high": 4450690
+    }
+   ],
+   "src": [
+    "irs_estate",
+    "irs_i706",
+    "irs_interest",
+    "uscode6621",
+    "uscode6622"
+   ]
+  },
+  {
+   "excess": 10000000,
+   "tax": 4000000,
+   "tax_rate": 0.4,
+   "due_months": 9,
+   "terms": [
+    {
+     "years": 1,
+     "balloon_paid": 4290000,
+     "balloon_interest": 290000,
+     "instalment_paid": 4290000,
+     "instalment_interest": 290000,
+     "return_given_up": 168000,
+     "deferral_advantage": -122000,
+     "balloon_low": 4121810,
+     "balloon_high": 4333110
+    },
+    {
+     "years": 3,
+     "balloon_paid": 4934610,
+     "balloon_interest": 934610,
+     "instalment_paid": 4593530,
+     "instalment_interest": 593530,
+     "return_given_up": 525460,
+     "deferral_advantage": -68070,
+     "balloon_low": 4376680,
+     "balloon_high": 5084860
+    },
+    {
+     "years": 5,
+     "balloon_paid": 5676080,
+     "balloon_interest": 1676080,
+     "instalment_paid": 4910520,
+     "instalment_interest": 910520,
+     "return_given_up": 913590,
+     "deferral_advantage": 3070,
+     "balloon_low": 4647310,
+     "balloon_high": 5967040
+    },
+    {
+     "years": 10,
+     "balloon_paid": 8054470,
+     "balloon_interest": 4054470,
+     "instalment_paid": 5761120,
+     "instalment_interest": 1761120,
+     "return_given_up": 2035830,
+     "deferral_advantage": 274710,
+     "balloon_low": 5399370,
+     "balloon_high": 8901380
+    }
+   ],
+   "src": [
+    "irs_estate",
+    "irs_i706",
+    "irs_interest",
+    "uscode6621",
+    "uscode6622"
+   ]
+  },
+  {
+   "excess": 20000000,
+   "tax": 8000000,
+   "tax_rate": 0.4,
+   "due_months": 9,
+   "terms": [
+    {
+     "years": 1,
+     "balloon_paid": 8580010,
+     "balloon_interest": 580010,
+     "instalment_paid": 8580010,
+     "instalment_interest": 580010,
+     "return_given_up": 336000,
+     "deferral_advantage": -244010,
+     "balloon_low": 8243630,
+     "balloon_high": 8666220
+    },
+    {
+     "years": 3,
+     "balloon_paid": 9869230,
+     "balloon_interest": 1869230,
+     "instalment_paid": 9187060,
+     "instalment_interest": 1187060,
+     "return_given_up": 1050930,
+     "deferral_advantage": -136130,
+     "balloon_low": 8753360,
+     "balloon_high": 10169730
+    },
+    {
+     "years": 5,
+     "balloon_paid": 11352160,
+     "balloon_interest": 3352160,
+     "instalment_paid": 9821050,
+     "instalment_interest": 1821050,
+     "return_given_up": 1827170,
+     "deferral_advantage": 6120,
+     "balloon_low": 9294620,
+     "balloon_high": 11934070
+    },
+    {
+     "years": 10,
+     "balloon_paid": 16108940,
+     "balloon_interest": 8108940,
+     "instalment_paid": 11522240,
+     "instalment_interest": 3522240,
+     "return_given_up": 4071670,
+     "deferral_advantage": 549430,
+     "balloon_low": 10798740,
+     "balloon_high": 17802770
+    }
+   ],
+   "src": [
+    "irs_estate",
+    "irs_i706",
+    "irs_interest",
+    "uscode6621",
+    "uscode6622"
+   ]
+  }
+ ],
+ "at_inheritance": [
+  {
+   "inherit_year": 2040,
+   "exclusion_projected": 21339350,
+   "exclusion_basis": "mechanical indexation at the modelled inflation rate; not law and not a forecast",
+   "house_value_at_death": 5368200,
+   "house_share_of_exclusion": 0.2516,
+   "tax_if_house_is_the_excess": 2147280,
+   "tax_share_of_house": 0.4,
+   "couple_exclusion_projected": 42678700,
+   "couple_excess_allowance_over_single": 21339350,
+   "src": [
+    "irs_estate",
+    "ssa_trustees",
+    "irs_i706"
+   ]
+  },
+  {
+   "inherit_year": 2045,
+   "exclusion_projected": 24143520,
+   "exclusion_basis": "mechanical indexation at the modelled inflation rate; not law and not a forecast",
+   "house_value_at_death": 6531230,
+   "house_share_of_exclusion": 0.2705,
+   "tax_if_house_is_the_excess": 2612490,
+   "tax_share_of_house": 0.4,
+   "couple_exclusion_projected": 48287040,
+   "couple_excess_allowance_over_single": 24143520,
+   "src": [
+    "irs_estate",
+    "ssa_trustees",
+    "irs_i706"
+   ]
+  },
+  {
+   "inherit_year": 2050,
+   "exclusion_projected": 27316170,
+   "exclusion_basis": "mechanical indexation at the modelled inflation rate; not law and not a forecast",
+   "house_value_at_death": 7946240,
+   "house_share_of_exclusion": 0.2909,
+   "tax_if_house_is_the_excess": 3178500,
+   "tax_share_of_house": 0.4,
+   "couple_exclusion_projected": 54632340,
+   "couple_excess_allowance_over_single": 27316170,
+   "src": [
+    "irs_estate",
+    "ssa_trustees",
+    "irs_i706"
+   ]
+  }
+ ],
+ "borrowing": {
+  "principal": 1000000,
+  "rate": 0.0711,
+  "rate_low": 0.0598,
+  "rate_high": 0.074,
+  "rate_basis": "The published 30-year fixed mortgage average for the week of 12 November 2026; the low and high are the lowest and highest weekly averages published in 2026",
+  "method": "Interest only, on a constant balance, with no amortisation and no deduction assumed for the interest - which is the conservative reading",
+  "rows": [
+   {
+    "years": 1,
+    "principal": 1000000,
+    "rate": 0.0711,
+    "interest": 71100,
+    "interest_low": 59800,
+    "interest_high": 74000,
+    "total_paid": 1071100
+   },
+   {
+    "years": 3,
+    "principal": 1000000,
+    "rate": 0.0711,
+    "interest": 213300,
+    "interest_low": 179400,
+    "interest_high": 222000,
+    "total_paid": 1213300
+   },
+   {
+    "years": 5,
+    "principal": 1000000,
+    "rate": 0.0711,
+    "interest": 355500,
+    "interest_low": 299000,
+    "interest_high": 370000,
+    "total_paid": 1355500
+   },
+   {
+    "years": 10,
+    "principal": 1000000,
+    "rate": 0.0711,
+    "interest": 711000,
+    "interest_low": 598000,
+    "interest_high": 740000,
+    "total_paid": 1711000
+   }
+  ],
+  "src": [
+   "fred_mortgage"
+  ],
+  "limit": "A rate for the 2040s is not published and is not forecast here. The interest is a carrying cost only: it says nothing about what the borrowed money earns, and nothing about whether the lender will lend against a property held in trust."
+ },
+ "joint_case": {
+  "single_exclusion": 250000,
+  "joint_exclusion": 500000,
+  "rule": "Either spouse may meet the ownership test, but both spouses must meet the use test individually: each must have lived in the home for at least 24 months of the 5 years before the sale.",
+  "gain_tax_rate": 0.371,
+  "rows": [
+   {
+    "occupy_years": 0,
+    "mode": "sell",
+    "label": "Sell at the inheritance",
+    "gain": 0,
+    "exclusion_single": 0,
+    "exclusion_joint": 500000,
+    "tax_single": 0,
+    "tax_joint": 0,
+    "saving": 0,
+    "both_spouses_must_occupy": false,
+    "net_single": 6172010,
+    "net_joint": 6172010
+   },
+   {
+    "occupy_years": 0,
+    "mode": "rent",
+    "label": "Let it out from the start, sell at the end",
+    "gain": 18712050,
+    "exclusion_single": 0,
+    "exclusion_joint": 0,
+    "tax_single": 7203420,
+    "tax_joint": 7203420,
+    "saving": 0,
+    "both_spouses_must_occupy": false,
+    "net_single": 12814880,
+    "net_joint": 12814880
+   },
+   {
+    "occupy_years": 2,
+    "mode": "sell",
+    "label": "Live in it for 2 years, then sell",
+    "gain": 144420,
+    "exclusion_single": 250000,
+    "exclusion_joint": 500000,
+    "tax_single": 0,
+    "tax_joint": 0,
+    "saving": 0,
+    "both_spouses_must_occupy": true,
+    "net_single": 6675650,
+    "net_joint": 6675650
+   },
+   {
+    "occupy_years": 2,
+    "mode": "rent",
+    "label": "Live in it for 2 years, then let it out",
+    "gain": 18712050,
+    "exclusion_single": 0,
+    "exclusion_joint": 0,
+    "tax_single": 7203420,
+    "tax_joint": 7203420,
+    "saving": 0,
+    "both_spouses_must_occupy": false,
+    "net_single": 12814880,
+    "net_joint": 12814880
+   },
+   {
+    "occupy_years": 2,
+    "mode": "rent",
+    "label": "Live in it for 2 years, then let it out (low assessment kept after move-out)",
+    "gain": 18712050,
+    "exclusion_single": 0,
+    "exclusion_joint": 0,
+    "tax_single": 7203420,
+    "tax_joint": 7203420,
+    "saving": 0,
+    "both_spouses_must_occupy": false,
+    "net_single": 12814880,
+    "net_joint": 12814880
+   },
+   {
+    "occupy_years": 5,
+    "mode": "sell",
+    "label": "Live in it for 5 years, then sell",
+    "gain": 977970,
+    "exclusion_single": 250000,
+    "exclusion_joint": 500000,
+    "tax_single": 270080,
+    "tax_joint": 177330,
+    "saving": 92750,
+    "both_spouses_must_occupy": true,
+    "net_single": 7239120,
+    "net_joint": 7331870
+   },
+   {
+    "occupy_years": 5,
+    "mode": "rent",
+    "label": "Live in it for 5 years, then let it out",
+    "gain": 18237050,
+    "exclusion_single": 0,
+    "exclusion_joint": 0,
+    "tax_single": 7003450,
+    "tax_joint": 7003450,
+    "saving": 0,
+    "both_spouses_must_occupy": false,
+    "net_single": 13014850,
+    "net_joint": 13014850
+   },
+   {
+    "occupy_years": 5,
+    "mode": "rent",
+    "label": "Live in it for 5 years, then let it out (low assessment kept after move-out)",
+    "gain": 18237050,
+    "exclusion_single": 0,
+    "exclusion_joint": 0,
+    "tax_single": 7003450,
+    "tax_joint": 7003450,
+    "saving": 0,
+    "both_spouses_must_occupy": false,
+    "net_single": 13014850,
+    "net_joint": 13014850
+   },
+   {
+    "occupy_years": 10,
+    "mode": "sell",
+    "label": "Live in it for 10 years, then sell",
+    "gain": 2604860,
+    "exclusion_single": 250000,
+    "exclusion_joint": 500000,
+    "tax_single": 873650,
+    "tax_joint": 780900,
+    "saving": 92750,
+    "both_spouses_must_occupy": true,
+    "net_single": 8262440,
+    "net_joint": 8355190
+   },
+   {
+    "occupy_years": 10,
+    "mode": "rent",
+    "label": "Live in it for 10 years, then let it out",
+    "gain": 17287050,
+    "exclusion_single": 0,
+    "exclusion_joint": 0,
+    "tax_single": 6603500,
+    "tax_joint": 6603500,
+    "saving": 0,
+    "both_spouses_must_occupy": false,
+    "net_single": 13414800,
+    "net_joint": 13414800
+   },
+   {
+    "occupy_years": 10,
+    "mode": "rent",
+    "label": "Live in it for 10 years, then let it out (low assessment kept after move-out)",
+    "gain": 17287050,
+    "exclusion_single": 0,
+    "exclusion_joint": 0,
+    "tax_single": 6603500,
+    "tax_joint": 6603500,
+    "saving": 0,
+    "both_spouses_must_occupy": false,
+    "net_single": 13414800,
+    "net_joint": 13414800
+   },
+   {
+    "occupy_years": 15,
+    "mode": "sell",
+    "label": "Live in it for 15 years, then sell",
+    "gain": 4584220,
+    "exclusion_single": 250000,
+    "exclusion_joint": 500000,
+    "tax_single": 1607990,
+    "tax_joint": 1515240,
+    "saving": 92750,
+    "both_spouses_must_occupy": true,
+    "net_single": 9507460,
+    "net_joint": 9600210
+   },
+   {
+    "occupy_years": 20,
+    "mode": "sell",
+    "label": "Live in it for 20 years, then sell",
+    "gain": 6992410,
+    "exclusion_single": 250000,
+    "exclusion_joint": 500000,
+    "tax_single": 2501430,
+    "tax_joint": 2408680,
+    "saving": 92750,
+    "both_spouses_must_occupy": true,
+    "net_single": 11022210,
+    "net_joint": 11114960
+   },
+   {
+    "occupy_years": 30,
+    "mode": "sell",
+    "label": "Live in it for the whole 30 years, then sell",
+    "gain": 13487060,
+    "exclusion_single": 250000,
+    "exclusion_joint": 500000,
+    "tax_single": 4910950,
+    "tax_joint": 4818200,
+    "saving": 92750,
+    "both_spouses_must_occupy": true,
+    "net_single": 15107350,
+    "net_joint": 15200100
+   }
+  ],
+  "src": [
+   "irs_tc701",
+   "irs_p523"
+  ],
+  "limit": "Only the exclusion amount changes. Depreciation recapture, which the letting paths carry, is not reduced by the section 121 exclusion, so the letting rows move by less than the living rows."
+ },
+ "cash_sources": [
+  {
+   "source": "Cash and marketable assets already in the estate",
+   "rule": "Pays the tax at the due date. No interest runs. Nothing has to be sold at a forced date.",
+   "cost": "The return those assets would otherwise have earned.",
+   "src": [
+    "irs_filing_eg"
+   ]
+  },
+  {
+   "source": "Sell the house",
+   "rule": "A sale soon after death carries almost no capital gains tax, because property acquired from a decedent takes a basis equal to its value at death.",
+   "cost": "Selling costs, modelled on this site at 5.5% of the price, plus the loss of the house.",
+   "src": [
+    "irs_basis",
+    "irs_tc701"
+   ]
+  },
+  {
+   "source": "Borrow against the house or against Property B",
+   "rule": "Keeps the asset and raises the cash. Nothing in the Code requires the estate to sell before it borrows.",
+   "cost": "Interest at the lender's rate, published averages for which are on the source ledger. This site assumes no tax deduction for that interest.",
+   "src": [
+    "fred_mortgage"
+   ]
+  },
+  {
+   "source": "Extension of time to pay, section 6161(a)(2)",
+   "rule": "A discretionary extension for reasonable cause, granted one year at a time for up to 10 years, and only for the amount of the cash shortage. It is not an extension of time to file, and interest runs from the due date regardless.",
+   "cost": "Interest at the underpayment rate, compounded daily, from the original due date.",
+   "src": [
+    "irs_i4768",
+    "uscode6601",
+    "uscode6622"
+   ]
+  },
+  {
+   "source": "Installment payment for a closely held business, section 6166",
+   "rule": "A 5-year deferral followed by up to 10 annual installments, but only where an interest in a closely held business exceeds 35% of the adjusted gross estate. Interest on the 2-percent portion runs at 2%; interest on the rest runs at 45% of the underpayment rate.",
+   "cost": "Interest at 2% on the 2-percent portion and at 45% of the underpayment rate on the rest. A home occupied as a personal residence is not an interest in a closely held business on the face of the statute, so this site does not assume the election is available.",
+   "src": [
+    "uscode6166",
+    "uscode6601"
+   ]
+  }
+ ],
+ "estate_exclusions": [
+  {
+   "inherit_year": 2040,
+   "one_exclusion": 21339350,
+   "two_exclusions": 42678700,
+   "difference": 21339350,
+   "src": [
+    "irs_estate",
+    "irs_whatsnew",
+    "rp_2022_32"
+   ]
+  },
+  {
+   "inherit_year": 2045,
+   "one_exclusion": 24143520,
+   "two_exclusions": 48287040,
+   "difference": 24143520,
+   "src": [
+    "irs_estate",
+    "irs_whatsnew",
+    "rp_2022_32"
+   ]
+  },
+  {
+   "inherit_year": 2050,
+   "one_exclusion": 27316170,
+   "two_exclusions": 54632340,
+   "difference": 27316170,
+   "src": [
+    "irs_estate",
+    "irs_whatsnew",
+    "rp_2022_32"
+   ]
+  }
+ ]
+}

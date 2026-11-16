@@ -4,8 +4,9 @@
 The model and economic bootstrap have a small dependency cycle: model.py first
 computes break-even values consumed by economy.py; model.py then embeds the
 refreshed bootstrap distributions from economy.json. mixed.py consumes both final
-JSON outputs, and build.py consumes all model outputs to write the site, CSV
-tables, and executive summary.
+JSON outputs, liquidity.py consumes model.json and mixed.json (it repriced the
+mixed paths for the two-person case), and build.py consumes all model outputs to
+write the site, CSV tables, and executive summary.
 
 All generators are deterministic and use only checked-in inputs. Their stdout and
 stderr are suppressed so property-specific model diagnostics are not copied into
@@ -25,6 +26,7 @@ STEPS = (
     ("economy (rebuild the bootstrap from the current model)", "economy.py"),
     ("model (embed the refreshed bootstrap)", "model.py"),
     ("mixed paths (use the refreshed model and bootstrap)", "mixed.py"),
+    ("estate liquidity and the two-person case", "liquidity.py"),
     ("site and executive summary", "build.py"),
 )
 
@@ -44,7 +46,7 @@ def main() -> int:
                 f"Rebuild failed in {script} (exit {result.returncode}); "
                 "component output was suppressed. Run that component locally for diagnostics."
             )
-    print("Rebuild complete: model, economy, mixed paths, pages, tables, and executive summary.")
+    print("Rebuild complete: model, economy, mixed paths, liquidity, pages, tables, and executive summary.")
     return 0
 
 

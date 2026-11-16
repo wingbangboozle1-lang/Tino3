@@ -511,9 +511,13 @@
    "publisher": "California Franchise Tax Board",
    "title": "Capital gains and losses",
    "url": "https://www.ftb.ca.gov/file/personal/income-types/capital-gains-and-losses.html",
-   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "checked": "Re-read on the publisher's site on 2026-11-16 (arena/0069abd3-tino3); the page states it was last updated 28 January 2026. Originally carried in the repository ledger and checked on 2026-11-13.",
    "supports": "California does not have a separate lower rate for long-term capital gains; gains are taxed as ordinary income under the California rate schedules.",
-   "limits": "Rates and brackets must be read from the current-year schedules."
+   "limits": "Rates and brackets must be read from the current-year schedules.",
+   "verifies": [
+    "California does not have a lower rate for capital gains; all capital gains are taxed as ordinary income"
+   ],
+   "quote": "California does not have a lower rate for capital gains. All capital gains are taxed as ordinary income."
   },
   {
    "id": "ftb_inheritance",
@@ -529,9 +533,14 @@
    "publisher": "California Franchise Tax Board",
    "title": "2025 California tax rate schedules (Form 540)",
    "url": "https://www.ftb.ca.gov/forms/2025/2025-540-tax-rate-schedules.pdf",
-   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
-   "supports": "The California marginal rate structure used to price a gain on sale.",
-   "limits": "This is the 2025 form. Later-year schedules must be used for a later-year sale."
+   "checked": "Re-read on the publisher's site on 2026-11-16 (arena/0069abd3-tino3): every one of the three 2025 filing-status schedules ends at a top rate of 12.30%, which is what makes the section 17043 1% additional to the top bracket rather than part of it. Originally carried in the repository ledger and checked on 2026-11-13.",
+   "supports": "The California marginal rate structure used to price a gain on sale, and the fact that the published 2025 schedules stop at 12.30% on every filing status.",
+   "limits": "This is the 2025 form. Later-year schedules must be used for a later-year sale.",
+   "verifies": [
+    "All three 2025 filing-status schedules (X, Y and Z) end at a top rate of 12.30%",
+    "The top bracket starts at a different threshold on each schedule but the top rate is the same on all three"
+   ],
+   "quote": "742,953 AND OVER | 72,219.84 + 12.30%"
   },
   {
    "id": "ftb_rates_2026",
@@ -1177,6 +1186,79 @@
    "checked": "Opened on the publisher's official domain on 2026-11-16; subsection (d) read in full from the 2024 edition and quoted from it.",
    "supports": "Subsection (d): with respect to a real property loan secured by a lien on residential real property containing fewer than five dwelling units, a lender may not exercise its option pursuant to a due-on-sale clause upon, among other transfers, \"(5) a transfer to a relative resulting from the death of a borrower\"; \"(6) a transfer where the spouse or children of the borrower become an owner of the property\"; and \"(8) a transfer into an inter vivos trust in which the borrower is and remains a beneficiary and which does not relate to a transfer of rights of occupancy in the property\".",
    "limits": "The section limits when a lender may accelerate on a transfer; it does not forgive the debt, does not decide who must make the payments, and does not reach a loan secured by five or more dwelling units. The loan contract and State law still govern everything else, and subsection (d)(8) protects a transfer into a trust only while the borrower remains the beneficiary."
+  },
+  {
+   "id": "irs_interest",
+   "publisher": "Internal Revenue Service",
+   "title": "Quarterly interest rates",
+   "url": "https://www.irs.gov/payments/quarterly-interest-rates",
+   "verifies": [
+    "Underpayment rate (corporate and non-corporate), 4th quarter 2026: 7 percent",
+    "Federal short-term rate (IRC 6603 deposit), 4th quarter 2026: 4 percent",
+    "Underpayment rates published for 2026 by quarter: 7, 7, 6 and 7 percent"
+   ],
+   "quote": "Underpayment (corporate and non-corporate) | 7% | 7% | 6% | 7%",
+   "checked": "opened on the publisher's site on 2026-11-16 (2026 quarterly table, and the 2025, 2024, 2023 and 2022 tables for the published range)",
+   "supports": "The published underpayment rate of 7 percent for the fourth quarter of 2026, the federal short-term rate of 4 percent for the same quarter, and the published range of 3 to 8 percent across 2022-2026.",
+   "limits": "Rates are set and published quarterly. The rate that applies to a death in the 2040s is not published and is not forecast here."
+  },
+  {
+   "id": "uscode6166",
+   "publisher": "U.S. Government Publishing Office (GovInfo)",
+   "title": "26 U.S.C. section 6166 - extension of time for payment of estate tax where estate consists largely of interest in closely held business",
+   "url": "https://www.govinfo.gov/content/pkg/USCODE-2023-title26/html/USCODE-2023-title26-subtitleF-chap62-subchapB-sec6166.htm",
+   "verifies": [
+    "Payment may be made in 2 or more (but not exceeding 10) equal installments",
+    "The first installment may be deferred to a date not more than 5 years after the date prescribed by section 6151(a)",
+    "The election requires that the interest in a closely held business exceed 35 percent of the adjusted gross estate",
+    "An interest in a closely held business means a proprietorship, a qualifying partnership interest, or stock in a corporation carrying on a trade or business"
+   ],
+   "quote": "If the value of an interest in a closely held business which is included in determining the gross estate of a decedent ... exceeds 35 percent of the adjusted gross estate, the executor may elect to pay part or all of the tax imposed by section 2001 in 2 or more (but not exceeding 10) equal installments.",
+   "checked": "opened on the publisher's site on 2026-11-16 (2023 edition of the United States Code)",
+   "supports": "The five-year deferral and ten-installment payment election, the 35 percent of adjusted gross estate test, and the statutory definition of an interest in a closely held business.",
+   "limits": "The 2023 edition is the current published edition of the Code. Whether a home occupied as a personal residence is an interest in a closely held business is a question of fact for the estate's adviser; this site does not assume the election is available."
+  },
+  {
+   "id": "uscode6601",
+   "publisher": "U.S. Government Publishing Office (GovInfo)",
+   "title": "26 U.S.C. section 6601 - interest on underpayment, nonpayment, or extensions of time for payment, of tax",
+   "url": "https://www.govinfo.gov/content/pkg/USCODE-2023-title26/html/USCODE-2023-title26-subtitleF-chap67-subchapA-sec6601.htm",
+   "verifies": [
+    "Interest runs at the underpayment rate established under section 6621 from the last date prescribed for payment to the date paid",
+    "Where the time for payment of an amount of estate tax is extended under section 6166, interest on the 2-percent portion is paid at 2 percent and interest on the excess at 45 percent of the underpayment rate",
+    "The 2-percent portion is the lesser of the tax on the sum of the inflation-adjusted $1,000,000 and the applicable exclusion amount (reduced by the applicable credit amount) and the tax extended under section 6166"
+   ],
+   "quote": "If any amount of tax imposed by this title ... is not paid on or before the last date prescribed for payment, interest on such amount at the underpayment rate established under section 6621 shall be paid for the period from such last date to the date paid.",
+   "checked": "opened on the publisher's site on 2026-11-16 (2023 edition of the United States Code)",
+   "supports": "Interest on unpaid estate tax runs from the original due date at the underpayment rate, and the reduced 2 percent rate that applies only where payment is extended under section 6166.",
+   "limits": "The inflation-adjusted $1,000,000 used to size the 2-percent portion is republished by the IRS each year in its inflation-adjustment revenue procedure; this site does not state a year-specific figure for it."
+  },
+  {
+   "id": "uscode6621",
+   "publisher": "U.S. Government Publishing Office (GovInfo)",
+   "title": "26 U.S.C. section 6621 - determination of rate of interest",
+   "url": "https://www.govinfo.gov/content/pkg/USCODE-2023-title26/html/USCODE-2023-title26-subtitleF-chap67-subchapC-sec6621.htm",
+   "verifies": [
+    "The underpayment rate is the Federal short-term rate plus 3 percentage points",
+    "The Secretary determines the Federal short-term rate for the first month in each calendar quarter"
+   ],
+   "quote": "The underpayment rate established under this section shall be the sum of-(A) the Federal short-term rate determined under subsection (b), plus (B) 3 percentage points.",
+   "checked": "opened on the publisher's site on 2026-11-16 (2023 edition of the United States Code)",
+   "supports": "The formula that sets the interest charged on estate tax paid after the due date: the federal short-term rate plus three percentage points, reset each quarter.",
+   "limits": "The rate therefore moves with short-term interest rates. This site uses the published rate and its published recent range; it does not forecast it."
+  },
+  {
+   "id": "uscode6622",
+   "publisher": "U.S. Government Publishing Office (GovInfo)",
+   "title": "26 U.S.C. section 6622 - interest compounded daily",
+   "url": "https://www.govinfo.gov/content/pkg/USCODE-2023-title26/html/USCODE-2023-title26-subtitleF-chap67-subchapC-sec6622.htm",
+   "verifies": [
+    "Interest required to be paid under title 26 is compounded daily"
+   ],
+   "quote": "In computing the amount of any interest required to be paid under this title ... such interest and such amount shall be compounded daily.",
+   "checked": "opened on the publisher's site on 2026-11-16 (2023 edition of the United States Code)",
+   "supports": "The compounding convention used in every deferral figure on the liquidity page: interest on unpaid tax compounds daily, not annually.",
+   "limits": "The engine on this site compounds on a 365-day year. The IRS determines rates quarterly and may apply them per quarter; small differences are possible against an assessment."
   }
  ]
 }
