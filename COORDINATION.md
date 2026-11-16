@@ -4068,7 +4068,7 @@ Cross-checked the dashboard's headline figures against `assets/data/model.json` 
 | Q-2 Re-run the deterministic build and every gate on the current head | **done** — result below; no generated drift | `arena/8ce55489-tino3` | read-only |
 | Q-3 Spot-check the federal basic exclusion figures on the site against IRS primary pages | **done** — both figures match; no site change needed | `arena/8ce55489-tino3` | read-only |
 | Q-4 Confirm the public Pages site is live and serving the current edition | **done** — result below | `arena/8ce55489-tino3` | read-only |
-| Q-5 Publish this record through a pull request to `main`, merge without approval, confirm the Pages deploy | **pending at time of writing** — see the publication record below if present | `arena/8ce55489-tino3` | `COORDINATION.md` (this section only) |
+| Q-5 Publish this record through a pull request to `main`, merge without approval, confirm the Pages deploy | **done** — PR #149 merged at `b3edcf1` (16 November 2026, 18:17 UTC); see the publication record below | `arena/8ce55489-tino3` | `COORDINATION.md` (this section only) |
 
 ### Q-2 result: gates on the current head (16 November 2026)
 
@@ -4094,3 +4094,10 @@ Cross-checked the dashboard's headline figures against `assets/data/model.json` 
 - Items that need owner-supplied facts or third-party quotes were not advanced in this session because no such inputs were provided: insurance quotes, rent and sale comparables, Property B lease and local-rule records, the Property A tax-rate-area and bill, the date-of-death valuation, a cash balance, and a written trust relationship for the Proposition 19 test (question A-1). These remain on the Questions and Flagged for Review pages.
 - The repository history still contains earlier unscrubbed content. No history rewrite or force push was performed by this session; the owner-run procedure is in `PRIVACY_REMEDIATION.md`, section 7.
 - This is a planning model, not tax, legal or appraisal advice. The household's attorney and CPA review the briefing sheet before any decision.
+
+### Q-5 publication record
+
+- **Pull request:** <https://github.com/wingbangboozle1-lang/Tino3/pull/149>, from `arena/8ce55489-tino3` to `main`, containing only this coordination section. Its Verify check passed before the merge.
+- **Merge:** `gh pr merge 149 --merge` succeeded without approval and without `--auto`. Merge commit `b3edcf1c9363b94972817d14571c5912cbb88c80`, merged 18:17:10 UTC.
+- **Post-merge checks on `main`:** `Verify static site` (run 43927220997) and `Deploy GitHub Pages` (run 43927220421) succeeded; legacy `pages-build-deployment` (run 43927220402) succeeded. Live URL: https://wingbangboozle1-lang.github.io/Tino3/.
+- **Site impact:** none. No model, source, data or generated-site content changed in this session.
