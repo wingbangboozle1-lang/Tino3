@@ -3782,3 +3782,45 @@ No changes were required to any source file: the working tree is clean at `1cfed
 **Finding and correction:** `EXECUTIVE_SUMMARY.md` was generated reproducibly, but its generator hard-coded old metro-era historical returns and local-area language. The HTML dashboard already used the anonymized California state-level series. The Markdown summary now computes the 1975–2025 and latest-20-year compound growth rates and annual CPI/house-index extrema from `assets/data/series.json`, identifies the index as statewide, and links the FRED CASTHPI and CPIAUCSL series. The regime explanation no longer implies neighborhood-specific forecast power. The derived results were independently recomputed from the checked-in annual series: 6.4% (1975–2025), 2.6% (latest 20 years), California house-index annual range −20.0% to 25.3%, CPI annual range −0.3% to 13.5%. No projection assumptions or recommendations changed.
 
 **Verification (16 November 2026):** `python3 scripts/rebuild.py`; `scripts/verify.py` (24 pages, 1,115 table rows; all rows source-linked or explicitly registered unverified); `scripts/privacy_boundary.py`; `scripts/tracked_tree_guard.py`; `scripts/package_site.py`; `scripts/verify_legacy.py --config-only`; `git diff --check` — all passed. The summary no longer contains the superseded metro-era percentages or Property A-area language. Sources: [FRED CASTHPI](https://fred.stlouisfed.org/series/CASTHPI), [FRED CPIAUCSL](https://fred.stlouisfed.org/series/CPIAUCSL).
+## Session `arena/3a29bbb0-tino3` — independent spot-check of official sources, timeline dating fix, publication · claimed 2026-11-16
+
+*Branch note:* This session is pinned to `arena/3a29bbb0-tino3`, branched from `main` at `5005a72` (merge of PR #137). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. `gh pr list --state open` returned nothing when this session started, so no other session holds `scripts/build.py`, `assets/data/*` or `assets/sources.json`. The earlier session `arena/99fbc3a3-tino3` left its Q-2 row at *in progress*; this session's V-4 row below supersedes that record for the spot-check it described, and this session does not edit that section.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| W-1 Claim this scope and push before any other edit | **done** — this section | `arena/3a29bbb0-tino3` | `COORDINATION.md` (this section only) |
+| W-2 Rebuild from source at `5005a72`; committed outputs must reproduce with no diff | **done** — result below | `arena/3a29bbb0-tino3` | read-only |
+| W-3 Re-open load-bearing official sources and compare each against the stored figure or statement | **done** — result below; no stored value changed | `arena/3a29bbb0-tino3` | read-only |
+| W-4 Timeline states that one dated item falls in the next year; two official dates in the next year were missing from the deadlines table. Correct the sentence and add the two rows, each with its official source | **done** — result below | `arena/3a29bbb0-tino3` | `scripts/build.py` (timeline block only), regenerated `timeline.html` |
+| W-5 Gates, PR to `main`, merge without waiting for approval, Pages deploy confirmed, record PR and result | **in progress** | `arena/3a29bbb0-tino3` | this section only |
+
+### W-2 result: rebuild at `5005a72`
+
+`python3 scripts/rebuild.py` exited 0 before any edit and left `git status` clean, so every committed page, data file, CSV and the executive summary reproduces byte for byte from source.
+
+### W-3 result: official sources re-opened on 16 November 2026
+
+Each row compares the publisher's text with the stored value or statement. Nothing stored was changed.
+
+- **IRS news release IR-2026-133 (5 November 2026), summarising Revenue Procedure 2026-35:** the 2027 basic exclusion amount is $15,480,000 and the 2027 annual gift exclusion is $20,000. Matches `federal_basic_exclusion_2027` and `annual_gift_exclusion_2027`. https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts
+- **IRS estate-tax page:** the filing threshold for a 2026 death is $15,000,000. Matches `federal_basic_exclusion_2026`. https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax
+- **BOE Letter to Assessors 2025/009:** the $1 million Proposition 19 amount is $1,044,586 for transfers from 16 February 2025 to 15 February 2027, and $1,022,600 for the prior period. Matches `prop19_value_cap_2025_2027` and `prop19_value_cap_prior_2023_2025`. The letter says the next adjustment occurs in February 2027. https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf
+- **BOE Letter to Assessors 2026/026 (3 August 2026), Proposition 19 FAQ:** the excluded amount is the factored base-year value plus the adjusted $1 million, and the exclusion depends on continual use as the principal residence. Matches the reset arithmetic in `scripts/model.py` (`taxable_live = byv + max(0, value_at_death − (byv + cap))`). https://www.boe.ca.gov/proptaxes/pdf/lta26026.pdf
+- **FTB, Gifts and inheritance (updated 24 September 2025):** an inheritance is not income; income it later produces is taxable. Matches the `ftb_inheritance` ledger statement. https://www.ftb.ca.gov/file/personal/income-types/gifts-and-inheritance.html
+- **State Controller's Office, California Estate Tax:** no California estate tax return is required for a death on or after 1 January 2005. Matches `california_estate_tax`. https://www.sco.ca.gov/ardtax_estate_tax.html
+- **Secretary of State, unofficial statewide results (as of 14 November 2026):** the results are unofficial and will be certified by 11 December 2026. This statement is the basis of the new timeline row (W-4). The statewide table was not copied into the site. https://electionresults.sos.ca.gov/returns/ballot-measures
+
+**Irregularities for review (not changed):** none in the figures above. The Secretary of State results page's header and table are presented as unofficial; the site does not rely on them beyond the certification date. The Proposition H terms remain unsourced on the public site by design (publisher withheld for privacy) and stay on the Flagged for Review page.
+
+### W-4 result: timeline dating corrected
+
+- The timeline sentence "That is the only dated item on this page that falls in the next year" was wrong. It now lists the two other official dates that fall in the next year: 11 December 2026 (statewide certification) and 16 February 2027 (the next Proposition 19 adjustment, which sets the amount for transfers from that day). The 2040s figures use a projected growth rate because no later amount is published.
+- Two rows added to the deadlines table, each with one official source: `11 December 2026` (sos_results) and `16 February 2027` (boe_lta25009). The 16 February row states that the new amount is not in the cited letter and so is not stated on the site.
+- The README verification snapshot is updated from 1,115 to 1,117 table rows and from 948 to 950 linked rows. The 167 unverified rows are unchanged.
+- Files changed: `scripts/build.py` (timeline block only), `timeline.html` (regenerated), `README.md` (two counts). `verify.py`, `privacy_boundary.py`, `tracked_tree_guard.py`, `package_site.py` and `verify_legacy.py --config-only` all exit 0 after the change.
+
+### Not done in this session, and why (owner-dependent, not blocking the merge)
+
+- **Git history scrub.** Not performed. Rewriting `main` requires a coordinated, backed-up force-push by the owner, and an agent session on this branch may not push to `main`. The runbook is `scripts/history_scrub.sh`, and the audit counts recorded in the 16 November P-2 result stand. The local clone is shallow (one commit), so the audit was not re-run here; it must be run on a full clone (`git fetch --unshallow`).
+- **Property A tax-rate area, Proposition 19 eligibility, trust terms and title, date-of-death valuation, insurance quotes and market rent.** These depend on the owner's documents or on quotations. No official source publishes them for the property, so they remain flagged on the Flagged for Review page.
+- **Proposition H (Property B's city parcel tax).** Preliminary, not certified. It remains flagged until the local canvass is complete.
