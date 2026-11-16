@@ -69,12 +69,12 @@ The pre-commitment register on `precommit.html` states, in advance, the conditio
 - **The shelter is smaller than the growth.** On a 2045 inheritance the exclusion shelters the old taxable value plus $1,886,640 against a market value of $6,531,230. Everything above the sum is reassessed.
 - **The tax-free window.** Property acquired from a decedent takes a basis equal to its value at death, so a sale soon afterwards pays about zero capital gains tax. In the 2045 baseline a $6,531,230 sale carries $0 of tax.
 - **What waiting costs.** Hold the same house thirty years and the tax on the eventual sale is about $4,910,950 after the section 121 exclusion; let it out as well and depreciation recapture pushes that to about $7,203,420.
-- **The break-even.** Keeping the home beats selling only if it appreciates 8.66% a year for thirty years. The verified index for this area compounded at 6.9% over fifty years and 3.3% over the last twenty.
+- **The break-even.** Keeping the home beats selling only if it appreciates 8.66% a year for thirty years. The verified California state house-price index compounded at 6.4% a year from 1975 to 2025 and 2.6% a year over the latest twenty years in the record ([FRED CASTHPI](https://fred.stlouisfed.org/series/CASTHPI)).
 - **The break-even rent.** Letting would need about $30,220 a month, $362,600 a year, in 2045, to match selling and investing.
 
 ## The black swans, and what they do to the answer
 
-Real economies do not grow at a constant rate. In the verified record used here, annual consumer price inflation ran from minus 0.3% to plus 13.5%, and annual house price growth in Property A's area from minus 12.3% to plus 30.2%. The regimes below replay the worst stretches of that record against a 2045 inheritance over thirty years.
+Real economies do not grow at a constant rate. In the verified record used here, annual consumer price inflation ranged from -0.3% to 13.5%, and annual house-price growth in the California state-level index ranged from -20.0% to 25.3% ([FRED CASTHPI](https://fred.stlouisfed.org/series/CASTHPI)). CPI figures use [FRED CPIAUCSL](https://fred.stlouisfed.org/series/CPIAUCSL). The regimes below replay the worst stretches of that record against a 2045 inheritance over thirty years.
 
 | Regime | Inflation | House growth | Treasury | Best path |
 |---|---|---|---|---|
@@ -85,7 +85,7 @@ Real economies do not grow at a constant rate. In the verified record used here,
 | House prices flat for the whole horizon | 2.5% | 0.0% | 4.7% | Sell, invest in equities |
 | Low inflation and falling nominal house prices | 0.5% | -1.0% | 2.0% | Sell, invest in equities |
 
-Sold into equities or Treasuries wins 4 of the 6 regimes. Keeping the house wins only in: Great Inflation repeat; A fast inflation burst then a rate shock. That is a bet on one neighbourhood repeating its best decades, not a plan.
+Sold into equities or Treasuries wins 4 of the 6 regimes. Keeping the house wins only in: Great Inflation repeat; A fast inflation burst then a rate shock. These are scenario results, not forecasts for a particular neighborhood.
 
 ### Entry timing, replayed against the real record
 

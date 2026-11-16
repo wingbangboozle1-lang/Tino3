@@ -3770,3 +3770,15 @@ No changes were required to any source file: the working tree is clean at `1cfed
 **Third rebase collision logged:** after PR #133 merged at `2f6ea0e`, the rebase conflicted only in `COORDINATION.md`. Resolution retained the entire latest main-side board, including its privacy redactions and session records, and appended only this session’s own section from its claim commit. No pre-redaction board text was reintroduced and no other session’s work was discarded. PR #133’s privacy changes are now part of the integration baseline; PR #132 was closed as superseded per the published handoff.
 
 **Privacy constraint:** No property-specific identifiers, personal names, addresses, postal codes, account details, or unrounded owner-provided amounts will be added to the public pages or new board text. The known historical exposure is not rewritten without the owner's decision and a coordinated, backed-up force-push; the scrub kit remains audit-only until then.
+
+## Session `arena/8e83e5b6-tino3` — audit and repair executive-summary historical-series drift · claimed 2026-11-16
+
+*Branch note:* pinned to `arena/8e83e5b6-tino3`, based on current `main` at `5005a72f77be50d738a005528343bd82ef35ab75`. Work stays on this branch. Initial check found no open pull requests.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| E-1 Check the executive summary against the current anonymized state-level series and correct stale or location-specific prose in the summary generator; rebuild and verify outputs. | **done** — historical ranges are derived from the checked-in state-level series, with source links | `arena/8e83e5b6-tino3` | `scripts/build.py`, `EXECUTIVE_SUMMARY.md`, `COORDINATION.md` (this section only) |
+
+**Finding and correction:** `EXECUTIVE_SUMMARY.md` was generated reproducibly, but its generator hard-coded old metro-era historical returns and local-area language. The HTML dashboard already used the anonymized California state-level series. The Markdown summary now computes the 1975–2025 and latest-20-year compound growth rates and annual CPI/house-index extrema from `assets/data/series.json`, identifies the index as statewide, and links the FRED CASTHPI and CPIAUCSL series. The regime explanation no longer implies neighborhood-specific forecast power. The derived results were independently recomputed from the checked-in annual series: 6.4% (1975–2025), 2.6% (latest 20 years), California house-index annual range −20.0% to 25.3%, CPI annual range −0.3% to 13.5%. No projection assumptions or recommendations changed.
+
+**Verification (16 November 2026):** `python3 scripts/rebuild.py`; `scripts/verify.py` (24 pages, 1,115 table rows; all rows source-linked or explicitly registered unverified); `scripts/privacy_boundary.py`; `scripts/tracked_tree_guard.py`; `scripts/package_site.py`; `scripts/verify_legacy.py --config-only`; `git diff --check` — all passed. The summary no longer contains the superseded metro-era percentages or Property A-area language. Sources: [FRED CASTHPI](https://fred.stlouisfed.org/series/CASTHPI), [FRED CPIAUCSL](https://fred.stlouisfed.org/series/CPIAUCSL).
