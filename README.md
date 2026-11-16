@@ -69,7 +69,7 @@ professional advice when dates, facts or laws change.
 ## Published site and verification snapshot
 
 The current generated edition contains **24 HTML pages**, **one runtime stylesheet**, **104 entries
-in the source ledger**, and **132 content-free withdrawal notices** for retired routes. The latest
+in the source ledger**, and **134 content-free withdrawal notices** for retired routes. The latest
 local verification reports **1115 table rows**: **948 linked to official publishers** and **167
 explicitly registered as unsourceable or unverified**. A row without a confirming official source is
 not filled in by inference. The public site contains no source ledger or internal model data files;
