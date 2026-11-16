@@ -4284,6 +4284,16 @@ def page_timeline() -> str:
          "Last day to pay the first installment of the 2026/27 secured bill without penalty, while the bill is "
          "still on the owner's record. Relevant to Property A only while it is held and before it is inherited.",
          "The owner of record.", ["boe_pub29"]),
+        ("11 December 2026",
+         "Certification of the November 2026 statewide results. The Secretary of State's unofficial results page "
+         "states that results will be certified by 11 December 2026. Until then, every statewide measure "
+         "shown on the law-watch page is unofficial.",
+         "The Secretary of State certifies the results.", ["sos_results"]),
+        ("16 February 2027",
+         "The Proposition 19 $1 million amount is next adjusted, from the federal house price index, every other "
+         "February 16. The new amount applies to transfers on or after this date. The letter this site relies on "
+         "does not state the new amount, so the site does not state it either.",
+         "The State Board of Equalization publishes the adjusted amount.", ["boe_lta25009"]),
     ]
     rows = []
     for when, what, who, ids in rows_spec:
@@ -4300,8 +4310,12 @@ def page_timeline() -> str:
         eligibility_callout()
         + callout("answer", "The next dated item", """
 <p>The first installment of the 2026/27 secured bill must be paid, or postmarked, by
-<strong>10 December 2026</strong> to avoid penalties. That is the only dated item on this page that falls in the
-next year. Everything else is measured from the date of death or the date of transfer.</p>""")
+<strong>10 December 2026</strong> to avoid penalties. That payment is an obligation only while Property A is still
+held. Two other official dates also fall in the next year, and both are listed in the table below:
+<strong>11 December 2026</strong>, the statewide certification that the law-watch figures depend on, and
+<strong>16 February 2027</strong>, the next Proposition 19 adjustment. The February date sets the shelter amount for
+transfers from that day; the 2040s figures on this site use a projected growth rate, because no later amount is
+published yet. Everything else is measured from the date of death or the date of transfer.</p>""")
         + '<p class="lede">Read in order. Each row is a legal or tax clock, and each names the official text it comes from.</p>'
         + tl
         + callout("answer", "Which deadlines can move the answer",
