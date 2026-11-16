@@ -18,7 +18,18 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: python scripts/verify.py
+      - name: Rebuild the model and public site from source inputs
+        run: python scripts/rebuild.py
+      - name: Verify sources, links, rounding and privacy
+        run: python scripts/verify.py
+      - name: Require committed generated outputs
+        run: |
+          paths=( '*.html' EXECUTIVE_SUMMARY.md assets/data/model.json assets/data/economy.json assets/data/mixed.json assets/data/property_a.csv assets/data/property_b.csv assets/data/decision.csv )
+          if ! git diff --quiet HEAD -- "${paths[@]}"; then
+            git --no-pager diff --stat HEAD -- "${paths[@]}"
+            echo "::error::committed generated outputs differ from a fresh rebuild; refusing to deploy stale or uncommitted results"
+            exit 1
+          fi
       - run: python scripts/package_site.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
