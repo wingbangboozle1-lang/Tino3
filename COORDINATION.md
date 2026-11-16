@@ -3792,7 +3792,7 @@ No changes were required to any source file: the working tree is clean at `1cfed
 | W-2 Rebuild from source at `5005a72`; committed outputs must reproduce with no diff | **done** — result below | `arena/3a29bbb0-tino3` | read-only |
 | W-3 Re-open load-bearing official sources and compare each against the stored figure or statement | **done** — result below; no stored value changed | `arena/3a29bbb0-tino3` | read-only |
 | W-4 Timeline states that one dated item falls in the next year; two official dates in the next year were missing from the deadlines table. Correct the sentence and add the two rows, each with its official source | **done** — result below | `arena/3a29bbb0-tino3` | `scripts/build.py` (timeline block only), regenerated `timeline.html` |
-| W-5 Gates, PR to `main`, merge without waiting for approval, Pages deploy confirmed, record PR and result | **in progress** | `arena/3a29bbb0-tino3` | this section only |
+| W-5 Gates, PR to `main`, merge without waiting for approval, Pages deploy confirmed, record PR and result | **done** — PR #139, merge result below | `arena/3a29bbb0-tino3` | this section only |
 
 ### W-2 result: rebuild at `5005a72`
 
@@ -3824,3 +3824,12 @@ Each row compares the publisher's text with the stored value or statement. Nothi
 - **Git history scrub.** Not performed. Rewriting `main` requires a coordinated, backed-up force-push by the owner, and an agent session on this branch may not push to `main`. The runbook is `scripts/history_scrub.sh`, and the audit counts recorded in the 16 November P-2 result stand. The local clone is shallow (one commit), so the audit was not re-run here; it must be run on a full clone (`git fetch --unshallow`).
 - **Property A tax-rate area, Proposition 19 eligibility, trust terms and title, date-of-death valuation, insurance quotes and market rent.** These depend on the owner's documents or on quotations. No official source publishes them for the property, so they remain flagged on the Flagged for Review page.
 - **Proposition H (Property B's city parcel tax).** Preliminary, not certified. It remains flagged until the local canvass is complete.
+
+### W-5 publication record
+
+- **Pull request:** https://github.com/wingbangboozle1-lang/Tino3/pull/139 (from `arena/3a29bbb0-tino3` to `main`).
+- **Merge:** merge commit `aca4b7d`, 16 November 2026 17:53:21 UTC, `gh pr merge --merge`, without approval and without `--auto`. The branch was rebased once onto `main` at `29f158a` (PR #138) before the merge; the rebase collision in this file was resolved by keeping both the PR #138 record and this session's record.
+- **Checks on the pull request:** `Verify static site` run 43922946564 succeeded before the merge.
+- **After the merge:** `Verify static site` run 43923069667 succeeded; `Deploy GitHub Pages` run 43923069606 succeeded; `pages build and deployment` run 43923068040 succeeded; the Pages API reports the latest build as `built` with no error.
+- **Live check:** the public `timeline.html` serves the corrected sentence and the two new rows (11 December 2026 and 16 February 2027), each with its official source link.
+- **Still open for the owner:** the Git history scrub (owner-run), the property-specific inputs listed above, and the Proposition H certification. None blocks this publication.
