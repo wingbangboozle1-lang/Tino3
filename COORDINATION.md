@@ -3947,3 +3947,25 @@ Cross-checked the dashboard's headline figures against `assets/data/model.json` 
 - **Rebase collisions logged:** while preparing the push, `main` advanced by PRs #138/#140/#141 (sessions `arena/8e83e5b6-tino3` and `arena/3a29bbb0-tino3`) and again by PR #142 (session `arena/e54b5bb4-tino3`). Each `git pull --rebase` conflicted in `COORDINATION.md` (both board sections retained in full; no other session's record edited) and, once, in `README.md` (counts resolved to the rebuilt totals, 1,118 / 951 / 167). No other session's work was discarded.
 - **Pages deploy:** after the merge the Pages API reported `status: built`, `error: null`; the `Verify static site`, `Deploy GitHub Pages` and `pages build and deployment` runs for the newest `main` head (including the follow-on board-only PR #144) all completed successfully, so the public site serves the merged edition with the 105-entry ledger and the two-schedule combined-rate row.
 - **Open follow-ups carried (not blocking):** re-check the local parcel-tax measure once certification is published (county canvass due by 3 December 2026); re-read the Proposition 19 cap in February 2027; the history rewrite remains an owner-run task.
+
+## Session `arena/22994da8-tino3` — local-only estate inventory and release re-verification · 16 November 2026
+
+*Branch note:* Work remains on the Arena-pinned branch `arena/22994da8-tino3`, based on `main` at `5005a72f77be50d738a005528343bd82ef35ab75`. No other branch is created, switched to, or pushed. The local inventory is placed only under the already-ignored `private/` directory; no personal details will be added to tracked files or public pages. The current integrated site is already published; this session will not edit shared model, navigation, or generated-site files.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| N-1 Claim this scope before creating the local inventory or making any public-tree change | **in progress** — claim recorded here; push immediately | `arena/22994da8-tino3` | `COORDINATION.md` (this section only), `private/` (ignored, local-only) |
+| N-2 Create a local-only inventory from the facts the owner already supplied; mark all unsupported, private, or time-dependent facts as owner-reported/unverified or unknown; do not infer missing values | **not started** | `arena/22994da8-tino3` | `private/estate_inventory.md` (must remain untracked and ignored) |
+| N-3 Re-run the deterministic build, source/link/privacy/publication-boundary checks, and confirm the current Pages deployment; report any open facts without representing them as verified | **in progress** — local gates run; current Actions result checked; final record below | `arena/22994da8-tino3` | read-only except this section |
+
+**Rebase collision:** before this claim could be pushed, `git pull --rebase origin main` fetched main commit `29f158a` and conflicted only at the end of `COORDINATION.md` with session `arena/8e83e5b6-tino3`'s executive-summary audit record. Both records are preserved in full; no generated output, source data or other session work was discarded. The current session will continue on its Arena-pinned branch and re-check the integrated main state.
+
+**Second rebase collision:** `git pull --rebase origin main` advanced the base through main commit `d657afd` and conflicted only at the appended `COORDINATION.md` session records. All main-side records (including the independent source/timeline audit and publication record) and this session's own section are retained; no model, source, generated-site or other session changes were discarded. The working branch remains `arena/22994da8-tino3`.
+
+**Third rebase collision:** `git pull --rebase origin main` fetched the merge of PR #142 (main commit `7f96104`) while replaying this claim and conflicted only in the appended `COORDINATION.md` session records. The full main-side independent audit/publication record and this session's own section are retained; no other session's work or generated output was discarded.
+
+**Fourth rebase collision:** `git pull --rebase origin main` advanced the base to the merge of PR #144 (main commit `b6e7263`, including the official 2026 state tax-rate schedule addition from PR #143) and conflicted only in the appended `COORDINATION.md` records. The complete main-side verification/publication record and this session's section are both kept; no source or generated output was dropped.
+
+**Fifth rebase collision:** `git pull --rebase origin main` advanced the base to `24907ff` (PR #145, the follow-up publication record for PR #143) and conflicted in `COORDINATION.md` where the earlier K-7 pending note met the updated publication record. The current main-side K-7 result is retained in full, along with this session's own section; no other session's record or source work was discarded.
+
+**Scope boundary:** This is a private working inventory, not a new public data source. No estate balance, address, title, lease, debt, tax-lot or other missing information will be guessed or added to the website. It does not replace an estate inventory filed by a personal representative or a valuation by a qualified professional.
