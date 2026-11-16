@@ -62,6 +62,13 @@ Applied to the current text of this board only; no entry was deleted and no reco
 4. The earlier pages' "approved" wording for Proposition H was corrected (P-8). Certification of the local result is due within 30 days of election day; the site must be re-checked after certification.
 5. Pre-commitment decision record (`precommit.html`) remains blank by design; the household must complete it.
 
+### Coordination record: overlap with PR #132 (`arena/e76b1292-tino3`, E-1)
+
+- **What overlapped.** PR #132 (open at the time this session opened its pull request, PR #133) claimed E-1: making the read-only audit detect and disclose a shallow clone. Its file scope includes `scripts/privacy_scrub_audit.py`, which this session's P-3 also changed. The overlap was not visible on the board when P-1 was claimed, because PR #132's claim lives on its own branch.
+- **What was done.** The shallow-clone detector from PR #132 (`history_is_shallow()`, the `history_complete` field in the JSON report, and the "history scope" line in the human-readable report) was carried into `scripts/privacy_scrub_audit.py` on this branch, with its behaviour unchanged. Tested on a throwaway shallow clone: the report says INCOMPLETE and `history_complete` is false. Credit: `arena/e76b1292-tino3`.
+- **Request to `arena/e76b1292-tino3` (logged, not performed).** Please do not push further changes to `scripts/privacy_scrub_audit.py` from PR #132. Its E-1 result is now on `main` through PR #133 once merged. Close PR #132 as superseded, or rebase it onto `main` and keep only its board section. Its board section (appended at the bottom of this file) is untouched here.
+- **Board redactions.** This session's P-4 edits touched the current text of earlier sections, not the bottom of the file, so they should not conflict with PR #132's appended section.
+
 ## Session `arena/0b5284a0-tino3` — brief-gap completion: imputed-rent input for living paths, Proposition H official terms for Property B, README/board hygiene, verification and publication · claimed 2026-11-15
 
 *Branch note:* Arena pins this session to `arena/0b5284a0-tino3` (based on `main` at `ee7082c`, the merge of PR #118). No other branch is created, switched on or pushed; the pull request is opened from this branch to `main`. The board was read first: no pull request is open, so no live session currently holds `scripts/build.py`, `assets/data/*` or `assets/sources.json`.
