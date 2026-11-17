@@ -5,8 +5,10 @@ The model and economic bootstrap have a small dependency cycle: model.py first
 computes break-even values consumed by economy.py; model.py then embeds the
 refreshed bootstrap distributions from economy.json. mixed.py consumes both final
 JSON outputs, liquidity.py consumes model.json and mixed.json (it repriced the
-mixed paths for the two-person case), and build.py consumes all model outputs to
-write the site, CSV tables, and executive summary.
+mixed paths for the two-person case), disposition.py consumes inputs.json and
+model.json (it prices the sale-timing ladder and the section 1031 exchange on the
+one published engine), and build.py consumes all model outputs to write the site,
+CSV tables, and executive summary.
 
 All generators are deterministic and use only checked-in inputs. Their stdout and
 stderr are suppressed so property-specific model diagnostics are not copied into
@@ -27,6 +29,7 @@ STEPS = (
     ("model (embed the refreshed bootstrap)", "model.py"),
     ("mixed paths (use the refreshed model and bootstrap)", "mixed.py"),
     ("estate liquidity and the two-person case", "liquidity.py"),
+    ("disposition timing and the like-kind exchange case", "disposition.py"),
     ("site and executive summary", "build.py"),
 )
 

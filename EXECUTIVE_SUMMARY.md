@@ -100,6 +100,13 @@ The stress regimes above are 30-year averages. The owner also asked what happens
 
 Waiting beat day-one investing in 3 of the 4 episodes. It lost in the 2020 episode, where the crash was over before a 24-month parking period ended. It is insurance against one specific bad luck, paid for in the years when that luck does not happen. The full method, the 24-month and 36-month results, and the case where the crash arrives three years after the inheritance are on the black swan page.
 
+## How fast to sell, and whether to exchange instead
+
+- **A sale in the same tax year as the inheritance pays no capital gains tax at all.** Property acquired from a decedent takes a basis equal to its value at the date of death, whether or not an estate tax return is filed, so on a 2045 inheritance the tax on an immediate sale is $0. The alternate valuation date applies only if the executor files a return and elects it there.
+- **Waiting is not a tax decision, it is a compounding decision.** The first 18 months create no taxable gain at all, because the selling costs exceed the appreciation. Twelve months of waiting then costs $1,509,990 at the thirty-year horizon, and almost none of that is tax. The ladder runs to sixty months at each inheritance year on the disposition page.
+- **A like-kind exchange defers $0 at the inheritance, because there is no gain to defer.** It is not forgiven, only postponed: the replacement takes the old basis, so the gain is taxed when the replacement is sold. It is also a change in ownership for property tax, so any exclusion carried on this house ends.
+- **It only becomes a live question after years of letting.** Held ten years from a 2045 inheritance, the deferral is worth about one percentage point a year of underperformance by the replacement property, and only if the gain is never taxed; sold at the horizon like everything else, the allowance shrinks to about half a point. The exchange also competes with the property-tax exclusion for the same two years, because the exclusion needs the home as a principal residence and the safe harbour needs it rented out.
+
 ## Estate and inheritance tax
 
 - California has no estate tax and no inheritance tax. No California estate tax return is required for a death on or after 1 January 2005, and an inheritance is not California income.

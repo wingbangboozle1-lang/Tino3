@@ -576,7 +576,7 @@ question A-1</a> before relying on any number here. {slink('rtc63_2_eligibility'
 <li><strong>Moving out after moving in.</strong> The Proposition 19 exclusion is removed when the heir stops qualifying, and the model now costs that at about {m(MIXED['clawback']['difference'])} of extra property tax over thirty years. <a href="decision.html">Mixed paths</a>.</li>
 <li><strong>The housing the house provides is worth close to its full market rent to the heir.</strong> The published comparison credits the living path with no housing at all. Credited at about {pc(100.0)} of market rent, living and selling come level; below that, selling wins. <a href="decision.html#imputed-rent">The rent living does not pay itself</a>.</li>
 <li><strong>Property B's fixed charges keep growing at their own pace.</strong> The model assumes {pcf(ASM['fixed_charge_growth']['baseline'])} a year; the audited record is {pcf(ASM['fixed_charge_growth']['high'])} over nine years, and those charges are {esc(str(MODEL['roll_audit']['property_b']['fixed_share_latest_pct']))}% of that bill. The 2% cap cannot bound them. <a href="review.html#roll-audit">Roll audit</a>.</li></ol>
-<p class="muted">Two candidates were tested for this edition and do <em>not</em> belong on that list, which is why
+<p class="muted">Three candidates were tested for this edition and do <em>not</em> belong on that list, which is why
 they are recorded as ruled out rather than as open questions. The insurance premium at Property A, taken across
 its whole published band, moves the thirty-year living figure by {m((MODEL.get('cost_cases') or {}).get('band', {}).get('effect_on_live', 0))} - about
 {(MODEL.get('cost_cases') or {}).get('band_share_of_gap', 0)}% of the gap between selling and living. And no debt
@@ -585,7 +585,13 @@ service the model was given - each $1,000 a month of payment costs the keeping p
 ever puts keeping the house ahead of selling it, because a house sold in the year of inheritance carries no
 payment stream. Both are on the <a href="costs.html#insurance-band">insurance band</a> and the
 <a href="decision.html#debt">debt section</a>, and both are on the <a href="what-if.html">what-if page</a> as
-levers 4 and 5.</p>""")
+levers 4 and 5. A third was tested and ruled out on the arithmetic rather than on a missing figure: a
+like-kind exchange under section 1031. At the inheritance the basis is the value at the date of death, so a sale
+realises no gain and there is <strong>{m(DISPO['exchange']['at_inheritance']['tax_deferred'])} of tax for an
+exchange to defer</strong> - the step-up at death removes the reason most exchangers do it. It only becomes a
+live question after years of letting the property out, and it then competes with the property-tax exclusion for
+the same two years. <a href="disposition.html">The disposition page</a> prices it and publishes the return a
+replacement property would have to earn.</p>""")
     cards = []
     for group, pages in NAV_GROUPS:
         if group == "Start here":
@@ -1346,6 +1352,20 @@ close the gap is in the break-even table above.</p>
 clawback table prices it. It does not change the recommendation, but it moves the live-then-let
 path by six figures and it would be a mistake to model that path without it.</p>""")
         + gap_chart + hist
+        + '<h2 id="timing-exchange">Two questions the paths alone do not answer</h2>'
+        + callout("note", "How soon to sell, and whether to exchange instead",
+                  f"""
+<p><strong>How soon.</strong> The sell path above is a sale at the inheritance, which is a sale in the same tax
+year: the basis is the value at the date of death, so the tax on it is
+{m(DISPO['sell_timing']['summary']['same_year_tax'])}. The cost of <em>not</em> doing it that fast is priced
+month by month on the <a href="disposition.html">disposition page</a> — about
+{m(abs(DISPO['sell_timing']['summary']['twelve_month_cost_per_year']))} for a year of waiting at a
+{DISPO['sell_timing']['base_year']} inheritance, and almost none of it is tax.</p>
+<p><strong>Whether to exchange.</strong> A like-kind exchange defers the tax a sale would realise, and at the
+inheritance there is {m(DISPO['exchange']['at_inheritance']['tax_deferred'])} of tax to defer, because the
+step-up has already removed the gain. It becomes a live question only after years of letting the property out,
+and it then competes with the property-tax exclusion for the same two years. Both are priced on the
+<a href="disposition.html">disposition page</a>, with the return the replacement property would have to earn.</p>""")
     )
 
 
@@ -3827,11 +3847,23 @@ QUESTIONS = [
        "Decides the $250,000 or $500,000 exclusion and the rate band for the gain.",
        ["irs_p523", "irs_tc409"]),
       ("Should a like-kind exchange or an instalment sale be considered?",
-       "Not modelled.",
-       "Whether the heir wants to remain in real estate.",
-       "Take tax advice at the time.",
-       "An exchange defers tax but does not change the property tax reassessment.",
-       []),
+       "Modelled on the disposition page. At the inheritance there is no tax to defer, because the basis "
+       "step-up removes the gain; after years of letting, the deferral is priced as the return the "
+       "replacement property would have to earn.",
+       "Whether the heir wants to remain in real estate at all, and whether this property would be treated "
+       "as held for investment rather than held for sale.",
+       "Take tax advice before the property is marketed - the 45-day identification clock starts on the "
+       "transfer, not on the decision.",
+       "An exchange defers tax, does not forgive it, does not stop a reassessment, and competes with the "
+       "Proposition 19 exclusion for the same two years.",
+       ["uscode1031", "irs_i8824", "irs_rp2008_16"]),
+      ("How soon after the inheritance should the sale happen, if selling?",
+       "Modelled month by month on the disposition page, to sixty months.",
+       "Whether the heir has a reason to think a particular sale date fetches more.",
+       "Decide before the transfer: the property tax runs from the reassessment, not from the sale.",
+       "The same-year sale pays no capital gains tax at all. Each year of waiting costs about a year of "
+       "compounding, and almost none of that cost is tax.",
+       ["irs_basis", "rtc63_2"]),
      ]),
     ("G", "Preferences",
      [
@@ -3904,8 +3936,11 @@ SUGGESTIONS = [
      "Establishes that the transfer will take the intended path and starts the county record correctly.",
      "Low", "Low if done now, high if discovered late", "inheritance", ["rtc480"]),
     ("S-04", "Model a sale in the same tax year as the inheritance, before deciding anything else",
-     "The basis step-up makes an immediate sale almost tax-free. This is the option everything else must beat.",
-     "Low", "Low", "decision", ["irs_basis"]),
+     "Modelled and published on the disposition page: a ladder from the same tax year out to sixty months at "
+     "each inheritance year, and lever 6 on the what-if page. The tax on the same-year sale is $0, the first "
+     "18 months create no taxable gain at all, and each year of waiting costs about a year of compounding. "
+     "What is left for the household is the decision, not the modelling.",
+     "Low", "Low", "disposition", ["irs_basis"]),
     ("S-05", "Claim the Proposition 19 exclusion only if the heir will occupy the home long term",
      "The exclusion is removed when the home stops being the principal residence, and there is no exception to the one-year occupation rule.",
      "Medium", "High if the heir may move out", "property-a", ["rtc63_2", "boe_lta26026"]),
@@ -3925,8 +3960,12 @@ SUGGESTIONS = [
      "Fixes the income tax basis and the depreciation basis if the property is ever let.",
      "Medium", "High if skipped", "inheritance", ["irs_basis"]),
     ("S-11", "Decide whether a like-kind exchange is wanted, and take advice before selling",
-     "An exchange must be arranged before the sale, not after. It defers tax but does not change the reassessment.",
-     "High", "High if attempted late", "taxes", []),
+     "An exchange must be arranged before the sale, not after. It defers tax but does not change the "
+     "reassessment. The model now prices it: at the inheritance there is nothing to defer, and after years "
+     "of letting it is worth at most about one to four percentage points a year of underperformance by the "
+     "replacement property, and only if the deferred gain is never taxed. The decision still has to be taken "
+     "with advice, before the property is marketed.",
+     "High", "High if attempted late", "disposition", ["uscode1031", "irs_i8824", "irs_rp2008_16"]),
     ("S-12", "Write an investment policy for the sale proceeds before the money arrives",
      "The recommendation assumes a diversified portfolio. Deciding the split in advance avoids doing it in a moving market.",
      "Medium", "Medium", "decision", []),
@@ -4644,6 +4683,17 @@ def page_review() -> str:
         ("Property A market rent, and therefore the imputed-rent credit", "Published only as a range of scenarios",
          "No official source publishes a market rent for a specific home, and the input is empty.",
          "Obtain one documented rent opinion and enter it in the data file."),
+        ("Whether a like-kind exchange would be available on these facts", "Not assumed either way",
+         "A facts question, not a figure: section 1031(a)(2) excludes real property held primarily for sale, "
+         "and the Internal Revenue Service's own procedures record that a home used solely as a personal "
+         "residence does not qualify and that the hope of selling at a gain is not an investment intent.",
+         "Ask the attorney before the property is marketed. The 45-day identification clock runs from the "
+         "transfer, so the advice has to come first."),
+        ("The replacement property in any exchange, and the return it would earn", "No replacement assumed",
+         "Modelled as a break-even instead of a forecast: the site publishes the return the replacement "
+         "property would have to earn, because it does not know what the replacement would be.",
+         "If the household wants to stay in real estate, name the candidate asset class and re-run the "
+         "disposition engine against its own expected return."),
         ("Combined recapture rate, corrected from 41.1% to 42.1%",
          "42.1% (was 41.1%)",
          "Arithmetic defect now fixed. Every component is a published rate - 25% federal "
@@ -4699,6 +4749,9 @@ def page_review() -> str:
         "City documentary transfer tax on a sale of Property A": ["rtc11911"],
         "Commission, escrow and title as a share of the sale price": [],
         "Property A market rent, and therefore the imputed-rent credit": ["hud_fmr"],
+        "Whether a like-kind exchange would be available on these facts": ["uscode1031", "irs_rp2008_16",
+                                                                           "irs_rp2005_14"],
+        "The replacement property in any exchange, and the return it would earn": [],
         "Parcel tax on Property B approved November 2026": [],
         "The Proposition 19 clawback on the live-then-let path": ["rtc63_2_eligibility", "boe_lta26026"],
         "Combined recapture rate, corrected from 41.1% to 42.1%": ["irs_tc409", "irs_tc559", "ftb_cg", "ftb_rates", "ftb_rates_2026"],
@@ -4898,6 +4951,12 @@ def page_glossary() -> str:
         ("Fair market value", "A valuation concept used for federal basis purposes. The date-of-death value should be substantiated by an appropriate appraisal or other acceptable evidence.", ["irs_basis"]),
         ("Section 121 exclusion", "Up to $250,000 ($500,000 for a couple) of gain on the sale of a principal residence can be excluded from federal income tax, subject to ownership and use tests.", ["irs_p523"]),
         ("Depreciation recapture", "Depreciation claimed while a property was rented is taxed back when it is sold, at up to 25% federally plus state tax.", ["irs_tc409", "ftb_cg"]),
+        ("Like-kind exchange (section 1031)", "A swap of real property held for use in a trade or business or for investment for other real property of like kind, on which no gain is recognised. It defers the tax rather than forgiving it: the replacement takes the old basis, so the deferred gain is still there when the replacement is eventually sold. The replacement must be identified in writing within 45 days of the transfer and received within 180 days, or by the due date of the return including extensions if that is earlier.", ["uscode1031", "irs_i8824"]),
+        ("Boot", "Cash or other non-like-kind property received in an exchange. Gain is recognised to the extent of it; no loss is ever recognised on an exchange.", ["uscode1031"]),
+        ("Substituted basis", "The basis of property received in a like-kind exchange: the basis of the property given up, reduced by money received and increased by gain recognised. Costs paid on the way out are not added to it.", ["uscode1031"]),
+        ("Held primarily for sale", "The disqualifying state for a like-kind exchange. Real property held primarily for sale does not qualify, which is why a decision to sell and a decision to exchange have to be taken in that order.", ["uscode1031", "irs_lke_tips"]),
+        ("Dwelling-unit safe harbour (Rev. Proc. 2008-16)", "A published safe harbour under which the Internal Revenue Service will not challenge whether a dwelling unit is held for investment: the unit is owned for at least 24 months and, in each of the two 12-month periods, rented at a fair rental for 14 days or more with personal use no more than the greater of 14 days or 10% of the rental days. The same 24-month standards apply to the replacement.", ["irs_rp2008_16"]),
+        ("Alternate valuation date", "Six months after the date of death. An inherited asset's basis is its value on the date of death unless the executor files an estate tax return and elects the alternate valuation date on it, which is only available if a return is filed.", ["irs_basis", "irs_i706"]),
         ("Net investment income tax (NIIT)", "A 3.8% federal tax on investment income for higher earners, layered on top of capital gains tax.", ["irs_tc559"]),
         ("Portability", "A surviving spouse may be able to use a deceased spouse's unused federal estate-tax exclusion if the required estate-tax return is timely and correctly filed.", ["irs_estate", "irs_i706"]),
         ("Proposition 13", "California's rule that property tax is 1% of assessed value plus voter-approved bonds, with assessed value rising no more than 2% a year until ownership changes.", ["boe_pub29", "rtc51"]),
@@ -4977,13 +5036,15 @@ units, federal law does not let a lender accelerate because the property passed 
 <p>Obtain certified tax bills and assessor records, title report, trust copy, date-of-death appraisal, insurer quotes for owner-occupied and rental uses, utility bills, property-condition inspection and a local rent opinion. Do not publish source documents or identifiers.</p>
 </section>
 <section><h2>Options and material risks</h2>
-<ul><li>Live in Property A: possible reassessment shelter only if eligible and occupancy requirements are met; higher concentration and maintenance exposure.</li><li>Rent Property A: full reassessment may apply; income, vacancy, repairs, landlord rules and depreciation/recapture need a CPA-grade model.</li><li>Sell and reinvest: basis step-up may limit immediate gain, but confirm sale costs and tax. The published transfer tax and recording fees come to {m(MIXED['fees_example']['published_total'])} on a {m(MIXED['fees_example']['price'])} sale - about {MIXED['fees_example']['published_share_of_modelled']}% of the modelled 5.5% selling cost - and the $75 instrument fee does not apply to a sale that pays the transfer tax; reinvestment risk remains. The Black Swan page models 24/36-month Treasury parking and phased equity entry through one canonical monthly path: a synthetic stress test and a dated backtest of the realized 1929, 2000 and 2008 returns. Reinvestment yield may decline at maturity.</li><li>Property B remains an independent owned asset: include its net operating costs, insurance, rent/legal rules and available unit in household liquidity planning.</li><li>If the taxable estate may exceed the federal exclusion: the tax is {pcf(LIQ['clock']['estate_tax_rate'], 0)} of the excess and is due in cash {LIQ['clock']['due_months_after_death']} months after death. An extension of time to file is not an extension of time to pay, and interest runs from the due date at the federal short-term rate plus three points, compounded daily. Ask whether the section 6166 instalment election is available. <a href='liquidity.html'>Estate liquidity page</a>. {slink('irs_i4768')} {slink('uscode6621')}</li></ul>
+<ul><li>Live in Property A: possible reassessment shelter only if eligible and occupancy requirements are met; higher concentration and maintenance exposure.</li><li>Rent Property A: full reassessment may apply; income, vacancy, repairs, landlord rules and depreciation/recapture need a CPA-grade model.</li><li>Exchange instead of selling: at the inheritance there is nothing to defer, because the basis step-up removes the gain; the 45-day clock starts on the transfer, an exchange does not stop a reassessment, and it competes with the Proposition 19 exclusion for the same two years. Priced on the <a href='disposition.html'>disposition page</a>. {slink('uscode1031')} {slink('irs_i8824')} {slink('irs_rp2008_16')}</li>
+<li>Sell and reinvest: basis step-up may limit immediate gain, but confirm sale costs and tax. The published transfer tax and recording fees come to {m(MIXED['fees_example']['published_total'])} on a {m(MIXED['fees_example']['price'])} sale - about {MIXED['fees_example']['published_share_of_modelled']}% of the modelled 5.5% selling cost - and the $75 instrument fee does not apply to a sale that pays the transfer tax; reinvestment risk remains. The Black Swan page models 24/36-month Treasury parking and phased equity entry through one canonical monthly path: a synthetic stress test and a dated backtest of the realized 1929, 2000 and 2008 returns. Reinvestment yield may decline at maturity.</li><li>How fast to sell, if selling: a sale in the same tax year as the inheritance pays no capital gains tax at all, and each year of waiting costs about a year of compounding, almost none of it tax. Ladder on the <a href='disposition.html'>disposition page</a> and lever 6 on the <a href='what-if.html'>what-if page</a>. {slink('irs_basis')}</li>
+<li>Property B remains an independent owned asset: include its net operating costs, insurance, rent/legal rules and available unit in household liquidity planning.</li><li>If the taxable estate may exceed the federal exclusion: the tax is {pcf(LIQ['clock']['estate_tax_rate'], 0)} of the excess and is due in cash {LIQ['clock']['due_months_after_death']} months after death. An extension of time to file is not an extension of time to pay, and interest runs from the due date at the federal short-term rate plus three points, compounded daily. Ask whether the section 6166 instalment election is available. <a href='liquidity.html'>Estate liquidity page</a>. {slink('irs_i4768')} {slink('uscode6621')}</li></ul>
 </section>
 <section><h2>Timing / action sequence</h2>
 <p>Before transfer: verify trust/deed, relationship eligibility, estate liquidity and insurance. At death/transfer: secure property, contact trustee/assessor/insurer, obtain date-of-death valuation, inventory expenses and confirm tax filing calendar. After title transfer: have counsel/CPA calendar assessor claim deadlines, income/estate returns, insurance endorsements and rental notices; model live/rent/sell choices with actual quotes before signing or distributing proceeds. Exact dates depend on transfer and filing facts.</p>
 </section>
 <section class="brief-glossary"><h2>Glossary</h2>
-<p><strong>Basis step-up</strong>: generally resets inherited property tax basis to date-of-death value, subject to exceptions. <strong>Prop 19 exclusion</strong>: conditional California parent-child reassessment exclusion subject to statutory value and occupancy rules. <strong>Estate tax</strong>: federal tax on taxable estate, not a California inheritance tax. <strong>Reinvestment risk</strong>: future short-term Treasury proceeds may earn lower yields at maturity. <strong>Encumbrance</strong>: a mortgage, deed of trust or lien on a property; unknown for both buildings here, so both are modelled free and clear, with the limit on acceleration set by 12 U.S.C. section 1701j-3(d).</p>
+<p><strong>Basis step-up</strong>: generally resets inherited property tax basis to date-of-death value, subject to exceptions. <strong>Prop 19 exclusion</strong>: conditional California parent-child reassessment exclusion subject to statutory value and occupancy rules. <strong>Estate tax</strong>: federal tax on taxable estate, not a California inheritance tax. <strong>Reinvestment risk</strong>: future short-term Treasury proceeds may earn lower yields at maturity. <strong>Encumbrance</strong>: a mortgage, deed of trust or lien on a property; unknown for both buildings here, so both are modelled free and clear, with the limit on acceleration set by 12 U.S.C. section 1701j-3(d). <strong>Like-kind exchange</strong>: a section 1031 swap that defers gain rather than forgiving it, on a 45-day identification and 180-day completion clock.</p>
 </section>
 </div>
 <p class="brief-footer">For attorney / CPA discussion only. Laws and projections may change before 2040–2050. Sources and full assumptions: <a href="sources.html">source ledger</a>, <a href="questions.html">question register</a>, <a href="review.html">unverified items</a>, <a href="black-swan.html">phased-investing stress test</a>, <a href="liquidity.html">estate liquidity</a>. No legal, tax or investment advice.</p>
@@ -5416,6 +5477,32 @@ def page_what_if() -> str:
              "the balance off out of the proceeds and a holder pays it off over time with interest on top. "
              "The ranking does not move at any of these levels.")
 
+    # ------------------------------------------------------------ wait lever --
+    # Lever 6 answers the brief's "model a sale in the same tax year as the
+    # inheritance, before deciding anything else". Every rung is the same engine
+    # the disposition page prints, at the 2045 inheritance, so the two pages cannot
+    # disagree about what waiting costs.
+    wait_rows = []
+    for r in DISPO["sell_timing"]["by_year"][str(DISPO["sell_timing"]["base_year"])]:
+        wait_rows.append(
+            f"<td><a id='wait-{r['wait_months']}'></a>{esc(r['wait_label'])}</td>"
+            f"<td>{m(r['price'])}</td><td>{m(r['tax'])}</td>"
+            f"<td>{m(r['net_proceeds'])}</td>"
+            f"<td>{m(r['wait_cost']) if r['wait_months'] else '&mdash;'}</td>"
+            f"<td>{m(r['terminal'])}</td>"
+            f"<td>{m(r['vs_immediate']) if r['wait_months'] else '&mdash;'}</td>"
+            + src_cell(["irs_basis", "rtc63_2"]))
+    wait_table = table(
+        "Lever 6: how long to wait before selling, at a 2045 inheritance",
+        ["Wait before selling", "Sale price", "Tax on the gain", "Net proceeds",
+         "Property tax and running costs during the wait", "Value at the 30-year horizon",
+         "Against selling in the same tax year", "Source"],
+        wait_rows,
+        note="The first row is the published baseline on the decision page: a sale at the inheritance, which is "
+             "a sale in the same tax year. The basis is the value at the date of death, so the first rungs "
+             "create no taxable gain at all - the selling costs exceed the appreciation - and almost the whole "
+             "cost of waiting is a year of investment return given up rather than tax.")
+
     jump = ("<ul class='card-list'>"
             "<li><a href='#house-2.5'>House growth at 2.5%</a></li>"
             "<li><a href='#house-5.5'>House growth at 5.5%</a></li>"
@@ -5433,7 +5520,9 @@ def page_what_if() -> str:
             + ("".join(f"<li><a href='#insurance-{r['annual']}'>Insurance at ${r['annual']:,} a year</a></li>"
                        for r in (cc.get("rows") or []))
                + "".join(f"<li><a href='#debt-{r['monthly']}'>Debt service at {m(r['monthly'])} a month</a></li>"
-                         for r in (cc.get("debt_rows") or [])))
+                         for r in (cc.get("debt_rows") or []))
+               + "".join(f"<li><a href='#wait-{r['wait_months']}'>Wait {esc(r['wait_label'])} before selling</a></li>"
+                         for r in DISPO["sell_timing"]["by_year"][str(DISPO["sell_timing"]["base_year"])]))
             + "</ul>")
     return (
         callout("method", "How to use this page", f"""
@@ -5441,14 +5530,16 @@ def page_what_if() -> str:
 or read the tables in order. Change one lever at a time, and the other stays at the baseline. Every figure is rounded
 to the nearest $10 and comes from the same model that builds the rest of the site.</p>
 {jump}""")
-        + lever1 + lever2 + im_table + ins_table + debt_table + reg_table + yr_table + be_table
+        + lever1 + lever2 + im_table + ins_table + debt_table + wait_table + reg_table + yr_table
+        + be_table
         + callout("flag", "What the cases do not show", """
 <p>No case here credits the letting paths with a market rent, because none has been supplied. Read every letting row as
 the path at zero rent, which is a floor. Lever 3 credits the <em>living</em> path instead, at stated levels that are
 scenarios rather than estimates; the input that would hold a real imputed rent is empty, so the published baseline
 stays the zero row. Levers 4 and 5 change a <em>cost</em> rather than a return, and they are there to show what does
 <em>not</em> move the answer: neither the insurance band nor any debt service tested here puts keeping the house
-ahead of selling it. The model also does not change the Proposition 19 eligibility question; if
+ahead of selling it. Lever 6 is the mirror image: it does not ask whether to sell, it asks how fast, and every
+rung is measured against the same-year sale that is already the baseline. The model also does not change the Proposition 19 eligibility question; if
 that answer is no, the reassessment is full and every case here moves toward selling.</p>""")
     )
 
@@ -5861,6 +5952,30 @@ def executive_summary_markdown() -> str:
       "It is insurance against one specific bad luck, paid for in the years when that luck does not happen. "
       "The full method, the 24-month and 36-month results, and the case where the crash arrives three years "
       "after the inheritance are on the black swan page.")
+    a("")
+    a("## How fast to sell, and whether to exchange instead")
+    a("")
+    a(f"- **A sale in the same tax year as the inheritance pays no capital gains tax at all.** Property acquired "
+      f"from a decedent takes a basis equal to its value at the date of death, whether or not an estate tax "
+      f"return is filed, so on a 2045 inheritance the tax on an immediate sale is "
+      f"{cash(DISPO['sell_timing']['summary']['same_year_tax'])}. The alternate valuation date applies only if "
+      f"the executor files a return and elects it there.")
+    a(f"- **Waiting is not a tax decision, it is a compounding decision.** The first "
+      f"{DISPO['sell_timing']['summary']['months_of_waiting_before_tax']} months create no taxable gain at all, "
+      f"because the selling costs exceed the appreciation. Twelve months of waiting then costs "
+      f"{cash(abs(DISPO['sell_timing']['summary']['twelve_month_cost_per_year']))} at the thirty-year horizon, "
+      f"and almost none of that is tax. The ladder runs to sixty months at each inheritance year on the "
+      f"disposition page.")
+    a(f"- **A like-kind exchange defers {cash(DISPO['exchange']['at_inheritance']['tax_deferred'])} at the "
+      f"inheritance, because there is no gain to defer.** It is not forgiven, only postponed: the replacement "
+      f"takes the old basis, so the gain is taxed when the replacement is sold. It is also a change in "
+      f"ownership for property tax, so any exclusion carried on this house ends.")
+    a(f"- **It only becomes a live question after years of letting.** Held ten years from a 2045 inheritance, "
+      f"the deferral is worth about one percentage point a year of underperformance by the replacement "
+      f"property, and only if the gain is never taxed; sold at the horizon like everything else, the allowance "
+      f"shrinks to about half a point. The exchange also competes with the property-tax exclusion for the same "
+      f"two years, because the exclusion needs the home as a principal residence and the safe harbour needs it "
+      f"rented out.")
     a("")
     a("## Estate and inheritance tax")
     a("")

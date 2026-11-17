@@ -30,12 +30,16 @@ and reinvestment choices.
 - `questions.html` — what is known, what is missing, who can verify it, and suggested next steps.
 - `suggestions.html` — proposals kept separate from implemented changes; each can be reviewed,
   adopted, deferred or rejected before implementation.
+- `disposition.html` — what waiting to sell costs, from a sale in the same tax year as the inheritance
+  out to sixty months at each transfer date, and what a like-kind exchange under section 1031 would
+  defer, priced on the statute rather than on promotional arithmetic.
 - `review.html` — flagged, assumed and unverified items.
 
 - **Start here:** Dashboard (the answer, its confidence, the date it was computed and the three checks that would move it, on the first screen), the **pre-commitment register** (`precommit.html`: the rules the household writes down before reading any figure, with empty decision columns), executive summary, decision analysis (including the mixed paths and the Proposition 19 clawback), the what-if cases page (one lever at a time, link-driven, no script), and a printable Attorney & CPA briefing sheet.
 - **Rules and the estate:** the trust steps, a dated deadlines timeline with official source links (`timeline.html`), thresholds and the law page.
 - **Properties:** Property A, Property B, and the ownership distinction.
-- **Costs and projections:** Running costs, year-by-year projections, income tax by path.
+- **Costs and projections:** Running costs, year-by-year projections, income tax by path, and the
+  disposition page (sale timing and the like-kind exchange).
 - **Rules and estate:** Inheritance process, estate/inheritance tax thresholds, law watch.
 - **Economic uncertainty:** Black-swan conditions and the historical economy record.
 - **Review:** Questions before deciding, suggestions for review, and Flagged for Review.
@@ -55,7 +59,7 @@ basis, actual sale costs, occupancy, rents, insurance, maintenance, utilities, d
 and laws in force at transfer. Missing or unverified property-specific amounts are not presented as
 confirmed; they are identified on the relevant pages and on `review.html`.
 
-There are **25 generated HTML pages** and one stylesheet in the public allowlist. The pages show rounded owner-provided figures, model outputs and official-source-backed legal/economic information. The source ledger contains **112 entries**. Both property placeholders grow with the California state-level FHFA house-price index: the two metropolitan-area series were withdrawn on 15 November 2026 because the index publisher's own metadata crosswalked the placeholders to their metropolitan areas (an audit finding), and the privacy gate now rejects the withdrawn series identifiers and metro phrasing. The jurisdiction-specific entries (the two properties' county and city official pages) were also withdrawn, because their publishers identify the properties. A factual table row either links to an official source or is explicitly registered as unsourceable/unverified.
+There are **26 generated HTML pages** and one stylesheet in the public allowlist. The pages show rounded owner-provided figures, model outputs and official-source-backed legal/economic information. The source ledger contains **118 entries**. Both property placeholders grow with the California state-level FHFA house-price index: the two metropolitan-area series were withdrawn on 15 November 2026 because the index publisher's own metadata crosswalked the placeholders to their metropolitan areas (an audit finding), and the privacy gate now rejects the withdrawn series identifiers and metro phrasing. The jurisdiction-specific entries (the two properties' county and city official pages) were also withdrawn, because their publishers identify the properties. A factual table row either links to an official source or is explicitly registered as unsourceable/unverified.
 
 The Black Swan analysis uses one canonical monthly park-and-phase engine and one short-Treasury
 parking-yield assumption. It includes synthetic stresses and historical entry replays, including
@@ -68,9 +72,9 @@ professional advice when dates, facts or laws change.
 
 ## Published site and verification snapshot
 
-The current generated edition contains **25 HTML pages**, **one runtime stylesheet**, **110 entries
-in the source ledger**, and **136 content-free withdrawal notices** for retired routes. The latest
-local verification reports **1238 table rows**: **1061 linked to official publishers** and **177
+The current generated edition contains **26 HTML pages**, **one runtime stylesheet**, **118 entries
+in the source ledger**, and **138 content-free withdrawal notices** for retired routes. The latest
+local verification reports **1306 table rows**: **1130 linked to official publishers** and **176
 explicitly registered as unsourceable or unverified**. A row without a confirming official source is
 not filled in by inference. The public site contains no source ledger or internal model data files;
 the Jekyll and Actions publication boundaries are checked separately.
