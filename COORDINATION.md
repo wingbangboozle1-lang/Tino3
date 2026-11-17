@@ -1,5 +1,107 @@
 # Coordination board
 
+## Session `arena/9cb84094-tino3` — the keep-and-borrow case modelled end to end (closes the open "Add a mortgage case" improvement), fresh source re-reads for the borrowing anchors, publication · claimed 2026-11-17
+
+*Branch note:* Arena pins this session to `arena/9cb84094-tino3`, branched from `main` at `3b86d5a` (the merge of PR #156). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. At claim time `gh pr list --state open` returned nothing, so no other session held `scripts/model.py`, `assets/data/model.json` or `EXECUTIVE_SUMMARY.md`. While this claim was being pushed, `main` advanced to `02a9d55` (PRs #157, #158 and #159: two law-watch refreshes by `arena/11bff629-tino3` and `arena/5fb0dcb1-tino3`, which edit the law-page and index regions of `scripts/build.py` and append to `assets/sources.json`). This session's `scripts/build.py` edits are confined to the liquidity page, the what-if page, the improvements register and the README counts — different regions — and `assets/sources.json` is append-only, so the scopes do not overlap; the tree was rebased onto `02a9d55` before any shared file was edited and the gates were re-run on the rebased tree.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| Y-1 Claim this scope and push before any other edit | **done** — this section | `arena/9cb84094-tino3` | `COORDINATION.md` (this section only) |
+| Y-2 Re-read the borrowing anchors at source (the published 30-year fixed mortgage average and its 2026 low/high weekly values) and re-read the two decision-critical federal figures the new case touches (the 40 percent top estate-tax rate and the nine-month payment clock) | **done** — result below; no stored value changed, so `assets/data/inputs.json` and `assets/sources.json` are untouched | `arena/9cb84094-tino3` | read-only |
+| Y-3 Build the keep-and-borrow case end to end: for each anonymous excess band the liquidity engine already publishes, price a fully amortising 30-year fixed loan at the published rate band, charge the payment stream to the keeping paths by the model's own conventions, and set it against the sell route that pays the same tax out of the proceeds; publish whether any band flips the ranking | **done** — `scripts/model.py` gained `keep_and_borrow_cases()`, published as `model.json.mortgage_case`; results below | `arena/9cb84094-tino3` | `scripts/model.py` (new function), `assets/data/model.json` (generated) |
+| Y-4 Publish the case on the estate liquidity page and as a what-if lever, with the loan-to-value arithmetic and the stated limits; close the "Add a mortgage case" improvement row with the implementation record | **done** — liquidity page callout and two tables, what-if lever 6 with jump links, decision-page liquidity row updated, glossary entry "Amortisation", improvements row now done, exec summary (page and markdown) and README updated | `arena/9cb84094-tino3` | `scripts/build.py`, `liquidity.html`, `what-if.html`, `decision.html`, `executive-summary.html`, `suggestions.html`, `glossary.html`, `EXECUTIVE_SUMMARY.md`, `README.md` (counts) |
+| Y-5 Rebuild, run every gate, pull request to `main`, merge without waiting, confirm the Pages deploy, record the result | **in progress** | `arena/9cb84094-tino3` | this section only |
+
+### Y-2 result: the anchors re-read at source, 17 November 2026
+
+1. **The 30-year fixed mortgage average: 7.11 in the week of 12 November 2026.** The full FRED
+   series MORTGAGE30US (Freddie Mac Primary Mortgage Market Survey) was downloaded as the
+   publisher's own CSV and the 2026 tail read week by week: the lowest weekly average published
+   in 2026 is **5.98** (26 February) and the highest is **7.40** (8 and 15 October). All three
+   values agree with the anchors `scripts/liquidity.py` already stores, so nothing was corrected.
+2. **The nine-month clock.** The IRS estate-tax FAQ states the due date of the estate tax return
+   is "nine months after the decedent's date of death", with an automatic six-month extension of
+   time to file on Form 4768 - exactly the wording the liquidity page publishes.
+3. **The 40 percent top rate.** Table A—Unified Rate Schedule in the Instructions for Form 706
+   (07/2026), read in full: a taxable amount over $1,000,000 carries $345,800 plus **40 percent**
+   on the excess. The same page's Table of Basic Exclusion Amounts confirms 2026 at $15,000,000
+   and the 2025-through-2026 annual gift exclusion at $19,000.
+4. The 2026 filing threshold of $15,000,000 was confirmed on the IRS estate-tax page itself.
+
+### Y-3 result: the case, its figures and its findings
+
+`scripts/model.py` gained `keep_and_borrow_cases(2045)` (published as `model.json.mortgage_case`).
+For each of the liquidity engine's five anonymous excess bands, the band's tax (40 percent of the
+excess) is raised one of two ways, both priced on the same path engine as the decision page at the
+2045 model:
+
+- **Keep route:** live in the house (or let it out) and borrow the tax against it on a fully
+  amortising 30-year fixed loan at the published 7.11 percent average; the payment stream is
+  charged on the model's own convention (each year's payments at that year's end, compounded at
+  the after-tax equity return, 6.3 percent). The keep-and-let rows credit no rent, so they are a
+  floor, like every letting row on the site.
+- **Sell route:** the proceeds invest through the first year, the band's tax is paid out of them
+  at the end of that year (close to the nine-month due date), and what remains compounds for the
+  years that are left.
+
+Findings, all computed and published, none assumed: **borrowing never becomes the better route at
+any published band** (`borrow_wins_any_band` is false); the payment stream compounds to about 6.7
+times the principal in future value (the smallest band's loan costs $2,691,700 of terminal value
+against the $33,166,570 selling-versus-living gap); the loan for the two largest bands exceeds
+Property A's projected value at the 2045 model ($6,531,230 alone, $10,323,560 for both buildings),
+so the loan-to-value columns are published rather than left implicit; and **the largest band
+($8,000,000 of tax on $20,000,000 of excess) is one the sale route cannot self-fund** - projected
+net proceeds are $6,172,010 - so the route table flags the row and says the shortfall must come
+from other assets. Limits are stated on the page: no rate for the 2040s is published or forecast,
+lender willingness and terms are not modelled, points and closing costs are not modelled, and the
+interest is assumed non-deductible, the conservative reading the site uses everywhere.
+
+*Note on the figures.* This section's dollar figures were first recorded against the pre-#170
+model and were re-stated against the current one after the rebase onto PR #170 (the fixed-charge
+double-growth fix): the fix lowers every post-inheritance bill on the keeping paths, so the
+keeping routes and the selling-versus-living gap moved slightly ($33,262,780 to $33,166,570;
+both-buildings value $10,319,690 to $10,323,560). The loan-side figures (payment, total paid,
+interest, future value of the payments) do not depend on the fix and did not move.
+
+Every published figure was re-derived independently outside the build (payment formula, future
+value of the payment stream, both route formulas) and agrees with `model.json` to the dollar.
+
+### Y-4 result
+
+`liquidity.html` carries the callout and two tables (the loan band by band, with
+loan-to-value columns and the low/high future-value band; the two complete routes, with the
+infeasible-sale flag on the largest band). `what-if.html` carries lever 6 with jump links.
+`decision.html`'s debt section now says liquidity is priced end to end and links the case.
+`glossary.html` gained "Amortisation". `suggestions.html`'s improvements register marks
+"Add a mortgage case" done with the implementation record (the S-13 row itself stays proposed
+for the owner, as every S-row does). `EXECUTIVE_SUMMARY.md` and the executive-summary page carry
+the case; README carries it and the verifier's current counts.
+
+**Privacy constraint:** no name, street address, postal code, parcel identifier, county or city name, trust term or unrounded owner amount is added to any file this session writes. The loan principal is the anonymous excess band already published, never an estate size.
+
+## Session `arena/e71d9910-tino3` — model-layer defect audit (property-tax fixed charge)
+
+**Scope.** Model-layer verification and defect audit of `scripts/model.py` and `scripts/mixed.py`, claimed as non-overlapping with the then-open PR #157. The audit read both scripts in full and independently recomputed the load-bearing figures from the raw `inputs.json` values, without importing the model's own functions.
+
+**Defect found and fixed.** The property-tax bill is modelled as `(rate × assessed value) + (fixed charge)`, where the fixed charge grows with inflation from the roll's base year (2025). Four code sites — `run_paths` and `breakeven_rent` in `scripts/model.py`, and both bill sites in `scripts/mixed.py` — pre-grew the fixed charge forward to the inheritance year but left `base_year` at the roll's base year. Because `bill_for()` grows the fixed charge from `base_year` to each billed year, the fixed charge was grown **twice** on every post-inheritance bill: about **$880** in the first inheritance year of the 2045 baseline, and about **$38,640** nominal over a 30-year horizon. This contradicted the single-growth convention used everywhere else in the model (`bill_today_projected`, `roll_table`, `project_roll`, `historical_replay` all grow the fixed charge once, from the base year); the same model run was internally inconsistent.
+
+**Fix.** Set `base_year` to the inheritance year wherever the fixed charge is pre-grown, so the fixed charge is grown exactly once from the roll's base year to each billed year. Four one-line corrections plus explanatory comments — 21 insertions, 0 deletions.
+
+**Verification.** Independent recomputation of the 2045 bills from the raw inputs reproduces the corrected figures; the break-even house-growth threshold now matches to the decimal (**8.66%**). The sell-path terminal values (the headline figures) are unaffected — only the keeping-path bills and their break-evens correct: bill if living year 1 (2045) $57,060 → $56,180; bill if let out year 1 (2045) $79,330 → $78,450; break-even monthly rent (2045) $30,220 → $30,140; live-in terminal (2045) $5,322,760 → $5,418,970; break-even return vs living −0.49% → −0.43%. **Recommendation unchanged:** selling at inheritance still wins by a wide margin.
+
+**Rebase collision, resolved without discarding work.** After this session branched, `main` advanced through the merged PRs #157–#164, and PR #160 had independently modified `scripts/model.py` (adding a `form540_surcharge` function and worksheet) and `assets/data/model.json`. The rebase onto `main` merged cleanly for the source files — #160's changes and this session's four `base_year` corrections occupy disjoint regions and both survive. Generated-page conflicts (`briefing.html`, `review.html`) were resolved by taking the main side and re-running a full rebuild on the current `build.py` + corrected model, which regenerated them consistently. No other session's work was discarded.
+
+**Publication record.**
+
+- **Pull request:** <https://github.com/wingbangboozle1-lang/Tino3/pull/170>, from `arena/e71d9910-tino3` to `main`. (An earlier PR #165 for the same change became stuck on a stale GitHub mergeability cache after a rebase and could not be reopened; it was superseded by #170, which is the merged one.)
+- **Merge:** `gh pr merge 170 --merge` succeeded, no approval waited for, no `--auto`. Merge commit `a63a26e042022750571134ffd40f3693e638f5f9`, merged 2026-11-17 17:06 UTC.
+- **Pages deploy:** for commit `a63a26e` the `Verify static site`, `Deploy GitHub Pages` and `pages-build-deployment` runs all completed **success**; the GitHub Pages deployment targets `a63a26e`, the current `main` head.
+- **Live-site confirmation:** <https://wingbangboozle1-lang.github.io/Tino3/what-if.html> serves the corrected figures — the baseline "Live in it" row reads **$5,418,970**, the "Let it out" row **−$957,360**, and the break-even return row **−0.43% a year**. (A first fetch of `decision.html` returned a cached copy of the previous edition showing the old $30,220 / $5,322,760; the deployed tree at `a63a26e` is confirmed correct, so readers who saw the older page should reload.)
+
+**Gates on the merged branch (17 November 2026).** `scripts/rebuild.py` PASS and byte-reproducible; `scripts/verify.py` PASS (25 pages, 1,239 table rows, 1,062 linked to official publishers, 177 registered unsourceable, 112 ledger sources, every internal link and fragment resolves); `scripts/privacy_boundary.py` PASS (139 content-free withdrawal routes); `scripts/tracked_tree_guard.py` PASS (68 tracked text files); `scripts/package_site.py` PASS; `scripts/verify_legacy.py --config-only` PASS; `git diff --check` clean.
+
+**Still open after this session (not blocking).** Same as above: the Git-history scrub is an owner action; Property A's tax-rate area, market rent, insurance quotes, written date-of-death valuation, and lease/encumbrance records remain owner- or third-party-supplied and stay on the Questions and Flagged for Review pages; the 2026 election results stay provisional until 11 December 2026 certification; the Proposition 19 $1M amount is re-read in February 2027.
+
 ## Session `arena/a9ed7d25-tino3` — keep-and-borrow path modelled end to end, mortgage-band re-verification at source, board hygiene · claimed 2026-11-17
 
 *Branch note:* Arena pins this session to `arena/a9ed7d25-tino3`, branched from `main` at `bd8ab5b` (the merge of PR #153). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. `gh pr list --state open` returned nothing when this session started, so no live session holds `scripts/model.py`, `scripts/build.py`, `scripts/liquidity.py`, `assets/data/inputs.json` or `assets/sources.json`. Before any edit: `python3 scripts/rebuild.py` produced no diff and all five gates (`rebuild`, `verify`, `privacy_boundary`, `tracked_tree_guard`, `package_site`) exited 0 on a clean tree.
@@ -31,14 +133,37 @@
   tax (7.81% gross at the model's drag), for borrowing to add anything. Findings on the 2045 baseline:
   at the latest published rate a 25% loan costs the living path **$1,102,500** and a 50% loan **$2,205,000**;
   at the 2026 low it adds **$435,560** and **$871,110** - and in every rung the borrow-and-keep terminal
-  stays **$32,391,670 or more** behind selling, so the recommendation does not move. Borrowing at 7.11% to
+  stays **$32,295,460 or more** behind selling, so the recommendation does not move. Borrowing at 7.11% to
   park in short Treasuries at 4.2% costs **$5,511,320**; running the same 50% loan through the stress
   table's stated crash at entry costs a further **$6,393,410** against the identical loan without the
-  crash, with the debt unchanged. All three figures are printed on the first screen as tested and ruled
+  crash, with the debt unchanged. (Deltas are unchanged by the #171 fixed-charge correction - they never
+  touch living costs - while terminals and gaps moved with the living path; the gap above is post-#171.)
+  All three findings print on the first screen as tested and ruled
   out, beside the insurance band and the payment-level rows. `scripts/liquidity.py` now reads the rate
   from the one `verified_parameters` key instead of its own constants (output byte-identical), and the
   glossary gains a Leverage entry. The suggestions register flips "Add a mortgage case" to **done**, with
   the honest remainder: borrowing against Property B is not modelled and stays open.
+- **Three sessions, three borrowing questions - collision handled in this merge.** Timeline: this session
+  claimed the scope at 16:34 UTC; session `arena/9cb84094-tino3` claimed "the keep-and-borrow case" at
+  17:06 and its PR #169 (the **forced** case: borrow each anonymous estate-tax band against the kept
+  house, fully amortising, published on the liquidity page and as what-if lever 6) merged at 17:08; session
+  `arena/219ee831-tino3` opened PR #172 at 17:12 with the **discretionary cash-out page**
+  (`keep-and-borrow.html`, 40/60/80% rungs, hurdle returns, prime rate) - still open at this writing.
+  Merge resolution, keeping every session's work: `scripts/model.py` now holds both engines under
+  distinct names - their `keep_and_borrow_cases()` (published as `model.json.mortgage_case`) and this
+  session's renamed `borrow_to_invest_cases()` (published as `borrow_invest_cases`); the duplicated
+  literal `MORTGAGE_RATE/LOW/HIGH` assignments their side carried were dropped in favour of the shared
+  `verified_parameters.mortgage_30yr_weekly` key both engines and `liquidity.py` now read (their comment
+  merged into the top-of-module one), so there is one source of truth; what-if keeps their estate-tax
+  borrowing as **lever 6** and carries this session's LTV matrix as **lever 7** (jump links for both,
+  anchors `borrow-{ltv}-{rate}` vs `borrow-{tax}` - no collisions); the suggestions register row and the
+  "what the cases do not show" note describe both cases in one voice; the glossary holds both
+  `Amortisation` (theirs) and `Leverage` (this session). For the open PR #172: its dedicated page remains
+  the deeper discretionary treatment and nothing here edits its files; when it re-merges `main` it will
+  find the register row already reading "done" for both cases, lever 7 (not lever 6) holding the
+  discretionary matrix, and should keep its own page and cross-links alongside - re-read this section
+  before resolving. Recorded per the board rule: collisions are resolved by keeping both sides, never by
+  discarding the other session's work.
 - **Verification performed.** All five gates green on every save: `rebuild.py` (deterministic - a second
   run leaves the tree byte-identical), `verify.py` (25 pages, **1,256 table rows**, **1,079 linked to
   official publishers**, **177 registered**, 4,412 links, 112 ledger sources, every internal link and

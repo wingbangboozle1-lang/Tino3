@@ -66,9 +66,9 @@
    "clawback_year": null,
    "sold_in_year": 30,
    "terminal_price": 21183380,
-   "property_tax_total": 3225670,
+   "property_tax_total": 3187030,
    "operating_total": 2274350,
-   "net_cash_fv": -13868450,
+   "net_cash_fv": -13772240,
    "sale": {
     "price": 21183380,
     "costs": 1165090,
@@ -81,11 +81,11 @@
    },
    "depreciation": 5224990,
    "exclusion_121": 0,
-   "asset_terminal": -1053570,
+   "asset_terminal": -957360,
    "housing_value_fv": 0,
    "opportunity_adjusted": null,
    "sell_now_terminal": 38585540,
-   "gap_vs_sell_now": 39639110,
+   "gap_vs_sell_now": 39542900,
    "gap_vs_sell_now_adjusted": null,
    "reading": ""
   },
@@ -100,9 +100,9 @@
    "clawback_year": null,
    "sold_in_year": 2,
    "terminal_price": 7064180,
-   "property_tax_total": 115280,
+   "property_tax_total": 113500,
    "operating_total": 71840,
-   "net_cash_fv": -192950,
+   "net_cash_fv": -191110,
    "sale": {
     "price": 7064180,
     "costs": 388530,
@@ -115,11 +115,11 @@
    },
    "depreciation": 0,
    "exclusion_121": 250000,
-   "asset_terminal": 36740930,
+   "asset_terminal": 36742770,
    "housing_value_fv": 0,
    "opportunity_adjusted": null,
    "sell_now_terminal": 38585540,
-   "gap_vs_sell_now": 1844610,
+   "gap_vs_sell_now": 1842770,
    "gap_vs_sell_now_adjusted": null,
    "reading": ""
   },
@@ -134,9 +134,9 @@
    "clawback_year": 2047,
    "sold_in_year": 30,
    "terminal_price": 21183380,
-   "property_tax_total": 3180700,
+   "property_tax_total": 3142060,
    "operating_total": 2241280,
-   "net_cash_fv": -13423270,
+   "net_cash_fv": -13327050,
    "sale": {
     "price": 21183380,
     "costs": 1165090,
@@ -149,11 +149,11 @@
    },
    "depreciation": 5224990,
    "exclusion_121": 0,
-   "asset_terminal": -608390,
+   "asset_terminal": -512170,
    "housing_value_fv": 0,
    "opportunity_adjusted": null,
    "sell_now_terminal": 38585540,
-   "gap_vs_sell_now": 39193930,
+   "gap_vs_sell_now": 39097710,
    "gap_vs_sell_now_adjusted": null,
    "reading": "strict"
   },
@@ -168,9 +168,9 @@
    "clawback_year": null,
    "sold_in_year": 30,
    "terminal_price": 21183380,
-   "property_tax_total": 3133970,
+   "property_tax_total": 3095330,
    "operating_total": 2241280,
-   "net_cash_fv": -12790540,
+   "net_cash_fv": -12694330,
    "sale": {
     "price": 21183380,
     "costs": 1165090,
@@ -183,11 +183,11 @@
    },
    "depreciation": 5224990,
    "exclusion_121": 0,
-   "asset_terminal": 24340,
+   "asset_terminal": 120550,
    "housing_value_fv": 0,
    "opportunity_adjusted": null,
    "sell_now_terminal": 38585540,
-   "gap_vs_sell_now": 38561200,
+   "gap_vs_sell_now": 38464980,
    "gap_vs_sell_now_adjusted": null,
    "reading": "favourable"
   },
@@ -202,9 +202,9 @@
    "clawback_year": null,
    "sold_in_year": 5,
    "terminal_price": 7946240,
-   "property_tax_total": 297080,
+   "property_tax_total": 292460,
    "operating_total": 186470,
-   "net_cash_fv": -546990,
+   "net_cash_fv": -541760,
    "sale": {
     "price": 7946240,
     "costs": 437040,
@@ -217,11 +217,11 @@
    },
    "depreciation": 0,
    "exclusion_121": 250000,
-   "asset_terminal": 32796990,
+   "asset_terminal": 32802220,
    "housing_value_fv": 0,
    "opportunity_adjusted": null,
    "sell_now_terminal": 38585540,
-   "gap_vs_sell_now": 5788550,
+   "gap_vs_sell_now": 5783320,
    "gap_vs_sell_now_adjusted": null,
    "reading": ""
   },
@@ -236,9 +236,9 @@
    "clawback_year": 2050,
    "sold_in_year": 30,
    "terminal_price": 21183380,
-   "property_tax_total": 3109820,
+   "property_tax_total": 3071170,
    "operating_total": 2188520,
-   "net_cash_fv": -12817650,
+   "net_cash_fv": -12721440,
    "sale": {
     "price": 21183380,
     "costs": 1165090,
@@ -251,11 +251,11 @@
    },
    "depreciation": 4749990,
    "exclusion_121": 0,
-   "asset_terminal": 197200,
+   "asset_terminal": 293410,
    "housing_value_fv": 0,
    "opportunity_adjusted": null,
    "sell_now_terminal": 38585540,
-   "gap_vs_sell_now": 38388340,
+   "gap_vs_sell_now": 38292120,
    "gap_vs_sell_now_adjusted": null,
    "reading": "strict"
   },
@@ -270,9 +270,9 @@
    "clawback_year": null,
    "sold_in_year": 30,
    "terminal_price": 21183380,
-   "property_tax_total": 2968670,
+   "property_tax_total": 2930030,
    "operating_total": 2188520,
-   "net_cash_fv": -12177960,
+   "net_cash_fv": -12081740,
    "sale": {
     "price": 21183380,
     "costs": 1165090,
@@ -285,11 +285,11 @@
    },
    "depreciation": 4749990,
    "exclusion_121": 0,
-   "asset_terminal": 836890,
+   "asset_terminal": 933110,
    "housing_value_fv": 0,
    "opportunity_adjusted": null,
    "sell_now_terminal": 38585540,
-   "gap_vs_sell_now": 37748640,
+   "gap_vs_sell_now": 37652430,
    "gap_vs_sell_now_adjusted": null,
    "reading": "favourable"
   },
@@ -304,9 +304,9 @@
    "clawback_year": null,
    "sold_in_year": 10,
    "terminal_price": 9667820,
-   "property_tax_total": 625410,
+   "property_tax_total": 615550,
    "operating_total": 397450,
-   "net_cash_fv": -1352460,
+   "net_cash_fv": -1339440,
    "sale": {
     "price": 9667820,
     "costs": 531730,
@@ -319,11 +319,11 @@
    },
    "depreciation": 0,
    "exclusion_121": 250000,
-   "asset_terminal": 26687250,
+   "asset_terminal": 26700270,
    "housing_value_fv": 0,
    "opportunity_adjusted": null,
    "sell_now_terminal": 38585540,
-   "gap_vs_sell_now": 11898280,
+   "gap_vs_sell_now": 11885270,
    "gap_vs_sell_now_adjusted": null,
    "reading": ""
   },
@@ -338,9 +338,9 @@
    "clawback_year": 2055,
    "sold_in_year": 30,
    "terminal_price": 21183380,
-   "property_tax_total": 2981900,
+   "property_tax_total": 2943260,
    "operating_total": 2091420,
-   "net_cash_fv": -11953870,
+   "net_cash_fv": -11857660,
    "sale": {
     "price": 21183380,
     "costs": 1165090,
@@ -353,11 +353,11 @@
    },
    "depreciation": 3799990,
    "exclusion_121": 0,
-   "asset_terminal": 1460930,
+   "asset_terminal": 1557140,
    "housing_value_fv": 0,
    "opportunity_adjusted": null,
    "sell_now_terminal": 38585540,
-   "gap_vs_sell_now": 37124610,
+   "gap_vs_sell_now": 37028390,
    "gap_vs_sell_now_adjusted": null,
    "reading": "strict"
   },
@@ -372,9 +372,9 @@
    "clawback_year": null,
    "sold_in_year": 30,
    "terminal_price": 21183380,
-   "property_tax_total": 2736920,
+   "property_tax_total": 2698280,
    "operating_total": 2091420,
-   "net_cash_fv": -11360830,
+   "net_cash_fv": -11264620,
    "sale": {
     "price": 21183380,
     "costs": 1165090,
@@ -387,11 +387,11 @@
    },
    "depreciation": 3799990,
    "exclusion_121": 0,
-   "asset_terminal": 2053970,
+   "asset_terminal": 2150180,
    "housing_value_fv": 0,
    "opportunity_adjusted": null,
    "sell_now_terminal": 38585540,
-   "gap_vs_sell_now": 36531570,
+   "gap_vs_sell_now": 36435360,
    "gap_vs_sell_now_adjusted": null,
    "reading": "favourable"
   },
@@ -406,9 +406,9 @@
    "clawback_year": null,
    "sold_in_year": 15,
    "terminal_price": 11762380,
-   "property_tax_total": 988280,
+   "property_tax_total": 972500,
    "operating_total": 636160,
-   "net_cash_fv": -2516140,
+   "net_cash_fv": -2491770,
    "sale": {
     "price": 11762380,
     "costs": 646930,
@@ -421,11 +421,11 @@
    },
    "depreciation": 0,
    "exclusion_121": 250000,
-   "asset_terminal": 21255740,
+   "asset_terminal": 21280110,
    "housing_value_fv": 0,
    "opportunity_adjusted": null,
    "sell_now_terminal": 38585540,
-   "gap_vs_sell_now": 17329800,
+   "gap_vs_sell_now": 17305430,
    "gap_vs_sell_now_adjusted": null,
    "reading": ""
   },
@@ -440,9 +440,9 @@
    "clawback_year": null,
    "sold_in_year": 20,
    "terminal_price": 14310730,
-   "property_tax_total": 1389330,
+   "property_tax_total": 1366850,
    "operating_total": 906230,
-   "net_cash_fv": -4174230,
+   "net_cash_fv": -4133580,
    "sale": {
     "price": 14310730,
     "costs": 787090,
@@ -455,11 +455,11 @@
    },
    "depreciation": 0,
    "exclusion_121": 250000,
-   "asset_terminal": 16130700,
+   "asset_terminal": 16171340,
    "housing_value_fv": 0,
    "opportunity_adjusted": null,
    "sell_now_terminal": 38585540,
-   "gap_vs_sell_now": 22454840,
+   "gap_vs_sell_now": 22414190,
    "gap_vs_sell_now_adjusted": null,
    "reading": ""
   },
@@ -474,9 +474,9 @@
    "clawback_year": null,
    "sold_in_year": 30,
    "terminal_price": 21183380,
-   "property_tax_total": 2322530,
+   "property_tax_total": 2283890,
    "operating_total": 1557500,
-   "net_cash_fv": -9784590,
+   "net_cash_fv": -9688380,
    "sale": {
     "price": 21183380,
     "costs": 1165090,
@@ -489,25 +489,25 @@
    },
    "depreciation": 0,
    "exclusion_121": 250000,
-   "asset_terminal": 5322760,
+   "asset_terminal": 5418970,
    "housing_value_fv": 0,
    "opportunity_adjusted": null,
    "sell_now_terminal": 38585540,
-   "gap_vs_sell_now": 33262780,
+   "gap_vs_sell_now": 33166560,
    "gap_vs_sell_now_adjusted": null,
    "reading": ""
   }
  ],
  "clawback": {
   "case": "Live in it for 10 years, then let it out",
-  "tax_with_clawback": 2981900,
-  "tax_without_clawback": 2736920,
+  "tax_with_clawback": 2943260,
+  "tax_without_clawback": 2698280,
   "difference": 244980,
-  "terminal_with_clawback": 1460930,
-  "terminal_without_clawback": 2053970,
+  "terminal_with_clawback": 1557140,
+  "terminal_without_clawback": 2150180,
   "terminal_difference": -593040,
-  "year_one_bill_after_move_out": 96840,
-  "year_one_bill_if_kept": 69700,
+  "year_one_bill_after_move_out": 95710,
+  "year_one_bill_if_kept": 68570,
   "rule": "Revenue and Taxation Code section 63.2(a)(1)(C): the base year value established at the change in ownership is enrolled, adjusted annually, when the eligible transferee no longer qualifies. The strict reading is published as the baseline and the favourable one is shown beside it."
  },
  "distribution": {
@@ -560,126 +560,126 @@
     "label": "Live in it for thirty years, then sell",
     "unit": "money",
     "deciles": [
-     -14341140,
-     1147450,
-     4060710,
-     7029410,
-     10154780,
-     14137410,
-     18601010,
-     24366820,
-     34456300,
-     48914980,
-     217774010
+     -14264690,
+     1247340,
+     4221820,
+     7129540,
+     10265090,
+     14245050,
+     18734010,
+     24629160,
+     34639710,
+     49057880,
+     217880410
     ],
-    "min": -14341140,
-    "max": 217774010,
-    "mean": 21316880
+    "min": -14264690,
+    "max": 217880410,
+    "mean": 21468560
    },
    {
     "key": "live10_sell",
     "label": "Live in it for ten years, then sell",
     "unit": "money",
     "deciles": [
-     8203840,
-     20008850,
-     25171260,
-     29453270,
-     33662630,
-     38458070,
-     44101590,
-     51149720,
-     60245200,
-     73120130,
-     166685200
+     8218220,
+     20026770,
+     25184520,
+     29490680,
+     33675910,
+     38470620,
+     44122020,
+     51169060,
+     60269660,
+     73152430,
+     166722970
     ],
-    "min": 8203840,
-    "max": 166685200,
-    "mean": 43493100
+    "min": 8218220,
+    "max": 166722970,
+    "mean": 43512010
    },
    {
     "key": "live10_rent",
     "label": "Live in it for ten years, then let it out",
     "unit": "money",
     "deciles": [
-     -26486090,
-     -3379650,
-     -353300,
-     2563270,
-     5583780,
-     9179090,
-     13857880,
-     19097170,
-     28184780,
-     42329400,
-     210498780
+     -26409650,
+     -3270220,
+     -204040,
+     2708410,
+     5720320,
+     9336390,
+     14016360,
+     19222630,
+     28331400,
+     42534520,
+     210605180
     ],
-    "min": -26486090,
-    "max": 210498780,
-    "mean": 16079740
+    "min": -26409650,
+    "max": 210605180,
+    "mean": 16231420
    },
    {
     "key": "gap_live",
     "label": "Selling minus living in it for thirty years",
     "unit": "money",
     "deciles": [
-     -135297580,
-     4328570,
-     14267410,
-     20379750,
-     26214340,
-     31633580,
-     37795580,
-     45255200,
-     55653480,
-     73227200,
-     185402120
+     -135521690,
+     4181750,
+     14107420,
+     20250530,
+     26058650,
+     31534900,
+     37693480,
+     45093610,
+     55420150,
+     73123500,
+     185265920
     ],
-    "min": -135297580,
-    "max": 185402120,
-    "mean": 34973800
+    "min": -135521690,
+    "max": 185265920,
+    "mean": 34822120
    },
    {
     "key": "gap_live10_sell",
     "label": "Selling minus living ten years then selling",
     "unit": "money",
     "deciles": [
-     -17984160,
-     2271510,
-     4874840,
-     6929830,
-     8958470,
-     10937070,
-     13150650,
-     16162300,
-     19818880,
-     26303290,
-     74836610
+     -18010920,
+     2247810,
+     4860220,
+     6912870,
+     8939090,
+     10923540,
+     13137310,
+     16137840,
+     19789670,
+     26290560,
+     74825990
     ],
-    "min": -17984160,
-    "max": 74836610,
-    "mean": 12797580
+    "min": -18010920,
+    "max": 74825990,
+    "mean": 12778670
    },
    {
     "key": "gap_live10_rent",
     "label": "Selling minus living ten years then letting",
     "unit": "money",
     "deciles": [
-     -128689470,
-     8668890,
-     17765850,
-     24387910,
-     30607630,
-     36232880,
-     42825180,
-     50872090,
-     61673670,
-     80461170,
-     199267260
+     -128913580,
+     8413420,
+     17640480,
+     24255630,
+     30442340,
+     36085350,
+     42702180,
+     50752300,
+     61572020,
+     80343010,
+     199131060
     ],
-    "min": -128689470,
-    "max": 199267260,
-    "mean": 40210940
+    "min": -128913580,
+    "max": 199131060,
+    "mean": 40059260
    },
    {
     "key": "g_hold",
@@ -727,11 +727,11 @@
   "shares": [
    {
     "key": "Selling beats living in it for thirty years",
-    "value": 0.928
+    "value": 0.9265
    },
    {
     "key": "Selling beats living in it ten years and then selling",
-    "value": 0.9555
+    "value": 0.955
    },
    {
     "key": "Selling beats living ten years and then letting it out",
@@ -743,33 +743,33 @@
    }
   ],
   "histogram": {
-   "lo": -42695850,
-   "hi": 121943220,
-   "bin_width": 8231950,
+   "lo": -42912580,
+   "hi": 121812990,
+   "bin_width": 8236280,
    "counts": [
-    24,
-    9,
-    11,
-    33,
-    52,
+    25,
+    8,
+    13,
+    32,
+    51,
     114,
-    182,
+    181,
     271,
-    299,
-    261,
-    189,
-    165,
-    101,
-    79,
+    296,
+    266,
+    185,
+    166,
+    103,
     78,
-    34,
+    78,
+    35,
     27,
     24,
     16,
     31
    ],
-   "share_above_zero": 0.928,
-   "zero_position": 0.25932999985969307,
+   "share_above_zero": 0.9265,
+   "zero_position": 0.26050952502395347,
    "note": "Twenty equal-width bins of selling minus living in it for thirty years, truncated at the first and ninety-ninth percentile so one extreme draw cannot flatten the shape. Bars to the right of the zero line are draws in which selling wins."
   }
  },
@@ -784,92 +784,92 @@
    },
    {
     "label": "Let it out from the start, sell at the end",
-    "asset_terminal": -910810,
-    "gap_vs_sell_now": 32625360,
+    "asset_terminal": -851110,
+    "gap_vs_sell_now": 32565660,
     "occupy_years": 0,
     "mode": "rent"
    },
    {
     "label": "Live in it for 2 years, then sell",
-    "asset_terminal": 30199410,
-    "gap_vs_sell_now": 1515140,
+    "asset_terminal": 30200550,
+    "gap_vs_sell_now": 1514000,
     "occupy_years": 2,
     "mode": "sell"
    },
    {
     "label": "Live in it for 2 years, then let it out",
-    "asset_terminal": -534460,
-    "gap_vs_sell_now": 32249010,
+    "asset_terminal": -474760,
+    "gap_vs_sell_now": 32189310,
     "occupy_years": 2,
     "mode": "rent"
    },
    {
     "label": "Live in it for 2 years, then let it out (low assessment kept after move-out)",
-    "asset_terminal": 91970,
-    "gap_vs_sell_now": 31622580,
+    "asset_terminal": 151670,
+    "gap_vs_sell_now": 31562880,
     "occupy_years": 2,
     "mode": "rent"
    },
    {
     "label": "Live in it for 5 years, then sell",
-    "asset_terminal": 27035720,
-    "gap_vs_sell_now": 4678820,
+    "asset_terminal": 27038970,
+    "gap_vs_sell_now": 4675580,
     "occupy_years": 5,
     "mode": "sell"
    },
    {
     "label": "Live in it for 5 years, then let it out",
-    "asset_terminal": 141810,
-    "gap_vs_sell_now": 31572740,
+    "asset_terminal": 201500,
+    "gap_vs_sell_now": 31513050,
     "occupy_years": 5,
     "mode": "rent"
    },
    {
     "label": "Live in it for 5 years, then let it out (low assessment kept after move-out)",
-    "asset_terminal": 753990,
-    "gap_vs_sell_now": 30960560,
+    "asset_terminal": 813690,
+    "gap_vs_sell_now": 30900860,
     "occupy_years": 5,
     "mode": "rent"
    },
    {
     "label": "Live in it for 10 years, then sell",
-    "asset_terminal": 21998090,
-    "gap_vs_sell_now": 9716460,
+    "asset_terminal": 22006160,
+    "gap_vs_sell_now": 9708380,
     "occupy_years": 10,
     "mode": "sell"
    },
    {
     "label": "Live in it for 10 years, then let it out",
-    "asset_terminal": 1200480,
-    "gap_vs_sell_now": 30514070,
+    "asset_terminal": 1260180,
+    "gap_vs_sell_now": 30454370,
     "occupy_years": 10,
     "mode": "rent"
    },
    {
     "label": "Live in it for 10 years, then let it out (low assessment kept after move-out)",
-    "asset_terminal": 1746990,
-    "gap_vs_sell_now": 29967560,
+    "asset_terminal": 1806690,
+    "gap_vs_sell_now": 29907860,
     "occupy_years": 10,
     "mode": "rent"
    },
    {
     "label": "Live in it for 15 years, then sell",
-    "asset_terminal": 17524910,
-    "gap_vs_sell_now": 14189640,
+    "asset_terminal": 17540030,
+    "gap_vs_sell_now": 14174520,
     "occupy_years": 15,
     "mode": "sell"
    },
    {
     "label": "Live in it for 20 years, then sell",
-    "asset_terminal": 13309920,
-    "gap_vs_sell_now": 18404630,
+    "asset_terminal": 13335140,
+    "gap_vs_sell_now": 18379410,
     "occupy_years": 20,
     "mode": "sell"
    },
    {
     "label": "Live in it for the whole 30 years, then sell",
-    "asset_terminal": 4440110,
-    "gap_vs_sell_now": 27274440,
+    "asset_terminal": 4499810,
+    "gap_vs_sell_now": 27214740,
     "occupy_years": 30,
     "mode": "sell"
    }
@@ -884,92 +884,92 @@
    },
    {
     "label": "Let it out from the start, sell at the end",
-    "asset_terminal": -1053570,
-    "gap_vs_sell_now": 39639110,
+    "asset_terminal": -957360,
+    "gap_vs_sell_now": 39542900,
     "occupy_years": 0,
     "mode": "rent"
    },
    {
     "label": "Live in it for 2 years, then sell",
-    "asset_terminal": 36740930,
-    "gap_vs_sell_now": 1844610,
+    "asset_terminal": 36742770,
+    "gap_vs_sell_now": 1842770,
     "occupy_years": 2,
     "mode": "sell"
    },
    {
     "label": "Live in it for 2 years, then let it out",
-    "asset_terminal": -608390,
-    "gap_vs_sell_now": 39193930,
+    "asset_terminal": -512170,
+    "gap_vs_sell_now": 39097710,
     "occupy_years": 2,
     "mode": "rent"
    },
    {
     "label": "Live in it for 2 years, then let it out (low assessment kept after move-out)",
-    "asset_terminal": 24340,
-    "gap_vs_sell_now": 38561200,
+    "asset_terminal": 120550,
+    "gap_vs_sell_now": 38464980,
     "occupy_years": 2,
     "mode": "rent"
    },
    {
     "label": "Live in it for 5 years, then sell",
-    "asset_terminal": 32796990,
-    "gap_vs_sell_now": 5788550,
+    "asset_terminal": 32802220,
+    "gap_vs_sell_now": 5783320,
     "occupy_years": 5,
     "mode": "sell"
    },
    {
     "label": "Live in it for 5 years, then let it out",
-    "asset_terminal": 197200,
-    "gap_vs_sell_now": 38388340,
+    "asset_terminal": 293410,
+    "gap_vs_sell_now": 38292120,
     "occupy_years": 5,
     "mode": "rent"
    },
    {
     "label": "Live in it for 5 years, then let it out (low assessment kept after move-out)",
-    "asset_terminal": 836890,
-    "gap_vs_sell_now": 37748640,
+    "asset_terminal": 933110,
+    "gap_vs_sell_now": 37652430,
     "occupy_years": 5,
     "mode": "rent"
    },
    {
     "label": "Live in it for 10 years, then sell",
-    "asset_terminal": 26687250,
-    "gap_vs_sell_now": 11898280,
+    "asset_terminal": 26700270,
+    "gap_vs_sell_now": 11885270,
     "occupy_years": 10,
     "mode": "sell"
    },
    {
     "label": "Live in it for 10 years, then let it out",
-    "asset_terminal": 1460930,
-    "gap_vs_sell_now": 37124610,
+    "asset_terminal": 1557140,
+    "gap_vs_sell_now": 37028390,
     "occupy_years": 10,
     "mode": "rent"
    },
    {
     "label": "Live in it for 10 years, then let it out (low assessment kept after move-out)",
-    "asset_terminal": 2053970,
-    "gap_vs_sell_now": 36531570,
+    "asset_terminal": 2150180,
+    "gap_vs_sell_now": 36435360,
     "occupy_years": 10,
     "mode": "rent"
    },
    {
     "label": "Live in it for 15 years, then sell",
-    "asset_terminal": 21255740,
-    "gap_vs_sell_now": 17329800,
+    "asset_terminal": 21280110,
+    "gap_vs_sell_now": 17305430,
     "occupy_years": 15,
     "mode": "sell"
    },
    {
     "label": "Live in it for 20 years, then sell",
-    "asset_terminal": 16130700,
-    "gap_vs_sell_now": 22454840,
+    "asset_terminal": 16171340,
+    "gap_vs_sell_now": 22414190,
     "occupy_years": 20,
     "mode": "sell"
    },
    {
     "label": "Live in it for the whole 30 years, then sell",
-    "asset_terminal": 5322760,
-    "gap_vs_sell_now": 33262780,
+    "asset_terminal": 5418970,
+    "gap_vs_sell_now": 33166560,
     "occupy_years": 30,
     "mode": "sell"
    }
@@ -984,92 +984,92 @@
    },
    {
     "label": "Let it out from the start, sell at the end",
-    "asset_terminal": -1230700,
-    "gap_vs_sell_now": 48175950,
+    "asset_terminal": -1085140,
+    "gap_vs_sell_now": 48030380,
     "occupy_years": 0,
     "mode": "rent"
    },
    {
     "label": "Live in it for 2 years, then sell",
-    "asset_terminal": 44699280,
-    "gap_vs_sell_now": 2245960,
+    "asset_terminal": 44702060,
+    "gap_vs_sell_now": 2243180,
     "occupy_years": 2,
     "mode": "sell"
    },
    {
     "label": "Live in it for 2 years, then let it out",
-    "asset_terminal": -703790,
-    "gap_vs_sell_now": 47649030,
+    "asset_terminal": -558220,
+    "gap_vs_sell_now": 47503470,
     "occupy_years": 2,
     "mode": "rent"
    },
    {
     "label": "Live in it for 2 years, then let it out (low assessment kept after move-out)",
-    "asset_terminal": -84020,
-    "gap_vs_sell_now": 47029270,
+    "asset_terminal": 61540,
+    "gap_vs_sell_now": 46883700,
     "occupy_years": 2,
     "mode": "rent"
    },
    {
     "label": "Live in it for 5 years, then sell",
-    "asset_terminal": 39805290,
-    "gap_vs_sell_now": 7139960,
+    "asset_terminal": 39813200,
+    "gap_vs_sell_now": 7132040,
     "occupy_years": 5,
     "mode": "sell"
    },
    {
     "label": "Live in it for 5 years, then let it out",
-    "asset_terminal": 256410,
-    "gap_vs_sell_now": 46688830,
+    "asset_terminal": 401980,
+    "gap_vs_sell_now": 46543270,
     "occupy_years": 5,
     "mode": "rent"
    },
    {
     "label": "Live in it for 5 years, then let it out (low assessment kept after move-out)",
-    "asset_terminal": 912840,
-    "gap_vs_sell_now": 46032410,
+    "asset_terminal": 1058400,
+    "gap_vs_sell_now": 45886840,
     "occupy_years": 5,
     "mode": "rent"
    },
    {
     "label": "Live in it for 10 years, then sell",
-    "asset_terminal": 32389310,
-    "gap_vs_sell_now": 14555930,
+    "asset_terminal": 32409010,
+    "gap_vs_sell_now": 14536240,
     "occupy_years": 10,
     "mode": "sell"
    },
    {
     "label": "Live in it for 10 years, then let it out",
-    "asset_terminal": 1765750,
-    "gap_vs_sell_now": 45179490,
+    "asset_terminal": 1911320,
+    "gap_vs_sell_now": 45033930,
     "occupy_years": 10,
     "mode": "rent"
    },
    {
     "label": "Live in it for 10 years, then let it out (low assessment kept after move-out)",
-    "asset_terminal": 2403950,
-    "gap_vs_sell_now": 44541290,
+    "asset_terminal": 2549520,
+    "gap_vs_sell_now": 44395730,
     "occupy_years": 10,
     "mode": "rent"
    },
    {
     "label": "Live in it for 15 years, then sell",
-    "asset_terminal": 25789260,
-    "gap_vs_sell_now": 21155990,
+    "asset_terminal": 25826120,
+    "gap_vs_sell_now": 21119120,
     "occupy_years": 15,
     "mode": "sell"
    },
    {
     "label": "Live in it for 20 years, then sell",
-    "asset_terminal": 19553370,
-    "gap_vs_sell_now": 27391870,
+    "asset_terminal": 19614870,
+    "gap_vs_sell_now": 27330380,
     "occupy_years": 20,
     "mode": "sell"
    },
    {
     "label": "Live in it for the whole 30 years, then sell",
-    "asset_terminal": 6375070,
-    "gap_vs_sell_now": 40570170,
+    "asset_terminal": 6520640,
+    "gap_vs_sell_now": 40424610,
     "occupy_years": 30,
     "mode": "sell"
    }
@@ -1081,27 +1081,27 @@
    "paths": [
     {
      "label": "Live in it for the whole 30 years, then sell",
-     "asset_terminal": 5322760,
-     "opportunity_adjusted": 5322760,
+     "asset_terminal": 5418970,
+     "opportunity_adjusted": 5418970,
      "credit": 0,
-     "gap_vs_sell_now": 33262780,
-     "gap_adjusted": 33262780
+     "gap_vs_sell_now": 33166560,
+     "gap_adjusted": 33166560
     },
     {
      "label": "Live in it for 10 years, then sell",
-     "asset_terminal": 26687250,
-     "opportunity_adjusted": 26687250,
+     "asset_terminal": 26700270,
+     "opportunity_adjusted": 26700270,
      "credit": 0,
-     "gap_vs_sell_now": 11898280,
-     "gap_adjusted": 11898280
+     "gap_vs_sell_now": 11885270,
+     "gap_adjusted": 11885270
     },
     {
      "label": "Live in it for 10 years, then let it out",
-     "asset_terminal": 1460930,
-     "opportunity_adjusted": 1460930,
+     "asset_terminal": 1557140,
+     "opportunity_adjusted": 1557140,
      "credit": 0,
-     "gap_vs_sell_now": 37124610,
-     "gap_adjusted": 37124610
+     "gap_vs_sell_now": 37028390,
+     "gap_adjusted": 37028390
     }
    ]
   },
@@ -1110,27 +1110,27 @@
    "paths": [
     {
      "label": "Live in it for the whole 30 years, then sell",
-     "asset_terminal": 5322760,
-     "opportunity_adjusted": 8602340,
+     "asset_terminal": 5418970,
+     "opportunity_adjusted": 8698550,
      "credit": 3279580,
-     "gap_vs_sell_now": 33262780,
-     "gap_adjusted": 29983200
+     "gap_vs_sell_now": 33166560,
+     "gap_adjusted": 29886990
     },
     {
      "label": "Live in it for 10 years, then sell",
-     "asset_terminal": 26687250,
-     "opportunity_adjusted": 28193220,
+     "asset_terminal": 26700270,
+     "opportunity_adjusted": 28206240,
      "credit": 1505970,
-     "gap_vs_sell_now": 11898280,
-     "gap_adjusted": 10392320
+     "gap_vs_sell_now": 11885270,
+     "gap_adjusted": 10379300
     },
     {
      "label": "Live in it for 10 years, then let it out",
-     "asset_terminal": 3234540,
-     "opportunity_adjusted": 4740500,
+     "asset_terminal": 3330750,
+     "opportunity_adjusted": 4836720,
      "credit": 1505970,
-     "gap_vs_sell_now": 35351000,
-     "gap_adjusted": 33845030
+     "gap_vs_sell_now": 35254780,
+     "gap_adjusted": 33748820
     }
    ]
   },
@@ -1139,27 +1139,27 @@
    "paths": [
     {
      "label": "Live in it for the whole 30 years, then sell",
-     "asset_terminal": 5322760,
-     "opportunity_adjusted": 11881910,
+     "asset_terminal": 5418970,
+     "opportunity_adjusted": 11978130,
      "credit": 6559150,
-     "gap_vs_sell_now": 33262780,
-     "gap_adjusted": 26703630
+     "gap_vs_sell_now": 33166560,
+     "gap_adjusted": 26607410
     },
     {
      "label": "Live in it for 10 years, then sell",
-     "asset_terminal": 26687250,
-     "opportunity_adjusted": 29699180,
+     "asset_terminal": 26700270,
+     "opportunity_adjusted": 29712200,
      "credit": 3011930,
-     "gap_vs_sell_now": 11898280,
-     "gap_adjusted": 8886350
+     "gap_vs_sell_now": 11885270,
+     "gap_adjusted": 8873340
     },
     {
      "label": "Live in it for 10 years, then let it out",
-     "asset_terminal": 5008150,
-     "opportunity_adjusted": 8020080,
+     "asset_terminal": 5104370,
+     "opportunity_adjusted": 8116300,
      "credit": 3011930,
-     "gap_vs_sell_now": 33577390,
-     "gap_adjusted": 30565460
+     "gap_vs_sell_now": 33481170,
+     "gap_adjusted": 30469240
     }
    ]
   },
@@ -1168,27 +1168,27 @@
    "paths": [
     {
      "label": "Live in it for the whole 30 years, then sell",
-     "asset_terminal": 5322760,
-     "opportunity_adjusted": 15161490,
+     "asset_terminal": 5418970,
+     "opportunity_adjusted": 15257700,
      "credit": 9838730,
-     "gap_vs_sell_now": 33262780,
-     "gap_adjusted": 23424050
+     "gap_vs_sell_now": 33166560,
+     "gap_adjusted": 23327840
     },
     {
      "label": "Live in it for 10 years, then sell",
-     "asset_terminal": 26687250,
-     "opportunity_adjusted": 31205150,
+     "asset_terminal": 26700270,
+     "opportunity_adjusted": 31218170,
      "credit": 4517900,
-     "gap_vs_sell_now": 11898280,
-     "gap_adjusted": 7380390
+     "gap_vs_sell_now": 11885270,
+     "gap_adjusted": 7367370
     },
     {
      "label": "Live in it for 10 years, then let it out",
-     "asset_terminal": 6781760,
-     "opportunity_adjusted": 11299660,
+     "asset_terminal": 6877980,
+     "opportunity_adjusted": 11395870,
      "credit": 4517900,
-     "gap_vs_sell_now": 31803780,
-     "gap_adjusted": 27285880
+     "gap_vs_sell_now": 31707560,
+     "gap_adjusted": 27189670
     }
    ]
   },
@@ -1197,27 +1197,27 @@
    "paths": [
     {
      "label": "Live in it for the whole 30 years, then sell",
-     "asset_terminal": 5322760,
-     "opportunity_adjusted": 18441060,
+     "asset_terminal": 5418970,
+     "opportunity_adjusted": 18537280,
      "credit": 13118300,
-     "gap_vs_sell_now": 33262780,
-     "gap_adjusted": 20144470
+     "gap_vs_sell_now": 33166560,
+     "gap_adjusted": 20048260
     },
     {
      "label": "Live in it for 10 years, then sell",
-     "asset_terminal": 26687250,
-     "opportunity_adjusted": 32711110,
+     "asset_terminal": 26700270,
+     "opportunity_adjusted": 32724130,
      "credit": 6023860,
-     "gap_vs_sell_now": 11898280,
-     "gap_adjusted": 5874420
+     "gap_vs_sell_now": 11885270,
+     "gap_adjusted": 5861400
     },
     {
      "label": "Live in it for 10 years, then let it out",
-     "asset_terminal": 8555370,
-     "opportunity_adjusted": 14579230,
+     "asset_terminal": 8651590,
+     "opportunity_adjusted": 14675450,
      "credit": 6023860,
-     "gap_vs_sell_now": 30030170,
-     "gap_adjusted": 24006310
+     "gap_vs_sell_now": 29933950,
+     "gap_adjusted": 23910090
     }
    ]
   },
@@ -1226,27 +1226,27 @@
    "paths": [
     {
      "label": "Live in it for the whole 30 years, then sell",
-     "asset_terminal": 5322760,
-     "opportunity_adjusted": 25000220,
+     "asset_terminal": 5418970,
+     "opportunity_adjusted": 25096430,
      "credit": 19677460,
-     "gap_vs_sell_now": 33262780,
-     "gap_adjusted": 13585320
+     "gap_vs_sell_now": 33166560,
+     "gap_adjusted": 13489110
     },
     {
      "label": "Live in it for 10 years, then sell",
-     "asset_terminal": 26687250,
-     "opportunity_adjusted": 35723040,
+     "asset_terminal": 26700270,
+     "opportunity_adjusted": 35736060,
      "credit": 9035790,
-     "gap_vs_sell_now": 11898280,
-     "gap_adjusted": 2862490
+     "gap_vs_sell_now": 11885270,
+     "gap_adjusted": 2849470
     },
     {
      "label": "Live in it for 10 years, then let it out",
-     "asset_terminal": 12102590,
-     "opportunity_adjusted": 21138380,
+     "asset_terminal": 12198810,
+     "opportunity_adjusted": 21234600,
      "credit": 9035790,
-     "gap_vs_sell_now": 26482940,
-     "gap_adjusted": 17447150
+     "gap_vs_sell_now": 26386730,
+     "gap_adjusted": 17350940
     }
    ]
   },
@@ -1255,27 +1255,27 @@
    "paths": [
     {
      "label": "Live in it for the whole 30 years, then sell",
-     "asset_terminal": 5322760,
-     "opportunity_adjusted": 31559370,
+     "asset_terminal": 5418970,
+     "opportunity_adjusted": 31655580,
      "credit": 26236610,
-     "gap_vs_sell_now": 33262780,
-     "gap_adjusted": 7026170
+     "gap_vs_sell_now": 33166560,
+     "gap_adjusted": 6929960
     },
     {
      "label": "Live in it for 10 years, then sell",
-     "asset_terminal": 26687250,
-     "opportunity_adjusted": 38734970,
+     "asset_terminal": 26700270,
+     "opportunity_adjusted": 38747990,
      "credit": 12047720,
-     "gap_vs_sell_now": 11898280,
-     "gap_adjusted": -149440
+     "gap_vs_sell_now": 11885270,
+     "gap_adjusted": -162460
     },
     {
      "label": "Live in it for 10 years, then let it out",
-     "asset_terminal": 15649820,
-     "opportunity_adjusted": 27697540,
+     "asset_terminal": 15746030,
+     "opportunity_adjusted": 27793750,
      "credit": 12047720,
-     "gap_vs_sell_now": 22935720,
-     "gap_adjusted": 10888000
+     "gap_vs_sell_now": 22839510,
+     "gap_adjusted": 10791790
     }
    ]
   },
@@ -1284,27 +1284,27 @@
    "paths": [
     {
      "label": "Live in it for the whole 30 years, then sell",
-     "asset_terminal": 5322760,
-     "opportunity_adjusted": 44677670,
+     "asset_terminal": 5418970,
+     "opportunity_adjusted": 44773890,
      "credit": 39354910,
-     "gap_vs_sell_now": 33262780,
-     "gap_adjusted": -6092130
+     "gap_vs_sell_now": 33166560,
+     "gap_adjusted": -6188350
     },
     {
      "label": "Live in it for 10 years, then sell",
-     "asset_terminal": 26687250,
-     "opportunity_adjusted": 44758840,
+     "asset_terminal": 26700270,
+     "opportunity_adjusted": 44771850,
      "credit": 18071580,
-     "gap_vs_sell_now": 11898280,
-     "gap_adjusted": -6173300
+     "gap_vs_sell_now": 11885270,
+     "gap_adjusted": -6186320
     },
     {
      "label": "Live in it for 10 years, then let it out",
-     "asset_terminal": 22744260,
-     "opportunity_adjusted": 40815840,
+     "asset_terminal": 22840470,
+     "opportunity_adjusted": 40912060,
      "credit": 18071580,
-     "gap_vs_sell_now": 15841280,
-     "gap_adjusted": -2230300
+     "gap_vs_sell_now": 15745060,
+     "gap_adjusted": -2326520
     }
    ]
   }
@@ -1314,32 +1314,32 @@
    "occupy_years": 30,
    "mode": "sell",
    "label": "Live in it for the whole 30 years, then sell",
-   "annual_rent": 304270,
-   "monthly_rent": 25360,
-   "share_of_value_at_death": 4.7
+   "annual_rent": 303390,
+   "monthly_rent": 25280,
+   "share_of_value_at_death": 4.6
   },
   {
    "occupy_years": 10,
    "mode": "sell",
    "label": "Live in it for 10 years, then sell",
-   "annual_rent": 237020,
-   "monthly_rent": 19750,
+   "annual_rent": 236760,
+   "monthly_rent": 19730,
    "share_of_value_at_death": 3.6
   },
   {
    "occupy_years": 5,
    "mode": "sell",
    "label": "Live in it for 5 years, then sell",
-   "annual_rent": 211440,
-   "monthly_rent": 17620,
+   "annual_rent": 211240,
+   "monthly_rent": 17600,
    "share_of_value_at_death": 3.2
   },
   {
    "occupy_years": 10,
    "mode": "rent",
    "label": "Live in it for 10 years, then let it out",
-   "annual_rent": 339600,
-   "monthly_rent": 28300,
+   "annual_rent": 338720,
+   "monthly_rent": 28230,
    "share_of_value_at_death": 5.2
   }
  ],
