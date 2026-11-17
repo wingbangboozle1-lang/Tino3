@@ -69,10 +69,11 @@ professional advice when dates, facts or laws change.
 ## Published site and verification snapshot
 
 The current generated edition contains **26 HTML pages**, **one runtime stylesheet**, **118 entries
-in the source ledger**, and **141 content-free withdrawal notices** for retired routes. The latest
-local verification reports **1366 table rows**: **1173 linked to official publishers** and **193
-explicitly registered as unsourceable or unverified**. A row without a confirming official source is
-not filled in by inference. The public site contains no source ledger or internal model data files;
+in the source ledger**, and **144 content-free withdrawal notices** for retired routes. The latest
+local verification reports **1366 table rows**: **1073 linked to official publishers** and **293
+explicitly registered as unsourceable or unverified**. Each linked row carries only the sources that
+bear on that row (per-row source map, 17 November 2026); a row without a confirming official source
+is not filled in by inference. The public site contains no source ledger or internal model data files;
 the Jekyll and Actions publication boundaries are checked separately.
 
 The model and pages are generated from `assets/data/` and `scripts/build.py`; do not edit generated

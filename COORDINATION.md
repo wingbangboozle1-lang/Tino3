@@ -96,17 +96,19 @@ PRs #158, #160 and #162 is closed on this branch:
   rule stays on the register.
 
 **Effect on the published counts (no figure, input, model output or recommendation changed):**
-restated on the merged tree at `20eb134`: 1,295 table rows (unchanged from that base), **1,011
-linked to official publishers** (was 1,111) and **284 registered as unsourceable** (was 184);
-3,689 links (2,054 external); ledger unchanged at 115. 100 rows moved from blanket-linked to
-registered, exactly as measured on the pre-merge base. README counts updated to match. Every row
-still satisfies the gate: at least one https link or the register link.
+restated on the final base `2cb1e8b` (PRs #173 and #174 merged while this branch was in flight):
+26 pages, 1,366 table rows (unchanged from that base), **1,073 linked to official publishers**
+(was 1,173) and **293 registered as unsourceable** (was 193); 3,933 links (2,222 external); ledger
+118 (that base's, untouched by this session). 100 rows moved from blanket-linked to registered,
+the same figure measured on every earlier base. README counts updated to match, including the
+withdrawal-route count the packager reports (144). Every row still satisfies the gate: at least
+one https link or the register link.
 
-**Gates on this branch after the change (merged tree at `20eb134`):** `rebuild.py` run twice
-(second run leaves the tree unchanged), `verify.py` PASS (25 pages, 1,295 rows, 1,011 linked,
-284 registered, 115 ledger, 3,689 links, every internal link and fragment resolves, print budget
-94% of one sheet), `privacy_boundary.py` PASS, `tracked_tree_guard.py` PASS (65 files),
-`package_site.py` PASS (25 pages, 1 runtime asset, 139 withdrawal routes),
+**Gates on this branch after the change (base `2cb1e8b`):** `rebuild.py` run twice (second run
+leaves the tree unchanged), `verify.py` PASS (26 pages, 1,366 rows, 1,073 linked, 293 registered,
+118 ledger, 3,933 links, every internal link and fragment resolves, print budget 94% of one
+sheet), `privacy_boundary.py` PASS (26 pages), `tracked_tree_guard.py` PASS (68 files),
+`package_site.py` PASS (26 pages, 1 runtime asset, 144 withdrawal routes),
 `verify_legacy.py --config-only` PASS, `git diff --check` clean.
 
 ## Session `arena/5fb0dcb1-tino3` — law-watch refresh to the 16 November 2026 official results reading, live Proposition 19 initiative recheck, publication · claimed 2026-11-17
