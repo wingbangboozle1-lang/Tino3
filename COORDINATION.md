@@ -4261,7 +4261,7 @@ nothing is inferred, and what could not be read says so instead of filling the g
   `tracked_tree_guard.py` passed immediately afterwards.
 - **C-3 README counts.** The snapshot paragraph said 110 ledger entries while the same README's
   model-boundaries section and the build both said 112; corrected to 112, then re-checked against the
-  final build of this session: **25 pages, 113 ledger entries, 1,248 table rows, 1,071 linked to official
+  final build of this session: **25 pages, 113 ledger entries, 1,249 table rows, 1,072 linked to official
   publishers, 177 registered as unsourceable, 136 content-free withdrawal notices, 1 runtime stylesheet**.
   The README now carries those exact figures; the dated Git-history audit counts (401 commits, 115 with a
   personal address, measured 16 November 2026) were left untouched because they are a dated record of a
@@ -4311,8 +4311,8 @@ nothing is inferred, and what could not be read says so instead of filling the g
   were wrong. The defect and its correction are published on `review.html` in the repository-audit table
   with the statutory sources beside them.
 - **Gates on the integrated tree (17 November 2026):** `rebuild.py` PASS and a second run leaves the
-  working tree byte-identical; `verify.py` PASS (25 pages, 1,248 rows, 1,071 linked, 177 explicitly
-  registered, 113 ledger sources, 4,337 links of which 2,844 external, every internal link and fragment
+  working tree byte-identical; `verify.py` PASS (25 pages, 1,249 rows, 1,072 linked, 177 explicitly
+  registered, 113 ledger sources, 4,338 links of which 2,845 external, every internal link and fragment
   resolves); `privacy_boundary.py` PASS (every published dollar figure rounded to $10 or a published
   official amount; 136 withdrawal routes); `tracked_tree_guard.py` PASS (65 tracked text files);
   `package_site.py` PASS (25 pages, 1 runtime asset, 136 withdrawal routes);
