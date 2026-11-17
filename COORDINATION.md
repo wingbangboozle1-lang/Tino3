@@ -4163,3 +4163,19 @@ One further conflict inside the rebase onto `82bac65` was in `scripts/build.py`:
 - A market rent for Property A: still flagged. The letting paths remain a floor, and the break-even rent is published instead.
 - The section 6166 instalment election: published as a rule with its 35% test, and explicitly **not** assumed available.
 - A keep-and-borrow path end to end: the carrying cost is priced, the path is not modelled, and the suggestions register says so.
+
+## Session `arena/ac0a4bd3-tino3` — integrated audit, stray-marker repair, decision-critical re-verification, gap closure and publication · claimed 2026-11-17
+
+*Branch note:* Arena pins this session to `arena/ac0a4bd3-tino3`, branched from `main` at `bd8ab5b` (the merge of PR #153). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. `gh pr list --state open` returned nothing when this session started, so no other session holds `scripts/build.py`, `scripts/model.py`, `assets/data/*` or `assets/sources.json`.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| AC-1 Claim this scope and push before any other edit | **done** — this section | `arena/ac0a4bd3-tino3` | `COORDINATION.md` (this section only) |
+| AC-2 **Repair the stray merge-conflict marker** left in this board at line 4140 (`>>>>>>> 5b8d8fa …`) by the PR #153 rebase. The board's own rule R-1143-2 requires `git grep -nE '^(<<<<<<<\|>>>>>>>)'` to be clean before any merge to `main`; it is not clean today | **in progress** | `arena/ac0a4bd3-tino3` | `COORDINATION.md` (the stray marker line only; no other session's record edited) |
+| AC-3 Line-by-line re-verification of the decision-critical official figures against the official publishers on their own domains, read this session; record every read with its link | pending | `arena/ac0a4bd3-tino3` | read-only; results recorded here and on `review.html` via `scripts/build.py` |
+| AC-4 Fresh gap check of the owner's brief against the published edition; close the genuine gaps that remain | pending | `arena/ac0a4bd3-tino3` | `scripts/build.py`, `assets/data/inputs.json`, `assets/sources.json` (append only), regenerated pages |
+| AC-5 Rebuild, run all five gates, open the pull request from this branch to `main`, merge without waiting for approval, confirm the Pages deploy, record the PR link and merge result | pending | `arena/ac0a4bd3-tino3` | this section only; `README.md` (counts) |
+
+**Privacy commitments for this session.** No name, street address, postal code, parcel identifier, county or city name, utility or account identifier, or jurisdiction-specific publisher host appears in any file this session writes, including this board. Owner-supplied money is published only as a multiple of ten; official amounts are published verbatim where the official document prints them. Every new ledger entry links to a host already on the approved list in `scripts/verify.py`. Claims that cannot be anchored to an official source are labelled and sent to the register on `review.html`, not printed as fact.
+
+**Baseline at claim (17 November 2026).** `scripts/rebuild.py` exit 0 with a clean `git status` afterwards, so the committed edition reproduces byte for byte. `verify.py` PASS (25 pages, 1,238 table rows, 1,061 linked to official publishers, 177 explicitly registered unsourceable, 112 ledger sources, 4,316 links). `privacy_boundary.py` PASS. `tracked_tree_guard.py` PASS (65 tracked text files). `package_site.py` PASS (25 pages, 1 runtime asset, 136 withdrawal routes). `verify_legacy.py --config-only` PASS.
