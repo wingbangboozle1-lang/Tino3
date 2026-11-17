@@ -17,6 +17,7 @@
 - **Initiative status (U-3).** The Secretary of State's qualification page is dated 20 October 2026 (the date printed on the page itself). It lists one initiative pending at the Attorney General, five cleared for circulation, none circulating with 25% of signatures, one eligible for 2028 (not a Proposition 19 measure) and 16 qualified. The cleared list (26-0001 to 26-0005) was read in full: none amends Proposition 19's inheritance or reassessment rules. The repeal memorandum of 18 May 2026 (failed petition) stands as recorded. One proposed-table row and one ledger entry (`sos_cleared_circulation`) were added so the page says the check was made.
 - **Irregularities, for the owner's review (not blocking).** (1) The official Proposition 3 voter guide says "over $371,000 (adjusted annually for inflation)", which is what the site states; a secondary election summary gives $361,000 for single filers. The site keeps the official figure and does not use the other number. (2) The results are unofficial and the margin on Proposition 42 is narrow; the law page says so. (3) The status page is dated 20 October 2026, so it is not a same-day reading of the dashboard; the page itself says it is updated as measures move.
 - **Official sources read this session:** https://electionresults.sos.ca.gov/returns/ballot-measures ; https://voterguide.sos.ca.gov/propositions/3/index.htm ; https://www.sos.ca.gov/elections/ballot-measures/qualified-ballot-measures ; https://www.sos.ca.gov/elections/ballot-measures/initiative-and-referendum-status ; https://www.sos.ca.gov/elections/ballot-measures/initiative-and-referendum-status/initiatives-referenda-cleared-circulation
+- **Overlap with PR #157 (merged first).** Session `arena/11bff629-tino3` merged its own law-watch refresh to the same 16 November reading, and its 17 November recheck, while this branch was in review. Both sides made the same text changes in `scripts/build.py`, which merged cleanly. For the shared generated pages (`laws.html`, `review.html`, `sources.html`) and `assets/sources.json`, this branch kept `main`'s version and regenerated from source, so no other session's work was discarded. This branch then re-applied only what #157 did not contain: the cleared-for-circulation row on the law page (U-3) and its ledger entry `sos_cleared_circulation`, and README counts moved to the verifier's current values (114 ledger entries, 1,251 table rows, 1,074 linked). Log only; no conflict marker was left in the tree (the `git grep` gate returned nothing).
 - **Gates (before commit):** `rebuild.py` run twice (second run leaves the tree unchanged), `verify.py` PASS (25 pages, 1,239 table rows, 1,064 linked to an official site, 177 explicitly logged as unsourceable, 113 ledger sources), `privacy_boundary.py` PASS, `tracked_tree_guard.py` PASS, `package_site.py` PASS, `verify_legacy.py --config-only` PASS.
 
 ## Session `arena/4f2a543e-tino3` — repair of the unresolved conflict marker left on `main`, a mechanical marker gate, independent re-verification of the decision-critical figures, publication · claimed 2026-11-17
@@ -4255,3 +4256,94 @@ One further conflict inside the rebase onto `82bac65` was in `scripts/build.py`:
 - A market rent for Property A: still flagged. The letting paths remain a floor, and the break-even rent is published instead.
 - The section 6166 instalment election: published as a rule with its 35% test, and explicitly **not** assumed available.
 - A keep-and-borrow path end to end: the carrying cost is priced, the path is not modelled, and the suggestions register says so.
+
+## Session `arena/11bff629-tino3` — board repair, README count correction, fresh official-source re-verification, publication · claimed 2026-11-17
+
+*Branch note:* Arena pins this session to `arena/11bff629-tino3`, branched from `main` at `bd8ab5b` (the merge of PR #153). `git fetch origin main` confirms `bd8ab5b` is the current `main` head at claim time, and `gh pr list --state open` returned nothing, so no other session holds an open pull request. No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. All five local gates (`rebuild.py`, `verify.py`, `privacy_boundary.py`, `tracked_tree_guard.py`, `package_site.py`) exited 0 on the untouched tree before any edit, and a fresh rebuild produced no diff.
+
+**Why these tasks.** A gap check against the owner's full brief on this tree found the brief's content items all published (pages exist for every bolded requirement: the Treasury park-and-phase black-swan path, Prop H terms, imputed rent, the section 121 exclusion, the Form 540 1% surcharge, the five-year maintenance plan, the distribution chart, the pre-commitment register, the what-if levers, the timeline, the glossary, the suggestions register, the questions list and the executive summary). Three defects remain that are repairable in-repo: (1) a stray rebase end-marker line left in this board by an earlier collision; (2) a count drift inside `README.md`, which states both 112 and 110 source-ledger entries for the same edition; (3) the load-bearing official figures need a fresh dated read, because the owner's brief requires periodic rechecks against official authorities with enacted changes distinguished from proposals.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| C-1 Claim this scope and push before any other edit | **done** — this section | `arena/11bff629-tino3` | `COORDINATION.md` (this section only) |
+| C-2 Repair the board: remove the stray `>>>>>>>` end-marker at line 4140, an artifact of an earlier rebase collision inside the `arena/0069abd3-tino3` section; no other line of that section changes | **done** (`276ff6d`) | `arena/11bff629-tino3` | `COORDINATION.md` (one line removal) |
+| C-3 Correct the `README.md` count drift (the snapshot section says 110 ledger entries; the build reports 112) and re-check every numeric claim in the README against the current build output | **done** (`d7848f6`; final counts restated at 113 rows after C-4's new ledger entry, see the record below) | `arena/11bff629-tino3` | `README.md` (counts only) |
+| C-4 Fresh dated re-read of the load-bearing official figures no session has re-opened since 16 November: the federal basic exclusion and 2027 inflation adjustment, the Proposition 19 shelter amount and its next adjustment date, the statewide rent cap, the Form 540 1% surcharge and capital-gain wording, and the status of the pending local parcel-tax certification; correct anything stale, record every confirmation with its source | **done** — see the completion record below | `arena/11bff629-tino3` | read-only against official publishers; corrections via `scripts/build.py`, `assets/data/inputs.json` (notes only), `assets/sources.json` (append only), regenerated pages |
+| C-5 Rebuild, run every gate, open the pull request from this branch to `main`, merge without waiting, confirm the Pages deploy, record the result | **in progress** (all gates green locally; publication record appended after the merge) | `arena/11bff629-tino3` | this section only |
+
+
+**Completion record, 17 November 2026 (C-2 to C-4).** Everything below was read at source in this session;
+nothing is inferred, and what could not be read says so instead of filling the gap.
+
+- **C-2 board repair.** The stray `>>>>>>> 5b8d8fa (...)` line inside the `arena/0069abd3-tino3` section
+  was the only conflict marker anywhere in the repository (checked with a repo-wide scan of Markdown, HTML,
+  Python, JSON and YAML files). It was removed with no other line of that section touched, and
+  `tracked_tree_guard.py` passed immediately afterwards.
+- **C-3 README counts.** The snapshot paragraph said 110 ledger entries while the same README's
+  model-boundaries section and the build both said 112; corrected to 112, then re-checked against the
+  final build of this session: **25 pages, 113 ledger entries, 1,249 table rows, 1,072 linked to official
+  publishers, 177 registered as unsourceable, 136 content-free withdrawal notices, 1 runtime stylesheet**.
+  The README now carries those exact figures; the dated Git-history audit counts (401 commits, 115 with a
+  personal address, measured 16 November 2026) were left untouched because they are a dated record of a
+  past measurement on a full clone, not a live count.
+- **C-4 official-source re-reads, all on 17 November 2026:**
+  - IRS *Estate tax* page: filing threshold table ends at 2026 with **$15,000,000**; the portability
+    sentence (surviving spouse, timely filed return) still stands. Matches the site. (`irs_estate`)
+  - IRS news release **IR-2026-133** (5 November 2026): 2027 basic exclusion **$15,480,000**, 2026
+    $15,000,000; 2027 annual gift exclusion **$20,000** (2026: $19,000); Rev. Proc. 2026-35 named as the
+    detail document. Matches the site. (`irs_2027`)
+  - BOE **Letter to Assessors 2025/009** in full: FHFA California house price index change of **2.15
+    percent** for 2024, so the shelter amount is **$1,044,586** for transfers 16 February 2025 through
+    15 February 2027, next adjustment **February 2027**. Matches the site. (`boe_lta25009`, `boe_prop19`)
+  - **Civil Code 1947.12(a)** verbatim: not more than **5 percent plus the percentage change in the cost
+    of living, or 10 percent, whichever is lower**, over any 12-month period, no more than two increases,
+    exemptions in subdivision (d) including the 15-year certificate-of-occupancy rule. Matches the site.
+    (`civ1947_12`, with `civ1946_2` for just cause.)
+  - **Revenue and Taxation Code 17043** verbatim: additional **1 percent** on taxable income above
+    **$1,000,000**; subsection (c) disapplies credits, filing-status recomputation and joint-return rules;
+    no indexation anywhere in the section. Matches the site. (`rtc17043`)
+  - **2025 Instructions for Form 540, line 62** — read at source for the first time on this site, closing
+    the owner's standing instruction to read the official booklet: the line is named the **Behavioral
+    Health Services Tax**, subtracts $1,000,000 from the line 19 amount and applies 1 percent to the
+    remainder. New ledger entry `ftb_540_instructions_2025`, now cited in the sensitivity table beside
+    the statute. This is the only ledger addition of the session (112 to 113 entries; `as_of` moved to
+    2026-11-17).
+  - FTB *Capital gains and losses* page: **"California does not have a lower rate for capital gains. All
+    capital gains are taxed as ordinary income."** Page states last updated 28 January 2026. Matches the
+    model's treatment. (`ftb_cg`)
+  - Secretary of State ballot-measures page, **16 November 2026, 7:12 p.m. update**: results still
+    labelled unofficial, certification still due **11 December 2026**; Proposition 3 **60.8 percent yes**
+    (was 60.7 on the 14 November read), Proposition 40 52.2 percent no, Proposition 41 55.2 percent no,
+    Proposition 42 51.2 percent yes, Proposition 43 57.7 percent no, Proposition 37 62.5 percent yes.
+    All eight dated law-watch figures on the laws page, the review register and the executive summary were
+    moved to this read; the `sos_results` ledger entry records both reads. **Nothing became law in the
+    window and no enacted-versus-proposed label changed.** (`sos_results`)
+  - Could not check, unchanged: the local parcel-tax certification (not due until 11 December 2026, and
+    the local publisher is withheld anyway), Property A's tax rate area (privacy), and the two pending
+    local measures on the law-watch (jurisdiction-identifying files). Each stays on the register.
+- **Irregularity found and fixed: the section 17043 sensitivity table printed percentages ten times too
+  large.** Nine call sites passed numbers that were already percentages into `pcf`, which multiplies by
+  100, so the taxes page showed **2000.0%, 380.0%, 1230.0%, 100.0%, 3710.0%, 3610.0% and 1330.0%** where
+  **20.0%, 3.8%, 12.3%, 1.0%, 37.1%, 36.1% and 13.3%** belong. All nine were corrected in `scripts/build.py`
+  and the pages rebuilt; a repository-wide scan for the broken renders now returns nothing. The model's
+  stored rates (0.20, 0.038, 0.123, 0.01, 0.371, 0.361) and every dollar figure computed from them were
+  always correct, so **no projection, ranking or recommendation changed** — only the printed percentages
+  were wrong. The defect and its correction are published on `review.html` in the repository-audit table
+  with the statutory sources beside them.
+- **Gates on the integrated tree (17 November 2026):** `rebuild.py` PASS and a second run leaves the
+  working tree byte-identical; `verify.py` PASS (25 pages, 1,249 rows, 1,072 linked, 177 explicitly
+  registered, 113 ledger sources, 4,338 links of which 2,845 external, every internal link and fragment
+  resolves); `privacy_boundary.py` PASS (every published dollar figure rounded to $10 or a published
+  official amount; 136 withdrawal routes); `tracked_tree_guard.py` PASS (65 tracked text files);
+  `package_site.py` PASS (25 pages, 1 runtime asset, 136 withdrawal routes);
+  `verify_legacy.py --config-only` PASS (26 allowlisted files, `_config.yml` untouched this session);
+  `git diff --check` clean.
+
+**Still open after this session (unchanged, none blocking):** the pre-rounding Git-history scrub remains
+the owner's coordinated force-push (runbook in `PRIVACY_REMEDIATION.md` / `scripts/history_scrub.sh`);
+Property A's tax rate area and a market rent for Property A remain privacy-flagged; the local parcel-tax
+certification becomes readable on or after 11 December 2026; the section 6166 instalment election stays
+published as a rule and is not assumed available; the keep-and-borrow path stays priced but not modelled,
+as the suggestions register says.
+
+**Privacy constraint for this session:** no name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term or unrounded owner amount is written to any file this session touches, including this board. Owner-supplied money appears only as a multiple of ten; official amounts appear exactly as the official document prints them. New ledger entries link only to hosts already allowlisted in `scripts/verify.py`.
