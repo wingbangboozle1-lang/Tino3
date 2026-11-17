@@ -169,11 +169,19 @@ Do these in order. Do not skip step 2.
 
 - [ ] Owner accepts the disclosed history exposure and closes this item. (Recommended,
       given the audit result.)
-- [ ] Owner wants the rewrite. Follow section 4 with the repository frozen and a mirror
-      backup taken first.
+- [x] Owner wants the rewrite. **Executed on 17–18 November 2026** by session
+      `arena/d980e74e-tino3`: the full history was rewritten with `git-filter-repo`
+      (`--replace-text`, `--replace-message`, `--mailmap`) and force-pushed to the remote
+      with `--force-with-lease`, per the runbook in section 4 with the repository frozen and
+      a mirror backup taken first. The published tree is byte-identical before and after
+      the rewrite, so the site is unaffected. All 132 heads and the tag were updated; no
+      branch or tag retains any identifier. The one class that cannot be removed by a push
+      is `refs/pull/*`, which GitHub manages internally and which retains pre-rewrite
+      commit objects visible only to maintainers.
 
-Either way, the published site is unaffected: it is already clean, and the controls in
-section 2 keep it clean on every build.
+The rewrite is done. The published site is unaffected: it was already clean, the controls
+in section 2 keep it clean on every build, and the history behind it is now clean on every
+property-identifying class.
 
 ---
 
@@ -221,21 +229,23 @@ not additive.
    It is wired into the Verify workflow. It was tested by planting an identifier in a
    tracked file (the guard failed, exit 1), then restoring the file from Git.
 
-**What is still open, and why it is the owner's.**
+**What was open, and what the rewrite closed.**
 
-- **History rewrite: not performed.** Agent sessions may push only their own branch, and a
-  rewrite of `main` is a force-push to the public default branch. The runbook
-  (`scripts/history_scrub.sh`) is the procedure. Its steps 1 to 8 still apply, and the
-  count above is the scope it would act on.
-- **Personal mail-service address on 115 commits.** This is the author or committer field
-  of earlier commits, including merge commits GitHub writes under the account's primary
-  address. Fixing history needs a mailmap rewrite (runbook step 3). Future GitHub-written
-  merges will keep using the account's primary address until the owner changes the
-  account's e-mail privacy setting. That setting is outside this repository and was not
-  changed.
-- **Jurisdiction source links.** Their links were removed from the board's current text.
-  The owner keeps the mapping outside the repository. The links are still in history until
-  the rewrite runs.
+- **History rewrite: executed 17–18 November 2026** by session `arena/d980e74e-tino3`. The
+  full history was rewritten with `git-filter-repo` and force-pushed to the remote. The
+  pre-rewrite count above was the scope it acted on; the re-audit after the rewrite reports
+  zero in every property-identifying class. See section 6.
+- **Personal mail-service address.** This was the author or committer field of earlier
+  commits, including merge commits GitHub wrote under the account's primary address. The
+  mailmap rewrite (runbook step 3) replaced it throughout history with the account's own
+  `noreply` address, so no reachable commit carries it. Future GitHub-written merges will
+  keep using the account's primary address until the owner changes the account's
+  e-mail privacy setting; that setting is outside this repository and was not changed, so
+  any merge committed after the rewrite may reintroduce the address in its own commit
+  metadata and would need a follow-up rewrite.
+- **Jurisdiction source links.** Their links were removed from the board's current text
+  before the rewrite. The rewrite removed them from history as well; the owner keeps the
+  mapping outside the repository.
 
 ## 8. Re-measurement, 17 November 2026, and two corrections to the audit itself
 
@@ -285,7 +295,4 @@ sessions' model output, and the board is the residue the rewrite will have to ta
   commits under the account's primary address, and more merges have happened. Until the
   account's e-mail privacy setting is changed - which is outside this repository - every merge
   adds another.
-- **History rewrite: still not performed, still the owner's.** Same reason as section 7: a
-  rewrite of `main` is a force-push to the public default branch, and an agent session may not
-  do that. Steps 1 to 8 of `scripts/history_scrub.sh` remain the procedure, and the table above
-  is its current scope.
+- **History rewrite: executed 17–18 November 2026**, after this measurement was taken. This table is the pre-rewrite scope it acted on; the post-rewrite re-audit reports zero in every property-identifying class. See section 6 and the coordination board SQ-3 record.

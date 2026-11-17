@@ -86,24 +86,29 @@ checked for drift. The source links and what they support are listed on `sources
 file (including the coordination board) and fails the Verify workflow on a hit; it prints file, line and
 class only. `scripts/privacy_scrub_audit.py` uses the same patterns for the history audit. The audit
 must be run on a full clone (`git fetch --unshallow`): a shallow clone silently under-reports history.
-On 17 November 2026 the full history (482 commits, 1,869 distinct file versions) still held postal
-codes, place and county names, and an earlier-edition file set, none of it in the current tree, and 172
-commits carry a personal mail-service address in their commit metadata rather than in any file; counts
-are in `PRIVACY_REMEDIATION.md` section 8. Only the owner can run the rewrite. The audit's own two
-miscounts - a GitHub service address treated as personal, and a private copy of the gate's official-amount
-exemptions that had drifted - were corrected on the same date, so the audit now calls the gate's tests
-instead of keeping its own rules.
+
+**The Git history has been scrubbed.** On 17–18 November 2026, at the owner's recorded decision, the
+full history was rewritten with `git-filter-repo` and force-pushed to the remote. The pre-rewrite audit
+(482 commits, 1,869 distinct file versions, measured 17 November 2026) had found postal codes, place and
+county names, an earlier-edition file set, and a personal mail-service address in the commit metadata of
+172 commits; counts and the audit's two own corrections (a GitHub service address no longer counted as
+personal, and the audit now calling the publication gate's tests instead of keeping a drifting private
+copy) are in `PRIVACY_REMEDIATION.md` section 8. The rewrite removed every property-identifying class
+from every reachable commit, and the personal author/committer address was replaced throughout history
+by the account's own `noreply` address. The published tree is byte-identical before and after the
+rewrite, so the site did not change.
 
 `privacy_boundary.py` checks the published artifact for prohibited identifiers and unrounded
-owner-supplied monetary values. The current page set passing that gate does **not** mean all public
-Git history is clean. Earlier commits, pull-request diffs, forks, caches and clones may retain
-previously exposed material.
+owner-supplied monetary values. The current page set passing that gate, and the rewritten history,
+together mean the branch history is clean — but a rewrite cannot recall copies already made.
+Pull-request diffs, forks, caches and clones taken before the rewrite may retain previously exposed
+material, and `refs/pull/*` (which GitHub manages internally) retains pre-rewrite commit objects
+visible only to maintainers.
 
-`scripts/history_scrub.py` and `scripts/history_scrub.sh` document audit and rewrite procedures. The
-rewrite is not performed by ordinary site builds. It changes Git history and requires a coordinated
-force-push; the owner must decide whether and when to run it. A rewrite cannot guarantee removal from
-forks, caches, clones or merged pull-request records. See `PRIVACY_REMEDIATION.md` for the internal
-remediation record. Do not add identifying data to this public repository.
+`scripts/history_scrub.py` and `scripts/history_scrub.sh` document the audit and rewrite procedures.
+The rewrite is not performed by ordinary site builds; it changes Git history and requires a coordinated
+force-push, which is the owner's decision. See `PRIVACY_REMEDIATION.md` for the internal remediation
+record. Do not add identifying data to this public repository.
 
 ## Publication
 

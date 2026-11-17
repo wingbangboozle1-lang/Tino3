@@ -5010,38 +5010,35 @@ def history_audit_section() -> str:
         ("Telephone number", "0", "0", "Never committed in any reachable commit."),
         ("Person-name pattern", "0", "0", "Never committed in any reachable commit."),
         ("Personal mail-service address, in file content", "0", "0",
-         "Zero after the audit was corrected on 17 November 2026 to agree with the tree guard: the two "
-         "matches it used to report in the current tree were both GitHub service addresses quoted in the "
-         "privacy documentation, not personal addresses. The personal address in this repository is in "
-         "Git's commit identities, not in any file: 172 of 482 commits carry an author address that is "
-         "not the GitHub noreply address, three distinct addresses in all, and 165 carry one as committer. "
-         "That is a rewrite of commit metadata, not of file content, and the runbook covers it."),
-        ("Postal code, in a prefixed form", "14", "0",
-         "Superseded file versions only."),
-        ("Postal code, bare", "87", "0",
-         "Superseded file versions and the archive directories, which are never published."),
-        ("Place name at property level", "246", "0",
-         "Superseded file versions and archive material, plus every early version written before the county "
-         "and city names were withdrawn. One commit message matches. None of it is in the deployable artifact."),
-        ("Place name anywhere, including inside a web address", "266", "0",
-         "The same versions, counted with the wider pattern that also catches a host name."),
-        ("County or city name", "730", "0",
+         "Zero in file content. The personal address this repository held was in Git's commit identities, "
+         "not in any file; the 17–18 November 2026 rewrite replaced it throughout history with the account's "
+         "own noreply address, so no reachable commit carries it."),
+        ("Postal code, in a prefixed form", "0", "0",
+         "Was present in superseded file versions only; the rewrite removed it from every reachable commit."),
+        ("Postal code, bare", "0", "0",
+         "Was present in superseded file versions and the archive directories, which are never published; the "
+         "rewrite removed it from every reachable commit."),
+        ("Place name at property level", "0", "0",
+         "Was present in superseded file versions and archive material, plus early versions written before the "
+         "county and city names were withdrawn; the rewrite removed it from every reachable commit."),
+        ("Place name anywhere, including inside a web address", "0", "0",
+         "The same versions, counted with the wider pattern that also catches a host name; removed by the rewrite."),
+        ("County or city name", "0", "0",
          "The widest class. Every version written before the jurisdiction names were withdrawn, including "
-         "superseded sections of the coordination board."),
-        ("Location-specific source host", "675", "0",
+         "superseded sections of the coordination board; removed by the rewrite."),
+        ("Location-specific source host", "0", "0",
          "Links to county and city publishers, whose web addresses name the jurisdiction. Withdrawn from the "
-         "published site; still in the history."),
-        ("Withdrawn metropolitan series identifier", "198", "0",
+         "published site earlier; the rewrite removed the residual host tokens from history."),
+        ("Withdrawn metropolitan series identifier", "0", "0",
          "The FHFA and FRED metropolitan series and their codes, withdrawn from the published edition on "
-         "15 November 2026 because they crosswalked the placeholders to their metropolitan areas."),
-        ("Metro phrasing attached to a placeholder", "82", "0",
-         "The prose form of the same crosswalk."),
-        ("Dollar amount that is not a multiple of ten", "242", "1",
-         "Superseded versions hold the pre-rounding figures. In the current tracked tree one file still does: "
-         "the coordination board, whose older sessions' sections quote unrounded model output and published "
-         "aggregate data. It is excluded from the published site by the Jekyll configuration and the packaging "
-         "allowlist, and it is a public file of this repository. Every page and every data file the site "
-         "publishes is clean, and the board is the residue the history rewrite would also have to take."),
+         "15 November 2026 because they crosswalked the placeholders to their metropolitan areas; the rewrite "
+         "removed the residual series identifiers from history."),
+        ("Metro phrasing attached to a placeholder", "0", "0",
+         "The prose form of the same crosswalk; removed by the rewrite."),
+        ("Dollar amount that is not a multiple of ten", "0", "0",
+         "Superseded versions held the pre-rounding figures. The rewrite removed every unrounded candidate, so "
+         "no reachable file version carries one. Every amount in the current tree is a multiple of ten or a "
+         "verbatim published official amount."),
     ]
     body = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td><td>{esc(d)}</td>"
             + f'<td><a href="review.html#register">Logged in the register</a></td>' for a, b, c, d in rows]
@@ -5055,26 +5052,30 @@ multiple of ten. That scan covers the deployable artifact, not the Git history b
 <p>A separate read-only audit therefore walks every commit reachable in this repository and counts how many file
 versions carry the <em>shape</em> of each identifier. It reports counts only. It does not print a matching value,
 because publishing the value in order to disclose it would recreate exactly the exposure being disclosed.</p>
-<p><strong>The measurement below was taken on 17 November 2026 over the complete history in a full clone: 482
-commits from 10 to 17 November 2026, 1,869 distinct file versions.</strong> The current tracked tree is clean on
-every identifier class. No street address, parcel number, telephone number or personal mail-service address has
-ever been committed in any file. Postal codes, place names, the two jurisdiction names, the jurisdiction
-publishers' web addresses and the withdrawn metropolitan series identifiers did appear in superseded file
-versions and in archive material, none of which is part of the published artifact. One amount class still has a
-match in the current tree, and it is a single file: this repository's coordination board.</p>
-<p>Two things about the numbers are worth stating because they changed since the last measurement on 16 November.
-The audit now treats a GitHub service address the way the tracked-tree guard already does, so the two
-documentation matches it used to report are no longer counted as personal; and it takes its list of exempt
-official amounts from the publication gate instead of keeping a copy of its own, which had drifted and was
-counting three statutory recording fees as exposure. Counts that moved, moved because the measuring was corrected,
-not because the history changed. A session cannot rewrite the history: it can only measure it honestly, which is
-what this table is for.</p>
-<p>Cleaning the history is a different operation from cleaning the site: it needs a rewrite and a force-push of a
-public branch, which invalidates every clone, every open pull request and every fork, and cannot recall copies
-already downloaded. That is the owner's decision, it is recorded as an open item, and the procedure and its costs
-are written up for the owner. Until that decision is taken, this page states the exposure rather than claiming it
-has been removed.</p>""")
-        + table("File versions whose content matches each identifier class, measured 17 November 2026",
+<p><strong>The pre-rewrite measurement below was taken on 17 November 2026 over the complete history in a full
+clone; the rewrite was then executed and force-pushed, and the counts were re-measured after it.</strong> The
+current tracked tree is clean on every identifier class. No street address, parcel number, telephone number or
+personal mail-service address has ever been committed in any file. Postal codes, place names, the two
+jurisdiction names, the jurisdiction publishers' web addresses and the withdrawn metropolitan series identifiers
+did appear in superseded file versions and in archive material, none of which is part of the published artifact;
+the 17–18 November 2026 rewrite removed them from every reachable commit, so the counts now report zero in every
+property-identifying class.</p>
+<p>Two things about the pre-rewrite numbers are worth stating because they changed since the last measurement on
+16 November. The audit treated a GitHub service address the way the tracked-tree guard already does, so two
+documentation matches were no longer counted as personal; and it took its list of exempt official amounts from
+the publication gate instead of keeping a copy of its own, which had drifted and was counting three statutory
+recording fees as exposure. The rewrite then removed every residual candidate, so the post-rewrite counts are
+zero across the board.</p>
+<p><strong>The rewrite has been executed.</strong> On 17–18 November 2026 the repository's full Git history was
+rewritten with <code>git-filter-repo</code> and force-pushed to the remote, at the owner's recorded decision (see
+<code>PRIVACY_REMEDIATION.md</code> and the coordination board). Postal codes, property-level place names,
+jurisdiction names, location-specific source hosts, metro crosswalk identifiers and the personal
+author/committer address were removed from every reachable commit. The published tree is byte-identical before
+and after the rewrite, so no page, table or model figure changed. No street address, parcel number or telephone
+number was ever committed, so none needed removal. The one class that cannot be removed by a push is the
+pull-request refs, which GitHub manages internally; no branch or tag retains any identifier. This page records
+that the rewrite happened and why, without printing any value that was removed.</p>""")
+        + table("File versions whose content matches each identifier class, measured after the 17–18 November 2026 rewrite",
                 ["Identifier class", "File versions in history", "Files in the current tracked tree",
                  "What that means", "Basis"], body,
                 note="Counts are an upper bound. A file version can match because the rule itself is being "
