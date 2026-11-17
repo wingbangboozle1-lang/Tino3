@@ -33,10 +33,68 @@
 | Task | Status | Owner | File scope |
 |---|---|---|---|
 | Y-1 Claim this scope and push before any other edit | **done** — this section | `arena/9cb84094-tino3` | `COORDINATION.md` (this section only) |
-| Y-2 Re-read the borrowing anchors at source (the published 30-year fixed mortgage average and its 2026 low/high weekly values) and re-read the two decision-critical federal figures the new case touches (the 40 percent top estate-tax rate and the nine-month payment clock) | **in progress** | `arena/9cb84094-tino3` | read-only; results recorded here and, if changed, in `assets/data/inputs.json` / `assets/sources.json` |
-| Y-3 Build the keep-and-borrow case end to end: for each anonymous excess band the liquidity engine already publishes, price a fully amortising 30-year fixed loan at the published rate band, charge the payment stream to the keeping paths by the model's own conventions, and set it against the sell route that pays the same tax out of the proceeds; publish whether any band flips the ranking | **in progress** | `arena/9cb84094-tino3` | `scripts/model.py` (new function), `assets/data/model.json` (generated) |
-| Y-4 Publish the case on the estate liquidity page and as a what-if lever, with the loan-to-value arithmetic and the stated limits; close the "Add a mortgage case" improvement row with the implementation record | **in progress** | `arena/9cb84094-tino3` | `scripts/build.py`, `liquidity.html`, `what-if.html`, `suggestions.html`, regenerated pages, `EXECUTIVE_SUMMARY.md`, `README.md` (counts) |
+| Y-2 Re-read the borrowing anchors at source (the published 30-year fixed mortgage average and its 2026 low/high weekly values) and re-read the two decision-critical federal figures the new case touches (the 40 percent top estate-tax rate and the nine-month payment clock) | **done** — result below; no stored value changed, so `assets/data/inputs.json` and `assets/sources.json` are untouched | `arena/9cb84094-tino3` | read-only |
+| Y-3 Build the keep-and-borrow case end to end: for each anonymous excess band the liquidity engine already publishes, price a fully amortising 30-year fixed loan at the published rate band, charge the payment stream to the keeping paths by the model's own conventions, and set it against the sell route that pays the same tax out of the proceeds; publish whether any band flips the ranking | **done** — `scripts/model.py` gained `keep_and_borrow_cases()`, published as `model.json.mortgage_case`; results below | `arena/9cb84094-tino3` | `scripts/model.py` (new function), `assets/data/model.json` (generated) |
+| Y-4 Publish the case on the estate liquidity page and as a what-if lever, with the loan-to-value arithmetic and the stated limits; close the "Add a mortgage case" improvement row with the implementation record | **done** — liquidity page callout and two tables, what-if lever 6 with jump links, decision-page liquidity row updated, glossary entry "Amortisation", improvements row now done, exec summary (page and markdown) and README updated | `arena/9cb84094-tino3` | `scripts/build.py`, `liquidity.html`, `what-if.html`, `decision.html`, `executive-summary.html`, `suggestions.html`, `glossary.html`, `EXECUTIVE_SUMMARY.md`, `README.md` (counts) |
 | Y-5 Rebuild, run every gate, pull request to `main`, merge without waiting, confirm the Pages deploy, record the result | **in progress** | `arena/9cb84094-tino3` | this section only |
+
+### Y-2 result: the anchors re-read at source, 17 November 2026
+
+1. **The 30-year fixed mortgage average: 7.11 in the week of 12 November 2026.** The full FRED
+   series MORTGAGE30US (Freddie Mac Primary Mortgage Market Survey) was downloaded as the
+   publisher's own CSV and the 2026 tail read week by week: the lowest weekly average published
+   in 2026 is **5.98** (26 February) and the highest is **7.40** (8 and 15 October). All three
+   values agree with the anchors `scripts/liquidity.py` already stores, so nothing was corrected.
+2. **The nine-month clock.** The IRS estate-tax FAQ states the due date of the estate tax return
+   is "nine months after the decedent's date of death", with an automatic six-month extension of
+   time to file on Form 4768 - exactly the wording the liquidity page publishes.
+3. **The 40 percent top rate.** Table A—Unified Rate Schedule in the Instructions for Form 706
+   (07/2026), read in full: a taxable amount over $1,000,000 carries $345,800 plus **40 percent**
+   on the excess. The same page's Table of Basic Exclusion Amounts confirms 2026 at $15,000,000
+   and the 2025-through-2026 annual gift exclusion at $19,000.
+4. The 2026 filing threshold of $15,000,000 was confirmed on the IRS estate-tax page itself.
+
+### Y-3 result: the case, its figures and its findings
+
+`scripts/model.py` gained `keep_and_borrow_cases(2045)` (published as `model.json.mortgage_case`).
+For each of the liquidity engine's five anonymous excess bands, the band's tax (40 percent of the
+excess) is raised one of two ways, both priced on the same path engine as the decision page at the
+2045 model:
+
+- **Keep route:** live in the house (or let it out) and borrow the tax against it on a fully
+  amortising 30-year fixed loan at the published 7.11 percent average; the payment stream is
+  charged on the model's own convention (each year's payments at that year's end, compounded at
+  the after-tax equity return, 6.3 percent). The keep-and-let rows credit no rent, so they are a
+  floor, like every letting row on the site.
+- **Sell route:** the proceeds invest through the first year, the band's tax is paid out of them
+  at the end of that year (close to the nine-month due date), and what remains compounds for the
+  years that are left.
+
+Findings, all computed and published, none assumed: **borrowing never becomes the better route at
+any published band** (`borrow_wins_any_band` is false); the payment stream compounds to about 6.7
+times the principal in future value (the smallest band's loan costs $2,691,700 of terminal value
+against the $33,262,780 selling-versus-living gap); the loan for the two largest bands exceeds
+Property A's projected value at the 2045 model ($6,531,230 alone, $10,319,690 for both buildings),
+so the loan-to-value columns are published rather than left implicit; and **the largest band
+($8,000,000 of tax on $20,000,000 of excess) is one the sale route cannot self-fund** - projected
+net proceeds are $6,172,010 - so the route table flags the row and says the shortfall must come
+from other assets. Limits are stated on the page: no rate for the 2040s is published or forecast,
+lender willingness and terms are not modelled, points and closing costs are not modelled, and the
+interest is assumed non-deductible, the conservative reading the site uses everywhere.
+
+Every published figure was re-derived independently outside the build (payment formula, future
+value of the payment stream, both route formulas) and agrees with `model.json` to the dollar.
+
+### Y-4 result
+
+`liquidity.html` carries the callout and two tables (the loan band by band, with
+loan-to-value columns and the low/high future-value band; the two complete routes, with the
+infeasible-sale flag on the largest band). `what-if.html` carries lever 6 with jump links.
+`decision.html`'s debt section now says liquidity is priced end to end and links the case.
+`glossary.html` gained "Amortisation". `suggestions.html`'s improvements register marks
+"Add a mortgage case" done with the implementation record (the S-13 row itself stays proposed
+for the owner, as every S-row does). `EXECUTIVE_SUMMARY.md` and the executive-summary page carry
+the case; README carries it and the verifier's current counts.
 
 **Privacy constraint:** no name, street address, postal code, parcel identifier, county or city name, trust term or unrounded owner amount is added to any file this session writes. The loan principal is the anonymous excess band already published, never an estate size.
 
