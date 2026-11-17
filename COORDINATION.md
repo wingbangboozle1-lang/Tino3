@@ -4277,10 +4277,10 @@ One further conflict inside the rebase onto `82bac65` was in `scripts/build.py`:
 | Task | Status | Owner | File scope |
 |---|---|---|---|
 | C-1 Claim this scope and push before any other edit | **done** — this section | `arena/11bff629-tino3` | `COORDINATION.md` (this section only) |
-| C-2 Repair the board: remove the stray `>>>>>>>` end-marker at line 4140, an artifact of an earlier rebase collision inside the `arena/0069abd3-tino3` section; no other line of that section changes | **done** (`276ff6d`) | `arena/11bff629-tino3` | `COORDINATION.md` (one line removal) |
-| C-3 Correct the `README.md` count drift (the snapshot section says 110 ledger entries; the build reports 112) and re-check every numeric claim in the README against the current build output | **done** (`d7848f6`; final counts restated at 113 rows after C-4's new ledger entry, see the record below) | `arena/11bff629-tino3` | `README.md` (counts only) |
+| C-2 Repair the board: remove the stray `>>>>>>>` end-marker at line 4140, an artifact of an earlier rebase collision inside the `arena/0069abd3-tino3` section; no other line of that section changes | **done** (committed pre-rebase as `276ff6d`; that commit was dropped as empty during the rebase onto `3b86d5a`, because `arena/4f2a543e-tino3`'s M-2 had already removed the same line on `main`. Net effect stands: zero markers anywhere, new guard passes) | `arena/11bff629-tino3` | `COORDINATION.md` (one line removal) |
+| C-3 Correct the `README.md` count drift (the snapshot section says 110 ledger entries; the build reports 112) and re-check every numeric claim in the README against the current build output | **done** (`d7848f6` pre-rebase, `f50803c` after the rebase; final counts restated at 113 ledger entries after C-4's new entry and at the merged build's 1,249 rows, see the record below) | `arena/11bff629-tino3` | `README.md` (counts only) |
 | C-4 Fresh dated re-read of the load-bearing official figures no session has re-opened since 16 November: the federal basic exclusion and 2027 inflation adjustment, the Proposition 19 shelter amount and its next adjustment date, the statewide rent cap, the Form 540 1% surcharge and capital-gain wording, and the status of the pending local parcel-tax certification; correct anything stale, record every confirmation with its source | **done** — see the completion record below | `arena/11bff629-tino3` | read-only against official publishers; corrections via `scripts/build.py`, `assets/data/inputs.json` (notes only), `assets/sources.json` (append only), regenerated pages |
-| C-5 Rebuild, run every gate, open the pull request from this branch to `main`, merge without waiting, confirm the Pages deploy, record the result | **in progress** (all gates green locally; publication record appended after the merge) | `arena/11bff629-tino3` | this section only |
+| C-5 Rebuild, run every gate, open the pull request from this branch to `main`, merge without waiting, confirm the Pages deploy, record the result | **done** — PR **#157** merged; see the publication record below | `arena/11bff629-tino3` | this section only |
 
 
 **Completion record, 17 November 2026 (C-2 to C-4).** Everything below was read at source in this session;
@@ -4350,11 +4350,51 @@ nothing is inferred, and what could not be read says so instead of filling the g
   `verify_legacy.py --config-only` PASS (26 allowlisted files, `_config.yml` untouched this session);
   `git diff --check` clean.
 
+
+**Booklet-name discrepancy logged for the owner and the CPA.** Session `arena/4f2a543e-tino3`'s M-4
+record quotes the official Form 540 booklet as computing the "**Mental Health Services Tax**" above
+$1,000,000; this session's read of the **2025** Instructions for Form 540 (line 62, read 17 November
+2026, quoted verbatim in ledger entry `ftb_540_instructions_2025`) names the same line the
+"**Behavioral Health Services Tax**". Both reads describe the identical computation — taxable income
+minus $1,000,000 times 1 percent, every filing status — so **no figure on the site depends on the
+name**. The difference is the booklet year or the line's current title, not the arithmetic. The site
+carries only this session's 2025-booklet wording with its dated quote; the discrepancy is recorded here
+so a reader who opens an older booklet is not surprised, and so the CPA can confirm the current title
+when the return is prepared.
+
+
 **Still open after this session (unchanged, none blocking):** the pre-rounding Git-history scrub remains
 the owner's coordinated force-push (runbook in `PRIVACY_REMEDIATION.md` / `scripts/history_scrub.sh`);
 Property A's tax rate area and a market rent for Property A remain privacy-flagged; the local parcel-tax
 certification becomes readable on or after 11 December 2026; the section 6166 instalment election stays
 published as a rule and is not assumed available; the keep-and-borrow path stays priced but not modelled,
 as the suggestions register says.
+
+
+### C-5 publication record (17 November 2026)
+
+- **Pull request:** https://github.com/wingbangboozle1-lang/Tino3/pull/157, from `arena/11bff629-tino3`
+  to `main`. The `Verify static site` check on the pull-request head passed (run 44128275676, 30 s)
+  before the merge. Merged without approval, without `--auto`, with `gh pr merge 157 --merge`;
+  merge commit `1fa3a7bd317f1a5654cd84d62abdb238d7b93a3e`, merged 2026-11-17T16:40:42Z.
+- **Post-merge checks on `main`:** `Verify static site` (run 44128487430) success, `Deploy GitHub Pages`
+  (run 44128487478) success, legacy `pages build and deployment` (run 44128485886) success.
+- **Live conformance:** the published taxes page was fetched from
+  <https://wingbangboozle1-lang.github.io/Tino3/taxes.html> after the deploy and serves this edition:
+  the rate table reads 20.0% / 3.8% / 12.3% / 1.0% with the combined **37.1%**, the note reads 36.1%
+  without the surcharge and 37.1% with it, and the section 17043 row carries the 2025 Form 540
+  instructions link and the Behavioral Health Services Tax name.
+- **Rebase log.** One `git pull --rebase origin main` conflicted because sessions `arena/4f2a543e-tino3`
+  (PRs #154-#156) landed while this session worked. The conflict was in `README.md` only (the row-count
+  sentence: their 1,239/1,062 against this session's 1,248/1,071); it was resolved by taking the merged
+  build's actual verify output (1,249/1,072), never by discarding their work, and `COORDINATION.md`,
+  `scripts/build.py` and `assets/sources.json` auto-merged cleanly. After the rebase the remote branch
+  still held this session's own pre-rebase commits (pushed by an interrupted command chain), so one
+  `git push --force-with-lease` replaced them; the remote carried only this session's own commits at
+  that point, and no other session's work was on it.
+- **Footer check-date window.** The page footer's "sources were last checked between 13 and 16 November
+  2026" was stale after this session's reads; it now says 13 and 17 November 2026, shipped in this
+  result PR.
+
 
 **Privacy constraint for this session:** no name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term or unrounded owner amount is written to any file this session touches, including this board. Owner-supplied money appears only as a multiple of ten; official amounts appear exactly as the official document prints them. New ledger entries link only to hosts already allowlisted in `scripts/verify.py`.
