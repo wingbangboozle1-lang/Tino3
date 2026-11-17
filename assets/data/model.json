@@ -5002,6 +5002,158 @@
     "terminal_with_surcharge": -715440
    }
   ],
+  "worksheet": [
+   {
+    "key": "sell_equities",
+    "label": "Sell at inheritance",
+    "gain": 0,
+    "flat_upper_bound": 0,
+    "rungs": [
+     {
+      "other_income": 0,
+      "label": "No other taxable income",
+      "taxable_income": 0,
+      "above_threshold": 0,
+      "surcharge": 0,
+      "surcharge_on_gain": 0,
+      "bracket_tax": 0,
+      "state_total": 0
+     },
+     {
+      "other_income": 250000,
+      "label": "$250,000 of other taxable income",
+      "taxable_income": 250000,
+      "above_threshold": 0,
+      "surcharge": 0,
+      "surcharge_on_gain": 0,
+      "bracket_tax": 30750,
+      "state_total": 30750
+     },
+     {
+      "other_income": 1000000,
+      "label": "$1,000,000 of other taxable income",
+      "taxable_income": 1000000,
+      "above_threshold": 0,
+      "surcharge": 0,
+      "surcharge_on_gain": 0,
+      "bracket_tax": 123000,
+      "state_total": 123000
+     },
+     {
+      "other_income": 2000000,
+      "label": "$2,000,000 of other taxable income",
+      "taxable_income": 2000000,
+      "above_threshold": 1000000,
+      "surcharge": 10000,
+      "surcharge_on_gain": 0,
+      "bracket_tax": 246000,
+      "state_total": 256000
+     }
+    ]
+   },
+   {
+    "key": "live_in",
+    "label": "Live in it, sell after 30 years",
+    "gain": 13487060,
+    "flat_upper_bound": 134870,
+    "rungs": [
+     {
+      "other_income": 0,
+      "label": "No other taxable income",
+      "taxable_income": 13487060,
+      "above_threshold": 12487060,
+      "surcharge": 124870,
+      "surcharge_on_gain": 124870,
+      "bracket_tax": 1658910,
+      "state_total": 1783780
+     },
+     {
+      "other_income": 250000,
+      "label": "$250,000 of other taxable income",
+      "taxable_income": 13737060,
+      "above_threshold": 12737060,
+      "surcharge": 127370,
+      "surcharge_on_gain": 127370,
+      "bracket_tax": 1689660,
+      "state_total": 1817030
+     },
+     {
+      "other_income": 1000000,
+      "label": "$1,000,000 of other taxable income",
+      "taxable_income": 14487060,
+      "above_threshold": 13487060,
+      "surcharge": 134870,
+      "surcharge_on_gain": 134870,
+      "bracket_tax": 1781910,
+      "state_total": 1916780
+     },
+     {
+      "other_income": 2000000,
+      "label": "$2,000,000 of other taxable income",
+      "taxable_income": 15487060,
+      "above_threshold": 14487060,
+      "surcharge": 144870,
+      "surcharge_on_gain": 134870,
+      "bracket_tax": 1904910,
+      "state_total": 2049780
+     }
+    ]
+   },
+   {
+    "key": "rent_out",
+    "label": "Let it out, sell after 30 years",
+    "gain": 18712050,
+    "flat_upper_bound": 187120,
+    "rungs": [
+     {
+      "other_income": 0,
+      "label": "No other taxable income",
+      "taxable_income": 18712050,
+      "above_threshold": 17712050,
+      "surcharge": 177120,
+      "surcharge_on_gain": 177120,
+      "bracket_tax": 2301580,
+      "state_total": 2478700
+     },
+     {
+      "other_income": 250000,
+      "label": "$250,000 of other taxable income",
+      "taxable_income": 18962050,
+      "above_threshold": 17962050,
+      "surcharge": 179620,
+      "surcharge_on_gain": 179620,
+      "bracket_tax": 2332330,
+      "state_total": 2511950
+     },
+     {
+      "other_income": 1000000,
+      "label": "$1,000,000 of other taxable income",
+      "taxable_income": 19712050,
+      "above_threshold": 18712050,
+      "surcharge": 187120,
+      "surcharge_on_gain": 187120,
+      "bracket_tax": 2424580,
+      "state_total": 2611700
+     },
+     {
+      "other_income": 2000000,
+      "label": "$2,000,000 of other taxable income",
+      "taxable_income": 20712050,
+      "above_threshold": 19712050,
+      "surcharge": 197120,
+      "surcharge_on_gain": 187120,
+      "bracket_tax": 2547580,
+      "state_total": 2744700
+     }
+    ]
+   }
+  ],
+  "worksheet_scenarios": [
+   0,
+   250000,
+   1000000,
+   2000000
+  ],
   "recommendation_unchanged": true
  },
  "projections_distribution": {
