@@ -36,6 +36,9 @@ and reinvestment choices.
 - **Rules and the estate:** the trust steps, a dated deadlines timeline with official source links (`timeline.html`), thresholds and the law page.
 - **Properties:** Property A, Property B, and the ownership distinction.
 - **Costs and projections:** Running costs, year-by-year projections, income tax by path.
+- **The letting path, taxed:** the income tax page carries the five statutory rules that decide
+  what a letting year owes, the rent at which the let stops being a tax loss, and the break-even
+  rent re-solved under ten treatments of the result (`taxes.html#letting-tax`).
 - **Rules and estate:** Inheritance process, estate/inheritance tax thresholds, law watch.
 - **Economic uncertainty:** Black-swan conditions and the historical economy record.
 - **Review:** Questions before deciding, suggestions for review, and Flagged for Review.
@@ -55,7 +58,7 @@ basis, actual sale costs, occupancy, rents, insurance, maintenance, utilities, d
 and laws in force at transfer. Missing or unverified property-specific amounts are not presented as
 confirmed; they are identified on the relevant pages and on `review.html`.
 
-There are **25 generated HTML pages** and one stylesheet in the public allowlist. The pages show rounded owner-provided figures, model outputs and official-source-backed legal/economic information. The source ledger contains **112 entries**. Both property placeholders grow with the California state-level FHFA house-price index: the two metropolitan-area series were withdrawn on 15 November 2026 because the index publisher's own metadata crosswalked the placeholders to their metropolitan areas (an audit finding), and the privacy gate now rejects the withdrawn series identifiers and metro phrasing. The jurisdiction-specific entries (the two properties' county and city official pages) were also withdrawn, because their publishers identify the properties. A factual table row either links to an official source or is explicitly registered as unsourceable/unverified.
+There are **25 generated HTML pages** and one stylesheet in the public allowlist. The pages show rounded owner-provided figures, model outputs and official-source-backed legal/economic information. The source ledger contains **120 entries**. Both property placeholders grow with the California state-level FHFA house-price index: the two metropolitan-area series were withdrawn on 15 November 2026 because the index publisher's own metadata crosswalked the placeholders to their metropolitan areas (an audit finding), and the privacy gate now rejects the withdrawn series identifiers and metro phrasing. The jurisdiction-specific entries (the two properties' county and city official pages) were also withdrawn, because their publishers identify the properties. A factual table row either links to an official source or is explicitly registered as unsourceable/unverified. The letting path is the one path that is priced under the income tax rules rather than before them: rent is ordinary income, the building is written off over 27.5 years and recaptured on sale, and a rental loss is suspended rather than deducted. It is published as a band over ten statutory treatments and three stated combined rates, because the household's marginal rate was never supplied.
 
 The Black Swan analysis uses one canonical monthly park-and-phase engine and one short-Treasury
 parking-yield assumption. It includes synthetic stresses and historical entry replays, including
@@ -68,9 +71,9 @@ professional advice when dates, facts or laws change.
 
 ## Published site and verification snapshot
 
-The current generated edition contains **25 HTML pages**, **one runtime stylesheet**, **110 entries
+The current generated edition contains **25 HTML pages**, **one runtime stylesheet**, **120 entries
 in the source ledger**, and **136 content-free withdrawal notices** for retired routes. The latest
-local verification reports **1238 table rows**: **1061 linked to official publishers** and **177
+local verification reports **1302 table rows**: **1125 linked to official publishers** and **177
 explicitly registered as unsourceable or unverified**. A row without a confirming official source is
 not filled in by inference. The public site contains no source ledger or internal model data files;
 the Jekyll and Actions publication boundaries are checked separately.

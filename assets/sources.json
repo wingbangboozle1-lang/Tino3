@@ -1259,6 +1259,78 @@
    "checked": "opened on the publisher's site on 2026-11-16 (2023 edition of the United States Code)",
    "supports": "The compounding convention used in every deferral figure on the liquidity page: interest on unpaid tax compounds daily, not annually.",
    "limits": "The engine on this site compounds on a 365-day year. The IRS determines rates quarterly and may apply them per quarter; small differences are possible against an assessment."
+  },
+  {
+   "id": "irs_niit",
+   "publisher": "Internal Revenue Service",
+   "title": "Net Investment Income Tax",
+   "url": "https://www.irs.gov/individuals/net-investment-income-tax",
+   "checked": "Opened on the publisher's official domain on 2026-11-17.",
+   "supports": "The tax is 3.8% of the lesser of net investment income and the amount by which modified adjusted gross income exceeds the statutory threshold. The thresholds are Married filing jointly $250,000, Married filing separately $125,000, Single or head of household $200,000, Qualifying widow(er) with a child $250,000. Net investment income includes rental and royalty income. Gain on the sale of a personal residence is excluded to the extent section 121 excludes it from gross income.",
+   "limits": "A threshold test, not a rate: it bites only above the stated amount, which is not the household's own figure."
+  },
+  {
+   "id": "irs_niit_qa",
+   "publisher": "Internal Revenue Service",
+   "title": "Questions and Answers on the Net Investment Income Tax",
+   "url": "https://www.irs.gov/newsroom/questions-and-answers-on-the-net-investment-income-tax",
+   "checked": "Opened on the publisher's official domain on 2026-11-17.",
+   "supports": "Confirms the same four thresholds and states in terms that they are not indexed for inflation. States that net investment income includes income from businesses that are passive activities within the meaning of section 469, and that section 121 excluded gain is not net investment income.",
+   "limits": "A general questions page. It does not compute any taxpayer's liability."
+  },
+  {
+   "id": "irs_qbi",
+   "publisher": "Internal Revenue Service",
+   "title": "Qualified business income deduction",
+   "url": "https://www.irs.gov/newsroom/qualified-business-income-deduction",
+   "checked": "Opened on the publisher's official domain on 2026-11-17.",
+   "supports": "The section 199A deduction is up to 20% of qualified business income from a domestic business. A safe harbour under Revenue Procedure 2019-38 can treat a rental real estate enterprise as a trade or business for this purpose only. The deduction is limited to 20% of taxable income minus net capital gain, and for tax years beginning after 2025 an alternative minimum deduction for active qualified business income also applies.",
+   "limits": "The deduction reduces taxable income, not tax at a flat 20%. Whether a rental qualifies depends on facts and records the household has not supplied. California has no equivalent deduction."
+  },
+  {
+   "id": "irs_rp1938",
+   "publisher": "Internal Revenue Service",
+   "title": "Revenue Procedure 2019-38, safe harbor for rental real estate enterprises under section 199A",
+   "url": "https://www.irs.gov/pub/irs-drop/rp-19-38.pdf",
+   "checked": "Opened on the publisher's official domain on 2026-11-17 and read in full.",
+   "supports": "The safe harbour requires, each year: separate books and records for the enterprise; 250 or more hours of rental services performed per year for an enterprise that has existed less than four years, and in any three of the five consecutive taxable years ending with the taxable year for one that has existed at least four years; contemporaneous records of hours, description, dates and who performed the services; and a statement attached to a timely filed original return. Rental services exclude financial or investment management, arranging financing, procuring property, and travel to and from the property. The safe harbour is unavailable for real estate used by the taxpayer as a residence under section 280A(d), for triple net leases, for property rented to a commonly controlled trade or business, and where any part of the interest is a specified service trade or business.",
+   "limits": "A safe harbour for one section only: failing it does not decide whether the rental is a section 162 trade or business, and meeting it does not make the activity non-passive for section 469."
+  },
+  {
+   "id": "uscode168",
+   "publisher": "U.S. Government Publishing Office (GovInfo)",
+   "title": "26 U.S.C. section 168 - Accelerated cost recovery system",
+   "url": "https://www.govinfo.gov/content/pkg/USCODE-2024-title26/html/USCODE-2024-title26-subtitleA-chap1-subchapB-partVI-sec168.htm",
+   "checked": "Opened on the publisher's official domain on 2026-11-17 and read in full.",
+   "supports": "Residential rental property has a 27.5-year recovery period, is recovered on the straight-line method, and uses the mid-month convention. Salvage value is treated as zero. Residential rental property is a building or structure of which 80% or more of the gross rental income is from dwelling units. Land is not depreciable property under this section, which is why the building share of the value is what is recovered.",
+   "limits": "The statute sets the method and the period; it does not allocate a purchase price between land and building."
+  },
+  {
+   "id": "uscode1014",
+   "publisher": "U.S. Government Publishing Office (GovInfo)",
+   "title": "26 U.S.C. section 1014 - Basis of property acquired from a decedent",
+   "url": "https://www.govinfo.gov/content/pkg/USCODE-2024-title26/html/USCODE-2024-title26-subtitleA-chap1-subchapO-partII-sec1014.htm",
+   "checked": "Opened on the publisher's official domain on 2026-11-17 and read in full.",
+   "supports": "Basis is the fair market value at the date of death, or the value at the alternate valuation date if the executor elects section 2032. Subsection (b)(6) extends the step-up to the surviving spouse's one-half share of community property where at least one half of the whole community interest was includible in the decedent's gross estate. Subsection (b)(9) covers property required to be included in the gross estate by reason of death, form of ownership or other conditions. Subsection (f) caps basis at the value finally determined for estate tax, or the value on a section 6035 statement.",
+   "limits": "The step-up is not automatic for every interest. Joint tenancy, a life estate, and property held outside the gross estate can each leave part of the property carrying the decedent's old basis."
+  },
+  {
+   "id": "uscode2032",
+   "publisher": "U.S. Government Publishing Office (GovInfo)",
+   "title": "26 U.S.C. section 2032 - Alternate valuation",
+   "url": "https://www.govinfo.gov/content/pkg/USCODE-2024-title26/html/USCODE-2024-title26-subtitleB-chap11-subchapA-partIII-sec2032.htm",
+   "checked": "Opened on the publisher's official domain on 2026-11-17 and read in full.",
+   "supports": "On the executor's election the gross estate is valued six months after death, or on the date of distribution or sale for property disposed of within that six months. The election is available only if it decreases both the value of the gross estate and the sum of the estate tax and the chapter 13 tax, is made on the return, is irrevocable, and cannot be made if the return is filed more than one year after the due date including extensions.",
+   "limits": "Available only when values have fallen, and it binds the income tax basis under section 1014(a)(2) as well."
+  },
+  {
+   "id": "ftb_3801",
+   "publisher": "California Franchise Tax Board",
+   "title": "2025 Instructions for Form FTB 3801, Passive Activity Loss Limitations",
+   "url": "https://www.ftb.ca.gov/forms/2025/2025-3801-instructions.html",
+   "checked": "Opened on the publisher's official domain on 2026-11-17.",
+   "supports": "California did not conform to section 469(c)(7): for California purposes all rental activities are passive activities, so the federal real estate professional exception does not apply and a rental loss can only be used against passive income or through the special allowance. California does have a $25,000 special allowance for rental real estate with active participation, reduced as modified adjusted gross income runs from $100,000 to $150,000 ($75,000 for married or registered domestic partners filing separately who lived apart all year). A trust does not qualify for the allowance; an estate may use it for two years after the death of a taxpayer who had actively participated.",
+   "limits": "Form instructions, described by the Franchise Tax Board itself as a summary and not authoritative law."
   }
  ]
 }
