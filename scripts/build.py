@@ -2471,7 +2471,7 @@ robust, the magnitude is an upper bound.</p>""")
                  + src_cell(["irs_tc559"], "Official source"),
                  f"<td>California top marginal bracket, 2025 and 2026 schedules</td><td>{pcf(0.123, 1)}</td>"
                  f"<td>Taxable income above the top bracket start, indexed annually; the 2026 schedule shows the same structure</td>"
-                 + src_cell(["ftb_rates", "ftb_rates_2026"], "Official source"),
+                 + src_cell(["ftb_rates", "ftb_rates_2026", "ftb_sched_ca_540"], "Official source"),
                  f"<td>California additional tax, section 17043</td><td>{pcf(0.01, 1)}</td>"
                  f"<td>Taxable income above $1,000,000, not indexed, every filing status; "
                  f"the 2025 Form 540 booklet reports it on line 62 as the Behavioral Health Services Tax</td>"
@@ -2482,7 +2482,107 @@ robust, the magnitude is an upper bound.</p>""")
                  + method_cell("#method", "Model output")],
                 note="The top California bracket is indexed every year, so its start rises; section 17043's "
                      "threshold does not. The model applies the combined rate to the entire gain, which "
-                     "overstates the tax rather than understating it."))
+                     "overstates the tax rather than understating it.")
+        + surcharge_worksheet_section())
+
+
+
+def surcharge_worksheet_section() -> str:
+    """The 1% computed the way the Form 540 instructions compute it.
+
+    Added after the owner asked for the official Form 540 instructions to be read and
+    the sensitivity value updated. The table above prices the surcharge as a flat
+    one-point difference on the entire gain. That is an upper bound. The form's own
+    line 62 worksheet works on the slice of *taxable income* above $1,000,000, so the
+    figure the household would actually enter depends on what else the return carries
+    in the year of sale. Both are published side by side rather than replacing one
+    with the other, because the ceiling is the honest worst case and the worksheet is
+    the honest number.
+    """
+    ss = MODEL.get("surcharge_sensitivity") or {}
+    ws = ss.get("worksheet") or []
+    if not ws:
+        return ""
+    rows = []
+    for block in ws:
+        for r in block["rungs"]:
+            rows.append(
+                f"<td>{esc(block['label'])}</td><td>{m(block['gain'])}</td>"
+                f"<td>{esc(r['label'])}</td><td>{m(r['taxable_income'])}</td>"
+                f"<td>{m(r['above_threshold'])}</td><td>{m(r['surcharge'])}</td>"
+                + method_cell("#method", "Model output"))
+    marginal = table(
+        "The line 62 worksheet on the same three sales",
+        ["Path", "Taxable gain", "Other taxable income in the year of sale",
+         "Taxable income (line 19)", "Above $1,000,000 (line 2 to 3)",
+         "1% under line 62 (line 5)", "Basis"],
+        rows,
+        note=("Four assumed levels of other income stand in for the rest of the return, because the "
+              "surcharge is computed on total taxable income and not on the gain alone. They are "
+              "scenarios, not figures from the household. The line 62 arithmetic is: taxable income, "
+              "less $(1,000,000), times 1%. A gain under the threshold carries no surcharge at all, "
+              "however large it is - which is the single most useful thing the worksheet shows."))
+
+    caused = table(
+        "How much of the 1% the gain actually causes",
+        ["Path", "Worst case: 1% on the whole gain", "1% caused by the gain, no other income",
+         "1% caused by the gain, $1,000,000 of other income", "Verdict"],
+        [f"<td>{esc(b['label'])}</td><td>{m(b['flat_upper_bound'])}</td>"
+         f"<td>{m(b['rungs'][0]['surcharge_on_gain'])}</td>"
+         f"<td>{m(b['rungs'][2]['surcharge_on_gain'])}</td>"
+         + f"<td>{'Nothing to tax' if b['gain'] == 0 else 'The ceiling holds'}</td>"
+         + method_cell("#method", "Model output") for b in ws],
+        note=("The middle and right columns count only the part of the surcharge that disappears if "
+              "the house is not sold. Other income above the threshold attracts the 1% whether or not "
+              "a sale happens, so charging that part to the sale would overstate what the decision "
+              "costs. On a sale at inheritance the gain is about zero and so is the surcharge: there "
+              "is nothing above the threshold for the gain to push there."))
+
+    other_mid = ss['worksheet_scenarios'][2] if len(ss.get('worksheet_scenarios') or []) > 2 else 1000000
+    return (
+        '<h2>The same tax, computed the way Form 540 computes it</h2>'
+        + callout("key", "What the Form 540 instructions actually say", f"""
+<p>The instruction for <strong>line 62</strong> of Form 540 does not describe a rate applied to a gain.
+It gives a five-step worksheet: taxable income from line 19, less $(1,000,000), multiplied by 1%.
+The form's name for the tax is the <strong>Behavioral Health Services Tax</strong>; the statute behind it is
+Revenue and Taxation Code section 17043, which is what the model has always used. Three things follow,
+and they change the sensitivity rather than the recommendation:</p>
+<ul>
+<li><strong>It is a tax on total taxable income, not on the sale.</strong> A gain of
+{m(ws[1]['gain'])} that lands on a return with no other income is taxed on
+{m(ws[1]['rungs'][0]['above_threshold'])} of income above the line. The same gain on a return already
+carrying {m(other_mid)} of taxable income is taxed on {m(ws[1]['rungs'][2]['above_threshold'])}.</li>
+<li><strong>A gain below the threshold carries none of it.</strong> The first block of the table above
+is the path this site recommends. The basis step-up leaves a gain of
+{m(ws[0]['gain'])}, so there is nothing above the threshold for the 1% to reach, and the
+surcharge is <strong>{m(ws[0]['flat_upper_bound'])}</strong> under the flat ceiling and
+<strong>{m(ws[0]['rungs'][0]['surcharge_on_gain'])}</strong> on the worksheet. The only surcharge that
+appears in that block is the {m(ws[0]['rungs'][-1]['surcharge'])} which the household's other income
+would owe in any case, and which is therefore not a cost of selling.</li>
+<li><strong>The flat figure in the earlier table is a ceiling, and it holds.</strong>
+{m(ws[1]['flat_upper_bound'])} is the most the one point can ever cost on that gain. The worksheet
+reaches it as soon as other taxable income has already filled the space below the threshold, and it
+cannot exceed it, because the gain can only be taxed on that part of itself which lands above the
+threshold. With no other income a slice of the gain itself sits below the line and escapes the point, so
+the true cost is <strong>{m(ws[1]['rungs'][0]['surcharge_on_gain'])}</strong>, not
+{m(ws[1]['flat_upper_bound'])}.</li>
+</ul>""")
+        + marginal
+        + caused
+        + callout("flag", "Two limits on this worksheet, stated rather than buried", f"""
+<ul>
+<li><strong>The bracket tax beside it is a flat approximation.</strong> The worksheet columns price the
+1% exactly, but the state total in the model applies the top printed bracket of {pcf(12.3, 1)} to all
+taxable income instead of walking the published schedule, which overstates the bracket tax. It does not
+affect the 1%, which is correctly a flat rate on the slice above the threshold. A prepared return would
+use the {pcf(12.3, 1)} bracket only on the top slice, as the schedules printed for each filing status
+require.</li>
+<li><strong>California does not conform to every federal change.</strong> The Schedule CA (540)
+instructions state on their face that the Revenue and Taxation Code generally does not conform to the One
+Big Beautiful Bill Act, and the line 7a instruction confirms California taxes long and short term capital
+gains as regular income with no special rate. A year-of-sale return must be prepared on that year's forms;
+the figures here are a planning calculation, not a return.</li>
+</ul>"""))
 
 
 def page_inheritance() -> str:
