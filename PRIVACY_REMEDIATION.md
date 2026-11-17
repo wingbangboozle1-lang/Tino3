@@ -236,3 +236,56 @@ not additive.
 - **Jurisdiction source links.** Their links were removed from the board's current text.
   The owner keeps the mapping outside the repository. The links are still in history until
   the rewrite runs.
+
+## 8. Re-measurement, 17 November 2026, and two corrections to the audit itself
+
+**Why another measurement.** Two days of further work, and a check of the audit's own
+assumptions. Same method as section 7: full clone (`git fetch --unshallow`), the publication
+gate's patterns, counts only.
+
+**Result.** Scope: 482 commits from 10 to 17 November 2026, 1,869 distinct file versions,
+audited at `82f1e6fc`.
+
+| Class (gate pattern) | Distinct file versions | Paths | Commit messages | Current tracked tree |
+|---|---|---|---|---|
+| Street address, parcel number, telephone, person name | **0** | 0 | 0 | **0** |
+| Mail-service address, in file content | **0** | 0 | 0 | **0** |
+| Postal code, bare and prefixed | 87 and 14 | 25 and 6 | 0 | **0** |
+| Property-level place name | 246 | 49 | 1 | **0** |
+| Place name, including inside web addresses | 266 | 53 | 1 | **0** |
+| County or city (jurisdiction) name | 730 | 102 | 1 | **0** |
+| Location-specific source host | 675 | 77 | 0 | **0** |
+| Withdrawn metro series identifier, and metro phrasing | 198 and 82 | 16 and 9 | 0 | **0** |
+| Amount not a multiple of ten | 242 | 29 | 0 | **1** (`COORDINATION.md`) |
+
+**Correction 1 - service addresses are not personal.** The audit counted three historical file
+versions and two current-tree files as carrying a mail-service address. Both current-tree
+matches were GitHub's own `noreply.github.com` service address, quoted in the documentation of
+the privacy procedure itself (`PRIVACY_REMEDIATION.md` and `scripts/history_scrub.sh`). The tree
+guard had already learned this and exempts `@github.com`; the audit had not, so the two tools
+disagreed. The audit now treats the class the same way. The current tree is **0**, and the
+published site never held either file.
+
+**Correction 2 - one exemption list, not two.** The audit kept its own copy of the gate's list
+of official amounts that are not multiples of ten, and the copy had drifted: it did not know
+about the three statutory recording fees ($3, $75, $225) that the published pages quote
+verbatim. The audit therefore reported seven current-tree files as carrying unrounded amounts
+where the publication gate reports one. It now calls the gate's own test instead of
+reimplementing it, so the two cannot disagree again, and the answer is the same one the gate
+gives: **one** file, the coordination board, which is excluded from the published artifact by
+the Jekyll configuration and by the packaging allowlist. Its history sections quote earlier
+sessions' model output, and the board is the residue the rewrite will have to take.
+
+**What did not change, and it matters more than the counts.**
+
+- **Personal address on commits.** 172 of 482 commits carry a non-service author address and
+  165 a non-service committer address, across three distinct addresses. This is commit metadata,
+  not file content: no file-pattern audit sees it, and it is fixed only by the mailmap rewrite
+  in runbook step 3. It has grown since section 7's count of 115 because GitHub writes merge
+  commits under the account's primary address, and more merges have happened. Until the
+  account's e-mail privacy setting is changed - which is outside this repository - every merge
+  adds another.
+- **History rewrite: still not performed, still the owner's.** Same reason as section 7: a
+  rewrite of `main` is a force-push to the public default branch, and an agent session may not
+  do that. Steps 1 to 8 of `scripts/history_scrub.sh` remain the procedure, and the table above
+  is its current scope.

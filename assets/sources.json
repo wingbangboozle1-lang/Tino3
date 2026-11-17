@@ -1344,6 +1344,47 @@
    "checked": "Read at the publisher on 2026-11-17 (this session). Part I, Section A, line 7a and the General Information conformity list were read in full.",
    "supports": "On line 7a, capital gain or loss: \"Generally, no adjustments are made on this line. California taxes long and short term capital gains as regular income. No special rate for long term capital gains exists.\" The same paragraph lists \"Gain on the sale of personal residence where depreciation was allowable\" among the items for which California basis can differ from federal basis, to be resolved on Schedule D (540). The General Information section lists the One Big Beautiful Bill Act among the federal acts to which the Revenue and Taxation Code generally does not conform.",
    "limits": "The schedule adjusts federal amounts; it does not state a rate, which comes from the Form 540 schedules and section 17043. The depreciation-allowable point applies to a home that was let before it was sold, which is the live-then-let case on this site."
+  },
+  {
+   "id": "rtc62",
+   "publisher": "California Legislative Information",
+   "title": "Revenue and Taxation Code section 62 - transfers that are not a change in ownership",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=62",
+   "verifies": [
+    "\"Change in ownership shall not include: ... (c) (1) The creation, assignment, termination, or reconveyance of a security interest; or (2) the substitution of a trustee under a security instrument.\""
+   ],
+   "quote": "Change in ownership shall not include: ... (c) (1) The creation, assignment, termination, or reconveyance of a security interest; or (2) the substitution of a trustee under a security instrument.",
+   "checked": "Section 62 read in full on the publisher's official domain on 2026-11-17, including subdivision (c), on which this citation rests. The quotation below was transcribed from that reading, not from memory: subdivision (c) reads \"(1) The creation, assignment, termination, or reconveyance of a security interest; or (2) the substitution of a trustee under a security instrument.\"",
+   "supports": "The rule that granting a mortgage or a home equity line on the home is not a change in ownership, so borrowing does not trigger a reassessment and does not disturb the Proposition 19 position, unlike letting the home out.",
+   "limits": "The section lists transfers excluded from change in ownership generally; it is not a Proposition 19 provision and confers no shelter of its own."
+  },
+  {
+   "id": "irs_p936",
+   "publisher": "Internal Revenue Service",
+   "title": "Publication 936 (2025), Home Mortgage Interest Deduction",
+   "url": "https://www.irs.gov/publications/p936",
+   "verifies": [
+    "\"Interest on home equity loans and lines of credit are deductible only if the borrowed funds are used to buy, build, or substantially improve the taxpayer's home that secures the loan.\"",
+    "Home acquisition debt taken out after December 15, 2017 is deductible only up to $750,000 ($375,000 if married filing separately); debt taken out between October 13, 1987 and December 16, 2017 is capped at $1,000,000.",
+    "The deduction requires itemising on Schedule A and a secured debt on a qualified home."
+   ],
+   "quote": "Interest on home equity loans and lines of credit are deductible only if the borrowed funds are used to buy, build, or substantially improve the taxpayer's home that secures the loan.",
+   "checked": "Part I of the publication read on the publisher's site on 2026-11-17.",
+   "supports": "The rule behind this site assuming no deduction for interest on money taken out of a home to invest it, and the statutory caps it quotes for acquisition debt.",
+   "limits": "The publication is the 2025 edition. It does not decide whether interest on a specific loan is deductible as investment interest; that turns on the taxpayer's other return data, and it is a question for the preparer."
+  },
+  {
+   "id": "fred_prime",
+   "publisher": "Federal Reserve Bank of St. Louis (data: Board of Governors of the Federal Reserve System)",
+   "title": "Prime Rate, daily (series DPRIME, H.15 statistical release)",
+   "url": "https://fred.stlouisfed.org/series/DPRIME",
+   "verifies": [
+    "7.00 percent on every business day published from 1 October 2026 through 9 November 2026"
+   ],
+   "quote": "2026-10-01,7.00 ... 2026-11-09,7.00",
+   "checked": "Series CSV opened on the publisher's site on 2026-11-17 for 1 October to 30 November 2026; the last observation published in that window is 9 November 2026.",
+   "supports": "The index a home equity line is priced off, used on the keep-and-borrow page as the interest-only rung with no margin added.",
+   "limits": "Prime is the rate banks quote their most creditworthy customers. A home equity line is quoted at prime plus a margin set by the lender, and no official source publishes a margin for a specific borrower."
   }
  ]
 }
