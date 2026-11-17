@@ -53,13 +53,13 @@
    "inherit_year": 2040,
    "value_at_death": 5368200,
    "terminal_price": 17411200,
-   "bill_if_live_year1": 45910,
-   "terminal_live": 4440110,
+   "bill_if_live_year1": 45360,
+   "terminal_live": 4499810,
    "terminal_sell": 31714550,
    "sell_costs": 295250,
    "sell_tax": 0,
    "sale_net_at_horizon": 12433650,
-   "carry_fv": 7993540,
+   "carry_fv": 7933840,
    "horizon_year": 2070,
    "rungs": [
     {
@@ -87,9 +87,9 @@
      "rate_pct": 5.98,
      "rate_label": "5.98%",
      "rate_basis": "the lowest weekly average published in 2026 (week of 26 February 2026)",
-     "terminal_borrow": 5230710,
+     "terminal_borrow": 5290410,
      "gap_vs_live": 790600,
-     "gap_vs_sell": -26483840,
+     "gap_vs_sell": -26424140,
      "cash_released_vs_sale": 1852030,
      "payment_vs_tax_multiple": 3.3
     },
@@ -118,9 +118,9 @@
      "rate_pct": 7.11,
      "rate_label": "7.11%",
      "rate_basis": "the latest published weekly average (week of 12 November 2026)",
-     "terminal_borrow": 3734480,
+     "terminal_borrow": 3794180,
      "gap_vs_live": -705630,
-     "gap_vs_sell": -27980070,
+     "gap_vs_sell": -27920370,
      "cash_released_vs_sale": 1852030,
      "payment_vs_tax_multiple": 3.7
     },
@@ -149,9 +149,9 @@
      "rate_pct": 7.4,
      "rate_label": "7.40%",
      "rate_basis": "the highest weekly average published in 2026 (weeks of 8 and 15 October 2026)",
-     "terminal_borrow": 3341770,
+     "terminal_borrow": 3401470,
      "gap_vs_live": -1098340,
-     "gap_vs_sell": -28372780,
+     "gap_vs_sell": -28313080,
      "cash_released_vs_sale": 1852030,
      "payment_vs_tax_multiple": 3.8
     },
@@ -180,9 +180,9 @@
      "rate_pct": 7.0,
      "rate_label": "7.00% prime, interest only",
      "rate_basis": "a line priced at the published prime with no margin, interest only, balance unchanged to the horizon",
-     "terminal_borrow": 3187130,
+     "terminal_borrow": 3246830,
      "gap_vs_live": -1252980,
-     "gap_vs_sell": -28527420,
+     "gap_vs_sell": -28467720,
      "cash_released_vs_sale": 1852030,
      "payment_vs_tax_multiple": 3.3
     },
@@ -211,9 +211,9 @@
      "rate_pct": 5.98,
      "rate_label": "5.98%",
      "rate_basis": "the lowest weekly average published in 2026 (week of 26 February 2026)",
-     "terminal_borrow": 5626000,
+     "terminal_borrow": 5685700,
      "gap_vs_live": 1185890,
-     "gap_vs_sell": -26088550,
+     "gap_vs_sell": -26028850,
      "cash_released_vs_sale": 2925670,
      "payment_vs_tax_multiple": 5.0
     },
@@ -242,11 +242,11 @@
      "rate_pct": 7.11,
      "rate_label": "7.11%",
      "rate_basis": "the latest published weekly average (week of 12 November 2026)",
-     "terminal_borrow": 3381670,
+     "terminal_borrow": 3441370,
      "gap_vs_live": -1058440,
-     "gap_vs_sell": -28332880,
+     "gap_vs_sell": -28273180,
      "cash_released_vs_sale": 2925670,
-     "payment_vs_tax_multiple": 5.5
+     "payment_vs_tax_multiple": 5.6
     },
     {
      "loan": 3220920,
@@ -273,11 +273,11 @@
      "rate_pct": 7.4,
      "rate_label": "7.40%",
      "rate_basis": "the highest weekly average published in 2026 (weeks of 8 and 15 October 2026)",
-     "terminal_borrow": 2792610,
+     "terminal_borrow": 2852310,
      "gap_vs_live": -1647500,
-     "gap_vs_sell": -28921940,
+     "gap_vs_sell": -28862240,
      "cash_released_vs_sale": 2925670,
-     "payment_vs_tax_multiple": 5.7
+     "payment_vs_tax_multiple": 5.8
     },
     {
      "loan": 3220920,
@@ -304,11 +304,11 @@
      "rate_pct": 7.0,
      "rate_label": "7.00% prime, interest only",
      "rate_basis": "a line priced at the published prime with no margin, interest only, balance unchanged to the horizon",
-     "terminal_borrow": 2560630,
+     "terminal_borrow": 2620330,
      "gap_vs_live": -1879480,
-     "gap_vs_sell": -29153920,
+     "gap_vs_sell": -29094220,
      "cash_released_vs_sale": 2925670,
-     "payment_vs_tax_multiple": 4.9
+     "payment_vs_tax_multiple": 5.0
     },
     {
      "loan": 4294560,
@@ -335,11 +335,11 @@
      "rate_pct": 5.98,
      "rate_label": "5.98%",
      "rate_basis": "the lowest weekly average published in 2026 (week of 26 February 2026)",
-     "terminal_borrow": 6021300,
+     "terminal_borrow": 6081000,
      "gap_vs_live": 1581190,
-     "gap_vs_sell": -25693250,
+     "gap_vs_sell": -25633550,
      "cash_released_vs_sale": 3999310,
-     "payment_vs_tax_multiple": 6.6
+     "payment_vs_tax_multiple": 6.7
     },
     {
      "loan": 4294560,
@@ -366,11 +366,11 @@
      "rate_pct": 7.11,
      "rate_label": "7.11%",
      "rate_basis": "the latest published weekly average (week of 12 November 2026)",
-     "terminal_borrow": 3028860,
+     "terminal_borrow": 3088560,
      "gap_vs_live": -1411250,
-     "gap_vs_sell": -28685690,
+     "gap_vs_sell": -28625990,
      "cash_released_vs_sale": 3999310,
-     "payment_vs_tax_multiple": 7.4
+     "payment_vs_tax_multiple": 7.5
     },
     {
      "loan": 4294560,
@@ -397,11 +397,11 @@
      "rate_pct": 7.4,
      "rate_label": "7.40%",
      "rate_basis": "the highest weekly average published in 2026 (weeks of 8 and 15 October 2026)",
-     "terminal_borrow": 2243440,
+     "terminal_borrow": 2303140,
      "gap_vs_live": -2196670,
-     "gap_vs_sell": -29471110,
+     "gap_vs_sell": -29411410,
      "cash_released_vs_sale": 3999310,
-     "payment_vs_tax_multiple": 7.6
+     "payment_vs_tax_multiple": 7.7
     },
     {
      "loan": 4294560,
@@ -428,11 +428,11 @@
      "rate_pct": 7.0,
      "rate_label": "7.00% prime, interest only",
      "rate_basis": "a line priced at the published prime with no margin, interest only, balance unchanged to the horizon",
-     "terminal_borrow": 1934140,
+     "terminal_borrow": 1993840,
      "gap_vs_live": -2505970,
-     "gap_vs_sell": -29780410,
+     "gap_vs_sell": -29720710,
      "cash_released_vs_sale": 3999310,
-     "payment_vs_tax_multiple": 6.5
+     "payment_vs_tax_multiple": 6.6
     }
    ],
    "term_rungs": [
@@ -456,9 +456,9 @@
      "hurdle_return_pct": 6.61,
      "interest_only": false,
      "term_years": 15,
-     "terminal_borrow": 4033330,
+     "terminal_borrow": 4093030,
      "gap_vs_live": -406780,
-     "gap_vs_sell": -27681220
+     "gap_vs_sell": -27621520
     },
     {
      "loan": 3220920,
@@ -480,9 +480,9 @@
      "hurdle_return_pct": 6.7,
      "interest_only": false,
      "term_years": 20,
-     "terminal_borrow": 3783340,
+     "terminal_borrow": 3843040,
      "gap_vs_live": -656770,
-     "gap_vs_sell": -27931210
+     "gap_vs_sell": -27871510
     },
     {
      "loan": 3220920,
@@ -504,9 +504,9 @@
      "hurdle_return_pct": 6.8,
      "interest_only": false,
      "term_years": 30,
-     "terminal_borrow": 3381670,
+     "terminal_borrow": 3441370,
      "gap_vs_live": -1058440,
-     "gap_vs_sell": -28332880
+     "gap_vs_sell": -28273180
     }
    ]
   },
@@ -514,13 +514,13 @@
    "inherit_year": 2045,
    "value_at_death": 6531230,
    "terminal_price": 21183380,
-   "bill_if_live_year1": 57060,
-   "terminal_live": 5322760,
+   "bill_if_live_year1": 56180,
+   "terminal_live": 5418970,
    "terminal_sell": 38585540,
    "sell_costs": 359220,
    "sell_tax": 0,
    "sale_net_at_horizon": 15107350,
-   "carry_fv": 9784590,
+   "carry_fv": 9688380,
    "horizon_year": 2075,
    "rungs": [
     {
@@ -548,11 +548,11 @@
      "rate_pct": 5.98,
      "rate_label": "5.98%",
      "rate_basis": "the lowest weekly average published in 2026 (week of 26 February 2026)",
-     "terminal_borrow": 6284640,
+     "terminal_borrow": 6380850,
      "gap_vs_live": 961880,
-     "gap_vs_sell": -32300900,
+     "gap_vs_sell": -32204690,
      "cash_released_vs_sale": 2253270,
-     "payment_vs_tax_multiple": 3.2
+     "payment_vs_tax_multiple": 3.3
     },
     {
      "loan": 2612490,
@@ -579,11 +579,11 @@
      "rate_pct": 7.11,
      "rate_label": "7.11%",
      "rate_basis": "the latest published weekly average (week of 12 November 2026)",
-     "terminal_borrow": 4464260,
+     "terminal_borrow": 4560470,
      "gap_vs_live": -858500,
-     "gap_vs_sell": -34121280,
+     "gap_vs_sell": -34025070,
      "cash_released_vs_sale": 2253270,
-     "payment_vs_tax_multiple": 3.6
+     "payment_vs_tax_multiple": 3.7
     },
     {
      "loan": 2612490,
@@ -610,11 +610,11 @@
      "rate_pct": 7.4,
      "rate_label": "7.40%",
      "rate_basis": "the highest weekly average published in 2026 (weeks of 8 and 15 October 2026)",
-     "terminal_borrow": 3986470,
+     "terminal_borrow": 4082680,
      "gap_vs_live": -1336290,
-     "gap_vs_sell": -34599070,
+     "gap_vs_sell": -34502860,
      "cash_released_vs_sale": 2253270,
-     "payment_vs_tax_multiple": 3.7
+     "payment_vs_tax_multiple": 3.8
     },
     {
      "loan": 2612490,
@@ -641,11 +641,11 @@
      "rate_pct": 7.0,
      "rate_label": "7.00% prime, interest only",
      "rate_basis": "a line priced at the published prime with no margin, interest only, balance unchanged to the horizon",
-     "terminal_borrow": 3798310,
+     "terminal_borrow": 3894520,
      "gap_vs_live": -1524450,
-     "gap_vs_sell": -34787230,
+     "gap_vs_sell": -34691020,
      "cash_released_vs_sale": 2253270,
-     "payment_vs_tax_multiple": 3.2
+     "payment_vs_tax_multiple": 3.3
     },
     {
      "loan": 3918740,
@@ -672,11 +672,11 @@
      "rate_pct": 5.98,
      "rate_label": "5.98%",
      "rate_basis": "the lowest weekly average published in 2026 (week of 26 February 2026)",
-     "terminal_borrow": 6765580,
+     "terminal_borrow": 6861790,
      "gap_vs_live": 1442820,
-     "gap_vs_sell": -31819960,
+     "gap_vs_sell": -31723750,
      "cash_released_vs_sale": 3559520,
-     "payment_vs_tax_multiple": 4.8
+     "payment_vs_tax_multiple": 4.9
     },
     {
      "loan": 3918740,
@@ -703,11 +703,11 @@
      "rate_pct": 7.11,
      "rate_label": "7.11%",
      "rate_basis": "the latest published weekly average (week of 12 November 2026)",
-     "terminal_borrow": 4035010,
+     "terminal_borrow": 4131220,
      "gap_vs_live": -1287750,
-     "gap_vs_sell": -34550530,
+     "gap_vs_sell": -34454320,
      "cash_released_vs_sale": 3559520,
-     "payment_vs_tax_multiple": 5.4
+     "payment_vs_tax_multiple": 5.5
     },
     {
      "loan": 3918740,
@@ -734,11 +734,11 @@
      "rate_pct": 7.4,
      "rate_label": "7.40%",
      "rate_basis": "the highest weekly average published in 2026 (weeks of 8 and 15 October 2026)",
-     "terminal_borrow": 3318320,
+     "terminal_borrow": 3414530,
      "gap_vs_live": -2004440,
-     "gap_vs_sell": -35267220,
+     "gap_vs_sell": -35171010,
      "cash_released_vs_sale": 3559520,
-     "payment_vs_tax_multiple": 5.6
+     "payment_vs_tax_multiple": 5.7
     },
     {
      "loan": 3918740,
@@ -765,11 +765,11 @@
      "rate_pct": 7.0,
      "rate_label": "7.00% prime, interest only",
      "rate_basis": "a line priced at the published prime with no margin, interest only, balance unchanged to the horizon",
-     "terminal_borrow": 3036090,
+     "terminal_borrow": 3132300,
      "gap_vs_live": -2286670,
-     "gap_vs_sell": -35549450,
+     "gap_vs_sell": -35453240,
      "cash_released_vs_sale": 3559520,
-     "payment_vs_tax_multiple": 4.8
+     "payment_vs_tax_multiple": 4.9
     },
     {
      "loan": 5224980,
@@ -796,11 +796,11 @@
      "rate_pct": 5.98,
      "rate_label": "5.98%",
      "rate_basis": "the lowest weekly average published in 2026 (week of 26 February 2026)",
-     "terminal_borrow": 7246520,
+     "terminal_borrow": 7342730,
      "gap_vs_live": 1923760,
-     "gap_vs_sell": -31339020,
+     "gap_vs_sell": -31242810,
      "cash_released_vs_sale": 4865760,
-     "payment_vs_tax_multiple": 6.5
+     "payment_vs_tax_multiple": 6.6
     },
     {
      "loan": 5224980,
@@ -827,11 +827,11 @@
      "rate_pct": 7.11,
      "rate_label": "7.11%",
      "rate_basis": "the latest published weekly average (week of 12 November 2026)",
-     "terminal_borrow": 3605760,
+     "terminal_borrow": 3701970,
      "gap_vs_live": -1717000,
-     "gap_vs_sell": -34979780,
+     "gap_vs_sell": -34883570,
      "cash_released_vs_sale": 4865760,
-     "payment_vs_tax_multiple": 7.2
+     "payment_vs_tax_multiple": 7.3
     },
     {
      "loan": 5224980,
@@ -858,11 +858,11 @@
      "rate_pct": 7.4,
      "rate_label": "7.40%",
      "rate_basis": "the highest weekly average published in 2026 (weeks of 8 and 15 October 2026)",
-     "terminal_borrow": 2650180,
+     "terminal_borrow": 2746390,
      "gap_vs_live": -2672580,
-     "gap_vs_sell": -35935360,
+     "gap_vs_sell": -35839150,
      "cash_released_vs_sale": 4865760,
-     "payment_vs_tax_multiple": 7.4
+     "payment_vs_tax_multiple": 7.5
     },
     {
      "loan": 5224980,
@@ -889,11 +889,11 @@
      "rate_pct": 7.0,
      "rate_label": "7.00% prime, interest only",
      "rate_basis": "a line priced at the published prime with no margin, interest only, balance unchanged to the horizon",
-     "terminal_borrow": 2273870,
+     "terminal_borrow": 2370080,
      "gap_vs_live": -3048890,
-     "gap_vs_sell": -36311670,
+     "gap_vs_sell": -36215460,
      "cash_released_vs_sale": 4865760,
-     "payment_vs_tax_multiple": 6.4
+     "payment_vs_tax_multiple": 6.5
     }
    ],
    "term_rungs": [
@@ -917,9 +917,9 @@
      "hurdle_return_pct": 6.61,
      "interest_only": false,
      "term_years": 15,
-     "terminal_borrow": 4827850,
+     "terminal_borrow": 4924060,
      "gap_vs_live": -494910,
-     "gap_vs_sell": -33757690
+     "gap_vs_sell": -33661480
     },
     {
      "loan": 3918740,
@@ -941,9 +941,9 @@
      "hurdle_return_pct": 6.7,
      "interest_only": false,
      "term_years": 20,
-     "terminal_borrow": 4523700,
+     "terminal_borrow": 4619910,
      "gap_vs_live": -799060,
-     "gap_vs_sell": -34061840
+     "gap_vs_sell": -33965630
     },
     {
      "loan": 3918740,
@@ -965,9 +965,9 @@
      "hurdle_return_pct": 6.8,
      "interest_only": false,
      "term_years": 30,
-     "terminal_borrow": 4035010,
+     "terminal_borrow": 4131220,
      "gap_vs_live": -1287750,
-     "gap_vs_sell": -34550530
+     "gap_vs_sell": -34454320
     }
    ]
   },
@@ -975,13 +975,13 @@
    "inherit_year": 2050,
    "value_at_death": 7946240,
    "terminal_price": 25772820,
-   "bill_if_live_year1": 70850,
-   "terminal_live": 6375070,
+   "bill_if_live_year1": 69520,
+   "terminal_live": 6520640,
    "terminal_sell": 46945240,
    "sell_costs": 437040,
    "sell_tax": 0,
    "sale_net_at_horizon": 18360300,
-   "carry_fv": 11985230,
+   "carry_fv": 11839660,
    "horizon_year": 2080,
    "rungs": [
     {
@@ -1009,9 +1009,9 @@
      "rate_pct": 5.98,
      "rate_label": "5.98%",
      "rate_basis": "the lowest weekly average published in 2026 (week of 26 February 2026)",
-     "terminal_borrow": 7545340,
+     "terminal_borrow": 7690910,
      "gap_vs_live": 1170270,
-     "gap_vs_sell": -39399900,
+     "gap_vs_sell": -39254330,
      "cash_released_vs_sale": 2741460,
      "payment_vs_tax_multiple": 3.2
     },
@@ -1040,11 +1040,11 @@
      "rate_pct": 7.11,
      "rate_label": "7.11%",
      "rate_basis": "the latest published weekly average (week of 12 November 2026)",
-     "terminal_borrow": 5330570,
+     "terminal_borrow": 5476140,
      "gap_vs_live": -1044500,
-     "gap_vs_sell": -41614670,
+     "gap_vs_sell": -41469100,
      "cash_released_vs_sale": 2741460,
-     "payment_vs_tax_multiple": 3.5
+     "payment_vs_tax_multiple": 3.6
     },
     {
      "loan": 3178500,
@@ -1071,11 +1071,11 @@
      "rate_pct": 7.4,
      "rate_label": "7.40%",
      "rate_basis": "the highest weekly average published in 2026 (weeks of 8 and 15 October 2026)",
-     "terminal_borrow": 4749270,
+     "terminal_borrow": 4894840,
      "gap_vs_live": -1625800,
-     "gap_vs_sell": -42195970,
+     "gap_vs_sell": -42050400,
      "cash_released_vs_sale": 2741460,
-     "payment_vs_tax_multiple": 3.6
+     "payment_vs_tax_multiple": 3.7
     },
     {
      "loan": 3178500,
@@ -1102,11 +1102,11 @@
      "rate_pct": 7.0,
      "rate_label": "7.00% prime, interest only",
      "rate_basis": "a line priced at the published prime with no margin, interest only, balance unchanged to the horizon",
-     "terminal_borrow": 4520350,
+     "terminal_borrow": 4665920,
      "gap_vs_live": -1854720,
-     "gap_vs_sell": -42424890,
+     "gap_vs_sell": -42279320,
      "cash_released_vs_sale": 2741460,
-     "payment_vs_tax_multiple": 3.1
+     "payment_vs_tax_multiple": 3.2
     },
     {
      "loan": 4767740,
@@ -1133,11 +1133,11 @@
      "rate_pct": 5.98,
      "rate_label": "5.98%",
      "rate_basis": "the lowest weekly average published in 2026 (week of 26 February 2026)",
-     "terminal_borrow": 8130480,
+     "terminal_borrow": 8276050,
      "gap_vs_live": 1755410,
-     "gap_vs_sell": -38814760,
+     "gap_vs_sell": -38669190,
      "cash_released_vs_sale": 4330700,
-     "payment_vs_tax_multiple": 4.7
+     "payment_vs_tax_multiple": 4.8
     },
     {
      "loan": 4767740,
@@ -1164,11 +1164,11 @@
      "rate_pct": 7.11,
      "rate_label": "7.11%",
      "rate_basis": "the latest published weekly average (week of 12 November 2026)",
-     "terminal_borrow": 4808320,
+     "terminal_borrow": 4953890,
      "gap_vs_live": -1566750,
-     "gap_vs_sell": -42136920,
+     "gap_vs_sell": -41991350,
      "cash_released_vs_sale": 4330700,
-     "payment_vs_tax_multiple": 5.3
+     "payment_vs_tax_multiple": 5.4
     },
     {
      "loan": 4767740,
@@ -1195,11 +1195,11 @@
      "rate_pct": 7.4,
      "rate_label": "7.40%",
      "rate_basis": "the highest weekly average published in 2026 (weeks of 8 and 15 October 2026)",
-     "terminal_borrow": 3936360,
+     "terminal_borrow": 4081930,
      "gap_vs_live": -2438710,
-     "gap_vs_sell": -43008880,
+     "gap_vs_sell": -42863310,
      "cash_released_vs_sale": 4330700,
-     "payment_vs_tax_multiple": 5.5
+     "payment_vs_tax_multiple": 5.6
     },
     {
      "loan": 4767740,
@@ -1226,11 +1226,11 @@
      "rate_pct": 7.0,
      "rate_label": "7.00% prime, interest only",
      "rate_basis": "a line priced at the published prime with no margin, interest only, balance unchanged to the horizon",
-     "terminal_borrow": 3592990,
+     "terminal_borrow": 3738560,
      "gap_vs_live": -2782080,
-     "gap_vs_sell": -43352250,
+     "gap_vs_sell": -43206680,
      "cash_released_vs_sale": 4330700,
-     "payment_vs_tax_multiple": 4.7
+     "payment_vs_tax_multiple": 4.8
     },
     {
      "loan": 6356990,
@@ -1257,11 +1257,11 @@
      "rate_pct": 5.98,
      "rate_label": "5.98%",
      "rate_basis": "the lowest weekly average published in 2026 (week of 26 February 2026)",
-     "terminal_borrow": 8715620,
+     "terminal_borrow": 8861190,
      "gap_vs_live": 2340550,
-     "gap_vs_sell": -38229620,
+     "gap_vs_sell": -38084050,
      "cash_released_vs_sale": 5919950,
-     "payment_vs_tax_multiple": 6.3
+     "payment_vs_tax_multiple": 6.5
     },
     {
      "loan": 6356990,
@@ -1288,11 +1288,11 @@
      "rate_pct": 7.11,
      "rate_label": "7.11%",
      "rate_basis": "the latest published weekly average (week of 12 November 2026)",
-     "terminal_borrow": 4286070,
+     "terminal_borrow": 4431640,
      "gap_vs_live": -2089000,
-     "gap_vs_sell": -42659170,
+     "gap_vs_sell": -42513600,
      "cash_released_vs_sale": 5919950,
-     "payment_vs_tax_multiple": 7.1
+     "payment_vs_tax_multiple": 7.2
     },
     {
      "loan": 6356990,
@@ -1319,11 +1319,11 @@
      "rate_pct": 7.4,
      "rate_label": "7.40%",
      "rate_basis": "the highest weekly average published in 2026 (weeks of 8 and 15 October 2026)",
-     "terminal_borrow": 3123460,
+     "terminal_borrow": 3269030,
      "gap_vs_live": -3251610,
-     "gap_vs_sell": -43821780,
+     "gap_vs_sell": -43676210,
      "cash_released_vs_sale": 5919950,
-     "payment_vs_tax_multiple": 7.3
+     "payment_vs_tax_multiple": 7.4
     },
     {
      "loan": 6356990,
@@ -1350,11 +1350,11 @@
      "rate_pct": 7.0,
      "rate_label": "7.00% prime, interest only",
      "rate_basis": "a line priced at the published prime with no margin, interest only, balance unchanged to the horizon",
-     "terminal_borrow": 2665630,
+     "terminal_borrow": 2811200,
      "gap_vs_live": -3709440,
-     "gap_vs_sell": -44279610,
+     "gap_vs_sell": -44134040,
      "cash_released_vs_sale": 5919950,
-     "payment_vs_tax_multiple": 6.3
+     "payment_vs_tax_multiple": 6.4
     }
    ],
    "term_rungs": [
@@ -1378,9 +1378,9 @@
      "hurdle_return_pct": 6.61,
      "interest_only": false,
      "term_years": 15,
-     "terminal_borrow": 5772930,
+     "terminal_borrow": 5918500,
      "gap_vs_live": -602140,
-     "gap_vs_sell": -41172310
+     "gap_vs_sell": -41026740
     },
     {
      "loan": 4767740,
@@ -1402,9 +1402,9 @@
      "hurdle_return_pct": 6.7,
      "interest_only": false,
      "term_years": 20,
-     "terminal_borrow": 5402890,
+     "terminal_borrow": 5548460,
      "gap_vs_live": -972180,
-     "gap_vs_sell": -41542350
+     "gap_vs_sell": -41396780
     },
     {
      "loan": 4767740,
@@ -1426,9 +1426,9 @@
      "hurdle_return_pct": 6.8,
      "interest_only": false,
      "term_years": 30,
-     "terminal_borrow": 4808320,
+     "terminal_borrow": 4953890,
      "gap_vs_live": -1566750,
-     "gap_vs_sell": -42136920
+     "gap_vs_sell": -41991350
     }
    ]
   }
