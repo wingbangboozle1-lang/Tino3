@@ -1,0 +1,12 @@
+{
+  "note": "The printable brief as published before the print-budget work, measured with the same estimator and against the same committed stylesheet. Reproduce with: git show 3c443c4:briefing.html > /tmp/b.html && git show 3c443c4:assets/style.css >/tmp/s.css && python3 scripts/print_budget.py /tmp/b.html /tmp/s.css",
+  "measured_commit": "3c443c4",
+  "estimated_height_pt": 953.9,
+  "capacity_pt": 737.3,
+  "fills": 1.294,
+  "fits_one_page": false,
+  "sections": 7,
+  "grid_rows": 4,
+  "font_pt": 7.4,
+  "margin_in": 0.38
+}

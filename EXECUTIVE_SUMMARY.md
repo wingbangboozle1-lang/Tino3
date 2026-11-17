@@ -137,6 +137,6 @@ Every rule, threshold and rate on the site was read on the publishing agency's o
 - `index.html` — the dashboard
 - `decision.html` — the five paths, the sensitivity and the break-evens
 - `questions.html` — what is unknown and how to find it, starting with A-1
-- `suggestions.html` — the review queue; nothing there has been implemented
+- `suggestions.html` — the review queue; every item needs a decision, recorded in its own decision and date columns
 - `review.html` — every unverified figure and modelling caveat
 - `sources.html` — the full ledger

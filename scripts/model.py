@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "assets" / "data"
 sys.path.insert(0, str(ROOT / "scripts"))
 
+import edition  # noqa: E402  (the edition's build date, shared with the page builder)
 import episodes as EP  # noqa: E402  (reads its own verbatim CSVs, no network, no randomness)
 INPUTS = json.loads((DATA / "inputs.json").read_text(encoding="utf-8"))
 SERIES = json.loads((DATA / "series.json").read_text(encoding="utf-8"))
@@ -1559,7 +1560,7 @@ def main() -> dict:
     maint_rent = A["annual_costs"]["maintenance_pct_rental"]["value"]
 
     out = {
-        "meta": {"built": "2026-11-13", "rounding": "nearest $10",
+        "meta": {"built": edition.BUILD_DATE_ISO, "rounding": "nearest $10",
                  "horizon_years": horizon, "deterministic": True,
                  "inflation_assumption": infl, "house_growth_assumption": g,
                  "equity_assumption": eq, "equity_drag": drag,
