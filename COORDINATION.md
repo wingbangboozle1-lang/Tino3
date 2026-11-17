@@ -62,13 +62,15 @@ which rows were re-attributed against what.
 The gap logged open by `arena/1c788435-tino3` and quoted as still open in the board sections of
 PRs #158, #160 and #162 is closed on this branch:
 
-- **`method_cell` (72 call sites, every unattributed row in the build).** Each call site now passes
+- **`method_cell` (73 call sites, every unattributed row in the build).** Each call site now passes
   the ledger ids that bear on its own row: property-tax rows to `boe_pub29`/`rtc51`, shelter rows to
   `rtc63_2`/`boe_lta25009`, basis and gain rows to `irs_basis`/`irs_tc409`, surcharge rows to
   `rtc17043`/`ftb_540_instructions_2025`, insurance rows to `cdi_homeowners_avg`/`cdi_df_rental`,
   market and return rows to `fred_casthpi`/`fred_gs10`/`fred_nasdaq`/`damodaran_histret` and the
   replay series, transfer-fee rows to `rtc11911`/`rtc11930`, and so on. The 102 year-rows of the
-  projections table now cite Publication 29 and section 51 instead of the four-link set.
+  projections table now cite Publication 29 and section 51 instead of the four-link set. The one
+  call site PR #169 added while this session was in flight (the keep-and-borrow lever) was
+  attributed in the same pass to `fred_mortgage`, `fred_casthpi` and `fred_gs10`.
 - **`sources=[]` is now an explicit decision.** The helper renders "no official source / Logged on
   the register" for a row that has no official publisher - an owner figure, a stated scenario, a
   household rule, a procedure or a private quote - instead of implying official backing with four
@@ -94,16 +96,18 @@ PRs #158, #160 and #162 is closed on this branch:
   rule stays on the register.
 
 **Effect on the published counts (no figure, input, model output or recommendation changed):**
-1,267 table rows (unchanged), **990 linked to official publishers** (was 1,090) and **277
-registered as unsourceable** (was 177); 3,610 links (2,002 external); ledger unchanged at 115.
-README counts updated to match. Every row still satisfies the gate: at least one https link or the
-register link.
+restated on the merged tree at `20eb134`: 1,295 table rows (unchanged from that base), **1,011
+linked to official publishers** (was 1,111) and **284 registered as unsourceable** (was 184);
+3,689 links (2,054 external); ledger unchanged at 115. 100 rows moved from blanket-linked to
+registered, exactly as measured on the pre-merge base. README counts updated to match. Every row
+still satisfies the gate: at least one https link or the register link.
 
-**Gates on this branch after the change:** `rebuild.py` run twice (second run leaves the tree
-unchanged), `verify.py` PASS (25 pages, 1,267 rows, 990 linked, 277 registered, 115 ledger,
-3,610 links, every internal link and fragment resolves), `privacy_boundary.py` PASS,
-`tracked_tree_guard.py` PASS (65 files), `package_site.py` PASS (25 pages, 1 runtime asset, 136
-withdrawal routes), `verify_legacy.py --config-only` PASS, `git diff --check` clean.
+**Gates on this branch after the change (merged tree at `20eb134`):** `rebuild.py` run twice
+(second run leaves the tree unchanged), `verify.py` PASS (25 pages, 1,295 rows, 1,011 linked,
+284 registered, 115 ledger, 3,689 links, every internal link and fragment resolves, print budget
+94% of one sheet), `privacy_boundary.py` PASS, `tracked_tree_guard.py` PASS (65 files),
+`package_site.py` PASS (25 pages, 1 runtime asset, 139 withdrawal routes),
+`verify_legacy.py --config-only` PASS, `git diff --check` clean.
 
 ## Session `arena/5fb0dcb1-tino3` — law-watch refresh to the 16 November 2026 official results reading, live Proposition 19 initiative recheck, publication · claimed 2026-11-17
 
