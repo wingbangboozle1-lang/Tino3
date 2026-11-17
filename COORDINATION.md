@@ -4686,3 +4686,102 @@ The Secretary of State's page was re-read on 17 November 2026 and shows the **16
 **Why these tasks.** A line-by-line pass of the owner's brief against the current tree finds every brief item published, and the board's own improvement register leaves exactly three rows open that an agent can close without the household's private documents: the keep-and-borrow path (Y-3), the pre-rounding history inventory (Y-5, where a session can measure and publish the exposure even though only the owner can rewrite it), and the standing duty the brief imposes to "periodically recheck official federal, state and local authorities" (Y-2). The remaining open rows - a rent opinion, a written valuation, three insurance quotes, five years of actual maintenance spend, the parcel's own bill, the lease file - are all owner actions that cannot be sourced publicly without naming the property, and stay on the Questions and Flagged for Review pages.
 
 **Privacy constraint for this session:** no name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term, estate size or unrounded owner amount is added to any file this session writes, including this board. Every dollar figure on any page this session publishes is rounded to the nearest $10, and the borrowing rates are published as the averages the publishers themselves state, not as anything specific to this household. The audit in Y-5 reports classes and counts only; it never prints a token.
+
+
+### Y-1 to Y-6 results — session `arena/219ee831-tino3`, 17 November 2026
+
+**What was published.** `scripts/borrow.py` (new engine, writes `assets/data/borrow.json`),
+`keep-and-borrow.html` (new page, 26th in the edition), the `borrow.py` step in `scripts/rebuild.py`, and the
+wiring: nav group, `PAGE_TITLES`, `SUMMARIES`, `PAGE_BUILDERS`, a dashboard KPI, a bullet in the decision page's
+"not modelled" list, a cross-link from the estate liquidity page's caveat list, four glossary entries (cash-out
+refinance, home equity line, loan-to-value, hurdle return and negative carry), a new questions group (H,
+borrowing instead of selling), suggestions **S-29** (get one written lender indication) and **S-30** (write the
+borrowing rule into the investment policy before the money is offered), and the `Add a mortgage case` row of the
+improvement register moved to **done** with the evidence gap left open.
+
+**The answer the page gives, and why it is not a competing recommendation.** A 60% cash-out at a 2045 transfer
+releases $3,918,740 and costs $309,340 a year; invested at the model's after-tax return the overlay over 30
+years is −$1,287,750, and the invested portfolio first runs short in year 27. Every rung sits $31,242,810 to
+$36,215,460 behind the selling path. The single number that decides it is the hurdle: 6.80% after tax at the
+latest published mortgage average against the model's 6.30%, so the path breaks even only at 2026's *lowest*
+published weekly average (5.98%), where the same rung turns positive by about $1,442,820. The page says in terms
+that a household cannot choose the loan rate it would need.
+
+**Overlap with another session, resolved by keeping both.** `main` had in the meantime taken PR #169
+(`arena/9cb84094-tino3`), which implemented "the keep-and-borrow case" inside `scripts/model.py`
+(`keep_and_borrow_cases`, published on the estate liquidity page and as what-if lever 6). That is a different
+question — borrowing because a band of estate tax is due within nine months — and it reaches the same conclusion
+(`borrow_wins_any_band: false`). Both are published; this page now states the distinction in its answer callout
+and in its method note, so the edition does not read as two competing claims, and the `Add a mortgage case`
+register entry describes both implementations rather than one. Merge conflicts in `scripts/build.py` (three
+regions: the liquidity caveat list, `improve_status`, the P-07 row) and in `assets/sources.json` (the
+`irs_interest` check date, and five ledger entries two sessions had appended at the same place) were resolved as
+a union — no entry from either side was dropped. `README.md`'s snapshot line was rewritten against the post-merge
+counts rather than either pre-merge count, and the second merge with `main` (PR #171's board record) was
+likewise a union of both session sections.
+
+**Sources read at their publishers on 17 November 2026 (Y-2).** `irs.gov` quarterly interest rates — 2026
+individual underpayment 7/6/7/7 percent by quarter, with no first-quarter 2027 row published (confirms the
+constant the liquidity page uses, and is recorded in the ledger). `fred.stlouisfed.org` `MORTGAGE30US` across
+calendar 2026 — 7.11 percent for the week of 12 November, with 5.98 (26 February) and 7.40 (8 and 15 October)
+as the year's ends, which are the three rate rungs. `fred.stlouisfed.org` `DPRIME` — 7.00 percent on every
+business day from 1 October to 9 November 2026, the interest-only rung. `home.treasury.gov` daily par yield
+curve, November 2026 — the 16 November row is 4.34 percent at three months and 4.83 at two years, inside the
+parking band, and the 13 November row a previous session recorded still matched. `irs.gov/publications/p936` —
+home-equity interest deductible only where the money was used to buy, build or substantially improve the
+securing home, acquisition-debt caps of $750,000 after 15 December 2017 and $1,000,000 before it; the authority
+for treating the interest as non-deductible here. `leginfo.legislature.ca.gov` Revenue and Taxation Code section
+62 — read in full, including subdivision (c).
+
+**One correction of an earlier citation, recorded because it was a real defect.** The ledger entry for section 62
+quoted subdivision (c)(1) from a partial read of the section, whose captured text began at (a)(2). The
+subsection has now been read directly at the publisher and the quotation transcribed from that read; the words
+match, so nothing moved, but the entry's `checked` field now records that the citation rests on the full read. No
+figure or claim changed. Three dated re-read notes were appended to existing entries (`fred_mortgage`,
+`treasury_cmt`, `irs_interest`) and the ledger's `as_of` is 2026-11-17; the ledger stands at **118** entries.
+
+**Privacy work (Y-5), and two audit defects fixed.** `scripts/privacy_scrub_audit.py` counted GitHub **service**
+addresses as personal, though the tree guard had long since learned to exempt them, and it kept its own copy of
+the gate's official-amount exemptions, which had drifted — it flagged the statutory recording fees the published
+pages quote verbatim. The audit now imports the gate's `check_money` and applies the same service-address
+exemption, so the two tools cannot disagree again; the drift is written into the tool as the reason for the
+rule. Re-measured on the **complete** history after `git fetch --unshallow` (the Arena clone arrives shallow,
+which silently under-reports): 482 commits from 10 to 17 November 2026, 1,869 distinct file versions, audited at
+`82f1e6fc`. Zero file-version matches for street address, parcel number, telephone, person name and mail-service
+address; postal codes 14 and 87 versions, property-level place name 246, place-name-with-hosts 266,
+jurisdiction names 730, location-specific hosts 675, withdrawn metro series identifiers 198 and metro phrasing 82
+— all **zero** in the current tracked tree; amounts not a multiple of ten 242 versions across 29 paths with
+**one** current-tree file, `COORDINATION.md` itself. The exposure no file-content audit can see is recorded as
+such: 172 of 482 commits carry a non-service author address and 165 a non-service committer address, across
+three distinct addresses — commit metadata, fixed only by the mailmap rewrite, which stays an owner action. The
+review page's history section (which had been printing stale hardcoded counts from an earlier measurement) and
+`PRIVACY_REMEDIATION.md` section 8 now carry these numbers.
+
+**Gates, run on the merged branch.** `scripts/rebuild.py` PASS and reproducible (a second full rebuild after the
+merge produced no diff). `scripts/verify.py` **PASS: 26 pages, 1,366 table rows, 1,173 linked to official
+publishers, 193 registered unsourceable, 4,748 links (3,137 external), 118 ledger sources, 141 content-free
+withdrawal routes**, briefing print budget 94% of one letter sheet and still estimated to fit.
+`scripts/privacy_boundary.py` PASS. `scripts/tracked_tree_guard.py` PASS (85 tracked text files).
+`scripts/package_site.py` PASS. `scripts/verify_legacy.py --config-only` PASS (27 public files). Confirmed in the
+same pass that `assets/data/*.json` are build-time inputs and are not packaged, which is why `borrow.json` needed
+no allowlist entry.
+
+**Effect of another session's model correction on this page.** `main`'s PR #170 fixed the double-growth of the
+property-tax fixed charge, which moved the living-path terminal to $5,418,970 and the first-year bill to $56,180
+at a 2045 transfer. Because the financing engine reads those values out of `model.json` instead of recomputing
+them, the page re-priced itself on the next build (cash-flow burden 3.2x to 3.3x the first-year bill) with no
+edit — the reason it was written that way. The recommendation is unchanged: selling at inheritance still leads,
+and borrowing does not overtake it at any published rung.
+
+**Publication record.** Pull request <https://github.com/wingbangboozle1-lang/Tino3/pull/172>, from
+`arena/219ee831-tino3` to `main`; the CI `verify` run passed on the PR head before merge. Merged with
+`gh pr merge 172 --merge` — merge commit `fa22e2c6e8f0aebabd323275d40e3dbb18b331f1`, 2026-11-17 17:14:38Z, no
+approval waited for, no `--auto`. `Verify static site`, `Deploy GitHub Pages` and `pages build and deployment`
+all completed **success** for `fa22e2c`, and `keep-and-borrow.html` serves live with the post-correction figures.
+
+**Still open after this session.** (1) A written lender indication — S-29 — without which every financing rung
+here is a published average rather than an offer, together with whether the instrument holding title permits a
+lien at all. (2) Whether either building is encumbered at the transfer: the forced-borrowing case, this page and
+the what-if debt lever all treat the answer as unknown and price it rather than guess. (3) The history rewrite,
+which only the owner can run. (4) The 11 December 2026 certification of the 2026 ballot measures and the
+February 2027 adjustment of the Proposition 19 amount, both standing recheck gates.
