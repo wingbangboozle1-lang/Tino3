@@ -4643,6 +4643,33 @@ The Secretary of State's page was re-read on 17 November 2026 and shows the **16
 - Property A's tax-rate area and published ad valorem rate, a market rent for Property A, insurance quotes, written date-of-death valuation, lease records and any encumbrance remain owner- or third-party-supplied, and stay on the Questions and Flagged for Review pages.
 - The 2026 election results stay provisional until the Secretary of State certifies on 11 December 2026; the page and the ledger say so.
 
+---
+
+## Session `arena/e71d9910-tino3` — model-layer defect audit (property-tax fixed charge)
+
+**Scope.** Model-layer verification and defect audit of `scripts/model.py` and `scripts/mixed.py`, claimed as non-overlapping with the then-open PR #157. The audit read both scripts in full and independently recomputed the load-bearing figures from the raw `inputs.json` values, without importing the model's own functions.
+
+**Defect found and fixed.** The property-tax bill is modelled as `(rate × assessed value) + (fixed charge)`, where the fixed charge grows with inflation from the roll's base year (2025). Four code sites — `run_paths` and `breakeven_rent` in `scripts/model.py`, and both bill sites in `scripts/mixed.py` — pre-grew the fixed charge forward to the inheritance year but left `base_year` at the roll's base year. Because `bill_for()` grows the fixed charge from `base_year` to each billed year, the fixed charge was grown **twice** on every post-inheritance bill: about **$880** in the first inheritance year of the 2045 baseline, and about **$38,640** nominal over a 30-year horizon. This contradicted the single-growth convention used everywhere else in the model (`bill_today_projected`, `roll_table`, `project_roll`, `historical_replay` all grow the fixed charge once, from the base year); the same model run was internally inconsistent.
+
+**Fix.** Set `base_year` to the inheritance year wherever the fixed charge is pre-grown, so the fixed charge is grown exactly once from the roll's base year to each billed year. Four one-line corrections plus explanatory comments — 21 insertions, 0 deletions.
+
+**Verification.** Independent recomputation of the 2045 bills from the raw inputs reproduces the corrected figures; the break-even house-growth threshold now matches to the decimal (**8.66%**). The sell-path terminal values (the headline figures) are unaffected — only the keeping-path bills and their break-evens correct: bill if living year 1 (2045) $57,060 → $56,180; bill if let out year 1 (2045) $79,330 → $78,450; break-even monthly rent (2045) $30,220 → $30,140; live-in terminal (2045) $5,322,760 → $5,418,970; break-even return vs living −0.49% → −0.43%. **Recommendation unchanged:** selling at inheritance still wins by a wide margin.
+
+**Rebase collision, resolved without discarding work.** After this session branched, `main` advanced through the merged PRs #157–#164, and PR #160 had independently modified `scripts/model.py` (adding a `form540_surcharge` function and worksheet) and `assets/data/model.json`. The rebase onto `main` merged cleanly for the source files — #160's changes and this session's four `base_year` corrections occupy disjoint regions and both survive. Generated-page conflicts (`briefing.html`, `review.html`) were resolved by taking the main side and re-running a full rebuild on the current `build.py` + corrected model, which regenerated them consistently. No other session's work was discarded.
+
+**Publication record.**
+
+- **Pull request:** <https://github.com/wingbangboozle1-lang/Tino3/pull/170>, from `arena/e71d9910-tino3` to `main`. (An earlier PR #165 for the same change became stuck on a stale GitHub mergeability cache after a rebase and could not be reopened; it was superseded by #170, which is the merged one.)
+- **Merge:** `gh pr merge 170 --merge` succeeded, no approval waited for, no `--auto`. Merge commit `a63a26e042022750571134ffd40f3693e638f5f9`, merged 2026-11-17 17:06 UTC.
+- **Pages deploy:** for commit `a63a26e` the `Verify static site`, `Deploy GitHub Pages` and `pages-build-deployment` runs all completed **success**; the GitHub Pages deployment targets `a63a26e`, the current `main` head.
+- **Live-site confirmation:** <https://wingbangboozle1-lang.github.io/Tino3/what-if.html> serves the corrected figures — the baseline "Live in it" row reads **$5,418,970**, the "Let it out" row **−$957,360**, and the break-even return row **−0.43% a year**. (A first fetch of `decision.html` returned a cached copy of the previous edition showing the old $30,220 / $5,322,760; the deployed tree at `a63a26e` is confirmed correct, so readers who saw the older page should reload.)
+
+**Gates on the merged branch (17 November 2026).** `scripts/rebuild.py` PASS and byte-reproducible; `scripts/verify.py` PASS (25 pages, 1,239 table rows, 1,062 linked to official publishers, 177 registered unsourceable, 112 ledger sources, every internal link and fragment resolves); `scripts/privacy_boundary.py` PASS (139 content-free withdrawal routes); `scripts/tracked_tree_guard.py` PASS (68 tracked text files); `scripts/package_site.py` PASS; `scripts/verify_legacy.py --config-only` PASS; `git diff --check` clean.
+
+**Still open after this session (not blocking).** Same as above: the Git-history scrub is an owner action; Property A's tax-rate area, market rent, insurance quotes, written date-of-death valuation, and lease/encumbrance records remain owner- or third-party-supplied and stay on the Questions and Flagged for Review pages; the 2026 election results stay provisional until 11 December 2026 certification; the Proposition 19 $1M amount is re-read in February 2027.
+
+---
+
 ## Session `arena/219ee831-tino3` — keep-and-borrow path modelled end to end, 17 November rate-and-rule re-read, full-history privacy audit re-run · claimed 2026-11-17
 
 *Branch note:* Arena pins this session to `arena/219ee831-tino3`, branched from `main` at `3b86d5a` (the merge of PR #156). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. At claim time `gh pr list --state open` returned nothing, so no other session holds `scripts/build.py`, `scripts/rebuild.py`, `assets/data/*` or `assets/sources.json`. The clone was shallow (one commit) at claim time; `git fetch --unshallow origin` was run so that the whole 471-commit history is available for the read-only audit in Y-5. `python3 scripts/rebuild.py` before any edit produced no diff, and `verify.py`, `privacy_boundary.py`, `tracked_tree_guard.py`, `package_site.py` and `verify_legacy.py --config-only` all exited 0 on the clean tree.
