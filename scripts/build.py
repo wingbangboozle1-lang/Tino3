@@ -1419,7 +1419,8 @@ def page_precommit() -> str:
         rule_rows,
         note="The two decision columns are deliberately empty. No path has been chosen. Fill them in "
              "by hand when the household decides, with the date, and keep the rule beside the decision "
-             "so a future reader can see whether the rule was followed or changed.")
+             "so a future reader can see whether the rule was followed or changed. " + esc(PRECOMMIT.get(
+                 "meta", {}).get("draft_note", "")) or None)
 
     goal_rows = []
     for g in goals:
@@ -3248,9 +3249,11 @@ the spread between the rate and the return, and on the fact that a kept house st
             + rules_table + bnote + limits
             + table("What to do with this page",
                     ["Step", "Action", "Why", "Source"],
-                    ["<td>1</td><td>Decide whether the household would borrow at all.</td>"
-                     "<td>The pre-commitment register has a row for this path and it is deliberately blank: a "
-                     "rule written after the numbers are read is not a rule.</td>"
+                    ["<td>1</td><td>Decide whether the household would borrow at all, and write the rule for it "
+                     "before reading the tables below.</td>"
+                     "<td>Rule <a href=\"precommit.html\">P-7</a> on the pre-commitment register now covers this "
+                     "path, and its decision columns are deliberately blank: a rule written after the numbers are "
+                     "read is not a rule. The rule it has to satisfy is the hurdle, not the payment.</td>"
                      + src_cell([], "Procedure, not a figure"),
                      "<td>2</td><td>If the answer might be yes, get one written lender indication, with the "
                      "closing costs in it.</td><td>Every figure here is a published average. One page from a "
