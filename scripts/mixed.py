@@ -204,6 +204,12 @@ def mixed_path(occupy_years: int, mode: str, inherit_year: int = INHERIT,
     fit_T = dict(fit_a)
     fit_T["fixed_base"] = (fit_a["fixed_base"]
                            * (1 + FIXED_GROWTH) ** (inherit_year - fit_a["base_year"]))
+    # base_year moves with the pre-grown fixed base, so bill_for() applies the fixed
+    # charge's inflation growth exactly once, from the roll's base year to each billed
+    # year. The earlier edition pre-grew fixed_base but left base_year behind, growing
+    # the fixed charge twice on every post-inheritance bill; that contradicted the
+    # single-growth convention used elsewhere in model.py. Fixed 2026-11-17.
+    fit_T["base_year"] = inherit_year
     rate_fv = eq - drag
 
     rented_years = 0 if mode == "sell" else horizon - occupy_years
@@ -329,6 +335,7 @@ def clawback_cost(inherit_year: int = INHERIT, **kw) -> dict:
     fit = dict(base.FIT_A)
     fit["fixed_base"] = (base.FIT_A["fixed_base"]
                          * (1 + FIXED_GROWTH) ** (inherit_year - base.FIT_A["base_year"]))
+    fit["base_year"] = inherit_year   # one growth from the roll's base year, not two (2026-11-17)
     return {
         "case": "Live in it for 10 years, then let it out",
         "tax_with_clawback": with_cb["property_tax_total"],
