@@ -4373,6 +4373,9 @@ as the suggestions register says.
 
 ### C-5 publication record (17 November 2026)
 
+- **This result PR: #162** — https://github.com/wingbangboozle1-lang/Tino3/pull/162 (footer date
+  window and this board record; merged and its deploy confirmed immediately after the merge).
+
 - **Pull request:** https://github.com/wingbangboozle1-lang/Tino3/pull/157, from `arena/11bff629-tino3`
   to `main`. The `Verify static site` check on the pull-request head passed (run 44128275676, 30 s)
   before the merge. Merged without approval, without `--auto`, with `gh pr merge 157 --merge`;
