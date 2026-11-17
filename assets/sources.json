@@ -382,10 +382,10 @@
     "5.98 percent in the week of 26 February 2026, the lowest weekly average published in 2026",
     "7.40 percent in the weeks of 8 and 15 October 2026, the highest weekly average published in 2026"
    ],
-   "checked": "CSV opened on the publisher's site on 11 November 2026 (two dated windows read); re-read on 2026-11-17 for the whole of calendar 2026 (5 January to 30 November).",
+   "checked": "CSV opened on the publisher's site on 11 November 2026 (two dated windows read); re-read on 2026-11-17 for the whole of calendar 2026 (5 January to 30 November), and the latest observation, the 2026 low and the 2026 high confirmed against it.",
    "id": "fred_mortgage",
    "supports": "18.63 percent in the week of 9 October 1981 | 7.79 percent in the week of 26 October 2023 | 7.11 percent for the week of 12 November 2026, with 5.98 and 7.40 percent as the 2026 low and high of the same published series - the three rungs the keep-and-borrow page prices.",
-   "limits": ""
+   "limits": "A national weekly average is not a quote for any borrower or property, and it says nothing about what a lender will offer on a property held in trust. A rate for the 2040s is not published and is not forecast here."
   },
   {
    "publisher": "Federal Reserve Bank of St. Louis (data: Nasdaq)",
