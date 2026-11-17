@@ -93,6 +93,12 @@ directly to `main` (the owner's decision), so no separate pull request was neede
 branch `arena/d980e74e-tino3` was reconciled to the scrubbed remote (`3dc8c59`, tree `a990c43f…` — identical to
 its pre-scrub content). The GitHub Pages deploy on the scrubbed `main` (`db458c3`, run `44141788297`) completed
 with `conclusion: success`, and the live site URL is unchanged at https://wingbangboozle1-lang.github.io/Tino3/.
+The **records** of the executed scrub were carried to `main` as pull request **#181** (board SQ-3/SQ-4/SQ-5
+records, the review-page note and post-scrub audit counts, the `PRIVACY_REMEDIATION.md` decision checkbox, the
+README privacy section), opened from this branch, merged at 2026-11-17T18:07:31Z as merge commit `74118ad1`
+(merged without waiting for approval). The repository is live and `main` advances roughly every minute, so the
+board conflict recurred on each merge attempt; it was resolved mechanically (both top sections kept, nothing
+discarded) and the PR merged on the second retry.
 
 
 
