@@ -4170,11 +4170,63 @@ One further conflict inside the rebase onto `82bac65` was in `scripts/build.py`:
 | Task | Status | Owner | File scope |
 |---|---|---|---|
 | AC-1 Claim this scope and push before any other edit | **done** — this section | `arena/ac0a4bd3-tino3` | `COORDINATION.md` (this section only) |
-| AC-2 **Repair the stray merge-conflict marker** left in this board at line 4140 (`>>>>>>> 5b8d8fa …`) by the PR #153 rebase. The board's own rule R-1143-2 requires `git grep -nE '^(<<<<<<<\|>>>>>>>)'` to be clean before any merge to `main`; it is not clean today | **in progress** | `arena/ac0a4bd3-tino3` | `COORDINATION.md` (the stray marker line only; no other session's record edited) |
-| AC-3 Line-by-line re-verification of the decision-critical official figures against the official publishers on their own domains, read this session; record every read with its link | pending | `arena/ac0a4bd3-tino3` | read-only; results recorded here and on `review.html` via `scripts/build.py` |
-| AC-4 Fresh gap check of the owner's brief against the published edition; close the genuine gaps that remain | pending | `arena/ac0a4bd3-tino3` | `scripts/build.py`, `assets/data/inputs.json`, `assets/sources.json` (append only), regenerated pages |
-| AC-5 Rebuild, run all five gates, open the pull request from this branch to `main`, merge without waiting for approval, confirm the Pages deploy, record the PR link and merge result | pending | `arena/ac0a4bd3-tino3` | this section only; `README.md` (counts) |
+| AC-2 **Repair the stray merge-conflict marker** left in this board at line 4140 (`>>>>>>> 5b8d8fa …`) by the PR #153 rebase. The board's own rule R-1143-2 requires `git grep -nE '^(<<<<<<<\|>>>>>>>)'` to be clean before any merge to `main`; it is not clean today | **done** — the orphaned `>>>>>>>` line was removed with an assertion-guarded edit, `git grep` is clean, and the repair is in commit `3c443c4` | `arena/ac0a4bd3-tino3` | `COORDINATION.md` (the stray marker line only; no other session's record edited) |
+| AC-3 Line-by-line re-verification of the decision-critical official figures against the official publishers on their own domains, read this session; record every read with its link | **done** — 17 November 2026 recheck table on `review.html`: 12 entries re-read on the publisher's own domain, 3 gaps recorded, no published figure changed | `arena/ac0a4bd3-tino3` | read-only; results recorded here and on `review.html` via `scripts/build.py` |
+| AC-4 Fresh gap check of the owner's brief against the published edition; close the genuine gaps that remain | **done** — suggestions page contradiction corrected, Decision and Date columns added, shared build-date module added, and the one-page brief's print budget measured and brought inside one sheet | `arena/ac0a4bd3-tino3` | `scripts/build.py`, `scripts/edition.py`, `scripts/print_budget.py`, `assets/data/inputs.json`, `assets/sources.json` (append only), regenerated pages |
+| AC-5 Rebuild, run all five gates, open the pull request from this branch to `main`, merge without waiting for approval, confirm the Pages deploy, record the PR link and merge result | **in progress** | `arena/ac0a4bd3-tino3` | this section only; `README.md` (counts) |
 
 **Privacy commitments for this session.** No name, street address, postal code, parcel identifier, county or city name, utility or account identifier, or jurisdiction-specific publisher host appears in any file this session writes, including this board. Owner-supplied money is published only as a multiple of ten; official amounts are published verbatim where the official document prints them. Every new ledger entry links to a host already on the approved list in `scripts/verify.py`. Claims that cannot be anchored to an official source are labelled and sent to the register on `review.html`, not printed as fact.
 
 **Baseline at claim (17 November 2026).** `scripts/rebuild.py` exit 0 with a clean `git status` afterwards, so the committed edition reproduces byte for byte. `verify.py` PASS (25 pages, 1,238 table rows, 1,061 linked to official publishers, 177 explicitly registered unsourceable, 112 ledger sources, 4,316 links). `privacy_boundary.py` PASS. `tracked_tree_guard.py` PASS (65 tracked text files). `package_site.py` PASS (25 pages, 1 runtime asset, 136 withdrawal routes). `verify_legacy.py --config-only` PASS.
+
+
+### Session work log (17 November 2026)
+
+**Suggestions page.** The "nothing implemented" line contradicted the same page's own table, which
+listed implemented improvements. The wording was corrected, and Decision and Date columns were added
+to both the proposed-household-action table and the site-improvement table. Both columns are blank:
+the household has not decided, and the site cannot claim a decision it has not recorded.
+
+**Shared edition date.** `scripts/edition.py` is now the single source of truth for the ISO build
+date, the text build date and the 13–17 November source-check window. `scripts/model.py` and
+`scripts/build.py` import it, so the model metadata and the published footers can no longer drift
+apart. This session found exactly that drift: the public footers said 17 November while
+`assets/data/model.json` still said `built: 2026-11-13`.
+
+**Print budget for the one-page brief.** The brief is published as a one letter-size page, and that
+claim had never been checked — no browser is available in the build environment. This session
+measured it instead rather than leaving the claim unexamined.
+
+- `scripts/print_budget.py` estimates the printed height of the brief against one sheet. It reads
+  the page margins, the column grid, the type size, the line height and the header and footer
+  sizes out of `assets/style.css`, so changing the print rules changes the estimate and the two
+  cannot drift apart. It skips content the print rules hide, pairs the grid sections into rows the
+  way the grid does, and applies a pessimistic character width, no margin collapsing and a 6%
+  safety margin, so it runs long rather than short.
+- **The brief as published before this check measured at 129% of a sheet** (954pt against 737pt of
+  usable page height): it would have run onto a second page while claiming to be one page. That
+  figure is a recorded measurement, kept in `assets/data/print_budget_before.json`, taken from the
+  committed file with this same estimator; it can be reproduced with
+  `python3 scripts/print_budget.py /tmp/b.html /tmp/s.css`.
+- Four changes brought it inside the sheet without dropping any of its substance: the seven
+  sections were re-ordered so that the two longest sit side by side in the two-column grid instead
+  of beside short ones, and so that the sheet reads in the order an adviser would want (decision,
+  questions to ask, options and risks, what is not known, mixed paths, timing, glossary); the print
+  type was set from 7.4pt to 7.1pt with tighter spacing; the screen lede was removed from the
+  printed sheet because the title already says what the document is; and the section text was
+  shortened. **It now measures at 94% of a sheet** (696pt against 737pt, 41pt of slack).
+- The estimator now also counts the wrapped lines of the title, the confidential line and the
+  footer, and of a section heading inside a narrow column. Measuring the whole rendered page
+  rather than the brief's body matters: the page template supplies the title, and the title prints.
+- `scripts/verify.py` now fails the build if the estimate ever exceeds one sheet again, so an edit
+  that breaks the one-page promise is caught before it is published, and the published figure is
+  checked against the measured one so the two cannot disagree.
+- **This is an estimate and is published as one.** It is a model of a browser, not a browser.
+  Nobody has seen the printed sheet; the browser check remains an open item on the register of
+  unverified things and is stated on `review.html` in those words.
+
+**Gates.** `scripts/rebuild.py` PASS and reproducible; `scripts/verify.py` PASS (25 pages, **1,258
+table rows**, **1,074 linked to official publishers**, **184 explicitly registered unsourceable**,
+**112 ledger sources**, 4,342 links); `scripts/privacy_boundary.py` PASS;
+`scripts/tracked_tree_guard.py` PASS; `scripts/package_site.py` PASS (25 public pages, 1 runtime
+asset, 136 withdrawal routes); `scripts/verify_legacy.py --config-only` PASS.

@@ -71,10 +71,18 @@ professional advice when dates, facts or laws change.
 
 The current generated edition contains **25 HTML pages**, **one runtime stylesheet**, **112 entries
 in the source ledger**, and **136 content-free withdrawal notices** for retired routes. The latest
-local verification reports **1251 table rows**: **1074 linked to official publishers** and **177
+local verification reports **1258 table rows**: **1074 linked to official publishers** and **184
 explicitly registered as unsourceable or unverified**. A row without a confirming official source is
 not filled in by inference. The public site contains no source ledger or internal model data files;
 the Jekyll and Actions publication boundaries are checked separately.
+
+The printable Attorney & CPA brief is published as a one-page sheet, and that claim is checked.
+`scripts/print_budget.py` estimates the brief's printed height against one letter-size page, reading
+the page margins, the column grid, the type size and the line height out of `assets/style.css`, so
+the estimate cannot drift from the sheet that is actually printed. The estimate is deliberately
+pessimistic and the build fails if it exceeds one sheet. It is an estimate, not a browser print: no
+browser is available in the build environment, so the printed sheet still has not been seen, and that
+open item is recorded on the register of unverified things.
 
 The model and pages are generated from `assets/data/` and `scripts/build.py`; do not edit generated
 HTML or CSV outputs by hand. `EXECUTIVE_SUMMARY.md` is generated from the same model data and is
