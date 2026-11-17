@@ -1547,6 +1547,146 @@ def insurance_and_encumbrance_cases(year: int = 2045) -> dict:
                  "service is charged the same way for the same reason."),
     }
 
+# ------------------------------------------------------- keep and borrow ----
+# The published 30-year fixed mortgage anchors. These constants are kept identical
+# to the ones in scripts/liquidity.py, which is the module that cites them on the
+# liquidity page; both were re-read at the publisher (FRED series MORTGAGE30US,
+# the Freddie Mac Primary Mortgage Market Survey) on 17 November 2026: 7.11 in the
+# week of 12 November 2026, 5.98 the lowest weekly average published in 2026
+# (26 February), and 7.40 the highest (8 and 15 October). Change them in both
+# places together.
+MORTGAGE_RATE = 0.0711
+MORTGAGE_LOW = 0.0598
+MORTGAGE_HIGH = 0.0740
+# The same anonymous excess bands the liquidity engine publishes, and Table A's top
+# rate (Instructions for Form 706: a taxable amount over $1,000,000 is taxed at 40
+# percent on the excess). The principal below is never an estate size: each band's
+# loan is the tax on that band of the amount above the exclusion.
+LIQUIDITY_EXCESS_BANDS = [1_000_000, 2_500_000, 5_000_000, 10_000_000, 20_000_000]
+ESTATE_TAX_TOP_RATE = 0.40
+
+
+def amortising_payment(principal: float, rate: float, months: int) -> float:
+    """The level monthly payment that fully retires `principal` over `months` at `rate`."""
+    i = rate / 12.0
+    return principal * i / (1.0 - (1.0 + i) ** (-months))
+
+
+def keep_and_borrow_cases(year: int = 2045) -> dict:
+    """The keep-and-borrow case, end to end (the open "Add a mortgage case" item).
+
+    The estate liquidity page prices borrowing as a carrying cost only. This case
+    runs the whole path for each anonymous excess band: the household keeps Property
+    A and raises that band's tax bill by borrowing against it - a fully amortising
+    30-year fixed loan at the published rate - instead of selling Property A and
+    paying the same bill out of the proceeds. Both routes are priced on the same
+    path engine the rest of the site uses, so the comparison is between two complete
+    futures, not between a cost and a silence. The principal is never an estate
+    size: each row is the tax on one anonymous band of the amount above the
+    exclusion, the same bands the payment-clock tables already publish.
+    """
+    base = next(x for x in MAIN_RESULT["paths"] if x["inherit_year"] == year)
+    live = base["paths"]["live_in"]["terminal"]
+    rent = base["paths"]["rent_out"]["terminal"]
+    sell = base["paths"]["sell_equities"]["terminal"]
+    net_proceeds = base["paths"]["sell_equities"]["sale"]["net"]
+    r_fv = ASM["equity_return_nominal_gross"]["baseline"] - ASM["equity_tax_drag"]["baseline"]
+    horizon = ASM["horizon_years"]
+    months = horizon * 12
+    g = ASM["house_growth"]["baseline"]
+    k = year - 2026
+    value_a = A["estimated_market_value_2026"] * (1 + g) ** k
+    value_b = B["estimated_market_value_2026"] * (1 + g) ** k
+
+    rows = []
+    for excess in LIQUIDITY_EXCESS_BANDS:
+        tax = money10(ESTATE_TAX_TOP_RATE * excess)
+        annual = amortising_payment(tax, MORTGAGE_RATE, months) * 12.0
+        fv_pay = fv_stream([annual] * horizon, r_fv)
+        fv_lo = fv_stream([amortising_payment(tax, MORTGAGE_LOW, months) * 12.0] * horizon, r_fv)
+        fv_hi = fv_stream([amortising_payment(tax, MORTGAGE_HIGH, months) * 12.0] * horizon, r_fv)
+        # The sale route pays the band's tax out of the proceeds at the end of the
+        # first year - the model's year-end convention, close to the nine-month due
+        # date - and invests what is left for the years that remain.
+        route_sell = sell - tax * (1 + r_fv) ** (horizon - 1)
+        # The keep routes are the pure keeping paths less the future value of the
+        # payment stream, exactly the way every other carrying cost is charged.
+        route_keep_live = live - fv_pay
+        route_keep_rent = rent - fv_pay
+        covers = bool(net_proceeds >= tax)
+        if covers:
+            best = max(route_sell, route_keep_live, route_keep_rent)
+            best_route = ("sell and pay from the proceeds" if best == route_sell
+                          else "keep, live in it and borrow" if best == route_keep_live
+                          else "keep, let it out and borrow")
+        else:
+            # The sale cannot raise the whole bill, so no route here is
+            # self-contained; the max is still computed and published, and the
+            # label says what the negative sale figure means.
+            best = max(route_sell, route_keep_live, route_keep_rent)
+            best_route = ("sell and pay, but the proceeds cannot cover the tax: the shortfall "
+                          "must come from other assets" if best == route_sell else
+                          ("keep, live in it and borrow" if best == route_keep_live
+                           else "keep, let it out and borrow"))
+        rows.append({
+            "excess": money10(excess),
+            "tax": tax,
+            "monthly_payment": money10(annual / 12.0),
+            "annual_payment": money10(annual),
+            "total_paid": money10(annual * horizon),
+            "total_interest": money10(annual * horizon - tax),
+            "fv_payments": money10(fv_pay),
+            "fv_payments_low": money10(fv_lo),
+            "fv_payments_high": money10(fv_hi),
+            "route_keep_live": money10(route_keep_live),
+            "route_keep_rent": money10(route_keep_rent),
+            "route_sell_pay": money10(route_sell),
+            "best_route": best_route,
+            "sale_covers_tax": covers,
+            "ltv_a": round(tax / value_a, 4) if value_a else None,
+            "ltv_both": round(tax / (value_a + value_b), 4) if (value_a + value_b) else None,
+        })
+
+    borrow_wins = any(r["route_keep_live"] > r["route_sell_pay"]
+                      or r["route_keep_rent"] > r["route_sell_pay"] for r in rows)
+    short_bands = [r["tax"] for r in rows if not r["sale_covers_tax"]]
+    return {
+        "inherit_year": year,
+        "horizon_years": horizon,
+        "rate": MORTGAGE_RATE, "rate_low": MORTGAGE_LOW, "rate_high": MORTGAGE_HIGH,
+        "rate_basis": ("the published 30-year fixed mortgage average for the week of 12 November 2026; "
+                       "the low and high are the lowest and highest weekly averages published in 2026"),
+        "method": ("a fully amortising 30-year fixed loan: level monthly payments that retire the principal "
+                   "over the whole horizon, charged to the keeping paths on the model's own convention "
+                   "(each year's payments treated as paid at that year's end and compounded at the "
+                   "after-tax equity return, the same way every other carrying cost on this site is "
+                   "charged), with no deduction assumed for the interest"),
+        "sale_route_timing": ("the proceeds invest through the first year, the band's tax is paid out of them at "
+                              "the end of that year (close to the nine-month due date), and what remains "
+                              "compounds for the years that are left; where the proceeds cannot cover the tax, "
+                              "the published sale figure is negative and is the future value of the shortfall "
+                              "the household would have to pay from its other assets, with nothing left "
+                              "invested from this sale"),
+        "value_at_death_a": money10(value_a),
+        "value_at_death_both": money10(value_a + value_b),
+        "net_sale_proceeds": net_proceeds,
+        "gap_live_at_baseline": money10(sell - live),
+        "borrow_wins_any_band": borrow_wins,
+        "bands_where_sale_alone_cannot_pay": short_bands,
+        "rows": rows,
+        "src": ["fred_mortgage", "irs_estate", "irs_i706"],
+        "limit": ("A rate for the 2040s is not published and is not forecast: the loan is priced at the "
+                  "rate published today, held flat for thirty years, which no real fixed-rate borrower in "
+                  "2045 would experience. Whether a lender would lend the larger bands against either "
+                  "building, and on what terms, is not modelled and is not assumed: the largest bands "
+                  "exceed the projected value of Property A alone, so they would need both buildings as "
+                  "collateral or other assets besides. Points, closing costs, underwriting and refinancing "
+                  "are not modelled. Interest is assumed non-deductible, the conservative reading the site "
+                  "uses everywhere."),
+        "note": ("The letting route credits no rent, because no rent opinion exists, so the keep-and-let "
+                 "rows are a floor exactly as the letting path is everywhere else on this site."),
+    }
+
 def _append_extras(out: dict) -> dict:
     """Run after main() has built `out`, without editing main()'s body."""
     global MAIN_RESULT
@@ -1556,6 +1696,7 @@ def _append_extras(out: dict) -> dict:
     out["roll_audit"] = roll_audit()
     out["imputed_rent"] = imputed_rent_sensitivity(2045)
     out["cost_cases"] = insurance_and_encumbrance_cases(2045)
+    out["mortgage_case"] = keep_and_borrow_cases(2045)
     return out
 
 
