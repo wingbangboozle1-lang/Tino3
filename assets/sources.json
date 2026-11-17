@@ -1313,6 +1313,37 @@
    "checked": "Opened on the publisher's official domain on 2026-11-17 and read in this session.",
    "supports": "The statutory definition, quoted in full: \"A 'change in ownership' means a transfer of a present interest in real property, including the beneficial use thereof, the value of which is substantially equal to the value of the fee interest.\" Used on the disposition page for the point that a transfer of the property in an exchange is a change in ownership for property tax purposes, so the replacement is enrolled at its own value and any intergenerational exclusion carried on the property given up ends.",
    "limits": "The general definition only. The exclusions and the exceptions are in the sections that follow it, and whether a particular transfer is excluded depends on those sections and on the facts."
+  },
+  {
+   "id": "ftb_540_instructions_2025",
+   "publisher": "California Franchise Tax Board",
+   "title": "2025 Instructions for Form 540, California Resident Income Tax Return",
+   "url": "https://www.ftb.ca.gov/forms/2025/2025-540-instructions.html",
+   "checked": "Opened on the publisher's official domain on 2026-11-17 (arena/11bff629-tino3).",
+   "supports": "Line 62 instructions: if taxable income is more than $1,000,000, subtract $1,000,000 from taxable income from Form 540 line 19 and apply a 1% rate to the remainder; the line is named the Behavioral Health Services Tax in the 2025 booklet.",
+   "limits": "The instructions booklet is for tax year 2025; later years must be re-read. The rate and threshold live in Revenue and Taxation Code section 17043, which is the authority; the booklet shows how the return reports it.",
+   "verifies": [
+    "The additional 1% applies to taxable income above $1,000,000 and is reported on Form 540 line 62 as the Behavioral Health Services Tax"
+   ],
+   "quote": "Line 62 - Behavioral Health Services Tax. If your taxable income is more than $1,000,000, compute the Behavioral Health Services Tax using whole dollars only: 1. Taxable income from Form 540, line 19. 2. Less: $(1,000,000). 3. Subtotal. 4. Tax rate - 1%: .01. 5. Behavioral Health Services Tax - Multiply line 3 by line 4. Enter this amount here and on line 62."
+  },
+  {
+   "id": "sos_cleared_circulation",
+   "publisher": "California Secretary of State",
+   "title": "Initiatives and Referenda Cleared for Circulation",
+   "url": "https://www.sos.ca.gov/elections/ballot-measures/initiative-and-referendum-status/initiatives-referenda-cleared-circulation",
+   "checked": "Opened on the publisher's official domain on 2026-11-17. The status page it is linked from is dated 20 October 2026 and lists 5 measures cleared for circulation, 0 circulating with 25% of signatures and 1 pending at the Attorney General.",
+   "supports": "Five proposed initiatives were cleared for circulation (26-0001 to 26-0005, summary dates 7 April to 25 September 2026): ballot-procedure changes, one with a 5% tax on income over $10 million to fund elections; a constitutional-revision route; a constitutional amendment creating a strategic implementation board; a repeal of the top-two primary law; and a food sales-tax exemption. None of the five amends the inheritance or transfer-reassessment rules of Proposition 19.",
+   "limits": "A list of proposals at a point in time, not a forecast. Clearance for circulation is not qualification: a measure needs the signatures listed on the status page, verification, and the ballot date that the Secretary of State sets. Re-read the live dashboard at each review gate."
+  },
+  {
+   "id": "ftb_sched_ca_540",
+   "publisher": "California Franchise Tax Board",
+   "title": "2025 Instructions for Schedule CA (540), California Adjustments - Residents",
+   "url": "https://www.ftb.ca.gov/forms/2025/2025-540-ca-instructions.html",
+   "checked": "Read at the publisher on 2026-11-17 (this session). Part I, Section A, line 7a and the General Information conformity list were read in full.",
+   "supports": "On line 7a, capital gain or loss: \"Generally, no adjustments are made on this line. California taxes long and short term capital gains as regular income. No special rate for long term capital gains exists.\" The same paragraph lists \"Gain on the sale of personal residence where depreciation was allowable\" among the items for which California basis can differ from federal basis, to be resolved on Schedule D (540). The General Information section lists the One Big Beautiful Bill Act among the federal acts to which the Revenue and Taxation Code generally does not conform.",
+   "limits": "The schedule adjusts federal amounts; it does not state a rate, which comes from the Form 540 schedules and section 17043. The depreciation-allowable point applies to a home that was let before it was sold, which is the live-then-let case on this site."
   }
  ]
 }
