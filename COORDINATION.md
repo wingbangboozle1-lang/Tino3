@@ -5004,3 +5004,18 @@ runner-side unreachable rather than as dead links.
 repository private; the two inputs that would close flagged items without moving the ranking
 (three insurance quotes per building, a written date-of-death valuation); the parcel-tax
 recheck after certification; and completing the pre-commitment register.
+
+### Follow-up: PR #179 merged
+
+- **Pull request:** https://github.com/wingbangboozle1-lang/Tino3/pull/179, from
+  `arena/d1968629-tino3` to `main`, carrying this section and the widened annotation only.
+- **Merge:** `gh pr merge 179 --merge` succeeded without approval and without `--auto`. Merge
+  commit `3c6e5bed`, merged 17:33:25 UTC on 17 November 2026.
+- **Post-merge checks on `main`:** `Verify static site` (run 44138293878) and `Deploy GitHub Pages`
+  (run 44138293895) both finished `success` on the merge commit; the legacy `pages build and
+  deployment` run for it completed as well.
+- **Live site:** re-read after the deploy. The dashboard serves the 17 November 2026 edition, so
+  the deployment is not stale.
+- **Session result:** two new scripts, one new workflow, three pull requests (#167 closed by
+  another session and superseded, #174 and #179), every gate green before each push, no generated
+  page, figure, model output or ledger entry changed by this session.
