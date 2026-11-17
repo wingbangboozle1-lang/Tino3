@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "assets" / "data"
 sys.path.insert(0, str(ROOT / "scripts"))
 
+import edition  # noqa: E402  (the edition's build date, shared with the page builder)
 import episodes as EP  # noqa: E402  (reads its own verbatim CSVs, no network, no randomness)
 INPUTS = json.loads((DATA / "inputs.json").read_text(encoding="utf-8"))
 SERIES = json.loads((DATA / "series.json").read_text(encoding="utf-8"))
@@ -1126,6 +1127,53 @@ CA_SURCHARGE = ASM.get("ca_1pct_surcharge", {})
 GAIN_RATE = ASM["combined_gain_tax_rate"]
 
 
+def form540_surcharge(gain: float, other_income: float, threshold: float,
+                      top_rate: float = 0.123) -> dict:
+    """The 1% computed the way the Form 540 instructions compute it.
+
+    Read from the 2025 Instructions for Form 540, line 62 (ledger entry
+    `ftb_540_instructions_2025`). The line 62 worksheet is:
+
+        1. taxable income from Form 540, line 19
+        2. less $(1,000,000)
+        3. subtotal
+        4. tax rate 1%
+        5. the tax: line 3 multiplied by line 4, entered on line 62
+
+    Two consequences the flat-rate version on this page got wrong, both in the
+    taxpayer's favour against a flat application to the whole gain:
+
+    * The 1% reaches only the slice of *taxable income* above the threshold. If
+      the gain plus all other taxable income stays under the threshold, the tax
+      is zero, whatever the size of the gain.
+    * Taxable income is cumulative. A gain lands on top of whatever else the
+      household already earns in the year of sale, so the position of the gain
+      relative to the threshold decides most of the answer, not its size alone.
+
+    The bracket tax is computed on the same cumulative income so that the two
+    layers can be priced against each other. `top_rate` is the top printed
+    bracket on the current schedule (12.3%); it is applied flat to all taxable
+    income, which OVERSTATES the bracket tax and is stated as such on the page.
+    That direction is deliberate: it cannot make the surcharge look larger than
+    it is.
+    """
+    ti = max(0.0, gain) + max(0.0, other_income)
+    over = max(0.0, ti - threshold)
+    # The part of the 1% that is actually caused by the gain: the gain can only be
+    # taxed on the slice of itself that lands above the threshold, and it can never
+    # be taxed on more than its own size. `over` above includes the slice created by
+    # other income, which the household owes whether or not it sells the house.
+    attributable = min(max(0.0, gain), over)
+    return {
+        "taxable_income": money10(ti),
+        "above_threshold": money10(over),
+        "surcharge": money10(over * 0.01),
+        "surcharge_on_gain": money10(attributable * 0.01),
+        "bracket_tax": money10(ti * top_rate),
+        "state_total": money10(over * 0.01 + ti * top_rate),
+    }
+
+
 def surcharge_sensitivity(year: int = 2045) -> dict:
     """What the section 17043 1% does to the one sale the site recommends.
 
@@ -1136,6 +1184,14 @@ def surcharge_sensitivity(year: int = 2045) -> dict:
     surcharge and at the rate with it. The point is to show that the surcharge
     changes the size of the tax on the late-sale and letting paths, and does not
     change whether selling at inheritance wins.
+
+    The flat comparison in `rows` is an UPPER BOUND on the surcharge: it applies
+    the one-point difference to the entire gain. The `worksheet` block below it
+    computes the same tax the way the Form 540 line 62 instructions do, on the
+    slice of cumulative taxable income above the threshold, across a range of
+    other taxable income. Read together, the two say: the direction is certain,
+    the magnitude is a ceiling, and for a modest household income the surcharge
+    is a fraction of what the ceiling implies.
     """
     p = next(x for x in MAIN_RESULT["paths"] if x["inherit_year"] == year)
     low, high = float(GAIN_RATE["low"]), float(GAIN_RATE["high"])
@@ -1160,13 +1216,46 @@ def surcharge_sensitivity(year: int = 2045) -> dict:
             "difference": s_high["tax"] - s_low["tax"],
             "terminal_with_surcharge": path["terminal"],
         })
+    # ---- the same tax computed on the Form 540 worksheet, not on the whole gain ----
+    # `other_income` stands in for every other item on the return: wages, interest,
+    # rent, pensions. It is an assumption, not a figure from the household, so it is
+    # published as a range of scenarios like the imputed rent and insurance bands.
+    low, high = float(GAIN_RATE["low"]), float(GAIN_RATE["high"])
+    threshold = int(CA_SURCHARGE.get("threshold", 1_000_000))
+    scenarios = ASM.get("form540_other_income", {}).get(
+        "scenarios", [0, 250_000, 1_000_000, 2_000_000])
+    worksheet = []
+    for key, label in (("sell_equities", "Sell at inheritance"),
+                       ("live_in", "Live in it, sell after 30 years"),
+                       ("rent_out", "Let it out, sell after 30 years")):
+        path = p["paths"][key]
+        gain = float(path["sale"]["gain"])
+        rungs = []
+        for other in scenarios:
+            w = form540_surcharge(gain, other, threshold)
+            # the bracket part of this tax, at the same cumulative income, priced on
+            # the two published California layers: 12.3% top bracket, then this 1%
+            rungs.append({
+                "other_income": money10(other),
+                "label": ("No other taxable income" if other == 0
+                          else f"${other:,.0f} of other taxable income"),
+                **w,
+            })
+        worksheet.append({
+            "key": key, "label": label,
+            "gain": money10(gain),
+            "flat_upper_bound": money10(gain * (high - low)),
+            "rungs": rungs,
+        })
     return {
         "year": year,
         "surcharge_rate": float(CA_SURCHARGE.get("value", 0.01)),
-        "threshold": int(CA_SURCHARGE.get("threshold", 1000000)),
+        "threshold": threshold,
         "threshold_indexed": bool(CA_SURCHARGE.get("threshold_indexed", False)),
         "rate_without": low, "rate_with": high,
         "rows": rows,
+        "worksheet": worksheet,
+        "worksheet_scenarios": scenarios,
         "recommendation_unchanged": (
             p["paths"]["sell_equities"]["terminal"] > p["paths"]["live_in"]["terminal"]),
     }
@@ -1816,7 +1905,7 @@ def main() -> dict:
     maint_rent = A["annual_costs"]["maintenance_pct_rental"]["value"]
 
     out = {
-        "meta": {"built": "2026-11-13", "rounding": "nearest $10",
+        "meta": {"built": edition.BUILD_DATE_ISO, "rounding": "nearest $10",
                  "horizon_years": horizon, "deterministic": True,
                  "inflation_assumption": infl, "house_growth_assumption": g,
                  "equity_assumption": eq, "equity_drag": drag,
