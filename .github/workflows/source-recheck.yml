@@ -1,0 +1,53 @@
+# Periodic recheck of the official sources this site publishes, plus an advisory
+# structural audit of the generated pages.
+#
+# The publication gate proves that every published table row links to an approved
+# official host and that the link resolves inside the artifact. It never asks the
+# publisher whether the page is still there. This workflow does, on a schedule and
+# before every pull request, and reports what it found.
+#
+# It is report-only by design: both scripts exit 0, the recheck step carries
+# continue-on-error, and nothing here builds, verifies or deploys the site. A dead,
+# moved or refused source is a finding for a human, not a reason to block a merge.
+#
+# Output routing matters: each script writes its Markdown report to a file with
+# --out, the file is appended to the job summary, and the script's own stdout (which
+# carries the report and the GitHub Actions annotations) goes to the job log. Nothing
+# is piped, because a pipe would strip the annotations before the runner sees them.
+name: Source and structure integrity report
+on:
+  pull_request:
+  schedule:
+    - cron: '17 6 4 * *'   # monthly, off the hour
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Structural audit of the published pages
+        run: |
+          mkdir -p _reports
+          python scripts/structure_audit.py --annotate \
+            --json _reports/structure.json --out _reports/structure.md
+          cat _reports/structure.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Recheck every official source the ledger publishes
+        continue-on-error: true
+        run: |
+          mkdir -p _reports
+          python scripts/source_recheck.py --annotate \
+            --out _reports/source-recheck.md
+          cat _reports/source-recheck.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload the reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integrity-report
+          path: _reports/
+          if-no-files-found: warn
+          retention-days: 90
