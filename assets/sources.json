@@ -924,9 +924,9 @@
    "publisher": "California Secretary of State",
    "title": "State Ballot Measures - Statewide Results, 2026 General Election",
    "url": "https://electionresults.sos.ca.gov/returns/ballot-measures",
-   "checked": "Opened on the publisher's official domain on 2026-11-15; results table read at the 14 November 2026, 5:16 p.m. update.",
-   "supports": "Unofficial results as of 14 November 2026, 5:16 p.m., with 23,860 of 23,860 precincts partially reporting; vote-by-mail, provisional and other ballots continue to be processed and counted during the canvass; results will be certified by 11 December 2026. Proposition 3 (extension of the existing tax on high incomes) yes 60.7%; Proposition 40 (one-time tax on certain taxpayers) no 52.2%; Proposition 41 (spending-limit audits) no 55.2%; Proposition 42 (no new state personal property taxes) yes 51.3%; Proposition 43 (limit on local revenue votes) no 57.6%; Proposition 37 (middle-income buyer loans) yes 62.5%.",
-   "limits": "These are unofficial results. They change during the canvass and are not final until certified on 11 December 2026. Treat every figure as provisional. An earlier edition published the 12 November 2026 counts (Prop 3 60.7% yes; Prop 40 52.4% no; Prop 41 55.1% no; Prop 42 51.4% yes; Prop 43 57.5% no); those moved during the canvass and were corrected on 15 November 2026."
+   "checked": "Opened on the publisher's official domain on 2026-11-17; results table read at the 16 November 2026, 7:12 p.m. update (the page's own 'reporting as of' line).",
+   "supports": "Unofficial results as of 16 November 2026, 7:12 p.m., with 23,860 of 23,860 precincts partially reporting; vote-by-mail, provisional and other ballots continue to be processed and counted during the canvass; results will be certified by 11 December 2026. Proposition 3 (extension of the existing tax on high incomes) yes 60.8%; Proposition 40 (one-time tax on certain taxpayers) no 52.2%; Proposition 41 (spending-limit audits) no 55.2%; Proposition 42 (no new state personal property taxes) yes 51.2%; Proposition 43 (limit on local revenue votes) no 57.7%; Proposition 37 (middle-income buyer loans) yes 62.5%.",
+   "limits": "These are unofficial results. They change during the canvass and are not final until certified on 11 December 2026. Treat every figure as provisional. Superseded readings, kept for the record: 12 November 2026 (Prop 3 60.7% yes; Prop 40 52.4% no; Prop 41 55.1% no; Prop 42 51.4% yes; Prop 43 57.5% no) and 14 November 2026, 5:16 p.m. (Prop 3 60.7% yes; Prop 40 52.2% no; Prop 41 55.2% no; Prop 42 51.3% yes; Prop 43 57.6% no). Those moved during the canvass and were replaced on 17 November 2026."
   },
   {
    "id": "ssa_trustees",
@@ -1259,6 +1259,15 @@
    "checked": "opened on the publisher's site on 2026-11-16 (2023 edition of the United States Code)",
    "supports": "The compounding convention used in every deferral figure on the liquidity page: interest on unpaid tax compounds daily, not annually.",
    "limits": "The engine on this site compounds on a 365-day year. The IRS determines rates quarterly and may apply them per quarter; small differences are possible against an assessment."
+  },
+  {
+    "id": "sos_cleared_circulation",
+    "publisher": "California Secretary of State",
+    "title": "Initiatives and Referenda Cleared for Circulation",
+    "url": "https://www.sos.ca.gov/elections/ballot-measures/initiative-and-referendum-status/initiatives-referenda-cleared-circulation",
+    "checked": "Opened on the publisher's official domain on 2026-11-17. The status page it is linked from is dated 20 October 2026 and lists 5 measures cleared for circulation, 0 circulating with 25% of signatures and 1 pending at the Attorney General.",
+    "supports": "Five proposed initiatives were cleared for circulation (26-0001 to 26-0005, summary dates 7 April to 25 September 2026): ballot-procedure changes, one with a 5% tax on income over $10 million to fund elections; a constitutional-revision route; a constitutional amendment creating a strategic implementation board; a repeal of the top-two primary law; and a food sales-tax exemption. None of the five amends the inheritance or transfer-reassessment rules of Proposition 19.",
+    "limits": "A list of proposals at a point in time, not a forecast. Clearance for circulation is not qualification: a measure needs the signatures listed on the status page, verification, and the ballot date that the Secretary of State sets. Re-read the live dashboard at each review gate."
   }
  ]
 }
