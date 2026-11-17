@@ -19,6 +19,131 @@
 
 **Privacy constraint.** No name, street address, postal code, parcel identifier, county or city name, trust term, estate size or unrounded owner amount is added to any public page or to this board. Owner-supplied money is published only as a multiple of ten; official amounts are published verbatim where the official document prints them. Every new ledger entry links to a host already on the approved list in `scripts/verify.py`. No rent, income, filing status or other household figure is invented: the letting-path engine is driven by the same empty rent input the model already uses and by anonymous scenario bands, and where the answer depends on a household fact the page says so instead of filling it in.
 
+### R-2 to R-6 completion record, 17 November 2026
+
+Everything below was read at source in this session. Nothing is inferred, and where the answer depends
+on a household fact that was never supplied, the page says so instead of filling it in.
+
+**R-2, the sources, read on the publishers' own domains on 17 November 2026.** Eight new ledger
+entries, 112 to 120:
+- `irs_niit` and `irs_niit_qa` — the net investment income tax is 3.8% of the lesser of net investment
+  income and the excess of modified adjusted gross income over the threshold: $250,000 joint, $125,000
+  married filing separately, $200,000 single or head of household, $250,000 qualifying widow(er).
+  Rental income is net investment income. **The IRS states that these threshold amounts are not
+  indexed for inflation**, so they are the same in 2045 as now unless Congress changes them. Section
+  121 excluded gain is not net investment income.
+- `irs_p925` (already in the ledger, now used) — "Generally, rental activities are passive activities
+  even if you materially participated in them." The $25,000 special allowance: maximum $25,000,
+  reduced by 50% of modified adjusted gross income over $100,000, gone at $150,000; $12,500 and
+  $50,000/$75,000 for married filing separately living apart; no allowance if they lived together.
+  Active participation needs at least 10% by value and genuine management decisions. Dispositions:
+  suspended losses are allowed in full in the year the owner disposes of the **entire** interest, in a
+  transaction in which **all** realised gain or loss is recognised, **to a person who is not related**.
+  Disposition by death: allowed only to the extent they exceed the step-up in the transferee's basis.
+- `irs_qbi` and `irs_rp1938` — section 199A is up to 20% of qualified business income. Rev. Proc.
+  2019-38 safe harbour: separate books and records; **250 or more hours** of rental services a year
+  for an enterprise under four years old, or in any three of the five consecutive years ending with
+  the taxable year for an older one; contemporaneous records of hours, description, dates and who
+  performed the services; and a statement on a timely filed original return. Excluded: property used
+  as a residence under section 280A(d), triple net leases, rents to a commonly controlled business,
+  and any part that is an SSTB. Travel to the property does not count as a rental service.
+- `uscode168` — residential rental property: **27.5-year** recovery period (section 168(c)), straight
+  line (168(b)(3)(B)), **mid-month** convention (168(d)(2)(B)); salvage value zero; "residential
+  rental property" is a building of which 80% or more of gross rental income is from dwelling units
+  (168(e)(2)(A)). Land is not within the section, which is why the building share is what is recovered.
+- `uscode1014` — basis is fair market value at death (a)(1), or the section 2032 alternate value
+  (a)(2); **(b)(6) steps up the surviving spouse's one-half share of community property** where at
+  least one half of the whole community interest was includible in the gross estate; (b)(9) covers
+  property required to be included in the gross estate; (f) caps basis at the estate-tax value or the
+  section 6035 statement value.
+- `uscode2032` — alternate valuation at six months (or the date of distribution or sale within it);
+  available only if it decreases **both** the gross estate and the sum of the estate tax and the
+  chapter 13 tax; made on the return; irrevocable; not available if the return is filed more than one
+  year after the due date including extensions.
+- `ftb_3801` — **California did not conform to section 469(c)(7): for California purposes all rental
+  activities are passive activities**, so the federal real estate professional exception does not
+  apply. California does allow the $25,000 special allowance on the same income test, but **a trust
+  does not qualify for it at all**, and an estate may use it for two years after the death of someone
+  who had actively participated.
+
+**R-3, the engine.** `scripts/rental_tax.py` writes `assets/data/rental_tax.json` and is wired into
+`scripts/rebuild.py` between `liquidity.py` and `build.py`. It rebuilds the letting path year by year
+and re-solves the break-even rent under ten statutory treatments. It imports `scripts/model.py` for
+the constants and helpers, so it cannot drift from them.
+
+**Validation, and it matters.** In the `untaxed` case the engine reproduces the root model exactly:
+break-even rent $362,600 a year and a letting-path value of −$1,053,570 at the empty rent input,
+byte-identical to `model.json`. The correction is therefore measured, not asserted.
+
+**R-4, the findings, stated the way the site states them.**
+- **The published break-even rent was too low.** Untaxed, the letting path needs $362,600 a year to
+  match selling at the inheritance and investing. Priced under the rules it needs **$418,880 to
+  $479,700** — up to **$117,100** more, because rent is ordinary income, not a gain.
+- **The best path does not move.** Under all ten treatments, selling at the inheritance still wins,
+  by $23,545,750 or more at today's empty rent input. The tax rules change how far behind the letting
+  path is, not that it is behind.
+- **The passive loss rules bite below the break-even, not above it.** At a rent of **$321,130 a year
+  or less** the let makes a tax loss every year, and California suspends that loss whatever the heir
+  does. Above it the let is simply taxed. The letting path only reaches break-even well above that
+  line, so for anyone choosing between paths the loss rules are a cushion on the way down.
+- **The one way the tail is worse than any published figure.** Kept until death rather than sold, the
+  suspended losses are allowed only to the extent they exceed the step-up in the transferee's basis,
+  and a full step-up leaves nothing: **$10,725,000 of them simply disappear**. This is published as
+  its own case, `never_released_mid`, and it returns the path to exactly the untaxed value.
+- **The correction is not one-directional, and the site says so.** The old model charged recapture on
+  thirty years of depreciation it had never allowed as a deduction. Both errors are now stated in the
+  opening callout of the section rather than quietly fixed.
+
+**R-5, the basis assumption.** The site had assumed, without ever saying so, that the whole of
+Property A steps up. `taxes.html#basis-at-death` now states the rule (section 1014), the alternate
+valuation date (section 2032), the community property rule (1014(b)(6)), the gross-estate condition
+(1014(b)(9)) and the consistency cap (1014(f)), and lists the three fact patterns that give only a
+partial step-up: a co-owner whose interest does not pass, a life estate or split interest, and
+community property where only part is in the gross estate. It keeps the three taxes apart on the
+page — the estate tax on the transfer, the income tax basis, and the property tax assessment, which
+is the separation the brief asked for.
+
+**Also published.** Three new questions in group F (what share the heir receives; whether a letting
+loss can be used at all; what rate the letting path should be priced at), suggestions S-29 and S-30,
+seven glossary terms (passive activity, suspended loss, real estate professional, section 199A, MACRS
+and the 27.5-year period, alternate valuation date, community property double step-up), two rows on
+the review register with their own source decisions, a callout on the decision page beside the
+untaxed break-even rent, and two lines on the one-page Attorney & CPA briefing sheet.
+
+**R-6, gates, pull request, merge.** `scripts/rebuild.py` PASS and a second run leaves the tree clean;
+`scripts/verify.py` PASS; `scripts/privacy_boundary.py`, `scripts/tracked_tree_guard.py`,
+`scripts/package_site.py` and `scripts/verify_legacy.py --config-only` all exit 0. Recorded below.
+
+### Privacy commitments for this session
+
+No name, street address, postal code, parcel identifier, county or city name, trust term, estate size,
+rent estimate, income figure, filing status or unrounded owner amount is added to any public page or to
+this board. The letting engine runs on the same empty rent input the root model uses; no market rent is
+invented anywhere. The three combined ordinary rates are labelled stated scenarios and are built only
+from published official rates, never from a figure about this household. Every new ledger entry links to
+a host already on the approved list in `scripts/verify.py`. New verbatim official amounts were
+registered in `inputs.json` `verified_parameters` so the privacy gate recognises them: the 2027 top
+bracket start of REDACTED-FIGURE the 37% top rate, and California's 13.3% top rate.
+
+## Session `arena/8b9e2db0-tino3` — letting-path tax realism (ordinary-rate rental taxation, passive-loss limitation, NIIT, section 199A) and the basis-at-death completeness assumption · claimed 2026-11-17
+
+*Branch note:* Arena pins this session to `arena/8b9e2db0-tino3`, branched from `main` at `bd8ab5b` (the merge of PR #153). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. At claim time `gh pr list --state open` returned nothing, so no other session holds any of the files below, and `python3 scripts/rebuild.py` left the working tree clean.
+
+**Scope boundary with the sessions already on the board.** `arena/5feeee8b-tino3` re-verified the insurance bands, the encumbrance rows and the law-watch entries on 16 November 2026; `arena/0069abd3-tino3` built the estate-liquidity engine and the joint-filer case. This session does **not** touch either file set and does not re-check that ledger. The sources this session opens are the ones no earlier board entry records: the passive activity loss rules, the rental depreciation and ordinary-income rules, the net investment income tax thresholds and their non-indexation, the section 199A rental safe harbour, and the basis-at-death rules (section 1014(b)(6), section 2032).
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| R-1 Claim this scope and push before any other edit | **done** — this section | `arena/8b9e2db0-tino3` | `COORDINATION.md` (this section only) |
+| R-2 Read and verify at source the rules the letting path currently ignores: Pub 925 / section 469 (rental per se passive, the $25,000 allowance and its MAGI phase-out, active participation, the real-estate-professional exception, suspended losses freed on disposition), Pub 527 (27.5-year MACRS, land not depreciable, mid-month convention), section 1411 and the NIIT thresholds, section 199A and the Rev. Proc. 2019-38 rental safe harbour, Pub 551 / sections 1014 and 2032 for the basis step-up | **in progress** | `arena/8b9e2db0-tino3` | `assets/sources.json` (append only), `assets/data/inputs.json` (`verified_parameters` only) |
+| R-3 Build `scripts/rental_tax.py`: a deterministic year-by-year letting-path tax engine that prices rent at ordinary rates net of depreciation, applies the passive-loss limitation and carries suspended losses to the disposition, tests section 199A on and off, applies the NIIT above its statutory threshold, and reports the result against the untaxed convention the model uses today | **in progress** | `arena/8b9e2db0-tino3` | `scripts/rental_tax.py` (new), `assets/data/rental_tax.json` (new), `scripts/model.py` (consume only) |
+| R-4 Publish the finding and the corrected letting path: a new section on the taxes page, a restated rent row on the decision page, what-if levers, new owner questions and suggestions, glossary entries, and a review-register row for anything unverifiable | **in progress** | `arena/8b9e2db0-tino3` | `scripts/build.py`, regenerated pages |
+| R-5 Publish the basis-at-death assumption explicitly: the model's sell path assumes the whole property steps up. State the section 1014(b)(6) community-property rule, the joint-tenancy and life-estate patterns that break a full step-up, and the section 2032 alternate valuation date, as labelled assumptions with what each would change | **in progress** | `arena/8b9e2db0-tino3` | `scripts/build.py` (taxes / inheritance / questions / precommit / review), regenerated pages |
+| R-6 Rebuild, run every gate, pull request to `main`, merge without waiting for approval, confirm the Pages deploy, record the PR link and result | **in progress** | `arena/8b9e2db0-tino3` | this section only |
+
+**Why these tasks.** A gap check against the owner's brief, run on the current tree, found two things that are genuinely missing rather than deliberately withheld. First, the letting path is the only path whose income the model never taxes: `rent_carry_fv` in `scripts/model.py` credits gross rent and deducts property tax and running costs, with no ordinary-rate tax on the rent, no depreciation deduction against that rent, no passive-loss limitation, no NIIT and no section 199A test. The rent input is empty today, so the published baseline is unaffected — but the moment a written rent opinion is entered (suggestion S-25) the path will be overstated by the whole of the income tax on it, and the break-even rent is computed on that same untaxed basis. Second, every sell path assumes the entire property receives a date-of-death basis, with no page stating the facts on which that rests or the three common patterns that give only a partial step-up. Both are model-visible and both are answered from official sources.
+
+**Privacy constraint.** No name, street address, postal code, parcel identifier, county or city name, trust term, estate size or unrounded owner amount is added to any public page or to this board. Owner-supplied money is published only as a multiple of ten; official amounts are published verbatim where the official document prints them. Every new ledger entry links to a host already on the approved list in `scripts/verify.py`. No rent, income, filing status or other household figure is invented: the letting-path engine is driven by the same empty rent input the model already uses and by anonymous scenario bands, and where the answer depends on a household fact the page says so instead of filling it in.
+
 ## Session `arena/5fb0dcb1-tino3` — law-watch refresh to the 16 November 2026 official results reading, live Proposition 19 initiative recheck, publication · claimed 2026-11-17
 
 *Branch note:* Arena pins this session to `arena/5fb0dcb1-tino3`, branched from `main` at `3b86d5a` (the merge of PR #156). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. At claim time `gh pr list --state open` returned nothing and no section on the board was marked in progress, so no other session holds `scripts/build.py`, `assets/sources.json` or the generated pages. The baseline was checked before any edit: `rebuild.py` reproduces the tree with no diff and all five gates pass.
