@@ -36,46 +36,38 @@ ROOT = Path(__file__).resolve().parents[1]
 # carries an identifier.) Importing the gate is safe: it only reads the artifact at run time.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from privacy_boundary import FORBIDDEN as _GATE_PATTERNS  # noqa: E402
+from privacy_boundary import check_money as _gate_check_money  # noqa: E402
 
 PATTERNS = dict(_GATE_PATTERNS)
 
-# The publication gate does not ban large amounts: it bans an amount that is not a
-# multiple of ten. This is evaluated the same way the gate evaluates it - parse the
-# amount, then test the value - so a rounded figure is never counted and a
-# pre-rounding figure always is. Counted as whole file versions, never as a value.
-AMOUNT = re.compile(r"\$\s*(\d[\d,]*)(?:\.\d+)?\s*(trillion|billion|million)?", re.I)
+# The tracked-tree guard exempts github.com service addresses, which are not personal.
+# The audit must agree with it or it reports a false exposure: two such addresses were
+# counted in the current tree on 17 November 2026, both of them documentation of the
+# privacy procedure itself (a GitHub noreply address in a runbook and in a scrub tool).
+SERVICE_EMAIL = re.compile(r"@(?:[\w-]+\.)*github\.com\b", re.I)
+
+
+def _email_shape(text: str) -> bool:
+    """True only for a personal-shaped address; service addresses are not exposure."""
+    return any(not SERVICE_EMAIL.search(m) for m in re.findall(r"[\w.+-]+@[\w-]+\.[\w.]+", text))
+
 UNROUNDED = "amount not a multiple of ten"
 
-# Published statutory and official amounts that are not multiples of ten. These are
-# the same exemptions the live publication gate grants (scripts/privacy_boundary.py
-# OFFICIAL_AMOUNTS plus the verified parameters in assets/data/inputs.json), because a
-# verbatim official threshold is not ours to round and its presence is not exposure.
-OFFICIAL_AMOUNTS = {
-    1, 5, 15,
-    1_000_000, 1_022_600, 1_044_586,
-    250_000, 500_000,
-    371_000,
-    5_490_000, 11_180_000, 11_400_000, 11_580_000, 11_700_000,
-    12_060_000, 12_920_000, 13_610_000, 13_990_000,
-    15_000_000, 15_480_000,
-    19_000, 20_000,
-    5_000_000_000, 15_000_000_000,
-}
+# The exemption list is deliberately not duplicated here. The gate's own money test is
+# called, so an official amount the gate allows - a statutory recording fee, a published
+# threshold - can never be reported here as exposure, and a figure the gate would fail on
+# can never be hidden from this audit. An earlier edition kept its own copy of the list,
+# and it had drifted: on 17 November 2026 it counted seven files in the current tree as
+# carrying unrounded amounts where the gate counts one, the difference being the $3, $75
+# and $225 statutory fees the copy had never been told about. One definition, in the gate.
+def has_unrounded_amount(text: str) -> bool:
+    """True when the publication gate would object to an amount in this text."""
+    return bool(_gate_check_money(text, "history-audit")[0])
 
 
-def _official_from_inputs() -> set[int]:
-    try:
-        data = json.loads((ROOT / "assets" / "data" / "inputs.json").read_text(encoding="utf-8"))
-    except (OSError, ValueError):
-        return set()
-    out = set()
-    for value in data.get("verified_parameters", {}).values():
-        if isinstance(value, dict) and isinstance(value.get("value"), (int, float)):
-            out.add(int(value["value"]))
-    return out
+def has_identifier(text: str, pattern: re.Pattern) -> bool:
+    return bool(pattern.search(text))
 
-
-ALLOWED = OFFICIAL_AMOUNTS | _official_from_inputs()
 
 # Current-tree files that legitimately contain the patterns (the gate itself, the
 # board's own discussion of the rule, and this tool). Counted separately.
@@ -125,20 +117,6 @@ def file_versions() -> list[tuple[str, str]]:
     return pairs
 
 
-def has_unrounded_amount(text: str) -> bool:
-    """True if any formatted dollar amount in the text is not a multiple of ten."""
-    for raw, scale in AMOUNT.findall(text):
-        if scale:                      # a quoted official aggregate, not a property amount
-            continue
-        if not raw.replace(",", "").isdigit():
-            continue
-        amount = int(raw.replace(",", ""))
-        if amount in ALLOWED or amount % 10 == 0:
-            continue
-        return True
-    return False
-
-
 def blob(commit: str, path: str) -> str:
     try:
         return git("show", f"{commit}:{path}")
@@ -162,7 +140,8 @@ def scan() -> dict:
         key = (commit, path)
         if key not in cache:
             text = blob(commit, path)
-            found = {label: bool(p.search(text)) for label, p in PATTERNS.items()}
+            found = {label: (_email_shape(text) if label == "email address"
+                             else has_identifier(text, p)) for label, p in PATTERNS.items()}
             found[UNROUNDED] = has_unrounded_amount(text)
             cache[key] = found
         for label, hit in cache[key].items():
@@ -173,7 +152,7 @@ def scan() -> dict:
     msg_hits = {label: [] for label in PATTERNS}
     for c in cmts:
         for label, p in PATTERNS.items():
-            if p.search(c["subject"]):
+            if _email_shape(c["subject"]) if label == "email address" else p.search(c["subject"]):
                 msg_hits[label].append(c["hash"][:8])
     current = {}
     for label, p in PATTERNS.items():
@@ -185,10 +164,12 @@ def scan() -> dict:
             if not f.is_file():
                 continue
             try:
-                if p.search(f.read_text(encoding="utf-8", errors="replace")):
-                    hits.append(path)
+                text = f.read_text(encoding="utf-8", errors="replace")
             except OSError:
                 continue
+            hit = _email_shape(text) if label == "email address" else has_identifier(text, p)
+            if hit:
+                hits.append(path)
         current[label] = hits
     unrounded_now = []
     for path in git("ls-files").splitlines():

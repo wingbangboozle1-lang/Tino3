@@ -55,7 +55,7 @@ basis, actual sale costs, occupancy, rents, insurance, maintenance, utilities, d
 and laws in force at transfer. Missing or unverified property-specific amounts are not presented as
 confirmed; they are identified on the relevant pages and on `review.html`.
 
-There are **25 generated HTML pages** and one stylesheet in the public allowlist. The pages show rounded owner-provided figures, model outputs and official-source-backed legal/economic information. The source ledger contains **114 entries**. Both property placeholders grow with the California state-level FHFA house-price index: the two metropolitan-area series were withdrawn on 15 November 2026 because the index publisher's own metadata crosswalked the placeholders to their metropolitan areas (an audit finding), and the privacy gate now rejects the withdrawn series identifiers and metro phrasing. The jurisdiction-specific entries (the two properties' county and city official pages) were also withdrawn, because their publishers identify the properties. A factual table row either links to an official source or is explicitly registered as unsourceable/unverified.
+There are **26 generated HTML pages** and one stylesheet in the public allowlist. The pages show rounded owner-provided figures, model outputs and official-source-backed legal/economic information. The source ledger contains **118 entries**. Both property placeholders grow with the California state-level FHFA house-price index: the two metropolitan-area series were withdrawn on 15 November 2026 because the index publisher's own metadata crosswalked the placeholders to their metropolitan areas (an audit finding), and the privacy gate now rejects the withdrawn series identifiers and metro phrasing. The jurisdiction-specific entries (the two properties' county and city official pages) were also withdrawn, because their publishers identify the properties. A factual table row either links to an official source or is explicitly registered as unsourceable/unverified.
 
 The Black Swan analysis uses one canonical monthly park-and-phase engine and one short-Treasury
 parking-yield assumption. It includes synthetic stresses and historical entry replays, including
@@ -68,9 +68,9 @@ professional advice when dates, facts or laws change.
 
 ## Published site and verification snapshot
 
-The current generated edition contains **25 HTML pages**, **one runtime stylesheet**, **114 entries
-in the source ledger**, and **136 content-free withdrawal notices** for retired routes. The latest
-local verification reports **1251 table rows**: **1074 linked to official publishers** and **177
+The current generated edition contains **26 HTML pages**, **one runtime stylesheet**, **118 entries
+in the source ledger**, and **144 content-free withdrawal notices** for retired routes. The latest
+local verification reports **1385 table rows**: **1192 linked to official publishers** and **193
 explicitly registered as unsourceable or unverified**. A row without a confirming official source is
 not filled in by inference. The public site contains no source ledger or internal model data files;
 the Jekyll and Actions publication boundaries are checked separately.
@@ -88,11 +88,14 @@ must be run on a full clone (`git fetch --unshallow`): a shallow clone silently 
 
 **The Git history has been scrubbed.** On 17–18 November 2026, at the owner's recorded decision, the
 full history was rewritten with `git-filter-repo` and force-pushed to the remote. The pre-rewrite audit
-(401 commits on 16 November 2026) had found postal codes, place and county names, an earlier-edition
-file set and a personal mail-service address on 115 commits; counts are in `PRIVACY_REMEDIATION.md`
-section 7. The rewrite removed every property-identifying class from every reachable commit, and the
-personal author/committer address was replaced throughout history by the account's own `noreply`
-address. The published tree is byte-identical before and after the rewrite, so the site did not change.
+(482 commits, 1,869 distinct file versions, measured 17 November 2026) had found postal codes, place and
+county names, an earlier-edition file set, and a personal mail-service address in the commit metadata of
+172 commits; counts and the audit's two own corrections (a GitHub service address no longer counted as
+personal, and the audit now calling the publication gate's tests instead of keeping a drifting private
+copy) are in `PRIVACY_REMEDIATION.md` section 8. The rewrite removed every property-identifying class
+from every reachable commit, and the personal author/committer address was replaced throughout history
+by the account's own `noreply` address. The published tree is byte-identical before and after the
+rewrite, so the site did not change.
 
 `privacy_boundary.py` checks the published artifact for prohibited identifiers and unrounded
 owner-supplied monetary values. The current page set passing that gate, and the rewritten history,
@@ -138,6 +141,13 @@ amount above the exclusion.
 - **The two-person case.** Two exclusions with portability at each inheritance year, and the joint
   section 121 amount repriced against every mixed path. The pure-path model still runs on single-filer
   assumptions, which is the conservative case.
+- **The keep-and-borrow case, end to end.** For each anonymous band of the amount above the exclusion, the
+  page runs both complete routes on the same path engine as the decision pages: keep the house and borrow
+  the band's tax against it on a fully amortising 30-year fixed loan at the published mortgage average, or
+  sell it and pay the tax out of the proceeds. Borrowing is dearer at every published band, the loan for
+  the two largest bands exceeds Property A's projected value alone (the loan-to-value arithmetic is
+  published), and the largest band is one the sale proceeds cannot self-fund - which makes the lender
+  conversation a task to settle before the nine-month date. It is also lever 6 on the what-if page.
 
 ## Mixed paths, distributions and the clawback
 
@@ -181,7 +191,9 @@ python3 scripts/verify_legacy.py --config-only
 `rebuild.py` runs `model.py`, `economy.py`, `model.py` again, `mixed.py`, and `build.py` in that
 order. The first model pass supplies break-even values used by the economy bootstrap; the second
 model pass embeds the freshly rebuilt bootstrap. The mixed-path model then consumes both current
-outputs. The pipeline writes the derived JSON/CSV tables, 25 pages, and `EXECUTIVE_SUMMARY.md`.
+outputs. The pipeline writes the derived JSON/CSV tables, 26 pages, and `EXECUTIVE_SUMMARY.md`.
+`borrow.py` runs after `liquidity.py` because the keep-and-borrow path is an overlay on the living path
+and reads its terminal value out of `model.json`; it writes `assets/data/borrow.json`.
 Its generator output is suppressed to keep detailed property diagnostics out of CI logs; run an
 individual component locally if a failure needs diagnosis.
 

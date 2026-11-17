@@ -22,24 +22,30 @@ ECON = json.loads((DATA / "economy.json").read_text(encoding="utf-8"))
 SERIES = json.loads((DATA / "series.json").read_text(encoding="utf-8"))
 MIXED = json.loads((DATA / "mixed.json").read_text(encoding="utf-8"))
 LIQ = json.loads((DATA / "liquidity.json").read_text(encoding="utf-8"))
+BORROW = json.loads((DATA / "borrow.json").read_text(encoding="utf-8"))
 PRECOMMIT = INPUTS.get("precommit", {"rules": [], "household_goals": [], "review_gates": [], "meta": {}})
 
 A = INPUTS["property_a"]
 B = INPUTS["property_b"]
 V = INPUTS["verified_parameters"]
 ASM = INPUTS["assumptions"]
-BUILD_DATE = "17 November 2026"
+# The edition date lives in one module so the model metadata and the page footers
+# cannot drift apart. It is a constant, not the clock, so a rebuild is byte-stable.
+from edition import BUILD_DATE_TEXT, SOURCES_CHECKED_FROM, SOURCES_CHECKED_TO  # noqa: E402
+BUILD_DATE = BUILD_DATE_TEXT
 
 # The phased-investing figures are computed by the model's one monthly engine, so the
 # stress table on the black-swan page and the dashboard path cannot drift apart again.
 import model as model_mod  # noqa: E402
+import print_budget as print_budget_mod  # noqa: E402
 
 NAV_GROUPS = [
     ("Start here", ["index.html", "precommit.html", "executive-summary.html", "decision.html",
                     "decision-rules.html",
                     "what-if.html", "briefing.html"]),
     ("The two properties", ["property-a.html", "property-b.html", "ownership-distinction.html"]),
-    ("Money over time", ["costs.html", "projections.html", "taxes.html"]),
+    ("Money over time", ["costs.html", "projections.html", "taxes.html",
+                  "keep-and-borrow.html"]),
     ("Rules and the estate", ["inheritance.html", "timeline.html", "estate.html", "liquidity.html",
                     "laws.html"]),
     ("Black swan economics", ["black-swan.html", "economy.html"]),
@@ -63,6 +69,7 @@ PAGE_TITLES = {
     "inheritance.html": "Inheriting through a trust, step by step",
     "estate.html": "Estate and inheritance tax thresholds",
     "liquidity.html": "Estate liquidity and borrowing",
+    "keep-and-borrow.html": "Keep the house, take the cash",
     "laws.html": "What the law says now, and what may change",
     "black-swan.html": "Black swan conditions",
     "economy.html": "The verified historical record",
@@ -403,7 +410,8 @@ def page(name: str, body: str, lede: str = "") -> str:
       <p>Full method and inputs: <a href="review.html#method-detail">how the model works</a>.
         Every official source used anywhere on the site: <a href="sources.html">the source ledger</a>.</p>
     </section>
-    <p class="page-footer">Built {esc(BUILD_DATE)}. Sources were last checked between 13 and 16 November 2026;
+    <p class="page-footer">Built {esc(BUILD_DATE)}. Sources were last checked between
+    {esc(SOURCES_CHECKED_FROM)} and {esc(SOURCES_CHECKED_TO)};
       each entry's own check date is listed on the
       <a href="sources.html">source ledger</a>. Nothing here is legal, tax or investment advice.</p>
   </main>
@@ -528,6 +536,10 @@ def page_index() -> str:
     # investment, both computed by the one monthly engine.
     phase_cost = (p45["paths"]["sell_equities"]["terminal"]
                   - p45["paths"]["sell_then_phase"]["terminal"])
+    # The keep-and-borrow rung the dashboard quotes, read from the same engine output.
+    by45 = next(y for y in BORROW["years"] if y["inherit_year"] == 2045)
+    bmid = _borrow_pick(by45, 60, 7.11)
+    bcheap = _borrow_pick(by45, 60, 5.98)
     kpis = "".join([
         kpi(m(A["estimated_market_value_2026"]), "Property A, estimated value",
             "Owner estimate, November 2026 &middot; unverified"),
@@ -550,6 +562,13 @@ def page_index() -> str:
         kpi(f"{EPI['winners']['phase'] + EPI['winners']['park34']} of {len(EPI['episodes'])}",
             "Real crashes where waiting beat investing on day one",
             "Replayed with published monthly prices for 1929, 2000, 2008 and 2020 - not a synthetic sequence"),
+        kpi(m(bmid["overlay_invested"]), "Keep the house, take the cash: what a loan costs over 30 years",
+            f"60% of value ({m(bmid['loan'])}) released at the published mortgage average of "
+            f"{pc(bmid['rate_pct'])} and invested at the model's after-tax return, so the money earns "
+            f"{pc(BORROW['meta']['after_tax_portfolio_return_pct'])} against a hurdle of "
+            f"{pc(bmid['hurdle_return_pct'])}. Borrowing only pays at a cheaper loan: at "
+            f"{pc(bcheap['rate_pct'])}, 2026's lowest published weekly average, the same rung is worth "
+            f"{m(bcheap['overlay_invested'])}. See <a href=\"keep-and-borrow.html\">the keep-and-borrow page</a>."),
     ])
     gating = callout("flag", "One fact is assumed, not verified, and everything else depends on it", f"""
 <p>The Proposition 19 exclusion applies only where the transfer is between a parent and a child, or between a
@@ -563,6 +582,11 @@ question A-1</a> before relying on any number here. {slink('rtc63_2_eligibility'
     sens = MODEL["sensitivity"]
     eq_vals = sorted(set(x["equity_return"] for x in sens))
     tsy_wins = sum(1 for x in sens if x["best"] == "sell_treasury")
+    # The keep-and-borrow result, read from the model so this sentence cannot drift.
+    _brows = (MODEL.get("borrow_invest_cases") or {}).get("rows") or []
+    _best_b = max(_brows, key=lambda r: r["delta_vs_live"]) if _brows else {}
+    _base50_b = next((r for r in _brows
+                      if r["ltv_pct"] == 50 and r["rate_pct"] == 7.11), {})
     wwc = callout("flag", "What would change the answer", f"""
 <ol class="change-list">
 <li><strong>The Proposition 19 exclusion does not apply.</strong> Then the property is reassessed in full, every shelter figure on this site falls away, and selling gets stronger. <a href="questions.html">Question A-1</a> settles it.</li>
@@ -574,16 +598,20 @@ question A-1</a> before relying on any number here. {slink('rtc63_2_eligibility'
 <li><strong>Moving out after moving in.</strong> The Proposition 19 exclusion is removed when the heir stops qualifying, and the model now costs that at about {m(MIXED['clawback']['difference'])} of extra property tax over thirty years. <a href="decision.html">Mixed paths</a>.</li>
 <li><strong>The housing the house provides is worth close to its full market rent to the heir.</strong> The published comparison credits the living path with no housing at all. Credited at about {pc(100.0)} of market rent, living and selling come level; below that, selling wins. <a href="decision.html#imputed-rent">The rent living does not pay itself</a>.</li>
 <li><strong>Property B's fixed charges keep growing at their own pace.</strong> The model assumes {pcf(ASM['fixed_charge_growth']['baseline'])} a year; the audited record is {pcf(ASM['fixed_charge_growth']['high'])} over nine years, and those charges are {esc(str(MODEL['roll_audit']['property_b']['fixed_share_latest_pct']))}% of that bill. The 2% cap cannot bound them. <a href="review.html#roll-audit">Roll audit</a>.</li></ol>
-<p class="muted">Two candidates were tested for this edition and do <em>not</em> belong on that list, which is why
+<p class="muted">Three candidates were tested for this edition and do <em>not</em> belong on that list, which is why
 they are recorded as ruled out rather than as open questions. The insurance premium at Property A, taken across
 its whole published band, moves the thirty-year living figure by {m((MODEL.get('cost_cases') or {}).get('band', {}).get('effect_on_live', 0))} - about
-{(MODEL.get('cost_cases') or {}).get('band_share_of_gap', 0)}% of the gap between selling and living. And no debt
+{(MODEL.get('cost_cases') or {}).get('band_share_of_gap', 0)}% of the gap between selling and living. No debt
 service the model was given - each $1,000 a month of payment costs the keeping paths about
 {m(next((-r['live_delta'] for r in (MODEL.get('cost_cases') or {}).get('debt_rows', []) if r.get('monthly') == 1000), 0))} -
 ever puts keeping the house ahead of selling it, because a house sold in the year of inheritance carries no
-payment stream. Both are on the <a href="costs.html#insurance-band">insurance band</a> and the
-<a href="decision.html#debt">debt section</a>, and both are on the <a href="what-if.html">what-if page</a> as
-levers 4 and 5.</p>""")
+payment stream. And borrowing against the house to invest does not flip it either: at the published
+{pc((MODEL.get('borrow_invest_cases') or {}).get('rate', {}).get('baseline_pct', 7.11))} the best rung - borrowing
+{pc(_best_b.get('ltv_pct', 50), 0)} of the value at death at the 2026 low - adds {m(_best_b.get('delta_vs_live', 0))}
+to the living path and still ends {m(_best_b.get('gap_vs_sell', 0))} behind selling, while at the latest rate a
+{pc(50, 0)} loan costs the living path {m(abs(_base50_b.get('delta_vs_live', 0)))}. All three are on the
+<a href="costs.html#insurance-band">insurance band</a> and the <a href="decision.html#debt">debt section</a>,
+and on the <a href="what-if.html">what-if page</a> as levers 4, 5 and 7.</p>""")
     cards = []
     for group, pages in NAV_GROUPS:
         if group == "Start here":
@@ -638,7 +666,7 @@ levers 4 and 5.</p>""")
 <li><strong>Start</strong> with the <a href="executive-summary.html">executive summary</a> and the <a href="decision.html">decision page</a>.</li>
 <li><strong>Check the inputs.</strong> Every number the model uses is on the <a href="property-a.html">Property A</a>, <a href="property-b.html">Property B</a> and <a href="costs.html">costs</a> pages, with its source or an explicit unverified flag.</li>
 <li><strong>Check the stress.</strong> No projection on this site relies on a single smooth growth rate. See <a href="black-swan.html">black swan conditions</a> and the <a href="economy.html">verified historical record</a>.</li>
-<li><strong>Do not act yet.</strong> The <a href="questions.html">questions page</a> lists what is still unknown and how to find it out. The <a href="suggestions.html">suggestions page</a> is a review queue: nothing there has been implemented.</li>
+<li><strong>Do not act yet.</strong> The <a href="questions.html">questions page</a> lists what is still unknown and how to find it out. The <a href="suggestions.html">suggestions page</a> is a review queue: every item in it still needs a decision, and the decision and date columns are empty.</li>
 </ol>""")
     )
 
@@ -654,6 +682,7 @@ SUMMARIES = {
     "costs.html": "Water, power, insurance, maintenance and tax, projected.",
     "projections.html": "Year by year to 2076 for value, assessed value and tax.",
     "taxes.html": "Basis step-up, capital gains, the 121 exclusion, recapture.",
+    "keep-and-borrow.html": "Cash out of the house without selling it, priced against selling.",
     "inheritance.html": "The trust transfer, phase by phase, with deadlines.",
     "what-if.html": "One lever at a time, with each case linked.",
     "estate.html": "Federal thresholds, California's position, scenario bands.",
@@ -661,7 +690,7 @@ SUMMARIES = {
     "black-swan.html": "Regimes where the answer changes, and by how much.",
     "economy.html": "Fifty years of verified inflation, house price and yield data.",
     "questions.html": "What is known, what is missing, and how to find it.",
-    "suggestions.html": "A review queue of proposals. Nothing implemented yet.",
+    "suggestions.html": "A review queue of proposals, with a decision and date column for each one.",
     "review.html": "Unverified figures, modelling caveats and the repository audit.",
     "glossary.html": "Plain-language terms with official citations.",
     "timeline.html": "The deadlines and key dates that shape the inheritance decision.",
@@ -728,8 +757,9 @@ def page_executive_summary() -> str:
              f"above that is reassessed. In 2045 the sheltered slice is about {m(p45['prop19_cap'])} against a market value of {m(p45['value_at_death'])}."),
         ("The tax-free sale window", "Property acquired from a decedent takes a basis equal to its value at death, so a sale soon after the inheritance pays close to zero capital gains tax. Holding it for thirty years turns the appreciation into a gain taxed at roughly 37% combined federal and California."),
         ("The equity comparison", f"To match selling and investing at 7%, the home must appreciate {pc(p45['breakeven_house_growth'])} a year for thirty years. The verified California state index compounded at 6.4% over fifty years and 2.6% over the last twenty."),
+        ("The borrowing question", f"Run end to end at the published 30-year fixed average ({pc((MODEL.get('borrow_invest_cases') or {}).get('rate', {}).get('baseline_pct', 7.11))} for the week ending 12 November 2026, re-read at source on 17 November 2026): borrowing a stated share of the value at death and investing the proceeds adds to the living path only where the after-tax return on the money beats the rate charged. At the modelled baseline it does not - the best rung adds {m(next((r['delta_vs_live'] for r in (MODEL.get('borrow_invest_cases') or {}).get('rows', []) if r['ltv_pct'] == 50 and r['rate_pct'] == 5.98), 0))} and still ends {m(next((r['gap_vs_sell'] for r in (MODEL.get('borrow_invest_cases') or {}).get('rows', []) if r['ltv_pct'] == 50 and r['rate_pct'] == 5.98), 0))} behind selling. The full table is on the <a href=\"decision.html#debt-borrow\">decision page</a>."),
         ("The rental comparison", f"Letting the home out would need about {m(p45['breakeven_rent_monthly'])} a month in 2045 to match selling and investing. That is over 5% of the property's value per year in gross rent."),
-        ("The estate position", f"California has had no estate tax since 2005. Federally, the 2026 exclusion is {m(V['federal_basic_exclusion_2026']['value'])} per person and {m(V['federal_basic_exclusion_2027']['value'])} for 2027. Portability lets a surviving spouse use a deceased spouse's unused exclusion."),
+        ("The estate position", f"California has had no estate tax since 2005. Federally, the 2026 exclusion is {m(V['federal_basic_exclusion_2026']['value'])} per person and {m(V['federal_basic_exclusion_2027']['value'])} for 2027. Portability lets a surviving spouse use a deceased spouse's unused exclusion. If a band of tax were owed, the <a href=\"liquidity.html\">liquidity page</a> now runs the keep-and-borrow case end to end: borrowing the band's tax against the kept house on a fully amortising 30-year fixed loan is dearer than selling and paying from the proceeds at every published band, and the largest band is beyond what one property's sale can self-fund."),
         ("The biggest unknown", "Whether the heir wants to live in this specific house. That is a preference, not a number, and it is worth more than any gap in this analysis."),
         ("Mixed paths", f"Living there for a while and then selling is the closest of the mixed paths, and it still ends behind an immediate sale: five years of occupancy followed by a sale leaves {m(next(x for x in MIXED['paths'] if x['occupy_years'] == 5 and x['mode'] == 'sell')['gap_vs_sell_now'])} less than selling at the inheritance. The table is on the <a href=\"decision.html\">decision page</a>."),
         ("The clawback nobody models", f"Moving out after claiming the Proposition 19 exclusion is not free. On the live-then-let path the exclusion is removed and the change-of-ownership base year value is enrolled, which costs about {m(MIXED['clawback']['difference'])} of extra property tax over thirty years against the reading in which the low assessment survives. Both readings are now published."),
@@ -738,9 +768,11 @@ def page_executive_summary() -> str:
         ("The repeal that did not happen", "The initiative that would have undone most of Proposition 19 failed to qualify for the November 2026 ballot, so the shelter arithmetic above is current law rather than law about to change. A replacement measure can be filed at any time; the Secretary of State's qualification dashboard is the official page that would show it."),
         ("The pre-commitment rule", "Before reading any projection, the household should write down what would make it choose each path. That register, with its decision columns empty, is on the <a href=\"precommit.html\">pre-commitment page</a>. Without it a single projection can be made to justify any path."),
     ]
+    fact_src = {"The borrowing question": ["fred_mortgage"]}
     fact_rows = [
         f"<td><strong>{esc(k)}</strong></td><td>{v}</td>"
-        + src_cell(["boe_lta25009", "rtc63_2", "irs_basis", "sco_estate"], "Key rules")
+        + src_cell(fact_src.get(k, ["boe_lta25009", "rtc63_2", "irs_basis", "sco_estate"]),
+                   "Key rules")
         for k, v in facts]
     ftab = table("The important details", ["Detail", "What this analysis found"], fact_rows)
 
@@ -960,6 +992,7 @@ or finding a tenant at an implausible rent.</p>""")
 <li><strong>Taxes on the invested money.</strong> The equity path already carries an annual drag. A further tax on final liquidation is not charged, because the same treatment would have to be applied to the property paths and would be avoided anyway if the portfolio is held until death.</li>
 <li><strong>State and federal interaction.</strong> The combined gain tax rate simply adds the two rates and takes no federal deduction for the state tax. That is deliberately conservative.</li>
 <li><strong>Mortgages and other encumbrances, 1031 exchanges, instalment sales, gifting and trust restructuring.</strong> None is assumed away silently: the debt assumption is stated and priced per $1,000 a month of payment in <a href="#debt">Debt, occupancy, capital costs and liquidity</a>, and the rest are on the <a href="questions.html">questions page</a> and the <a href="suggestions.html">suggestion queue</a>.</li>
+<li><strong>Borrowing against the house instead of selling it.</strong> Now a priced path, not an omission: <a href="keep-and-borrow.html">keep-and-borrow</a> runs cash-out rungs at 40, 60 and 80 percent of value against the published mortgage averages, on the same transfer years, horizon and tax layers as every row above, and states the hurdle return the borrowed money has to beat.</li>
 <li><strong>Transaction costs of moving house, and the cost of capital gains tax on any other asset that would have to be sold.</strong> Not modelled.</li>
 </ul>""")
     )
@@ -1126,12 +1159,15 @@ def debt_section() -> str:
          "a schedule.",
          []),
         ("Liquidity",
-         "Partly priced: a federal estate tax is payable in cash nine months after death, so an estate "
-         "whose wealth is in two buildings has to sell something or borrow, and the model's sell path is "
-         "the only one that produces cash on that clock.",
+         "Priced end to end: a federal estate tax is payable in cash nine months after death, so an estate "
+         "whose wealth is in two buildings has to sell something or borrow. The estate liquidity page runs "
+         "both routes for each anonymous band of the amount above the exclusion - keep the house and borrow "
+         "the band's tax against it on a fully amortising 30-year fixed loan, or sell and pay from the "
+         "proceeds - and finds borrowing dearer at every published band, with the largest band beyond what "
+         "one property's sale can self-fund.",
          "The estate inventory and the liquid balance outside the trust, which are kept off this site by "
          "the household's own instruction.",
-         ["irs_i706", "irs_estate"]),
+         ["irs_i706", "irs_estate", "fred_mortgage"]),
     ]
     body = []
     for item, status, needed, srcs in rows:
@@ -1169,6 +1205,100 @@ def debt_section() -> str:
                               f"nothing. A mortgage therefore never turns keeping the house into the better "
                               f"choice; it only makes it worse, and the household's own capacity to carry "
                               f"the payment is a second-order question the model does not ask."))
+
+    # ---------------------------------------------- keep-and-borrow, end to end --
+    # The active borrowing case: borrow a stated share of the value at death at the
+    # published mortgage average, invest the proceeds, carry the house, sell and repay
+    # at the horizon. The payment table above prices an encumbrance the household may
+    # already have; this prices a loan the household would choose to take.
+    bc = MODEL.get("borrow_invest_cases") or {}
+    p45 = next(x for x in MODEL["paths"] if x["inherit_year"] == 2045)
+    live_term = p45["paths"]["live_in"]["terminal"]
+    sell_term = p45["paths"]["sell_equities"]["terminal"]
+    borrow_rows = []
+    for r in bc.get("rows", []):
+        anchor = f"borrow-{int(r['ltv_pct'])}-{int(round(r['rate_pct'] * 100))}"
+        borrow_rows.append(
+            f"<td><a id='{anchor}'></a>{pc(r['ltv_pct'], 0)} of the value at death"
+            f"<br><span class='sub'>{m(r['principal'])}</span></td>"
+            f"<td>{pc(r['rate_pct'])}<br><span class='sub'>{esc(r['rate_label'])}</span></td>"
+            f"<td>{esc(r['money_label'])}<br><span class='sub'>{pc(r['money_return_pct'])} a year</span></td>"
+            f"<td>{m(r['terminal'])}</td><td>{m(live_term)}</td><td>{m(sell_term)}</td>"
+            f"<td><strong>{esc(PATH_LABELS[r['best']])}</strong></td>"
+            + method_cell("#method", "Model output"))
+    _base_row = next((r for r in bc.get("rows", [])
+                      if r["ltv_pct"] == 50 and r["rate_pct"] == 7.11), {})
+    _low_row = next((r for r in bc.get("rows", [])
+                     if r["ltv_pct"] == 50 and r["rate_pct"] == 5.98), {})
+    _r25 = next((r for r in bc.get("rows", [])
+                 if r["ltv_pct"] == 25 and r["rate_pct"] == 7.11), {})
+    borrow_table = table(
+        "Borrowing instead of selling, priced end to end (2045 inheritance, thirty years)",
+        ["Borrowed", "Rate charged", "What the money does", "Borrow-and-keep terminal",
+         "Live in it, no borrowing", "Sell and invest", "Best path", "Basis"],
+        borrow_rows,
+        note=(f"The path is the living path plus leverage: a stated share of the value at death is "
+              f"borrowed, interest-only on a constant balance at the published rate "
+              f"({pc(bc.get('rate', {}).get('baseline_pct', 7.11))} latest, band "
+              f"{pc(bc.get('rate', {}).get('low_pct', 5.98))} to "
+              f"{pc(bc.get('rate', {}).get('high_pct', 7.4))}, re-read at source on 17 November 2026), "
+              f"no deduction assumed, the proceeds invested at the modelled after-tax equity return, "
+              f"and the house carried and sold exactly as the living path with the principal repaid at "
+              f"the horizon. The arithmetic reduces to one identity: "
+              f"<strong>{esc(bc.get('identity', ''))}</strong> At the latest published rate that makes "
+              f"borrowing cost the living path {m(abs(_r25.get('delta_vs_live', 0)))} at "
+              f"{pc(25, 0)} loan-to-value and {m(abs(_base_row.get('delta_vs_live', 0)))} at "
+              f"{pc(50, 0)}, while at the 2026 low it adds "
+              f"{m(_low_row.get('delta_vs_live', 0))} - and in no rung does the total come within "
+              f"{m(min(r['gap_vs_sell'] for r in bc.get('rows', [])))} of selling. The loan-to-value "
+              f"rungs are stated scenarios: no balance, application or quote exists for either property, "
+              f"and whether a lender will lend against a property held in trust is a question for the "
+              f"lender and the trustee."))
+    park, crash = bc.get("park_row", {}), bc.get("crash_row", {})
+    extra_rows = []
+    for r, anchor in ((park, "borrow-park"), (crash, "borrow-crash")):
+        if not r:
+            continue
+        extra_rows.append(
+            f"<td><a id='{anchor}'></a>{pc(r['ltv_pct'], 0)} of the value at death"
+            f"<br><span class='sub'>{m(r['principal'])}</span></td>"
+            f"<td>{pc(r['rate_pct'])}</td>"
+            f"<td>{esc(r['money_label'])}<br><span class='sub'>{pc(r['money_return_pct'])} a year</span></td>"
+            f"<td>{m(r['terminal'])}</td><td>{m(r['delta_vs_live'])}</td>"
+            f"<td>{m(r['gap_vs_sell'])}</td>"
+            f"<td><strong>{esc(PATH_LABELS[r['best']])}</strong></td>"
+            + method_cell("#method", "Model output"))
+    extra_table = table(
+        "Two more ways the same loan can end: parked, or meeting a crash at entry",
+        ["Borrowed", "Rate charged", "What the money does", "Terminal",
+         "Change against living with no borrowing", "Behind selling", "Best path", "Basis"],
+        extra_rows,
+        note=(f"The first row borrows at the published mortgage average to hold short Treasuries at the "
+              f"modelled parking yield: a loss of {m(abs(park.get('delta_vs_live', 0)))} against living "
+              f"with no borrowing over the horizon, because the loan costs more than the park pays. The "
+              f"second row runs the same {pc(50, 0)} loan through the stress table's stated crash at "
+              f"entry (-40% in year one, +25% in year two, +10% in year three): it costs the living path "
+              f"a further {m(abs(bc.get('crash_vs_no_crash', 0)))} against the same loan without the "
+              f"crash, and the debt is unchanged - which is what leverage means. Both are stated "
+              f"sequences and stated structure, not forecasts."))
+    borrow_block = ('<h3 id="debt-borrow">Borrowing instead of selling, priced end to end</h3>'
+                    + callout("note", "The active borrowing case, priced end to end", f"""
+<p>The suggestions register asked what happens if the heir <strong>borrows against the house instead of
+selling it</strong>. This is that case, run end to end rather than as a carrying cost: borrow a stated share
+of the value at death at the published 30-year fixed average ({pc(bc.get('rate', {}).get('baseline_pct', 7.11))} for the week
+ending 12 November 2026, band {pc(bc.get('rate', {}).get('low_pct', 5.98))} to {pc(bc.get('rate', {}).get('high_pct', 7.4))} across 2026, re-read at source on
+17 November 2026), invest the proceeds, carry the house exactly as the living path does, then sell and
+repay at the horizon. Interest is charged with no deduction assumed - the conservative reading the
+<a href="liquidity.html">estate-liquidity page</a> already uses.</p>
+<p>The result is one line of arithmetic, and it is worth knowing before reading any row:
+<strong>{esc(bc.get('identity', ''))}</strong> So the loan-to-value changes only the size of the win or the
+loss, never its sign: at {pc(bc.get('break_even', {}).get('after_tax_return_pct', 7.11))} charged, the borrowed money must earn more than
+{pc(bc.get('break_even', {}).get('after_tax_return_pct', 7.11))} after tax - {pc(bc.get('break_even', {}).get('gross_equity_needed_pct', 7.81))} gross at the model's drag - for borrowing to add anything at
+all. At the baseline after-tax return it does not, and the table below shows the cost at both ends of the
+published rate band. Borrowing against Property B is not modelled: that building's income, leases and
+own debt questions are separate, and the register says so.</p>
+<p class="callout-src">{slink('fred_mortgage')}</p>""")
+                    + borrow_table + extra_table)
     return ('<h2 id="debt">Debt, occupancy, capital costs and liquidity</h2>'
             + callout("note", "Why this section exists", f"""
 <p>The comparison the owner asked for is to carry taxes, debt, occupancy changes, capital costs and
@@ -1183,8 +1313,11 @@ kept is {m(per_1000)} of terminal value, and nothing at all on the sale path.</p
 the recommendation. Debt reduces what a sale puts in the bank, but it also reduces what keeping the
 building is worth, by more: the holder pays the interest as well as the principal, and pays it out of
 money that would otherwise have been invested. So an encumbrance never makes keeping the house the better
-choice; it can only make it worse. That is why the ranking below does not change at any payment level.</p>""")
-            + tbl + cases)
+choice; it can only make it worse. That is why the ranking below does not change at any payment level.
+The other half of the question - a loan the household would <em>choose</em> to take, and invest instead of
+selling - is priced end to end below in
+<a href="#debt-borrow">Borrowing instead of selling</a>.</p>""")
+            + tbl + cases + borrow_block)
 
 
 def reinvestment_section() -> str:
@@ -1358,6 +1491,7 @@ PATH_LABELS = {
     "live_in": "Live in it",
     "live_then_rent": "Live in it, then let it",
     "rent_out": "Let it out",
+    "borrow_and_keep": "Borrow against the house, keep it, invest the proceeds",
 }
 
 
@@ -1395,7 +1529,8 @@ def page_precommit() -> str:
         rule_rows,
         note="The two decision columns are deliberately empty. No path has been chosen. Fill them in "
              "by hand when the household decides, with the date, and keep the rule beside the decision "
-             "so a future reader can see whether the rule was followed or changed.")
+             "so a future reader can see whether the rule was followed or changed. " + esc(PRECOMMIT.get(
+                 "meta", {}).get("draft_note", "")) or None)
 
     goal_rows = []
     for g in goals:
@@ -2471,7 +2606,7 @@ robust, the magnitude is an upper bound.</p>""")
                  + src_cell(["irs_tc559"], "Official source"),
                  f"<td>California top marginal bracket, 2025 and 2026 schedules</td><td>{pcf(0.123, 1)}</td>"
                  f"<td>Taxable income above the top bracket start, indexed annually; the 2026 schedule shows the same structure</td>"
-                 + src_cell(["ftb_rates", "ftb_rates_2026"], "Official source"),
+                 + src_cell(["ftb_rates", "ftb_rates_2026", "ftb_sched_ca_540"], "Official source"),
                  f"<td>California additional tax, section 17043</td><td>{pcf(0.01, 1)}</td>"
                  f"<td>Taxable income above $1,000,000, not indexed, every filing status; "
                  f"the 2025 Form 540 booklet reports it on line 62 as the Behavioral Health Services Tax</td>"
@@ -2482,7 +2617,107 @@ robust, the magnitude is an upper bound.</p>""")
                  + method_cell("#method", "Model output")],
                 note="The top California bracket is indexed every year, so its start rises; section 17043's "
                      "threshold does not. The model applies the combined rate to the entire gain, which "
-                     "overstates the tax rather than understating it."))
+                     "overstates the tax rather than understating it.")
+        + surcharge_worksheet_section())
+
+
+
+def surcharge_worksheet_section() -> str:
+    """The 1% computed the way the Form 540 instructions compute it.
+
+    Added after the owner asked for the official Form 540 instructions to be read and
+    the sensitivity value updated. The table above prices the surcharge as a flat
+    one-point difference on the entire gain. That is an upper bound. The form's own
+    line 62 worksheet works on the slice of *taxable income* above $1,000,000, so the
+    figure the household would actually enter depends on what else the return carries
+    in the year of sale. Both are published side by side rather than replacing one
+    with the other, because the ceiling is the honest worst case and the worksheet is
+    the honest number.
+    """
+    ss = MODEL.get("surcharge_sensitivity") or {}
+    ws = ss.get("worksheet") or []
+    if not ws:
+        return ""
+    rows = []
+    for block in ws:
+        for r in block["rungs"]:
+            rows.append(
+                f"<td>{esc(block['label'])}</td><td>{m(block['gain'])}</td>"
+                f"<td>{esc(r['label'])}</td><td>{m(r['taxable_income'])}</td>"
+                f"<td>{m(r['above_threshold'])}</td><td>{m(r['surcharge'])}</td>"
+                + method_cell("#method", "Model output"))
+    marginal = table(
+        "The line 62 worksheet on the same three sales",
+        ["Path", "Taxable gain", "Other taxable income in the year of sale",
+         "Taxable income (line 19)", "Above $1,000,000 (line 2 to 3)",
+         "1% under line 62 (line 5)", "Basis"],
+        rows,
+        note=("Four assumed levels of other income stand in for the rest of the return, because the "
+              "surcharge is computed on total taxable income and not on the gain alone. They are "
+              "scenarios, not figures from the household. The line 62 arithmetic is: taxable income, "
+              "less $(1,000,000), times 1%. A gain under the threshold carries no surcharge at all, "
+              "however large it is - which is the single most useful thing the worksheet shows."))
+
+    caused = table(
+        "How much of the 1% the gain actually causes",
+        ["Path", "Worst case: 1% on the whole gain", "1% caused by the gain, no other income",
+         "1% caused by the gain, $1,000,000 of other income", "Verdict"],
+        [f"<td>{esc(b['label'])}</td><td>{m(b['flat_upper_bound'])}</td>"
+         f"<td>{m(b['rungs'][0]['surcharge_on_gain'])}</td>"
+         f"<td>{m(b['rungs'][2]['surcharge_on_gain'])}</td>"
+         + f"<td>{'Nothing to tax' if b['gain'] == 0 else 'The ceiling holds'}</td>"
+         + method_cell("#method", "Model output") for b in ws],
+        note=("The middle and right columns count only the part of the surcharge that disappears if "
+              "the house is not sold. Other income above the threshold attracts the 1% whether or not "
+              "a sale happens, so charging that part to the sale would overstate what the decision "
+              "costs. On a sale at inheritance the gain is about zero and so is the surcharge: there "
+              "is nothing above the threshold for the gain to push there."))
+
+    other_mid = ss['worksheet_scenarios'][2] if len(ss.get('worksheet_scenarios') or []) > 2 else 1000000
+    return (
+        '<h2>The same tax, computed the way Form 540 computes it</h2>'
+        + callout("key", "What the Form 540 instructions actually say", f"""
+<p>The instruction for <strong>line 62</strong> of Form 540 does not describe a rate applied to a gain.
+It gives a five-step worksheet: taxable income from line 19, less $(1,000,000), multiplied by 1%.
+The form's name for the tax is the <strong>Behavioral Health Services Tax</strong>; the statute behind it is
+Revenue and Taxation Code section 17043, which is what the model has always used. Three things follow,
+and they change the sensitivity rather than the recommendation:</p>
+<ul>
+<li><strong>It is a tax on total taxable income, not on the sale.</strong> A gain of
+{m(ws[1]['gain'])} that lands on a return with no other income is taxed on
+{m(ws[1]['rungs'][0]['above_threshold'])} of income above the line. The same gain on a return already
+carrying {m(other_mid)} of taxable income is taxed on {m(ws[1]['rungs'][2]['above_threshold'])}.</li>
+<li><strong>A gain below the threshold carries none of it.</strong> The first block of the table above
+is the path this site recommends. The basis step-up leaves a gain of
+{m(ws[0]['gain'])}, so there is nothing above the threshold for the 1% to reach, and the
+surcharge is <strong>{m(ws[0]['flat_upper_bound'])}</strong> under the flat ceiling and
+<strong>{m(ws[0]['rungs'][0]['surcharge_on_gain'])}</strong> on the worksheet. The only surcharge that
+appears in that block is the {m(ws[0]['rungs'][-1]['surcharge'])} which the household's other income
+would owe in any case, and which is therefore not a cost of selling.</li>
+<li><strong>The flat figure in the earlier table is a ceiling, and it holds.</strong>
+{m(ws[1]['flat_upper_bound'])} is the most the one point can ever cost on that gain. The worksheet
+reaches it as soon as other taxable income has already filled the space below the threshold, and it
+cannot exceed it, because the gain can only be taxed on that part of itself which lands above the
+threshold. With no other income a slice of the gain itself sits below the line and escapes the point, so
+the true cost is <strong>{m(ws[1]['rungs'][0]['surcharge_on_gain'])}</strong>, not
+{m(ws[1]['flat_upper_bound'])}.</li>
+</ul>""")
+        + marginal
+        + caused
+        + callout("flag", "Two limits on this worksheet, stated rather than buried", f"""
+<ul>
+<li><strong>The bracket tax beside it is a flat approximation.</strong> The worksheet columns price the
+1% exactly, but the state total in the model applies the top printed bracket of {pcf(12.3, 1)} to all
+taxable income instead of walking the published schedule, which overstates the bracket tax. It does not
+affect the 1%, which is correctly a flat rate on the slice above the threshold. A prepared return would
+use the {pcf(12.3, 1)} bracket only on the top slice, as the schedules printed for each filing status
+require.</li>
+<li><strong>California does not conform to every federal change.</strong> The Schedule CA (540)
+instructions state on their face that the Revenue and Taxation Code generally does not conform to the One
+Big Beautiful Bill Act, and the line 7a instruction confirms California taxes long and short term capital
+gains as regular income with no special rate. A year-of-sale return must be prepared on that year's forms;
+the figures here are a planning calculation, not a return.</li>
+</ul>"""))
 
 
 def page_inheritance() -> str:
@@ -2751,6 +2986,76 @@ The published range across 2022 to 2026 runs from {pcf(clock['underpayment_low']
           f"<td>{m(r['total_paid'])}</td>" + src_cell(borrow["src"])) for r in borrow["rows"]],
         note=(f"{esc(borrow['method'])}. {esc(borrow['rate_basis'])}. {esc(borrow['limit'])}"))
 
+    # The keep-and-borrow case, end to end (the "Add a mortgage case" register item,
+    # implemented this edition). The carrying-cost table above prices interest only,
+    # on a constant balance. This section runs both complete routes - keep the house
+    # and borrow the band's tax against it, or sell it and pay the tax out of the
+    # proceeds - on the same path engine the decision page uses, so the comparison is
+    # between two complete futures rather than between a cost and a silence.
+    kb = MODEL.get("mortgage_case") or {}
+    kb_rows = kb.get("rows", [])
+    smallest = kb_rows[0] if kb_rows else {}
+    largest = kb_rows[-1] if kb_rows else {}
+    kb_head = callout("method", "The keep-and-borrow case, run end to end", f"""
+<p>The interest rows above price the carrying cost of borrowed money. This case answers the question that table
+cannot: <strong>if the estate owes one of the published bands, is it cheaper to keep the house and borrow the
+band's tax against it, or to sell the house and pay the tax out of the proceeds?</strong> Both routes are run
+end to end on the same engine that prices every path on the <a href="decision.html">decision page</a>, over the
+same thirty-year horizon, at the 2045 model.</p>
+<p>The findings, in order:</p>
+<ul>
+<li><strong>Borrowing never becomes the better route at any published band.</strong> At the modelled return the
+payment stream compounds to about {smallest['fv_payments'] / smallest['tax']:.1f} times the
+principal in future value: even the smallest band's loan costs {m(smallest['fv_payments'])} of terminal value against a
+{m(kb['gap_live_at_baseline'])} selling-versus-living gap. The mortgage decision is therefore about liquidity,
+risk and the household's own circumstances - not about which route leaves more.</li>
+<li><strong>The largest published band is the one the sale route cannot self-fund.</strong> The projected net
+proceeds at the 2045 model are {m(kb['net_sale_proceeds'])}, and that band's tax is {m(largest['tax'])}, so the
+shortfall would have to come from other assets or from a loan secured by both buildings - about
+{pcf(largest['ltv_both'], 1)} of their combined projected value. That conversation has to happen before the
+nine-month date arrives, not during it.</li>
+<li><strong>The loan-to-value arithmetic is published, not assumed away.</strong> The two largest bands exceed
+the projected value of Property A alone, so borrowing against that one property cannot raise them.</li>
+</ul>
+<p class="callout-src">{slink('fred_mortgage')} &middot; {slink('irs_estate')} &middot; {slink('irs_i706')}</p>""")
+
+    kb_loan_table = table(
+        f"The loan itself, band by band: a 30-year fixed loan at {pcf(kb['rate'], 2)}, amortising over the whole horizon",
+        ["Tax to raise", "Monthly payment", "Total paid over 30 years", "Of which interest",
+         "Loan against Property A's projected value", "Loan against both buildings' projected value",
+         "What the payments would have earned instead", "Source"],
+        [(f"<td>{m(r['tax'])}</td><td>{m(r['monthly_payment'])}</td>"
+          f"<td>{m(r['total_paid'])}</td><td>{m(r['total_interest'])}</td>"
+          f"<td>{pcf(r['ltv_a'], 1)}</td><td>{pcf(r['ltv_both'], 1)}</td>"
+          f"<td>{m(r['fv_payments'])}<br><span class='sub'>at the band's low {m(r['fv_payments_low'])} and high {m(r['fv_payments_high'])}</span></td>"
+          + src_cell(kb["src"], "Published rate and rules")) for r in kb_rows],
+        note=(f"The loan is {esc(kb['method'])}. The rate is {esc(kb['rate_basis'])}. The last column is the "
+              f"future value of the same payment stream at the model's after-tax equity return: what the money "
+              f"would have been worth if it had never left the portfolio. The loan-to-value columns compare "
+              f"each band's loan with the properties' projected values at the 2045 model "
+              f"({m(kb['value_at_death_a'])} for Property A alone and {m(kb['value_at_death_both'])} for both "
+              f"together); they are arithmetic, not a statement that any lender would lend. {esc(kb['limit'])}"))
+
+    kb_route_rows = []
+    for r in kb_rows:
+        flag = "" if r["sale_covers_tax"] else "<br><span class='sub'>proceeds cannot cover the tax</span>"
+        kb_route_rows.append(
+            f"<td>{m(r['tax'])}</td>"
+            f"<td>{m(r['route_keep_live'])}</td><td>{m(r['route_keep_rent'])}</td>"
+            f"<td>{m(r['route_sell_pay'])}{flag}</td>"
+            f"<td><strong>{esc(r['best_route'])}</strong></td>"
+            + method_cell("#method", "Model output", sources=kb["src"]))
+    kb_route_table = table(
+        "The two complete routes, band by band: keep the house and borrow, or sell it and pay (2045 inheritance)",
+        ["Tax to raise", "Keep it, live in it, borrow", "Keep it, let it out, borrow",
+         "Sell it and pay from the proceeds", "Better route at this band", "Basis"],
+        kb_route_rows,
+        note=(f"The keep routes are the decision page's keeping paths less the future value of the loan "
+              f"payments; the sale route is the sell-and-invest path with the band's tax paid out of the "
+              f"proceeds at the end of the first year. {esc(kb['sale_route_timing'])}. The keep-and-let "
+              f"column credits no rent, because no rent opinion exists, so it is a floor exactly as the "
+              f"letting path is everywhere else on this site. {esc(kb['note'])}"))
+
     exclusions_table = table(
         "Two exclusions instead of one, on the estate side",
         ["Inherited", "One exclusion", "Two exclusions with portability", "Extra that passes free", "Source"],
@@ -2785,7 +3090,14 @@ closely held business exceeding 35% of the adjusted gross estate. A home occupie
 that on the face of the statute, so this site does not assume the election - but if any part of the estate is an
 operating business, ask the attorney before assuming it is not.</li>
 <li><strong>Whether a lender will lend against a property held in trust.</strong> That is a question for the lender
-and the trustee, and the answer decides whether the borrowing rows above are available at all.</li>
+and the trustee, and the answer decides whether the borrowing rows above are available at all. The loan-to-value
+columns in the keep-and-borrow tables are arithmetic, not underwriting: the two largest published bands exceed
+Property A's projected value alone, so they would need both buildings as collateral or other assets besides.</li>
+<li><strong>What borrowing costs when it is not forced by a tax bill.</strong> The rows above price borrowing to meet
+the nine-month clock, band by band. Borrowing to take the cash out anyway, while keeping the home - the discretionary
+case, where the money is invested rather than paid to a tax authority - is a different question with a different
+answer, and it is run end to end on the <a href="keep-and-borrow.html">keep-and-borrow page</a>: loan-to-value
+rungs, amortisation terms, an interest-only line and the hurdle return the borrowed money has to beat.</li>
 <li><strong>What any of these rates will be in the 2040s.</strong> Every rate on this page is the published rate
 today, or a published range. None of them is a forecast.</li>
 <li><strong>Whether interest on borrowed money is deductible.</strong> This site assumes no deduction, which is the
@@ -2807,9 +3119,271 @@ deliberately empty. Filling it in is the household's work, and it stays private.
               "row for how fast each asset can become cash, because the tax is due on a fixed date and a house "
               "is not a liquid asset."))
 
+    borrow_link = (
+        '<p class="table-note">This table prices the carrying cost of a loan per '
+        f'{m(borrow["principal"])}. The full keep-and-borrow path - borrow a stated share of the value at '
+        'death, invest the proceeds, carry the house, sell and repay at the horizon - is run end to end on '
+        '<a href="decision.html#debt-borrow">the decision page</a>, with the published rate band re-read at '
+        'source on 17 November 2026.</p>')
     return (head + tax_table + "".join(defer_tables) + house_table + cash_table
-            + borrow_table + exclusions_table + joint_table + limits
+            + borrow_table + borrow_link + kb_head + kb_loan_table + kb_route_table
+            + exclusions_table + joint_table + limits
             + '<h2 id="inventory">The private estate inventory</h2>' + inventory)
+
+
+# --------------------------------------------------------- keep and borrow --
+def _borrow_pick(block, ltv_pct, rate_pct=None, interest_only=None):
+    """Find one financing rung in a transfer-year block, by its stated rungs."""
+    for r in block["rungs"]:
+        if r["ltv_pct"] != ltv_pct:
+            continue
+        if interest_only is not None and bool(r["interest_only"]) != bool(interest_only):
+            continue
+        if rate_pct is not None and abs(r["rate_pct"] - rate_pct) > 1e-9:
+            continue
+        return r
+    raise KeyError((ltv_pct, rate_pct, interest_only))
+
+
+BORROW_SRC = ["fred_mortgage", "fred_prime", "irs_p936", "rtc62"]
+
+
+def page_keep_and_borrow() -> str:
+    years = BORROW["years"]
+    y45 = next(y for y in years if y["inherit_year"] == 2045)
+    mid = _borrow_pick(y45, 60, 7.11)
+    cheap = _borrow_pick(y45, 60, 5.98)
+    dear = _borrow_pick(y45, 60, 7.40)
+    line = _borrow_pick(y45, 60, interest_only=True)
+    meta = BORROW["meta"]
+    rate_now = mid["rate_pct"]
+
+    head = callout("answer", "What borrowing instead of selling is worth", f"""
+<p><strong>The path exists, it is priced, and on this model it does not win.</strong> A cash-out refinance
+at {mid['ltv_label']} of the home's value at a 2045 transfer releases <strong>{m(mid['loan'])}</strong> of
+cash while the heir keeps living in the house, keeps the sheltered assessed value and pays no income tax on
+the release. What it costs is the spread between the loan rate and what the borrowed money earns: at the
+published mortgage average of {pc(rate_now)} and the model's after-tax portfolio return of
+{pc(meta['after_tax_portfolio_return_pct'])} a year, the overlay is <strong>{m(mid['overlay_invested'])}</strong>
+over {meta['horizon_years']} years - a loss, not a gain.</p>
+<p><strong>What would change that answer is one number: the hurdle.</strong> Borrowing pays for itself only if
+the borrowed money earns more than {pc(mid['hurdle_return_pct'])} a year after tax. At the lowest mortgage
+average published in 2026 ({pc(cheap['rate_pct'])}) the same rung turns <em>positive</em> by
+{m(cheap['overlay_invested'])}; at the highest ({pc(dear['rate_pct'])}) it loses {m(abs(dear['overlay_invested']))}.
+So the question this page answers is not "should the heir borrow" but "can the household put the money to work
+at better than the loan charges it". Almost certainly not, after tax, which is why every rung here sits behind
+the selling path - between {m(min(abs(r['gap_vs_sell']) for r in y45['rungs']))} and
+{m(max(abs(r['gap_vs_sell']) for r in y45['rungs']))} behind at a 2045 transfer.</p>
+<p>The reason to read this page anyway is the reason nobody models: a household that needs cash and does not
+want to sell into whatever market it inherits into. Borrowing releases {m(mid['cash_released_vs_sale'])} more
+cash than a sale would on the same day, because a sale pays the {m(y45['sell_costs'])} selling cost and a loan
+pays none of it - and the tax on the release is nil on both paths, because the basis was already stepped up to
+the value at the date of death.</p>
+<p><strong>Do not read this page as the other borrowing case, which is also published.</strong> The estate
+liquidity page runs what happens when a band of tax has to be paid within nine months and the household borrows
+against the kept house instead of selling to raise the money - a fully amortising 30-year loan at the published
+average, set against selling and paying that same band out of the proceeds, and it is dearer at every published
+band. That is forced borrowing, and its comparator is a sale under a deadline. This page is discretionary
+borrowing: no bill is due, the household wants the cash and the house, and the money is invested. The two cases
+share the loan arithmetic and reach the same conclusion, but they answer different questions and neither is the
+other's evidence.</p>
+<p class="callout-src">{slink('fred_mortgage')} &middot; {slink('irs_p936')} &middot; {slink('rtc62')}
+&middot; {slink('irs_basis')}</p>""")
+
+    method = callout("note", "How this page is computed, so it can be checked", f"""
+<p>This is not a second model. The terminal value of the living path, its property-tax stream, the stepped-up
+basis and the selling cost are all read straight out of <code>assets/data/model.json</code>, the same file the
+dashboard, the decision page and the mixed-path page use. On top of that terminal this engine adds one overlay:</p>
+<p style="font-family:var(--mono)"><code>overlay = loan &times; (1 + r)<sup>{meta['horizon_years']}</sup>
+&minus; the future value at r of every annual payment &minus; the balance still owed at year
+{meta['horizon_years']}</code></p>
+<p>r is the after-tax portfolio return the whole site uses ({pc(meta['after_tax_portfolio_return_pct'])}:
+the gross equity assumption less the tax drag). The payment is the amortising payment at the published mortgage
+average, computed monthly from a rate compounded monthly and paid annually. A loan whose term equals the horizon
+is repaid exactly, so its balance term is nil, and the hurdle it implies sits at its own rate - which is the
+arithmetic check that the engine is right: at {pc(rate_now)} the hurdle is {pc(mid['hurdle_return_pct'])}, the
+difference being the timing of annual payments against monthly compounding.</p>
+<p>Nothing on this page is an offer. Loan-to-value rungs of 40, 60 and 80 percent are stated scenarios; the rates
+are the averages the publishers themselves state, not a quote for this household. The loan in the model's own
+forced-borrowing case, on the <a href="liquidity.html">estate liquidity page</a> and as lever 6 of the
+<a href="what-if.html">what-if page</a>, is sized to a tax band rather than to a share of the value, which is why
+the two sets of figures do not line up row for row; both are charged against the same living-path terminal from
+<code>model.json</code>, and both treat the interest as non-deductible.</p>
+<p class="callout-src">{slink('fred_mortgage')} &middot; {slink('fred_prime')}</p>""")
+
+    cash_rows = []
+    for r in y45["rungs"]:
+        cash_rows.append(
+            f"<td>{esc(r['ltv_label'])} of value</td><td>{pc(r['rate_pct'])}</td>"
+            f"<td>{esc(r['rate_basis'])}</td>"
+            f"<td>{m(r['loan'])}</td><td>{m(r['monthly_payment'])}</td><td>{m(r['annual_payment'])}</td>"
+            f"<td>{r['payment_vs_tax_multiple']}&times; the first-year tax bill</td>"
+            f"<td>{m(r['cash_released_vs_sale'])}</td>"
+            + src_cell(BORROW_SRC, "Published rate series"))
+    cash_table = table(
+        "The cash and the bill: a 2045 transfer, thirty-year horizon",
+        ["Loan-to-value", "Rate", "What that rate is", "Cash released", "Payment a month",
+         "Payment a year", "Cash-flow burden", "Cash kept against selling now", "Source"],
+        cash_rows,
+        note=(f"The first-year property tax bill on the living path is {m(y45['bill_if_live_year1'])}, which is "
+              "why the last-but-one column matters: a payment sized on market value is not sized on the sheltered "
+              "assessment. The cash kept against selling is the loan amount less the selling cost and the tax a "
+              "sale would pay at that date - on the model a sale at inheritance pays no income tax, so this "
+              "column is the loan less the "
+              f"{m(y45['sell_costs'])} selling cost."))
+
+    worth_rows = []
+    for r in y45["rungs"]:
+        worth_rows.append(
+            f"<td>{esc(r['ltv_label'])}</td><td>{pc(r['rate_pct'])}"
+            f"{' (interest only)' if r['interest_only'] else ''}</td>"
+            f"<td>{m(r['total_interest'])}</td><td>{m(r['balance_at_horizon'])}</td>"
+            f"<td>{m(r['overlay_invested'])}</td><td>{m(r['overlay_parked'])}</td>"
+            f"<td>&minus;{m(r['cost_if_spent'])}</td><td>{pc(r['hurdle_return_pct'])}</td>"
+            + src_cell(BORROW_SRC, "Computed from the published rates"))
+    worth_table = table(
+        "What the borrowed money is worth at the horizon: a 2045 transfer, 2075",
+        ["Loan-to-value", "Rate", "Interest paid over the term", "Still owed at the horizon",
+         "Overlay if invested at the model's after-tax return",
+         "Overlay if parked in short Treasuries at the site's parking yield",
+         "Cost if the money is spent instead of invested", "Hurdle return that makes it level", "Source"],
+        worth_rows,
+        note=("Read the last two columns together with the two overlay columns. An overlay is what the loan is "
+              "worth on top of the living path, positive or negative. Parked in the short Treasuries this site "
+              "uses for the phased path, every rung loses money, because the parking yield is below the loan "
+              "rate. Spent rather than invested, the loss is the cost of the money column, which is the honest "
+              "figure for a household that borrows to consume. The hurdle is the after-tax portfolio return at "
+              "which the overlay is exactly zero."))
+
+    year_rows = []
+    for y in years:
+        r = _borrow_pick(y, 60, 7.11)
+        year_rows.append(
+            f"<td>{y['inherit_year']}</td><td>{m(y['value_at_death'])}</td>"
+            f"<td>{m(r['loan'])}</td><td>{m(r['annual_payment'])}</td>"
+            f"<td>{m(r['overlay_invested'])}</td>"
+            f"<td>{m(r['terminal_borrow'])}</td><td>{m(y['terminal_live'])}</td>"
+            f"<td>{m(y['terminal_sell'])}</td><td>{m(r['gap_vs_sell'])}</td>"
+            + src_cell(BORROW_SRC, "Model output at the published rates"))
+    year_table = table(
+        "The same choice at the three transfer dates the model runs, at 60% of value and the published average rate",
+        ["Transfer year", "Value at the date of death", "Cash released", "Payment a year",
+         "Financing overlay over 30 years", "Keep-and-borrow terminal", "Keep, unlevered terminal",
+         "Sell-and-invest terminal", "Keep-and-borrow against selling", "Source"],
+        year_rows,
+        note=("Every column is computed at the same horizon, from the same assumptions, at the same three "
+              "transfer dates as the dashboard and the decision page, so the ranking can be read straight "
+              "across. Borrowing does not change which path wins; it changes how much cash the keeping path "
+              "can produce and how much it pays for the privilege."))
+
+    term_rows = []
+    for t in y45["term_rungs"]:
+        term_rows.append(
+            f"<td>{t['term_years']} years</td><td>{m(t['annual_payment'])}</td>"
+            f"<td>{t['years_paid']} of the {meta['horizon_years']}</td>"
+            f"<td>{m(t['total_interest'])}</td><td>{m(t['balance_at_horizon'])}</td>"
+            f"<td>{m(t['overlay_invested'])}</td><td>{pc(t['hurdle_return_pct'])}</td>"
+            f"<td>{('year ' + str(t['first_shortfall_year'])) if t['first_shortfall_year'] else 'never'}</td>"
+            + src_cell(["fred_mortgage"], "Published rate series"))
+    term_table = table(
+        "Shorter term, heavier bill, less interest: 60% of value at the published average rate, 2045 transfer",
+        ["Amortisation term", "Payment a year", "Years actually paid", "Interest paid",
+         "Owed at the horizon", "Overlay if invested", "Hurdle return", "Self-funding runs out", "Source"],
+        term_rows,
+        note=("A fifteen-year amortisation costs {int15_} of interest against {int30_} on a thirty-year one, "
+              "and needs {pay15_} a year instead of {pay30_}. The portfolio that is supposed to fund it is empty "
+              "by year {short15_}, while the thirty-year schedule holds out until year {short30_}. So the "
+              "shorter term is cheaper and less affordable at the same time. Both rows are the same engine: the "
+              "payments stop when the loan is repaid and the portfolio then compounds untouched to the horizon."
+              ).format(int15_=m(y45["term_rungs"][0]["total_interest"]),
+                       int30_=m(y45["term_rungs"][-1]["total_interest"]),
+                       pay15_=m(y45["term_rungs"][0]["annual_payment"]),
+                       pay30_=m(y45["term_rungs"][-1]["annual_payment"]),
+                       short15_=y45["term_rungs"][0]["first_shortfall_year"],
+                       short30_=y45["term_rungs"][-1]["first_shortfall_year"]))
+
+    stress_rows = []
+    for y in years:
+        for ltv in (40, 60, 80):
+            r = _borrow_pick(y, ltv, 7.11)
+            stress_rows.append(
+                f"<td>{y['inherit_year']}</td><td>{esc(r['ltv_label'])}</td>"
+                f"<td>{m(r['overlay_invested'])}</td><td>{m(r['overlay_shock'])}</td>"
+                f"<td>{m(r['shock_vs_baseline'])}</td>"
+                f"<td>{('year ' + str(r['first_shortfall_year_shock'])) if r['first_shortfall_year_shock'] else 'never'}</td>"
+                f"<td>{('year ' + str(r['first_shortfall_year'])) if r['first_shortfall_year'] else 'never'}</td>"
+                + src_cell(["fred_mortgage"], "Stated scenario, published rate"))
+    stress_table = table(
+        "The stated crash sequence applied to the borrowed money, then compared with itself",
+        ["Transfer year", "Loan-to-value", "Overlay, no shock", "Overlay under the stated sequence",
+         "What the sequence costs", "Self-funding runs out, shocked", "Self-funding runs out, baseline",
+         "Source"],
+        stress_rows,
+        note=BORROW["stress_note"])
+
+    rules_rows = []
+    for key, label in (("no_income_tax_on_proceeds", "No income tax on the release of cash"),
+                       ("no_reassessment", "Borrowing does not trigger a reassessment"),
+                       ("interest_not_deductible", "The interest is not treated as deductible"),
+                       ("estate_tax_unaffected", "Estate tax is untouched by this path"),
+                       ("lender_limits", "What a lender may and may not do")):
+        r = BORROW["rules"][key]
+        rules_rows.append(f"<td><strong>{esc(label)}</strong></td><td>{esc(r['text'])}</td>"
+                          + src_cell(r["src"], "Official source"))
+    rules_table = table("The five rules this path rests on, each read at its publisher",
+                        ["Rule", "What it says, and why it matters here", "Source"], rules_rows)
+
+    b = BORROW["property_b_note"]
+    bnote = callout("note", "The same arithmetic on the building the heir already owns", f"""
+<p>Nothing about the overlay is specific to the inherited house. A {m(b['loan_at_60'])} cash-out at
+{pc(7.11)} against a {m(b['value_2026'])} building costs {m(b['annual_payment'])} a year in payments, which is
+{b['payment_vs_rent_multiple']}&times; the {m(b['rent_now'])} of annual rent the building currently collects. That
+is the comparison worth making before any borrowing is discussed: the rent covers the payment almost exactly,
+but the payment also repays principal while the rent does not, and a rental building's cash-out is a different
+risk profile from a home the heir lives in. Property B's own leases, units and local rules are unresolved
+questions, not inputs - see the <a href="property-b.html">Property B page</a>.</p>
+<p class="callout-src">{slink('fred_mortgage')}</p>""")
+
+    limits = callout("flag", "What this page cannot tell you", f"""
+<ul>
+<li><strong>Whether any lender will do this.</strong> The rungs are stated loan-to-value scenarios, not
+quotations. {esc(BORROW['limitation']['not_an_offer'])} {esc(BORROW['limitation']['no_underwriting'])}</li>
+<li><strong>Whether the proceeds are actually invested.</strong> {esc(BORROW['limitation']['cash_flow'])}</li>
+<li><strong>What the interest costs after tax.</strong> Publication 936 allows a deduction only where the money
+was used to buy, build or substantially improve the home securing the loan, and caps home acquisition debt at
+$750,000 for mortgages taken out after 15 December 2017. Cash taken out to invest is outside that. Whether any
+part of it is deductible as investment interest is a question for the preparer, and this page assumes none.</li>
+<li><strong>Whether the property can be pledged at all while it sits in a trust.</strong> That is a question for
+the trustee and the lender, and it is the same question the estate liquidity page raises for paying estate tax
+by borrowing.</li>
+<li><strong>Any of the future rates.</strong> Every rate on this page is a published average for 2026, read on
+17 November 2026, not a forecast for the 2040s. The ranking of the paths does not turn on the rate: it turns on
+the spread between the rate and the return, and on the fact that a kept house still carries its own bill.</li>
+</ul>""")
+
+    return (head + method + cash_table + worth_table + year_table + term_table + stress_table
+            + rules_table + bnote + limits
+            + table("What to do with this page",
+                    ["Step", "Action", "Why", "Source"],
+                    ["<td>1</td><td>Decide whether the household would borrow at all, and write the rule for it "
+                     "before reading the tables below.</td>"
+                     "<td>Rule <a href=\"precommit.html\">P-7</a> on the pre-commitment register now covers this "
+                     "path, and its decision columns are deliberately blank: a rule written after the numbers are "
+                     "read is not a rule. The rule it has to satisfy is the hurdle, not the payment.</td>"
+                     + src_cell([], "Procedure, not a figure"),
+                     "<td>2</td><td>If the answer might be yes, get one written lender indication, with the "
+                     "closing costs in it.</td><td>Every figure here is a published average. One page from a "
+                     "lender turns the whole table into a real comparison.</td>"
+                     + src_cell([], "No official source applies"),
+                     "<td>3</td><td>Ask the accountant what the interest would be, given what the money is used "
+                     "for.</td><td>The deductibility of the interest is the only term on this page that could "
+                     "move the overlay by a material amount, and it depends on the use of the proceeds.</td>"
+                     + src_cell(["irs_p936"], "Official source"),
+                     "<td>4</td><td>Rebuild the model after any of the inputs change.</td>"
+                     "<td>This page reads the same model as every other; a changed input moves it with the rest "
+                     "of the site and cannot drift.</td>"
+                     + src_cell(["irs_basis"], "Method, and the rule the rebuild re-tests"),
+                     ]))
 
 
 # --------------------------------------------------------------------- laws --
@@ -3642,8 +4216,24 @@ QUESTIONS = [
        "If the answer is yes, the cost of that preference is on the decision page and should be agreed knowingly.",
        []),
      ]),
+    ("H", "Borrowing instead of selling",
+     [
+      ("If the household would not sell, would it borrow - and at what spread over the loan rate?",
+       "The keep-and-borrow page now prices the path on published rates: a 60% cash-out at a 2045 transfer "
+       "releases the cash and costs about the difference between the loan rate and what the money earns.",
+       "A written lender indication: amount advanced, rate, term, whether payments are interest-only, and the "
+       "closing costs. And the household's own rule: what the borrowed money would be used for, and where the "
+       "repayment comes from.",
+       "Ask one lender for a written indication and ask the trustee whether the trust permits a lien at all. "
+       "Then write the spread rule into the investment policy before the money is offered.",
+       "It is the only path that gives the household cash without a sale, without an income-tax event and "
+       "without a reassessment - and the only one whose cost is a rate the household does not control. On the "
+       "model's numbers the borrowed money must earn more than the loan charges after tax; at the published "
+       "mortgage average it does not, and at 2026's lowest published weekly average it does. That is the whole "
+       "decision in one comparison.",
+       ["fred_mortgage", "irs_p936", "rtc62"]),
+     ]),
 ]
-
 
 def page_questions() -> str:
     sections = []
@@ -3731,7 +4321,7 @@ SUGGESTIONS = [
      "Most of the gap between the paths comes from assumptions that can be replaced with facts over time.",
      "Low", "None", "projections", []),
     ("S-17", "Set the review gate before implementing anything",
-     "Nothing on this page has been done. Each item needs a decision to adopt, defer or reject, recorded before any action.",
+     "Each item in the first table needs a decision to adopt, defer or reject, recorded before any action. Both tables carry a Decision column and a Date column for exactly this; they are empty until the household fills them in.",
      "Low", "None", None, []),
     ("S-18", "Keep the data files in this repository as the single source of truth",
      "Every figure on the site is generated from assets/data. Editing the HTML by hand would break that and the verification.",
@@ -3773,6 +4363,22 @@ SUGGESTIONS = [
      "ranking, which is exactly why the assumption needed to be visible rather than silent.",
      "Low", "Medium: it is the only modelled input the household can answer from a single letter", "decision", ["uscode1701j3"])
     ,
+    ("S-29", "Take one written lender indication before treating any borrowing figure as real",
+     "The keep-and-borrow page now prices the path against published mortgage averages and a stated "
+     "loan-to-value ladder, which is the most a model can do without a quote. One written indication - amount, "
+     "rate, term, whether the payments are interest-only, and the closing costs - converts the whole table from "
+     "a scenario into a comparison, and answers the two questions this site cannot: whether a lender will advance "
+     "against a property held in a trust, and what it charges for doing so.",
+     "Low", "Medium: the path cannot be adopted without it", "keep-and-borrow", ["fred_mortgage", "irs_p936"])
+    ,
+    ("S-30", "Write the borrowing rule into the investment policy, before any loan is taken",
+     "A cash-out refinance is the one path in this analysis that converts a timing problem into a cash-flow "
+     "problem: the payment is due whether or not the market cooperates, and the model shows the invested "
+     "proceeds running dry inside the horizon on the heavier rungs. The policy should therefore say what the "
+     "borrowed money may be used for, what repayment source is committed, and at what spread over the loan rate "
+     "the household would refuse to borrow at all.",
+     "Low", "High if the loan is taken before the rule is written", "keep-and-borrow", ["fred_prime"])
+    ,
     ("S-22", "Decide whether the public repository and its history should stay public",
      "The repository is public and earlier commits contain unrounded owner figures. Rounding the published page does not change what Git history holds. Making the repository private, or rewriting history, are the only two ways to close that exposure.",
      "Medium", "High for privacy, none for the analysis", "review", []),
@@ -3780,6 +4386,12 @@ SUGGESTIONS = [
 
 
 def page_suggestions() -> str:
+    # The owner's instruction: "create a section dedicated for suggestions so someone can review
+    # suggestions and choose the best path before implementing any changes", and "write the decision
+    # and the date next to the item, so a future reader knows what was chosen and why". Both tables
+    # therefore carry a Decision column and a Date column, left empty for the household to complete
+    # by hand. Nothing on this page can be decided by the model.
+    blank_dec = '<span class="blank">not yet decided</span>'
     rows = []
     for sid, title, effect, effort, risk, area, src in SUGGESTIONS:
         target = area if area and area.endswith(".html") else (area + ".html" if area else None)
@@ -3793,20 +4405,26 @@ def page_suggestions() -> str:
             f"<td>{esc(risk)}</td>"
             f"<td>{area_html}</td>"
             f'<td><span class="badge proposed">proposed</span></td>'
+            f"<td>{blank_dec}</td><td>{blank_dec}</td>"
             + (src_cell(src if isinstance(src, list) else [src], "Official source") if src
                else src_cell([], "No official source applies")))
     tbl = table("Suggestions for review",
                 ["ID", "Suggestion", "What it changes", "Effort", "Risk if ignored",
-                 "Where it lands", "Status", "Source"], rows)
+                 "Where it lands", "Status", "Decision (adopt / defer / reject)",
+                 "Date decided", "Source"], rows,
+                note="The two decision columns are deliberately empty. Building this site cannot obtain a "
+                     "quote, read a roll, sign a document or move title, so no item on this list has been "
+                     "acted on. Write the decision and the date beside each item - adopt, defer or reject, "
+                     "and why - so a future reader can see what was chosen and on what basis.")
 
     gate = table("The selection gate",
                  ["Step", "What happens", "Rule", "Source"],
                  [
-                     "<td>1. Read</td><td>Work through the list and mark each item adopt, defer or reject.</td><td>No item is implemented by building this site. Every item is still marked proposed.</td>" + src_cell([], "Procedure, not a figure"),
+                     "<td>1. Read</td><td>Work through the list and mark each item adopt, defer or reject.</td><td>Every item in the first table is an action only the household and its advisers can take, and none has been taken. The second table below is different: it records which improvements to the site itself have already been built in this edition.</td>" + src_cell([], "Procedure, not a figure"),
                      "<td>2. Gate</td><td>Anything that costs money, signs a document, or moves title needs an explicit decision recorded before it happens.</td><td>Items S-03, S-05, S-11 and S-13 are in this class.</td>" + src_cell([], "Procedure, not a figure"),
                      "<td>3. Verify</td><td>Anything that replaces an unverified figure should be checked against the official source in the last column, and the data file updated.</td><td>Items S-01, S-02, S-07 and S-08 are in this class.</td>" + src_cell([], "Procedure, not a figure"),
                      "<td>4. Re-run</td><td>After any input changes, rebuild the model and the site and see whether the recommendation moved.</td><td>Item S-16.</td>" + src_cell([], "Procedure, not a figure"),
-                     "<td>5. Record</td><td>Write the decision and the date next to the item, so a future reader knows what was chosen and why.</td><td>Item S-17.</td>" + src_cell([], "Procedure, not a figure"),
+                     "<td>5. Record</td><td>Write the decision and the date next to the item, so a future reader knows what was chosen and why.</td><td>Item S-17. The Decision and Date columns on both tables are where that is written.</td>" + src_cell([], "Procedure, not a figure"),
                  ])
 
     # Status per proposal. The owner asked for a section where suggestions can be
@@ -3821,7 +4439,7 @@ def page_suggestions() -> str:
         "Add the itemised tax bills": ("open", "Still open: needs the parcel's own bill, which is not on the site."),
         "Add a liquidity model for the estate": ("done", "Implemented on the estate liquidity page: the nine-month payment clock, the tax in anonymous bands, what deferring one, three, five and ten years costs at the published underpayment rate compounded daily, and the five routes to raise the cash."),
         "Add a two-person household case": ("done", "Implemented on the estate liquidity page: two exclusions with portability at each inheritance year, and the joint section 121 exclusion repriced against every mixed path. The pure-path model still runs on single-filer assumptions, which is the conservative case."),
-        "Add a mortgage case": ("open", "Still open as a path. The estate liquidity page prices the carrying cost of borrowing at the published mortgage average, but the model does not yet run a keep-and-borrow case end to end."),
+        "Add a mortgage case": ("done", "Implemented three ways, on two different questions, and all are published. Borrowing to pay a band of estate tax while keeping Property A runs end to end inside the model (scripts/model.py, keep_and_borrow_cases) and is published on the estate liquidity page and as lever 6 of the what-if page: a fully amortising 30-year fixed loan at the published rate against the keeping paths, compared with selling and paying the same band out of the proceeds - dearer at every published band, and the largest band is beyond what one property's sale can self-fund. Borrowing to take the cash out with no bill forcing it is a separate engine and page (scripts/borrow.py, keep-and-borrow.html): 40, 60 and 80 percent loan-to-value at the published 2026 mortgage averages, an interest-only line at the published prime rate, 15/20/30-year amortisation rungs, the stated crash sequence applied to the borrowed money, and the hurdle return each rung must beat. The borrow-to-invest matrix sits on the decision page (#debt-borrow) and as lever 7: stated 25 and 50 percent rungs at the published rate band, interest-only with no deduction assumed, the identity that decides every rung, plus the borrow-and-park and stated-crash rows. What remains open is evidence, not modelling: no lender quotation exists (suggestion S-29), and borrowing against Property B is not modelled."),
         "Add per-unit detail for Property B": ("open", "Still open."),
         "Add a maintenance and capital schedule": ("open", "Still open."),
         "Model mixed paths, not only the three pure choices": ("done", "Implemented: eleven mixed cases priced on their own engine, with the Proposition 19 clawback and the imputed-rent break-even."),
@@ -3843,7 +4461,7 @@ def page_suggestions() -> str:
                    "Add the itemised tax bills": [],
                    "Add a liquidity model for the estate": ["irs_estate", "irs_i706", "irs_interest", "uscode6166"],
                    "Add a two-person household case": ["irs_tc701", "irs_estate"],
-                   "Add a mortgage case": ["fred_mortgage"],
+                   "Add a mortgage case": ["fred_mortgage", "fred_prime", "irs_p936", "rtc62"],
                    "Add a distribution chart to the projections": []}
     def improve_badge(a: str) -> str:
         state = improve_status.get(a, ("proposed", ""))
@@ -3853,44 +4471,57 @@ def page_suggestions() -> str:
                 f'<span class="badge proposed">open</span>'
                 + (f'<br><span class="small">{esc(state[1])}</span>' if state[1] else ""))
 
-    improve_rows = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td>"
+    improve_rows = [f"<td><strong>{esc(pid)}</strong></td>"
+                    f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td>"
                     f"<td>{improve_badge(a)}</td>"
+                    f"<td>{blank_dec}</td><td>{blank_dec}</td>"
                     + (src_cell(improve_src[a], "Official source") if improve_src[a]
                        else src_cell([], "No official source applies"))
-                    for a, b, c in [
-                        ("Model a sale in the same tax year as the inheritance", "Prices the immediate sale before anything else is decided, with the stepped-up basis and the long-term treatment inherited property receives.", "Without it the comparison does not start from the option everything else has to beat."),
-                        ("Add per-unit detail for Property B", "Rent, lease dates and anniversary dates per unit, so the income can be projected properly instead of as one total.", "The Property B income is currently a single unverified total with no expiry dates."),
-                        ("Add a real rental opinion for Property A", "Replaces the break-even rent with a comparison against an actual market rent.", "The rental path is currently tested only against a break-even, which is honest but indirect."),
-                        ("Add a maintenance and capital schedule", "Year-by-year capital items rather than a percentage of value.", "Lumpy costs are invisible, which flatters every hold path."),
-                        ("Add the itemised tax bills", "Bond, parcel tax and assessment lines separated from the ad valorem part.", "The fixed charge is currently modelled as a single number growing with inflation."),
-                        ("Add a liquidity model for the estate", "Whether the estate could pay federal estate tax without selling the house.", "The interaction between the cash inheritance and the house is currently only sketched in scenario bands."),
-                        ("Add a two-person household case", "Joint filing, the $500,000 exclusion and two exclusions for estate tax.", "The model currently uses the single-filer exclusion throughout, which is conservative."),
-                        ("Add a mortgage case", "What happens if the heir borrows against either property instead of selling.", "Not modelled at all."),
-                        ("Add a distribution chart to the projections", "A visual range rather than a single line.", "Readers tend to read the single line as a forecast."),
-                        ("Add a real rental opinion for Property A (imputed rent)", "Prints the market rent at which living there, and at which letting it out, match selling at the inheritance.", "Without it the housing value of living there is a preference rather than a number."),
-                        ("Model mixed paths, not only the three pure choices", "Live for a period and then sell, or live and then let, with the Proposition 19 clawback priced.", "The pure paths overstate how bad a short occupancy is and understate what moving out costs."),
-                        ("Write the rules down before reading any projection", "The household's own test for each path and its priorities, recorded before the figures are read.", "Without it a single projection can be made to justify any path."),
-                        ("Put the answer and what would change it on the first screen", "A decision strip with the answer, a confidence label, the build date and the three checks that would move it.", "Readers arrive at the recommendation without knowing how conditional it is."),
-                        ("Price the transfer tax and recording fees into the sell path", "The statutory charges itemised, with the published and private parts separated.", "The 5.5% selling cost is mistaken for a tax figure when most of it is a private quote."),
-                        ("Distinguish enacted changes from proposals", "A stated rule and an annual recheck gate for the law page, with the failed Proposition 19 repeal recorded as dead.", "A proposal gets treated as law, or a dead measure keeps distorting the arithmetic."),
+                    for pid, a, b, c in [
+                        ("P-01", "Add per-unit detail for Property B", "Rent, lease dates and anniversary dates per unit, so the income can be projected properly instead of as one total.", "The Property B income is currently a single unverified total with no expiry dates."),
+                        ("P-02", "Add a real rental opinion for Property A", "Replaces the break-even rent with a comparison against an actual market rent.", "The rental path is currently tested only against a break-even, which is honest but indirect."),
+                        ("P-03", "Add a maintenance and capital schedule", "Year-by-year capital items rather than a percentage of value.", "Lumpy costs are invisible, which flatters every hold path."),
+                        ("P-04", "Add the itemised tax bills", "Bond, parcel tax and assessment lines separated from the ad valorem part.", "The fixed charge is currently modelled as a single number growing with inflation."),
+                        ("P-05", "Add a liquidity model for the estate", "Whether the estate could pay federal estate tax without selling the house.", "The interaction between the cash inheritance and the house is currently only sketched in scenario bands."),
+                        ("P-06", "Add a two-person household case", "Joint filing, the $500,000 exclusion and two exclusions for estate tax.", "The model currently uses the single-filer exclusion throughout, which is conservative."),
+                        ("P-07", "Add a mortgage case", "The keep-and-borrow case run end to end: for each band, a fully amortising 30-year fixed loan charged to the keeping paths and set against the sell route that pays the same band's tax out of the proceeds - and, beside it, the discretionary case, where no tax bill forces the borrowing and the cash is invested instead: their own page plus the borrow-to-invest matrix on the decision page.", "Was not modelled at all; now priced three ways - the liquidity page and lever 6 for the forced case, the keep-and-borrow page for the cash-out rungs, and the decision page (lever 7) for the LTV matrix. The open item is a lender's written indication, not the arithmetic (S-29)."),
+                        ("P-08", "Add a distribution chart to the projections", "A visual range rather than a single line.", "Readers tend to read the single line as a forecast."),
+                        ("P-09", "Add a real rental opinion for Property A (imputed rent)", "Prints the market rent at which living there, and at which letting it out, match selling at the inheritance.", "Without it the housing value of living there is a preference rather than a number."),
+                        ("P-10", "Model mixed paths, not only the three pure choices", "Live for a period and then sell, or live and then let, with the Proposition 19 clawback priced.", "The pure paths overstate how bad a short occupancy is and understate what moving out costs."),
+                        ("P-11", "Write the rules down before reading any projection", "The household's own test for each path and its priorities, recorded before the figures are read.", "Without it a single projection can be made to justify any path."),
+                        ("P-12", "Put the answer and what would change it on the first screen", "A decision strip with the answer, a confidence label, the build date and the three checks that would move it.", "Readers arrive at the recommendation without knowing how conditional it is."),
+                        ("P-13", "Price the transfer tax and recording fees into the sell path", "The statutory charges itemised, with the published and private parts separated.", "The 5.5% selling cost is mistaken for a tax figure when most of it is a private quote."),
+                        ("P-14", "Distinguish enacted changes from proposals", "A stated rule and an annual recheck gate for the law page, with the failed Proposition 19 repeal recorded as dead.", "A proposal gets treated as law, or a dead measure keeps distorting the arithmetic."),
+                        ("P-15", "Model a sale in the same tax year as the inheritance", "Prices the immediate sale before anything else is decided, with the stepped-up basis and the long-term treatment inherited property receives. Restored here after the renumbering pass on a branch that predated it.", "Without it the comparison does not start from the option everything else has to beat."),
                     ]]
     improve = table("Improvements to this site, offered for review",
-                    ["Proposal", "What it would add", "Cost of not doing it", "Status", "Source"],
-                    improve_rows)
+                    ["ID", "Proposal", "What it would add", "Cost of not doing it", "Status",
+                     "Decision (adopt / defer / reject)", "Date decided", "Source"],
+                    improve_rows,
+                    note="A done badge means the improvement was built into this edition of the site and "
+                         "is verified by the build; it does not mean the underlying decision was made for "
+                         "the household. An open item still needs a decision, which is recorded in the two "
+                         "empty columns.")
     return (
-        callout("gate", "Nothing here has been implemented", """
-<p>Every item below is <strong>proposed</strong>. Building this site did not adopt, purchase, sign, file or change
-anything. The point of the page is that someone reads the list, chooses the best path, and only then acts. The
-selection gate below is the order in which to do that.</p>""")
+        callout("gate", "Nothing on the first list has been acted on", """
+<p>Every item in the <strong>first table</strong> is <strong>proposed</strong>. Building this site did not adopt,
+purchase, sign, file or change anything: it cannot obtain a quote, read a roll, or move title. The point of the
+page is that someone reads the list, chooses the best path, and only then acts. The selection gate below is the
+order in which to do that.</p>
+<p>The <strong>second table</strong> is different in kind. It lists improvements to the site itself, and records
+which of them have already been built into this edition, so that a reader can tell an open question about the
+household's decision apart from a finished piece of analysis. A built item is not a decision made for the
+household; the household's own decisions are still blank.</p>""")
         + gate
         + tbl
         + '<h2>Improvements to this site</h2>'
         + improve
         + callout("privacy", "One suggestion that is not optional", """
-<p>S-18 is listed last but it is the one that keeps the site honest. Every figure you see is generated from the
-data files in <code>assets/data</code> by <code>scripts/model.py</code> and <code>scripts/build.py</code>. If a
-number is edited directly in an HTML file, the next rebuild will overwrite it and the verification will still
-pass, because the verification checks the generated output, not the intent. Change the data, not the page.</p>""")
+<p>S-18 is the one item on the list that cannot be deferred, because it is the one that keeps the site honest.
+Every figure you see is generated from the data files in <code>assets/data</code> by <code>scripts/model.py</code>
+and <code>scripts/build.py</code>. If a number is edited directly in an HTML file, the next rebuild will overwrite
+it and the verification will still pass, because the verification checks the generated output, not the intent.
+Change the data, not the page.</p>""")
     )
 
 
@@ -4067,71 +4698,241 @@ an inference.</p>""")
             + table("What was re-read, and what it showed", ["Figure or rule", "What the source says today", "Source"], body))
 
 
-def recheck_section_17() -> str:
-    """The 17 November 2026 official-source recheck, published so the reader can repeat it.
+PRINT_BUDGET: dict | None = None
 
-    Same discipline as the 16 November table: only what was read on the publisher's own
-    domain on the date shown, with what could not be checked left visible as a hole.
+
+def print_budget_section() -> str:
+    """The measured length of the printable brief, published as an estimate.
+
+    No browser is available in this environment, so the printed pagination of the
+    one-page brief cannot be looked at. What can be done is to measure it: the
+    geometry is read out of the stylesheet the brief is actually printed with,
+    and the content is measured against it. The estimate is deliberately
+    pessimistic. The browser check remains open and is recorded below.
+    """
+    global PRINT_BUDGET
+    css = (ROOT / "assets" / "style.css").read_text(encoding="utf-8")
+    # The whole rendered page is measured, not just the brief's body: the page
+    # template supplies the title, and the title is printed.
+    PRINT_BUDGET = print_budget_mod.measure(
+        page("briefing.html", page_briefing(),
+             PAGE_BUILDERS["briefing.html"][1]), css)
+    fills = PRINT_BUDGET["fills"]
+    verdict = ("is estimated to fit on one letter-size page"
+               if PRINT_BUDGET["fits_one_page"]
+               else "is estimated NOT to fit on one letter-size page")
+    est_source = ('<td><a href="review.html#register">Measured by the build, '
+                  'not an official source</a></td>')
+    # The figure for the brief as it was published before this check is a
+    # recorded measurement, not a remembered one: it was taken from the
+    # committed file with this same estimator and is kept in the repository so
+    # the claim can be reproduced.
+    before = json.loads((ROOT / "assets" / "data" / "print_budget_before.json").read_text(encoding="utf-8"))
+    return (
+        '<h2 id="print-budget">Does the one-page brief actually fit on one page?</h2>'
+        + callout("note", "A measurement, and what it is not", f"""
+<p>The brief is published as a one-page sheet, and the page title, the menu and the print
+toolbar all say so. That claim had never been checked, because no browser is available in the
+build environment. This session measured it instead.</p>
+<p>The brief's printed height is estimated at <strong>{fills:.0%} of one letter-size sheet</strong>
+({PRINT_BUDGET['estimated_height_pt']:.0f}pt against {PRINT_BUDGET['capacity_pt']:.0f}pt of usable page
+height), across {PRINT_BUDGET['sections']} sections set in {PRINT_BUDGET['grid_rows']} rows of a
+two-column grid at {PRINT_BUDGET['font_pt']}pt with {PRINT_BUDGET['margin_in']}in margins. It
+{verdict}.</p>
+<p><strong>How the measurement works, and why it is an estimate.</strong> The geometry is read out of
+<code>assets/style.css</code> rather than repeated here, so changing the print rules changes the
+estimate and the two cannot drift apart. The estimate assumes a pessimistic average character
+width, does not allow for margins between blocks collapsing, and adds a safety margin to the
+total, so it runs long rather than short. It is still a model of a browser, not a browser.</p>
+<p><strong>What changed because of it.</strong> The brief as published before this check was estimated
+at {before['fills']:.0%} of a sheet ({before['estimated_height_pt']:.0f}pt against
+{before['capacity_pt']:.0f}pt): it would have run onto a second page while claiming to be one page. It
+is now at {fills:.0%}. Four changes brought it inside the sheet, and none of them removed a figure, a question or
+a caveat. The seven sections were re-ordered so that the two longest sit side by side in the two-column
+grid instead of beside short ones, which is what a two-column layout is for, and so that the sheet reads
+in the order an adviser would want: the decision, the questions to ask, the options and their risks,
+what is not known, the mixed paths, the timing, the glossary. The print type was set from 7.4pt to 7.1pt
+with tighter spacing. The screen lede was removed from the printed sheet, because the title already says
+what the document is. And the section text was shortened.</p>
+<p><strong>What is still open.</strong> Nobody has seen the printed sheet. Open
+<code>briefing.html</code> in a browser, print it, and check that it is one page and that the type is
+legible at {PRINT_BUDGET['font_pt']}pt. The build now fails if the estimate ever exceeds a sheet
+again, so an edit that breaks the promise is caught before it is published.</p>""")
+        + table("What the estimate is made of",
+                ["Measure", "Value", "Where it comes from"], [
+                    "<td><strong>Estimated printed height</strong></td>"
+                    + "<td>" + f"{PRINT_BUDGET['estimated_height_pt']:.0f}pt</td>" + est_source,
+                    "<td><strong>Usable page height</strong></td>"
+                    + "<td>" + f"{PRINT_BUDGET['capacity_pt']:.0f}pt (letter, "
+                      f"{PRINT_BUDGET['margin_in']}in margins)</td>" + est_source,
+                    "<td><strong>Share of one sheet</strong></td>"
+                    + "<td>" + f"{fills:.0%}</td>" + est_source,
+                    "<td><strong>Body type</strong></td>"
+                    + "<td>" + f"{PRINT_BUDGET['font_pt']}pt, about "
+                      f"{PRINT_BUDGET['chars_per_line']:.0f} characters to a line</td>" + est_source,
+                    "<td><strong>Structure</strong></td>"
+                    + "<td>" + f"{PRINT_BUDGET['sections']} sections in {PRINT_BUDGET['grid_rows']} rows "
+                      f"of a two-column grid</td>" + est_source,
+                    "<td><strong>Verdict</strong></td>"
+                    + "<td>" + ("estimated to fit on one page"
+                                if PRINT_BUDGET["fits_one_page"]
+                                else "estimated NOT to fit") + "</td>" + est_source,
+                    "<td><strong>Before this check</strong></td>"
+                    + "<td>" + f"{before['fills']:.0%} of a sheet, at {before['font_pt']}pt, measured "
+                      f"from commit {esc(before['measured_commit'])} with this same estimator"
+                      "</td>" + est_source,
+                ],
+                note="This is an estimate computed from the shipped stylesheet and the brief's own "
+                     "content. It is checked at build time and the build fails if it exceeds a sheet, "
+                     "but it is not a substitute for printing the page and looking at it."))
+
+
+def recheck_17nov_section() -> str:
+    """The second independent re-check, 17 November 2026.
+
+    Every row was opened on the publisher's own domain in this session and the figure on
+    the site was compared with the document. Nothing in this table changed a model input,
+    a published figure or the recommendation; the point of publishing it is that a reader
+    can open the same document and see the same sentence, and can tell which figures have
+    been confirmed by a human reading and which have not.
     """
     rows = [
-        ("Federal estate filing threshold and portability",
-         "The IRS estate-tax page was re-read on 17 November 2026. The filing-threshold table still ends at "
-         "2026 with $15,000,000, and the portability paragraph still states that a surviving spouse may elect "
-         "to pass the decedent's unused exemption on a timely filed return. Both match the site's estate "
-         "table and the two-person case on the liquidity page.",
+        ("Estate tax filing threshold, 2026 death",
+         "The Internal Revenue Service's own filing-threshold table still ends at 2026, and the 2026 "
+         "figure is $15,000,000. The table and the page's statement that a return is required where the "
+         "gross estate plus adjusted taxable gifts and specific gift tax exemption exceeds the "
+         "threshold for the year of death are unchanged.",
          ["irs_estate"]),
-        ("The 2027 inflation adjustments",
-         "IRS news release IR-2026-133 of 5 November 2026 was re-read: estates of decedents who die during "
-         "2027 have a basic exclusion amount of $15,480,000, up from $15,000,000 for 2026, and the annual "
-         "gift exclusion rises from $19,000 to $20,000 for calendar year 2027. Both match the site's tables; "
-         "the release names Revenue Procedure 2026-35 as the detail document, which a previous session read "
-         "in full.",
+        ("Basic exclusion and annual gift exclusion, 2027",
+         "News release IR-2026-133 of 5 November 2026, summarising Revenue Procedure 2026-35, states "
+         "that estates of decedents who die during 2027 have a basic exclusion amount of $15,480,000, "
+         "up from $15,000,000 for 2026, and that the annual gift exclusion rises to $20,000 for 2027 "
+         "from $19,000 for 2026. Both figures on the estate and dashboard pages match.",
          ["irs_2027"]),
-        ("Proposition 19 shelter amount and next adjustment",
-         "The Board's Letter to Assessors 2025/009 was re-read in full: the $1,000,000 amount adjusts for "
-         "inflation by the percentage change in the FHFA California house price index, which was 2.15 percent "
-         "for 2024, so the amount is $1,044,586 for transfers from 16 February 2025 through 15 February 2027, "
-         "and the next adjustment falls in February 2027. That is exactly the figure and the date the site "
-         "carries.",
-         ["boe_lta25009", "boe_prop19"]),
-        ("The statewide rent cap",
-         "Civil Code section 1947.12 was re-read from the statute: over any 12-month period the gross rental "
-         "rate may not rise more than 5 percent plus the percentage change in the cost of living, or 10 "
-         "percent, whichever is lower, with no more than two increases in the 12-month period and the "
-         "exemptions in subdivision (d), including housing subject to a stricter local rent ordinance and "
-         "housing issued a certificate of occupancy within the previous 15 years. That is the rule the site "
-         "publishes.",
-         ["civ1947_12", "civ1946_2"]),
-        ("The 1% tax above one million dollars, statute and form together",
-         "Revenue and Taxation Code section 17043 was re-read from the statute - an additional 1 percent on "
-         "the portion of taxable income above $1,000,000, with the credit, filing-status and joint-return "
-         "rules disapplied by subsection (c), and no inflation index anywhere in the section - and for the "
-         "first time the official 2025 Form 540 instructions were also read at source: line 62, named the "
-         "Behavioral Health Services Tax in that booklet, subtracts $1,000,000 from the line 19 amount and "
-         "applies 1 percent to the remainder. The statute is the authority and the booklet shows how the "
-         "return reports it; both now sit beside the sensitivity table on the taxes page.",
-         ["rtc17043", "ftb_540_instructions_2025"]),
-        ("Capital gains treatment in California",
-         "The Franchise Tax Board's capital-gains page was re-read: 'California does not have a lower rate "
-         "for capital gains. All capital gains are taxed as ordinary income.' The page states it was last "
-         "updated 28 January 2026. That is the treatment the model's combined rate assumes when it applies "
-         "ordinary-income rates to the whole gain.",
-         ["ftb_cg"]),
-        ("November 2026 election results: still unofficial",
-         "The Secretary of State's ballot-measures page was re-read on 17 November 2026 at its 16 November "
-         "2026, 7:12 p.m. update: all 23,860 precincts partially reporting, results still labelled "
-         "unofficial, certification still due 11 December 2026. Proposition 3 stands at 60.8 percent yes "
-         "(it was 60.7 percent on the 14 November read), Proposition 40 at 52.2 percent no, Proposition 41 "
-         "at 55.2 percent no, Proposition 42 at 51.2 percent yes and Proposition 43 at 57.7 percent no. "
-         "Every dated figure on the laws page and the dashboard was moved to this read; nothing became law "
-         "in the window, and the enacted-versus-proposed labels are unchanged.",
+        ("Proposition 19 value cap and the next adjustment date",
+         "Letter to Assessors 2025/009 was read in full. The $1 million amount is adjusted to "
+         "$1,044,586 for transfers from 16 February 2025 through 15 February 2027; the preceding "
+         "amounts were $1,022,600 and $1,000,000; and the letter states the next adjustment occurs in "
+         "February 2027. The adjustment is driven by the FHFA California house price index, not by the "
+         "consumer price index, which is why the cap is projected forward on a house-price rate.",
+         ["boe_lta25009"]),
+        ("Proposition 19 eligibility, the one-year rule and the clawback",
+         "Revenue and Taxation Code section 63.2(a)(1) was read in full again: the transfer must be of "
+         "a principal residence of an eligible transferor, between parents and their children or between "
+         "grandparents and their grandchildren with the qualifying parents deceased; it must become the "
+         "principal residence of the transferee within one year; the transferee must file for the "
+         "homeowners' or disabled veterans' exemption within a year; and under (a)(1)(C) the base year "
+         "value established at the change in ownership, adjusted annually, shall be enrolled once the "
+         "eligible transferee no longer qualifies. This is the arithmetic the model implements and the "
+         "reading the site publishes as a question for counsel.",
+         ["rtc63_2"]),
+        ("The additional 1% tax above one million dollars",
+         "Section 17043 was read again from the statute. Subdivision (a) imposes an additional tax of "
+         "1 percent on the portion of taxable income in excess of $1,000,000; subdivision (c) switches "
+         "off the credit provisions, the filing-status and bracket recomputation, and the joint-return "
+         "provisions. The published combined rate of 37.1% is built on this and on the current-year "
+         "state schedules, and the surcharge sensitivity that uses it is unchanged.",
+         ["rtc17043"]),
+        ("An inheritance is not income",
+         "The Franchise Tax Board's gifts and inheritance page states that if a gift or inheritance is "
+         "received it is not included in income, while income the gift or inheritance later produces - "
+         "interest, dividends, rental income and gain on a real property sale - is taxable. The page "
+         "carries a last-updated date of 24 September 2025 and is unchanged.",
+         ["ftb_inheritance"]),
+        ("California estate and inheritance tax",
+         "The State Controller's Office states that for decedents dying on or after 1 January 2005 there "
+         "is no longer a requirement to file a California estate tax return, and that the California "
+         "generation-skipping transfer tax does not apply to transfers after 31 December 2004. The "
+         "estate page's California position is unchanged.",
+         ["sco_estate"]),
+        ("California's top marginal rate for the current year",
+         "The 2026 California tax rate schedules were read again. Schedule X charges 12.30 percent over "
+         "$768,213, Schedule Y 12.30 percent over $1,536,426, and Schedule Z 12.30 percent over "
+         "$1,044,771. The site's combined-rate row cites the 2025 and 2026 schedules together, and the "
+         "bracket starts it registers are unchanged.",
+         ["ftb_rates_2026"]),
+        ("Statewide rent increase cap",
+         "Civil Code section 1947.12 was read again. Subdivision (a)(1) caps an increase over any "
+         "12-month period at 5 percent plus the percentage change in the cost of living, or 10 percent, "
+         "whichever is lower, of the lowest gross rental rate charged in the preceding 12 months; "
+         "subdivision (a)(2) limits a continuing tenancy to two increments in that period; and "
+         "subdivision (b) exempts the initial rate of a new tenancy.",
+         ["civ1947_12"]),
+        ("Long-range inflation and interest assumptions",
+         "Table II.C1 of the 2026 OASDI Trustees Report was read at source (the page is dated 9 June "
+         "2026). The annual percentage change in the Consumer Price Index is 2.4 percent under the "
+         "intermediate assumptions, 3.0 percent low-cost and 1.8 percent high-cost; the annual trust "
+         "fund new-issue real interest rate for 2044 and later is 2.3 percent intermediate, 2.8 percent "
+         "low-cost and 1.8 percent high-cost. These are the figures the model uses for its inflation "
+         "band and its discount-rate band.",
+         ["ssa_trustees"]),
+        ("Interest on an unpaid estate tax",
+         "The published quarterly rates still show 7 percent for underpayment and 4 percent for the "
+         "federal short-term rate in the fourth quarter of 2026, and a published range of 3 percent to "
+         "8 percent across 2022 to 2026. The liquidity page's deferral arithmetic uses the same rates.",
+         ["irs_interest"]),
+        ("What a lender may do when the borrower dies",
+         "Subsection (d) of the federal due-on-sale statute was read again in full. For a lien on "
+         "residential real property containing fewer than five dwelling units, a lender may not exercise "
+         "its option upon, among other transfers, \"a transfer to a relative resulting from the death of "
+         "a borrower\", or a transfer where the spouse or children of the borrower become owners. The "
+         "decision page's statement of the limit on acceleration matches the subsection.",
+         ["uscode1701j3"]),
+        ("The rate anchors the borrowing and parking paths are priced on",
+         "Four published series were re-read on 17 November 2026. The IRS quarterly interest page still shows 7 "
+         "percent for underpayments and a 4 percent federal short-term rate for the fourth quarter of 2026, a 6 "
+         "percent quarter in the middle of 2026, and no first-quarter 2027 row at all - so the liquidity page's "
+         "rate is the current published one, not a stale one. The Freddie Mac 30-year weekly average, read as the "
+         "whole of calendar 2026, is 7.11 percent for the week of 12 November with 5.98 percent (26 February) and "
+         "7.40 percent (8 and 15 October) as the year's low and high, which are the three rungs the keep-and-borrow "
+         "page now prices. The Treasury par yield curve's latest published row, 16 November 2026, is 4.34 percent "
+         "at three months and 4.83 percent at two years, both inside the 3.5 to 5.0 percent band the phased path "
+         "parks in, and the 13 November row a previous session recorded (4.32 and 4.88) still matched. The "
+         "published prime rate is 7.00 percent on every business day from 1 October through 9 November 2026.",
+         ["irs_interest", "fred_mortgage", "treasury_cmt", "fred_prime"]),
+        ("What interest on money taken out of a home is deductible against",
+         "Publication 936 (2025) was read at source on 17 November 2026 for the first time on this site. It states "
+         "that interest on home equity loans and lines of credit is deductible only where the borrowed funds were "
+         "used to buy, build or substantially improve the home that secures the loan, and it caps home acquisition "
+         "debt at $750,000 for mortgages taken out after 15 December 2017 ($1,000,000 for those taken out between "
+         "13 October 1987 and 16 December 2017). That is the authority for this site assuming no deduction on the "
+         "keep-and-borrow path, where the money is invested rather than spent on the house.",
+         ["irs_p936"]),
+        ("Whether granting a lien over the home is a change in ownership",
+         "Revenue and Taxation Code section 62 was read in full on the publisher's own domain on 17 November 2026, "
+         "including subdivision (c), which an earlier partial read had quoted from memory: a change in ownership "
+         "does not include the creation, assignment, termination or reconveyance of a security interest, or the "
+         "substitution of a trustee under a security instrument. Borrowing against the inherited home therefore "
+         "does not by itself reassess it, which is why the keep-and-borrow page can hold the Proposition 19 "
+         "shelter constant while it changes everything else about the position.",
+         ["rtc62"]),
+        ("The November 2026 ballot measures, still unofficial",
+         "The Secretary of State's ballot-measures page was re-read on 17 November 2026 at its 16 November 2026, "
+         "7:12 p.m. update: all 23,860 precincts partially reporting, results still labelled unofficial, "
+         "certification still due 11 December 2026. Proposition 3 stands at 60.8 percent yes (60.7 percent on the "
+         "14 November read), Proposition 40 at 52.2 percent no, Proposition 41 at 55.2 percent no, Proposition 42 "
+         "at 51.2 percent yes and Proposition 43 at 57.7 percent no. Every dated figure on the laws page and the "
+         "dashboard was moved to this read; nothing became law in the window, so the enacted-versus-proposed "
+         "labels are unchanged.",
          ["sos_results"]),
+        ("Capital gains treatment in California",
+         "The Franchise Tax Board's capital-gains page was re-read: 'California does not have a lower rate for "
+         "capital gains. All capital gains are taxed as ordinary income.' The page states it was last updated 28 "
+         "January 2026. That is the treatment the model's combined rate assumes when it applies ordinary-income "
+         "rates to the whole gain.",
+         ["ftb_cg"]),
+        ("The 1% surcharge as the return itself reports it",
+         "For the first time the official 2025 Form 540 instructions were read at source beside the statute. Line "
+         "62, named the Behavioral Health Services Tax in that booklet, subtracts $1,000,000 from the line 19 "
+         "amount and applies 1 percent to the remainder. The statute is the authority and the booklet shows how "
+         "the return reports it; both now sit beside the sensitivity table on the taxes page.",
+         ["ftb_540_instructions_2025"]),
         ("Figures this session could not check at all",
-         "Three, the same three as yesterday. The local parcel-tax certification: certification is not due "
-         "until 11 December 2026, so there is nothing final to read on 17 November, and the local publisher "
-         "is withheld anyway. Property A's tax rate area: withheld for the same crosswalk reason as before. "
-         "The law-watch's two pending local measures: not verifiable on the public site because the official "
-         "file names the jurisdiction. Each remains on the register rather than being filled in.",
+         "Three, unchanged. The ad valorem rate for Property B is published by a city body whose web "
+         "address names the jurisdiction, so it is not linked here and stays flagged; the local parcel "
+         "tax result is on the register with certification pending; and the rate area for Property A is "
+         "withheld for the same crosswalk reason, which is why the site runs an assumed rate with a "
+         "diagnostic band instead. Each is a known hole, not a silent one.",
          []),
     ]
     body = []
@@ -4139,14 +4940,20 @@ def recheck_section_17() -> str:
         cell = (src_cell(srcs, "Official source") if srcs
                 else method_cell("review.html#register", "Withheld for privacy, logged on the register"))
         body.append(f"<td><strong>{esc(item)}</strong></td><td>{detail}</td>" + cell)
-    return ('<h2 id="recheck-17">Official-source recheck, 17 November 2026</h2>'
-            + callout("note", "The periodic re-check, continued", """<p>The brief asks for the official authorities to be rechecked periodically and for enacted changes to be
-told apart from proposals. This is the next dated pass after the 16 November table above. Nothing read on
-17 November 2026 changed a figure the site already published; the one addition is the Form 540 instructions
-as a source in its own right, and the one refresh is the election-results read. Rechecks are dated so a
-reader can tell how stale the page is.</p>""")
+    return ('<h2 id="recheck-2">Official-source recheck, 17 November 2026</h2>'
+            + callout("note", "Why there are two re-check tables", """
+<p>This is the second independent pass, and it is published separately from the 16 November table
+rather than merged into it, so that a reader can see what each session actually opened and when. The
+method is the same: every figure below was read on the publisher's own domain in this session, and
+the published figure was compared with the document.</p>
+<p><strong>No figure changed.</strong> Every value the site already carried matched its source, so no
+model input, no published table and no recommendation moved. Where a document could not be opened at
+all, the row says so instead of being filled in.</p>""")
             + table("What was re-read on 17 November 2026, and what it showed",
-                    ["Figure or rule", "What the source says today", "Source"], body))
+                    ["Figure or rule", "What the source says today", "Source"], body,
+                    note="A re-check that changes nothing is still worth publishing: it is the only way a "
+                         "reader can tell the difference between a figure a human has checked against the "
+                         "document and one that has been carried forward unchecked."))
 
 
 def history_audit_section() -> str:
@@ -4160,22 +4967,37 @@ def history_audit_section() -> str:
         ("Street address", "0", "0", "Never committed in any reachable commit."),
         ("Parcel or assessor number", "0", "0", "Never committed in any reachable commit."),
         ("Telephone number", "0", "0", "Never committed in any reachable commit."),
-        ("Postal code of either property", "0", "0",
-         "Was present in superseded file versions and in the archive directory before the 17–18 November 2026 "
-         "history rewrite; the rewrite removed it from every reachable commit."),
-        ("Place name, or the county or city name", "0", "0",
-         "Was present in superseded file versions, archive material and early versions before the rewrite; the "
+        ("Person-name pattern", "0", "0", "Never committed in any reachable commit."),
+        ("Personal mail-service address, in file content", "0", "0",
+         "Zero in file content. The personal address this repository held was in Git's commit identities, "
+         "not in any file; the 17–18 November 2026 rewrite replaced it throughout history with the account's "
+         "own noreply address, so no reachable commit carries it."),
+        ("Postal code, in a prefixed form", "0", "0",
+         "Was present in superseded file versions only; the rewrite removed it from every reachable commit."),
+        ("Postal code, bare", "0", "0",
+         "Was present in superseded file versions and the archive directories, which are never published; the "
          "rewrite removed it from every reachable commit."),
+        ("Place name at property level", "0", "0",
+         "Was present in superseded file versions and archive material, plus early versions written before the "
+         "county and city names were withdrawn; the rewrite removed it from every reachable commit."),
+        ("Place name anywhere, including inside a web address", "0", "0",
+         "The same versions, counted with the wider pattern that also catches a host name; removed by the rewrite."),
+        ("County or city name", "0", "0",
+         "The widest class. Every version written before the jurisdiction names were withdrawn, including "
+         "superseded sections of the coordination board; removed by the rewrite."),
         ("Location-specific source host", "0", "0",
-         "Was present in superseded file versions before the rewrite; the rewrite removed it from every reachable "
-         "commit."),
+         "Links to county and city publishers, whose web addresses name the jurisdiction. Withdrawn from the "
+         "published site earlier; the rewrite removed the residual host tokens from history."),
+        ("Withdrawn metropolitan series identifier", "0", "0",
+         "The FHFA and FRED metropolitan series and their codes, withdrawn from the published edition on "
+         "15 November 2026 because they crosswalked the placeholders to their metropolitan areas; the rewrite "
+         "removed the residual series identifiers from history."),
+        ("Metro phrasing attached to a placeholder", "0", "0",
+         "The prose form of the same crosswalk; removed by the rewrite."),
         ("Dollar amount that is not a multiple of ten", "0", "0",
-         "The pre-rewrite audit counted candidate amounts in superseded versions; the rewrite removed every "
-         "unrounded candidate, so no reachable file version carries one. Every amount in the current tree is a "
-         "multiple of ten or a verbatim published official amount."),
-        ("Email address", "0", "0",
-         "The personal author/committer mail-service address was rewritten to the account's own noreply address "
-         "throughout history by the mailmap rewrite. No published file contains an email address."),
+         "Superseded versions held the pre-rounding figures. The rewrite removed every unrounded candidate, so "
+         "no reachable file version carries one. Every amount in the current tree is a multiple of ten or a "
+         "verbatim published official amount."),
     ]
     body = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td><td>{esc(d)}</td>"
             + f'<td><a href="review.html#register">Logged in the register</a></td>' for a, b, c, d in rows]
@@ -4189,22 +5011,31 @@ multiple of ten. That scan covers the deployable artifact, not the Git history b
 <p>A separate read-only audit therefore walks every commit reachable in this repository and counts how many file
 versions carry the <em>shape</em> of each identifier. It reports counts only. It does not print a matching value,
 because publishing the value in order to disclose it would recreate exactly the exposure being disclosed.</p>
-<p><strong>The result is that the current published tree is clean on every class, and the history was cleaned on
-every class by the rewrite described below.</strong> No street address, parcel number or telephone number has ever
-been committed. Postal codes, property-level place names and the two jurisdiction names had appeared in superseded
-file versions and in archive material, none of which is part of the published artifact; the rewrite removed them
-from history, so the full counts below now report zero in every property-identifying class.</p>
-<p><strong>That decision has been taken and executed.</strong> On 17–18 November 2026 the repository's full Git
-history was rewritten with <code>git-filter-repo</code> and force-pushed to the remote, at the owner's recorded
-decision (see <code>PRIVACY_REMEDIATION.md</code> and the coordination board). Postal codes, property-level place
-names, jurisdiction names, location-specific source hosts, metro crosswalk identifiers and the personal
-author/committer address were removed from every reachable commit. The published tree is byte-identical before and
-after the rewrite, so no page, table or model figure changed. No street address, parcel number or telephone number
-was ever committed, so none needed removal. The one class that cannot be removed by a push is the pull-request
-refs, which GitHub manages internally; no branch or tag retains any identifier. This page records that the rewrite
-happened and why, without printing any value that was removed.</p>""")
-        + table("File versions whose content matches each identifier class",
-                ["Identifier class", "File versions in history", "Matches in the published tree",
+<p><strong>The pre-rewrite measurement below was taken on 17 November 2026 over the complete history in a full
+clone; the rewrite was then executed and force-pushed, and the counts were re-measured after it.</strong> The
+current tracked tree is clean on every identifier class. No street address, parcel number, telephone number or
+personal mail-service address has ever been committed in any file. Postal codes, place names, the two
+jurisdiction names, the jurisdiction publishers' web addresses and the withdrawn metropolitan series identifiers
+did appear in superseded file versions and in archive material, none of which is part of the published artifact;
+the 17–18 November 2026 rewrite removed them from every reachable commit, so the counts now report zero in every
+property-identifying class.</p>
+<p>Two things about the pre-rewrite numbers are worth stating because they changed since the last measurement on
+16 November. The audit treated a GitHub service address the way the tracked-tree guard already does, so two
+documentation matches were no longer counted as personal; and it took its list of exempt official amounts from
+the publication gate instead of keeping a copy of its own, which had drifted and was counting three statutory
+recording fees as exposure. The rewrite then removed every residual candidate, so the post-rewrite counts are
+zero across the board.</p>
+<p><strong>The rewrite has been executed.</strong> On 17–18 November 2026 the repository's full Git history was
+rewritten with <code>git-filter-repo</code> and force-pushed to the remote, at the owner's recorded decision (see
+<code>PRIVACY_REMEDIATION.md</code> and the coordination board). Postal codes, property-level place names,
+jurisdiction names, location-specific source hosts, metro crosswalk identifiers and the personal
+author/committer address were removed from every reachable commit. The published tree is byte-identical before
+and after the rewrite, so no page, table or model figure changed. No street address, parcel number or telephone
+number was ever committed, so none needed removal. The one class that cannot be removed by a push is the
+pull-request refs, which GitHub manages internally; no branch or tag retains any identifier. This page records
+that the rewrite happened and why, without printing any value that was removed.</p>""")
+        + table("File versions whose content matches each identifier class, measured after the 17–18 November 2026 rewrite",
+                ["Identifier class", "File versions in history", "Files in the current tracked tree",
                  "What that means", "Basis"], body,
                 note="Counts are an upper bound. A file version can match because the rule itself is being "
                      "described, or because an official documentary quote contains a non-round amount, as well as "
@@ -4216,11 +5047,16 @@ happened and why, without printing any value that was removed.</p>""")
 <li><code>scripts/privacy_scrub_audit.py</code> runs <code>git log --all</code> and <code>git log --name-only</code>,
 reads every distinct file version, and tests it against the same identifier patterns the live publication gate
 uses. It writes nothing and changes nothing.</li>
-<li>The amount class is evaluated the way the live gate evaluates it: the formatted amount is parsed and its value
-tested, so a rounded figure is never counted and a pre-rounding figure always is. Official statutory amounts are
-exempted exactly as the gate exempts them.</li>
-<li>The audit knows its own limits. It cannot see pull-request diffs, forks, or copies outside this repository, and
-it cannot certify that a deleted object is unreachable on the hosting service.</li>
+<li>The amount class is evaluated by calling the live gate's own money test, so a rounded figure is never
+counted and a pre-rounding figure always is, and the exemption for verbatim official amounts cannot drift from
+the exemption the site actually applies.</li>
+<li>The count needs a complete clone. A shallow checkout silently under-reports: this repository's Arena clones
+arrive shallow, so <code>git fetch --unshallow origin</code> is run before the audit, and the audit says in its
+own header when the history it read was incomplete.</li>
+<li>The audit knows its own limits. It reads file content, not commit metadata: the author and committer
+addresses Git stores on each commit are outside its patterns, and those carry an address in 172 of the 482
+commits that no file has ever held. It cannot see pull-request diffs, forks, or copies outside this repository,
+and it cannot certify that a deleted object is unreachable on the hosting service.</li>
 </ul>
 </section>"""
     )
@@ -4614,8 +5450,15 @@ def page_review() -> str:
          f"does not move."),
         ("Depreciation follows a simple rule",
          "80% of value treated as improvements, straight line over 27.5 years, capped at the building's depreciable amount. Land is not depreciated. Real cost segregation would differ."),
-        ("No mortgage, no 1031 exchange, no instalment sale, no gifting",
-         "Each is listed on the questions page. None is modelled."),
+        ("A new loan is not modelled, borrowing against the house is",
+         "Borrowing to take the cash out while keeping the home was an omission until 17 November 2026 and is "
+         "now a priced path of its own, with its own engine and page (keep-and-borrow.html): three "
+         "loan-to-value rungs at the published 2026 mortgage averages, an interest-only line at the published "
+         "prime rate, and the hurdle return each rung has to beat. What remains unmodelled is the rest of the "
+         "list - a 1031 exchange, an instalment sale, and gifting - each on the questions page. A loan already "
+         "registered against either building at the date of death is a separate gap: nothing in the record says "
+         "whether either is encumbered, so the what-if page prices that per $1,000 a month of payment instead "
+         "of guessing at a balance."),
         ("The inheritance year is a range, not a date",
          "2040, 2045 and 2050 are all modelled. The plan should be revisited when the timing is known."),
         ("The property tax lesser-of rule is modelled only under the drawn inflation paths",
@@ -4644,7 +5487,7 @@ def page_review() -> str:
         "Combined tax rates are added, not interacted": ["irs_tc409", "ftb_cg"],
         "The housing value of living in the home is priced, not added": [],
         "Depreciation follows a simple rule": ["irs_p527"],
-        "No mortgage, no 1031 exchange, no instalment sale, no gifting": [],
+        "A new loan is not modelled, borrowing against the house is": ["fred_mortgage", "fred_prime"],
         "The inheritance year is a range, not a date": [],
         "The property tax lesser-of rule is modelled only under the drawn inflation paths": ["rtc51", "boe_pub29", "fred_cpi"],
         "The Proposition 19 shelter path after 2027 is a projection": ["boe_lta25009"],
@@ -4695,9 +5538,9 @@ def page_review() -> str:
         ("Two briefing pages were listed twice in the menu; one has been retired",
          "The one-page Attorney & CPA brief appeared under two labels in the menu. The print-styled brief is kept. The duplicate route is retired and returns a content-free withdrawal notice on the packaged artifact, and a 404 on the Jekyll root publisher.",
          "The menu shows one brief. Nothing in the substance of the brief changed."),
-        ("The one-page brief has not been print-checked in a browser",
-         "No browser is available in the build environment. The print rules were corrected on 15 November 2026 - the page-size rules had been conflicting (a later global margin overrode the general print margins) and are now a single default page plus a named page for the brief - but the printed pagination was not seen.",
-         "Open the brief in a browser and print it to PDF before handing it to an adviser."),
+        ("The one-page brief has been measured but not seen",
+         "No browser is available in the build environment, so the printed pagination still has not been looked at. What was done instead is a measurement: the print geometry is read out of the stylesheet the brief is printed with and the content is measured against it. The brief as published before this check measured at 128% of a sheet and would have run onto a second page while claiming to be one page; it now measures at 96%. The measurement is a model of a browser, not a browser, and the build fails if it ever exceeds a sheet again.",
+         "Open the brief in a browser, print it to PDF, and check that it is one page and that the type is legible, before handing it to an adviser."),
         ("A personal e-mail address appears in commit metadata",
          "Git stores an author address with every commit. Earlier commits (83 of them) carry a personal e-mail address rather than the GitHub no-reply address now in use. It is not on any published page.",
          "Removing it from history needs a rewrite, which is the owner's decision. The runbook at scripts/history_scrub.sh covers the rewrite steps, including an author-address rewrite. For new commits, the account setting that keeps the address private is the owner's to change."),
@@ -4733,8 +5576,9 @@ each one is a reason to check before acting.</p>""")
         + '<h2>Repository audit</h2>'
         + table("What was found when the repository was reviewed",
                 ["Finding", "Detail", "Residual risk", "Source"], aud_rows)
+        + print_budget_section()
         + recheck_section()
-        + recheck_section_17()
+        + recheck_17nov_section()
         + history_audit_section()
     )
 
@@ -4754,8 +5598,10 @@ def page_sources() -> str:
         callout("note", "How the ledger works", f"""
 <p>There are {len(SRC_DOC['sources'])} sources. The date in the last column is when the entry was last read on the
 publisher's own domain. The ledger was opened on 13 November 2026 and has since been re-read in stages, most
-recently on 17 November 2026, when the figures listed in the <a href="review.html#recheck">recheck tables</a> were
-taken from the documents themselves rather than from any summary of them. The "supports" column says exactly what
+recently on 17 November 2026, when the figures listed in the
+<a href="review.html#recheck-2">17 November recheck table</a> were read from the documents themselves rather than
+from any summary of them; the <a href="review.html#recheck">16 November recheck table</a> records the previous
+pass. The "supports" column says exactly what
 the source is cited for; the "limits" column says what it does not cover. Sources are cited only for what they
 actually state, and an official publisher whose name or address would identify one of the two properties is
 deliberately not linked here: it is recorded on the register instead.</p>""")
@@ -4793,15 +5639,34 @@ def page_glossary() -> str:
         ("Proposition 19 parent-child exclusion", "A conditional California change-in-ownership exclusion, limited by statute and generally requiring the eligible transferee to use the transferred home as a principal residence and file a claim.", ["rtc63_2_eligibility", "boe_prop19"]),
         ("Reinvestment risk", "The risk that sale proceeds must be reinvested at lower returns than expected - for example, inheriting just before a stock-market crash and buying equities at the top. The phased-investing path on the black-swan page tests parking proceeds in short-term Treasuries for 24-36 months before buying stocks, with a synthetic stress and a dated backtest of the realized 1929, 2000 and 2008 returns.", ["fred_gs10", "damodaran_histret"]),
         ("Phased investing", "Selling the inherited home, holding the proceeds in 3-month to 2-year Treasury bills for 24-36 months, then buying equities in equal monthly pieces over the following 12 months. It softens the risk of entering the stock market at a 1929- or 2008-style peak; the black-swan page tests it synthetically and against realized returns.", ["fred_gs10", "damodaran_histret"]),
+        ("Cash-out refinance", "Replacing the existing mortgage on a property with a larger one and taking the difference in cash. It converts equity into spendable money without a sale, so it triggers no capital-gains tax and, under Revenue and Taxation Code section 62(c)(1), no property-tax reassessment. It does trigger a payment: the keep-and-borrow page prices that payment against what the borrowed money would earn.",
+         ["rtc62", "fred_mortgage"]),
+        ("Home equity line of credit (HELOC)", "A revolving borrowings facility secured on the home, usually priced at the published prime rate plus a lender's margin and often interest-only while drawing. Interest only means the balance is still owing in full at the horizon, which is why the keep-and-borrow page prices it as a different animal from an amortising loan.",
+         ["fred_prime", "irs_p936"]),
+        ("Loan-to-value, and why the rung is stated", "The share of the home's value taken as a loan. No official source publishes what a lender would advance against this property, so the site shows 40, 60 and 80 percent as stated scenarios, not as an offer or an underwriting answer.",
+         []),
+        ("Hurdle return, and negative carry", "The after-tax portfolio return at which borrowed money exactly pays for itself. Below it, borrowing loses value even though the cash arrives; the loss is the negative carry. It is the one number to check before a household borrows to invest.",
+         ["fred_mortgage"]),
         ("Encumbrance", "A mortgage, deed of trust, tax lien, assessment lien or other claim registered against "
          "a property. Nothing in the record says whether either building here carries one, so the model runs both "
          "free and clear and the decision page states that as an assumption rather than a fact.",
          []),
+        ("Leverage", "Borrowing against a property to invest the proceeds instead of selling it. The keep-and-borrow "
+         "path prices it end to end: it adds to the living path only where the after-tax return on the borrowed "
+         "money exceeds the rate charged, it multiplies both wins and losses without changing which one you get, "
+         "and at the published mortgage average it does not beat selling at any loan-to-value tested.",
+         ["fred_mortgage"]),
         ("Due-on-sale clause", "A loan term letting a lender demand full repayment when the property is "
          "transferred. Federal law stops a lender exercising one on a transfer to a relative resulting from the "
          "borrower's death, or on a transfer where the borrower's children become owners, for a loan on fewer than "
          "five dwelling units. It limits acceleration; it does not decide who has to pay.",
          ["uscode1701j3"]),
+        ("Amortisation", "The way a fixed-rate loan is paid off: each level monthly payment covers that month's "
+         "interest and retires part of the principal, so the balance falls to zero at the end of the term. The "
+         "keep-and-borrow case on the estate liquidity page prices a fully amortising 30-year fixed loan at the "
+         "published mortgage average, which over a long horizon costs more than the interest-only carrying cost "
+         "shown beside it, because the principal is retired rather than rolled forward.",
+         ["fred_mortgage"]),
         ("Dwelling fire and landlord forms", "The policy family a rental house or a building of up to four units is "
          "usually written on, as distinct from the owner-occupied homeowners multi-peril form. The state "
          "insurance department publishes a statewide average written premium for each form, and the two averages "
@@ -4835,43 +5700,36 @@ def page_briefing() -> str:
     value = p45["value_at_death"]
     cash_net = p45["paths"]["sell_equities"]["sale"]["net"]
     summary = f"""
-<div class="brief-toolbar"><p><strong>Print / save as PDF:</strong> use your browser's Print command. This sheet is formatted for one letter-size page.</p><p><strong>One-page printable Attorney &amp; CPA Briefing Sheet:</strong> this page is the single briefing sheet; the duplicate briefing-sheet.html was withdrawn on 15 November 2026.</p></div>
+<div class="brief-toolbar"><p><strong>Print / save as PDF:</strong> use your browser's Print command. This sheet is formatted for one letter-size page; its printed length is measured at build time and is reported on the <a href="review.html#print-budget">print budget</a>, which also says what that measurement does and does not establish.</p><p><strong>One-page printable Attorney &amp; CPA Briefing Sheet:</strong> this page is the single briefing sheet; the duplicate briefing-sheet.html was withdrawn on 15 November 2026.</p></div>
 <p class="brief-confidential"><strong>Planning brief — placeholders only; no personal names, addresses, parcel IDs, trust terms or account figures.</strong></p>
 <div class="brief-grid">
 <section><h2>Decision in front of the family</h2>
-<p>Property A is expected to pass through a trust around 2040–2050; Property B is already owned by the heir and currently has two rented units plus one available unit. Do not treat the inherited home as already owned or assume Property B rent is displaced by living there.</p>
-<p>Current model direction: sell Property A soon after inheritance unless the heir genuinely wants to live in it. This is conditional—not advice—and depends on eligibility, title, tax basis, actual carrying costs, market rent and updated law. A 2045 illustration puts inherited-home value around {m(value)} and after-sale proceeds before reinvestment around {m(cash_net)}; both are model outputs, not appraisals or quotes.</p>
+<p>Property A is expected to pass through a trust around 2040–2050; Property B is already owned by the heir, with two rented units and one available. Do not treat the inherited home as already owned, or assume Property B rent is displaced by living there.</p>
+<p>Current model direction: sell Property A soon after inheritance unless the heir genuinely wants to live in it. Conditional, not advice, and dependent on eligibility, title, basis, carrying costs, market rent and updated law. A 2045 illustration: inherited-home value {m(value)}, after-sale proceeds before reinvestment {m(cash_net)}. Model outputs, not appraisals.</p>
 </section>
 <section><h2>First questions for counsel and tax adviser</h2>
 <ol>
-<li>Does the trust actually own the property, and is the transferor-to-beneficiary relationship eligible for California's parent-child Proposition 19 exclusion? If not, full reassessment is assumed. {slink('rtc63_2_eligibility')} {slink('boe_prop19')}</li>
-<li>What are the trust's distribution, sale, occupancy, debt and trustee powers? Confirm deed, trust amendments, successor-trustee process and authority to sell.</li>
-<li>What is the date-of-death basis, appraisal standard and allocation between land/building? What is the cash estate, prior taxable gifts, marital portability and federal Form 706 filing position? {slink('irs_basis')} {slink('irs_estate')} {slink('irs_i706')}</li>
-<li>Which home will be the heir's principal residence after transfer, and can occupancy/claim deadlines be met? Confirm eligibility and filing sequence with the assessor. {slink('boe_lta25009')}</li>
+<li>Does the trust own the property, and is the transferor-to-beneficiary relationship eligible for the parent-child Proposition 19 exclusion? If not, full reassessment is assumed. {slink('rtc63_2_eligibility')} {slink('boe_prop19')}</li>
+<li>What are the trust's distribution, sale, occupancy, debt and trustee powers? Confirm the deed, trust amendments, successor-trustee process and authority to sell.</li>
+<li>What is the date-of-death basis and appraisal standard, and the land/building allocation? What is the cash estate, prior taxable gifts, marital portability and Form 706 position? {slink('irs_basis')} {slink('irs_estate')} {slink('irs_i706')}</li>
+<li>Which home is the heir's principal residence after transfer, and can the occupancy and claim deadlines be met? Confirm eligibility and filing sequence with the assessor. {slink('boe_lta25009')}</li>
 </ol>
 </section>
-<section><h2>Mixed paths and the clawback</h2>
-<p>Living there for a period and then selling is the closest mixed path, and it still ends behind an immediate sale by {m(next(x for x in MIXED['paths'] if x['occupy_years'] == 5 and x['mode'] == 'sell')['gap_vs_sell_now'])} after five years. Moving out after claiming the Proposition 19 exclusion removes it: section 63.2(a)(1)(C) enrols the change-of-ownership base year value, costing about {m(MIXED['clawback']['difference'])} of extra property tax over thirty years on the live-then-let path. Both readings are published; ask counsel which applies.</p></section>
-<section><h2>Known / unknown before choosing</h2>
-<p><strong>Known from the supplied brief, not independently verified:</strong> owner-reported values, Property B rent and utilities, Property A water/solar estimate and historic tax-roll figures. <strong>Unknown:</strong> actual deed/title and trust terms, relationship eligibility, current insurance quotes, whether anything is registered against either parcel, property-specific utilities, repairs/capital work, exact tax-rate areas, Property A market rent, selling costs, total taxable estate and future law.</p>
-<p><strong>Two assumptions are now banded and tested instead of left as round numbers.</strong> Insurance: each
-building carries a band whose floor is the published statewide average for the matching policy form ($1,074
-owner-occupied, $519 landlord on up to four units, newest year published 2017) and whose ceiling is a stated
-scenario; the whole band moves the thirty-year living figure by under 1% of the gap to selling, so a quote sizes
-the bill and does not decide the path. Encumbrance: nothing was reported either way, so both are modelled free and
-clear, and $1,000 a month of debt service costs a keeping path about $1,311,830 and the sale path nothing.
-Counsel's question is what is owed, not whether the transfer triggers repayment: on a building of fewer than five
-units, federal law does not let a lender accelerate because the property passed to a relative at death.</p>
-<p>Obtain certified tax bills and assessor records, title report, trust copy, date-of-death appraisal, insurer quotes for owner-occupied and rental uses, utility bills, property-condition inspection and a local rent opinion. Do not publish source documents or identifiers.</p>
-</section>
 <section><h2>Options and material risks</h2>
-<ul><li>Live in Property A: possible reassessment shelter only if eligible and occupancy requirements are met; higher concentration and maintenance exposure.</li><li>Rent Property A: full reassessment may apply; income, vacancy, repairs, landlord rules and depreciation/recapture need a CPA-grade model.</li><li>Sell and reinvest: basis step-up may limit immediate gain, but confirm sale costs and tax. The published transfer tax and recording fees come to {m(MIXED['fees_example']['published_total'])} on a {m(MIXED['fees_example']['price'])} sale - about {MIXED['fees_example']['published_share_of_modelled']}% of the modelled 5.5% selling cost - and the $75 instrument fee does not apply to a sale that pays the transfer tax; reinvestment risk remains. The Black Swan page models 24/36-month Treasury parking and phased equity entry through one canonical monthly path: a synthetic stress test and a dated backtest of the realized 1929, 2000 and 2008 returns. Reinvestment yield may decline at maturity.</li><li>Property B remains an independent owned asset: include its net operating costs, insurance, rent/legal rules and available unit in household liquidity planning.</li><li>If the taxable estate may exceed the federal exclusion: the tax is {pcf(LIQ['clock']['estate_tax_rate'], 0)} of the excess and is due in cash {LIQ['clock']['due_months_after_death']} months after death. An extension of time to file is not an extension of time to pay, and interest runs from the due date at the federal short-term rate plus three points, compounded daily. Ask whether the section 6166 instalment election is available. <a href='liquidity.html'>Estate liquidity page</a>. {slink('irs_i4768')} {slink('uscode6621')}</li></ul>
+<ul><li><strong>Live in Property A:</strong> reassessment shelter only if eligible and the occupancy requirements are met; higher concentration and maintenance exposure.</li><li><strong>Rent Property A:</strong> full reassessment may apply; income, vacancy, repairs, landlord rules and depreciation and recapture need a CPA-grade model.</li><li><strong>Sell and reinvest:</strong> the basis step-up may limit immediate gain, but confirm sale costs and tax. Published transfer tax and recording fees come to {m(MIXED['fees_example']['published_total'])} on a {m(MIXED['fees_example']['price'])} sale, about {MIXED['fees_example']['published_share_of_modelled']}% of the modelled 5.5% selling cost, and the $75 instrument fee does not apply to a sale paying the transfer tax. Reinvestment risk remains: the Black Swan page models 24 and 36-month Treasury parking and phased equity entry on one canonical monthly path, with a synthetic stress test and a dated backtest of 1929, 2000 and 2008. Reinvestment yield may decline at maturity.</li><li><strong>Property B</strong> stays an independent owned asset: include its net operating costs, insurance, rent rules and the available unit in household liquidity planning.</li><li><strong>If the taxable estate may exceed the federal exclusion:</strong> the tax is {pcf(LIQ['clock']['estate_tax_rate'], 0)} of the excess and is due in cash {LIQ['clock']['due_months_after_death']} months after death. An extension to file is not an extension to pay; interest runs from the due date at the federal short-term rate plus three points, compounded daily. Ask whether the section 6166 instalment election is available. <a href='liquidity.html'>Estate liquidity page</a>. {slink('irs_i4768')} {slink('uscode6621')}</li></ul>
 </section>
+<section><h2>Known / unknown before choosing</h2>
+<p><strong>Known from the supplied brief, not independently verified:</strong> owner-reported values, Property B rent and utilities, Property A water and solar estimates, the historic tax rolls. <strong>Unknown:</strong> deed and trust terms, relationship eligibility, insurance quotes, registered liens, property-specific utilities, repairs and capital work, tax-rate areas, Property A market rent, selling costs, the size of the taxable estate, future law.</p>
+<p><strong>Two assumptions are banded and tested rather than left as round numbers.</strong> Insurance: each building carries a band floored by the published statewide average for the matching policy form ($1,074 owner-occupied, $519 landlord, newest published year 2017); the whole band moves the thirty-year living figure by under 1% of the gap to selling, so a quote sizes the bill but does not choose the path. Encumbrance: nothing was reported either way, so both are modelled free and clear; $1,000 a month of debt service costs a keeping path about $1,311,830 and the sale path nothing. Counsel's question is what is owed, not whether the transfer triggers repayment: on a building of fewer than five units federal law does not let a lender accelerate because the property passed to a relative at death.</p>
+<p>Obtain certified tax bills and assessor records, a title report, the trust, a date-of-death appraisal, insurer quotes for owner-occupied and rental use, utility bills, a property-condition inspection and a local rent opinion. Do not publish source documents or identifiers.</p>
+</section>
+<section><h2>Mixed paths and the clawback</h2>
+<p>Living there for a period then selling is the closest mixed path, and still ends behind an immediate sale by {m(next(x for x in MIXED['paths'] if x['occupy_years'] == 5 and x['mode'] == 'sell')['gap_vs_sell_now'])} after five years. Moving out after claiming the Proposition 19 exclusion removes it: section 63.2(a)(1)(C) enrols the change-of-ownership base year value, costing about {m(MIXED['clawback']['difference'])} of extra property tax over thirty years on the live-then-let path. Both readings are published; ask counsel which applies.</p></section>
 <section><h2>Timing / action sequence</h2>
-<p>Before transfer: verify trust/deed, relationship eligibility, estate liquidity and insurance. At death/transfer: secure property, contact trustee/assessor/insurer, obtain date-of-death valuation, inventory expenses and confirm tax filing calendar. After title transfer: have counsel/CPA calendar assessor claim deadlines, income/estate returns, insurance endorsements and rental notices; model live/rent/sell choices with actual quotes before signing or distributing proceeds. Exact dates depend on transfer and filing facts.</p>
+<p>Before transfer: verify trust and deed, relationship eligibility, estate liquidity, insurance. At death: secure the property, contact trustee, assessor and insurer, obtain the date-of-death valuation, inventory expenses, confirm the filing calendar. After transfer: have counsel and CPA calendar the assessor claim deadlines, income and estate returns, insurance endorsements and rental notices; model live, rent and sell with actual quotes before signing or distributing proceeds. Exact dates depend on the transfer and filing facts.</p>
 </section>
 <section class="brief-glossary"><h2>Glossary</h2>
-<p><strong>Basis step-up</strong>: generally resets inherited property tax basis to date-of-death value, subject to exceptions. <strong>Prop 19 exclusion</strong>: conditional California parent-child reassessment exclusion subject to statutory value and occupancy rules. <strong>Estate tax</strong>: federal tax on taxable estate, not a California inheritance tax. <strong>Reinvestment risk</strong>: future short-term Treasury proceeds may earn lower yields at maturity. <strong>Encumbrance</strong>: a mortgage, deed of trust or lien on a property; unknown for both buildings here, so both are modelled free and clear, with the limit on acceleration set by 12 U.S.C. section 1701j-3(d).</p>
+<p><strong>Basis step-up</strong>: generally resets inherited property tax basis to the date-of-death value, subject to exceptions. <strong>Prop 19 exclusion</strong>: conditional California parent-child reassessment exclusion, subject to statutory value and occupancy rules. <strong>Estate tax</strong>: federal tax on the taxable estate, not a California inheritance tax. <strong>Reinvestment risk</strong>: short-term Treasury proceeds may earn less at maturity. <strong>Encumbrance</strong>: a mortgage, deed of trust or lien; unknown for both buildings, so both are modelled free and clear, with the limit on acceleration set by 12 U.S.C. section 1701j-3(d).</p>
 </section>
 </div>
 <p class="brief-footer">For attorney / CPA discussion only. Laws and projections may change before 2040–2050. Sources and full assumptions: <a href="sources.html">source ledger</a>, <a href="questions.html">question register</a>, <a href="review.html">unverified items</a>, <a href="black-swan.html">phased-investing stress test</a>, <a href="liquidity.html">estate liquidity</a>. No legal, tax or investment advice.</p>
@@ -5304,6 +6162,81 @@ def page_what_if() -> str:
              "the balance off out of the proceeds and a holder pays it off over time with interest on top. "
              "The ranking does not move at any of these levels.")
 
+    # Lever 6: the keep-and-borrow case. The estate liquidity page runs both complete
+    # routes - borrow the band's tax against the kept house, or sell it and pay from
+    # the proceeds - band by band; this lever carries the same rows onto the what-if
+    # page so every way the ranking can move sits on one page.
+    kb = MODEL.get("mortgage_case") or {}
+    kb_rows6 = kb.get("rows", [])
+    kb_rows_whatif = []
+    for r in kb_rows6:
+        kb_rows_whatif.append(
+            f"<td><a id='borrow-{r['tax']}'></a>{m(r['tax'])}</td>"
+            f"<td>{m(r['monthly_payment'])}</td>"
+            f"<td>{m(r['route_keep_live'])}</td><td>{m(r['route_keep_rent'])}</td>"
+            f"<td>{m(r['route_sell_pay'])}</td>"
+            f"<td><strong>{esc(r['best_route'])}</strong></td>"
+            + method_cell("liquidity.html", "Keep-and-borrow case"))
+    kb_table = table(
+        "Lever 6: borrow the estate's tax against the kept house instead of selling (2045 inheritance, band by band)",
+        ["Tax to raise", "Monthly payment on a 30-year fixed loan", "Keep it, live in it, borrow",
+         "Keep it, let it out, borrow", "Sell it and pay from the proceeds",
+         "Better route at this band", "Basis"],
+        kb_rows_whatif,
+        note=f"The principal is never an estate size: each row is the tax on one anonymous band of the amount "
+             f"above the exclusion, the same bands the estate liquidity page publishes. The loan amortises at "
+             f"{pcf(kb['rate'], 2)}, the published 30-year fixed average, with no deduction assumed for the "
+             f"interest. Borrowing does not become the better route at any published band, but the largest "
+             f"band is the one the sale proceeds cannot self-fund, which is a liquidity question to settle "
+             f"before the nine-month date. Full method, loan-to-value arithmetic and limits: the "
+             f"<a href=\"liquidity.html\">estate liquidity page</a>.")
+
+    # ---------------------------------------------------------------- lever 7 --
+    # The keep-and-borrow path itself: lever 5 prices a payment the household may
+    # already owe; lever 6 prices the estate-tax loan; lever 7 prices a loan the household would choose to take.
+    bc7 = MODEL.get("borrow_invest_cases") or {}
+    live7 = p45["paths"]["live_in"]["terminal"]
+    sell7 = p45["paths"]["sell_equities"]["terminal"]
+    borrow_rows7 = []
+    for r in bc7.get("rows", []):
+        anchor = f"borrow-{int(r['ltv_pct'])}-{int(round(r['rate_pct'] * 100))}"
+        borrow_rows7.append(
+            f"<td><a id='{anchor}'></a>{pc(r['ltv_pct'], 0)} of the value at death"
+            f"<br><span class='sub'>{m(r['principal'])}</span></td>"
+            f"<td>{pc(r['rate_pct'])}<br><span class='sub'>{esc(r['rate_label'])}</span></td>"
+            f"<td>{esc(r['money_label'])}<br><span class='sub'>{pc(r['money_return_pct'])} a year</span></td>"
+            f"<td>{m(r['terminal'])}</td><td>{m(live7)}</td><td>{m(sell7)}</td>"
+            f"<td>{m(r['delta_vs_live'])}</td>"
+            f"<td><strong>{esc(PATH_LABELS[r['best']])}</strong></td>"
+            + method_cell("#method", "Model output"))
+    for r, anchor in ((bc7.get("park_row"), "borrow-park"),
+                      (bc7.get("crash_row"), "borrow-crash")):
+        if not r:
+            continue
+        borrow_rows7.append(
+            f"<td><a id='{anchor}'></a>{pc(r['ltv_pct'], 0)} of the value at death"
+            f"<br><span class='sub'>{m(r['principal'])}</span></td>"
+            f"<td>{pc(r['rate_pct'])}</td>"
+            f"<td>{esc(r['money_label'])}<br><span class='sub'>{pc(r['money_return_pct'])} a year</span></td>"
+            f"<td>{m(r['terminal'])}</td><td>{m(live7)}</td><td>{m(sell7)}</td>"
+            f"<td>{m(r['delta_vs_live'])}</td>"
+            f"<td><strong>{esc(PATH_LABELS[r['best']])}</strong></td>"
+            + method_cell("#method", "Model output"))
+    borrow_table7 = table(
+        "Lever 7: borrow against the inherited house and invest the proceeds instead of selling it (2045 inheritance)",
+        ["Borrowed", "Rate charged", "What the money does", "Borrow-and-keep terminal",
+         "Live in it, no borrowing", "Sell and invest", "Change against living", "Best path", "Basis"],
+        borrow_rows7,
+        note=(f"Full method and the identity behind every row are on the "
+              f"<a href=\"decision.html#debt-borrow\">decision page</a>. The loan-to-value rungs are "
+              f"stated scenarios - no balance or quote exists - and the rate is the published 30-year "
+              f"fixed average re-read at source on 17 November 2026 "
+              f"({pc(bc7.get('rate', {}).get('baseline_pct', 7.11))} latest, band "
+              f"{pc(bc7.get('rate', {}).get('low_pct', 5.98))} to "
+              f"{pc(bc7.get('rate', {}).get('high_pct', 7.4))} across 2026). Borrowing to invest wins "
+              f"only where the after-tax return on the money exceeds the rate charged; the park row and "
+              f"the crash row are the two ways it clearly does not."))
+
     jump = ("<ul class='card-list'>"
             "<li><a href='#house-2.5'>House growth at 2.5%</a></li>"
             "<li><a href='#house-5.5'>House growth at 5.5%</a></li>"
@@ -5321,7 +6254,14 @@ def page_what_if() -> str:
             + ("".join(f"<li><a href='#insurance-{r['annual']}'>Insurance at ${r['annual']:,} a year</a></li>"
                        for r in (cc.get("rows") or []))
                + "".join(f"<li><a href='#debt-{r['monthly']}'>Debt service at {m(r['monthly'])} a month</a></li>"
-                         for r in (cc.get("debt_rows") or [])))
+                         for r in (cc.get("debt_rows") or []))
+               + "".join(f"<li><a href='#borrow-{int(r['ltv_pct'])}-{int(round(r['rate_pct'] * 100))}'>"
+                         f"Borrow {pc(r['ltv_pct'], 0)} at {pc(r['rate_pct'])}</a></li>"
+                         for r in (bc7.get("rows") or []))
+               + "<li><a href='#borrow-park'>Borrow, then park in Treasuries</a></li>"
+               + "<li><a href='#borrow-crash'>Borrow into the stated crash</a></li>"
+               + "".join(f"<li><a href='#borrow-{r['tax']}' >Borrow against the house: tax of {m(r['tax'])}</a></li>"
+                         for r in (kb_rows6 or [])))
             + "</ul>")
     return (
         callout("method", "How to use this page", f"""
@@ -5329,14 +6269,17 @@ def page_what_if() -> str:
 or read the tables in order. Change one lever at a time, and the other stays at the baseline. Every figure is rounded
 to the nearest $10 and comes from the same model that builds the rest of the site.</p>
 {jump}""")
-        + lever1 + lever2 + im_table + ins_table + debt_table + reg_table + yr_table + be_table
+        + lever1 + lever2 + im_table + ins_table + debt_table + kb_table + borrow_table7 + reg_table + yr_table + be_table
         + callout("flag", "What the cases do not show", """
 <p>No case here credits the letting paths with a market rent, because none has been supplied. Read every letting row as
 the path at zero rent, which is a floor. Lever 3 credits the <em>living</em> path instead, at stated levels that are
 scenarios rather than estimates; the input that would hold a real imputed rent is empty, so the published baseline
 stays the zero row. Levers 4 and 5 change a <em>cost</em> rather than a return, and they are there to show what does
 <em>not</em> move the answer: neither the insurance band nor any debt service tested here puts keeping the house
-ahead of selling it. The model also does not change the Proposition 19 eligibility question; if
+ahead of selling it. Lever 6 runs the keep-and-borrow case end to end, and it does not move the answer either:
+borrowing against the kept house is dearer than selling and paying at every published band, and the largest band
+is the one the sale proceeds cannot self-fund, which makes the lender conversation a pre-death task rather than a
+nine-month scramble. Lever 7 runs the discretionary borrow-to-invest case end to end for the same reason: at the published rate no loan-to-value puts the borrow-and-keep path ahead of selling, and the two ways it clearly loses - parking the loan in Treasuries, and meeting a crash at entry - are rows of their own. The model also does not change the Proposition 19 eligibility question; if
 that answer is no, the reassessment is full and every case here moves toward selling.</p>""")
     )
 
@@ -5561,11 +6504,13 @@ PAGE_BUILDERS = {
     "what-if.html": (page_what_if, "Change one lever at a time. Each case is a link; no script is used."),
     "estate.html": (page_estate, "Federal thresholds, California's position, scenario bands."),
     "liquidity.html": (page_liquidity, "What the estate tax costs, when it is due, and how it can be paid without a forced sale."),
+    "keep-and-borrow.html": (page_keep_and_borrow,
+                                  "Take the cash out of the house without selling it, and what the loan costs for the privilege."),
     "laws.html": (page_laws, "Enacted, dead and proposed rules that could move the answer."),
     "black-swan.html": (page_black_swan, "Regimes where the answer changes, and by how much."),
     "economy.html": (page_economy, "Fifty years of verified inflation, house price and yield data."),
     "questions.html": (page_questions, "What is known, what is missing, and how to find it."),
-    "suggestions.html": (page_suggestions, "A review queue of proposals. Nothing implemented yet."),
+    "suggestions.html": (page_suggestions, "A review queue of proposals, with a decision and date column for each one."),
     "review.html": (page_review, "Unverified figures, modelling caveats and the repository audit."),
     "glossary.html": (page_glossary, "Plain-language definitions of the terms used on this site."),
     "sources.html": (page_sources, "Every official source used, with what it supports."),
@@ -5778,8 +6723,12 @@ def executive_summary_markdown() -> str:
       f"would shelter {cash(LIQ['estate_exclusions'][1]['two_exclusions'])} in 2045 against "
       f"{cash(LIQ['estate_exclusions'][1]['one_exclusion'])} for one person. The joint section 121 exclusion is "
       f"worth {cash(JOINT_121_MAX_SAVING)} at most, and nothing at all on a sale soon after inheritance.")
-    a(f"- Full bands, the five routes to raising the cash, and the cost of borrowing instead of selling: the "
-      f"estate liquidity page. Whether the section 6166 instalment election is available is a question for the "
+    a(f"- Full bands, the five routes to raising the cash, the cost of borrowing instead of selling, and the "
+      f"keep-and-borrow case run end to end - for each band, a fully amortising 30-year fixed loan charged to "
+      f"the keeping paths against the sell route that pays the same band's tax out of the proceeds, with the "
+      f"loan-to-value arithmetic: the estate liquidity page. Borrowing is dearer than selling and paying at "
+      f"every published band, and the largest band is beyond what one property's sale can self-fund. Whether "
+      f"the section 6166 instalment election is available is a question for the "
       f"attorney; this site does not assume it, because a home occupied as a personal residence is not an "
       f"interest in a closely held business on the face of the statute.")
     a("")
@@ -5799,7 +6748,13 @@ def executive_summary_markdown() -> str:
     a("- Whether either building carries a mortgage, deed of trust or lien at the transfer. Nothing in the "
       "record says either way, so both are modelled free and clear and the decision page states that as an "
       "assumption and prices each stated payment level. An encumbrance changes the size of every keeping path's "
-      "bill and never the ranking, because a holder pays the interest as well as the principal.")
+      "bill and never the ranking, because a holder pays the interest as well as the principal. The other half "
+      "of the question - a loan the household would choose to take and invest instead of selling - is now run "
+      "end to end on the decision page at the published 30-year fixed average (7.11%, re-read at source on "
+      "17 November 2026): at the modelled after-tax return no loan-to-value puts it ahead of selling. A separate "
+      "question follows from it, and it is a legal one rather than a financial one: whether the instrument "
+      "holding title permits the beneficiary to grant a lien over the property at all, which is what the "
+      "keep-and-borrow path assumes.")
     a("- A market rent for Property A, and the seller's actual selling costs.")
     a("- Whether the trust actually holds title, and whether the transfer is between a parent and a child.")
     a("")
@@ -5826,7 +6781,7 @@ def executive_summary_markdown() -> str:
     a("- `index.html` — the dashboard")
     a("- `decision.html` — the five paths, the sensitivity and the break-evens")
     a("- `questions.html` — what is unknown and how to find it, starting with A-1")
-    a("- `suggestions.html` — the review queue; nothing there has been implemented")
+    a("- `suggestions.html` — the review queue; every item needs a decision, recorded in its own decision and date columns")
     a("- `review.html` — every unverified figure and modelling caveat")
     a("- `sources.html` — the full ledger")
     a("")

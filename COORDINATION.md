@@ -94,6 +94,214 @@ branch `arena/d980e74e-tino3` was reconciled to the scrubbed remote (`3dc8c59`, 
 its pre-scrub content). The GitHub Pages deploy on the scrubbed `main` (`db458c3`, run `44141788297`) completed
 with `conclusion: success`, and the live site URL is unchanged at https://wingbangboozle1-lang.github.io/Tino3/.
 
+
+## Session `arena/9cb84094-tino3` — the keep-and-borrow case modelled end to end (closes the open "Add a mortgage case" improvement), fresh source re-reads for the borrowing anchors, publication · claimed 2026-11-17
+
+*Branch note:* Arena pins this session to `arena/9cb84094-tino3`, branched from `main` at `3b86d5a` (the merge of PR #156). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. At claim time `gh pr list --state open` returned nothing, so no other session held `scripts/model.py`, `assets/data/model.json` or `EXECUTIVE_SUMMARY.md`. While this claim was being pushed, `main` advanced to `02a9d55` (PRs #157, #158 and #159: two law-watch refreshes by `arena/11bff629-tino3` and `arena/5fb0dcb1-tino3`, which edit the law-page and index regions of `scripts/build.py` and append to `assets/sources.json`). This session's `scripts/build.py` edits are confined to the liquidity page, the what-if page, the improvements register and the README counts — different regions — and `assets/sources.json` is append-only, so the scopes do not overlap; the tree was rebased onto `02a9d55` before any shared file was edited and the gates were re-run on the rebased tree.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| Y-1 Claim this scope and push before any other edit | **done** — this section | `arena/9cb84094-tino3` | `COORDINATION.md` (this section only) |
+| Y-2 Re-read the borrowing anchors at source (the published 30-year fixed mortgage average and its 2026 low/high weekly values) and re-read the two decision-critical federal figures the new case touches (the 40 percent top estate-tax rate and the nine-month payment clock) | **done** — result below; no stored value changed, so `assets/data/inputs.json` and `assets/sources.json` are untouched | `arena/9cb84094-tino3` | read-only |
+| Y-3 Build the keep-and-borrow case end to end: for each anonymous excess band the liquidity engine already publishes, price a fully amortising 30-year fixed loan at the published rate band, charge the payment stream to the keeping paths by the model's own conventions, and set it against the sell route that pays the same tax out of the proceeds; publish whether any band flips the ranking | **done** — `scripts/model.py` gained `keep_and_borrow_cases()`, published as `model.json.mortgage_case`; results below | `arena/9cb84094-tino3` | `scripts/model.py` (new function), `assets/data/model.json` (generated) |
+| Y-4 Publish the case on the estate liquidity page and as a what-if lever, with the loan-to-value arithmetic and the stated limits; close the "Add a mortgage case" improvement row with the implementation record | **done** — liquidity page callout and two tables, what-if lever 6 with jump links, decision-page liquidity row updated, glossary entry "Amortisation", improvements row now done, exec summary (page and markdown) and README updated | `arena/9cb84094-tino3` | `scripts/build.py`, `liquidity.html`, `what-if.html`, `decision.html`, `executive-summary.html`, `suggestions.html`, `glossary.html`, `EXECUTIVE_SUMMARY.md`, `README.md` (counts) |
+| Y-5 Rebuild, run every gate, pull request to `main`, merge without waiting, confirm the Pages deploy, record the result | **in progress** | `arena/9cb84094-tino3` | this section only |
+
+### Y-2 result: the anchors re-read at source, 17 November 2026
+
+1. **The 30-year fixed mortgage average: 7.11 in the week of 12 November 2026.** The full FRED
+   series MORTGAGE30US (Freddie Mac Primary Mortgage Market Survey) was downloaded as the
+   publisher's own CSV and the 2026 tail read week by week: the lowest weekly average published
+   in 2026 is **5.98** (26 February) and the highest is **7.40** (8 and 15 October). All three
+   values agree with the anchors `scripts/liquidity.py` already stores, so nothing was corrected.
+2. **The nine-month clock.** The IRS estate-tax FAQ states the due date of the estate tax return
+   is "nine months after the decedent's date of death", with an automatic six-month extension of
+   time to file on Form 4768 - exactly the wording the liquidity page publishes.
+3. **The 40 percent top rate.** Table A—Unified Rate Schedule in the Instructions for Form 706
+   (07/2026), read in full: a taxable amount over $1,000,000 carries $345,800 plus **40 percent**
+   on the excess. The same page's Table of Basic Exclusion Amounts confirms 2026 at $15,000,000
+   and the 2025-through-2026 annual gift exclusion at $19,000.
+4. The 2026 filing threshold of $15,000,000 was confirmed on the IRS estate-tax page itself.
+
+### Y-3 result: the case, its figures and its findings
+
+`scripts/model.py` gained `keep_and_borrow_cases(2045)` (published as `model.json.mortgage_case`).
+For each of the liquidity engine's five anonymous excess bands, the band's tax (40 percent of the
+excess) is raised one of two ways, both priced on the same path engine as the decision page at the
+2045 model:
+
+- **Keep route:** live in the house (or let it out) and borrow the tax against it on a fully
+  amortising 30-year fixed loan at the published 7.11 percent average; the payment stream is
+  charged on the model's own convention (each year's payments at that year's end, compounded at
+  the after-tax equity return, 6.3 percent). The keep-and-let rows credit no rent, so they are a
+  floor, like every letting row on the site.
+- **Sell route:** the proceeds invest through the first year, the band's tax is paid out of them
+  at the end of that year (close to the nine-month due date), and what remains compounds for the
+  years that are left.
+
+Findings, all computed and published, none assumed: **borrowing never becomes the better route at
+any published band** (`borrow_wins_any_band` is false); the payment stream compounds to about 6.7
+times the principal in future value (the smallest band's loan costs $2,691,700 of terminal value
+against the $33,166,570 selling-versus-living gap); the loan for the two largest bands exceeds
+Property A's projected value at the 2045 model ($6,531,230 alone, $10,323,560 for both buildings),
+so the loan-to-value columns are published rather than left implicit; and **the largest band
+($8,000,000 of tax on $20,000,000 of excess) is one the sale route cannot self-fund** - projected
+net proceeds are $6,172,010 - so the route table flags the row and says the shortfall must come
+from other assets. Limits are stated on the page: no rate for the 2040s is published or forecast,
+lender willingness and terms are not modelled, points and closing costs are not modelled, and the
+interest is assumed non-deductible, the conservative reading the site uses everywhere.
+
+*Note on the figures.* This section's dollar figures were first recorded against the pre-#170
+model and were re-stated against the current one after the rebase onto PR #170 (the fixed-charge
+double-growth fix): the fix lowers every post-inheritance bill on the keeping paths, so the
+keeping routes and the selling-versus-living gap moved slightly ($33,262,780 to $33,166,570;
+both-buildings value $10,319,690 to $10,323,560). The loan-side figures (payment, total paid,
+interest, future value of the payments) do not depend on the fix and did not move.
+
+Every published figure was re-derived independently outside the build (payment formula, future
+value of the payment stream, both route formulas) and agrees with `model.json` to the dollar.
+
+### Y-4 result
+
+`liquidity.html` carries the callout and two tables (the loan band by band, with
+loan-to-value columns and the low/high future-value band; the two complete routes, with the
+infeasible-sale flag on the largest band). `what-if.html` carries lever 6 with jump links.
+`decision.html`'s debt section now says liquidity is priced end to end and links the case.
+`glossary.html` gained "Amortisation". `suggestions.html`'s improvements register marks
+"Add a mortgage case" done with the implementation record (the S-13 row itself stays proposed
+for the owner, as every S-row does). `EXECUTIVE_SUMMARY.md` and the executive-summary page carry
+the case; README carries it and the verifier's current counts.
+
+**Privacy constraint:** no name, street address, postal code, parcel identifier, county or city name, trust term or unrounded owner amount is added to any file this session writes. The loan principal is the anonymous excess band already published, never an estate size.
+
+## Session `arena/e71d9910-tino3` — model-layer defect audit (property-tax fixed charge)
+
+**Scope.** Model-layer verification and defect audit of `scripts/model.py` and `scripts/mixed.py`, claimed as non-overlapping with the then-open PR #157. The audit read both scripts in full and independently recomputed the load-bearing figures from the raw `inputs.json` values, without importing the model's own functions.
+
+**Defect found and fixed.** The property-tax bill is modelled as `(rate × assessed value) + (fixed charge)`, where the fixed charge grows with inflation from the roll's base year (2025). Four code sites — `run_paths` and `breakeven_rent` in `scripts/model.py`, and both bill sites in `scripts/mixed.py` — pre-grew the fixed charge forward to the inheritance year but left `base_year` at the roll's base year. Because `bill_for()` grows the fixed charge from `base_year` to each billed year, the fixed charge was grown **twice** on every post-inheritance bill: about **$880** in the first inheritance year of the 2045 baseline, and about **$38,640** nominal over a 30-year horizon. This contradicted the single-growth convention used everywhere else in the model (`bill_today_projected`, `roll_table`, `project_roll`, `historical_replay` all grow the fixed charge once, from the base year); the same model run was internally inconsistent.
+
+**Fix.** Set `base_year` to the inheritance year wherever the fixed charge is pre-grown, so the fixed charge is grown exactly once from the roll's base year to each billed year. Four one-line corrections plus explanatory comments — 21 insertions, 0 deletions.
+
+**Verification.** Independent recomputation of the 2045 bills from the raw inputs reproduces the corrected figures; the break-even house-growth threshold now matches to the decimal (**8.66%**). The sell-path terminal values (the headline figures) are unaffected — only the keeping-path bills and their break-evens correct: bill if living year 1 (2045) $57,060 → $56,180; bill if let out year 1 (2045) $79,330 → $78,450; break-even monthly rent (2045) $30,220 → $30,140; live-in terminal (2045) $5,322,760 → $5,418,970; break-even return vs living −0.49% → −0.43%. **Recommendation unchanged:** selling at inheritance still wins by a wide margin.
+
+**Rebase collision, resolved without discarding work.** After this session branched, `main` advanced through the merged PRs #157–#164, and PR #160 had independently modified `scripts/model.py` (adding a `form540_surcharge` function and worksheet) and `assets/data/model.json`. The rebase onto `main` merged cleanly for the source files — #160's changes and this session's four `base_year` corrections occupy disjoint regions and both survive. Generated-page conflicts (`briefing.html`, `review.html`) were resolved by taking the main side and re-running a full rebuild on the current `build.py` + corrected model, which regenerated them consistently. No other session's work was discarded.
+
+**Publication record.**
+
+- **Pull request:** <https://github.com/wingbangboozle1-lang/Tino3/pull/170>, from `arena/e71d9910-tino3` to `main`. (An earlier PR #165 for the same change became stuck on a stale GitHub mergeability cache after a rebase and could not be reopened; it was superseded by #170, which is the merged one.)
+- **Merge:** `gh pr merge 170 --merge` succeeded, no approval waited for, no `--auto`. Merge commit `a63a26e042022750571134ffd40f3693e638f5f9`, merged 2026-11-17 17:06 UTC.
+- **Pages deploy:** for commit `a63a26e` the `Verify static site`, `Deploy GitHub Pages` and `pages-build-deployment` runs all completed **success**; the GitHub Pages deployment targets `a63a26e`, the current `main` head.
+- **Live-site confirmation:** <https://wingbangboozle1-lang.github.io/Tino3/what-if.html> serves the corrected figures — the baseline "Live in it" row reads **$5,418,970**, the "Let it out" row **−$957,360**, and the break-even return row **−0.43% a year**. (A first fetch of `decision.html` returned a cached copy of the previous edition showing the old $30,220 / $5,322,760; the deployed tree at `a63a26e` is confirmed correct, so readers who saw the older page should reload.)
+
+**Gates on the merged branch (17 November 2026).** `scripts/rebuild.py` PASS and byte-reproducible; `scripts/verify.py` PASS (25 pages, 1,239 table rows, 1,062 linked to official publishers, 177 registered unsourceable, 112 ledger sources, every internal link and fragment resolves); `scripts/privacy_boundary.py` PASS (139 content-free withdrawal routes); `scripts/tracked_tree_guard.py` PASS (68 tracked text files); `scripts/package_site.py` PASS; `scripts/verify_legacy.py --config-only` PASS; `git diff --check` clean.
+
+**Still open after this session (not blocking).** Same as above: the Git-history scrub is an owner action; Property A's tax-rate area, market rent, insurance quotes, written date-of-death valuation, and lease/encumbrance records remain owner- or third-party-supplied and stay on the Questions and Flagged for Review pages; the 2026 election results stay provisional until 11 December 2026 certification; the Proposition 19 $1M amount is re-read in February 2027.
+
+## Session `arena/a9ed7d25-tino3` — keep-and-borrow path modelled end to end, mortgage-band re-verification at source, board hygiene · claimed 2026-11-17
+
+*Branch note:* Arena pins this session to `arena/a9ed7d25-tino3`, branched from `main` at `bd8ab5b` (the merge of PR #153). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. `gh pr list --state open` returned nothing when this session started, so no live session holds `scripts/model.py`, `scripts/build.py`, `scripts/liquidity.py`, `assets/data/inputs.json` or `assets/sources.json`. Before any edit: `python3 scripts/rebuild.py` produced no diff and all five gates (`rebuild`, `verify`, `privacy_boundary`, `tracked_tree_guard`, `package_site`) exited 0 on a clean tree.
+
+**Gap check that sets this scope.** The suggestions register still carries one model-visible item marked open: **"Add a mortgage case - what happens if the heir borrows against either property instead of selling. Not modelled at all."** The estate-liquidity page prices the *carrying cost* of borrowing per $1,000,000 at the published mortgage average, but no path runs keep-and-borrow end to end (borrow at a stated loan-to-value, invest the proceeds, carry the house, sell and repay at the horizon, against the sell and live-in terminals). Every other brief item is published, registered, or a documented owner decision. Two board irregularities are also recorded here: a stray `>>>>>>>` conflict marker left in this file by the PR #152 board merge, and a stale ledger count in `README.md` (says 110 where the build reports 112) - both were found independently by this session, and the correction record below says how the merge onto `main` changed the claim.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| A-1 Claim this scope and push before any other edit; remove the stray conflict marker in this file and correct the stale README ledger count | **done, with a correction recorded below**: the claim commit (`79f3fed`) did both fixes on this branch, but the merge onto `main` at `5ac5113` showed that sessions `arena/4f2a543e-tino3` (M-2) and `arena/11bff629-tino3` (C-2) and `arena/ac0a4bd3-tino3` (AC-2) had already removed the same marker on `main` (`3c443c4`) and `f50803c` had already corrected the same README count - this session's duplicates were subsumed by the merge resolution, which keeps `main`'s side of both files | `arena/a9ed7d25-tino3` | `COORDINATION.md` (this section only), `README.md` (one count) |
+| A-2 Re-verify the mortgage band at source: read the official weekly series table for the 30-year fixed average in full, confirm the latest, the 2026 low and the 2026 high, and record the read in the ledger entry | **done** — see the completion record below | `arena/a9ed7d25-tino3` | `assets/sources.json` (`fred_mortgage` entry fields) |
+| A-3 **Model keep-and-borrow end to end**: a `keep_and_borrow_cases()` engine in `scripts/model.py` (stated loan-to-value rungs, the re-verified rate band, interest-only with no deduction, proceeds invested at the modelled after-tax equity return, house carried and sold exactly as the live-in path, principal repaid at the horizon), published as `borrow_cases` | **done** (`1fedaf8`, pushed) — see the completion record below | `arena/a9ed7d25-tino3` | `assets/data/inputs.json` (`verified_parameters` append), `scripts/model.py` |
+| A-4 **Publish it where decisions are read**: the decision page's debt section gets a "borrowing instead of selling, priced end to end" table, the what-if page gets a lever, the suggestions register flips "Add a mortgage case" to done with what it now shows, and the liquidity page cross-links; rebuild, run every gate | **done** (`1fedaf8`, pushed) — see the completion record below | `arena/a9ed7d25-tino3` | `scripts/build.py` (debt / what-if / suggestions / liquidity / executive-summary sections), `scripts/liquidity.py` (read the rate from the one inputs key instead of a duplicated constant), regenerated pages, `EXECUTIVE_SUMMARY.md` |
+| A-5 Rebuild, run every gate, open the pull request from this branch to `main`, merge without waiting for approval, confirm the Pages deploy, record the result | **done** — see the publication record below | `arena/a9ed7d25-tino3` | this section only |
+
+**Privacy commitments for this session.** No name, street address, postal code, parcel identifier, county or city name, or jurisdiction-specific publisher host appears in any file this session writes, including this board. Owner-supplied money is published only as a multiple of ten; official amounts are published verbatim. The loan-to-value rungs are stated scenarios, not facts about the household: no balance or application exists, and the pages say so. Every new table row links to a host already on the approved list in `scripts/verify.py`.
+
+**Completion record.**
+
+- **A-2, mortgage band re-verified at source on 17 November 2026.** The official weekly series table (publisher: Freddie Mac Primary Mortgage Market Survey, via the Federal Reserve Bank of St. Louis) was read end to end for 2025-2026: the latest observation is **7.11** percent for the week ending 12 November 2026; the 2026 low is **5.98** percent for the week ending 26 February 2026; the 2026 high is **7.40** percent for the weeks ending 8 and 15 October 2026. All three match the figures `scripts/liquidity.py` has been carrying (0.0711 / 0.0598 / 0.0740), so the band is confirmed rather than changed. The ledger's `fred_mortgage` entry gains this read in its `checked`/`supports` fields.
+- **A-3/A-4 design, stated before the numbers are read.** The path is the live-in path plus leverage, so the only difference between the two columns is the borrowing decision itself: principal = a stated percentage of the date-of-death value; interest at the re-verified rate, interest-only on a constant balance, no deduction assumed (the conservative reading, same convention the liquidity page already uses); the proceeds invested at the modelled after-tax equity return; at the horizon the house is sold exactly as the live-in path sells it (date-of-death basis, section 121 exclusion as modelled) and the principal is repaid out of the proceeds. The identity the table tests is simple and will be printed with it: borrowing to invest only wins when the after-tax return on the money exceeds the rate charged, and the rungs show both sides of that line.
+- **A-1 irregularities found and fixed - with a correction.** (1) A stray `>>>>>>> 5b8d8fa` conflict marker sat at the end of the `arena/0069abd3-tino3` claim table in this file - a leftover from the PR #152 board merge. This session found it independently and removed it on this branch, but the merge onto `main` (`5ac5113`) showed three other sessions had found and fixed the same line on `main` first (`3c443c4` and the M-2, C-2 and AC-2 records); the merge resolution keeps `main`'s board, so no entry of any session's is deleted or double-claimed. (2) `README.md` reported "110 entries in the source ledger" in one paragraph and 112 in another; `f50803c` corrected the same drift on `main` while this session worked, and this session's duplicate was likewise subsumed. Both irregularities were real; neither fix is claimed as unique to this session.
+- **A-3/A-4 published and what it found.** The path is the live-in path plus leverage, so the only
+  difference between the columns is the borrowing decision. Six rungs (25% and 50% of the value at death,
+  at each end and the middle of the published rate band) plus a borrow-and-park row and a stated-crash row
+  are published on the decision page (`#debt-borrow`), as lever 6 on the what-if page, in the executive
+  summary's important-details table, and cross-linked from the liquidity page's borrowing table. The
+  identity the tables carry: **delta = P x ((1 + r)^H - 1) x (r - b) / r**, so leverage multiplies the win
+  or the loss but never changes its sign - the borrowed money must beat the rate charged, i.e. 7.11% after
+  tax (7.81% gross at the model's drag), for borrowing to add anything. Findings on the 2045 baseline:
+  at the latest published rate a 25% loan costs the living path **$1,102,500** and a 50% loan **$2,205,000**;
+  at the 2026 low it adds **$435,560** and **$871,110** - and in every rung the borrow-and-keep terminal
+  stays **$32,295,460 or more** behind selling, so the recommendation does not move. Borrowing at 7.11% to
+  park in short Treasuries at 4.2% costs **$5,511,320**; running the same 50% loan through the stress
+  table's stated crash at entry costs a further **$6,393,410** against the identical loan without the
+  crash, with the debt unchanged. (Deltas are unchanged by the #171 fixed-charge correction - they never
+  touch living costs - while terminals and gaps moved with the living path; the gap above is post-#171.)
+  All three findings print on the first screen as tested and ruled
+  out, beside the insurance band and the payment-level rows. `scripts/liquidity.py` now reads the rate
+  from the one `verified_parameters` key instead of its own constants (output byte-identical), and the
+  glossary gains a Leverage entry. The suggestions register flips "Add a mortgage case" to **done**, with
+  the honest remainder: borrowing against Property B is not modelled and stays open.
+- **Three sessions, three borrowing questions - collision handled in this merge.** Timeline: this session
+  claimed the scope at 16:34 UTC; session `arena/9cb84094-tino3` claimed "the keep-and-borrow case" at
+  17:06 and its PR #169 (the **forced** case: borrow each anonymous estate-tax band against the kept
+  house, fully amortising, published on the liquidity page and as what-if lever 6) merged at 17:05; session
+  `arena/219ee831-tino3` opened PR #172 at 17:12 with the **discretionary cash-out page**
+  (`keep-and-borrow.html`, 40/60/80% rungs, hurdle returns, prime rate) and it merged at 17:14 (board
+  record #173 at 17:18) - while this branch was being prepared for its own pull request. Three merges of
+  `origin/main` followed (#160, #171, #173), all resolved by keeping both sides.
+  Merge resolution, keeping every session's work: `scripts/model.py` now holds both engines under
+  distinct names - their `keep_and_borrow_cases()` (published as `model.json.mortgage_case`) and this
+  session's renamed `borrow_to_invest_cases()` (published as `borrow_invest_cases`); the duplicated
+  literal `MORTGAGE_RATE/LOW/HIGH` assignments their side carried were dropped in favour of the shared
+  `verified_parameters.mortgage_30yr_weekly` key both engines and `liquidity.py` now read (their comment
+  merged into the top-of-module one), so there is one source of truth; what-if keeps their estate-tax
+  borrowing as **lever 6** and carries this session's LTV matrix as **lever 7** (jump links for both,
+  anchors `borrow-{ltv}-{rate}` vs `borrow-{tax}` - no collisions); the suggestions register row and the
+  "what the cases do not show" note describe all three published treatments in one voice; the glossary
+  holds `Amortisation` (session `arena/9cb84094-tino3`), `Leverage` (this session) and PR #172's four
+  entries. The #172 merge was then resolved against this branch directly: its register text, its
+  `fred_mortgage` ledger re-read (whole calendar 2026, kept with this session's limits text and a union
+  `checked` line), its board sections and its `keep-and-borrow.html` engine all survive, and the register
+  row credits all three treatments - forced case (lever 6), cash-out page (its own engine), and this
+  session's decision-page matrix (lever 7) - with S-29's lender evidence left honestly open.
+  Recorded per the board rule: collisions are resolved by keeping both sides, never by
+  discarding the other session's work.
+- **Verification performed.** All five gates green on every save: `rebuild.py` (deterministic - a second
+  run leaves the tree byte-identical), `verify.py` (26 pages, **1,384 table rows**, **1,191 linked to
+  official publishers**, **193 registered**, 4,844 links, 118 ledger sources, every internal link and
+  fragment resolves - including the new `#debt-borrow` and lever-7 anchors), `privacy_boundary.py`,
+  `tracked_tree_guard.py`, `package_site.py`, `verify_legacy.py --config-only`, `git diff --check`, and
+  the board's `R-1143-2` marker grep. The published borrow figures were
+  recomputed independently from the identity against the model's unrounded inputs and reconcile to the
+  $10 rounding; the terminal columns reconcile exactly to live-in plus the printed delta. Three defects
+  were caught by this pass and fixed before commit: a doubled percent sign and a raw `50.0` in the
+  dashboard sentence, a triple-backslash link escape in the executive-summary fact that the link
+  gate caught, and a dropped `id` field in the `fred_mortgage` ledger merge that the build caught.
+
+### A-5 publication record, 17 November 2026
+
+- **Pull request:** <https://github.com/wingbangboozle1-lang/Tino3/pull/176>, from `arena/a9ed7d25-tino3`
+  to `main`, opened at head `3ed095d` with the body carrying the full collision log.
+- **Pre-merge state:** `MERGEABLE` / `CLEAN`; both PR checks green - `verify` (25s) and the new
+  `report` integrity check (12s) from PR #174.
+- **Merge:** `gh pr merge 176 --merge` succeeded, no approval waited for, no `--auto`. Merge commit
+  **`091d3a420c94ff68b2281266d9a2d113b1de0b5c`**, merged **2026-11-17 17:28:10 UTC**.
+- **Deploy:** on `091d3a4` all three runs succeeded - `Verify static site` (run 44137324597),
+  `Deploy GitHub Pages` (44137324611) and `pages build and deployment` (44137323263).
+- **Live check:** the published `what-if.html` serves the merged edition - the jump list carries all
+  eight of this session's matrix rows (`Borrow 25% at 5.98%` through `Borrow into the stated crash`)
+  alongside the five forced-case rows (`Borrow against the house: tax of ...`), and the baseline
+  "Live in it" row reads **$5,418,970** (the #171-corrected figure).
+- **Merges this branch carried (all resolved keeping both sides):** `origin/main` four times - at
+  `5ac5113` (PRs #154-#160), `20eb134` (#161-#171), `2884e85` (#169-#173) and `8478b5d` (#174-#175);
+  conflicts touched `scripts/build.py` (7 hunks, then 3), `scripts/model.py` (two hunks - function-name
+  collision resolved by renaming this session's engine), the board, the register, the ledger and the
+  generated pages (always regenerated, never hand-merged). No other session's work was discarded.
+- **Left for later, not blocking:** suggestion **S-29** (a lender's written indication - the rate on
+  this page is a published average, not an offer, and whether the instrument holding title permits a
+  lien is a legal question for attorney and trustee); borrowing against **Property B** is not modelled
+  and stays open on the register; the 2020s-style re-read gates in the board (parcel tax 11 Dec 2026,
+  Proposition 19 amount Feb 2027) continue to apply to the mortgage band as well.
+
+
+
 ## Session `arena/5fb0dcb1-tino3` — law-watch refresh to the 16 November 2026 official results reading, live Proposition 19 initiative recheck, publication · claimed 2026-11-17
 
 *Branch note:* Arena pins this session to `arena/5fb0dcb1-tino3`, branched from `main` at `3b86d5a` (the merge of PR #156). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. At claim time `gh pr list --state open` returned nothing and no section on the board was marked in progress, so no other session holds `scripts/build.py`, `assets/sources.json` or the generated pages. The baseline was checked before any edit: `rebuild.py` reproduces the tree with no diff and all five gates pass.
@@ -103,7 +311,7 @@ with `conclusion: success`, and the live site URL is unchanged at https://wingba
 | U-1 Claim this scope and push before any other edit | **in progress** — this section | `arena/5fb0dcb1-tino3` | `COORDINATION.md` (this section only) |
 | U-2 Re-read the Secretary of State's statewide results for the 3 November 2026 measures at the official results page; the board's figures were read at 14 November 2026, 5:16 p.m. and are now a later reading. Replace the stale figures on the law page, the index note, the Proposition 3 and 40 rows and the results source entry, and say which reading is used | **done** — see the U-2/U-3 record below | `arena/5fb0dcb1-tino3` | `scripts/build.py` (law page, index note, results notes), `assets/sources.json` (the `sos_results` entry only) |
 | U-3 Re-read the Secretary of State's initiative status pages and confirm that no measure restoring the pre-2021 Proposition 19 inheritance rules is pending, eligible or cleared for circulation; record the page dates | **done** — no status changed; one proposed-table row and one ledger entry added (see below) | `arena/5fb0dcb1-tino3` | `scripts/build.py` (law page proposed table), `assets/sources.json` (append only) |
-| U-4 Rebuild, run all gates, pull request to `main`, merge without waiting, confirm the Pages deploy, record the result | in progress | `arena/5fb0dcb1-tino3` | this section only |
+| U-4 Rebuild, run all gates, pull request to `main`, merge without waiting, confirm the Pages deploy, record the result | **done** — see the publication record below | `arena/5fb0dcb1-tino3` | this section only |
 
 ### U-2 / U-3 record, 17 November 2026
 
@@ -113,6 +321,14 @@ with `conclusion: success`, and the live site URL is unchanged at https://wingba
 - **Official sources read this session:** https://electionresults.sos.ca.gov/returns/ballot-measures ; https://voterguide.sos.ca.gov/propositions/3/index.htm ; https://www.sos.ca.gov/elections/ballot-measures/qualified-ballot-measures ; https://www.sos.ca.gov/elections/ballot-measures/initiative-and-referendum-status ; https://www.sos.ca.gov/elections/ballot-measures/initiative-and-referendum-status/initiatives-referenda-cleared-circulation
 - **Overlap with PR #157 (merged first).** Session `arena/11bff629-tino3` merged its own law-watch refresh to the same 16 November reading, and its 17 November recheck, while this branch was in review. Both sides made the same text changes in `scripts/build.py`, which merged cleanly. For the shared generated pages (`laws.html`, `review.html`, `sources.html`) and `assets/sources.json`, this branch kept `main`'s version and regenerated from source, so no other session's work was discarded. This branch then re-applied only what #157 did not contain: the cleared-for-circulation row on the law page (U-3) and its ledger entry `sos_cleared_circulation`, and README counts moved to the verifier's current values (114 ledger entries, 1,251 table rows, 1,074 linked). Log only; no conflict marker was left in the tree (the `git grep` gate returned nothing).
 - **Gates (before commit):** `rebuild.py` run twice (second run leaves the tree unchanged), `verify.py` PASS (25 pages, 1,239 table rows, 1,064 linked to an official site, 177 explicitly logged as unsourceable, 113 ledger sources), `privacy_boundary.py` PASS, `tracked_tree_guard.py` PASS, `package_site.py` PASS, `verify_legacy.py --config-only` PASS.
+
+### U-4 publication record, 17 November 2026
+
+- **PR #158** (`arena/5fb0dcb1-tino3` to `main`: law-watch results reading, cleared-for-circulation row and ledger entry, README counts, board record) was merged into `main` as **`02a9d55`** at 16:43:55 UTC with `gh pr merge 158 --merge`, without `--auto` and without waiting for approval. Before the merge the PR was `MERGEABLE` and `CLEAN`; the Verify check passed on the head `44df928`.
+- **Merge with `main`.** `main` had moved to PR #157 (`arena/11bff629-tino3`) while this PR was open; the overlap is described in the overlap note above. Nothing from #157 was discarded.
+- **Deploy.** On `02a9d55`: `Verify static site` success, `Deploy GitHub Pages` success, `pages build and deployment` success.
+- **Live check.** The published `laws.html` was read at the Pages URL and shows the 16 November 2026, 7:12 p.m. figures (Proposition 3 60.8%, Proposition 42 51.2%, Proposition 43 57.7%).
+- **Left for the owner, unchanged:** the public-history rewrite (suggestion S-22; the owner must decide and run it, see `PRIVACY_REMEDIATION.md`); the Proposition 3 threshold note (official $371,000 used; see the irregularities list); the 11 December 2026 certification, after which the law page's unofficial labels should be replaced with the certified figures; the Property A rate-area and market-rent items that the board records as unobtainable without publishing identifiers.
 
 ## Session `arena/4f2a543e-tino3` — repair of the unresolved conflict marker left on `main`, a mechanical marker gate, independent re-verification of the decision-critical figures, publication · claimed 2026-11-17
 
@@ -4362,6 +4578,80 @@ One further conflict inside the rebase onto `82bac65` was in `scripts/build.py`:
 - The section 6166 instalment election: published as a rule with its 35% test, and explicitly **not** assumed available.
 - A keep-and-borrow path end to end: the carrying cost is priced, the path is not modelled, and the suggestions register says so.
 
+## Session `arena/ac0a4bd3-tino3` — integrated audit, stray-marker repair, decision-critical re-verification, gap closure and publication · claimed 2026-11-17
+
+*Branch note:* Arena pins this session to `arena/ac0a4bd3-tino3`, branched from `main` at `bd8ab5b` (the merge of PR #153). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. `gh pr list --state open` returned nothing when this session started, so no other session holds `scripts/build.py`, `scripts/model.py`, `assets/data/*` or `assets/sources.json`.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| AC-1 Claim this scope and push before any other edit | **done** — this section | `arena/ac0a4bd3-tino3` | `COORDINATION.md` (this section only) |
+| AC-2 **Repair the stray merge-conflict marker** left in this board at line 4140 (`>>>>>>> 5b8d8fa …`) by the PR #153 rebase. The board's own rule R-1143-2 requires `git grep -nE '^(<<<<<<<\|>>>>>>>)'` to be clean before any merge to `main`; it is not clean today | **done** — the orphaned `>>>>>>>` line was removed with an assertion-guarded edit, `git grep` is clean, and the repair is in commit `3c443c4` | `arena/ac0a4bd3-tino3` | `COORDINATION.md` (the stray marker line only; no other session's record edited) |
+| AC-3 Line-by-line re-verification of the decision-critical official figures against the official publishers on their own domains, read this session; record every read with its link | **done** — 17 November 2026 recheck table on `review.html`: 12 entries re-read on the publisher's own domain, 3 gaps recorded, no published figure changed | `arena/ac0a4bd3-tino3` | read-only; results recorded here and on `review.html` via `scripts/build.py` |
+| AC-4 Fresh gap check of the owner's brief against the published edition; close the genuine gaps that remain | **done** — suggestions page contradiction corrected, Decision and Date columns added, shared build-date module added, and the one-page brief's print budget measured and brought inside one sheet | `arena/ac0a4bd3-tino3` | `scripts/build.py`, `scripts/edition.py`, `scripts/print_budget.py`, `assets/data/inputs.json`, `assets/sources.json` (append only), regenerated pages |
+| AC-5 Rebuild, run all five gates, open the pull request from this branch to `main`, merge without waiting for approval, confirm the Pages deploy, record the PR link and merge result | **in progress** | `arena/ac0a4bd3-tino3` | this section only; `README.md` (counts) |
+
+**Privacy commitments for this session.** No name, street address, postal code, parcel identifier, county or city name, utility or account identifier, or jurisdiction-specific publisher host appears in any file this session writes, including this board. Owner-supplied money is published only as a multiple of ten; official amounts are published verbatim where the official document prints them. Every new ledger entry links to a host already on the approved list in `scripts/verify.py`. Claims that cannot be anchored to an official source are labelled and sent to the register on `review.html`, not printed as fact.
+
+**Baseline at claim (17 November 2026).** `scripts/rebuild.py` exit 0 with a clean `git status` afterwards, so the committed edition reproduces byte for byte. `verify.py` PASS (25 pages, 1,238 table rows, 1,061 linked to official publishers, 177 explicitly registered unsourceable, 112 ledger sources, 4,316 links). `privacy_boundary.py` PASS. `tracked_tree_guard.py` PASS (65 tracked text files). `package_site.py` PASS (25 pages, 1 runtime asset, 136 withdrawal routes). `verify_legacy.py --config-only` PASS.
+
+
+### Session work log (17 November 2026)
+
+**Suggestions page.** The "nothing implemented" line contradicted the same page's own table, which
+listed implemented improvements. The wording was corrected, and Decision and Date columns were added
+to both the proposed-household-action table and the site-improvement table. Both columns are blank:
+the household has not decided, and the site cannot claim a decision it has not recorded.
+
+**Shared edition date.** `scripts/edition.py` is now the single source of truth for the ISO build
+date, the text build date and the 13–17 November source-check window. `scripts/model.py` and
+`scripts/build.py` import it, so the model metadata and the published footers can no longer drift
+apart. This session found exactly that drift: the public footers said 17 November while
+`assets/data/model.json` still said `built: 2026-11-13`.
+
+**Print budget for the one-page brief.** The brief is published as a one letter-size page, and that
+claim had never been checked — no browser is available in the build environment. This session
+measured it instead rather than leaving the claim unexamined.
+
+- `scripts/print_budget.py` estimates the printed height of the brief against one sheet. It reads
+  the page margins, the column grid, the type size, the line height and the header and footer
+  sizes out of `assets/style.css`, so changing the print rules changes the estimate and the two
+  cannot drift apart. It skips content the print rules hide, pairs the grid sections into rows the
+  way the grid does, and applies a pessimistic character width, no margin collapsing and a 6%
+  safety margin, so it runs long rather than short.
+- **The brief as published before this check measured at 129% of a sheet** (954pt against 737pt of
+  usable page height): it would have run onto a second page while claiming to be one page. That
+  figure is a recorded measurement, kept in `assets/data/print_budget_before.json`, taken from the
+  committed file with this same estimator; it can be reproduced with
+  `python3 scripts/print_budget.py /tmp/b.html /tmp/s.css`.
+- Four changes brought it inside the sheet without dropping any of its substance: the seven
+  sections were re-ordered so that the two longest sit side by side in the two-column grid instead
+  of beside short ones, and so that the sheet reads in the order an adviser would want (decision,
+  questions to ask, options and risks, what is not known, mixed paths, timing, glossary); the print
+  type was set from 7.4pt to 7.1pt with tighter spacing; the screen lede was removed from the
+  printed sheet because the title already says what the document is; and the section text was
+  shortened. **It now measures at 94% of a sheet** (696pt against 737pt, 41pt of slack).
+- The estimator now also counts the wrapped lines of the title, the confidential line and the
+  footer, and of a section heading inside a narrow column. Measuring the whole rendered page
+  rather than the brief's body matters: the page template supplies the title, and the title prints.
+- `scripts/verify.py` now fails the build if the estimate ever exceeds one sheet again, so an edit
+  that breaks the one-page promise is caught before it is published, and the published figure is
+  checked against the measured one so the two cannot disagree.
+- **This is an estimate and is published as one.** It is a model of a browser, not a browser.
+  Nobody has seen the printed sheet; the browser check remains an open item on the register of
+  unverified things and is stated on `review.html` in those words.
+
+**Gates.** `scripts/rebuild.py` PASS and reproducible; `scripts/verify.py` PASS (25 pages, **1,258
+table rows**, **1,074 linked to official publishers**, **184 explicitly registered unsourceable**,
+**112 ledger sources**, 4,342 links); `scripts/privacy_boundary.py` PASS;
+`scripts/tracked_tree_guard.py` PASS (68 tracked text files); `scripts/package_site.py` PASS
+(25 public pages, 1 runtime asset, 139 withdrawal routes); `scripts/verify_legacy.py --config-only`
+PASS.
+
+The withdrawal-route count rose from 136 to 139 because this session added three tracked internal
+files — `scripts/edition.py`, `scripts/print_budget.py` and `assets/data/print_budget_before.json`.
+They are repository tools and inputs, not public content, so the packaging gate replaces each of
+them in the deployable artifact with a content-free withdrawal notice, exactly as it does for every
+other non-published tracked path.
 ## Session `arena/11bff629-tino3` — board repair, README count correction, fresh official-source re-verification, publication · claimed 2026-11-17
 
 *Branch note:* Arena pins this session to `arena/11bff629-tino3`, branched from `main` at `bd8ab5b` (the merge of PR #153). `git fetch origin main` confirms `bd8ab5b` is the current `main` head at claim time, and `gh pr list --state open` returned nothing, so no other session holds an open pull request. No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. All five local gates (`rebuild.py`, `verify.py`, `privacy_boundary.py`, `tracked_tree_guard.py`, `package_site.py`) exited 0 on the untouched tree before any edit, and a fresh rebuild produced no diff.
@@ -4371,10 +4661,10 @@ One further conflict inside the rebase onto `82bac65` was in `scripts/build.py`:
 | Task | Status | Owner | File scope |
 |---|---|---|---|
 | C-1 Claim this scope and push before any other edit | **done** — this section | `arena/11bff629-tino3` | `COORDINATION.md` (this section only) |
-| C-2 Repair the board: remove the stray `>>>>>>>` end-marker at line 4140, an artifact of an earlier rebase collision inside the `arena/0069abd3-tino3` section; no other line of that section changes | **done** (`276ff6d`) | `arena/11bff629-tino3` | `COORDINATION.md` (one line removal) |
-| C-3 Correct the `README.md` count drift (the snapshot section says 110 ledger entries; the build reports 112) and re-check every numeric claim in the README against the current build output | **done** (`d7848f6`; final counts restated at 113 rows after C-4's new ledger entry, see the record below) | `arena/11bff629-tino3` | `README.md` (counts only) |
+| C-2 Repair the board: remove the stray `>>>>>>>` end-marker at line 4140, an artifact of an earlier rebase collision inside the `arena/0069abd3-tino3` section; no other line of that section changes | **done** (committed pre-rebase as `276ff6d`; that commit was dropped as empty during the rebase onto `3b86d5a`, because `arena/4f2a543e-tino3`'s M-2 had already removed the same line on `main`. Net effect stands: zero markers anywhere, new guard passes) | `arena/11bff629-tino3` | `COORDINATION.md` (one line removal) |
+| C-3 Correct the `README.md` count drift (the snapshot section says 110 ledger entries; the build reports 112) and re-check every numeric claim in the README against the current build output | **done** (`d7848f6` pre-rebase, `f50803c` after the rebase; final counts restated after C-4's new ledger entry and again after the post-merge additions noted in the C-5 record; the current merged build reports 114 ledger entries and 1,251 rows) | `arena/11bff629-tino3` | `README.md` (counts only) |
 | C-4 Fresh dated re-read of the load-bearing official figures no session has re-opened since 16 November: the federal basic exclusion and 2027 inflation adjustment, the Proposition 19 shelter amount and its next adjustment date, the statewide rent cap, the Form 540 1% surcharge and capital-gain wording, and the status of the pending local parcel-tax certification; correct anything stale, record every confirmation with its source | **done** — see the completion record below | `arena/11bff629-tino3` | read-only against official publishers; corrections via `scripts/build.py`, `assets/data/inputs.json` (notes only), `assets/sources.json` (append only), regenerated pages |
-| C-5 Rebuild, run every gate, open the pull request from this branch to `main`, merge without waiting, confirm the Pages deploy, record the result | **in progress** (all gates green locally; publication record appended after the merge) | `arena/11bff629-tino3` | this section only |
+| C-5 Rebuild, run every gate, open the pull request from this branch to `main`, merge without waiting, confirm the Pages deploy, record the result | **done** — PR **#157** merged; see the publication record below | `arena/11bff629-tino3` | this section only |
 
 
 **Completion record, 17 November 2026 (C-2 to C-4).** Everything below was read at source in this session;
@@ -4444,6 +4734,19 @@ nothing is inferred, and what could not be read says so instead of filling the g
   `verify_legacy.py --config-only` PASS (26 allowlisted files, `_config.yml` untouched this session);
   `git diff --check` clean.
 
+
+**Booklet-name discrepancy logged for the owner and the CPA.** Session `arena/4f2a543e-tino3`'s M-4
+record quotes the official Form 540 booklet as computing the "**Mental Health Services Tax**" above
+$1,000,000; this session's read of the **2025** Instructions for Form 540 (line 62, read 17 November
+2026, quoted verbatim in ledger entry `ftb_540_instructions_2025`) names the same line the
+"**Behavioral Health Services Tax**". Both reads describe the identical computation — taxable income
+minus $1,000,000 times 1 percent, every filing status — so **no figure on the site depends on the
+name**. The difference is the booklet year or the line's current title, not the arithmetic. The site
+carries only this session's 2025-booklet wording with its dated quote; the discrepancy is recorded here
+so a reader who opens an older booklet is not surprised, and so the CPA can confirm the current title
+when the return is prepared.
+
+
 **Still open after this session (unchanged, none blocking):** the pre-rounding Git-history scrub remains
 the owner's coordinated force-push (runbook in `PRIVACY_REMEDIATION.md` / `scripts/history_scrub.sh`);
 Property A's tax rate area and a market rent for Property A remain privacy-flagged; the local parcel-tax
@@ -4451,4 +4754,365 @@ certification becomes readable on or after 11 December 2026; the section 6166 in
 published as a rule and is not assumed available; the keep-and-borrow path stays priced but not modelled,
 as the suggestions register says.
 
+
+### C-5 publication record (17 November 2026)
+
+- **This result PR: #162** — https://github.com/wingbangboozle1-lang/Tino3/pull/162 (footer date
+  window and this board record; merged and its deploy confirmed immediately after the merge).
+
+- **Pull request:** https://github.com/wingbangboozle1-lang/Tino3/pull/157, from `arena/11bff629-tino3`
+  to `main`. The `Verify static site` check on the pull-request head passed (run 44128275676, 30 s)
+  before the merge. Merged without approval, without `--auto`, with `gh pr merge 157 --merge`;
+  merge commit `1fa3a7bd317f1a5654cd84d62abdb238d7b93a3e`, merged 2026-11-17T16:40:42Z.
+- **Post-merge checks on `main`:** `Verify static site` (run 44128487430) success, `Deploy GitHub Pages`
+  (run 44128487478) success, legacy `pages build and deployment` (run 44128485886) success.
+- **Live conformance:** the published taxes page was fetched from
+  <https://wingbangboozle1-lang.github.io/Tino3/taxes.html> after the deploy and serves this edition:
+  the rate table reads 20.0% / 3.8% / 12.3% / 1.0% with the combined **37.1%**, the note reads 36.1%
+  without the surcharge and 37.1% with it, and the section 17043 row carries the 2025 Form 540
+  instructions link and the Behavioral Health Services Tax name.
+- **Rebase log.** One `git pull --rebase origin main` conflicted because sessions `arena/4f2a543e-tino3`
+  (PRs #154-#156) landed while this session worked. The conflict was in `README.md` only (the row-count
+  sentence: their 1,239/1,062 against this session's 1,248/1,071); it was resolved by taking the merged
+  build's actual verify output (1,249/1,072), never by discarding their work, and `COORDINATION.md`,
+  `scripts/build.py` and `assets/sources.json` auto-merged cleanly. After the rebase the remote branch
+  still held this session's own pre-rebase commits (pushed by an interrupted command chain), so one
+  `git push --force-with-lease` replaced them; the remote carried only this session's own commits at
+  that point, and no other session's work was on it.
+- **Footer check-date window.** The page footer's "sources were last checked between 13 and 16 November
+  2026" was stale after this session's reads; it now says 13 and 17 November 2026, shipped in this
+  result PR.
+- **After PR #157 merged,** session `arena/5fb0dcb1-tino3` landed PR #158 (one register row and one
+  ledger entry, with its own README count update). This session then re-ran the whole gate suite on
+  that tree for this result PR: **1,251 table rows, 1,074 linked, 177 explicitly registered, 114 ledger
+  sources, 4,340 links (2,847 external)**, rebuild byte-identical, privacy boundary, tracked-tree guard,
+  packaging and legacy-config gates all PASS, `git diff --check` clean. The counts in the C-4 record
+  above are stated as of PR #157's merge and remain accurate for that edition; the figures here are the
+  current ones.
+
+
 **Privacy constraint for this session:** no name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term or unrounded owner amount is written to any file this session touches, including this board. Owner-supplied money appears only as a multiple of ten; official amounts appear exactly as the official document prints them. New ledger entries link only to hosts already allowlisted in `scripts/verify.py`.
+
+## Session `arena/cd11dc07-tino3` — Form 540 reading of the 1% above one million dollars, and the election-result currency check · claimed 2026-11-17
+
+*Branch note:* Arena pins this session to `arena/cd11dc07-tino3`, branched from `main` at `3b86d5a` (the merge of PR #156). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. `git fetch origin` was run before any edit and `main` had not moved. `gh pr list --state open` returned nothing, and the board was read in full: no other session holds an open claim, and every earlier section is closed with a publication record.
+
+**Why this scope and not another.** The integrated edition already serves the owner's brief in full: the phased-investing path, mixed paths, what-if controls, briefing sheet, timeline, glossary, distributions, questions, suggestions, pre-commitment register, Prop 19 carry-forward, transfer-tax pricing, ranges, and the two-person case. Two of the owner's standing instructions were, however, still open on the board as unfinished reading rather than as build work:
+
+1. *"Read the official Form 540 instructions for the 1% tax above one million dollars and the capital-gain treatment, then update the sensitivity value."* The site already states the statute (Revenue and Taxation Code section 17043) and the rate, but it has never cited the Form 540 instructions themselves, and its sensitivity applies a flat rate difference to the **whole** gain. The instructions describe a worksheet on the slice above the threshold. This session reads that document and rebuilds the sensitivity the way the form actually works.
+2. *"Periodically recheck official federal, state and local authorities and distinguish enacted changes from proposals."* The 2026 general-election figures carried on the site are dated 14 November 2026. The publisher's page has moved since.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| M-1 Claim this scope and push before any other edit | **done** — this section | `arena/cd11dc07-tino3` | `COORDINATION.md` (this section only) |
+| M-2 Read the current Form 540 instructions at the Franchise Tax Board for the 1% above one million dollars and for the capital-gain treatment; record what the publisher states, including the form's own name for the tax and the worksheet arithmetic | **done** — result below | `arena/cd11dc07-tino3` | `assets/sources.json` (ledger entries only) |
+| M-3 Rebuild the surcharge sensitivity as a Form 540 computation: the 1% applied to the slice of taxable income above the threshold, priced across a range of assumed other taxable income instead of the whole gain at a flat rate difference. Keep the flat-rate figure as a labelled upper bound | **done** — result below | `arena/cd11dc07-tino3` | `scripts/model.py`, `assets/data/inputs.json` (`assumptions` and `verified_parameters` only), `scripts/build.py` (the taxes page only) |
+| M-4 Re-read the election-results page at the Secretary of State and update the carried figures and their timestamp if the publisher's numbers have moved; keep the provisional/certification caveat intact | **done** — merged with W-5; see collision note | `arena/cd11dc07-tino3` | `assets/sources.json`, `scripts/build.py` |
+| M-5 Run every gate from a clean rebuild; confirm byte-reproducibility | **done** — result below | `arena/cd11dc07-tino3` | read-only |
+| M-6 Pull request to `main`, merge without waiting for approval, confirm the Pages deploy, record the PR link and result | **done** — result below | `arena/cd11dc07-tino3` | this section only |
+
+**Privacy constraint:** no property-specific identifier, name, address, parcel number, postal code, county or city name, trust term, estate size or unrounded owner amount is added to any public page or to this board. Every dollar figure the site publishes stays rounded to the nearest $10 or is a verbatim official amount.
+
+### M-2 and M-3 result: the Form 540 worksheet, read and computed
+
+**What the publisher states** (2025 Instructions for Form 540, <https://www.ftb.ca.gov/forms/2025/2025-540-instructions.html>, read 17 November 2026):
+
+- **Line 62 is named the Behavioral Health Services Tax.** The instruction gives a five-step worksheet: taxable income from line 19; less $(1,000,000); subtotal; tax rate 1%; the tax is line 3 multiplied by line 4. This is the arithmetic the return actually performs, and it is a tax on **total taxable income**, not on a gain.
+- **Line 31** sends a taxpayer whose line 19 exceeds $100,000 to the tax rate schedules for the filing status. **Line 19** is taxable income, so the 1% is computed after the gain and every other item of income are combined.
+- **Schedule CA (540), line 7a** (<https://www.ftb.ca.gov/forms/2025/2025-540-ca-instructions.html>): "Generally, no adjustments are made on this line. California taxes long and short term capital gains as regular income. No special rate for long term capital gains exists." The same paragraph lists "Gain on the sale of personal residence where depreciation was allowable" among the items for which California basis can differ, resolved on Schedule D (540) - which is the live-then-let case.
+- **The Schedule CA General Information section** lists the One Big Beautiful Bill Act among the federal acts to which the Revenue and Taxation Code generally does not conform.
+
+**What this changed.** The site's sensitivity had applied a flat one-point difference to the **whole gain**. That is not what the form does. It is now published as a labelled **ceiling**, beside a worksheet that prices the same three sales at four assumed levels of other taxable income. Verified arithmetic from the rebuilt model (2045 inheritance, single filer):
+
+| Path | Taxable gain | 1% on the whole gain (ceiling) | 1% caused by the gain, no other income | 1% caused by the gain, $1,000,000 other income |
+|---|---|---|---|---|
+| Sell at inheritance | $0 | $0 | $0 | $0 |
+| Live in it, sell after 30 years | $13,487,060 | $134,870 | $124,870 | $134,870 |
+| Let it out, sell after 30 years | $18,712,050 | $187,120 | $177,120 | $187,120 |
+
+Two properties of that table are worth stating plainly, and both are now on the page:
+
+1. **The ceiling holds, and it is reached only in the limiting case.** The 1% caused by a gain can never exceed one point on the gain itself, because the gain can only be taxed on that part of itself which lands above the threshold. With other taxable income already filling the space below the line, the whole gain sits above it and the ceiling is exactly right. With no other income, the first slice of the gain falls below the line and escapes, so the true cost is **$10,000 lower** on the 30-year living path.
+2. **On the recommended path there is nothing to tax.** The basis step-up leaves a gain of about zero, so the surcharge attributable to the sale is zero at every income level. The only surcharge that appears on that row is the one which other income would owe whether or not the house is sold, and it is now identified as such instead of being charged to the decision.
+
+**Bracket-tax limit, stated on the page.** The worksheet columns price the 1% exactly. The state *total* still applies the top printed bracket of 12.3% flat to all taxable income rather than walking the schedule, which **overstates** the bracket tax. That direction is deliberate and cannot make the recommendation look better than it is. A year-of-sale return would use the bracket only on the top slice.
+
+**Recommendation movement: none.** The change makes the two holding paths very slightly *less* bad, which works against the recommendation, and the recommendation survives it. `surcharge_sensitivity.recommendation_unchanged` is true on the rebuilt model.
+
+### M-4 result: election figures, and a collision with session `arena/11bff629-tino3`
+
+The Secretary of State's page was re-read on 17 November 2026 and shows the **16 November 2026, 7:12 p.m.** update, still labelled unofficial, certification still due 11 December 2026. The carried figures were from the 14 November read.
+
+**Collision, resolved without discarding anyone's work.** Session `arena/11bff629-tino3` (PR #161, merged as `df36071` while this session was building) had independently read the *same two documents* - the Form 540 booklet and the Secretary of State's results page - and had already applied the same currency corrections, including the same 60.8% Proposition 3 figure and its own ledger entry `ftb_540_instructions_2025`. Rather than duplicate it, this session's conflict was resolved as follows:
+
+- `assets/sources.json` — took the **main side** in full, and dropped this session's duplicate Form 540 entry in favour of theirs. Retained the one entry main did not have: `ftb_sched_ca_540`, with its verbatim line 7a quote. Ledger 113 → **114**.
+- `scripts/build.py`, `review.html`, `sources.html`, `taxes.html`, `EXECUTIVE_SUMMARY.md`, `README.md` — took the **main side** and re-applied this session's one substantive addition on top: `surcharge_worksheet_section()` and its two tables, plus the Schedule CA citation on the bracket row. Main had read the booklet and cited it; it had not computed the worksheet.
+- `scripts/model.py`, `assets/data/inputs.json` — this session's version kept; main had no equivalent.
+- `README.md` counts corrected to the numbers the **merged** build actually reports, not either session's prediction: 114 ledger entries, 1265 table rows, 1088 linked.
+
+### M-6 publication record
+
+- **Pull request:** <https://github.com/wingbangboozle1-lang/Tino3/pull/163>, from `arena/cd11dc07-tino3` to `main`. The `Verify static site` check passed on the PR head (27s) before the merge.
+- **Merge:** `gh pr merge 163 --merge` succeeded, with no approval waited for and no `--auto`. Merge commit `9998b9b1edc307959fa3336f28ad584333a6cc08`, merged 2026-11-17 16:47:25 UTC.
+- **Pages deploy:** for commit `9998b9b` the `Verify static site`, `Deploy GitHub Pages` and `pages-build-deployment` runs all completed **success**.
+- **Live-site confirmation:** <https://wingbangboozle1-lang.github.io/Tino3/taxes.html> serves the new section - the heading "The same tax, computed the way Form 540 computes it", the line 62 worksheet table and the "how much of the 1% the gain actually causes" table are all present, and the Schedule CA (540) citation appears on the bracket row beside the 12.3% entry. A first fetch returned a cached copy of the previous edition; a cache-busted re-fetch confirmed the current one. Readers who saw the older page should reload.
+
+### M-5 and M-6 result: gates, pull request and deployment
+
+- **Local gates on the merged branch (17 November 2026):** `scripts/rebuild.py` PASS, and a second run leaves the tree byte-identical (verified by `md5sum -c` across `taxes.html`, `review.html`, `sources.html`, `model.json` and `EXECUTIVE_SUMMARY.md`); `scripts/verify.py` PASS (25 pages, **1265 table rows**, **1088 linked to official publishers**, 177 registered as unsourceable, **114 ledger sources**, 4,418 links, every internal link and fragment resolves); `scripts/privacy_boundary.py` PASS; `scripts/tracked_tree_guard.py` PASS (65 tracked text files); `scripts/package_site.py` PASS; `scripts/verify_legacy.py --config-only` PASS; `git diff --check` clean.
+- **Rebase collisions logged:** two, both against `main` as it moved under this session. The first was in `COORDINATION.md` only (another session's section being appended at the same offset) and was resolved by keeping the main-side board and re-appending this section. The second was the six-file collision described above. No other session's work was discarded in either.
+
+### Still open after this session (not blocking)
+
+- The Git history scrub remains an owner action; this session performed no rewrite and no force-push.
+- Property A's tax-rate area and published ad valorem rate, a market rent for Property A, insurance quotes, written date-of-death valuation, lease records and any encumbrance remain owner- or third-party-supplied, and stay on the Questions and Flagged for Review pages.
+- The 2026 election results stay provisional until the Secretary of State certifies on 11 December 2026; the page and the ledger say so.
+
+
+---
+
+## Session `arena/219ee831-tino3` — keep-and-borrow path modelled end to end, 17 November rate-and-rule re-read, full-history privacy audit re-run · claimed 2026-11-17
+
+*Branch note:* Arena pins this session to `arena/219ee831-tino3`, branched from `main` at `3b86d5a` (the merge of PR #156). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. At claim time `gh pr list --state open` returned nothing, so no other session holds `scripts/build.py`, `scripts/rebuild.py`, `assets/data/*` or `assets/sources.json`. The clone was shallow (one commit) at claim time; `git fetch --unshallow origin` was run so that the whole 471-commit history is available for the read-only audit in Y-5. `python3 scripts/rebuild.py` before any edit produced no diff, and `verify.py`, `privacy_boundary.py`, `tracked_tree_guard.py`, `package_site.py` and `verify_legacy.py --config-only` all exited 0 on the clean tree.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| Y-1 Claim this scope and push before any other edit | **done** | `arena/219ee831-tino3` | `COORDINATION.md` (this section only) |
+| Y-2 Independent verification pass, 17 November 2026, on the rate and rule anchors the edition publishes and on the ones the new path will use: the IRS quarterly underpayment and short-term rates for 2022 to 2026 and whether a first-quarter 2027 rate has been published; the Freddie Mac 30-year weekly average series, its latest observation and its 2026 range; the Treasury par yield curve 3-month and 2-year rates the phased path parks in, latest published row; Publication 936 on what interest on a home equity loan or line is deductible against; Revenue and Taxation Code section 62(c)(1) on whether granting a security interest is a change in ownership. Correct or refresh anything stale, with its read date | **done** | `arena/219ee831-tino3` | read-only on the sources; `assets/sources.json` (quote dates and verified strings), `scripts/build.py` (read dates where stale), regenerated pages |
+| Y-3 Close the last model gap that does not need an owner's private facts: model the **keep-and-borrow path end to end**. The improvement register says the carrying cost of borrowing is priced but the path is not run; this makes it a sixth path with the same transfer years, horizons, tax layers, reassessment treatment, carrying costs and liquidity as every other path, and ranks it against them | **done** | `arena/219ee831-tino3` | `scripts/borrow.py` (new), `assets/data/borrow.json` (new), `scripts/rebuild.py` (one step), `assets/data/inputs.json` (a `borrow` block), regenerated root `*.html` |
+| Y-4 Publish the new page and wire it in: nav group, the decision-page comparison, the questions page, the pre-commitment register, the glossary, the suggestions register and the improvement statuses, the README page map and counts, the executive summary | **done** | `arena/219ee831-tino3` | `scripts/build.py`, `README.md`, `EXECUTIVE_SUMMARY.md` (generated) |
+| Y-5 Privacy, the pre-rounding history: re-run the read-only history audit on the complete 471-commit history now that the clone is unshallowed, and publish the current exposure inventory - identifier classes and counts only, never token values - on the Flagged for Review page and in the remediation runbook, so the owner can see exactly what a rewrite would still have to remove. Confirm in the same pass that the tip of `main` carries no identifier and no unrounded owner figure | **done** | `arena/219ee831-tino3` | read-only on history; `scripts/build.py` (one review row), `PRIVACY_REMEDIATION.md`, regenerated pages |
+| Y-6 Rebuild, run every gate, pull request to `main`, merge without waiting for approval, confirm the Pages deploy, record the PR link, the merge result, the sources read and any irregularity in this board | **done** | `arena/219ee831-tino3` | this section only |
+
+**Why these tasks.** A line-by-line pass of the owner's brief against the current tree finds every brief item published, and the board's own improvement register leaves exactly three rows open that an agent can close without the household's private documents: the keep-and-borrow path (Y-3), the pre-rounding history inventory (Y-5, where a session can measure and publish the exposure even though only the owner can rewrite it), and the standing duty the brief imposes to "periodically recheck official federal, state and local authorities" (Y-2). The remaining open rows - a rent opinion, a written valuation, three insurance quotes, five years of actual maintenance spend, the parcel's own bill, the lease file - are all owner actions that cannot be sourced publicly without naming the property, and stay on the Questions and Flagged for Review pages.
+
+**Privacy constraint for this session:** no name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term, estate size or unrounded owner amount is added to any file this session writes, including this board. Every dollar figure on any page this session publishes is rounded to the nearest $10, and the borrowing rates are published as the averages the publishers themselves state, not as anything specific to this household. The audit in Y-5 reports classes and counts only; it never prints a token.
+
+
+### Y-1 to Y-6 results — session `arena/219ee831-tino3`, 17 November 2026
+
+**What was published.** `scripts/borrow.py` (new engine, writes `assets/data/borrow.json`),
+`keep-and-borrow.html` (new page, 26th in the edition), the `borrow.py` step in `scripts/rebuild.py`, and the
+wiring: nav group, `PAGE_TITLES`, `SUMMARIES`, `PAGE_BUILDERS`, a dashboard KPI, a bullet in the decision page's
+"not modelled" list, a cross-link from the estate liquidity page's caveat list, four glossary entries (cash-out
+refinance, home equity line, loan-to-value, hurdle return and negative carry), a new questions group (H,
+borrowing instead of selling), suggestions **S-29** (get one written lender indication) and **S-30** (write the
+borrowing rule into the investment policy before the money is offered), and the `Add a mortgage case` row of the
+improvement register moved to **done** with the evidence gap left open.
+
+**The answer the page gives, and why it is not a competing recommendation.** A 60% cash-out at a 2045 transfer
+releases $3,918,740 and costs $309,340 a year; invested at the model's after-tax return the overlay over 30
+years is −$1,287,750, and the invested portfolio first runs short in year 27. Every rung sits $31,242,810 to
+$36,215,460 behind the selling path. The single number that decides it is the hurdle: 6.80% after tax at the
+latest published mortgage average against the model's 6.30%, so the path breaks even only at 2026's *lowest*
+published weekly average (5.98%), where the same rung turns positive by about $1,442,820. The page says in terms
+that a household cannot choose the loan rate it would need.
+
+**Overlap with another session, resolved by keeping both.** `main` had in the meantime taken PR #169
+(`arena/9cb84094-tino3`), which implemented "the keep-and-borrow case" inside `scripts/model.py`
+(`keep_and_borrow_cases`, published on the estate liquidity page and as what-if lever 6). That is a different
+question — borrowing because a band of estate tax is due within nine months — and it reaches the same conclusion
+(`borrow_wins_any_band: false`). Both are published; this page now states the distinction in its answer callout
+and in its method note, so the edition does not read as two competing claims, and the `Add a mortgage case`
+register entry describes both implementations rather than one. Merge conflicts in `scripts/build.py` (three
+regions: the liquidity caveat list, `improve_status`, the P-07 row) and in `assets/sources.json` (the
+`irs_interest` check date, and five ledger entries two sessions had appended at the same place) were resolved as
+a union — no entry from either side was dropped. `README.md`'s snapshot line was rewritten against the post-merge
+counts rather than either pre-merge count, and the second merge with `main` (PR #171's board record) was
+likewise a union of both session sections.
+
+**Sources read at their publishers on 17 November 2026 (Y-2).** `irs.gov` quarterly interest rates — 2026
+individual underpayment 7/6/7/7 percent by quarter, with no first-quarter 2027 row published (confirms the
+constant the liquidity page uses, and is recorded in the ledger). `fred.stlouisfed.org` `MORTGAGE30US` across
+calendar 2026 — 7.11 percent for the week of 12 November, with 5.98 (26 February) and 7.40 (8 and 15 October)
+as the year's ends, which are the three rate rungs. `fred.stlouisfed.org` `DPRIME` — 7.00 percent on every
+business day from 1 October to 9 November 2026, the interest-only rung. `home.treasury.gov` daily par yield
+curve, November 2026 — the 16 November row is 4.34 percent at three months and 4.83 at two years, inside the
+parking band, and the 13 November row a previous session recorded still matched. `irs.gov/publications/p936` —
+home-equity interest deductible only where the money was used to buy, build or substantially improve the
+securing home, acquisition-debt caps of $750,000 after 15 December 2017 and $1,000,000 before it; the authority
+for treating the interest as non-deductible here. `leginfo.legislature.ca.gov` Revenue and Taxation Code section
+62 — read in full, including subdivision (c).
+
+**One correction of an earlier citation, recorded because it was a real defect.** The ledger entry for section 62
+quoted subdivision (c)(1) from a partial read of the section, whose captured text began at (a)(2). The
+subsection has now been read directly at the publisher and the quotation transcribed from that read; the words
+match, so nothing moved, but the entry's `checked` field now records that the citation rests on the full read. No
+figure or claim changed. Three dated re-read notes were appended to existing entries (`fred_mortgage`,
+`treasury_cmt`, `irs_interest`) and the ledger's `as_of` is 2026-11-17; the ledger stands at **118** entries.
+
+**Privacy work (Y-5), and two audit defects fixed.** `scripts/privacy_scrub_audit.py` counted GitHub **service**
+addresses as personal, though the tree guard had long since learned to exempt them, and it kept its own copy of
+the gate's official-amount exemptions, which had drifted — it flagged the statutory recording fees the published
+pages quote verbatim. The audit now imports the gate's `check_money` and applies the same service-address
+exemption, so the two tools cannot disagree again; the drift is written into the tool as the reason for the
+rule. Re-measured on the **complete** history after `git fetch --unshallow` (the Arena clone arrives shallow,
+which silently under-reports): 482 commits from 10 to 17 November 2026, 1,869 distinct file versions, audited at
+`82f1e6fc`. Zero file-version matches for street address, parcel number, telephone, person name and mail-service
+address; postal codes 14 and 87 versions, property-level place name 246, place-name-with-hosts 266,
+jurisdiction names 730, location-specific hosts 675, withdrawn metro series identifiers 198 and metro phrasing 82
+— all **zero** in the current tracked tree; amounts not a multiple of ten 242 versions across 29 paths with
+**one** current-tree file, `COORDINATION.md` itself. The exposure no file-content audit can see is recorded as
+such: 172 of 482 commits carry a non-service author address and 165 a non-service committer address, across
+three distinct addresses — commit metadata, fixed only by the mailmap rewrite, which stays an owner action. The
+review page's history section (which had been printing stale hardcoded counts from an earlier measurement) and
+`PRIVACY_REMEDIATION.md` section 8 now carry these numbers.
+
+**Gates, run on the merged branch.** `scripts/rebuild.py` PASS and reproducible (a second full rebuild after the
+merge produced no diff). `scripts/verify.py` **PASS: 26 pages, 1,366 table rows, 1,173 linked to official
+publishers, 193 registered unsourceable, 4,748 links (3,137 external), 118 ledger sources, 141 content-free
+withdrawal routes**, briefing print budget 94% of one letter sheet and still estimated to fit.
+`scripts/privacy_boundary.py` PASS. `scripts/tracked_tree_guard.py` PASS (85 tracked text files).
+`scripts/package_site.py` PASS. `scripts/verify_legacy.py --config-only` PASS (27 public files). Confirmed in the
+same pass that `assets/data/*.json` are build-time inputs and are not packaged, which is why `borrow.json` needed
+no allowlist entry.
+
+**Effect of another session's model correction on this page.** `main`'s PR #170 fixed the double-growth of the
+property-tax fixed charge, which moved the living-path terminal to $5,418,970 and the first-year bill to $56,180
+at a 2045 transfer. Because the financing engine reads those values out of `model.json` instead of recomputing
+them, the page re-priced itself on the next build (cash-flow burden 3.2x to 3.3x the first-year bill) with no
+edit — the reason it was written that way. The recommendation is unchanged: selling at inheritance still leads,
+and borrowing does not overtake it at any published rung.
+
+**Publication record.** Pull request <https://github.com/wingbangboozle1-lang/Tino3/pull/172>, from
+`arena/219ee831-tino3` to `main`; the CI `verify` run passed on the PR head before merge. Merged with
+`gh pr merge 172 --merge` — merge commit `fa22e2c6e8f0aebabd323275d40e3dbb18b331f1`, 2026-11-17 17:14:38Z, no
+approval waited for, no `--auto`. `Verify static site`, `Deploy GitHub Pages` and `pages build and deployment`
+all completed **success** for `fa22e2c`, and `keep-and-borrow.html` serves live with the post-correction figures.
+
+**Still open after this session.** (1) A written lender indication — S-29 — without which every financing rung
+here is a published average rather than an offer, together with whether the instrument holding title permits a
+lien at all. (2) Whether either building is encumbered at the transfer: the forced-borrowing case, this page and
+the what-if debt lever all treat the answer as unknown and price it rather than guess. (3) The history rewrite,
+which only the owner can run. (4) The 11 December 2026 certification of the 2026 ballot measures and the
+February 2027 adjustment of the Proposition 19 amount, both standing recheck gates.
+## Session `arena/d1968629-tino3` - publication and source integrity: a periodic official-source recheck, an independent structural audit of the published pages, live-boundary confirmation - claimed 2026-11-17
+
+*Branch note:* Arena pins this session to `arena/d1968629-tino3`, branched from `main` at `bd8ab5b` (the merge of PR #153). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. `gh pr list --state open` returned nothing when this session started, and `python3 scripts/rebuild.py` produced no diff with all five gates exiting 0 before any edit.
+
+**Scope boundary with the sessions already on the board.** Two sessions claimed on 17 November 2026 and are active at claim time: `arena/1d220917-tino3` (D-1..D-6, source completion of the unsourced model parameters, holding `assets/data/inputs.json`, `assets/sources.json`, `scripts/model.py` and `scripts/build.py`) and `arena/ac0a4bd3-tino3` (AC-1..AC-5, integrated audit, the stray conflict marker at line 4140 of this board, gap closure, holding `scripts/build.py`, `scripts/model.py`, `assets/data/*`, `assets/sources.json`, that marker line and the README counts). This session edits none of those files. Its scope is the files nobody has claimed: two new verification scripts, one new workflow, and this section. Nothing this session ships changes a figure, a page or the model, so it cannot collide with either session's content work; every finding it makes about generated pages is logged here as a request to the session that owns `scripts/build.py` rather than edited in place.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| T-1 Claim this scope and push before any other edit | **done** (`9b09f1c`, pushed) | `arena/d1968629-tino3` | `COORDINATION.md` (this section only) |
+| T-2 Build `scripts/source_recheck.py`: re-read the source ledger and re-request every official source URL it publishes; report status, final URL after redirects, and how long ago each entry was last read at source; report-only, a per-URL failure never fails a run, and the script contacts only URLs the ledger already publishes | **done** - see the completion record below | `arena/d1968629-tino3` | `scripts/source_recheck.py` (new) |
+| T-3 Add `.github/workflows/source-recheck.yml`: a monthly schedule, a manual dispatch and a pull-request trigger; Markdown job summary plus a report artifact; the check step carries `continue-on-error` so it can never block the site | **done** - see the completion record below | `arena/d1968629-tino3` | `.github/workflows/source-recheck.yml` (new) |
+| T-4 Build `scripts/structure_audit.py`: an independent structural audit of the twenty-five published pages (heading order, landmarks, table semantics, duplicate ids, the active navigation marker, the print rules on the one-page brief); advisory, exit 0, findings recorded in this section | **done** - see the completion record below | `arena/d1968629-tino3` | `scripts/structure_audit.py` (new) |
+| T-5 Confirm the live publication boundary by fetching the deployed site: the dashboard and the sensitive paths that `_config.yml` is supposed to exclude; record what is served and what is refused | **done** - see the completion record below | `arena/d1968629-tino3` | read-only; results recorded in this section |
+| T-6 Prove both scripts: a local run of the rechecker against a host this sandbox can reach, a local run of the structural audit over all twenty-five pages, and a real run of the rechecker over the whole ledger in CI on this pull request | **done** - see the completion record below | `arena/d1968629-tino3` | this section |
+| T-7 Rebuild, run every gate, open the pull request from this branch to `main`, merge without waiting for approval, confirm the Pages deploy, record the PR link and the merge result | **done** - PR **#174** merged into `main` as `2cb1e8be` at 17:23 UTC on 17 November 2026; `Verify static site`, `Deploy GitHub Pages` and the legacy `pages build and deployment` all finished `success` on the merge commit. The board record travels in the pull request opened from this branch immediately after this text was written; its number and merge result are appended below once it exists. | `arena/d1968629-tino3` | this section only |
+
+**Why these tasks.** The owner's brief asks for two things this repository still does by hand: *"Periodically recheck official federal, state and local authorities"* and *"Verify line by line. Every table row must have a source link to an official site."* The verifier checks that a link exists, is https, is on the approved host list and resolves in the built artifact; it never asks the publisher's server whether the page is still there, and no run of any gate would notice an official page that has moved or vanished. Forty-one of the one hundred and twelve ledger entries also carry no date at all in their `checked` field, so the repository cannot currently say which sources are due for a re-read. The second half of the claim is the line-by-line review of the repository the brief asks for, aimed at structure rather than figures, because figures are already being re-verified by the two sessions above.
+
+**Privacy commitments for this session.** No name, street address, postal code, parcel identifier, county or city name, jurisdiction-specific publisher host, utility or account identifier appears in any file this session writes, including this board and both new scripts. The rechecker reads `assets/sources.json` and requests only URLs the ledger already publishes; it adds no host to any allowlist and writes no new ledger entry. No owner-supplied dollar figure is copied anywhere. The structural audit reads the generated pages and prints counts and page names only.
+
+### Completion record, 17 November 2026 (T-1 to T-7)
+
+Everything below was produced by this session and checked before it was written down. Where a
+check could not be completed, the line says so instead of filling the gap.
+
+- **T-2 `scripts/source_recheck.py`.** Reads `assets/sources.json` and requests every URL it
+  publishes, eight at a time, with a per-request timeout and an honest user agent. Outcomes are
+  classified as reachable, refused (401, 403, 429 - a bot policy and reported separately from a
+  dead page), missing (404, 410), error, or unreachable. The recorded read date is the latest date
+  in the entry's own `checked` field after parenthetical content is removed, because that field
+  mixes read dates with quoted content windows; where no date survives the rule the entry is
+  reported as having no recorded read date rather than being assigned one. Default exit status is
+  0 so no build can depend on it, `--strict` is available for a local check meant to fail,
+  `--probe` runs a single-URL connectivity test, and `--annotate` writes the headline counts as
+  GitHub Actions annotations.
+- **T-3 `.github/workflows/source-recheck.yml`.** Monthly (`17 6 4 * *`), on `workflow_dispatch`
+  and on `pull_request`. Each script writes clean Markdown to a file with `--out`, the file is
+  appended to the job summary, and the script's own stdout - which carries the annotations - goes
+  to the job log. Nothing is piped, because a pipe would strip the annotations before the runner
+  saw them. The recheck step carries `continue-on-error`, so the workflow can never block a build,
+  a merge or a deployment. The file was parsed with a real YAML parser before the first push.
+- **T-4 `scripts/structure_audit.py`.** Advisory audit of every published page: document language,
+  one title, one main, one h1, downward heading-level skips, duplicate ids, `th` scope, table
+  captions, exactly one active navigation marker, the skip link, forbidden elements, the
+  stylesheet link, and the printable brief's print rules in `assets/style.css`. Exit 0 by default;
+  `--strict` exits 1 when anything is found.
+- **T-5 live publication boundary.** Fetched from the deployed site on 17 November 2026: the
+  dashboard, the glossary page and the stylesheet all serve normally; `README.md`, `COORDINATION.md`,
+  `PRIVACY_REMEDIATION.md`, `assets/data/inputs.json` and `scripts/verify.py` return GitHub Pages'
+  standard 404; `EXECUTIVE_SUMMARY.md`, `assets/sources.json`, `assets/data/model.json`,
+  `scripts/build.py`, `assets/data/decision.csv` and the one retired briefing route returned
+  GitHub's generic 500 error page instead of a 404 on every attempt. **No repository content was
+  served in any response**, so the boundary held in the only sense that matters. The
+  404-versus-500 difference is unexplained and is recorded as an irregularity below rather than
+  treated as a pass or a failure.
+- **T-6 proof.** Locally: `--probe` against a host this sandbox may reach returned HTTP 200 with
+  the full result record; a ledger run produced the complete Markdown report with correct outcome
+  classes; `--strict` exits 1 when something needs a human look; the structural audit ran over
+  every published page and `--out` produced clean Markdown with no annotation line in it. In CI:
+  the workflow ran on the pull request and both steps succeeded.
+- **T-7 publication.** PR #167 was closed by another session at 16:59 UTC while it was still open
+  and green; it was re-opened as **PR #174**, rebased onto the then-current `main`, and merged as
+  `2cb1e8be` at 17:23:00 UTC on 17 November 2026 without waiting for approval. All five local gates
+  exited 0 on the rebased tree immediately before the push, `git diff --check` was clean, and the
+  `Verify static site`, `Deploy GitHub Pages` and legacy `pages build and deployment` runs on the
+  merge commit all finished `success`.
+
+**First full run of the rechecker (CI, 17 November 2026), read from the check-run annotations.**
+Requested **118** ledger URLs across the approved hosts: **98 reachable**, **0 refused**,
+**0 missing**, **0 error**, **20 unreachable**; 20 entries need a human look; **15** have no
+recorded read date and 15 are flagged as recheck-due. Structural audit on the same run:
+**26 pages scanned, 24 findings**, all of them the heading-level skip described below.
+
+The twenty unreachable results are **runner-side, not dead sources**. That is not assumed: two of
+them were opened independently from a different network path in this session and both served their
+full content, the Congressional Budget Office outlook publication
+<https://www.cbo.gov/publication/62105> and Revenue and Taxation Code section 11911 at
+<https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=11911>.
+Zero entries returned 404 or 410, which is the finding that matters: no published official link
+has rotted. The complete list of twenty is carried in the annotation on the pull request run.
+
+**Irregularities and requests recorded by this session.**
+
+1. **Heading levels skip from h1 to h3 on 24 of the 26 published pages.** Callout and chart
+   headings are emitted as `<h3>` before any `<h2>` section exists. Every other structural check
+   passes on every page. This is a request to the session that owns `scripts/build.py`; this
+   session does not edit generated pages.
+2. **Fifteen ledger entries carry no date in `checked`.** Until they do, the repository cannot say
+   which sources are due for a re-read, which is the input the new recheck reports on.
+3. **One ledger entry's `checked` field mixes a read date with quoted content dates**, so a naive
+   date read reports a data window as though it were a read date. The rechecker strips
+   parenthetical content before reading and reports the rest as "not recorded".
+4. **The live 404-versus-500 difference** described in T-5 is unexplained and should be re-checked
+   after the next deployment.
+5. **`README.md`'s withdrawal-route count is stale**, because this session adds three tracked
+   non-public files and other sessions have added more since the last sync. That count sits in
+   another session's claimed scope, so it is logged here rather than edited.
+6. **PR #167 was closed externally** while open and green; recorded so the next reader does not
+   mistake it for a withdrawn contribution.
+
+**Board-record pull request.** PR **#179**, opened from this branch after this text was written.
+Its merge commit and the Pages deployment are recorded in the follow-up note appended below.
+
+**The complete list of twenty flagged ledger ids**, read from the annotation on run `44137709464`
+(the same run that reported 98 reachable and 0 missing): `ab1157`, `cbo_outlook`, `civ1946_2`,
+`civ1947_12`, `prob16061_7`, `rtc11911`, `rtc11930`, `rtc13301`, `rtc17043`, `rtc480`, `rtc51`,
+`rtc63_2`, `sb974`, `tsp_returns`, `rtc63_2_eligibility`, `rtc11930_trust`, `gov27388_1`,
+`gov27361`, `civ1102`, `rtc62`. Two of them, `cbo_outlook` and `rtc11911`, were opened
+independently in this session and served their full content, which is why the group is recorded as
+runner-side unreachable rather than as dead links.
+
+**Still open for the owner, unchanged by this session.** The public-history rewrite or making the
+repository private; the two inputs that would close flagged items without moving the ranking
+(three insurance quotes per building, a written date-of-death valuation); the parcel-tax
+recheck after certification; and completing the pre-commitment register.
+
+### Follow-up: PR #179 merged
+
+- **Pull request:** https://github.com/wingbangboozle1-lang/Tino3/pull/179, from
+  `arena/d1968629-tino3` to `main`, carrying this section and the widened annotation only.
+- **Merge:** `gh pr merge 179 --merge` succeeded without approval and without `--auto`. Merge
+  commit `3c6e5bed`, merged 17:33:25 UTC on 17 November 2026.
+- **Post-merge checks on `main`:** `Verify static site` (run 44138293878) and `Deploy GitHub Pages`
+  (run 44138293895) both finished `success` on the merge commit; the legacy `pages build and
+  deployment` run for it completed as well.
+- **Live site:** re-read after the deploy. The dashboard serves the 17 November 2026 edition, so
+  the deployment is not stale.
+- **Session result:** two new scripts, one new workflow, three pull requests (#167 closed by
+  another session and superseded, #174 and #179), every gate green before each push, no generated
+  page, figure, model output or ledger entry changed by this session.

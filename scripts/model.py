@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "assets" / "data"
 sys.path.insert(0, str(ROOT / "scripts"))
 
+import edition  # noqa: E402  (the edition's build date, shared with the page builder)
 import episodes as EP  # noqa: E402  (reads its own verbatim CSVs, no network, no randomness)
 INPUTS = json.loads((DATA / "inputs.json").read_text(encoding="utf-8"))
 SERIES = json.loads((DATA / "series.json").read_text(encoding="utf-8"))
@@ -37,6 +38,15 @@ TSY_SHORT = ASM["treasury_short_yield_nominal"]["baseline"]
 PARK_TSY = TSY_SHORT
 PARK_MONTHS = int(ASM["phased_park_months"]["value"])
 PHASE_MONTHS = int(ASM["phased_equity_phase_months"]["value"])
+
+# The published 30-year fixed mortgage average, re-read at source on 17 November 2026:
+# latest week (7.11 percent, week ending 12 November 2026), and the lowest and highest
+# weekly averages published in 2026 (5.98 and 7.40 percent). Used by the keep-and-borrow
+# path below; the estate-liquidity page reads the same key so there is one source of truth.
+MORTGAGE = V["mortgage_30yr_weekly"]
+MORTGAGE_RATE = float(MORTGAGE["value"])
+MORTGAGE_LOW = float(MORTGAGE["low"])
+MORTGAGE_HIGH = float(MORTGAGE["high"])
 
 
 # ---------------------------------------------------------------- rounding ---
@@ -241,6 +251,17 @@ def run_paths(inherit_year: int, g: float, infl: float, eq: float, drag: float,
 
     fit_T = dict(fit_a)
     fit_T["fixed_base"] = fit_a["fixed_base"] * (1 + fixed_growth) ** (inherit_year - fit_a["base_year"])
+    # The base year moves with the fixed base. bill_for() grows the fixed charge from
+    # fit["base_year"], so the pre-grown fixed_base above MUST be paired with base_year
+    # set to the inheritance year. Earlier editions pre-grew fixed_base but left
+    # base_year at the roll's base year, so the fixed charge was grown twice - once to
+    # the inheritance year and again from the base year to each billed year. That
+    # double-growth inflated every post-inheritance bill on the keeping paths (by
+    # about $880 in the first inheritance year of the baseline) and contradicted the
+    # single-growth convention used everywhere else (bill_today_projected, roll_table,
+    # project_roll, historical_replay all grow the fixed charge once, from the base
+    # year). Fixed 2026-11-17 after independent recomputation of the bills.
+    fit_T["base_year"] = inherit_year
 
     terminal_price = value_at_death * (1 + g) ** horizon
 
@@ -586,6 +607,9 @@ def breakeven_rent(inherit_year: int, g: float, infl: float, eq: float, drag: fl
     value_at_death = A["estimated_market_value_2026"] * (1 + g) ** k
     fit_T = dict(fit_a)
     fit_T["fixed_base"] = fit_a["fixed_base"] * (1 + fixed_growth) ** (inherit_year - fit_a["base_year"])
+    # base_year moves with the pre-grown fixed base (one growth from the roll's base
+    # year, not two); see the note in run_paths. Fixed 2026-11-17.
+    fit_T["base_year"] = inherit_year
 
     def rent_terminal(r0: float) -> float:
         cash = 0.0
@@ -1126,6 +1150,53 @@ CA_SURCHARGE = ASM.get("ca_1pct_surcharge", {})
 GAIN_RATE = ASM["combined_gain_tax_rate"]
 
 
+def form540_surcharge(gain: float, other_income: float, threshold: float,
+                      top_rate: float = 0.123) -> dict:
+    """The 1% computed the way the Form 540 instructions compute it.
+
+    Read from the 2025 Instructions for Form 540, line 62 (ledger entry
+    `ftb_540_instructions_2025`). The line 62 worksheet is:
+
+        1. taxable income from Form 540, line 19
+        2. less $(1,000,000)
+        3. subtotal
+        4. tax rate 1%
+        5. the tax: line 3 multiplied by line 4, entered on line 62
+
+    Two consequences the flat-rate version on this page got wrong, both in the
+    taxpayer's favour against a flat application to the whole gain:
+
+    * The 1% reaches only the slice of *taxable income* above the threshold. If
+      the gain plus all other taxable income stays under the threshold, the tax
+      is zero, whatever the size of the gain.
+    * Taxable income is cumulative. A gain lands on top of whatever else the
+      household already earns in the year of sale, so the position of the gain
+      relative to the threshold decides most of the answer, not its size alone.
+
+    The bracket tax is computed on the same cumulative income so that the two
+    layers can be priced against each other. `top_rate` is the top printed
+    bracket on the current schedule (12.3%); it is applied flat to all taxable
+    income, which OVERSTATES the bracket tax and is stated as such on the page.
+    That direction is deliberate: it cannot make the surcharge look larger than
+    it is.
+    """
+    ti = max(0.0, gain) + max(0.0, other_income)
+    over = max(0.0, ti - threshold)
+    # The part of the 1% that is actually caused by the gain: the gain can only be
+    # taxed on the slice of itself that lands above the threshold, and it can never
+    # be taxed on more than its own size. `over` above includes the slice created by
+    # other income, which the household owes whether or not it sells the house.
+    attributable = min(max(0.0, gain), over)
+    return {
+        "taxable_income": money10(ti),
+        "above_threshold": money10(over),
+        "surcharge": money10(over * 0.01),
+        "surcharge_on_gain": money10(attributable * 0.01),
+        "bracket_tax": money10(ti * top_rate),
+        "state_total": money10(over * 0.01 + ti * top_rate),
+    }
+
+
 def surcharge_sensitivity(year: int = 2045) -> dict:
     """What the section 17043 1% does to the one sale the site recommends.
 
@@ -1136,6 +1207,14 @@ def surcharge_sensitivity(year: int = 2045) -> dict:
     surcharge and at the rate with it. The point is to show that the surcharge
     changes the size of the tax on the late-sale and letting paths, and does not
     change whether selling at inheritance wins.
+
+    The flat comparison in `rows` is an UPPER BOUND on the surcharge: it applies
+    the one-point difference to the entire gain. The `worksheet` block below it
+    computes the same tax the way the Form 540 line 62 instructions do, on the
+    slice of cumulative taxable income above the threshold, across a range of
+    other taxable income. Read together, the two say: the direction is certain,
+    the magnitude is a ceiling, and for a modest household income the surcharge
+    is a fraction of what the ceiling implies.
     """
     p = next(x for x in MAIN_RESULT["paths"] if x["inherit_year"] == year)
     low, high = float(GAIN_RATE["low"]), float(GAIN_RATE["high"])
@@ -1160,13 +1239,46 @@ def surcharge_sensitivity(year: int = 2045) -> dict:
             "difference": s_high["tax"] - s_low["tax"],
             "terminal_with_surcharge": path["terminal"],
         })
+    # ---- the same tax computed on the Form 540 worksheet, not on the whole gain ----
+    # `other_income` stands in for every other item on the return: wages, interest,
+    # rent, pensions. It is an assumption, not a figure from the household, so it is
+    # published as a range of scenarios like the imputed rent and insurance bands.
+    low, high = float(GAIN_RATE["low"]), float(GAIN_RATE["high"])
+    threshold = int(CA_SURCHARGE.get("threshold", 1_000_000))
+    scenarios = ASM.get("form540_other_income", {}).get(
+        "scenarios", [0, 250_000, 1_000_000, 2_000_000])
+    worksheet = []
+    for key, label in (("sell_equities", "Sell at inheritance"),
+                       ("live_in", "Live in it, sell after 30 years"),
+                       ("rent_out", "Let it out, sell after 30 years")):
+        path = p["paths"][key]
+        gain = float(path["sale"]["gain"])
+        rungs = []
+        for other in scenarios:
+            w = form540_surcharge(gain, other, threshold)
+            # the bracket part of this tax, at the same cumulative income, priced on
+            # the two published California layers: 12.3% top bracket, then this 1%
+            rungs.append({
+                "other_income": money10(other),
+                "label": ("No other taxable income" if other == 0
+                          else f"${other:,.0f} of other taxable income"),
+                **w,
+            })
+        worksheet.append({
+            "key": key, "label": label,
+            "gain": money10(gain),
+            "flat_upper_bound": money10(gain * (high - low)),
+            "rungs": rungs,
+        })
     return {
         "year": year,
         "surcharge_rate": float(CA_SURCHARGE.get("value", 0.01)),
-        "threshold": int(CA_SURCHARGE.get("threshold", 1000000)),
+        "threshold": threshold,
         "threshold_indexed": bool(CA_SURCHARGE.get("threshold_indexed", False)),
         "rate_without": low, "rate_with": high,
         "rows": rows,
+        "worksheet": worksheet,
+        "worksheet_scenarios": scenarios,
         "recommendation_unchanged": (
             p["paths"]["sell_equities"]["terminal"] > p["paths"]["live_in"]["terminal"]),
     }
@@ -1444,6 +1556,270 @@ def insurance_and_encumbrance_cases(year: int = 2045) -> dict:
                  "service is charged the same way for the same reason."),
     }
 
+
+def borrow_to_invest_cases(year: int = 2045) -> dict:
+    """Borrow against the inherited house instead of selling it, priced end to end.
+
+    The path is the live-in path plus leverage, so the only difference between the
+    two columns is the borrowing decision itself: a stated percentage of the
+    date-of-death value is borrowed at the published mortgage average, interest-only
+    on a constant balance with no deduction assumed (the conservative reading the
+    estate-liquidity page already uses), and the proceeds are invested at the
+    modelled after-tax equity return. At the horizon the house is sold exactly as
+    the live-in path sells it - date-of-death basis, section 121 exclusion as
+    modelled - and the principal is repaid out of the proceeds.
+
+    The arithmetic reduces to one identity, which is published with the table:
+        delta = P * ((1 + r_inv)^H - 1) * (r_inv - r_borrow) / r_inv
+    so borrowing to invest wins if and only if the after-tax return on the money
+    exceeds the rate charged, at ANY loan-to-value: the leverage multiplies the
+    win or the loss, it never changes its sign. The rows show both sides of that
+    line, plus a borrow-and-park row (borrowing to hold short Treasuries) and a
+    crash-at-entry row (the stated -40/+25/+10 sequence from the stress table).
+
+    Loan-to-value rungs are stated scenarios, not facts: no balance, application
+    or quote exists for either property, and whether a lender will lend against a
+    property held in trust is a question for the lender.
+    """
+    base = next(x for x in MAIN_RESULT["paths"] if x["inherit_year"] == year)
+    g = ASM["house_growth"]["baseline"]
+    eq = ASM["equity_return_nominal_gross"]["baseline"]
+    drag = ASM["equity_tax_drag"]["baseline"]
+    tsy = ASM["treasury_short_yield_nominal"]["baseline"]
+    rf = eq - drag                      # after-tax equity return, the model's convention
+    horizon = ASM["horizon_years"]
+    k = year - 2026
+    v0 = A["estimated_market_value_2026"] * (1 + g) ** k
+    live = base["paths"]["live_in"]["terminal"]
+    sell = base["paths"]["sell_equities"]["terminal"]
+    shock_returns = [-0.40, 0.25, 0.10]   # the stress table's stated sequence
+
+    def interest_fv(principal: float, rate: float, ret: float) -> float:
+        # Each year's interest paid from wealth compounding at `ret`, the same
+        # convention the carrying costs in run_paths use (fv_stream at rate_fv).
+        return principal * rate * (((1.0 + ret) ** horizon - 1.0) / ret)
+
+    def delta_constant(principal: float, rate: float, ret: float) -> float:
+        fv = principal * ((1.0 + ret) ** horizon - 1.0)
+        return fv - interest_fv(principal, rate, ret)
+
+    def delta_shock(principal: float, rate: float) -> float:
+        # The portfolio follows the stated crash sequence; the interest stream is
+        # still paid from wealth compounding at the baseline return, so the
+        # difference between this row and its no-crash sibling isolates the crash.
+        def em(month: int) -> float:
+            yr = (month - 1) // 12
+            annual = shock_returns[yr] if yr < len(shock_returns) else rf
+            return (1.0 + annual) ** (1.0 / 12.0) - 1.0
+        _tsy_bal, equity = monthly_phase(principal, 0, 1, horizon * 12,
+                                         PARK_TSY, eq, drag, equity_monthly=em)
+        return equity - principal - interest_fv(principal, rate, rf)
+
+    def row(ltv: float, rate: float, rate_label: str, money_label: str,
+            ret: float, delta: float) -> dict:
+        principal = money10(ltv * v0)
+        terminal = money10(live + delta)
+        candidates = {"sell_equities": sell, "live_in": live,
+                      "borrow_and_keep": terminal}
+        return {
+            "ltv_pct": pct(ltv, 0),
+            "principal": principal,
+            "rate_pct": pct(rate),
+            "rate_label": rate_label,
+            "money_label": money_label,
+            "money_return_pct": pct(ret),
+            "terminal": terminal,
+            "delta_vs_live": money10(delta),
+            "gap_vs_sell": money10(sell - terminal),
+            "best": max(candidates, key=candidates.get),
+        }
+
+    rate_cases = (
+        ("2026 low, week ending 26 February 2026", MORTGAGE_LOW),
+        ("latest, week ending 12 November 2026", MORTGAGE_RATE),
+        ("2026 high, weeks ending 8 and 15 October 2026", MORTGAGE_HIGH),
+    )
+    rows = []
+    for ltv in (0.25, 0.50):
+        for label, rate in rate_cases:
+            rows.append(row(ltv, rate, label,
+                            "Equities at the modelled after-tax return",
+                            rf, delta_constant(ltv * v0, rate, rf)))
+    park = row(0.50, MORTGAGE_RATE, "latest, week ending 12 November 2026",
+               "Short Treasuries at the parking yield",
+               tsy, delta_constant(0.50 * v0, MORTGAGE_RATE, tsy))
+    crash = row(0.50, MORTGAGE_RATE, "latest, week ending 12 November 2026",
+                "Equities with the stated crash at entry",
+                rf, delta_shock(0.50 * v0, MORTGAGE_RATE))
+    crash_sibling = next(r for r in rows
+                         if r["ltv_pct"] == 50.0 and r["rate_pct"] == pct(MORTGAGE_RATE))
+    return {
+        "inherit_year": year,
+        "horizon_years": horizon,
+        "method": ("Interest-only on a constant balance at the published average, no "
+                   "amortisation and no deduction assumed for the interest; proceeds "
+                   "invested at the modelled after-tax equity return; the house carried "
+                   "and sold exactly as the live-in path; principal repaid at the horizon."),
+        "rate": {"baseline_pct": pct(MORTGAGE_RATE), "low_pct": pct(MORTGAGE_LOW),
+                 "high_pct": pct(MORTGAGE_HIGH), "as_of": MORTGAGE.get("as_of"),
+                 "src": ["fred_mortgage"]},
+        "identity": ("Borrowing to invest adds P x ((1 + r)^H - 1) x (r - b) / r to the "
+                     "living path, where P is the principal, r the after-tax return on "
+                     "the money and b the rate charged - positive only when r exceeds b, "
+                     "at any loan-to-value."),
+        "break_even": {"after_tax_return_pct": pct(MORTGAGE_RATE),
+                       "gross_equity_needed_pct": pct(MORTGAGE_RATE + drag),
+                       "reading": ("At the published rate the after-tax return on the "
+                                   "borrowed money must exceed it; with the model's drag "
+                                   "that means this gross equity return.")},
+        "rows": rows,
+        "park_row": park,
+        "crash_row": crash,
+        "crash_vs_no_crash": money10(crash["delta_vs_live"]
+                                     - crash_sibling["delta_vs_live"]),
+        "note": ("No rung here puts borrowing ahead of selling, because the sale path "
+                 "never pays interest on anything. The loan-to-value rungs are stated "
+                 "scenarios; no balance or quote exists for either property."),
+    }
+
+
+# ------------------------------------------------------- keep and borrow ----
+# The published 30-year fixed mortgage anchors come from the shared inputs key
+# (MORTGAGE_RATE / MORTGAGE_LOW / MORTGAGE_HIGH at the top of this module, read
+# from verified_parameters.mortgage_30yr_weekly, re-read at the publisher - FRED
+# series MORTGAGE30US, the Freddie Mac Primary Mortgage Market Survey - on
+# 17 November 2026: 7.11 in the week of 12 November 2026, 5.98 the lowest weekly
+# average published in 2026 (26 February), 7.40 the highest (8 and 15 October)).
+# scripts/liquidity.py reads the same key, so there is one source of truth.
+# The same anonymous excess bands the liquidity engine publishes, and Table A's top
+# rate (Instructions for Form 706: a taxable amount over $1,000,000 is taxed at 40
+# percent on the excess). The principal below is never an estate size: each band's
+# loan is the tax on that band of the amount above the exclusion.
+LIQUIDITY_EXCESS_BANDS = [1_000_000, 2_500_000, 5_000_000, 10_000_000, 20_000_000]
+ESTATE_TAX_TOP_RATE = 0.40
+
+
+def amortising_payment(principal: float, rate: float, months: int) -> float:
+    """The level monthly payment that fully retires `principal` over `months` at `rate`."""
+    i = rate / 12.0
+    return principal * i / (1.0 - (1.0 + i) ** (-months))
+
+
+def keep_and_borrow_cases(year: int = 2045) -> dict:
+    """The keep-and-borrow case, end to end (the open "Add a mortgage case" item).
+
+    The estate liquidity page prices borrowing as a carrying cost only. This case
+    runs the whole path for each anonymous excess band: the household keeps Property
+    A and raises that band's tax bill by borrowing against it - a fully amortising
+    30-year fixed loan at the published rate - instead of selling Property A and
+    paying the same bill out of the proceeds. Both routes are priced on the same
+    path engine the rest of the site uses, so the comparison is between two complete
+    futures, not between a cost and a silence. The principal is never an estate
+    size: each row is the tax on one anonymous band of the amount above the
+    exclusion, the same bands the payment-clock tables already publish.
+    """
+    base = next(x for x in MAIN_RESULT["paths"] if x["inherit_year"] == year)
+    live = base["paths"]["live_in"]["terminal"]
+    rent = base["paths"]["rent_out"]["terminal"]
+    sell = base["paths"]["sell_equities"]["terminal"]
+    net_proceeds = base["paths"]["sell_equities"]["sale"]["net"]
+    r_fv = ASM["equity_return_nominal_gross"]["baseline"] - ASM["equity_tax_drag"]["baseline"]
+    horizon = ASM["horizon_years"]
+    months = horizon * 12
+    g = ASM["house_growth"]["baseline"]
+    k = year - 2026
+    value_a = A["estimated_market_value_2026"] * (1 + g) ** k
+    value_b = B["estimated_market_value_2026"] * (1 + g) ** k
+
+    rows = []
+    for excess in LIQUIDITY_EXCESS_BANDS:
+        tax = money10(ESTATE_TAX_TOP_RATE * excess)
+        annual = amortising_payment(tax, MORTGAGE_RATE, months) * 12.0
+        fv_pay = fv_stream([annual] * horizon, r_fv)
+        fv_lo = fv_stream([amortising_payment(tax, MORTGAGE_LOW, months) * 12.0] * horizon, r_fv)
+        fv_hi = fv_stream([amortising_payment(tax, MORTGAGE_HIGH, months) * 12.0] * horizon, r_fv)
+        # The sale route pays the band's tax out of the proceeds at the end of the
+        # first year - the model's year-end convention, close to the nine-month due
+        # date - and invests what is left for the years that remain.
+        route_sell = sell - tax * (1 + r_fv) ** (horizon - 1)
+        # The keep routes are the pure keeping paths less the future value of the
+        # payment stream, exactly the way every other carrying cost is charged.
+        route_keep_live = live - fv_pay
+        route_keep_rent = rent - fv_pay
+        covers = bool(net_proceeds >= tax)
+        if covers:
+            best = max(route_sell, route_keep_live, route_keep_rent)
+            best_route = ("sell and pay from the proceeds" if best == route_sell
+                          else "keep, live in it and borrow" if best == route_keep_live
+                          else "keep, let it out and borrow")
+        else:
+            # The sale cannot raise the whole bill, so no route here is
+            # self-contained; the max is still computed and published, and the
+            # label says what the negative sale figure means.
+            best = max(route_sell, route_keep_live, route_keep_rent)
+            best_route = ("sell and pay, but the proceeds cannot cover the tax: the shortfall "
+                          "must come from other assets" if best == route_sell else
+                          ("keep, live in it and borrow" if best == route_keep_live
+                           else "keep, let it out and borrow"))
+        rows.append({
+            "excess": money10(excess),
+            "tax": tax,
+            "monthly_payment": money10(annual / 12.0),
+            "annual_payment": money10(annual),
+            "total_paid": money10(annual * horizon),
+            "total_interest": money10(annual * horizon - tax),
+            "fv_payments": money10(fv_pay),
+            "fv_payments_low": money10(fv_lo),
+            "fv_payments_high": money10(fv_hi),
+            "route_keep_live": money10(route_keep_live),
+            "route_keep_rent": money10(route_keep_rent),
+            "route_sell_pay": money10(route_sell),
+            "best_route": best_route,
+            "sale_covers_tax": covers,
+            "ltv_a": round(tax / value_a, 4) if value_a else None,
+            "ltv_both": round(tax / (value_a + value_b), 4) if (value_a + value_b) else None,
+        })
+
+    borrow_wins = any(r["route_keep_live"] > r["route_sell_pay"]
+                      or r["route_keep_rent"] > r["route_sell_pay"] for r in rows)
+    short_bands = [r["tax"] for r in rows if not r["sale_covers_tax"]]
+    return {
+        "inherit_year": year,
+        "horizon_years": horizon,
+        "rate": MORTGAGE_RATE, "rate_low": MORTGAGE_LOW, "rate_high": MORTGAGE_HIGH,
+        "rate_basis": ("the published 30-year fixed mortgage average for the week of 12 November 2026; "
+                       "the low and high are the lowest and highest weekly averages published in 2026"),
+        "method": ("a fully amortising 30-year fixed loan: level monthly payments that retire the principal "
+                   "over the whole horizon, charged to the keeping paths on the model's own convention "
+                   "(each year's payments treated as paid at that year's end and compounded at the "
+                   "after-tax equity return, the same way every other carrying cost on this site is "
+                   "charged), with no deduction assumed for the interest"),
+        "sale_route_timing": ("the proceeds invest through the first year, the band's tax is paid out of them at "
+                              "the end of that year (close to the nine-month due date), and what remains "
+                              "compounds for the years that are left; where the proceeds cannot cover the tax, "
+                              "the published sale figure is negative and is the future value of the shortfall "
+                              "the household would have to pay from its other assets, with nothing left "
+                              "invested from this sale"),
+        "value_at_death_a": money10(value_a),
+        "value_at_death_both": money10(value_a + value_b),
+        "net_sale_proceeds": net_proceeds,
+        "gap_live_at_baseline": money10(sell - live),
+        "borrow_wins_any_band": borrow_wins,
+        "bands_where_sale_alone_cannot_pay": short_bands,
+        "rows": rows,
+        "src": ["fred_mortgage", "irs_estate", "irs_i706"],
+        "limit": ("A rate for the 2040s is not published and is not forecast: the loan is priced at the "
+                  "rate published today, held flat for thirty years, which no real fixed-rate borrower in "
+                  "2045 would experience. Whether a lender would lend the larger bands against either "
+                  "building, and on what terms, is not modelled and is not assumed: the largest bands "
+                  "exceed the projected value of Property A alone, so they would need both buildings as "
+                  "collateral or other assets besides. Points, closing costs, underwriting and refinancing "
+                  "are not modelled. Interest is assumed non-deductible, the conservative reading the site "
+                  "uses everywhere."),
+        "note": ("The letting route credits no rent, because no rent opinion exists, so the keep-and-let "
+                 "rows are a floor exactly as the letting path is everywhere else on this site."),
+    }
+
 def _append_extras(out: dict) -> dict:
     """Run after main() has built `out`, without editing main()'s body."""
     global MAIN_RESULT
@@ -1453,6 +1829,8 @@ def _append_extras(out: dict) -> dict:
     out["roll_audit"] = roll_audit()
     out["imputed_rent"] = imputed_rent_sensitivity(2045)
     out["cost_cases"] = insurance_and_encumbrance_cases(2045)
+    out["borrow_invest_cases"] = borrow_to_invest_cases(2045)
+    out["mortgage_case"] = keep_and_borrow_cases(2045)
     return out
 
 
@@ -1471,7 +1849,7 @@ def main() -> dict:
     maint_rent = A["annual_costs"]["maintenance_pct_rental"]["value"]
 
     out = {
-        "meta": {"built": "2026-11-13", "rounding": "nearest $10",
+        "meta": {"built": edition.BUILD_DATE_ISO, "rounding": "nearest $10",
                  "horizon_years": horizon, "deterministic": True,
                  "inflation_assumption": infl, "house_growth_assumption": g,
                  "equity_assumption": eq, "equity_drag": drag,
