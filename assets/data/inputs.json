@@ -492,6 +492,16 @@
     "cdi_df_rental"
    ],
    "note": "Statewide average written premium for the dwelling policy form the Department describes as 'rental dwelling or landlord policy form - up to 4 units', experience year 2017, the newest year in that series. Property B is a three-unit building, which is on this form family. Quoted verbatim; not a premium for any one building."
+  },
+  "mortgage_30yr_weekly": {
+   "value": 0.0711,
+   "low": 0.0598,
+   "high": 0.074,
+   "as_of": "2026-11-12",
+   "src": [
+    "fred_mortgage"
+   ],
+   "note": "The published 30-year fixed mortgage average for the week ending 12 November 2026 (7.11 percent). The low and high are the lowest and highest weekly averages published in 2026, read from the same official weekly table on 17 November 2026: 5.98 percent for the week ending 26 February 2026, and 7.40 percent for the weeks ending 8 and 15 October 2026. A national weekly average, not a quote for any borrower or property, and not a rate for the 2040s. Used by the estate-liquidity borrowing rows and by the keep-and-borrow path on the decision page."
   }
  },
  "assumptions": {

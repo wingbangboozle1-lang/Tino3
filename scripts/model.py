@@ -38,6 +38,15 @@ PARK_TSY = TSY_SHORT
 PARK_MONTHS = int(ASM["phased_park_months"]["value"])
 PHASE_MONTHS = int(ASM["phased_equity_phase_months"]["value"])
 
+# The published 30-year fixed mortgage average, re-read at source on 17 November 2026:
+# latest week (7.11 percent, week ending 12 November 2026), and the lowest and highest
+# weekly averages published in 2026 (5.98 and 7.40 percent). Used by the keep-and-borrow
+# path below; the estate-liquidity page reads the same key so there is one source of truth.
+MORTGAGE = V["mortgage_30yr_weekly"]
+MORTGAGE_RATE = float(MORTGAGE["value"])
+MORTGAGE_LOW = float(MORTGAGE["low"])
+MORTGAGE_HIGH = float(MORTGAGE["high"])
+
 
 # ---------------------------------------------------------------- rounding ---
 def money10(x: float) -> int:
@@ -1444,6 +1453,133 @@ def insurance_and_encumbrance_cases(year: int = 2045) -> dict:
                  "service is charged the same way for the same reason."),
     }
 
+
+def keep_and_borrow_cases(year: int = 2045) -> dict:
+    """Borrow against the inherited house instead of selling it, priced end to end.
+
+    The path is the live-in path plus leverage, so the only difference between the
+    two columns is the borrowing decision itself: a stated percentage of the
+    date-of-death value is borrowed at the published mortgage average, interest-only
+    on a constant balance with no deduction assumed (the conservative reading the
+    estate-liquidity page already uses), and the proceeds are invested at the
+    modelled after-tax equity return. At the horizon the house is sold exactly as
+    the live-in path sells it - date-of-death basis, section 121 exclusion as
+    modelled - and the principal is repaid out of the proceeds.
+
+    The arithmetic reduces to one identity, which is published with the table:
+        delta = P * ((1 + r_inv)^H - 1) * (r_inv - r_borrow) / r_inv
+    so borrowing to invest wins if and only if the after-tax return on the money
+    exceeds the rate charged, at ANY loan-to-value: the leverage multiplies the
+    win or the loss, it never changes its sign. The rows show both sides of that
+    line, plus a borrow-and-park row (borrowing to hold short Treasuries) and a
+    crash-at-entry row (the stated -40/+25/+10 sequence from the stress table).
+
+    Loan-to-value rungs are stated scenarios, not facts: no balance, application
+    or quote exists for either property, and whether a lender will lend against a
+    property held in trust is a question for the lender.
+    """
+    base = next(x for x in MAIN_RESULT["paths"] if x["inherit_year"] == year)
+    g = ASM["house_growth"]["baseline"]
+    eq = ASM["equity_return_nominal_gross"]["baseline"]
+    drag = ASM["equity_tax_drag"]["baseline"]
+    tsy = ASM["treasury_short_yield_nominal"]["baseline"]
+    rf = eq - drag                      # after-tax equity return, the model's convention
+    horizon = ASM["horizon_years"]
+    k = year - 2026
+    v0 = A["estimated_market_value_2026"] * (1 + g) ** k
+    live = base["paths"]["live_in"]["terminal"]
+    sell = base["paths"]["sell_equities"]["terminal"]
+    shock_returns = [-0.40, 0.25, 0.10]   # the stress table's stated sequence
+
+    def interest_fv(principal: float, rate: float, ret: float) -> float:
+        # Each year's interest paid from wealth compounding at `ret`, the same
+        # convention the carrying costs in run_paths use (fv_stream at rate_fv).
+        return principal * rate * (((1.0 + ret) ** horizon - 1.0) / ret)
+
+    def delta_constant(principal: float, rate: float, ret: float) -> float:
+        fv = principal * ((1.0 + ret) ** horizon - 1.0)
+        return fv - interest_fv(principal, rate, ret)
+
+    def delta_shock(principal: float, rate: float) -> float:
+        # The portfolio follows the stated crash sequence; the interest stream is
+        # still paid from wealth compounding at the baseline return, so the
+        # difference between this row and its no-crash sibling isolates the crash.
+        def em(month: int) -> float:
+            yr = (month - 1) // 12
+            annual = shock_returns[yr] if yr < len(shock_returns) else rf
+            return (1.0 + annual) ** (1.0 / 12.0) - 1.0
+        _tsy_bal, equity = monthly_phase(principal, 0, 1, horizon * 12,
+                                         PARK_TSY, eq, drag, equity_monthly=em)
+        return equity - principal - interest_fv(principal, rate, rf)
+
+    def row(ltv: float, rate: float, rate_label: str, money_label: str,
+            ret: float, delta: float) -> dict:
+        principal = money10(ltv * v0)
+        terminal = money10(live + delta)
+        candidates = {"sell_equities": sell, "live_in": live,
+                      "borrow_and_keep": terminal}
+        return {
+            "ltv_pct": pct(ltv, 0),
+            "principal": principal,
+            "rate_pct": pct(rate),
+            "rate_label": rate_label,
+            "money_label": money_label,
+            "money_return_pct": pct(ret),
+            "terminal": terminal,
+            "delta_vs_live": money10(delta),
+            "gap_vs_sell": money10(sell - terminal),
+            "best": max(candidates, key=candidates.get),
+        }
+
+    rate_cases = (
+        ("2026 low, week ending 26 February 2026", MORTGAGE_LOW),
+        ("latest, week ending 12 November 2026", MORTGAGE_RATE),
+        ("2026 high, weeks ending 8 and 15 October 2026", MORTGAGE_HIGH),
+    )
+    rows = []
+    for ltv in (0.25, 0.50):
+        for label, rate in rate_cases:
+            rows.append(row(ltv, rate, label,
+                            "Equities at the modelled after-tax return",
+                            rf, delta_constant(ltv * v0, rate, rf)))
+    park = row(0.50, MORTGAGE_RATE, "latest, week ending 12 November 2026",
+               "Short Treasuries at the parking yield",
+               tsy, delta_constant(0.50 * v0, MORTGAGE_RATE, tsy))
+    crash = row(0.50, MORTGAGE_RATE, "latest, week ending 12 November 2026",
+                "Equities with the stated crash at entry",
+                rf, delta_shock(0.50 * v0, MORTGAGE_RATE))
+    crash_sibling = next(r for r in rows
+                         if r["ltv_pct"] == 50.0 and r["rate_pct"] == pct(MORTGAGE_RATE))
+    return {
+        "inherit_year": year,
+        "horizon_years": horizon,
+        "method": ("Interest-only on a constant balance at the published average, no "
+                   "amortisation and no deduction assumed for the interest; proceeds "
+                   "invested at the modelled after-tax equity return; the house carried "
+                   "and sold exactly as the live-in path; principal repaid at the horizon."),
+        "rate": {"baseline_pct": pct(MORTGAGE_RATE), "low_pct": pct(MORTGAGE_LOW),
+                 "high_pct": pct(MORTGAGE_HIGH), "as_of": MORTGAGE.get("as_of"),
+                 "src": ["fred_mortgage"]},
+        "identity": ("Borrowing to invest adds P x ((1 + r)^H - 1) x (r - b) / r to the "
+                     "living path, where P is the principal, r the after-tax return on "
+                     "the money and b the rate charged - positive only when r exceeds b, "
+                     "at any loan-to-value."),
+        "break_even": {"after_tax_return_pct": pct(MORTGAGE_RATE),
+                       "gross_equity_needed_pct": pct(MORTGAGE_RATE + drag),
+                       "reading": ("At the published rate the after-tax return on the "
+                                   "borrowed money must exceed it; with the model's drag "
+                                   "that means this gross equity return.")},
+        "rows": rows,
+        "park_row": park,
+        "crash_row": crash,
+        "crash_vs_no_crash": money10(crash["delta_vs_live"]
+                                     - crash_sibling["delta_vs_live"]),
+        "note": ("No rung here puts borrowing ahead of selling, because the sale path "
+                 "never pays interest on anything. The loan-to-value rungs are stated "
+                 "scenarios; no balance or quote exists for either property."),
+    }
+
+
 def _append_extras(out: dict) -> dict:
     """Run after main() has built `out`, without editing main()'s body."""
     global MAIN_RESULT
@@ -1453,6 +1589,7 @@ def _append_extras(out: dict) -> dict:
     out["roll_audit"] = roll_audit()
     out["imputed_rent"] = imputed_rent_sensitivity(2045)
     out["cost_cases"] = insurance_and_encumbrance_cases(2045)
+    out["borrow_cases"] = keep_and_borrow_cases(2045)
     return out
 
 
