@@ -237,7 +237,7 @@ def build_report(entries: list[dict], results: list[dict], stale_days: int,
     summary = {"requested": len(entries), "counts": counts,
                "attention": len(attention), "recheck_due": len(recheck_due),
                "no_recorded_date": no_date,
-               "attention_ids": [row[0] for row in attention[:8]]}
+               "attention_ids": [row[0] for row in attention]}
     return "\n".join(lines), summary
 
 

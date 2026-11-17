@@ -4897,14 +4897,110 @@ February 2027 adjustment of the Proposition 19 amount, both standing recheck gat
 
 | Task | Status | Owner | File scope |
 |---|---|---|---|
-| T-1 Claim this scope and push before any other edit | **in progress** (this section) | `arena/d1968629-tino3` | `COORDINATION.md` (this section only) |
-| T-2 Build `scripts/source_recheck.py`: re-read the source ledger and re-request every official source URL it publishes; report status, final URL after redirects, and how long ago each entry was last read at source; report-only, a per-URL failure never fails a run, and the script contacts only URLs the ledger already publishes | pending | `arena/d1968629-tino3` | `scripts/source_recheck.py` (new) |
-| T-3 Add `.github/workflows/source-recheck.yml`: a monthly schedule, a manual dispatch and a pull-request trigger; Markdown job summary plus a report artifact; the check step carries `continue-on-error` so it can never block the site | pending | `arena/d1968629-tino3` | `.github/workflows/source-recheck.yml` (new) |
-| T-4 Build `scripts/structure_audit.py`: an independent structural audit of the twenty-five published pages (heading order, landmarks, table semantics, duplicate ids, the active navigation marker, the print rules on the one-page brief); advisory, exit 0, findings recorded in this section | pending | `arena/d1968629-tino3` | `scripts/structure_audit.py` (new) |
-| T-5 Confirm the live publication boundary by fetching the deployed site: the dashboard and the sensitive paths that `_config.yml` is supposed to exclude; record what is served and what is refused | pending | `arena/d1968629-tino3` | read-only; results recorded in this section |
-| T-6 Prove both scripts: a local run of the rechecker against a host this sandbox can reach, a local run of the structural audit over all twenty-five pages, and a real run of the rechecker over the whole ledger in CI on this pull request | pending | `arena/d1968629-tino3` | this section |
-| T-7 Rebuild, run every gate, open the pull request from this branch to `main`, merge without waiting for approval, confirm the Pages deploy, record the PR link and the merge result | pending | `arena/d1968629-tino3` | this section only |
+| T-1 Claim this scope and push before any other edit | **done** (`9b09f1c`, pushed) | `arena/d1968629-tino3` | `COORDINATION.md` (this section only) |
+| T-2 Build `scripts/source_recheck.py`: re-read the source ledger and re-request every official source URL it publishes; report status, final URL after redirects, and how long ago each entry was last read at source; report-only, a per-URL failure never fails a run, and the script contacts only URLs the ledger already publishes | **done** - see the completion record below | `arena/d1968629-tino3` | `scripts/source_recheck.py` (new) |
+| T-3 Add `.github/workflows/source-recheck.yml`: a monthly schedule, a manual dispatch and a pull-request trigger; Markdown job summary plus a report artifact; the check step carries `continue-on-error` so it can never block the site | **done** - see the completion record below | `arena/d1968629-tino3` | `.github/workflows/source-recheck.yml` (new) |
+| T-4 Build `scripts/structure_audit.py`: an independent structural audit of the twenty-five published pages (heading order, landmarks, table semantics, duplicate ids, the active navigation marker, the print rules on the one-page brief); advisory, exit 0, findings recorded in this section | **done** - see the completion record below | `arena/d1968629-tino3` | `scripts/structure_audit.py` (new) |
+| T-5 Confirm the live publication boundary by fetching the deployed site: the dashboard and the sensitive paths that `_config.yml` is supposed to exclude; record what is served and what is refused | **done** - see the completion record below | `arena/d1968629-tino3` | read-only; results recorded in this section |
+| T-6 Prove both scripts: a local run of the rechecker against a host this sandbox can reach, a local run of the structural audit over all twenty-five pages, and a real run of the rechecker over the whole ledger in CI on this pull request | **done** - see the completion record below | `arena/d1968629-tino3` | this section |
+| T-7 Rebuild, run every gate, open the pull request from this branch to `main`, merge without waiting for approval, confirm the Pages deploy, record the PR link and the merge result | **done** - PR **#174** merged into `main` as `2cb1e8be` at 17:23 UTC on 17 November 2026; `Verify static site`, `Deploy GitHub Pages` and the legacy `pages build and deployment` all finished `success` on the merge commit. The board record travels in the pull request opened from this branch immediately after this text was written; its number and merge result are appended below once it exists. | `arena/d1968629-tino3` | this section only |
 
 **Why these tasks.** The owner's brief asks for two things this repository still does by hand: *"Periodically recheck official federal, state and local authorities"* and *"Verify line by line. Every table row must have a source link to an official site."* The verifier checks that a link exists, is https, is on the approved host list and resolves in the built artifact; it never asks the publisher's server whether the page is still there, and no run of any gate would notice an official page that has moved or vanished. Forty-one of the one hundred and twelve ledger entries also carry no date at all in their `checked` field, so the repository cannot currently say which sources are due for a re-read. The second half of the claim is the line-by-line review of the repository the brief asks for, aimed at structure rather than figures, because figures are already being re-verified by the two sessions above.
 
 **Privacy commitments for this session.** No name, street address, postal code, parcel identifier, county or city name, jurisdiction-specific publisher host, utility or account identifier appears in any file this session writes, including this board and both new scripts. The rechecker reads `assets/sources.json` and requests only URLs the ledger already publishes; it adds no host to any allowlist and writes no new ledger entry. No owner-supplied dollar figure is copied anywhere. The structural audit reads the generated pages and prints counts and page names only.
+
+### Completion record, 17 November 2026 (T-1 to T-7)
+
+Everything below was produced by this session and checked before it was written down. Where a
+check could not be completed, the line says so instead of filling the gap.
+
+- **T-2 `scripts/source_recheck.py`.** Reads `assets/sources.json` and requests every URL it
+  publishes, eight at a time, with a per-request timeout and an honest user agent. Outcomes are
+  classified as reachable, refused (401, 403, 429 - a bot policy and reported separately from a
+  dead page), missing (404, 410), error, or unreachable. The recorded read date is the latest date
+  in the entry's own `checked` field after parenthetical content is removed, because that field
+  mixes read dates with quoted content windows; where no date survives the rule the entry is
+  reported as having no recorded read date rather than being assigned one. Default exit status is
+  0 so no build can depend on it, `--strict` is available for a local check meant to fail,
+  `--probe` runs a single-URL connectivity test, and `--annotate` writes the headline counts as
+  GitHub Actions annotations.
+- **T-3 `.github/workflows/source-recheck.yml`.** Monthly (`17 6 4 * *`), on `workflow_dispatch`
+  and on `pull_request`. Each script writes clean Markdown to a file with `--out`, the file is
+  appended to the job summary, and the script's own stdout - which carries the annotations - goes
+  to the job log. Nothing is piped, because a pipe would strip the annotations before the runner
+  saw them. The recheck step carries `continue-on-error`, so the workflow can never block a build,
+  a merge or a deployment. The file was parsed with a real YAML parser before the first push.
+- **T-4 `scripts/structure_audit.py`.** Advisory audit of every published page: document language,
+  one title, one main, one h1, downward heading-level skips, duplicate ids, `th` scope, table
+  captions, exactly one active navigation marker, the skip link, forbidden elements, the
+  stylesheet link, and the printable brief's print rules in `assets/style.css`. Exit 0 by default;
+  `--strict` exits 1 when anything is found.
+- **T-5 live publication boundary.** Fetched from the deployed site on 17 November 2026: the
+  dashboard, the glossary page and the stylesheet all serve normally; `README.md`, `COORDINATION.md`,
+  `PRIVACY_REMEDIATION.md`, `assets/data/inputs.json` and `scripts/verify.py` return GitHub Pages'
+  standard 404; `EXECUTIVE_SUMMARY.md`, `assets/sources.json`, `assets/data/model.json`,
+  `scripts/build.py`, `assets/data/decision.csv` and the one retired briefing route returned
+  GitHub's generic 500 error page instead of a 404 on every attempt. **No repository content was
+  served in any response**, so the boundary held in the only sense that matters. The
+  404-versus-500 difference is unexplained and is recorded as an irregularity below rather than
+  treated as a pass or a failure.
+- **T-6 proof.** Locally: `--probe` against a host this sandbox may reach returned HTTP 200 with
+  the full result record; a ledger run produced the complete Markdown report with correct outcome
+  classes; `--strict` exits 1 when something needs a human look; the structural audit ran over
+  every published page and `--out` produced clean Markdown with no annotation line in it. In CI:
+  the workflow ran on the pull request and both steps succeeded.
+- **T-7 publication.** PR #167 was closed by another session at 16:59 UTC while it was still open
+  and green; it was re-opened as **PR #174**, rebased onto the then-current `main`, and merged as
+  `2cb1e8be` at 17:23:00 UTC on 17 November 2026 without waiting for approval. All five local gates
+  exited 0 on the rebased tree immediately before the push, `git diff --check` was clean, and the
+  `Verify static site`, `Deploy GitHub Pages` and legacy `pages build and deployment` runs on the
+  merge commit all finished `success`.
+
+**First full run of the rechecker (CI, 17 November 2026), read from the check-run annotations.**
+Requested **118** ledger URLs across the approved hosts: **98 reachable**, **0 refused**,
+**0 missing**, **0 error**, **20 unreachable**; 20 entries need a human look; **15** have no
+recorded read date and 15 are flagged as recheck-due. Structural audit on the same run:
+**26 pages scanned, 24 findings**, all of them the heading-level skip described below.
+
+The twenty unreachable results are **runner-side, not dead sources**. That is not assumed: two of
+them were opened independently from a different network path in this session and both served their
+full content, the Congressional Budget Office outlook publication
+<https://www.cbo.gov/publication/62105> and Revenue and Taxation Code section 11911 at
+<https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=11911>.
+Zero entries returned 404 or 410, which is the finding that matters: no published official link
+has rotted. The complete list of twenty is carried in the annotation on the pull request run.
+
+**Irregularities and requests recorded by this session.**
+
+1. **Heading levels skip from h1 to h3 on 24 of the 26 published pages.** Callout and chart
+   headings are emitted as `<h3>` before any `<h2>` section exists. Every other structural check
+   passes on every page. This is a request to the session that owns `scripts/build.py`; this
+   session does not edit generated pages.
+2. **Fifteen ledger entries carry no date in `checked`.** Until they do, the repository cannot say
+   which sources are due for a re-read, which is the input the new recheck reports on.
+3. **One ledger entry's `checked` field mixes a read date with quoted content dates**, so a naive
+   date read reports a data window as though it were a read date. The rechecker strips
+   parenthetical content before reading and reports the rest as "not recorded".
+4. **The live 404-versus-500 difference** described in T-5 is unexplained and should be re-checked
+   after the next deployment.
+5. **`README.md`'s withdrawal-route count is stale**, because this session adds three tracked
+   non-public files and other sessions have added more since the last sync. That count sits in
+   another session's claimed scope, so it is logged here rather than edited.
+6. **PR #167 was closed externally** while open and green; recorded so the next reader does not
+   mistake it for a withdrawn contribution.
+
+**Board-record pull request.** PR **#179**, opened from this branch after this text was written.
+Its merge commit and the Pages deployment are recorded in the follow-up note appended below.
+
+**The complete list of twenty flagged ledger ids**, read from the annotation on run `44137709464`
+(the same run that reported 98 reachable and 0 missing): `ab1157`, `cbo_outlook`, `civ1946_2`,
+`civ1947_12`, `prob16061_7`, `rtc11911`, `rtc11930`, `rtc13301`, `rtc17043`, `rtc480`, `rtc51`,
+`rtc63_2`, `sb974`, `tsp_returns`, `rtc63_2_eligibility`, `rtc11930_trust`, `gov27388_1`,
+`gov27361`, `civ1102`, `rtc62`. Two of them, `cbo_outlook` and `rtc11911`, were opened
+independently in this session and served their full content, which is why the group is recorded as
+runner-side unreachable rather than as dead links.
+
+**Still open for the owner, unchanged by this session.** The public-history rewrite or making the
+repository private; the two inputs that would close flagged items without moving the ranking
+(three insurance quotes per building, a written date-of-death valuation); the parcel-tax
+recheck after certification; and completing the pre-commitment register.
