@@ -10,8 +10,8 @@
 |---|---|---|---|
 | A-1 Claim this scope and push before any other edit; remove the stray conflict marker in this file and correct the stale README ledger count | **done** (`bd8ab5b..` claim commit, pushed) | `arena/a9ed7d25-tino3` | `COORDINATION.md` (this section only), `README.md` (one count) |
 | A-2 Re-verify the mortgage band at source: read the official weekly series table for the 30-year fixed average in full, confirm the latest, the 2026 low and the 2026 high, and record the read in the ledger entry | **done** — see the completion record below | `arena/a9ed7d25-tino3` | `assets/sources.json` (`fred_mortgage` entry fields) |
-| A-3 **Model keep-and-borrow end to end**: a `keep_and_borrow_cases()` engine in `scripts/model.py` (stated loan-to-value rungs, the re-verified rate band, interest-only with no deduction, proceeds invested at the modelled after-tax equity return, house carried and sold exactly as the live-in path, principal repaid at the horizon), published as `borrow_cases` | **in progress** | `arena/a9ed7d25-tino3` | `assets/data/inputs.json` (`verified_parameters` append), `scripts/model.py` |
-| A-4 **Publish it where decisions are read**: the decision page's debt section gets a "borrowing instead of selling, priced end to end" table, the what-if page gets a lever, the suggestions register flips "Add a mortgage case" to done with what it now shows, and the liquidity page cross-links; rebuild, run every gate | **in progress** | `arena/a9ed7d25-tino3` | `scripts/build.py` (debt / what-if / suggestions / liquidity sections), `scripts/liquidity.py` (read the rate from the one inputs key instead of a duplicated constant), regenerated pages, `EXECUTIVE_SUMMARY.md` |
+| A-3 **Model keep-and-borrow end to end**: a `keep_and_borrow_cases()` engine in `scripts/model.py` (stated loan-to-value rungs, the re-verified rate band, interest-only with no deduction, proceeds invested at the modelled after-tax equity return, house carried and sold exactly as the live-in path, principal repaid at the horizon), published as `borrow_cases` | **done** (`1fedaf8`, pushed) — see the completion record below | `arena/a9ed7d25-tino3` | `assets/data/inputs.json` (`verified_parameters` append), `scripts/model.py` |
+| A-4 **Publish it where decisions are read**: the decision page's debt section gets a "borrowing instead of selling, priced end to end" table, the what-if page gets a lever, the suggestions register flips "Add a mortgage case" to done with what it now shows, and the liquidity page cross-links; rebuild, run every gate | **done** (`1fedaf8`, pushed) — see the completion record below | `arena/a9ed7d25-tino3` | `scripts/build.py` (debt / what-if / suggestions / liquidity / executive-summary sections), `scripts/liquidity.py` (read the rate from the one inputs key instead of a duplicated constant), regenerated pages, `EXECUTIVE_SUMMARY.md` |
 | A-5 Rebuild, run every gate, open the pull request from this branch to `main`, merge without waiting for approval, confirm the Pages deploy, record the result | **in progress** | `arena/a9ed7d25-tino3` | this section only |
 
 **Privacy commitments for this session.** No name, street address, postal code, parcel identifier, county or city name, or jurisdiction-specific publisher host appears in any file this session writes, including this board. Owner-supplied money is published only as a multiple of ten; official amounts are published verbatim. The loan-to-value rungs are stated scenarios, not facts about the household: no balance or application exists, and the pages say so. Every new table row links to a host already on the approved list in `scripts/verify.py`.
@@ -21,6 +21,34 @@
 - **A-2, mortgage band re-verified at source on 17 November 2026.** The official weekly series table (publisher: Freddie Mac Primary Mortgage Market Survey, via the Federal Reserve Bank of St. Louis) was read end to end for 2025-2026: the latest observation is **7.11** percent for the week ending 12 November 2026; the 2026 low is **5.98** percent for the week ending 26 February 2026; the 2026 high is **7.40** percent for the weeks ending 8 and 15 October 2026. All three match the figures `scripts/liquidity.py` has been carrying (0.0711 / 0.0598 / 0.0740), so the band is confirmed rather than changed. The ledger's `fred_mortgage` entry gains this read in its `checked`/`supports` fields.
 - **A-3/A-4 design, stated before the numbers are read.** The path is the live-in path plus leverage, so the only difference between the two columns is the borrowing decision itself: principal = a stated percentage of the date-of-death value; interest at the re-verified rate, interest-only on a constant balance, no deduction assumed (the conservative reading, same convention the liquidity page already uses); the proceeds invested at the modelled after-tax equity return; at the horizon the house is sold exactly as the live-in path sells it (date-of-death basis, section 121 exclusion as modelled) and the principal is repaid out of the proceeds. The identity the table tests is simple and will be printed with it: borrowing to invest only wins when the after-tax return on the money exceeds the rate charged, and the rungs show both sides of that line.
 - **A-1 irregularities found and fixed.** (1) A stray `>>>>>>> 5b8d8fa` conflict marker sat at the end of the `arena/0069abd3-tino3` claim table in this file - a leftover from the PR #152 board merge that reached `main`; removed here, no entry deleted. (2) `README.md` reported "110 entries in the source ledger" in one paragraph and 112 in another; the build reports 112, so the stale paragraph is corrected.
+- **A-3/A-4 published and what it found.** The path is the live-in path plus leverage, so the only
+  difference between the columns is the borrowing decision. Six rungs (25% and 50% of the value at death,
+  at each end and the middle of the published rate band) plus a borrow-and-park row and a stated-crash row
+  are published on the decision page (`#debt-borrow`), as lever 6 on the what-if page, in the executive
+  summary's important-details table, and cross-linked from the liquidity page's borrowing table. The
+  identity the tables carry: **delta = P x ((1 + r)^H - 1) x (r - b) / r**, so leverage multiplies the win
+  or the loss but never changes its sign - the borrowed money must beat the rate charged, i.e. 7.11% after
+  tax (7.81% gross at the model's drag), for borrowing to add anything. Findings on the 2045 baseline:
+  at the latest published rate a 25% loan costs the living path **$1,102,500** and a 50% loan **$2,205,000**;
+  at the 2026 low it adds **$435,560** and **$871,110** - and in every rung the borrow-and-keep terminal
+  stays **$32,391,670 or more** behind selling, so the recommendation does not move. Borrowing at 7.11% to
+  park in short Treasuries at 4.2% costs **$5,511,320**; running the same 50% loan through the stress
+  table's stated crash at entry costs a further **$6,393,410** against the identical loan without the
+  crash, with the debt unchanged. All three figures are printed on the first screen as tested and ruled
+  out, beside the insurance band and the payment-level rows. `scripts/liquidity.py` now reads the rate
+  from the one `verified_parameters` key instead of its own constants (output byte-identical), and the
+  glossary gains a Leverage entry. The suggestions register flips "Add a mortgage case" to **done**, with
+  the honest remainder: borrowing against Property B is not modelled and stays open.
+- **Verification performed.** All five gates green on every save: `rebuild.py` (deterministic - a second
+  run leaves the tree byte-identical), `verify.py` (25 pages, **1,256 table rows**, **1,079 linked to
+  official publishers**, **177 registered**, 4,412 links, 112 ledger sources, every internal link and
+  fragment resolves - including the new `#debt-borrow` and lever-6 anchors), `privacy_boundary.py`,
+  `tracked_tree_guard.py`, `package_site.py`, and `git diff --check`. The published borrow figures were
+  recomputed independently from the identity against the model's unrounded inputs and reconcile to the
+  $10 rounding; the terminal columns reconcile exactly to live-in plus the printed delta. Two defects
+  were caught by this pass and fixed before commit: a doubled percent sign and a raw `50.0` in the
+  dashboard sentence, and a triple-backslash link escape in the executive-summary fact that the link
+  gate caught.
 
 ## Session `arena/5feeee8b-tino3` — independent re-verification pass, insurance bands replacing the round-number point assumptions, explicit debt and encumbrance treatment, publication · claimed 2026-11-16
 
