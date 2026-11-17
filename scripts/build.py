@@ -29,7 +29,7 @@ A = INPUTS["property_a"]
 B = INPUTS["property_b"]
 V = INPUTS["verified_parameters"]
 ASM = INPUTS["assumptions"]
-BUILD_DATE = "16 November 2026"
+BUILD_DATE = "17 November 2026"
 
 # The phased-investing figures are computed by the model's one monthly engine, so the
 # stress table on the black-swan page and the dashboard path cannot drift apart again.
@@ -405,7 +405,7 @@ def page(name: str, body: str, lede: str = "") -> str:
       <p>Full method and inputs: <a href="review.html#method-detail">how the model works</a>.
         Every official source used anywhere on the site: <a href="sources.html">the source ledger</a>.</p>
     </section>
-    <p class="page-footer">Built {esc(BUILD_DATE)}. Sources were last checked between 13 and 16 November 2026;
+    <p class="page-footer">Built {esc(BUILD_DATE)}. Sources were last checked between 13 and 17 November 2026;
       each entry's own check date is listed on the
       <a href="sources.html">source ledger</a>. Nothing here is legal, tax or investment advice.</p>
   </main>
@@ -2947,7 +2947,9 @@ break even. The step-up at death removes the reason most exchangers do this.</p>
               "'held for productive use in a trade or business or for investment' as section 1031(a)(1) "
               "requires. Depreciation is claimed at the 27.5-year residential life on 80% of the value, the same "
               "convention the rest of the site uses, and it is what creates the recapture column. The safe harbour "
-              "needs 24 months of ownership, so it cannot be met in the first two years."))
+              "needs the unit to have been owned for at least the 24 months immediately before the "
+              "exchange and rented at a fair rental in both of the two 12-month periods, so it cannot "
+              "be met at any point inside the first 24 months."))
 
     breakeven_rows = []
     for r in exch["rows"]:
@@ -4079,6 +4081,18 @@ def page_suggestions() -> str:
         "Put the answer and what would change it on the first screen": ("done", "Implemented: the dashboard opens with the answer, a confidence label, the build date and the three checks that would move it."),
         "Price the transfer tax and recording fees into the sell path": ("done", "Implemented: itemised on the taxes page, with the $75 instrument fee shown as exempt and the reason given."),
         "Distinguish enacted changes from proposals": ("done", "Implemented on the law page, with a stated rule for moving an item between the three groups and an annual recheck gate."),
+        "Model a sale in the same tax year as the inheritance": (
+            "done",
+            "Implemented on the disposition page: a ladder at each inheritance year from the same tax year to "
+            "sixty months, and lever 6 on the what-if page. The tax on the same-year sale is $0, the first 18 "
+            "months create no taxable gain at all, and each year of waiting costs about a year of compounding "
+            "at the thirty-year horizon."),
+        "Price a like-kind exchange against selling": (
+            "done",
+            "Implemented on the disposition page, on the statute's own terms: $0 of tax to defer at the "
+            "inheritance, about one to four percentage points a year of allowed underperformance after years of "
+            "letting and only if the gain is never taxed, a change of ownership for property tax, and a direct "
+            "conflict with the occupancy the Proposition 19 exclusion requires."),
     }
     improve_src = {"Add a real rental opinion for Property A (imputed rent)": ["hud_fmr"],
                    "Model mixed paths, not only the three pure choices": ["rtc63_2_eligibility"],
@@ -4093,7 +4107,10 @@ def page_suggestions() -> str:
                    "Add a liquidity model for the estate": ["irs_estate", "irs_i706", "irs_interest", "uscode6166"],
                    "Add a two-person household case": ["irs_tc701", "irs_estate"],
                    "Add a mortgage case": ["fred_mortgage"],
-                   "Add a distribution chart to the projections": []}
+                   "Add a distribution chart to the projections": [],
+                   "Model a sale in the same tax year as the inheritance": ["irs_basis", "rtc63_2"],
+                   "Price a like-kind exchange against selling": ["uscode1031", "irs_i8824", "irs_rp2008_16",
+                                                                  "irs_rp2005_14", "rtc60"]}
     def improve_badge(a: str) -> str:
         state = improve_status.get(a, ("proposed", ""))
         return (f'<span class="badge verified">done</span>'
@@ -4121,6 +4138,8 @@ def page_suggestions() -> str:
                         ("Put the answer and what would change it on the first screen", "A decision strip with the answer, a confidence label, the build date and the three checks that would move it.", "Readers arrive at the recommendation without knowing how conditional it is."),
                         ("Price the transfer tax and recording fees into the sell path", "The statutory charges itemised, with the published and private parts separated.", "The 5.5% selling cost is mistaken for a tax figure when most of it is a private quote."),
                         ("Distinguish enacted changes from proposals", "A stated rule and an annual recheck gate for the law page, with the failed Proposition 19 repeal recorded as dead.", "A proposal gets treated as law, or a dead measure keeps distorting the arithmetic."),
+                        ("Model a sale in the same tax year as the inheritance", "A waiting ladder from the same tax year out to sixty months at each transfer date, so how fast to sell is a number rather than a feeling.", "The tax-free window created by the basis step-up was asserted on the site but never measured."),
+                        ("Price a like-kind exchange against selling", "What an exchange would defer, what the replacement property would have to earn to justify it, and what the exchange does to the property tax position.", "An exchange is the one alternative to selling that this site described in prose and never priced."),
                     ]]
     improve = table("Improvements to this site, offered for review",
                     ["Proposal", "What it would add", "Cost of not doing it", "Status", "Source"],
@@ -4313,6 +4332,90 @@ previously taken from a summary or a search excerpt, this says so and says wheth
 now been read; and where a document could not be read at all, the row is left blank rather than filled with
 an inference.</p>""")
             + table("What was re-read, and what it showed", ["Figure or rule", "What the source says today", "Source"], body))
+
+
+def recheck_section_17nov() -> str:
+    """The 17 November 2026 official-source recheck, published so the reader can repeat it.
+
+    The six documents behind the disposition page were opened and read on their
+    publishers' own domains on 17 November 2026. Each row records what was read,
+    what the document says, and what could not be checked at all.
+    """
+    rows = [
+        ("Section 1031, the statute itself",
+         "The 2024 edition of the United States Code was read at the Government Publishing Office. Subsection "
+         "(a)(1) states the non-recognition rule for real property held for productive use in a trade or "
+         "business or for investment; (a)(2) excludes real property held primarily for sale; (a)(3) sets the "
+         "45-day identification and 180-day or due-date completion requirement; (b) and (c) deal with boot and "
+         "with the loss that is never recognised; (d) sets the substituted basis; (f) unwinds a related-party "
+         "exchange on a disposal within two years; (h) makes United States and foreign real property not like "
+         "kind. Every one of these is quoted on the disposition page rather than paraphrased.",
+         ["uscode1031"]),
+        ("The exchange clocks, as the Internal Revenue Service states them",
+         "The 2026 revision of the Instructions for Form 8824 was read. It states the 45-day written "
+         "identification requirement with its three conditions, and the 180-day or due-date-including-"
+         "extensions receipt deadline. It also states that section 1031 does not apply to an exchange where "
+         "the property given up was used solely as the taxpayer's personal residence at the time of the "
+         "exchange, and that section 1031 does not apply to exchanges of real property held primarily for "
+         "sale. Those two sentences are why the disposition page treats the exchange as unavailable to an "
+         "owner-occupier rather than merely difficult.",
+         ["irs_i8824"]),
+        ("The dwelling-unit safe harbour",
+         "Revenue Procedure 2008-16 was read in full. Section 4.02 sets the qualifying use standards: 24 months "
+         "of ownership, 14 days or more of renting at a fair rental in each of the two 12-month periods, and "
+         "personal use no more than the greater of 14 days or 10% of the rental days. The same standards apply "
+         "to the replacement for 24 months after the exchange, and the procedure is expressly limited to the "
+         "held-for-use question. Its own background section records that a personal residence does not qualify "
+         "and that the mere hope or expectation of selling at a gain is not an investment intent.",
+         ["irs_rp2008_16"]),
+        ("What happens when both the home exclusion and the exchange could apply",
+         "Revenue Procedure 2005-14 was read. Section 4.02(1) requires section 121 to be applied to gain "
+         "realised before section 1031; section 4.02(2) records that the exclusion does not reach gain "
+         "attributable to depreciation for periods after 6 May 1997 but that section 1031 may; and section 2.05 "
+         "states that section 1031 does not apply to property used solely as a personal residence.",
+         ["irs_rp2005_14"]),
+        ("The scope of the provision after 2017",
+         "The Internal Revenue Service's own real-estate tax tips page was read: section 1031 now applies only "
+         "to exchanges of real property, and an exchange of real property held primarily for sale still does "
+         "not qualify.",
+         ["irs_lke_tips"]),
+        ("Whether an exchange is a change in ownership for property tax",
+         "Revenue and Taxation Code section 60 was read at the Legislative Counsel's site and is quoted in "
+         "full on the disposition page: a change in ownership means a transfer of a present interest in real "
+         "property, including the beneficial use of it, the value of which is substantially equal to the value "
+         "of the fee interest. Read with section 63.2, which ends the claim period on a transfer to a third "
+         "party, that is the basis for the statement that an exchange does not carry the exclusion with it.",
+         ["rtc60", "rtc63_2"]),
+        ("The inherited-property basis rule, read again",
+         "The Internal Revenue Service gifts and inheritances answer was opened and read in this session, not "
+         "carried over from a summary. The basis is the fair market value on the date of the decedent's death, "
+         "and that is so whether or not an estate tax return is filed; the alternate valuation date applies "
+         "only if the executor files a return and elects it there. The answer also warns that a recipient who "
+         "receives a Schedule A to Form 8971 may have to report a basis consistent with the estate tax value "
+         "finally determined, which is now recorded in the ledger entry's limits.",
+         ["irs_basis"]),
+        ("What this session could not check",
+         "Three. The local parcel tax on Property B is still pending certification, which is due 11 December "
+         "2026, so its status is unchanged and remains flagged; Property A's tax rate area is still withheld, "
+         "because naming the county names the property; and whether this property would be treated as held for "
+         "investment rather than for sale is a facts question no document can answer for a household. Each is "
+         "recorded as an open item rather than as a finding.",
+         []),
+    ]
+    body = []
+    for item, detail, srcs in rows:
+        cell = (src_cell(srcs, "Official source") if srcs
+                else method_cell("review.html#register", "Withheld for privacy, logged on the register"))
+        body.append(f"<td><strong>{esc(item)}</strong></td><td>{detail}</td>" + cell)
+    return ('<h2 id="recheck-17-nov">Official-source recheck, 17 November 2026</h2>'
+            + callout("note", "Why a second recheck, one day later", f"""
+<p>The disposition page needed six sources this site had never opened, so each was read on the publisher's own
+domain before any figure was computed from it. None of them moved an existing figure on the site: they answered
+two questions the register had been carrying as open, which is what a recheck is supposed to do. The parcel-tax
+certification is still pending and is still the only dated item whose status can change before the next
+build.</p>""")
+            + table("What was read, and what it says",
+                    ["Rule or figure", "What the document says", "Source"], body))
 
 
 def history_audit_section() -> str:
@@ -4900,6 +5003,7 @@ each one is a reason to check before acting.</p>""")
         + table("What was found when the repository was reviewed",
                 ["Finding", "Detail", "Residual risk", "Source"], aud_rows)
         + recheck_section()
+        + recheck_section_17nov()
         + history_audit_section()
     )
 
