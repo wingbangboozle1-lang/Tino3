@@ -1,5 +1,3 @@
-# Coordination board
-
 ## Session `arena/5fb0dcb1-tino3` — law-watch refresh to the 16 November 2026 official results reading, live Proposition 19 initiative recheck, publication · claimed 2026-11-17
 
 *Branch note:* Arena pins this session to `arena/5fb0dcb1-tino3`, branched from `main` at `3b86d5a` (the merge of PR #156). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. At claim time `gh pr list --state open` returned nothing and no section on the board was marked in progress, so no other session holds `scripts/build.py`, `assets/sources.json` or the generated pages. The baseline was checked before any edit: `rebuild.py` reproduces the tree with no diff and all five gates pass.
@@ -27,6 +25,20 @@
 - **Deploy.** On `02a9d55`: `Verify static site` success, `Deploy GitHub Pages` success, `pages build and deployment` success.
 - **Live check.** The published `laws.html` was read at the Pages URL and shows the 16 November 2026, 7:12 p.m. figures (Proposition 3 60.8%, Proposition 42 51.2%, Proposition 43 57.7%).
 - **Left for the owner, unchanged:** the public-history rewrite (suggestion S-22; the owner must decide and run it, see `PRIVACY_REMEDIATION.md`); the Proposition 3 threshold note (official $371,000 used; see the irregularities list); the 11 December 2026 certification, after which the law page's unofficial labels should be replaced with the certified figures; the Property A rate-area and market-rent items that the board records as unobtainable without publishing identifiers.
+
+## Session `arena/9cb84094-tino3` — the keep-and-borrow case modelled end to end (closes the open "Add a mortgage case" improvement), fresh source re-reads for the borrowing anchors, publication · claimed 2026-11-17
+
+*Branch note:* Arena pins this session to `arena/9cb84094-tino3`, branched from `main` at `3b86d5a` (the merge of PR #156). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. At claim time `gh pr list --state open` returned nothing, so no other session held `scripts/model.py`, `assets/data/model.json` or `EXECUTIVE_SUMMARY.md`. While this claim was being pushed, `main` advanced to `02a9d55` (PRs #157, #158 and #159: two law-watch refreshes by `arena/11bff629-tino3` and `arena/5fb0dcb1-tino3`, which edit the law-page and index regions of `scripts/build.py` and append to `assets/sources.json`). This session's `scripts/build.py` edits are confined to the liquidity page, the what-if page, the improvements register and the README counts — different regions — and `assets/sources.json` is append-only, so the scopes do not overlap; the tree was rebased onto `02a9d55` before any shared file was edited and the gates were re-run on the rebased tree.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| Y-1 Claim this scope and push before any other edit | **done** — this section | `arena/9cb84094-tino3` | `COORDINATION.md` (this section only) |
+| Y-2 Re-read the borrowing anchors at source (the published 30-year fixed mortgage average and its 2026 low/high weekly values) and re-read the two decision-critical federal figures the new case touches (the 40 percent top estate-tax rate and the nine-month payment clock) | **in progress** | `arena/9cb84094-tino3` | read-only; results recorded here and, if changed, in `assets/data/inputs.json` / `assets/sources.json` |
+| Y-3 Build the keep-and-borrow case end to end: for each anonymous excess band the liquidity engine already publishes, price a fully amortising 30-year fixed loan at the published rate band, charge the payment stream to the keeping paths by the model's own conventions, and set it against the sell route that pays the same tax out of the proceeds; publish whether any band flips the ranking | **in progress** | `arena/9cb84094-tino3` | `scripts/model.py` (new function), `assets/data/model.json` (generated) |
+| Y-4 Publish the case on the estate liquidity page and as a what-if lever, with the loan-to-value arithmetic and the stated limits; close the "Add a mortgage case" improvement row with the implementation record | **in progress** | `arena/9cb84094-tino3` | `scripts/build.py`, `liquidity.html`, `what-if.html`, `suggestions.html`, regenerated pages, `EXECUTIVE_SUMMARY.md`, `README.md` (counts) |
+| Y-5 Rebuild, run every gate, pull request to `main`, merge without waiting, confirm the Pages deploy, record the result | **in progress** | `arena/9cb84094-tino3` | this section only |
+
+**Privacy constraint:** no name, street address, postal code, parcel identifier, county or city name, trust term or unrounded owner amount is added to any file this session writes. The loan principal is the anonymous excess band already published, never an estate size.
 
 ## Session `arena/4f2a543e-tino3` — repair of the unresolved conflict marker left on `main`, a mechanical marker gate, independent re-verification of the decision-critical figures, publication · claimed 2026-11-17
 
