@@ -4195,6 +4195,17 @@ Cross-checked the dashboard's headline figures against `assets/data/model.json` 
 - **Merge:** `gh pr merge 149 --merge` succeeded without approval and without `--auto`. Merge commit `b3edcf1c9363b94972817d14571c5912cbb88c80`, merged 18:17:10 UTC.
 - **Post-merge checks on `main`:** `Verify static site` (run 43927220997) and `Deploy GitHub Pages` (run 43927220421) succeeded; legacy `pages-build-deployment` (run 43927220402) succeeded. Live URL: https://wingbangboozle1-lang.github.io/Tino3/.
 - **Site impact:** none. No model, source, data or generated-site content changed in this session.
+
+## Session `arena/7b5fb48d-tino3` — independent verification of the load-bearing official figures against primary sources, brief-completeness review, fillable-gap fixes, and publication · claimed 2026-11-17
+
+*Branch note:* Arena pins this session to `arena/7b5fb48d-tino3`, branched from `main` at `3b86d5a` (the merge of PR #156). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. At claim time `gh pr list --state open` returned nothing, so no other session holds `scripts/build.py`, `scripts/model.py`, `assets/data/*` or `assets/sources.json`.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| V-1 Claim this scope and push before any other edit | in progress | `arena/7b5fb48d-tino3` | `COORDINATION.md` (this section only) |
+| V-2 Independent re-read of every load-bearing official parameter the published edition quotes (federal basic exclusion 2026/2027, annual gift exclusions, Proposition 19 cap and its adjustment window, RTC 63.2 family-home exclusion and clawback, RTC 17043 1% surcharge, RTC 51 lesser-of rule, Civil Code 1947.12 rent cap, Form 706 nine-month clock, section 121 amounts, inherited-property basis, CDI/NAIC insurance context) against the publisher's own domain; record each read with date and verdict; blank-and-flag anything that cannot be confirmed | unclaimed | `arena/7b5fb48d-tino3` | read-only on sources; `assets/sources.json` only if a verified figure forces a change |
+| V-3 Line-by-line review of the 25 published pages against the owner's brief; list every requirement present, explicitly registered as open, or genuinely missing; fix gaps that can be filled without publishing any identifier, personal information or unrounded owner figure | unclaimed | `arena/7b5fb48d-tino3` | regenerated pages via `scripts/build.py` only; no hand edits to HTML |
+| V-4 Rebuild, run every gate, confirm byte-reproducibility, pull request to `main`, merge without waiting, confirm the Pages deploy, record the PR link and result | unclaimed | `arena/7b5fb48d-tino3` | this section only; generated outputs |
 ## Session `arena/0069abd3-tino3` — estate liquidity and borrowing model, joint-filer case, fresh official verification of the new sources · claimed 2026-11-16
 
 *Branch note:* Arena pins this session to `arena/0069abd3-tino3`, branched from `main` at `5005a72`. `git pull --rebase origin main` was run before any edit and fast-forwarded the branch to `aca4b7d` (merge of PR #139, session `arena/3a29bbb0-tino3`). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. `gh pr list --state open` returned nothing when this session started.
