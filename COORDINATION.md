@@ -4371,10 +4371,58 @@ as the suggestions register says.
 | Task | Status | Owner | File scope |
 |---|---|---|---|
 | M-1 Claim this scope and push before any other edit | **done** — this section | `arena/cd11dc07-tino3` | `COORDINATION.md` (this section only) |
-| M-2 Read the current Form 540 instructions at the Franchise Tax Board for the 1% above one million dollars and for the capital-gain treatment; record what the publisher states, including the form's own name for the tax and the worksheet arithmetic | **in progress** | `arena/cd11dc07-tino3` | `assets/sources.json` (ledger entries only) |
-| M-3 Rebuild the surcharge sensitivity as a Form 540 computation: the 1% applied to the slice of taxable income above the threshold, priced across a range of assumed other taxable income instead of the whole gain at a flat rate difference. Keep the flat-rate figure as a labelled upper bound | **in progress** | `arena/cd11dc07-tino3` | `scripts/model.py`, `assets/data/inputs.json` (`assumptions` and `verified_parameters` only), `scripts/build.py` (the taxes page only) |
-| M-4 Re-read the election-results page at the Secretary of State and update the carried figures and their timestamp if the publisher's numbers have moved; keep the provisional/certification caveat intact | **in progress** | `arena/cd11dc07-tino3` | `assets/sources.json`, `scripts/build.py` |
-| M-5 Run every gate from a clean rebuild; confirm byte-reproducibility | **in progress** | `arena/cd11dc07-tino3` | read-only |
-| M-6 Pull request to `main`, merge without waiting for approval, confirm the Pages deploy, record the PR link and result | **in progress** | `arena/cd11dc07-tino3` | this section only |
+| M-2 Read the current Form 540 instructions at the Franchise Tax Board for the 1% above one million dollars and for the capital-gain treatment; record what the publisher states, including the form's own name for the tax and the worksheet arithmetic | **done** — result below | `arena/cd11dc07-tino3` | `assets/sources.json` (ledger entries only) |
+| M-3 Rebuild the surcharge sensitivity as a Form 540 computation: the 1% applied to the slice of taxable income above the threshold, priced across a range of assumed other taxable income instead of the whole gain at a flat rate difference. Keep the flat-rate figure as a labelled upper bound | **done** — result below | `arena/cd11dc07-tino3` | `scripts/model.py`, `assets/data/inputs.json` (`assumptions` and `verified_parameters` only), `scripts/build.py` (the taxes page only) |
+| M-4 Re-read the election-results page at the Secretary of State and update the carried figures and their timestamp if the publisher's numbers have moved; keep the provisional/certification caveat intact | **done** — merged with W-5; see collision note | `arena/cd11dc07-tino3` | `assets/sources.json`, `scripts/build.py` |
+| M-5 Run every gate from a clean rebuild; confirm byte-reproducibility | **done** — result below | `arena/cd11dc07-tino3` | read-only |
+| M-6 Pull request to `main`, merge without waiting for approval, confirm the Pages deploy, record the PR link and result | **done** — result below | `arena/cd11dc07-tino3` | this section only |
 
 **Privacy constraint:** no property-specific identifier, name, address, parcel number, postal code, county or city name, trust term, estate size or unrounded owner amount is added to any public page or to this board. Every dollar figure the site publishes stays rounded to the nearest $10 or is a verbatim official amount.
+
+### M-2 and M-3 result: the Form 540 worksheet, read and computed
+
+**What the publisher states** (2025 Instructions for Form 540, <https://www.ftb.ca.gov/forms/2025/2025-540-instructions.html>, read 17 November 2026):
+
+- **Line 62 is named the Behavioral Health Services Tax.** The instruction gives a five-step worksheet: taxable income from line 19; less $(1,000,000); subtotal; tax rate 1%; the tax is line 3 multiplied by line 4. This is the arithmetic the return actually performs, and it is a tax on **total taxable income**, not on a gain.
+- **Line 31** sends a taxpayer whose line 19 exceeds $100,000 to the tax rate schedules for the filing status. **Line 19** is taxable income, so the 1% is computed after the gain and every other item of income are combined.
+- **Schedule CA (540), line 7a** (<https://www.ftb.ca.gov/forms/2025/2025-540-ca-instructions.html>): "Generally, no adjustments are made on this line. California taxes long and short term capital gains as regular income. No special rate for long term capital gains exists." The same paragraph lists "Gain on the sale of personal residence where depreciation was allowable" among the items for which California basis can differ, resolved on Schedule D (540) - which is the live-then-let case.
+- **The Schedule CA General Information section** lists the One Big Beautiful Bill Act among the federal acts to which the Revenue and Taxation Code generally does not conform.
+
+**What this changed.** The site's sensitivity had applied a flat one-point difference to the **whole gain**. That is not what the form does. It is now published as a labelled **ceiling**, beside a worksheet that prices the same three sales at four assumed levels of other taxable income. Verified arithmetic from the rebuilt model (2045 inheritance, single filer):
+
+| Path | Taxable gain | 1% on the whole gain (ceiling) | 1% caused by the gain, no other income | 1% caused by the gain, $1,000,000 other income |
+|---|---|---|---|---|
+| Sell at inheritance | $0 | $0 | $0 | $0 |
+| Live in it, sell after 30 years | $13,487,060 | $134,870 | $124,870 | $134,870 |
+| Let it out, sell after 30 years | $18,712,050 | $187,120 | $177,120 | $187,120 |
+
+Two properties of that table are worth stating plainly, and both are now on the page:
+
+1. **The ceiling holds, and it is reached only in the limiting case.** The 1% caused by a gain can never exceed one point on the gain itself, because the gain can only be taxed on that part of itself which lands above the threshold. With other taxable income already filling the space below the line, the whole gain sits above it and the ceiling is exactly right. With no other income, the first slice of the gain falls below the line and escapes, so the true cost is **$10,000 lower** on the 30-year living path.
+2. **On the recommended path there is nothing to tax.** The basis step-up leaves a gain of about zero, so the surcharge attributable to the sale is zero at every income level. The only surcharge that appears on that row is the one which other income would owe whether or not the house is sold, and it is now identified as such instead of being charged to the decision.
+
+**Bracket-tax limit, stated on the page.** The worksheet columns price the 1% exactly. The state *total* still applies the top printed bracket of 12.3% flat to all taxable income rather than walking the schedule, which **overstates** the bracket tax. That direction is deliberate and cannot make the recommendation look better than it is. A year-of-sale return would use the bracket only on the top slice.
+
+**Recommendation movement: none.** The change makes the two holding paths very slightly *less* bad, which works against the recommendation, and the recommendation survives it. `surcharge_sensitivity.recommendation_unchanged` is true on the rebuilt model.
+
+### M-4 result: election figures, and a collision with session `arena/11bff629-tino3`
+
+The Secretary of State's page was re-read on 17 November 2026 and shows the **16 November 2026, 7:12 p.m.** update, still labelled unofficial, certification still due 11 December 2026. The carried figures were from the 14 November read.
+
+**Collision, resolved without discarding anyone's work.** Session `arena/11bff629-tino3` (PR #161, merged as `df36071` while this session was building) had independently read the *same two documents* - the Form 540 booklet and the Secretary of State's results page - and had already applied the same currency corrections, including the same 60.8% Proposition 3 figure and its own ledger entry `ftb_540_instructions_2025`. Rather than duplicate it, this session's conflict was resolved as follows:
+
+- `assets/sources.json` — took the **main side** in full, and dropped this session's duplicate Form 540 entry in favour of theirs. Retained the one entry main did not have: `ftb_sched_ca_540`, with its verbatim line 7a quote. Ledger 113 → **114**.
+- `scripts/build.py`, `review.html`, `sources.html`, `taxes.html`, `EXECUTIVE_SUMMARY.md`, `README.md` — took the **main side** and re-applied this session's one substantive addition on top: `surcharge_worksheet_section()` and its two tables, plus the Schedule CA citation on the bracket row. Main had read the booklet and cited it; it had not computed the worksheet.
+- `scripts/model.py`, `assets/data/inputs.json` — this session's version kept; main had no equivalent.
+- `README.md` counts corrected to the numbers the **merged** build actually reports, not either session's prediction: 114 ledger entries, 1265 table rows, 1088 linked.
+
+### M-5 and M-6 result: gates, pull request and deployment
+
+- **Local gates on the merged branch (17 November 2026):** `scripts/rebuild.py` PASS, and a second run leaves the tree byte-identical (verified by `md5sum -c` across `taxes.html`, `review.html`, `sources.html`, `model.json` and `EXECUTIVE_SUMMARY.md`); `scripts/verify.py` PASS (25 pages, **1265 table rows**, **1088 linked to official publishers**, 177 registered as unsourceable, **114 ledger sources**, 4,418 links, every internal link and fragment resolves); `scripts/privacy_boundary.py` PASS; `scripts/tracked_tree_guard.py` PASS (65 tracked text files); `scripts/package_site.py` PASS; `scripts/verify_legacy.py --config-only` PASS; `git diff --check` clean.
+- **Rebase collisions logged:** two, both against `main` as it moved under this session. The first was in `COORDINATION.md` only (another session's section being appended at the same offset) and was resolved by keeping the main-side board and re-appending this section. The second was the six-file collision described above. No other session's work was discarded in either.
+
+### Still open after this session (not blocking)
+
+- The Git history scrub remains an owner action; this session performed no rewrite and no force-push.
+- Property A's tax-rate area and published ad valorem rate, a market rent for Property A, insurance quotes, written date-of-death valuation, lease records and any encumbrance remain owner- or third-party-supplied, and stay on the Questions and Flagged for Review pages.
+- The 2026 election results stay provisional until the Secretary of State certifies on 11 December 2026; the page and the ledger say so.
