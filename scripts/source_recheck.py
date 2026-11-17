@@ -65,6 +65,11 @@ PROSE_DATE = re.compile(
 PARENTHETICAL = re.compile(r"\([^()]*\)")
 
 
+def annotation_escape(text: str) -> str:
+    """Escape a value for a GitHub Actions workflow-command annotation."""
+    return text.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+
+
 def recorded_read_date(checked: str) -> dt.date | None:
     """Latest date the `checked` field records as a read date, or None.
 
@@ -231,7 +236,8 @@ def build_report(entries: list[dict], results: list[dict], stale_days: int,
     lines.append("")
     summary = {"requested": len(entries), "counts": counts,
                "attention": len(attention), "recheck_due": len(recheck_due),
-               "no_recorded_date": no_date}
+               "no_recorded_date": no_date,
+               "attention_ids": [row[0] for row in attention[:8]]}
     return "\n".join(lines), summary
 
 
@@ -256,6 +262,23 @@ def run_recheck(args: argparse.Namespace) -> int:
         Path(args.out).write_text(report + "\n", encoding="utf-8")
         print(f"(report written to {args.out})", file=sys.stderr)
     print(f"SUMMARY {json.dumps(summary, sort_keys=True)}", file=sys.stderr)
+    if args.annotate:
+        counts = summary["counts"]
+        message = (
+            f"requested={summary['requested']} "
+            f"reachable={counts.get('reachable', 0)} "
+            f"refused={counts.get('refused', 0)} "
+            f"missing={counts.get('missing', 0)} "
+            f"error={counts.get('error', 0)} "
+            f"unreachable={counts.get('unreachable', 0)}; "
+            f"needing a human look={summary['attention']}; "
+            f"recheck due={summary['recheck_due']}; "
+            f"no recorded read date={summary['no_recorded_date']}"
+        )
+        print(f"::notice title=Official source recheck::{annotation_escape(message)}")
+        if summary["attention_ids"]:
+            print("::warning title=Sources needing a human look::"
+                  + annotation_escape(", ".join(summary["attention_ids"])))
     if args.strict and (summary["attention"] or summary["recheck_due"]):
         return 1
     return 0
@@ -278,6 +301,10 @@ def main() -> int:
     parser.add_argument("--out", default="", help="also write the Markdown report to this path")
     parser.add_argument("--strict", action="store_true",
                         help="exit 1 when anything needs a human look")
+    parser.add_argument("--annotate", action="store_true",
+                        help="also emit GitHub Actions annotations, so the headline "
+                             "counts are readable from the check run without "
+                             "downloading the job log or the artifact")
     parser.add_argument("--probe", default="",
                         help="request this one URL instead of the ledger, then exit")
     args = parser.parse_args()
