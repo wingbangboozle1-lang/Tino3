@@ -721,6 +721,7 @@
  "precommit": {
   "meta": {
    "purpose": "Rules the household writes down BEFORE reading any projection, so the outcome cannot be reverse-engineered from whichever projection is shown first.",
+   "draft_note": "P-7 is the one rule on this register that a session drafted rather than the household: it was written on 17 November 2026 alongside the keep-and-borrow page, so the new path is not left without a rule. Treat it as a draft to amend or reject, not as a rule the household has agreed.",
    "how_to_use": "Each row states, in advance, the condition under which that path is the chosen one. The decision column is for a date and a name, entered by hand when the choice is made. Nothing in this repository fills it in.",
    "status": "No path has been chosen. This page is the testing rule, not a recommendation."
   },
@@ -778,6 +779,15 @@
     "decided_on": "",
     "decided_by": "",
     "evidence": "questions.html"
+   },
+   {
+    "id": "P-7",
+    "path": "Keep the house and take the cash out of it (borrow against it)",
+    "decides_if": "The household writes down, before any quote is obtained, the after-tax return it believes it can earn on the borrowed money and for how long, and that return is above the hurdle the keep-and-borrow page states for the loan-to-value rung it would actually take; a lender has confirmed in writing that it will lend against the property as it is held, at a rate and term the household has seen; and the payment can be met from committed income without selling anything, in a year when the portfolio is down.",
+    "would_override_if": "The written lender indication is dearer than the published average the page prices, the trust does not permit a lien without a consent that cannot be obtained, or the household cannot name a repayment source that does not rely on the portfolio's own returns.",
+    "decided_on": "",
+    "decided_by": "",
+    "evidence": "keep-and-borrow.html"
    }
   ],
   "household_goals": [
