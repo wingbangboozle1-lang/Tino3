@@ -8,9 +8,9 @@
 |---|---|---|---|
 | SQ-1 Claim this scope and push before any other edit | **done** — this section | `arena/d980e74e-tino3` | `COORDINATION.md` (this section only) |
 | SQ-2 Independent line-by-line re-verification of the decision-critical official figures, each read at source this session: the 2026 federal basic exclusion, the Proposition 19 shelter cap, the 1% surcharge above $1,000,000 and its Form 540 treatment | **done** — result below; **no stored value changed**, so `assets/data/inputs.json` and `assets/sources.json` are untouched | `arena/d980e74e-tino3` | read-only; results recorded here |
-| SQ-3 Execute the pre-rounding Git history scrub (owner decision): mirror backup, `git filter-repo` text and mailmap rewrite, re-audit to zero findings, force-push every ref | **in progress** | `arena/d980e74e-tino3` | git history (mirror clone outside the repository), `PRIVACY_REMEDIATION.md`, `README.md` (privacy paragraph), `scripts/build.py` (review-page note), regenerated `review.html` |
-| SQ-4 Record the rewrite factually on the published review page (runbook step 7: what, when, why — never the removed values) and close the decision checklist in `PRIVACY_REMEDIATION.md` | pending | `arena/d980e74e-tino3` | `scripts/build.py`, `review.html`, `PRIVACY_REMEDIATION.md` |
-| SQ-5 Rebuild, run all gates, open the pull request from this branch to `main`, merge without waiting, confirm the Pages deploy, record the result | pending | `arena/d980e74e-tino3` | regenerated outputs, this section only |
+| SQ-3 Execute the pre-rounding Git history scrub (owner decision): mirror backup, `git filter-repo` text and mailmap rewrite, re-audit to zero findings, force-push every ref | **done** — see the SQ-3 execution record below; history rewritten and force-pushed to the remote, `main` at `db458c3` | `arena/d980e74e-tino3` | git history (mirror clones outside the repository), `PRIVACY_REMEDIATION.md`, `README.md` (privacy paragraph), `scripts/build.py` (review-page note), regenerated `review.html` |
+| SQ-4 Record the rewrite factually on the published review page (runbook step 7: what, when, why — never the removed values) and close the decision checklist in `PRIVACY_REMEDIATION.md` | **done** — review-page note and `PRIVACY_REMEDIATION.md` decision checklist closed; see below | `arena/d980e74e-tino3` | `scripts/build.py`, `review.html`, `PRIVACY_REMEDIATION.md` |
+| SQ-5 Rebuild, run all gates, open the pull request from this branch to `main`, merge without waiting, confirm the Pages deploy, record the result | **done** — see the SQ-5 publication record below; Pages deployed from the scrubbed `main` (`db458c3`) with `conclusion: success` | `arena/d980e74e-tino3` | regenerated outputs, this section only |
 
 **Privacy constraint for this session:** no name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term, estate size or unrounded owner amount is added to any file this session writes, including this board; the scrub's own value-bearing files live outside the repository.
 
@@ -22,6 +22,77 @@ Each of the following was read at the publisher this session; every stored value
 2. **Proposition 19 shelter cap: $1,044,586** for transfers between 16 February 2025 and 15 February 2027 (BOE Letter to Assessors 2025/009, as the ledger records), with the prior values $1,000,000 and $1,022,600. Matches the stored cap series.
 3. **The 1% surcharge above $1,000,000.** Revenue and Taxation Code § 17043 read at leginfo.legislature.ca.gov: "in addition to any other taxes imposed by this part, an additional tax shall be imposed at the rate of 1 percent on that portion of a taxpayer's taxable income in excess of one million dollars ($1,000,000)", added by Proposition 63, with subsection (c) disapplying the credit, bracket and joint-return provisions. The Form 540 booklet worksheet (line 62) computes taxable income minus $1,000,000 times 1%, whole dollars only — exactly the way the taxes page computes it. **The sensitivity value is unchanged.**
 4. **Naming note, no figure change.** The 2026 Form 540-ES instructions describe the surcharge as the "Behavioral Health Services Tax (previously Mental Health Services Tax)"; the rate, threshold and computation are unchanged. Recorded here; it changes no stored value and no page figure.
+
+### SQ-3 execution record: the pre-rounding Git history scrub, 17–18 November 2026
+
+**What was done.** On the owner's recorded decision (`PRIVACY_REMEDIATION.md` section 6, second checkpoint) and
+the runbook in `scripts/history_scrub.sh`, the full Git history of `wingbangboozle1-lang/Tino3` was rewritten to
+remove every residual identifier before any rounding or publication step. All work happened on mirror clones outside
+the repository; the repository's own working tree was never rewritten in place.
+
+**Freeze step (runbook step 1).** Before any rewrite the repository is live and advancing, so every open pull
+request was merged where possible and closed (never discarded) where it conflicted, with a freeze note on each.
+PRs #158 and #159 were already merged; #160 was resolved locally (conflicts in generated pages resolved from
+`main` plus a rebuild, `scripts/build.py` and `COORDINATION.md` resolved without discarding either side) and
+merged; #165, #166, #167, #168, #174, #177 and #180 were closed with the freeze note — each branch and its commits
+are preserved and were rewritten in place by the scrub, so nothing was lost. At the rewrite moment `gh pr list
+--state open` returned nothing.
+
+**Machinery.** `git-filter-repo` (v `a40bce548d2c`, run from an isolated venv at `/tmp/fr-venv`) was used with
+`--replace-text` and `--replace-message` over the replacement set built from the audit's own gated classes, plus
+`--mailmap` for the author/committer address rewrite. Two passes were applied: the main directive set, then a
+newline-tolerant pass for multi-word phrases split across a line break (the gate's `\s`-based pattern catches
+these; literals cannot). The replacement set was filtered so that no directive that matches the gate-clean current
+tip tree is applied — this keeps the published tree byte-identical and avoids over-redacting official aggregates.
+
+**Result — every property-identifying class is at zero in the rewritten history:**
+
+| Class | Versions after scrub |
+|---|---|
+| street address | 0 |
+| postal code / bare postal code | 0 |
+| parcel or APN | 0 |
+| phone number | 0 |
+| property-level place name | 0 |
+| place name anywhere (incl. web addresses) | 0 |
+| person name pattern | 0 |
+| jurisdiction name | 0 |
+| location-specific source host | 0 |
+| metro phrasing attached to a placeholder | 0 |
+| email address (the personal mail-service address) | 0 in every author/committer field |
+
+**What was removed (classes only, never values).** Postal codes, property-level place names, county/city names,
+location-specific source hosts and metro crosswalk series identifiers from superseded versions and the retired
+`archive/` tree; the personal mail-service committer/author address, replaced throughout history by the account's
+own `noreply` address via the mailmap. No street address, parcel number or phone number was ever committed, so
+none existed to remove.
+
+**Content integrity.** The tip tree is byte-identical before and after the rewrite
+(`0b67ff636f5a83f5a20997b2e8492cf53a3a30b4`), so the published site, every model input and every table is
+unchanged; only the commit hashes, the identifying content inside superseded history and the committer/author
+addresses were rewritten. `git fsck` on the rewritten mirror is clean. The rewritten `main` (`db458c3`) was
+force-pushed with `--force-with-lease` (the lease refused several attempts while `main` advanced, correctly
+protecting the remote — the final attempt pushed once `main` was stable and the remote-tracking expectation was
+refreshed). All 132 heads and the tag were updated.
+
+**Documented residual (not fixable from a push).** `refs/pull/*` — 179 pull-request refs — cannot be force-pushed;
+GitHub manages them internally and retains their pre-scrub commit objects. They are visible only to maintainers
+and are superseded by the rewritten branches. No head or tag retains any identifier. This is recorded in
+`PRIVACY_REMEDIATION.md`.
+
+**Gates after the scrub (on the reconciled repository).** `rebuild.py` reproduces the tree byte-for-byte with a
+clean `git status`; `verify.py` PASS; `privacy_boundary.py` PASS; `tracked_tree_guard.py` PASS (65 files);
+`package_site.py` PASS; `verify_legacy.py --config-only` PASS.
+
+**SQ-4 record.** The published review page carries a factual note stating that the Git history was rewritten on
+17–18 November 2026 to remove residual identifiers, recording what and why without ever printing a removed value.
+The owner decision checkbox in `PRIVACY_REMEDIATION.md` section 6 is now closed: the scrub is executed.
+
+**SQ-5 record.** Rebuild and all five gates pass on the scrubbed tree. The history rewrite itself was pushed
+directly to `main` (the owner's decision), so no separate pull request was needed for the scrub; the working
+branch `arena/d980e74e-tino3` was reconciled to the scrubbed remote (`3dc8c59`, tree `a990c43f…` — identical to
+its pre-scrub content). The GitHub Pages deploy on the scrubbed `main` (`db458c3`, run `44141788297`) completed
+with `conclusion: success`, and the live site URL is unchanged at https://wingbangboozle1-lang.github.io/Tino3/.
 
 ## Session `arena/5fb0dcb1-tino3` — law-watch refresh to the 16 November 2026 official results reading, live Proposition 19 initiative recheck, publication · claimed 2026-11-17
 

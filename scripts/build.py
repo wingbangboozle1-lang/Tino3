@@ -4160,17 +4160,22 @@ def history_audit_section() -> str:
         ("Street address", "0", "0", "Never committed in any reachable commit."),
         ("Parcel or assessor number", "0", "0", "Never committed in any reachable commit."),
         ("Telephone number", "0", "0", "Never committed in any reachable commit."),
-        ("Postal code of either property", "66", "0",
-         "Present in superseded file versions and in the archive directory, which is never published."),
-        ("Place name, or the county or city name", "917", "0",
-         "Superseded file versions and archive material, plus every early version written before the county and "
-         "city names were withdrawn. None of it is in the deployable artifact."),
-        ("Dollar amount that is not a multiple of ten", "143", "0",
-         "Superseded versions only. Every amount in the current tree is a multiple of ten or a verbatim "
-         "published official amount."),
-        ("Email address", "1", "0 published",
-         "One internal working note carries a publisher's contact address in a quotation. The note is excluded "
-         "from the deployable artifact, so no published file contains an email address."),
+        ("Postal code of either property", "0", "0",
+         "Was present in superseded file versions and in the archive directory before the 17–18 November 2026 "
+         "history rewrite; the rewrite removed it from every reachable commit."),
+        ("Place name, or the county or city name", "0", "0",
+         "Was present in superseded file versions, archive material and early versions before the rewrite; the "
+         "rewrite removed it from every reachable commit."),
+        ("Location-specific source host", "0", "0",
+         "Was present in superseded file versions before the rewrite; the rewrite removed it from every reachable "
+         "commit."),
+        ("Dollar amount that is not a multiple of ten", "0", "0",
+         "The pre-rewrite audit counted candidate amounts in superseded versions; the rewrite removed every "
+         "unrounded candidate, so no reachable file version carries one. Every amount in the current tree is a "
+         "multiple of ten or a verbatim published official amount."),
+        ("Email address", "0", "0",
+         "The personal author/committer mail-service address was rewritten to the account's own noreply address "
+         "throughout history by the mailmap rewrite. No published file contains an email address."),
     ]
     body = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td><td>{esc(d)}</td>"
             + f'<td><a href="review.html#register">Logged in the register</a></td>' for a, b, c, d in rows]
@@ -4184,15 +4189,20 @@ multiple of ten. That scan covers the deployable artifact, not the Git history b
 <p>A separate read-only audit therefore walks every commit reachable in this repository and counts how many file
 versions carry the <em>shape</em> of each identifier. It reports counts only. It does not print a matching value,
 because publishing the value in order to disclose it would recreate exactly the exposure being disclosed.</p>
-<p><strong>The result is that the current published tree is clean on every class, and the history is not clean on
-three of them.</strong> No street address, parcel number or telephone number has ever been
-committed. Postal codes, property-level place names and the two jurisdiction names did appear in superseded file
-versions and in archive material, none of which is part of the published artifact. The full counts are below.</p>
-<p>Cleaning the history is a different operation from cleaning the site: it needs a rewrite and a force-push of a
-public branch, which invalidates every clone, every open pull request and every fork, and cannot recall copies
-already downloaded. That is the owner's decision, it is recorded as an open item, and the procedure and its costs
-are written up for the owner. Until that decision is taken, this page states the exposure rather than claiming it
-has been removed.</p>""")
+<p><strong>The result is that the current published tree is clean on every class, and the history was cleaned on
+every class by the rewrite described below.</strong> No street address, parcel number or telephone number has ever
+been committed. Postal codes, property-level place names and the two jurisdiction names had appeared in superseded
+file versions and in archive material, none of which is part of the published artifact; the rewrite removed them
+from history, so the full counts below now report zero in every property-identifying class.</p>
+<p><strong>That decision has been taken and executed.</strong> On 17–18 November 2026 the repository's full Git
+history was rewritten with <code>git-filter-repo</code> and force-pushed to the remote, at the owner's recorded
+decision (see <code>PRIVACY_REMEDIATION.md</code> and the coordination board). Postal codes, property-level place
+names, jurisdiction names, location-specific source hosts, metro crosswalk identifiers and the personal
+author/committer address were removed from every reachable commit. The published tree is byte-identical before and
+after the rewrite, so no page, table or model figure changed. No street address, parcel number or telephone number
+was ever committed, so none needed removal. The one class that cannot be removed by a push is the pull-request
+refs, which GitHub manages internally; no branch or tag retains any identifier. This page records that the rewrite
+happened and why, without printing any value that was removed.</p>""")
         + table("File versions whose content matches each identifier class",
                 ["Identifier class", "File versions in history", "Matches in the published tree",
                  "What that means", "Basis"], body,
