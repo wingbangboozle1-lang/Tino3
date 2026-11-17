@@ -4278,7 +4278,7 @@ One further conflict inside the rebase onto `82bac65` was in `scripts/build.py`:
 |---|---|---|---|
 | C-1 Claim this scope and push before any other edit | **done** — this section | `arena/11bff629-tino3` | `COORDINATION.md` (this section only) |
 | C-2 Repair the board: remove the stray `>>>>>>>` end-marker at line 4140, an artifact of an earlier rebase collision inside the `arena/0069abd3-tino3` section; no other line of that section changes | **done** (committed pre-rebase as `276ff6d`; that commit was dropped as empty during the rebase onto `3b86d5a`, because `arena/4f2a543e-tino3`'s M-2 had already removed the same line on `main`. Net effect stands: zero markers anywhere, new guard passes) | `arena/11bff629-tino3` | `COORDINATION.md` (one line removal) |
-| C-3 Correct the `README.md` count drift (the snapshot section says 110 ledger entries; the build reports 112) and re-check every numeric claim in the README against the current build output | **done** (`d7848f6` pre-rebase, `f50803c` after the rebase; final counts restated at 113 ledger entries after C-4's new entry and at the merged build's 1,249 rows, see the record below) | `arena/11bff629-tino3` | `README.md` (counts only) |
+| C-3 Correct the `README.md` count drift (the snapshot section says 110 ledger entries; the build reports 112) and re-check every numeric claim in the README against the current build output | **done** (`d7848f6` pre-rebase, `f50803c` after the rebase; final counts restated after C-4's new ledger entry and again after the post-merge additions noted in the C-5 record; the current merged build reports 114 ledger entries and 1,251 rows) | `arena/11bff629-tino3` | `README.md` (counts only) |
 | C-4 Fresh dated re-read of the load-bearing official figures no session has re-opened since 16 November: the federal basic exclusion and 2027 inflation adjustment, the Proposition 19 shelter amount and its next adjustment date, the statewide rent cap, the Form 540 1% surcharge and capital-gain wording, and the status of the pending local parcel-tax certification; correct anything stale, record every confirmation with its source | **done** — see the completion record below | `arena/11bff629-tino3` | read-only against official publishers; corrections via `scripts/build.py`, `assets/data/inputs.json` (notes only), `assets/sources.json` (append only), regenerated pages |
 | C-5 Rebuild, run every gate, open the pull request from this branch to `main`, merge without waiting, confirm the Pages deploy, record the result | **done** — PR **#157** merged; see the publication record below | `arena/11bff629-tino3` | this section only |
 
@@ -4395,6 +4395,13 @@ as the suggestions register says.
 - **Footer check-date window.** The page footer's "sources were last checked between 13 and 16 November
   2026" was stale after this session's reads; it now says 13 and 17 November 2026, shipped in this
   result PR.
+- **After PR #157 merged,** session `arena/5fb0dcb1-tino3` landed PR #158 (one register row and one
+  ledger entry, with its own README count update). This session then re-ran the whole gate suite on
+  that tree for this result PR: **1,251 table rows, 1,074 linked, 177 explicitly registered, 114 ledger
+  sources, 4,340 links (2,847 external)**, rebuild byte-identical, privacy boundary, tracked-tree guard,
+  packaging and legacy-config gates all PASS, `git diff --check` clean. The counts in the C-4 record
+  above are stated as of PR #157's merge and remain accurate for that edition; the figures here are the
+  current ones.
 
 
 **Privacy constraint for this session:** no name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term or unrounded owner amount is written to any file this session touches, including this board. Owner-supplied money appears only as a multiple of ten; official amounts appear exactly as the official document prints them. New ledger entries link only to hosts already allowlisted in `scripts/verify.py`.
