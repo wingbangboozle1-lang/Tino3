@@ -5393,5 +5393,125 @@
   ],
   "encumbrance_stated": false,
   "note": "Insurance is charged to the keeping paths only, so a higher premium widens the gap in favour of selling rather than narrowing it. Debt service is charged the same way for the same reason."
+ },
+ "borrow_cases": {
+  "inherit_year": 2045,
+  "horizon_years": 30,
+  "method": "Interest-only on a constant balance at the published average, no amortisation and no deduction assumed for the interest; proceeds invested at the modelled after-tax equity return; the house carried and sold exactly as the live-in path; principal repaid at the horizon.",
+  "rate": {
+   "baseline_pct": 7.11,
+   "low_pct": 5.98,
+   "high_pct": 7.4,
+   "as_of": "2026-11-12",
+   "src": [
+    "fred_mortgage"
+   ]
+  },
+  "identity": "Borrowing to invest adds P x ((1 + r)^H - 1) x (r - b) / r to the living path, where P is the principal, r the after-tax return on the money and b the rate charged - positive only when r exceeds b, at any loan-to-value.",
+  "break_even": {
+   "after_tax_return_pct": 7.11,
+   "gross_equity_needed_pct": 7.81,
+   "reading": "At the published rate the after-tax return on the borrowed money must exceed it; with the model's drag that means this gross equity return."
+  },
+  "rows": [
+   {
+    "ltv_pct": 25.0,
+    "principal": 1632810,
+    "rate_pct": 5.98,
+    "rate_label": "2026 low, week ending 26 February 2026",
+    "money_label": "Equities at the modelled after-tax return",
+    "money_return_pct": 6.3,
+    "terminal": 5758320,
+    "delta_vs_live": 435560,
+    "gap_vs_sell": 32827220,
+    "best": "sell_equities"
+   },
+   {
+    "ltv_pct": 25.0,
+    "principal": 1632810,
+    "rate_pct": 7.11,
+    "rate_label": "latest, week ending 12 November 2026",
+    "money_label": "Equities at the modelled after-tax return",
+    "money_return_pct": 6.3,
+    "terminal": 4220260,
+    "delta_vs_live": -1102500,
+    "gap_vs_sell": 34365280,
+    "best": "sell_equities"
+   },
+   {
+    "ltv_pct": 25.0,
+    "principal": 1632810,
+    "rate_pct": 7.4,
+    "rate_label": "2026 high, weeks ending 8 and 15 October 2026",
+    "money_label": "Equities at the modelled after-tax return",
+    "money_return_pct": 6.3,
+    "terminal": 3825540,
+    "delta_vs_live": -1497220,
+    "gap_vs_sell": 34760000,
+    "best": "sell_equities"
+   },
+   {
+    "ltv_pct": 50.0,
+    "principal": 3265620,
+    "rate_pct": 5.98,
+    "rate_label": "2026 low, week ending 26 February 2026",
+    "money_label": "Equities at the modelled after-tax return",
+    "money_return_pct": 6.3,
+    "terminal": 6193870,
+    "delta_vs_live": 871110,
+    "gap_vs_sell": 32391670,
+    "best": "sell_equities"
+   },
+   {
+    "ltv_pct": 50.0,
+    "principal": 3265620,
+    "rate_pct": 7.11,
+    "rate_label": "latest, week ending 12 November 2026",
+    "money_label": "Equities at the modelled after-tax return",
+    "money_return_pct": 6.3,
+    "terminal": 3117760,
+    "delta_vs_live": -2205000,
+    "gap_vs_sell": 35467780,
+    "best": "sell_equities"
+   },
+   {
+    "ltv_pct": 50.0,
+    "principal": 3265620,
+    "rate_pct": 7.4,
+    "rate_label": "2026 high, weeks ending 8 and 15 October 2026",
+    "money_label": "Equities at the modelled after-tax return",
+    "money_return_pct": 6.3,
+    "terminal": 2328310,
+    "delta_vs_live": -2994450,
+    "gap_vs_sell": 36257230,
+    "best": "sell_equities"
+   }
+  ],
+  "park_row": {
+   "ltv_pct": 50.0,
+   "principal": 3265620,
+   "rate_pct": 7.11,
+   "rate_label": "latest, week ending 12 November 2026",
+   "money_label": "Short Treasuries at the parking yield",
+   "money_return_pct": 4.2,
+   "terminal": -188560,
+   "delta_vs_live": -5511320,
+   "gap_vs_sell": 38774100,
+   "best": "sell_equities"
+  },
+  "crash_row": {
+   "ltv_pct": 50.0,
+   "principal": 3265620,
+   "rate_pct": 7.11,
+   "rate_label": "latest, week ending 12 November 2026",
+   "money_label": "Equities with the stated crash at entry",
+   "money_return_pct": 6.3,
+   "terminal": -3275650,
+   "delta_vs_live": -8598410,
+   "gap_vs_sell": 41861190,
+   "best": "sell_equities"
+  },
+  "crash_vs_no_crash": -6393410,
+  "note": "No rung here puts borrowing ahead of selling, because the sale path never pays interest on anything. The loan-to-value rungs are stated scenarios; no balance or quote exists for either property."
  }
 }
