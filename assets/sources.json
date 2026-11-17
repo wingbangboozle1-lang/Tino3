@@ -379,10 +379,10 @@
     "18.63 percent in the week of 9 October 1981",
     "7.79 percent in the week of 26 October 2023"
    ],
-   "checked": "CSV opened on the publisher's site on 11 November 2026 (two dated windows read)",
+   "checked": "CSV of every 2026 weekly observation opened on the publisher's site on 2026-11-17; earlier reads on 11 November 2026.",
    "id": "fred_mortgage",
-   "supports": "18.63 percent in the week of 9 October 1981 | 7.79 percent in the week of 26 October 2023",
-   "limits": ""
+   "supports": "7.11 percent in the week of 12 November 2026; 2026 weekly averages range from 5.98 percent (week of 26 February 2026) to 7.40 percent (weeks of 8 and 15 October 2026); 18.63 percent in the week of 9 October 1981; 7.79 percent in the week of 26 October 2023.",
+   "limits": "A national average of a survey of lenders, not a rate anyone is offered, and not a home equity line rate: a line of credit prices off a different index. No rate for the 2040s is published, so the site uses the 2026 extremes as a band and says so."
   },
   {
    "publisher": "Federal Reserve Bank of St. Louis (data: Nasdaq)",
@@ -1259,6 +1259,42 @@
    "checked": "opened on the publisher's site on 2026-11-16 (2023 edition of the United States Code)",
    "supports": "The compounding convention used in every deferral figure on the liquidity page: interest on unpaid tax compounds daily, not annually.",
    "limits": "The engine on this site compounds on a 365-day year. The IRS determines rates quarterly and may apply them per quarter; small differences are possible against an assessment."
+  },
+  {
+   "id": "irs_p936",
+   "publisher": "Internal Revenue Service",
+   "title": "Publication 936 (2025), Home Mortgage Interest Deduction",
+   "url": "https://www.irs.gov/publications/p936",
+   "checked": "Opened on the publisher's official domain on 2026-11-17 (Part I read in full).",
+   "supports": "\"Interest on home equity loans and lines of credit are deductible only if the borrowed funds are used to buy, build, or substantially improve the taxpayer's home that secures the loan.\" Debt taken out after 15 December 2017 to buy, build or substantially improve the home is home acquisition debt only if it totals $750,000 or less throughout the year ($375,000 or less if married filing separately); pre-16 December 2017 acquisition debt carries the $1 million limit. The deduction requires itemising on Schedule A.",
+   "limits": "A publication, not the Code, and it states the rule for 2025; the $750,000 limit and the home equity rule are the ones in force on the read date. Whether the same limits apply to a loan taken out in the 2040s is not published and is not assumed here. The publication also notes a binding-contract exception for pre-2018 purchase contracts, which has no bearing on a future refinance."
+  },
+  {
+   "id": "rtc62",
+   "publisher": "California Legislative Information",
+   "title": "Revenue and Taxation Code section 62 - transfers that are not a change in ownership",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=62.",
+   "checked": "Read at the state's legislative publisher on 2026-11-17.",
+   "supports": "\"Change in ownership shall not include: ... (c)(1) The creation, assignment, termination, or reconveyance of a security interest; or (2) the substitution of a trustee under a security instrument.\" Section 62(d) separately excludes a transfer by the trustor, or the trustor's spouse or registered domestic partner, into a trust for so long as the transferor is the present beneficiary of the trust or the trust is revocable.",
+   "limits": "Statewide statute. It says a security interest is not itself a change in ownership; it does not say what happens if the loan is defaulted and the property is transferred to the lender, and it does not speak to any lender's own consent requirements."
+  },
+  {
+   "id": "bls_cex_ownmaint",
+   "publisher": "U.S. Bureau of Labor Statistics (Consumer Expenditure Surveys, published through FRED)",
+   "title": "Expenditures: Maintenance, Repairs, Insurance, Other Expenses for Owned Dwelling by Housing Tenure: Home Owner, annual",
+   "url": "https://fred.stlouisfed.org/series/CXUOWNEXPENLB1702M",
+   "checked": "Series CSV opened on the publisher's official domain on 2026-11-17; values 2015-2024 read from it.",
+   "supports": "Average annual outlay of home-owner consumer units, U.S. dollars, not seasonally adjusted: 2015 2290; 2016 2289; 2017 2560; 2018 2663; 2019 2913; 2020 3267; 2021 3587; 2022 3911; 2023 3974; 2024 4481. Compound growth over the nine years between the first and last observation: 7.74% a year, against 3.16% a year for the consumer price index over the same window (annual averages, 237.002 in 2015 to 313.698 in 2024).",
+   "limits": "A national average for all homeowner households, of every house size and value, and the line bundles insurance and other expenses with maintenance and repair - so it is an upper bound on upkeep, never a maintenance figure alone. It is a survey mean, not a cost standard, and it is history: it does not forecast the 2040s."
+  },
+  {
+   "id": "bls_cesan2025",
+   "publisher": "U.S. Bureau of Labor Statistics",
+   "title": "Consumer Expenditures - 2025 (news release USDL-26-1619, 29 October 2026)",
+   "url": "https://www.bls.gov/news.release/cesan.nr0.htm",
+   "checked": "Read at the publisher's official domain on 2026-11-17, including the archived release for the release date.",
+   "supports": "Average annual expenditures of all consumer units in 2025 were $81,905, up 4.3% on 2024; housing $27,790 (33.9% of the total), up 5.8%; within housing, household operations $2,034, up 5.9%. The release notes that the 2025 lapse in federal appropriations stopped collection in October and November 2025 and that a weight adjustment was used for the missing months.",
+   "limits": "All consumer units, not owners only, and the release table does not split maintaining and repairing on its own; the detailed tables behind it are published as spreadsheets. The shutdown adjustment is disclosed by the publisher and applies to the 2025 estimates."
   }
  ]
 }
