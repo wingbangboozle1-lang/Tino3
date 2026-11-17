@@ -499,6 +499,27 @@
     "cdi_df_rental"
    ],
    "note": "Statewide average written premium for the dwelling policy form the Department describes as 'rental dwelling or landlord policy form - up to 4 units', experience year 2017, the newest year in that series. Property B is a three-unit building, which is on this form family. Quoted verbatim; not a premium for any one building."
+  },
+  "federal_top_ordinary_rate_2027": {
+   "value": 0.37,
+   "src": [
+    "irs_2027"
+   ],
+   "note": "The top marginal rate for tax year 2027, published verbatim in IR-2026-133: \"the top tax rate remains 37% for individual single taxpayers with incomes greater than REDACTED-FIGURE ($793,650 for married couples filing jointly)\"."
+  },
+  "irs_top_bracket_start_2027_single": {
+   "value": 661375,
+   "src": [
+    "irs_2027"
+   ],
+   "note": "The income at which the 37% bracket begins for a single filer in tax year 2027, published verbatim in IR-2026-133. Not owner money; registered so the privacy gate recognises it as a verbatim official figure."
+  },
+  "ca_top_ordinary_rate": {
+   "value": 0.133,
+   "src": [
+    "ftb_rates"
+   ],
+   "note": "California's top marginal rate on ordinary income. Registered here because the combined gain rate the model uses is built from it, and because the letting path's sensitivity grid needs it stated on its own."
   }
  },
  "assumptions": {

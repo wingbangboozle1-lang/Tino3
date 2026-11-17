@@ -22,6 +22,7 @@ ECON = json.loads((DATA / "economy.json").read_text(encoding="utf-8"))
 SERIES = json.loads((DATA / "series.json").read_text(encoding="utf-8"))
 MIXED = json.loads((DATA / "mixed.json").read_text(encoding="utf-8"))
 LIQ = json.loads((DATA / "liquidity.json").read_text(encoding="utf-8"))
+RENTAL = json.loads((DATA / "rental_tax.json").read_text(encoding="utf-8"))
 PRECOMMIT = INPUTS.get("precommit", {"rules": [], "household_goals": [], "review_gates": [], "meta": {}})
 
 A = INPUTS["property_a"]
@@ -858,6 +859,33 @@ model rebuilt.</p>
 <p>Until then, read every statement that letting is the weakest path as <em>the weakest path at zero rent</em>.</p>
 """)
 
+    # The break-even rent above is computed on the untaxed convention. The taxes page
+    # prices the letting path under the rules and publishes the corrected band; this
+    # callout points at it so the decision page never quotes the untaxed figure as the
+    # rent a landlord would actually need.
+    rent_tax_callout = callout("flag", "That break-even rent is the untaxed figure. Taxed, the "
+                                       "letting path needs more.", f"""
+<p>The rent above is what the letting path needs if the rent is never taxed. It is not. Rent is ordinary
+income, the building is written off over {RENTAL['depreciation']['years']} years and that depreciation is
+taxed back when the property is sold, and a rental loss is suspended rather than deducted. Priced under
+those rules the letting path needs between <strong>{m(RENTAL['spread']['breakeven_low'])}</strong> and
+<strong>{m(RENTAL['spread']['breakeven_high'])}</strong> a year of rent to break even
+&mdash; up to <strong>{m(RENTAL['spread']['uplift_vs_untaxed'])}</strong>
+a year more than the figure above.</p>
+<p>The spread is wide because the household's marginal rate was never supplied and this site will not
+invent one: the three figures are the same engine run at {pcf(0.371, 1)}, {pcf(0.503, 1)} and
+{pcf(0.551, 1)} combined ordinary rates. What the correction does <em>not</em> do is change the answer.
+Under every one of the {len(RENTAL['cases'])} treatments tested, selling at the inheritance and investing
+still wins, and the letting path is still the weakest of the keeping paths at any rent the market is
+likely to clear.</p>
+<p>Two things in it are worth knowing before anyone signs a tenancy. First, at a rent of
+{m(RENTAL['year_one']['tax_loss_threshold_annual'])} a year or less the let makes a tax loss every year,
+and California will suspend that loss whatever the heir does, because California has no real estate
+professional exception. Second, if the property is kept until death rather than sold, the suspended
+losses are allowed only to the extent they exceed the step-up in the transferee's basis &mdash; which on
+a full step-up means <strong>{m(next(c for c in RENTAL['cases'] if c['key'] == 'never_released_mid')['suspended_at_exit_zero_rent'])}
+of them simply disappear</strong>. See <a href="taxes.html#letting-tax">the letting path, taxed</a>.</p>""")
+
     sens_table = table(
         "Sensitivity: which path wins at each combination of house growth and equity return",
         ["House growth", "Equity return", "Sell, equities", "Sell, Treasuries",
@@ -914,6 +942,7 @@ or finding a tenant at an implausible rent.</p>""")
         + sens_kpis
         + paths_table
         + rent_callout
+        + rent_tax_callout
         + be_table
         + sens_table
         + mixed_section()
@@ -2311,6 +2340,319 @@ as zero with the reason, because deleting it silently would hide the verificatio
             + tbl)
 
 
+RENTAL_RATE_LABEL = {
+    0.371: "37.1% combined (the rate this site uses for gains)",
+    0.503: "50.3% combined (37% federal top ordinary + 13.3% California top)",
+    0.551: "55.1% combined (the two above + the 1% surcharge + 3.8% NIIT)",
+}
+
+
+def letting_rules_table() -> str:
+    """The rules that decide what a letting year owes, one row each."""
+    rows = [
+        ("Rent is ordinary income, not a capital gain",
+         "Rent is taxed at the same rates as wages, net of the costs of running the "
+         "property and net of depreciation. It does not get the lower rates that apply "
+         "to a gain on a sale.", ["irs_p527"]),
+        (f"The building is written off over {RENTAL['depreciation']['years']} years, "
+         "on the straight-line method",
+         f"Residential rental property has a {RENTAL['depreciation']['years']}-year "
+         "recovery period, is recovered on the straight-line method and uses the "
+         "mid-month convention. Land is not depreciable, so only the building share of "
+         f"the value is recovered: on this model that is "
+         f"{m(RENTAL['depreciation']['annual'])} a year for the first "
+         f"{RENTAL['depreciation']['exhausted_in_year'] - 1} years of the let.",
+         ["uscode168"]),
+        ("A rental is a passive activity even if the heir manages it",
+         "Rental activities are passive activities even when the owner materially "
+         "participates in them. A passive loss can only be used against passive income, "
+         "or under the special allowance below; everything else is carried forward.",
+         ["irs_p925"]),
+        ("Up to $25,000 of loss can be used against other income, if income is low enough",
+         "A person who actively participates - owns at least 10% of the activity by "
+         "value and makes the genuine management decisions - can deduct up to $25,000 of "
+         "rental real estate loss against nonpassive income. The allowance is reduced by "
+         "50 cents for every dollar of modified adjusted gross income over $100,000 and "
+         "is gone at $150,000. Those figures have never been indexed for inflation.",
+         ["irs_p925"]),
+        ("California treats every rental as passive, with no exception",
+         "California did not conform to the federal real estate professional rule: for "
+         "California purposes all rental activities are passive activities. A loss that "
+         "is deductible federally may still be suspended on the California return, which "
+         "is what form FTB 3801 reconciles. California does allow the same $25,000 "
+         "special allowance, on the same income test. A trust does not qualify for it at "
+         "all; an estate may use it for two years after the death of someone who had "
+         "actively participated.", ["ftb_3801"]),
+        ("A suspended loss is freed on a complete sale, and only then",
+         "Losses that have never been allowed are allowed in full in the year the owner "
+         "disposes of the entire interest, in a transaction in which all gain or loss is "
+         "recognised, to someone who is not related. Keeping the property until death "
+         "does not do it: the losses are then allowed only to the extent they exceed the "
+         "step-up in the transferee's basis, and a step-up to full market value leaves "
+         "nothing.", ["irs_p925"]),
+        ("A further 3.8% applies above the threshold, and the thresholds never move",
+         "The net investment income tax is 3.8% of the lesser of net investment income "
+         "and the excess of modified adjusted gross income over the threshold: $200,000 "
+         "single, $250,000 joint, $125,000 married filing separately. Rental income is "
+         "net investment income. The IRS states that these threshold amounts are not "
+         "indexed for inflation, so they are the same in 2045 as they are now unless "
+         "Congress changes them.", ["irs_niit_qa", "irs_niit", "irs_tc559"]),
+        ("20% of a net positive year may be deducted, if the records are kept",
+         "Section 199A can deduct up to 20% of qualified business income. A rental "
+         "qualifies through the safe harbour in Revenue Procedure 2019-38 only if, every "
+         "year, separate books and records are kept, 250 or more hours of rental services "
+         "are performed, contemporaneous records of the hours, the work, the dates and "
+         "who did it are maintained, and a statement is attached to a timely filed return. "
+         "The safe harbour is unavailable where the owner uses the property as a "
+         "residence, on a triple net lease, or for a rent to a commonly controlled "
+         "business. Failing it does not end the enquiry; meeting it does not make the "
+         "activity non-passive. California has no equivalent deduction.",
+         ["irs_qbi", "irs_rp1938"]),
+    ]
+    return table("The rules that decide what a letting year owes",
+                 ["Rule", "What it says, in the terms the publisher uses", "Source"],
+                 [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td>"
+                  + src_cell(c, "Official source") for a, b, c in rows])
+
+
+def letting_year_table() -> str:
+    """The three deductions a letting year carries, in the first year of the let."""
+    y = RENTAL["year_one"]
+    return table(
+        "The three deductions a letting year carries, first year of the let",
+        ["Line", "Amount", "What it is"],
+        [
+            f"<td>Running costs</td><td>{m(y['running_costs'])}</td>"
+            "<td>Insurance, water, electricity net of the solar credit, and repairs.</td>"
+            + method_cell("#method", "Model output", ["irs_p527"]),
+            f"<td>Property tax</td><td>{m(y['property_tax'])}</td>"
+            "<td>Reassessed to the date-of-death value, because a let receives no "
+            "intergenerational exclusion.</td>"
+            + method_cell("#method", "Model output", ["rtc63_2", "boe_pub29"]),
+            f"<td>Depreciation</td><td>{m(y['depreciation'])}</td>"
+            f"<td>{pcf(RENTAL['depreciation']['building_ratio'], 0)} of the value (the "
+            f"building share) over {RENTAL['depreciation']['years']} years. Land is not "
+            "depreciable, so the rest never comes off.</td>"
+            + method_cell("#method", "Model output", ["uscode168"]),
+            f"<td><strong>Cash cost of the year</strong></td>"
+            f"<td><strong>{m(y['cash_cost_annual'])}</strong></td>"
+            f"<td>About {m(y['cash_cost_monthly'])} a month. Below this the let loses "
+            "cash before any tax.</td>"
+            + method_cell("#method", "Model output", ["irs_p527"]),
+            f"<td><strong>Rent at which the let stops being a tax loss</strong></td>"
+            f"<td><strong>{m(y['tax_loss_threshold_annual'])}</strong></td>"
+            f"<td>About {m(y['tax_loss_threshold_monthly'])} a month. This is the line "
+            "that decides which rules govern: below it every year is a loss and section "
+            "469 decides what happens to that loss; above it the rent is simply taxed.</td>"
+            + method_cell("#method", "Model output", ["uscode168", "irs_p925"]),
+        ],
+        note="First year of the let on the 2045 model. Running costs and rent grow with "
+             "the modelled inflation rate, the assessed value with the 2% cap, and "
+             "depreciation is a fixed nominal amount, so the taxable result turns "
+             "steadily upwards even if the rent only keeps pace with inflation.")
+
+
+def letting_cases_table() -> str:
+    """The letting path's break-even rent, under each treatment of the loss."""
+    rows = []
+    for c in RENTAL["cases"]:
+        tag = ("the convention the rest of this site uses" if c["key"] == "untaxed"
+               else "taxed")
+        rows.append(
+            f"<td><strong>{esc(c['label'])}</strong>"
+            f"<br><span class=\"muted\">{esc(RENTAL_RATE_LABEL[c['rate']])}</span></td>"
+            f"<td>{m(c['breakeven_rent_annual'])}</td>"
+            f"<td>{m(c['breakeven_rent_monthly'])}</td>"
+            f"<td>{m(c['terminal_at_zero_rent'])}</td>"
+            f"<td>{m(c['suspended_at_exit_zero_rent'])}</td>"
+            f"<td>{esc(tag)}<br><span class=\"muted\">{esc(c['note'])}</span></td>"
+            + method_cell("#method", "Model output",
+                          ["irs_p925", "uscode168", "ftb_3801", "irs_p527"]))
+    return table(
+        "What the letting path needs to break even, under each treatment",
+        ["Treatment of the year's result", "Rent needed, a year", "Rent needed, a month",
+         "Path value at today's empty rent input", "Loss suspended at the end",
+         "Note"],
+        rows,
+        note=f"The target is {m(RENTAL['target'])}, the value of selling at the 2045 "
+             "inheritance and investing, which is the best path in every case shown. "
+             "The rent input is empty, exactly as it is everywhere else on this site, so "
+             "the fourth column is the letting path with cost and no income - its "
+             "conservative case - and the first two columns solve for the rent that "
+             "would close the gap. Every rate is a stated scenario: the household's "
+             "marginal rate was never supplied.")
+
+
+def letting_headline_table() -> str:
+    """Year by year, at the one rent that makes the taxed letting path break even."""
+    case = next(c for c in RENTAL["cases"] if c["key"] == RENTAL["headline_case"])
+    rows = []
+    for r in RENTAL["headline_rows"]:
+        rows.append(
+            f"<td>{r['year']}</td><td>{m(r['rent'])}</td><td>{m(r['opex'])}</td>"
+            f"<td>{m(r['property_tax'])}</td><td>{m(r['depreciation'])}</td>"
+            f"<td>{m(r['taxable'])}</td><td>{m(r['tax'])}</td>"
+            f"<td>{m(r['after_tax_cash'])}</td>"
+            + method_cell("#method", "Model output", ["uscode168", "irs_p527"]))
+    return table(
+        f"Year by year at {m(case['breakeven_rent_annual'])} a year of rent "
+        "(the headline taxed case)",
+        ["Year", "Rent", "Running costs", "Property tax", "Depreciation",
+         "Taxable", "Tax", "After-tax cash"],
+        rows,
+        note="The headline case is the one this site treats as most likely: the loss, "
+             "where there is one, is suspended and allowed only on a complete sale, "
+             "priced at the top combined ordinary rate. The first ten years are shown, "
+             "then every fifth year, then the last. Note the shape: depreciation is a "
+             "fixed nominal amount, so it shelters less of the rent each year, and when "
+             "the building is fully recovered in year "
+             f"{RENTAL['depreciation']['exhausted_in_year']} the taxable result jumps.")
+
+
+def letting_tax_section() -> str:
+    sp = RENTAL["spread"]
+    untaxed = next(c for c in RENTAL["cases"] if c["key"] == "untaxed")
+    worst = next(c for c in RENTAL["cases"] if c["key"] == "suspended_high")
+    never = next(c for c in RENTAL["cases"] if c["key"] == "never_released_mid")
+    y = RENTAL["year_one"]
+    return (
+        '<h2 id="letting-tax">The letting path, taxed the way the rules actually say</h2>'
+        + callout("flag", "What this site had been getting wrong about the letting path", f"""
+<p>Every other path on this site is priced after tax. The letting path was not. It credited the rent and
+deducted the property tax and the running costs, and then charged <em>no income tax at all</em> on what
+was left. At the same time it reduced the sale basis by thirty years of depreciation and charged
+recapture on that depreciation when the property was sold &mdash; a deduction it had never allowed in
+the first place. So the published letting path was generous in one direction, harsh in the other, and
+stated neither.</p>
+<p>The rent input is still empty, so no published baseline figure was wrong: with no rent the path
+carries cost and no income, which is the conservative case. But the break-even rent the site published
+was computed on that untaxed basis, and the whole of the income tax on the rent was missing from it.
+This section prices the path the way the rules say and shows the difference.</p>""")
+        + letting_rules_table()
+        + letting_year_table()
+        + letting_cases_table()
+        + callout("key", "What it changes", f"""
+<p><strong>The published break-even rent was too low.</strong> Untaxed, the letting path needs
+{m(untaxed['breakeven_rent_annual'])} a year of rent to match selling at the inheritance and investing.
+Priced under the rules, it needs between {m(sp['breakeven_low'])} and {m(sp['breakeven_high'])} a year
+&mdash; up to {m(sp['uplift_vs_untaxed'])} more, because the rent is taxed at ordinary rates rather
+than at the lower rates that apply to a gain. The lowest taxed figure is the most favourable case a
+letting landlord can hope for: every year's loss used immediately, at the lowest rate in the grid.</p>
+<p><strong>The best path does not move.</strong> In all {len(RENTAL['cases'])} cases, selling at the
+inheritance and investing is still worth more than letting the house out by
+{m(min(c['gap_to_best_at_zero_rent'] for c in RENTAL['cases']))} or more at today's empty rent input,
+and by construction the two are equal at each case's own break-even rent. The tax rules change how far
+behind the letting path is, not that it is behind.</p>
+<p><strong>The passive loss rules bite below the break-even, not above it.</strong> At a rent of
+{m(y['tax_loss_threshold_annual'])} a year or less the let throws off a tax loss every year, and that
+loss is suspended for California whatever the heir does, because California has no real estate
+professional exception. Above that rent the let is net positive and simply taxed. The letting path only
+reaches break-even at rents well above that line, so for anyone actually choosing between paths the
+loss rules are a cushion on the way down rather than a reason to let.</p>
+<p><strong>The one way the tax tail can be worse than the model shows.</strong> If the heir keeps the
+property until death instead of selling it, the suspended losses are allowed only to the extent they
+exceed the step-up in the transferee's basis &mdash; and a step-up to full market value leaves
+nothing. In that case the letting path is worth {m(never['terminal_at_zero_rent'])} at today's empty
+rent input, exactly what the untaxed model says, with {m(never['suspended_at_exit_zero_rent'])} of
+suspended losses simply lost.</p>""")
+        + letting_headline_table()
+        + callout("flag", "What is assumed here, and what is not known", f"""
+<ul>
+<li><strong>The household's marginal rate is not supplied.</strong> It is not assumed. Every case is run
+at three stated combined ordinary rates and the grid is the answer, not any one row of it.</li>
+<li><strong>Losses freed on a sale are assumed to be absorbed in that year.</strong> Where the released
+amount exceeds the year's income it becomes a net operating loss carryforward rather than a refund; this
+model treats it as absorbed, which is the favourable reading, and the reading is stated.</li>
+<li><strong>The rent input is empty.</strong> No market rent is invented anywhere on this page. The
+break-even figures are solved for; the path values are stated at the empty input.</li>
+<li><strong>Whether the heir would meet the 250-hour safe harbour, actively participate, or have
+modified adjusted gross income inside the $100,000 to $150,000 range is not known.</strong> All three
+are tested as separate cases rather than assumed either way.</li>
+<li><strong>The state and federal rules are simply added.</strong> No federal deduction is taken for the
+state tax, and no California adjustment is modelled for a deduction the state does not allow. Both
+choices are deliberately conservative.</li>
+</ul>"""))
+
+
+def basis_at_death_section() -> str:
+    """The assumption every sale figure on the site rests on, stated at last."""
+    rows = [
+        ("Fair market value at the date of death",
+         "The basis of property acquired from a decedent is its fair market value at the "
+         "date of death. This is the rule every sale figure on this site uses.",
+         ["uscode1014", "irs_basis"]),
+        ("The alternate valuation date, six months later",
+         "If the executor elects it, the value is set six months after the death, or on "
+         "the date of distribution or sale for property disposed of within those six "
+         "months. The election is available only if it decreases both the value of the "
+         "gross estate and the sum of the estate tax and the generation-skipping tax; it "
+         "is made on the return, it is irrevocable, and it cannot be made if the return "
+         "is filed more than one year after the due date including extensions. The same "
+         "value then becomes the income tax basis.", ["uscode2032", "uscode1014"]),
+        ("Community property: the whole property can step up",
+         "Where at least one half of the whole community interest was includible in the "
+         "decedent's gross estate, the surviving spouse's one-half share of that community "
+         "property is also treated as acquired from the decedent. That is the "
+         "double step-up, and it is worth confirming whether it applies here.",
+         ["uscode1014"]),
+        ("Property that must be included in the gross estate",
+         "Property acquired from the decedent by reason of death, form of ownership or "
+         "other conditions is covered where it is required to be included in the gross "
+         "estate. Where it was acquired before death, the basis is reduced by the "
+         "depreciation allowed before the death.",
+         ["uscode1014"]),
+        ("Basis cannot exceed the value reported for estate tax",
+         "Basis is capped at the value finally determined for the estate tax, or at the "
+         "value on the statement furnished under section 6035. The two cannot be played "
+         "against each other: a high date-of-death appraisal that is not reported is not "
+         "available later as basis.", ["uscode1014"]),
+    ]
+    return (
+        '<h2 id="basis-at-death">What actually steps up: the assumption behind every '
+        'sale figure</h2>'
+        + callout("flag", "The model assumes the whole property gets a new basis at death. "
+                          "Three common facts would break that.", """
+<p>Every sale figure on this site &mdash; the near-zero tax on selling at the inheritance, the tax on
+holding for thirty years, the recapture on letting &mdash; assumes that the whole of Property A receives
+a basis equal to its value at the date of death. That is the ordinary rule, and it is probably right
+here. But it is an assumption about facts this site has never seen, and three patterns give only a
+partial step-up:</p>
+<ul>
+<li><strong>A co-owner who is not covered.</strong> If someone else owns a share of the house today
+&mdash; a joint tenant, a sibling, a surviving spouse whose share does not pass to the heir &mdash; only
+the share that passes from the decedent takes the new basis. The rest keeps its old, much lower basis,
+and a later sale carries gain on that part.</li>
+<li><strong>A life estate or a trust that does not give the heir the whole interest.</strong> A
+remainder that vests later, or an interest that is split, can leave part of the property outside the
+step-up entirely.</li>
+<li><strong>Community property where only part is in the gross estate.</strong> The double step-up is
+not automatic: it applies where at least one half of the whole community interest was includible in
+the decedent's gross estate. That is a fact about the estate, not about the deed.</li>
+</ul>
+<p>None of these changes the property tax analysis, which depends on the change in ownership, not on
+the basis. All of them change the income tax on a later sale. The trust document and the deed decide
+which one applies.</p>""")
+        + table("The basis rules, in the terms the statute uses",
+                ["Rule", "What it says", "Source"],
+                [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td>"
+                 + src_cell(c, "Official source") for a, b, c in rows],
+                note="The step-up is a federal income tax rule. It is separate from the "
+                     "property tax reassessment, which is a California rule about a change "
+                     "in ownership, and separate from the federal estate tax, which is a "
+                     "tax on the transfer. Keeping the three apart is most of the work on "
+                     "this page.")
+        + callout("note", "The alternate valuation date is a one-way door, and it is the "
+                          "executor's to walk", """
+<p>If values fall in the six months after the death, the executor can elect to value the estate then
+instead, but only if doing so reduces both the gross estate and the estate tax, and the election is
+irrevocable once made. It also sets the income tax basis, so it helps a later sale only if the estate
+itself was taxable. Where the estate is inside the exclusion &mdash; which is the case this site models
+for the house alone, though the owner has said the estate as a whole may not be &mdash; there is no
+estate tax to reduce, so the election is usually not available and not wanted. Take advice before the
+return is filed: the window closes when it is filed, and it cannot be reopened more than a year after
+the due date.</p>"""))
+
+
 def page_taxes() -> str:
     p45 = next(p for p in MODEL["paths"] if p["inherit_year"] == 2045)
     now_sale = p45["paths"]["sell_equities"]["sale"]
@@ -2373,6 +2715,8 @@ Let it out as well and depreciation recapture pushes it to <strong>{m(rent_sale[
 rules work, and it only exists at the moment of transfer.</p>""")
         + tbl
         + worked
+        + basis_at_death_section()
+        + letting_tax_section()
         + sale_charges_section()
         + '<h2>Transfer tax if Property B is sold</h2>'
         + table("City transfer tax on a sale of Property B",
@@ -3725,6 +4069,24 @@ QUESTIONS = [
        "Take tax advice at the time.",
        "An exchange defers tax but does not change the property tax reassessment.",
        []),
+      ("What exactly does the heir receive - the whole house, or a share of it?",
+       "The owner describes the house as being inherited through a trust around 2040 to 2050. Nothing in the material this site was built from says who owns a share of the house today, or what share the heir is to receive.",
+       "Every owner of record today and each one's share; whether any of them is a spouse of the transferor; whether the property is community property; and what the trust actually distributes to the heir.",
+       "Read the recorded deed and the trust instrument. The deed names the owners and the form of ownership; the trust names what the heir takes.",
+       "Only the interest that passes from the decedent takes a new basis at death. Every sale figure on this site assumes the whole house steps up. If the heir receives a half interest, or if a co-owner's share does not pass, part of the property keeps its old basis and a later sale carries taxable gain on that part. Where the property is community property and at least half of the whole community interest is in the decedent's gross estate, the statute steps up the whole of it - but that is a fact about the estate, not about the deed.",
+       ["uscode1014", "irs_basis"]),
+      ("Where the house is let, can the loss be used at all?",
+       "Not supplied. The letting path's rent input is empty, and nothing is known about the heir's other income, their participation, or whether they would keep the records the section 199A safe harbour requires.",
+       "Whether the heir has passive income to absorb a rental loss, whether they would qualify as a real estate professional for federal tax, their modified adjusted gross income against the $100,000 to $150,000 range, and whether 250 hours a year of rental services would be performed and recorded.",
+       "Ask the CPA to answer it in writing before a tenancy begins, and keep the hours records from the first day if the safe harbour is wanted.",
+       "It is the difference between a loss that shelters tax as it arises and a loss that waits thirty years and then depends on a sale. California treats every rental as passive and has no real estate professional exception, so for California the loss waits whatever the answer is on the federal side. Kept until death, the suspended losses are allowed only to the extent they exceed the step-up in the transferee's basis - which on a full step-up means they are lost.",
+       ["irs_p925", "ftb_3801", "irs_rp1938"]),
+      ("What combined marginal rate should the letting path be priced at?",
+       "Not supplied. The site runs the letting path at three stated combined ordinary rates and publishes all three rather than picking one.",
+       "The heir's filing status, and the income that would sit on top of the rental result in the years the property is let.",
+       "Estimate with the CPA at the time, then set the rate once and rebuild the model.",
+       "It is the single largest unknown in the letting comparison. The spread between the lowest and highest stated rung moves the rent the letting path needs to break even by tens of thousands of dollars a year, and it does not move which path wins.",
+       ["irs_2027", "ftb_rates", "irs_niit_qa", "rtc17043"]),
      ]),
     ("G", "Preferences",
      [
@@ -3878,6 +4240,25 @@ SUGGESTIONS = [
      "ranking, which is exactly why the assumption needed to be visible rather than silent.",
      "Low", "Medium: it is the only modelled input the household can answer from a single letter", "decision", ["uscode1701j3"])
     ,
+    ("S-29", "Get the CPA's written answer on the letting loss before a tenancy begins",
+     "The letting path was the one path on this site whose income was not taxed at all, and "
+     "it also charged recapture on depreciation it had never allowed. The tax rules are now "
+     "priced, in a band, on the taxes page. What the band cannot tell you is which row of it "
+     "is yours: whether a rental loss would be usable as it arises, suspended until a sale, "
+     "or suspended and then lost. California treats every rental as passive and has no real "
+     "estate professional exception, so the state half of the answer is already fixed. Ask "
+     "for the rest in writing before signing a tenancy, not after.",
+     "Low", "Medium if the house is let for years first", "taxes",
+     ["irs_p925", "ftb_3801"]),
+    ("S-30", "Read the deed and the trust together, and confirm what share of the house the "
+     "heir receives",
+     "Every sale figure on this site assumes the whole of the property takes a new basis at "
+     "the date of death. That is the ordinary rule, but it is an assumption about facts this "
+     "site has never seen. A co-owner whose share does not pass, a life estate, or community "
+     "property where only part is in the gross estate each leaves some of the property "
+     "carrying its old basis and a later sale carrying gain on that part. The deed names the "
+     "owners; the trust names what the heir takes; the two have to be read together.",
+     "Low", "High if there is a co-owner", "property-a", ["uscode1014", "irs_basis"]),
     ("S-22", "Decide whether the public repository and its history should stay public",
      "The repository is public and earlier commits contain unrounded owner figures. Rounding the published page does not change what Git history holds. Making the repository private, or rewriting history, are the only two ways to close that exposure.",
      "Medium", "High for privacy, none for the analysis", "review", []),
@@ -4805,6 +5186,23 @@ def page_review() -> str:
          "anything this repository has read. The difference between the two readings is published "
          "rather than assumed away.",
          "Get a written answer from the county assessor, and have counsel confirm the reading."),
+        ("The letting path's tax treatment", "Priced as a band, not as a number",
+         "The letting path was the one path this site never taxed. It is now priced under five "
+         "statutory treatments at three stated combined ordinary rates, and the whole band is "
+         "published. What the band cannot say is which row is this household's: whether a "
+         "rental loss would be usable as it arises, suspended until a sale, or suspended and "
+         "then lost. Where released losses exceed the disposition year's income they become a "
+         "net operating loss carryforward rather than a refund, and this model treats them as "
+         "absorbed - the favourable reading, stated as a reading.",
+         "Get the CPA's written answer before a tenancy begins, then set the rate once and "
+         "rebuild."),
+        ("Whether the whole of Property A takes a new basis at death", "Assumed yes",
+         "Every sale figure on this site assumes the entire property gets a basis equal to its "
+         "value at the date of death. Nothing in the material this site was built from "
+         "confirms who owns a share of the house today or what share the heir is to receive. "
+         "A co-owner whose interest does not pass, a life estate, or community property where "
+         "only part is in the gross estate each leaves part of the property on its old basis.",
+         "Read the recorded deed and the trust instrument together, and confirm the share."),
     ]
     # Each row points only at the official source that actually bears on it. A row with no
     # matching official source says so, and links to the register, rather than borrowing a
@@ -4832,6 +5230,11 @@ def page_review() -> str:
         "The Proposition 19 clawback on the live-then-let path": ["rtc63_2_eligibility", "boe_lta26026"],
         "Combined recapture rate, corrected from 41.1% to 42.1%": ["irs_tc409", "irs_tc559", "ftb_cg", "ftb_rates", "ftb_rates_2026"],
         "Mixed paths and the distributions behind the headline": ["fred_casthpi", "fred_cpi"],
+        "The letting path's tax treatment": ["irs_p925", "ftb_3801", "irs_qbi", "irs_rp1938",
+                                             "irs_niit_qa", "uscode168"],
+        "Whether the whole of Property A takes a new basis at death": ["uscode1014",
+                                                                       "uscode2032",
+                                                                       "irs_basis"],
     }
     assert set(UV_WHERE) == {a for a, _, _, _ in unverified}, "every unverified row needs a source decision"
     uv_rows = [f"<td><strong>{esc(a)}</strong></td><td>{b}</td>"
@@ -5062,6 +5465,42 @@ def page_glossary() -> str:
         ("Break-even", "The rent, return or house-growth rate at which one path ties another. Below it, selling and investing wins; above it, keeping the home can win.", []),
         ("Horizon", "The 30 years after the inheritance over which each path is valued.", []),
         ("Outflow", "The total property tax and carrying cost paid over the horizon on a path (rental paths also credit rent received).", []),
+        ("Passive activity", "A rental is a passive activity even when the owner manages it "
+         "themselves. A passive loss can normally only be used against passive income, or "
+         "under the $25,000 special allowance, and anything left over is carried forward. "
+         "California goes further: it did not adopt the federal real estate professional "
+         "exception, so for California every rental is passive.", ["irs_p925", "ftb_3801"]),
+        ("Suspended loss", "A rental loss that the passive activity rules will not allow this "
+         "year. It is carried forward and allowed in full in the year the owner disposes of "
+         "the entire interest, in a transaction where all gain or loss is recognised, to "
+         "someone who is not related. Handed on at death instead, it is allowed only to the "
+         "extent it exceeds the step-up in the transferee's basis - and a full step-up leaves "
+         "nothing.", ["irs_p925"]),
+        ("Real estate professional", "A federal status - more than half of the year's "
+         "personal services in real property businesses, and more than 750 hours in them - "
+         "that can make a rental non-passive. California does not recognise it, so a loss "
+         "allowed federally under this rule can still be suspended on the California return "
+         "and reconciled on form FTB 3801.", ["irs_p925", "ftb_3801"]),
+        ("Section 199A deduction (qualified business income)", "Up to 20% of qualified "
+         "business income, including from a rental real estate enterprise that meets the "
+         "safe harbour in Revenue Procedure 2019-38: separate books and records, 250 or more "
+         "hours of rental services in the year, and contemporaneous records of the hours, "
+         "the work, the dates and who performed it. It is a federal deduction only; "
+         "California has no equivalent.", ["irs_qbi", "irs_rp1938"]),
+        ("MACRS and the 27.5-year recovery period", "Residential rental property is written "
+         "off over 27.5 years on the straight-line method with the mid-month convention. "
+         "Land is not depreciable, so only the building share of the value is recovered, and "
+         "the depreciation is taxed back on sale as unrecaptured section 1250 gain.",
+         ["uscode168", "irs_tc409"]),
+        ("Alternate valuation date", "The executor may value the estate six months after "
+         "death instead of at the date of death, but only if doing so reduces both the gross "
+         "estate and the estate tax. The election is irrevocable and sets the income tax "
+         "basis as well.", ["uscode2032", "uscode1014"]),
+        ("Community property double step-up", "Where at least half of the whole community "
+         "interest was includible in the decedent's gross estate, the surviving spouse's "
+         "half of that community property also takes a basis equal to its value at death, "
+         "not just the decedent's half. Whether it applies here depends on the estate, not "
+         "on the deed.", ["uscode1014"]),
     ]
     rows = []
     for term, definition, srcs in terms:
@@ -5095,12 +5534,12 @@ def page_briefing() -> str:
 <ol>
 <li>Does the trust own the property, and is the transferor-to-beneficiary relationship eligible for the parent-child Proposition 19 exclusion? If not, full reassessment is assumed. {slink('rtc63_2_eligibility')} {slink('boe_prop19')}</li>
 <li>What are the trust's distribution, sale, occupancy, debt and trustee powers? Confirm the deed, trust amendments, successor-trustee process and authority to sell.</li>
-<li>What is the date-of-death basis and appraisal standard, and the land/building allocation? What is the cash estate, prior taxable gifts, marital portability and Form 706 position? {slink('irs_basis')} {slink('irs_estate')} {slink('irs_i706')}</li>
+<li>What share does the heir receive? Only what passes from the decedent steps up. What is the date-of-death basis and appraisal standard, and the land/building allocation? What is the cash estate, prior taxable gifts, marital portability and Form 706 position? {slink('uscode1014')} {slink('irs_basis')} {slink('irs_estate')} {slink('irs_i706')}</li>
 <li>Which home is the heir's principal residence after transfer, and can the occupancy and claim deadlines be met? Confirm eligibility and filing sequence with the assessor. {slink('boe_lta25009')}</li>
 </ol>
 </section>
 <section><h2>Options and material risks</h2>
-<ul><li><strong>Live in Property A:</strong> reassessment shelter only if eligible and the occupancy requirements are met; higher concentration and maintenance exposure.</li><li><strong>Rent Property A:</strong> full reassessment may apply; income, vacancy, repairs, landlord rules and depreciation and recapture need a CPA-grade model.</li><li><strong>Sell and reinvest:</strong> the basis step-up may limit immediate gain, but confirm sale costs and tax. Published transfer tax and recording fees come to {m(MIXED['fees_example']['published_total'])} on a {m(MIXED['fees_example']['price'])} sale, about {MIXED['fees_example']['published_share_of_modelled']}% of the modelled 5.5% selling cost, and the $75 instrument fee does not apply to a sale paying the transfer tax. Reinvestment risk remains: the Black Swan page models 24 and 36-month Treasury parking and phased equity entry on one canonical monthly path, with a synthetic stress test and a dated backtest of 1929, 2000 and 2008. Reinvestment yield may decline at maturity.</li><li><strong>Property B</strong> stays an independent owned asset: include its net operating costs, insurance, rent rules and the available unit in household liquidity planning.</li><li><strong>If the taxable estate may exceed the federal exclusion:</strong> the tax is {pcf(LIQ['clock']['estate_tax_rate'], 0)} of the excess and is due in cash {LIQ['clock']['due_months_after_death']} months after death. An extension to file is not an extension to pay; interest runs from the due date at the federal short-term rate plus three points, compounded daily. Ask whether the section 6166 instalment election is available. <a href='liquidity.html'>Estate liquidity page</a>. {slink('irs_i4768')} {slink('uscode6621')}</li></ul>
+<ul><li><strong>Live in Property A:</strong> reassessment shelter only if eligible and the occupancy requirements are met; higher concentration and maintenance exposure.</li><li><strong>Rent Property A:</strong> full reassessment may apply; income, vacancy, repairs, landlord rules and depreciation and recapture need a CPA-grade model. Rent is ordinary income; losses are suspended. Break-even rent {m(RENTAL['spread']['breakeven_low'])}-{m(RENTAL['spread']['breakeven_high'])}. {slink('irs_p925')}</li><li><strong>Sell and reinvest:</strong> the basis step-up may limit immediate gain, but confirm sale costs and tax. Published transfer tax and recording fees come to {m(MIXED['fees_example']['published_total'])} on a {m(MIXED['fees_example']['price'])} sale, about {MIXED['fees_example']['published_share_of_modelled']}% of the modelled 5.5% selling cost, and the $75 instrument fee does not apply to a sale paying the transfer tax. Reinvestment risk remains: the Black Swan page models 24 and 36-month Treasury parking and phased equity entry on one canonical monthly path, with a synthetic stress test and a dated backtest of 1929, 2000 and 2008. Reinvestment yield may decline at maturity.</li><li><strong>Property B</strong> stays an independent owned asset: include its net operating costs, insurance, rent rules and the available unit in household liquidity planning.</li><li><strong>If the taxable estate may exceed the federal exclusion:</strong> the tax is {pcf(LIQ['clock']['estate_tax_rate'], 0)} of the excess and is due in cash {LIQ['clock']['due_months_after_death']} months after death. An extension to file is not an extension to pay; interest runs from the due date at the federal short-term rate plus three points, compounded daily. Ask whether the section 6166 instalment election is available. <a href='liquidity.html'>Estate liquidity page</a>. {slink('irs_i4768')} {slink('uscode6621')}</li></ul>
 </section>
 <section><h2>Known / unknown before choosing</h2>
 <p><strong>Known from the supplied brief, not independently verified:</strong> owner-reported values, Property B rent and utilities, Property A water and solar estimates, the historic tax rolls. <strong>Unknown:</strong> deed and trust terms, relationship eligibility, insurance quotes, registered liens, property-specific utilities, repairs and capital work, tax-rate areas, Property A market rent, selling costs, the size of the taxable estate, future law.</p>

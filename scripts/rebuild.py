@@ -27,6 +27,7 @@ STEPS = (
     ("model (embed the refreshed bootstrap)", "model.py"),
     ("mixed paths (use the refreshed model and bootstrap)", "mixed.py"),
     ("estate liquidity and the two-person case", "liquidity.py"),
+    ("letting-path tax realism (the letting path, priced under the rules)", "rental_tax.py"),
     ("site and executive summary", "build.py"),
 )
 
