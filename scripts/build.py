@@ -2878,8 +2878,8 @@ same thirty-year horizon, at the 2045 model.</p>
 <p>The findings, in order:</p>
 <ul>
 <li><strong>Borrowing never becomes the better route at any published band.</strong> At the modelled return the
-payment stream compounds to about {pcf(smallest['fv_payments'] / smallest['tax'], 1)} times the principal in
-future value: even the smallest band's loan costs {m(smallest['fv_payments'])} of terminal value against a
+payment stream compounds to about {smallest['fv_payments'] / smallest['tax']:.1f} times the
+principal in future value: even the smallest band's loan costs {m(smallest['fv_payments'])} of terminal value against a
 {m(kb['gap_live_at_baseline'])} selling-versus-living gap. The mortgage decision is therefore about liquidity,
 risk and the household's own circumstances - not about which route leaves more.</li>
 <li><strong>The largest published band is the one the sale route cannot self-fund.</strong> The projected net
