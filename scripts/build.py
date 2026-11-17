@@ -28,7 +28,7 @@ A = INPUTS["property_a"]
 B = INPUTS["property_b"]
 V = INPUTS["verified_parameters"]
 ASM = INPUTS["assumptions"]
-BUILD_DATE = "16 November 2026"
+BUILD_DATE = "17 November 2026"
 
 # The phased-investing figures are computed by the model's one monthly engine, so the
 # stress table on the black-swan page and the dashboard path cannot drift apart again.
@@ -403,7 +403,7 @@ def page(name: str, body: str, lede: str = "") -> str:
       <p>Full method and inputs: <a href="review.html#method-detail">how the model works</a>.
         Every official source used anywhere on the site: <a href="sources.html">the source ledger</a>.</p>
     </section>
-    <p class="page-footer">Built {esc(BUILD_DATE)}. Sources were last checked between 13 and 16 November 2026;
+    <p class="page-footer">Built {esc(BUILD_DATE)}. Sources were last checked between 13 and 17 November 2026;
       each entry's own check date is listed on the
       <a href="sources.html">source ledger</a>. Nothing here is legal, tax or investment advice.</p>
   </main>
@@ -638,7 +638,7 @@ levers 4 and 5.</p>""")
 <li><strong>Start</strong> with the <a href="executive-summary.html">executive summary</a> and the <a href="decision.html">decision page</a>.</li>
 <li><strong>Check the inputs.</strong> Every number the model uses is on the <a href="property-a.html">Property A</a>, <a href="property-b.html">Property B</a> and <a href="costs.html">costs</a> pages, with its source or an explicit unverified flag.</li>
 <li><strong>Check the stress.</strong> No projection on this site relies on a single smooth growth rate. See <a href="black-swan.html">black swan conditions</a> and the <a href="economy.html">verified historical record</a>.</li>
-<li><strong>Do not act yet.</strong> The <a href="questions.html">questions page</a> lists what is still unknown and how to find it out. The <a href="suggestions.html">suggestions page</a> is a review queue: nothing there has been implemented.</li>
+<li><strong>Do not act yet.</strong> The <a href="questions.html">questions page</a> lists what is still unknown and how to find it out. The <a href="suggestions.html">suggestions page</a> is a review queue: every item in it still needs a decision, and the decision and date columns are empty.</li>
 </ol>""")
     )
 
@@ -661,7 +661,7 @@ SUMMARIES = {
     "black-swan.html": "Regimes where the answer changes, and by how much.",
     "economy.html": "Fifty years of verified inflation, house price and yield data.",
     "questions.html": "What is known, what is missing, and how to find it.",
-    "suggestions.html": "A review queue of proposals. Nothing implemented yet.",
+    "suggestions.html": "A review queue of proposals, with a decision and date column for each one.",
     "review.html": "Unverified figures, modelling caveats and the repository audit.",
     "glossary.html": "Plain-language terms with official citations.",
     "timeline.html": "The deadlines and key dates that shape the inheritance decision.",
@@ -3725,7 +3725,7 @@ SUGGESTIONS = [
      "Most of the gap between the paths comes from assumptions that can be replaced with facts over time.",
      "Low", "None", "projections", []),
     ("S-17", "Set the review gate before implementing anything",
-     "Nothing on this page has been done. Each item needs a decision to adopt, defer or reject, recorded before any action.",
+     "Each item in the first table needs a decision to adopt, defer or reject, recorded before any action. Both tables carry a Decision column and a Date column for exactly this; they are empty until the household fills them in.",
      "Low", "None", None, []),
     ("S-18", "Keep the data files in this repository as the single source of truth",
      "Every figure on the site is generated from assets/data. Editing the HTML by hand would break that and the verification.",
@@ -3774,6 +3774,12 @@ SUGGESTIONS = [
 
 
 def page_suggestions() -> str:
+    # The owner's instruction: "create a section dedicated for suggestions so someone can review
+    # suggestions and choose the best path before implementing any changes", and "write the decision
+    # and the date next to the item, so a future reader knows what was chosen and why". Both tables
+    # therefore carry a Decision column and a Date column, left empty for the household to complete
+    # by hand. Nothing on this page can be decided by the model.
+    blank_dec = '<span class="blank">not yet decided</span>'
     rows = []
     for sid, title, effect, effort, risk, area, src in SUGGESTIONS:
         target = area if area and area.endswith(".html") else (area + ".html" if area else None)
@@ -3787,20 +3793,26 @@ def page_suggestions() -> str:
             f"<td>{esc(risk)}</td>"
             f"<td>{area_html}</td>"
             f'<td><span class="badge proposed">proposed</span></td>'
+            f"<td>{blank_dec}</td><td>{blank_dec}</td>"
             + (src_cell(src if isinstance(src, list) else [src], "Official source") if src
                else src_cell([], "No official source applies")))
     tbl = table("Suggestions for review",
                 ["ID", "Suggestion", "What it changes", "Effort", "Risk if ignored",
-                 "Where it lands", "Status", "Source"], rows)
+                 "Where it lands", "Status", "Decision (adopt / defer / reject)",
+                 "Date decided", "Source"], rows,
+                note="The two decision columns are deliberately empty. Building this site cannot obtain a "
+                     "quote, read a roll, sign a document or move title, so no item on this list has been "
+                     "acted on. Write the decision and the date beside each item - adopt, defer or reject, "
+                     "and why - so a future reader can see what was chosen and on what basis.")
 
     gate = table("The selection gate",
                  ["Step", "What happens", "Rule", "Source"],
                  [
-                     "<td>1. Read</td><td>Work through the list and mark each item adopt, defer or reject.</td><td>No item is implemented by building this site. Every item is still marked proposed.</td>" + src_cell([], "Procedure, not a figure"),
+                     "<td>1. Read</td><td>Work through the list and mark each item adopt, defer or reject.</td><td>Every item in the first table is an action only the household and its advisers can take, and none has been taken. The second table below is different: it records which improvements to the site itself have already been built in this edition.</td>" + src_cell([], "Procedure, not a figure"),
                      "<td>2. Gate</td><td>Anything that costs money, signs a document, or moves title needs an explicit decision recorded before it happens.</td><td>Items S-03, S-05, S-11 and S-13 are in this class.</td>" + src_cell([], "Procedure, not a figure"),
                      "<td>3. Verify</td><td>Anything that replaces an unverified figure should be checked against the official source in the last column, and the data file updated.</td><td>Items S-01, S-02, S-07 and S-08 are in this class.</td>" + src_cell([], "Procedure, not a figure"),
                      "<td>4. Re-run</td><td>After any input changes, rebuild the model and the site and see whether the recommendation moved.</td><td>Item S-16.</td>" + src_cell([], "Procedure, not a figure"),
-                     "<td>5. Record</td><td>Write the decision and the date next to the item, so a future reader knows what was chosen and why.</td><td>Item S-17.</td>" + src_cell([], "Procedure, not a figure"),
+                     "<td>5. Record</td><td>Write the decision and the date next to the item, so a future reader knows what was chosen and why.</td><td>Item S-17. The Decision and Date columns on both tables are where that is written.</td>" + src_cell([], "Procedure, not a figure"),
                  ])
 
     # Status per proposal. The owner asked for a section where suggestions can be
@@ -3845,43 +3857,56 @@ def page_suggestions() -> str:
                 f'<span class="badge proposed">open</span>'
                 + (f'<br><span class="small">{esc(state[1])}</span>' if state[1] else ""))
 
-    improve_rows = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td>"
+    improve_rows = [f"<td><strong>{esc(pid)}</strong></td>"
+                    f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td>"
                     f"<td>{improve_badge(a)}</td>"
+                    f"<td>{blank_dec}</td><td>{blank_dec}</td>"
                     + (src_cell(improve_src[a], "Official source") if improve_src[a]
                        else src_cell([], "No official source applies"))
-                    for a, b, c in [
-                        ("Add per-unit detail for Property B", "Rent, lease dates and anniversary dates per unit, so the income can be projected properly instead of as one total.", "The Property B income is currently a single unverified total with no expiry dates."),
-                        ("Add a real rental opinion for Property A", "Replaces the break-even rent with a comparison against an actual market rent.", "The rental path is currently tested only against a break-even, which is honest but indirect."),
-                        ("Add a maintenance and capital schedule", "Year-by-year capital items rather than a percentage of value.", "Lumpy costs are invisible, which flatters every hold path."),
-                        ("Add the itemised tax bills", "Bond, parcel tax and assessment lines separated from the ad valorem part.", "The fixed charge is currently modelled as a single number growing with inflation."),
-                        ("Add a liquidity model for the estate", "Whether the estate could pay federal estate tax without selling the house.", "The interaction between the cash inheritance and the house is currently only sketched in scenario bands."),
-                        ("Add a two-person household case", "Joint filing, the $500,000 exclusion and two exclusions for estate tax.", "The model currently uses the single-filer exclusion throughout, which is conservative."),
-                        ("Add a mortgage case", "What happens if the heir borrows against either property instead of selling.", "Not modelled at all."),
-                        ("Add a distribution chart to the projections", "A visual range rather than a single line.", "Readers tend to read the single line as a forecast."),
-                        ("Add a real rental opinion for Property A (imputed rent)", "Prints the market rent at which living there, and at which letting it out, match selling at the inheritance.", "Without it the housing value of living there is a preference rather than a number."),
-                        ("Model mixed paths, not only the three pure choices", "Live for a period and then sell, or live and then let, with the Proposition 19 clawback priced.", "The pure paths overstate how bad a short occupancy is and understate what moving out costs."),
-                        ("Write the rules down before reading any projection", "The household's own test for each path and its priorities, recorded before the figures are read.", "Without it a single projection can be made to justify any path."),
-                        ("Put the answer and what would change it on the first screen", "A decision strip with the answer, a confidence label, the build date and the three checks that would move it.", "Readers arrive at the recommendation without knowing how conditional it is."),
-                        ("Price the transfer tax and recording fees into the sell path", "The statutory charges itemised, with the published and private parts separated.", "The 5.5% selling cost is mistaken for a tax figure when most of it is a private quote."),
-                        ("Distinguish enacted changes from proposals", "A stated rule and an annual recheck gate for the law page, with the failed Proposition 19 repeal recorded as dead.", "A proposal gets treated as law, or a dead measure keeps distorting the arithmetic."),
+                    for pid, a, b, c in [
+                        ("P-01", "Add per-unit detail for Property B", "Rent, lease dates and anniversary dates per unit, so the income can be projected properly instead of as one total.", "The Property B income is currently a single unverified total with no expiry dates."),
+                        ("P-02", "Add a real rental opinion for Property A", "Replaces the break-even rent with a comparison against an actual market rent.", "The rental path is currently tested only against a break-even, which is honest but indirect."),
+                        ("P-03", "Add a maintenance and capital schedule", "Year-by-year capital items rather than a percentage of value.", "Lumpy costs are invisible, which flatters every hold path."),
+                        ("P-04", "Add the itemised tax bills", "Bond, parcel tax and assessment lines separated from the ad valorem part.", "The fixed charge is currently modelled as a single number growing with inflation."),
+                        ("P-05", "Add a liquidity model for the estate", "Whether the estate could pay federal estate tax without selling the house.", "The interaction between the cash inheritance and the house is currently only sketched in scenario bands."),
+                        ("P-06", "Add a two-person household case", "Joint filing, the $500,000 exclusion and two exclusions for estate tax.", "The model currently uses the single-filer exclusion throughout, which is conservative."),
+                        ("P-07", "Add a mortgage case", "What happens if the heir borrows against either property instead of selling.", "Not modelled at all."),
+                        ("P-08", "Add a distribution chart to the projections", "A visual range rather than a single line.", "Readers tend to read the single line as a forecast."),
+                        ("P-09", "Add a real rental opinion for Property A (imputed rent)", "Prints the market rent at which living there, and at which letting it out, match selling at the inheritance.", "Without it the housing value of living there is a preference rather than a number."),
+                        ("P-10", "Model mixed paths, not only the three pure choices", "Live for a period and then sell, or live and then let, with the Proposition 19 clawback priced.", "The pure paths overstate how bad a short occupancy is and understate what moving out costs."),
+                        ("P-11", "Write the rules down before reading any projection", "The household's own test for each path and its priorities, recorded before the figures are read.", "Without it a single projection can be made to justify any path."),
+                        ("P-12", "Put the answer and what would change it on the first screen", "A decision strip with the answer, a confidence label, the build date and the three checks that would move it.", "Readers arrive at the recommendation without knowing how conditional it is."),
+                        ("P-13", "Price the transfer tax and recording fees into the sell path", "The statutory charges itemised, with the published and private parts separated.", "The 5.5% selling cost is mistaken for a tax figure when most of it is a private quote."),
+                        ("P-14", "Distinguish enacted changes from proposals", "A stated rule and an annual recheck gate for the law page, with the failed Proposition 19 repeal recorded as dead.", "A proposal gets treated as law, or a dead measure keeps distorting the arithmetic."),
                     ]]
     improve = table("Improvements to this site, offered for review",
-                    ["Proposal", "What it would add", "Cost of not doing it", "Status", "Source"],
-                    improve_rows)
+                    ["ID", "Proposal", "What it would add", "Cost of not doing it", "Status",
+                     "Decision (adopt / defer / reject)", "Date decided", "Source"],
+                    improve_rows,
+                    note="A done badge means the improvement was built into this edition of the site and "
+                         "is verified by the build; it does not mean the underlying decision was made for "
+                         "the household. An open item still needs a decision, which is recorded in the two "
+                         "empty columns.")
     return (
-        callout("gate", "Nothing here has been implemented", """
-<p>Every item below is <strong>proposed</strong>. Building this site did not adopt, purchase, sign, file or change
-anything. The point of the page is that someone reads the list, chooses the best path, and only then acts. The
-selection gate below is the order in which to do that.</p>""")
+        callout("gate", "Nothing on the first list has been acted on", """
+<p>Every item in the <strong>first table</strong> is <strong>proposed</strong>. Building this site did not adopt,
+purchase, sign, file or change anything: it cannot obtain a quote, read a roll, or move title. The point of the
+page is that someone reads the list, chooses the best path, and only then acts. The selection gate below is the
+order in which to do that.</p>
+<p>The <strong>second table</strong> is different in kind. It lists improvements to the site itself, and records
+which of them have already been built into this edition, so that a reader can tell an open question about the
+household's decision apart from a finished piece of analysis. A built item is not a decision made for the
+household; the household's own decisions are still blank.</p>""")
         + gate
         + tbl
         + '<h2>Improvements to this site</h2>'
         + improve
         + callout("privacy", "One suggestion that is not optional", """
-<p>S-18 is listed last but it is the one that keeps the site honest. Every figure you see is generated from the
-data files in <code>assets/data</code> by <code>scripts/model.py</code> and <code>scripts/build.py</code>. If a
-number is edited directly in an HTML file, the next rebuild will overwrite it and the verification will still
-pass, because the verification checks the generated output, not the intent. Change the data, not the page.</p>""")
+<p>S-18 is the one item on the list that cannot be deferred, because it is the one that keeps the site honest.
+Every figure you see is generated from the data files in <code>assets/data</code> by <code>scripts/model.py</code>
+and <code>scripts/build.py</code>. If a number is edited directly in an HTML file, the next rebuild will overwrite
+it and the verification will still pass, because the verification checks the generated output, not the intent.
+Change the data, not the page.</p>""")
     )
 
 
@@ -4056,6 +4081,126 @@ previously taken from a summary or a search excerpt, this says so and says wheth
 now been read; and where a document could not be read at all, the row is left blank rather than filled with
 an inference.</p>""")
             + table("What was re-read, and what it showed", ["Figure or rule", "What the source says today", "Source"], body))
+
+
+def recheck_17nov_section() -> str:
+    """The second independent re-check, 17 November 2026.
+
+    Every row was opened on the publisher's own domain in this session and the figure on
+    the site was compared with the document. Nothing in this table changed a model input,
+    a published figure or the recommendation; the point of publishing it is that a reader
+    can open the same document and see the same sentence, and can tell which figures have
+    been confirmed by a human reading and which have not.
+    """
+    rows = [
+        ("Estate tax filing threshold, 2026 death",
+         "The Internal Revenue Service's own filing-threshold table still ends at 2026, and the 2026 "
+         "figure is $15,000,000. The table and the page's statement that a return is required where the "
+         "gross estate plus adjusted taxable gifts and specific gift tax exemption exceeds the "
+         "threshold for the year of death are unchanged.",
+         ["irs_estate"]),
+        ("Basic exclusion and annual gift exclusion, 2027",
+         "News release IR-2026-133 of 5 November 2026, summarising Revenue Procedure 2026-35, states "
+         "that estates of decedents who die during 2027 have a basic exclusion amount of $15,480,000, "
+         "up from $15,000,000 for 2026, and that the annual gift exclusion rises to $20,000 for 2027 "
+         "from $19,000 for 2026. Both figures on the estate and dashboard pages match.",
+         ["irs_2027"]),
+        ("Proposition 19 value cap and the next adjustment date",
+         "Letter to Assessors 2025/009 was read in full. The $1 million amount is adjusted to "
+         "$1,044,586 for transfers from 16 February 2025 through 15 February 2027; the preceding "
+         "amounts were $1,022,600 and $1,000,000; and the letter states the next adjustment occurs in "
+         "February 2027. The adjustment is driven by the FHFA California house price index, not by the "
+         "consumer price index, which is why the cap is projected forward on a house-price rate.",
+         ["boe_lta25009"]),
+        ("Proposition 19 eligibility, the one-year rule and the clawback",
+         "Revenue and Taxation Code section 63.2(a)(1) was read in full again: the transfer must be of "
+         "a principal residence of an eligible transferor, between parents and their children or between "
+         "grandparents and their grandchildren with the qualifying parents deceased; it must become the "
+         "principal residence of the transferee within one year; the transferee must file for the "
+         "homeowners' or disabled veterans' exemption within a year; and under (a)(1)(C) the base year "
+         "value established at the change in ownership, adjusted annually, shall be enrolled once the "
+         "eligible transferee no longer qualifies. This is the arithmetic the model implements and the "
+         "reading the site publishes as a question for counsel.",
+         ["rtc63_2"]),
+        ("The additional 1% tax above one million dollars",
+         "Section 17043 was read again from the statute. Subdivision (a) imposes an additional tax of "
+         "1 percent on the portion of taxable income in excess of $1,000,000; subdivision (c) switches "
+         "off the credit provisions, the filing-status and bracket recomputation, and the joint-return "
+         "provisions. The published combined rate of 37.1% is built on this and on the current-year "
+         "state schedules, and the surcharge sensitivity that uses it is unchanged.",
+         ["rtc17043"]),
+        ("An inheritance is not income",
+         "The Franchise Tax Board's gifts and inheritance page states that if a gift or inheritance is "
+         "received it is not included in income, while income the gift or inheritance later produces - "
+         "interest, dividends, rental income and gain on a real property sale - is taxable. The page "
+         "carries a last-updated date of 24 September 2025 and is unchanged.",
+         ["ftb_inheritance"]),
+        ("California estate and inheritance tax",
+         "The State Controller's Office states that for decedents dying on or after 1 January 2005 there "
+         "is no longer a requirement to file a California estate tax return, and that the California "
+         "generation-skipping transfer tax does not apply to transfers after 31 December 2004. The "
+         "estate page's California position is unchanged.",
+         ["sco_estate"]),
+        ("California's top marginal rate for the current year",
+         "The 2026 California tax rate schedules were read again. Schedule X charges 12.30 percent over "
+         "$768,213, Schedule Y 12.30 percent over $1,536,426, and Schedule Z 12.30 percent over "
+         "$1,044,771. The site's combined-rate row cites the 2025 and 2026 schedules together, and the "
+         "bracket starts it registers are unchanged.",
+         ["ftb_rates_2026"]),
+        ("Statewide rent increase cap",
+         "Civil Code section 1947.12 was read again. Subdivision (a)(1) caps an increase over any "
+         "12-month period at 5 percent plus the percentage change in the cost of living, or 10 percent, "
+         "whichever is lower, of the lowest gross rental rate charged in the preceding 12 months; "
+         "subdivision (a)(2) limits a continuing tenancy to two increments in that period; and "
+         "subdivision (b) exempts the initial rate of a new tenancy.",
+         ["civ1947_12"]),
+        ("Long-range inflation and interest assumptions",
+         "Table II.C1 of the 2026 OASDI Trustees Report was read at source (the page is dated 9 June "
+         "2026). The annual percentage change in the Consumer Price Index is 2.4 percent under the "
+         "intermediate assumptions, 3.0 percent low-cost and 1.8 percent high-cost; the annual trust "
+         "fund new-issue real interest rate for 2044 and later is 2.3 percent intermediate, 2.8 percent "
+         "low-cost and 1.8 percent high-cost. These are the figures the model uses for its inflation "
+         "band and its discount-rate band.",
+         ["ssa_trustees"]),
+        ("Interest on an unpaid estate tax",
+         "The published quarterly rates still show 7 percent for underpayment and 4 percent for the "
+         "federal short-term rate in the fourth quarter of 2026, and a published range of 3 percent to "
+         "8 percent across 2022 to 2026. The liquidity page's deferral arithmetic uses the same rates.",
+         ["irs_interest"]),
+        ("What a lender may do when the borrower dies",
+         "Subsection (d) of the federal due-on-sale statute was read again in full. For a lien on "
+         "residential real property containing fewer than five dwelling units, a lender may not exercise "
+         "its option upon, among other transfers, \"a transfer to a relative resulting from the death of "
+         "a borrower\", or a transfer where the spouse or children of the borrower become owners. The "
+         "decision page's statement of the limit on acceleration matches the subsection.",
+         ["uscode1701j3"]),
+        ("Figures this session could not check at all",
+         "Three, unchanged. The ad valorem rate for Property B is published by a city body whose web "
+         "address names the jurisdiction, so it is not linked here and stays flagged; the local parcel "
+         "tax result is on the register with certification pending; and the rate area for Property A is "
+         "withheld for the same crosswalk reason, which is why the site runs an assumed rate with a "
+         "diagnostic band instead. Each is a known hole, not a silent one.",
+         []),
+    ]
+    body = []
+    for item, detail, srcs in rows:
+        cell = (src_cell(srcs, "Official source") if srcs
+                else method_cell("review.html#register", "Withheld for privacy, logged on the register"))
+        body.append(f"<td><strong>{esc(item)}</strong></td><td>{detail}</td>" + cell)
+    return ('<h2 id="recheck-2">Official-source recheck, 17 November 2026</h2>'
+            + callout("note", "Why there are two re-check tables", """
+<p>This is the second independent pass, and it is published separately from the 16 November table
+rather than merged into it, so that a reader can see what each session actually opened and when. The
+method is the same: every figure below was read on the publisher's own domain in this session, and
+the published figure was compared with the document.</p>
+<p><strong>No figure changed.</strong> Every value the site already carried matched its source, so no
+model input, no published table and no recommendation moved. Where a document could not be opened at
+all, the row says so instead of being filled in.</p>""")
+            + table("What was re-read on 17 November 2026, and what it showed",
+                    ["Figure or rule", "What the source says today", "Source"], body,
+                    note="A re-check that changes nothing is still worth publishing: it is the only way a "
+                         "reader can tell the difference between a figure a human has checked against the "
+                         "document and one that has been carried forward unchecked."))
 
 
 def history_audit_section() -> str:
@@ -4629,6 +4774,7 @@ each one is a reason to check before acting.</p>""")
         + table("What was found when the repository was reviewed",
                 ["Finding", "Detail", "Residual risk", "Source"], aud_rows)
         + recheck_section()
+        + recheck_17nov_section()
         + history_audit_section()
     )
 
@@ -4648,8 +4794,10 @@ def page_sources() -> str:
         callout("note", "How the ledger works", f"""
 <p>There are {len(SRC_DOC['sources'])} sources. The date in the last column is when the entry was last read on the
 publisher's own domain. The ledger was opened on 13 November 2026 and has since been re-read in stages, most
-recently on 16 November 2026, when the figures listed in the <a href="review.html#recheck">recheck table</a> were
-taken from the documents themselves rather than from any summary of them. The "supports" column says exactly what
+recently on 17 November 2026, when the figures listed in the
+<a href="review.html#recheck-2">17 November recheck table</a> were read from the documents themselves rather than
+from any summary of them; the <a href="review.html#recheck">16 November recheck table</a> records the previous
+pass. The "supports" column says exactly what
 the source is cited for; the "limits" column says what it does not cover. Sources are cited only for what they
 actually state, and an official publisher whose name or address would identify one of the two properties is
 deliberately not linked here: it is recorded on the register instead.</p>""")
@@ -5459,7 +5607,7 @@ PAGE_BUILDERS = {
     "black-swan.html": (page_black_swan, "Regimes where the answer changes, and by how much."),
     "economy.html": (page_economy, "Fifty years of verified inflation, house price and yield data."),
     "questions.html": (page_questions, "What is known, what is missing, and how to find it."),
-    "suggestions.html": (page_suggestions, "A review queue of proposals. Nothing implemented yet."),
+    "suggestions.html": (page_suggestions, "A review queue of proposals, with a decision and date column for each one."),
     "review.html": (page_review, "Unverified figures, modelling caveats and the repository audit."),
     "glossary.html": (page_glossary, "Plain-language definitions of the terms used on this site."),
     "sources.html": (page_sources, "Every official source used, with what it supports."),
@@ -5720,7 +5868,7 @@ def executive_summary_markdown() -> str:
     a("- `index.html` — the dashboard")
     a("- `decision.html` — the five paths, the sensitivity and the break-evens")
     a("- `questions.html` — what is unknown and how to find it, starting with A-1")
-    a("- `suggestions.html` — the review queue; nothing there has been implemented")
+    a("- `suggestions.html` — the review queue; every item needs a decision, recorded in its own decision and date columns")
     a("- `review.html` — every unverified figure and modelling caveat")
     a("- `sources.html` — the full ledger")
     a("")

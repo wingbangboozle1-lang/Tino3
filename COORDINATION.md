@@ -4137,7 +4137,6 @@ Cross-checked the dashboard's headline figures against `assets/data/model.json` 
 | X-6 Rebuild, run every gate, pull request to `main`, merge without waiting for approval, confirm the Pages deploy, record the PR link and result | **in progress** | `arena/0069abd3-tino3` | this section only |
 
 **Privacy constraint:** no property-specific identifier, name, address, parcel number, postal code, county or city name, trust term, estate size or unrounded owner amount is added to any public page or to this board. The estate's actual size is deliberately not published and not modelled as a figure; the liquidity engine works in anonymous bands and reports ratios. Every dollar figure on the public site is rounded to the nearest $10.
->>>>>>> 5b8d8fa (Board: claim arena/0069abd3-tino3 scope (estate liquidity model, joint-filer case, liquidity page))
 
 ### X-6 result: gates, pull request and deployment
 

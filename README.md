@@ -29,7 +29,8 @@ and reinvestment choices.
 - `briefing.html` — one-page, printable Attorney & CPA discussion sheet.
 - `questions.html` — what is known, what is missing, who can verify it, and suggested next steps.
 - `suggestions.html` — proposals kept separate from implemented changes; each can be reviewed,
-  adopted, deferred or rejected before implementation.
+  adopted, deferred or rejected before implementation, and each row carries a Decision column and a
+  Date column for the household to complete by hand.
 - `review.html` — flagged, assumed and unverified items.
 
 - **Start here:** Dashboard (the answer, its confidence, the date it was computed and the three checks that would move it, on the first screen), the **pre-commitment register** (`precommit.html`: the rules the household writes down before reading any figure, with empty decision columns), executive summary, decision analysis (including the mixed paths and the Proposition 19 clawback), the what-if cases page (one lever at a time, link-driven, no script), and a printable Attorney & CPA briefing sheet.
@@ -68,9 +69,9 @@ professional advice when dates, facts or laws change.
 
 ## Published site and verification snapshot
 
-The current generated edition contains **25 HTML pages**, **one runtime stylesheet**, **110 entries
+The current generated edition contains **25 HTML pages**, **one runtime stylesheet**, **112 entries
 in the source ledger**, and **136 content-free withdrawal notices** for retired routes. The latest
-local verification reports **1238 table rows**: **1061 linked to official publishers** and **177
+local verification reports **1251 table rows**: **1074 linked to official publishers** and **177
 explicitly registered as unsourceable or unverified**. A row without a confirming official source is
 not filled in by inference. The public site contains no source ledger or internal model data files;
 the Jekyll and Actions publication boundaries are checked separately.

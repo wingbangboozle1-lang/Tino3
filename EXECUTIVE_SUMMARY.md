@@ -1,6 +1,6 @@
 # Executive summary
 
-Built 16 November 2026 from the same deterministic model as the site. Every dollar figure is rounded to the nearest $10. Anonymised throughout: **Property A** is the single-family home being inherited through a trust; **Property B** is the three-unit building the heir already owns. No name, street address, postal parcel number, postal code, county or city name, trust term or utility account appears here or on the site; the county and city are deliberately withheld because they identify the properties.
+Built 17 November 2026 from the same deterministic model as the site. Every dollar figure is rounded to the nearest $10. Anonymised throughout: **Property A** is the single-family home being inherited through a trust; **Property B** is the three-unit building the heir already owns. No name, street address, postal parcel number, postal code, county or city name, trust term or utility account appears here or on the site; the county and city are deliberately withheld because they identify the properties.
 
 Planning analysis, not legal, tax or investment advice.
 
@@ -137,6 +137,6 @@ Every rule, threshold and rate on the site was read on the publishing agency's o
 - `index.html` — the dashboard
 - `decision.html` — the five paths, the sensitivity and the break-evens
 - `questions.html` — what is unknown and how to find it, starting with A-1
-- `suggestions.html` — the review queue; nothing there has been implemented
+- `suggestions.html` — the review queue; every item needs a decision, recorded in its own decision and date columns
 - `review.html` — every unverified figure and modelling caveat
 - `sources.html` — the full ledger
