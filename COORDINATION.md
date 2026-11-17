@@ -4358,3 +4358,23 @@ published as a rule and is not assumed available; the keep-and-borrow path stays
 as the suggestions register says.
 
 **Privacy constraint for this session:** no name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term or unrounded owner amount is written to any file this session touches, including this board. Owner-supplied money appears only as a multiple of ten; official amounts appear exactly as the official document prints them. New ledger entries link only to hosts already allowlisted in `scripts/verify.py`.
+
+## Session `arena/cd11dc07-tino3` — Form 540 reading of the 1% above one million dollars, and the election-result currency check · claimed 2026-11-17
+
+*Branch note:* Arena pins this session to `arena/cd11dc07-tino3`, branched from `main` at `3b86d5a` (the merge of PR #156). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. `git fetch origin` was run before any edit and `main` had not moved. `gh pr list --state open` returned nothing, and the board was read in full: no other session holds an open claim, and every earlier section is closed with a publication record.
+
+**Why this scope and not another.** The integrated edition already serves the owner's brief in full: the phased-investing path, mixed paths, what-if controls, briefing sheet, timeline, glossary, distributions, questions, suggestions, pre-commitment register, Prop 19 carry-forward, transfer-tax pricing, ranges, and the two-person case. Two of the owner's standing instructions were, however, still open on the board as unfinished reading rather than as build work:
+
+1. *"Read the official Form 540 instructions for the 1% tax above one million dollars and the capital-gain treatment, then update the sensitivity value."* The site already states the statute (Revenue and Taxation Code section 17043) and the rate, but it has never cited the Form 540 instructions themselves, and its sensitivity applies a flat rate difference to the **whole** gain. The instructions describe a worksheet on the slice above the threshold. This session reads that document and rebuilds the sensitivity the way the form actually works.
+2. *"Periodically recheck official federal, state and local authorities and distinguish enacted changes from proposals."* The 2026 general-election figures carried on the site are dated 14 November 2026. The publisher's page has moved since.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| M-1 Claim this scope and push before any other edit | **done** — this section | `arena/cd11dc07-tino3` | `COORDINATION.md` (this section only) |
+| M-2 Read the current Form 540 instructions at the Franchise Tax Board for the 1% above one million dollars and for the capital-gain treatment; record what the publisher states, including the form's own name for the tax and the worksheet arithmetic | **in progress** | `arena/cd11dc07-tino3` | `assets/sources.json` (ledger entries only) |
+| M-3 Rebuild the surcharge sensitivity as a Form 540 computation: the 1% applied to the slice of taxable income above the threshold, priced across a range of assumed other taxable income instead of the whole gain at a flat rate difference. Keep the flat-rate figure as a labelled upper bound | **in progress** | `arena/cd11dc07-tino3` | `scripts/model.py`, `assets/data/inputs.json` (`assumptions` and `verified_parameters` only), `scripts/build.py` (the taxes page only) |
+| M-4 Re-read the election-results page at the Secretary of State and update the carried figures and their timestamp if the publisher's numbers have moved; keep the provisional/certification caveat intact | **in progress** | `arena/cd11dc07-tino3` | `assets/sources.json`, `scripts/build.py` |
+| M-5 Run every gate from a clean rebuild; confirm byte-reproducibility | **in progress** | `arena/cd11dc07-tino3` | read-only |
+| M-6 Pull request to `main`, merge without waiting for approval, confirm the Pages deploy, record the PR link and result | **in progress** | `arena/cd11dc07-tino3` | this section only |
+
+**Privacy constraint:** no property-specific identifier, name, address, parcel number, postal code, county or city name, trust term, estate size or unrounded owner amount is added to any public page or to this board. Every dollar figure the site publishes stays rounded to the nearest $10 or is a verbatim official amount.
