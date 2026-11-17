@@ -242,6 +242,17 @@ def run_paths(inherit_year: int, g: float, infl: float, eq: float, drag: float,
 
     fit_T = dict(fit_a)
     fit_T["fixed_base"] = fit_a["fixed_base"] * (1 + fixed_growth) ** (inherit_year - fit_a["base_year"])
+    # The base year moves with the fixed base. bill_for() grows the fixed charge from
+    # fit["base_year"], so the pre-grown fixed_base above MUST be paired with base_year
+    # set to the inheritance year. Earlier editions pre-grew fixed_base but left
+    # base_year at the roll's base year, so the fixed charge was grown twice - once to
+    # the inheritance year and again from the base year to each billed year. That
+    # double-growth inflated every post-inheritance bill on the keeping paths (by
+    # about $880 in the first inheritance year of the baseline) and contradicted the
+    # single-growth convention used everywhere else (bill_today_projected, roll_table,
+    # project_roll, historical_replay all grow the fixed charge once, from the base
+    # year). Fixed 2026-11-17 after independent recomputation of the bills.
+    fit_T["base_year"] = inherit_year
 
     terminal_price = value_at_death * (1 + g) ** horizon
 
@@ -587,6 +598,9 @@ def breakeven_rent(inherit_year: int, g: float, infl: float, eq: float, drag: fl
     value_at_death = A["estimated_market_value_2026"] * (1 + g) ** k
     fit_T = dict(fit_a)
     fit_T["fixed_base"] = fit_a["fixed_base"] * (1 + fixed_growth) ** (inherit_year - fit_a["base_year"])
+    # base_year moves with the pre-grown fixed base (one growth from the roll's base
+    # year, not two); see the note in run_paths. Fixed 2026-11-17.
+    fit_T["base_year"] = inherit_year
 
     def rent_terminal(r0: float) -> float:
         cash = 0.0
@@ -1593,6 +1607,10 @@ def _live_raw(inherit_year: int, *, g: float, infl: float, eq: float, drag: floa
     taxable_live = byv + max(0.0, value_at_death - (byv + cap))
     fit_t = dict(fit_a)
     fit_t["fixed_base"] = fit_a["fixed_base"] * (1 + fixed_growth) ** (inherit_year - fit_a["base_year"])
+    # The base year moves with the pre-grown fixed base, exactly as run_paths() does it
+    # (fixed on 2026-11-17 for double growth of the fixed charge). This replica must follow
+    # the parent or the assertion below fails, which is what it is there for.
+    fit_t["base_year"] = inherit_year
     terminal_price = value_at_death * (1 + g) ** horizon
     bills = annual_bills(taxable_live, fit_t, inherit_year, infl, horizon)
     sale = sale_proceeds(terminal_price, value_at_death, sell_pct, gain_rate, rec_rate, 0.0, exclusion)
