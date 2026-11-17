@@ -1,5 +1,28 @@
 # Coordination board
 
+## Session `arena/d980e74e-tino3` — pre-rounding Git history scrub, line-by-line source re-verification, publication · claimed 2026-11-17
+
+*Branch note:* Arena pins this session to `arena/d980e74e-tino3`, branched from `main` at `3b86d5a` and fast-forwarded to `main` at `02a9d55` (the merge of PR #158) before any edit. The session's ordinary work stays on this branch; the history scrub is executed on a separate mirror clone and force-pushed to the remote per the owner's recorded decision (`PRIVACY_REMEDIATION.md` section 6, second checkpoint) and the runbook in `scripts/history_scrub.sh`. At claim time `gh pr list --state open` returned nothing — PR #158 merged at 16:43:55Z and PR #159 was already merged — so runbook step 1 (freeze: merge or close every open pull request) is satisfied before the rewrite.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| SQ-1 Claim this scope and push before any other edit | **done** — this section | `arena/d980e74e-tino3` | `COORDINATION.md` (this section only) |
+| SQ-2 Independent line-by-line re-verification of the decision-critical official figures, each read at source this session: the 2026 federal basic exclusion, the Proposition 19 shelter cap, the 1% surcharge above $1,000,000 and its Form 540 treatment | **done** — result below; **no stored value changed**, so `assets/data/inputs.json` and `assets/sources.json` are untouched | `arena/d980e74e-tino3` | read-only; results recorded here |
+| SQ-3 Execute the pre-rounding Git history scrub (owner decision): mirror backup, `git filter-repo` text and mailmap rewrite, re-audit to zero findings, force-push every ref | **in progress** | `arena/d980e74e-tino3` | git history (mirror clone outside the repository), `PRIVACY_REMEDIATION.md`, `README.md` (privacy paragraph), `scripts/build.py` (review-page note), regenerated `review.html` |
+| SQ-4 Record the rewrite factually on the published review page (runbook step 7: what, when, why — never the removed values) and close the decision checklist in `PRIVACY_REMEDIATION.md` | pending | `arena/d980e74e-tino3` | `scripts/build.py`, `review.html`, `PRIVACY_REMEDIATION.md` |
+| SQ-5 Rebuild, run all gates, open the pull request from this branch to `main`, merge without waiting, confirm the Pages deploy, record the result | pending | `arena/d980e74e-tino3` | regenerated outputs, this section only |
+
+**Privacy constraint for this session:** no name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term, estate size or unrounded owner amount is added to any file this session writes, including this board; the scrub's own value-bearing files live outside the repository.
+
+### SQ-2 result: the figures re-read at source, 17 November 2026
+
+Each of the following was read at the publisher this session; every stored value agreed, so nothing was corrected and no ledger entry was added.
+
+1. **Federal basic exclusion, 2026: $15,000,000.** The IRS "What's new — Estate and gift tax" page, read in full at irs.gov: the Working Families Tax Cuts Bill, signed 4 July 2025 as Public Law 119-21, "amends § 2010(c)(3) by increasing the basic exclusion amount to $15,000,000 for calendar year 2026." Matches the stored `federal_basic_exclusion_2026`.
+2. **Proposition 19 shelter cap: $1,044,586** for transfers between 16 February 2025 and 15 February 2027 (BOE Letter to Assessors 2025/009, as the ledger records), with the prior values $1,000,000 and $1,022,600. Matches the stored cap series.
+3. **The 1% surcharge above $1,000,000.** Revenue and Taxation Code § 17043 read at leginfo.legislature.ca.gov: "in addition to any other taxes imposed by this part, an additional tax shall be imposed at the rate of 1 percent on that portion of a taxpayer's taxable income in excess of one million dollars ($1,000,000)", added by Proposition 63, with subsection (c) disapplying the credit, bracket and joint-return provisions. The Form 540 booklet worksheet (line 62) computes taxable income minus $1,000,000 times 1%, whole dollars only — exactly the way the taxes page computes it. **The sensitivity value is unchanged.**
+4. **Naming note, no figure change.** The 2026 Form 540-ES instructions describe the surcharge as the "Behavioral Health Services Tax (previously Mental Health Services Tax)"; the rate, threshold and computation are unchanged. Recorded here; it changes no stored value and no page figure.
+
 ## Session `arena/5fb0dcb1-tino3` — law-watch refresh to the 16 November 2026 official results reading, live Proposition 19 initiative recheck, publication · claimed 2026-11-17
 
 *Branch note:* Arena pins this session to `arena/5fb0dcb1-tino3`, branched from `main` at `3b86d5a` (the merge of PR #156). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. At claim time `gh pr list --state open` returned nothing and no section on the board was marked in progress, so no other session holds `scripts/build.py`, `assets/sources.json` or the generated pages. The baseline was checked before any edit: `rebuild.py` reproduces the tree with no diff and all five gates pass.
