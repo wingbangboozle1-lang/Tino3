@@ -4228,5 +4228,12 @@ measured it instead rather than leaving the claim unexamined.
 **Gates.** `scripts/rebuild.py` PASS and reproducible; `scripts/verify.py` PASS (25 pages, **1,258
 table rows**, **1,074 linked to official publishers**, **184 explicitly registered unsourceable**,
 **112 ledger sources**, 4,342 links); `scripts/privacy_boundary.py` PASS;
-`scripts/tracked_tree_guard.py` PASS; `scripts/package_site.py` PASS (25 public pages, 1 runtime
-asset, 136 withdrawal routes); `scripts/verify_legacy.py --config-only` PASS.
+`scripts/tracked_tree_guard.py` PASS (68 tracked text files); `scripts/package_site.py` PASS
+(25 public pages, 1 runtime asset, 139 withdrawal routes); `scripts/verify_legacy.py --config-only`
+PASS.
+
+The withdrawal-route count rose from 136 to 139 because this session added three tracked internal
+files — `scripts/edition.py`, `scripts/print_budget.py` and `assets/data/print_budget_before.json`.
+They are repository tools and inputs, not public content, so the packaging gate replaces each of
+them in the deployable artifact with a content-free withdrawal notice, exactly as it does for every
+other non-published tracked path.
