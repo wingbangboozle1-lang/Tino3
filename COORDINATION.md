@@ -68,7 +68,7 @@ site, 177 explicitly logged as unsourceable, 112 ledger sources), `privacy_bound
   edition, confirming the deploy.
 - The pre-merge R-1143-2 grep (`git grep -nE '^(<<<<<<<|=======\s*$|>>>>>>>)'`) was run on the
   merge result of #154 and returned nothing; it is now enforced mechanically by M-3's guard.
-- The board-only result section is contained in the pull request that carries it.
+- The board-only result section is contained in pull request **#156**.
 - Left for the owner, unchanged: the public-history rewrite (suggestion S-22), Property A's
   tax-rate-area rate and market rent (flagged as unobtainable without publishing identifiers),
   and the unverified owner-supplied figures on the Flagged for Review page.
