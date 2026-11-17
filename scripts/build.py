@@ -4126,7 +4126,7 @@ SUGGESTIONS = [
      "Low", "Low if done now, high if discovered late", "inheritance", ["rtc480"]),
     ("S-04", "Model a sale in the same tax year as the inheritance, before deciding anything else",
      "Modelled and published on the disposition page: a ladder from the same tax year out to sixty months at "
-     "each inheritance year, and lever 6 on the what-if page. The tax on the same-year sale is $0, the first "
+     "each inheritance year, and lever 7 on the what-if page. The tax on the same-year sale is $0, the first "
      "18 months create no taxable gain at all, and each year of waiting costs about a year of compounding. "
      "What is left for the household is the decision, not the modelling.",
      "Low", "Low", "disposition", ["irs_basis"]),

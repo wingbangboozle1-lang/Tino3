@@ -4642,3 +4642,67 @@ The Secretary of State's page was re-read on 17 November 2026 and shows the **16
 - The Git history scrub remains an owner action; this session performed no rewrite and no force-push.
 - Property A's tax-rate area and published ad valorem rate, a market rent for Property A, insurance quotes, written date-of-death valuation, lease records and any encumbrance remain owner- or third-party-supplied, and stay on the Questions and Flagged for Review pages.
 - The 2026 election results stay provisional until the Secretary of State certifies on 11 December 2026; the page and the ledger say so.
+
+## Session `arena/a4e58d90-tino3` — sale timing (a sale in the same tax year as the inheritance) and the section 1031 like-kind exchange question · claimed 2026-11-17, finished 2026-11-17
+
+*Branch note:* Arena pins this session to `arena/a4e58d90-tino3`, branched from `main` at `bd8ab5ba` (the merge of PR #153). The pull request is opened from this branch to `main`; no other branch is created, switched to or pushed. The board was scanned before the claim: the two brief items taken here (register rows S-04 and S-11 on `suggestions.html`) existed only as proposals, never as modelled content, and no board entry recorded a section 1031 computation or an alternate-valuation explanation.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| D-1 Claim this scope and push before any other edit | **done** — this section | `arena/a4e58d90-tino3` | `COORDINATION.md` |
+| D-2 Read the official sources: section 1031 (statute, Form 8824, Rev. Procs. 2005-14 and 2008-16), the inherited-property basis rule, the property-tax treatment of an exchange, and the Proposition 19 occupancy condition | **done** — seven documents read on their publishers' own domains, all seven added to the ledger | `arena/a4e58d90-tino3` | `assets/sources.json` (append only) |
+| D-3 Build `scripts/disposition.py`: a deterministic disposition engine | **done** — sale-timing ladder from the same tax year out to sixty months at every inheritance year, plus the exchange case | `arena/a4e58d90-tino3` | `scripts/disposition.py` (new), `assets/data/disposition.json` (new), `scripts/rebuild.py` |
+| D-4 Publish `disposition.html` in the "Money over time" group and wire every page that touches the question | **done** | `arena/a4e58d90-tino3` | `scripts/build.py`, `disposition.html`, regenerated pages, `README.md` |
+| D-5 Rebuild, run every gate, pull request to `main`, merge without waiting, confirm the Pages deploy, record the PR link | **done** — see the publication record below | `arena/a4e58d90-tino3` | this section |
+
+**Privacy constraint honoured:** no property-specific identifier, name, address, parcel number, postal code, county or city name, trust term, estate size or unrounded owner amount was added to any public page or to this board. Every published dollar figure is rounded to the nearest $10. Every new ledger entry links to a host already on the approved list in `scripts/verify.py`.
+
+### D-2 result: what the sources actually say
+
+| Source | What it settles |
+|---|---|
+| 26 U.S.C. 1031 (2024 ed., GPO) | (a)(1) non-recognition for real property held for productive use in a trade or business or for investment; (a)(2) **excludes real property held primarily for sale**; (a)(3) 45-day written identification and receipt by the earlier of 180 days or the return due date including extensions; (b) boot taxed to the extent of gain; (c) **no loss recognised**; (d) substituted basis; (f) two-year related-party unwind; (h) US and foreign real property are not like kind |
+| 2026 Instructions for Form 8824 | the two clocks restated by the Internal Revenue Service; section 1031 does not apply where the relinquished property was used **solely** as the taxpayer's personal residence at the time of the exchange, nor to real property held primarily for sale |
+| Rev. Proc. 2008-16 | the dwelling-unit safe harbour: 24 months of ownership, 14 days or more of fair rental in **each** of the two 12-month periods, personal use no more than the greater of 14 days or 10% of the rental days; the same standards apply to the replacement for 24 months after; the procedure is expressly limited to the "held for use" question, and its own background records that a personal residence does not qualify and that **the mere hope of selling at a gain is not an investment intent** |
+| Rev. Proc. 2005-14 | where both section 121 and section 1031 could apply, **section 121 is applied first** (4.02(1)); depreciation gain after 6 May 1997 cannot be excluded but can be deferred (4.02(2)); boot counts only to the extent it exceeds the excluded gain (4.02(3)); the excluded gain increases the replacement's basis (4.03); section 2.05: section 1031 does not apply to property used solely as a personal residence |
+| IRS like-kind real-estate tax tips | after the 2017 Act the provision is real-property only; property held primarily for sale still does not qualify |
+| R&T Code section 60 | a change in ownership is a transfer of a present interest in real property, including the beneficial use of it, the value of which is substantially equal to the value of the fee interest — so an exchange must be tested against it, it is not an automatic exclusion |
+| IRS gifts and inheritances FAQ | basis of inherited property is the value on the date of death **whether or not** a return is filed; the alternate valuation date applies **only if the executor files Form 706 and elects it there**; Schedule A to Form 8971 consistent-basis warning |
+
+### D-3 result: what the model found (2045 inheritance, 30-year horizon, everything at money10)
+
+- **A sale in the same tax year as the inheritance pays $0 of capital gains tax.** The basis is the value at death, so a sale at that value realises nothing. The first rung that produces any tax at all is **18 months**, because 5.5% of selling costs exceeds a year of appreciation.
+- **Waiting is a compounding decision, not a tax decision.** Twelve months of waiting costs $1,509,990 at the thirty-year horizon; twenty-four months $3,218,420; sixty months $8,312,740. Per year of waiting: $1.51M, $1.61M, $1.66M. Tax is a small share of that in every rung.
+- **A like-kind exchange defers $0 at the inheritance, because there is no gain to defer.** The basis step-up removes the reason most exchangers use it. It is not forgiven, only postponed: section 1031(d) gives the replacement the old basis.
+- **It only becomes live after years of letting.** Held 2 / 5 / 10 / 20 years first, the deferral is $213,560 / $762,770 / $1,766,300 / $4,193,980. Expressed as the return a replacement would have to earn: Case A (replacement held until death, gain never taxed again) allows 0.12 / 0.45 / 1.14 / 3.87 points a year below the 6.30% equity return; Case B (both sides sold at the horizon, section 1031(d) substituted basis) allows **−0.11 to 0.51 points** — that is, at two years the replacement has to *out-earn* equities for the exchange to win.
+- **The two reliefs compete for the same two years.** The intergenerational exclusion needs the home as the heir's principal residence; the safe harbour needs it rented at a fair rental with personal use held to the safe harbour's limits. On these figures the property-tax shelter is worth **$22,260 a year from the first year**, against a deferral of **$0** at the inheritance.
+- **An exchange is a change in ownership.** R&T section 60 read with section 63.2, which ends the claim on a transfer to a third party: any exclusion carried on this house ends.
+
+Modelling decisions recorded on the page itself: the waiting heir is charged the full reassessed bill (section 63.2 needs occupancy plus a filed claim); no depreciation during the wait; the exchange rows price a clean deferred exchange with the substituted basis capped at reinvested capital; transaction costs are neither deductible nor added to basis.
+
+### D-4 result: what was published
+
+- **`disposition.html`** (new, in "Money over time"): the same-year-sale explanation and the alternate valuation condition; three ladder tables (2040, 2045, 2050); the exchange deferral table; the break-even table (what the replacement must earn, Case A and Case B); the conditions table; the conflict with the Proposition 19 exclusion; the property-tax shelter lost over the years left; the frictions no column can price (intermediary fee unquoted, the clocks run from the transfer and do not stop for a market with nothing suitable, foreign real property is not like kind, section 1031(f) two-year related-party look-forward, costs not deductible and not added to basis); and an explicit "what this page cannot tell you".
+- Cross-wired without duplicating: `#timing-exchange` on the decision page; **lever 7** on the what-if page (lever 6 is another session's keep-and-borrow case, so the numbers were left consecutive rather than overwritten); two rows on the questions page; S-04 and S-11 rewritten to point at the page; seven glossary terms; two new register rows; two bullets and a glossary term on the printable brief; the "what would change the answer" list on the dashboard; a new executive-summary section; P-15's status refreshed and P-16 added on the suggestions page; a "sources read for the disposition page, 17 November 2026" table on the review page, kept separate from the other sessions' recheck tables.
+
+### Irregularities found and dispositions
+
+- **The brief's one-page claim was false for this branch.** Another session added a print-budget gate that fails the build above one sheet; this branch's brief had never been measured against it. Resolved by shortening this session's three additions to the brief until the estimate returned to **98% of a sheet**, not by relaxing the gate.
+- **Both sessions had added a "17 November 2026 recheck" function of the same name.** Resolved by keeping the other session's function and renaming this one to `disposition_sources_section`, with its own anchor on the review page, so neither pass is lost and a reader can see which session opened which document.
+- **Both sessions had numbered a what-if lever 6.** Resolved by keeping the other session's keep-and-borrow lever as 6 and renumbering this session's wait lever to 7, and correcting the S-04 text that referred to it.
+- **Register rows S-04 and S-11 were claimed twice.** P-15 ("model a sale in the same tax year") had been added by another session and was already marked done; this session replaced the status text with the ladder's actual result rather than adding a duplicate, and added P-16 for the exchange.
+- **Board collision during the merge:** this session's COORDINATION.md section was dropped by an incorrect conflict resolution that kept the main-side block. Re-appended here in full.
+
+### Publication record
+
+- **Local gates (17 November 2026):** `scripts/rebuild.py` PASS, and a second run leaves the working tree unchanged; `scripts/verify.py` PASS; `scripts/privacy_boundary.py` PASS; `scripts/tracked_tree_guard.py` PASS (71 tracked text files); `scripts/package_site.py` PASS; `scripts/verify_legacy.py --config-only` PASS; `git diff --check` clean.
+- **Counts on the merged edition:** 26 pages, **1372 table rows**, **1189 linked to official publishers**, **183 registered as unsourceable**, 4757 links, **121 ledger sources**, 141 content-free withdrawal routes, print budget 98%.
+- **Merge with `main`:** resolved by hand. Twelve conflicts: `COORDINATION.md`, `assets/sources.json` (union by id, 121 entries), `README.md` (counts recomputed after the rebuild), `scripts/build.py` (twelve hunks — the edition-date module, the improvements list, the two recheck functions and one call site, the brief's options and glossary, and four hunks in the what-if levers), and twenty generated files, all resolved from the main side and then regenerated.
+
+### Still open after this session (not blocking)
+
+- Whether *this* property would be treated as held for investment rather than for sale is a facts question for the attorney, not a number. It is registered rather than assumed, and the 45-day clock runs from the transfer.
+- What the replacement property would be, or earn: no replacement is assumed and the break-even is published instead.
+- The qualified intermediary's fee, exchange documents and legal review are not priced, because no quote exists for this household.
+- The property-tax treatment of an exchange beyond R&T section 60 was not found in statute; the page relies on section 60 read with section 63.2 and says so.
+- Property A's tax rate area, market rent, insurance quotes and the written date-of-death valuation remain owner- or third-party-supplied, and stay on the Questions and Flagged for Review pages.
