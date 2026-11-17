@@ -27,6 +27,7 @@ STEPS = (
     ("model (embed the refreshed bootstrap)", "model.py"),
     ("mixed paths (use the refreshed model and bootstrap)", "mixed.py"),
     ("estate liquidity and the two-person case", "liquidity.py"),
+    ("keep-and-borrow path (the financing overlay on the living path)", "borrow.py"),
     ("site and executive summary", "build.py"),
 )
 
