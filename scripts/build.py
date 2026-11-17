@@ -4476,17 +4476,40 @@ def history_audit_section() -> str:
         ("Street address", "0", "0", "Never committed in any reachable commit."),
         ("Parcel or assessor number", "0", "0", "Never committed in any reachable commit."),
         ("Telephone number", "0", "0", "Never committed in any reachable commit."),
-        ("Postal code of either property", "66", "0",
-         "Present in superseded file versions and in the archive directory, which is never published."),
-        ("Place name, or the county or city name", "917", "0",
-         "Superseded file versions and archive material, plus every early version written before the county and "
-         "city names were withdrawn. None of it is in the deployable artifact."),
-        ("Dollar amount that is not a multiple of ten", "143", "0",
-         "Superseded versions only. Every amount in the current tree is a multiple of ten or a verbatim "
-         "published official amount."),
-        ("Email address", "1", "0 published",
-         "One internal working note carries a publisher's contact address in a quotation. The note is excluded "
-         "from the deployable artifact, so no published file contains an email address."),
+        ("Person-name pattern", "0", "0", "Never committed in any reachable commit."),
+        ("Personal mail-service address, in file content", "0", "0",
+         "Zero after the audit was corrected on 17 November 2026 to agree with the tree guard: the two "
+         "matches it used to report in the current tree were both GitHub service addresses quoted in the "
+         "privacy documentation, not personal addresses. The personal address in this repository is in "
+         "Git's commit identities, not in any file: 172 of 482 commits carry an author address that is "
+         "not the GitHub noreply address, three distinct addresses in all, and 165 carry one as committer. "
+         "That is a rewrite of commit metadata, not of file content, and the runbook covers it."),
+        ("Postal code, in a prefixed form", "14", "0",
+         "Superseded file versions only."),
+        ("Postal code, bare", "87", "0",
+         "Superseded file versions and the archive directories, which are never published."),
+        ("Place name at property level", "246", "0",
+         "Superseded file versions and archive material, plus every early version written before the county "
+         "and city names were withdrawn. One commit message matches. None of it is in the deployable artifact."),
+        ("Place name anywhere, including inside a web address", "266", "0",
+         "The same versions, counted with the wider pattern that also catches a host name."),
+        ("County or city name", "730", "0",
+         "The widest class. Every version written before the jurisdiction names were withdrawn, including "
+         "superseded sections of the coordination board."),
+        ("Location-specific source host", "675", "0",
+         "Links to county and city publishers, whose web addresses name the jurisdiction. Withdrawn from the "
+         "published site; still in the history."),
+        ("Withdrawn metropolitan series identifier", "198", "0",
+         "The FHFA and FRED metropolitan series and their codes, withdrawn from the published edition on "
+         "15 November 2026 because they crosswalked the placeholders to their metropolitan areas."),
+        ("Metro phrasing attached to a placeholder", "82", "0",
+         "The prose form of the same crosswalk."),
+        ("Dollar amount that is not a multiple of ten", "242", "1",
+         "Superseded versions hold the pre-rounding figures. In the current tracked tree one file still does: "
+         "the coordination board, whose older sessions' sections quote unrounded model output and published "
+         "aggregate data. It is excluded from the published site by the Jekyll configuration and the packaging "
+         "allowlist, and it is a public file of this repository. Every page and every data file the site "
+         "publishes is clean, and the board is the residue the history rewrite would also have to take."),
     ]
     body = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td><td>{esc(d)}</td>"
             + f'<td><a href="review.html#register">Logged in the register</a></td>' for a, b, c, d in rows]
@@ -4500,17 +4523,27 @@ multiple of ten. That scan covers the deployable artifact, not the Git history b
 <p>A separate read-only audit therefore walks every commit reachable in this repository and counts how many file
 versions carry the <em>shape</em> of each identifier. It reports counts only. It does not print a matching value,
 because publishing the value in order to disclose it would recreate exactly the exposure being disclosed.</p>
-<p><strong>The result is that the current published tree is clean on every class, and the history is not clean on
-three of them.</strong> No street address, parcel number or telephone number has ever been
-committed. Postal codes, property-level place names and the two jurisdiction names did appear in superseded file
-versions and in archive material, none of which is part of the published artifact. The full counts are below.</p>
+<p><strong>The measurement below was taken on 17 November 2026 over the complete history in a full clone: 482
+commits from 10 to 17 November 2026, 1,869 distinct file versions.</strong> The current tracked tree is clean on
+every identifier class. No street address, parcel number, telephone number or personal mail-service address has
+ever been committed in any file. Postal codes, place names, the two jurisdiction names, the jurisdiction
+publishers' web addresses and the withdrawn metropolitan series identifiers did appear in superseded file
+versions and in archive material, none of which is part of the published artifact. One amount class still has a
+match in the current tree, and it is a single file: this repository's coordination board.</p>
+<p>Two things about the numbers are worth stating because they changed since the last measurement on 16 November.
+The audit now treats a GitHub service address the way the tracked-tree guard already does, so the two
+documentation matches it used to report are no longer counted as personal; and it takes its list of exempt
+official amounts from the publication gate instead of keeping a copy of its own, which had drifted and was
+counting three statutory recording fees as exposure. Counts that moved, moved because the measuring was corrected,
+not because the history changed. A session cannot rewrite the history: it can only measure it honestly, which is
+what this table is for.</p>
 <p>Cleaning the history is a different operation from cleaning the site: it needs a rewrite and a force-push of a
 public branch, which invalidates every clone, every open pull request and every fork, and cannot recall copies
 already downloaded. That is the owner's decision, it is recorded as an open item, and the procedure and its costs
 are written up for the owner. Until that decision is taken, this page states the exposure rather than claiming it
 has been removed.</p>""")
-        + table("File versions whose content matches each identifier class",
-                ["Identifier class", "File versions in history", "Matches in the published tree",
+        + table("File versions whose content matches each identifier class, measured 17 November 2026",
+                ["Identifier class", "File versions in history", "Files in the current tracked tree",
                  "What that means", "Basis"], body,
                 note="Counts are an upper bound. A file version can match because the rule itself is being "
                      "described, or because an official documentary quote contains a non-round amount, as well as "
@@ -4522,11 +4555,16 @@ has been removed.</p>""")
 <li><code>scripts/privacy_scrub_audit.py</code> runs <code>git log --all</code> and <code>git log --name-only</code>,
 reads every distinct file version, and tests it against the same identifier patterns the live publication gate
 uses. It writes nothing and changes nothing.</li>
-<li>The amount class is evaluated the way the live gate evaluates it: the formatted amount is parsed and its value
-tested, so a rounded figure is never counted and a pre-rounding figure always is. Official statutory amounts are
-exempted exactly as the gate exempts them.</li>
-<li>The audit knows its own limits. It cannot see pull-request diffs, forks, or copies outside this repository, and
-it cannot certify that a deleted object is unreachable on the hosting service.</li>
+<li>The amount class is evaluated by calling the live gate's own money test, so a rounded figure is never
+counted and a pre-rounding figure always is, and the exemption for verbatim official amounts cannot drift from
+the exemption the site actually applies.</li>
+<li>The count needs a complete clone. A shallow checkout silently under-reports: this repository's Arena clones
+arrive shallow, so <code>git fetch --unshallow origin</code> is run before the audit, and the audit says in its
+own header when the history it read was incomplete.</li>
+<li>The audit knows its own limits. It reads file content, not commit metadata: the author and committer
+addresses Git stores on each commit are outside its patterns, and those carry an address in 172 of the 482
+commits that no file has ever held. It cannot see pull-request diffs, forks, or copies outside this repository,
+and it cannot certify that a deleted object is unreachable on the hosting service.</li>
 </ul>
 </section>"""
     )
@@ -4920,8 +4958,15 @@ def page_review() -> str:
          f"does not move."),
         ("Depreciation follows a simple rule",
          "80% of value treated as improvements, straight line over 27.5 years, capped at the building's depreciable amount. Land is not depreciated. Real cost segregation would differ."),
-        ("No mortgage, no 1031 exchange, no instalment sale, no gifting",
-         "Each is listed on the questions page. None is modelled."),
+        ("A new loan is not modelled, borrowing against the house is",
+         "Borrowing to take the cash out while keeping the home was an omission until 17 November 2026 and is "
+         "now a priced path of its own, with its own engine and page (keep-and-borrow.html): three "
+         "loan-to-value rungs at the published 2026 mortgage averages, an interest-only line at the published "
+         "prime rate, and the hurdle return each rung has to beat. What remains unmodelled is the rest of the "
+         "list - a 1031 exchange, an instalment sale, and gifting - each on the questions page. A loan already "
+         "registered against either building at the date of death is a separate gap: nothing in the record says "
+         "whether either is encumbered, so the what-if page prices that per $1,000 a month of payment instead "
+         "of guessing at a balance."),
         ("The inheritance year is a range, not a date",
          "2040, 2045 and 2050 are all modelled. The plan should be revisited when the timing is known."),
         ("The property tax lesser-of rule is modelled only under the drawn inflation paths",
@@ -4950,7 +4995,7 @@ def page_review() -> str:
         "Combined tax rates are added, not interacted": ["irs_tc409", "ftb_cg"],
         "The housing value of living in the home is priced, not added": [],
         "Depreciation follows a simple rule": ["irs_p527"],
-        "No mortgage, no 1031 exchange, no instalment sale, no gifting": [],
+        "A new loan is not modelled, borrowing against the house is": ["fred_mortgage", "fred_prime"],
         "The inheritance year is a range, not a date": [],
         "The property tax lesser-of rule is modelled only under the drawn inflation paths": ["rtc51", "boe_pub29", "fred_cpi"],
         "The Proposition 19 shelter path after 2027 is a projection": ["boe_lta25009"],
@@ -6115,7 +6160,10 @@ def executive_summary_markdown() -> str:
     a("- Whether either building carries a mortgage, deed of trust or lien at the transfer. Nothing in the "
       "record says either way, so both are modelled free and clear and the decision page states that as an "
       "assumption and prices each stated payment level. An encumbrance changes the size of every keeping path's "
-      "bill and never the ranking, because a holder pays the interest as well as the principal.")
+      "bill and never the ranking, because a holder pays the interest as well as the principal. A separate "
+      "question follows from it, and it is a legal one rather than a financial one: whether the instrument "
+      "holding title permits the beneficiary to grant a lien over the property at all, which is what the "
+      "keep-and-borrow path assumes.")
     a("- A market rent for Property A, and the seller's actual selling costs.")
     a("- Whether the trust actually holds title, and whether the transfer is between a parent and a child.")
     a("")
