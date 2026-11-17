@@ -114,7 +114,7 @@ the case; README carries it and the verifier's current counts.
 | A-2 Re-verify the mortgage band at source: read the official weekly series table for the 30-year fixed average in full, confirm the latest, the 2026 low and the 2026 high, and record the read in the ledger entry | **done** — see the completion record below | `arena/a9ed7d25-tino3` | `assets/sources.json` (`fred_mortgage` entry fields) |
 | A-3 **Model keep-and-borrow end to end**: a `keep_and_borrow_cases()` engine in `scripts/model.py` (stated loan-to-value rungs, the re-verified rate band, interest-only with no deduction, proceeds invested at the modelled after-tax equity return, house carried and sold exactly as the live-in path, principal repaid at the horizon), published as `borrow_cases` | **done** (`1fedaf8`, pushed) — see the completion record below | `arena/a9ed7d25-tino3` | `assets/data/inputs.json` (`verified_parameters` append), `scripts/model.py` |
 | A-4 **Publish it where decisions are read**: the decision page's debt section gets a "borrowing instead of selling, priced end to end" table, the what-if page gets a lever, the suggestions register flips "Add a mortgage case" to done with what it now shows, and the liquidity page cross-links; rebuild, run every gate | **done** (`1fedaf8`, pushed) — see the completion record below | `arena/a9ed7d25-tino3` | `scripts/build.py` (debt / what-if / suggestions / liquidity / executive-summary sections), `scripts/liquidity.py` (read the rate from the one inputs key instead of a duplicated constant), regenerated pages, `EXECUTIVE_SUMMARY.md` |
-| A-5 Rebuild, run every gate, open the pull request from this branch to `main`, merge without waiting for approval, confirm the Pages deploy, record the result | **in progress** | `arena/a9ed7d25-tino3` | this section only |
+| A-5 Rebuild, run every gate, open the pull request from this branch to `main`, merge without waiting for approval, confirm the Pages deploy, record the result | **done** — see the publication record below | `arena/a9ed7d25-tino3` | this section only |
 
 **Privacy commitments for this session.** No name, street address, postal code, parcel identifier, county or city name, or jurisdiction-specific publisher host appears in any file this session writes, including this board. Owner-supplied money is published only as a multiple of ten; official amounts are published verbatim. The loan-to-value rungs are stated scenarios, not facts about the household: no balance or application exists, and the pages say so. Every new table row links to a host already on the approved list in `scripts/verify.py`.
 
@@ -179,6 +179,31 @@ the case; README carries it and the verifier's current counts.
   were caught by this pass and fixed before commit: a doubled percent sign and a raw `50.0` in the
   dashboard sentence, a triple-backslash link escape in the executive-summary fact that the link
   gate caught, and a dropped `id` field in the `fred_mortgage` ledger merge that the build caught.
+
+### A-5 publication record, 17 November 2026
+
+- **Pull request:** <https://github.com/wingbangboozle1-lang/Tino3/pull/176>, from `arena/a9ed7d25-tino3`
+  to `main`, opened at head `3ed095d` with the body carrying the full collision log.
+- **Pre-merge state:** `MERGEABLE` / `CLEAN`; both PR checks green - `verify` (25s) and the new
+  `report` integrity check (12s) from PR #174.
+- **Merge:** `gh pr merge 176 --merge` succeeded, no approval waited for, no `--auto`. Merge commit
+  **`091d3a420c94ff68b2281266d9a2d113b1de0b5c`**, merged **2026-11-17 17:28:10 UTC**.
+- **Deploy:** on `091d3a4` all three runs succeeded - `Verify static site` (run 44137324597),
+  `Deploy GitHub Pages` (44137324611) and `pages build and deployment` (44137323263).
+- **Live check:** the published `what-if.html` serves the merged edition - the jump list carries all
+  eight of this session's matrix rows (`Borrow 25% at 5.98%` through `Borrow into the stated crash`)
+  alongside the five forced-case rows (`Borrow against the house: tax of ...`), and the baseline
+  "Live in it" row reads **$5,418,970** (the #171-corrected figure).
+- **Merges this branch carried (all resolved keeping both sides):** `origin/main` four times - at
+  `5ac5113` (PRs #154-#160), `20eb134` (#161-#171), `2884e85` (#169-#173) and `8478b5d` (#174-#175);
+  conflicts touched `scripts/build.py` (7 hunks, then 3), `scripts/model.py` (two hunks - function-name
+  collision resolved by renaming this session's engine), the board, the register, the ledger and the
+  generated pages (always regenerated, never hand-merged). No other session's work was discarded.
+- **Left for later, not blocking:** suggestion **S-29** (a lender's written indication - the rate on
+  this page is a published average, not an offer, and whether the instrument holding title permits a
+  lien is a legal question for attorney and trustee); borrowing against **Property B** is not modelled
+  and stays open on the register; the 2020s-style re-read gates in the board (parcel tax 11 Dec 2026,
+  Proposition 19 amount Feb 2027) continue to apply to the mortgage band as well.
 
 ## Session `arena/5fb0dcb1-tino3` — law-watch refresh to the 16 November 2026 official results reading, live Proposition 19 initiative recheck, publication · claimed 2026-11-17
 
