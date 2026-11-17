@@ -22,6 +22,7 @@ ECON = json.loads((DATA / "economy.json").read_text(encoding="utf-8"))
 SERIES = json.loads((DATA / "series.json").read_text(encoding="utf-8"))
 MIXED = json.loads((DATA / "mixed.json").read_text(encoding="utf-8"))
 LIQ = json.loads((DATA / "liquidity.json").read_text(encoding="utf-8"))
+DISPO = json.loads((DATA / "disposition.json").read_text(encoding="utf-8"))
 PRECOMMIT = INPUTS.get("precommit", {"rules": [], "household_goals": [], "review_gates": [], "meta": {}})
 
 A = INPUTS["property_a"]
@@ -39,7 +40,7 @@ NAV_GROUPS = [
                     "decision-rules.html",
                     "what-if.html", "briefing.html"]),
     ("The two properties", ["property-a.html", "property-b.html", "ownership-distinction.html"]),
-    ("Money over time", ["costs.html", "projections.html", "taxes.html"]),
+    ("Money over time", ["costs.html", "projections.html", "taxes.html", "disposition.html"]),
     ("Rules and the estate", ["inheritance.html", "timeline.html", "estate.html", "liquidity.html",
                     "laws.html"]),
     ("Black swan economics", ["black-swan.html", "economy.html"]),
@@ -60,6 +61,7 @@ PAGE_TITLES = {
     "costs.html": "Running costs",
     "projections.html": "Year by year projections",
     "taxes.html": "Income tax on each path",
+    "disposition.html": "Selling timing and the like-kind exchange",
     "inheritance.html": "Inheriting through a trust, step by step",
     "estate.html": "Estate and inheritance tax thresholds",
     "liquidity.html": "Estate liquidity and borrowing",
@@ -667,6 +669,7 @@ SUMMARIES = {
     "timeline.html": "The deadlines and key dates that shape the inheritance decision.",
     "sources.html": "Every official source used, with what it supports.",
     "liquidity.html": "The nine-month payment clock, what deferring costs, and the two-person case.",
+    "disposition.html": "What waiting to sell costs, and what a like-kind exchange would defer.",
 }
 
 
@@ -2809,6 +2812,221 @@ deliberately empty. Filling it in is the household's work, and it stays private.
     return (head + tax_table + "".join(defer_tables) + house_table + cash_table
             + borrow_table + exclusions_table + joint_table + limits
             + '<h2 id="inventory">The private estate inventory</h2>' + inventory)
+
+
+# --------------------------------------------------------------- disposition --
+def page_disposition() -> str:
+    """Sale timing from the date of inheritance, and what an exchange is worth."""
+    timing = DISPO["sell_timing"]
+    exch = DISPO["exchange"]
+    base_year = timing["base_year"]
+    summary = timing["summary"]
+    rows_45 = timing["by_year"][str(base_year)]
+    at_inheritance = exch["at_inheritance"]
+
+    head = callout("answer", "The same-year sale, and what waiting costs", f"""
+<p>Property acquired from a decedent takes a basis equal to its value on the date of the decedent's death, and
+that is so <strong>whether or not an estate tax return is filed</strong>. The value on the alternate valuation
+date applies only if the executor files a return and elects it there. So a sale made at the value at death
+realises no gain and pays no capital gains tax: on a {base_year} inheritance this model puts the tax on an
+immediate sale at <strong>{m(summary['same_year_tax'])}</strong>.</p>
+<p>That is the number every other path has to beat, and the table below asks the only question left: what does it
+cost to wait? Waiting buys appreciation and pays for it three times over - in selling costs on the higher price,
+in property tax on a reassessed value, and in a lost year of compounding. By the {base_year}
+inheritance, twelve months of waiting costs <strong>{m(abs(summary['twelve_month_cost']))}</strong> at the
+thirty-year horizon, and it still creates <strong>no taxable gain at all</strong>, because the
+{pcf(ASM['selling_cost_pct']['baseline'], 1)} of selling costs is greater than a year of appreciation.
+The first rung that produces tax is {summary['months_of_waiting_before_tax']} months.</p>
+<p class="callout-src">{slink('irs_basis')} &middot; {slink('rtc63_2')}</p>""")
+
+    timing_tables = []
+    for year in timing["inherit_years"]:
+        rows = []
+        for r in timing["by_year"][str(year)]:
+            hold = (f"{m(r['property_tax_during_wait'])} property tax"
+                    f"<br><span class='sub'>+ {m(r['running_cost_during_wait'])} running costs</span>"
+                    if r["wait_months"] else "&mdash;")
+            cost = ("&mdash;" if not r["wait_months"]
+                    else f"{m(r['vs_immediate'])}<br><span class='sub'>"
+                         f"{m(abs(r['vs_immediate_per_year']))} a year of waiting</span>")
+            rows.append(
+                f"<td><strong>{esc(r['wait_label'])}</strong></td>"
+                f"<td>{m(r['price'])}</td><td>{m(r['basis'])}</td>"
+                f"<td>{m(r['gain'])}</td><td>{m(r['tax'])}</td>"
+                f"<td>{m(r['net_proceeds'])}</td><td>{hold}</td>"
+                f"<td>{m(r['terminal'])}</td><td>{cost}</td>"
+                + src_cell(["irs_basis", "rtc63_2"]))
+        timing_tables.append(
+            table(f"If the inheritance falls in {year}: what waiting to sell costs",
+                  ["Wait before selling", "Sale price", "Basis: the value at death",
+                   "Gain after selling costs", "Tax on the gain", "Net proceeds",
+                   "Cost of holding during the wait", "Value at the 30-year horizon",
+                   "The wait, measured against selling now", "Source"],
+                  rows,
+                  note=("Every row is measured at the same horizon as the rest of the site: the thirtieth year "
+                        "after the inheritance, so a later sale has less time to compound. The house is held empty "
+                        "or occupied by the heir during the wait, not let, so no depreciation is claimed and no "
+                        "rent is credited. The property tax during the wait is charged on the reassessed value, "
+                        "because the intergenerational exclusion is a claim the heir makes by moving in and "
+                        "filing, not something a seller waiting for a better price can rely on.")))
+
+    verdict_timing = callout("note", "What the ladder says", f"""
+<ul>
+<li>A sale in the same tax year as the inheritance is already the baseline sell path on the
+<a href="decision.html">decision page</a>. It is not a new path: it is the path, and this page states its tax
+explicitly instead of leaving it implicit.</li>
+<li><strong>Tax is not the reason to hurry.</strong> The first {summary['months_of_waiting_before_tax']} months
+create no taxable gain at all, and the tax at sixty months is
+{m(next(r['tax'] for r in rows_45 if r['wait_months'] == 60))} on a price of
+{m(next(r['price'] for r in rows_45 if r['wait_months'] == 60))} - about
+{next(r['tax_share_of_price'] for r in rows_45 if r['wait_months'] == 60)}% of it.</li>
+<li><strong>Compounding is the reason to hurry.</strong> Almost the whole cost of waiting is the year of
+investment return given up, not the tax. That is why the cost per year of waiting is nearly constant across the
+ladder: {m(abs(summary['twelve_month_cost_per_year']))} for the first year,
+{m(abs(summary['sixty_month_cost_per_year']))} a year averaged over five.</li>
+<li><strong>None of this is a forecast of price.</strong> The house grows at the modelled
+{pcf(ASM['house_growth']['baseline'], 1)} a year in every row. If the heir has a reason to think a
+specific sale date will fetch more, that is a view about price, and the
+<a href="black-swan.html">black swan page</a> is where the downside of acting on it is priced.</li>
+</ul>""")
+
+    exchange_head = callout("answer", "The like-kind exchange, priced the way the statute works", f"""
+<p>An exchange under section 1031 defers the tax a sale would realise. It does not forgive it: the deferred gain
+rides in the replacement property, whose basis is set by reference to the basis of the property given up, and it
+is taxed when the replacement is disposed of. It also does nothing about property tax - a transfer in an exchange
+is a change in ownership under Revenue and Taxation Code section 60, so the replacement is enrolled at its own
+value.</p>
+<p><strong>The finding, stated plainly: at the inheritance there is nothing to defer.</strong> The gain on a sale
+at the date-of-death value is {m(at_inheritance['gain'])}, so the tax an exchange could postpone is
+<strong>{m(at_inheritance['tax_deferred'])}</strong>. The replacement property would have to earn
+{at_inheritance['required_return_pct']:.2f}% a year - exactly the modelled equity return - for the exchange to
+break even. The step-up at death removes the reason most exchangers do this.</p>
+<p class="callout-src">{slink('uscode1031')} &middot; {slink('irs_i8824')} &middot; {slink('rtc60')}
+&middot; {slink('irs_basis')}</p>""")
+
+    exch_rows = []
+    for r in exch["rows"]:
+        exch_rows.append(
+            f"<td><strong>{r['hold_years']} year{'s' if r['hold_years'] != 1 else ''}</strong></td>"
+            f"<td>{m(r['value_at_exchange'])}</td><td>{m(r['adjusted_basis'])}</td>"
+            f"<td>{m(r['gain'])}</td>"
+            f"<td>{m(r['recapture'])}<br><span class='sub'>of the gain</span></td>"
+            f"<td>{m(r['tax_if_sold'])}</td>"
+            f"<td><strong>{m(r['tax_deferred_by_exchange'])}</strong></td>"
+            f"<td>{r['deferred_share_of_capital']:.1f}%</td>"
+            f"<td>{'Yes' if r['safe_harbour_available'] else 'No'}</td>"
+            + src_cell(["uscode1031", "irs_i8824", "irs_rp2008_16"]))
+    exch_table = table(
+        f"What an exchange would defer, at a {exch['inherit_year']} inheritance, holding the house first",
+        ["Years held before the exchange", "Value of the house then", "Adjusted basis then",
+         "Gain if it were sold", "Of which depreciation recapture", "Tax if it were sold",
+         "Tax the exchange would defer", "Deferral as a share of the capital reinvested",
+         "Dwelling-unit safe harbour available?", "Source"],
+        exch_rows,
+        note=("Held as a rental in every row beyond year zero, which is the only way the property can be "
+              "'held for productive use in a trade or business or for investment' as section 1031(a)(1) "
+              "requires. Depreciation is claimed at the 27.5-year residential life on 80% of the value, the same "
+              "convention the rest of the site uses, and it is what creates the recapture column. The safe harbour "
+              "needs 24 months of ownership, so it cannot be met in the first two years."))
+
+    breakeven_rows = []
+    for r in exch["rows"]:
+        held = (f"{r['required_return_pct']:.2f}% a year"
+                if r["required_return_pct"] is not None else "&mdash;")
+        hand = (f"{r['handicap_pp']:.2f} points a year less"
+                if r["handicap_pp"] is not None else "&mdash;")
+        sold = (f"{r['required_return_if_sold_pct']:.2f}% a year"
+                if r["required_return_if_sold_pct"] is not None else "&mdash;")
+        hand_b = (f"{r['handicap_if_sold_pp']:.2f} points a year less"
+                  if r["handicap_if_sold_pp"] is not None else "&mdash;")
+        breakeven_rows.append(
+            f"<td><strong>{r['hold_years']} year{'s' if r['hold_years'] != 1 else ''}</strong></td>"
+            f"<td>{r['years_left']}</td>"
+            f"<td>{m(r['net_if_sold'])}</td><td>{m(r['capital_if_exchanged'])}</td>"
+            f"<td>{m(r['deferral_upside'])}</td>"
+            f"<td>{held}</td><td>{hand}</td>"
+            f"<td>{sold}</td><td>{hand_b}</td>"
+            + src_cell(["uscode1031", "irs_tc409", "irs_tc559", "ftb_cg"], "Model and rates"))
+    breakeven_table = table(
+        "What the replacement property has to earn to justify the deferral",
+        ["Years held first", "Years left in the horizon", "Capital if sold and reinvested",
+         "Capital if exchanged", "The most the deferral can be worth",
+         "Case A: nothing taxed again (held until death)", "How far below equities that allows",
+         "Case B: both sold on the same day at the horizon", "How far below equities that allows",
+         "Source"],
+        breakeven_rows,
+        note=("Case A is the generous case and the one the rest of this site measures: neither side is taxed at "
+              "the horizon, which is what happens if both are still held at death. Case B is the symmetric case "
+              "nobody quotes: both sides are liquidated on the same day, the deferred gain is taxed then, and the "
+              "only thing the exchange has bought is the time value of the tax. The real-estate side pays the "
+              "modelled 5.5% selling cost again in Case B and the securities side pays none, which is why a "
+              "zero-deferral exchange shows the exchange slightly behind. 'The most the deferral can be worth' is "
+              "the tax kept, compounded at the modelled equity return for the years left."))
+
+    pt_rows = []
+    for r in exch["rows"]:
+        pt_rows.append(
+            f"<td><strong>{r['hold_years']} year{'s' if r['hold_years'] != 1 else ''}</strong></td>"
+            f"<td>{m(r['bill_if_excluded'])}</td><td>{m(r['bill_if_reassessed'])}</td>"
+            f"<td>{m(r['annual_shelter_lost'])}</td>"
+            f"<td>{m(r['shelter_lost_over_years_left']) if r['years_left'] else '&mdash;'}</td>"
+            + src_cell(["rtc60", "rtc63_2", "boe_pub29"]))
+    pt_table = table(
+        f"What the exchange costs in property tax, at a {exch['inherit_year']} inheritance",
+        ["Years held first", "Annual bill if the exclusion is kept",
+         "Annual bill once the property is transferred", "Extra property tax a year",
+         "Extra property tax over the years left", "Source"],
+        pt_rows,
+        note=("An exchange is a transfer to a third party, and section 63.2 ends the claim period on a transfer "
+              "to a third party or when the transferee stops occupying. The replacement is enrolled at its own "
+              "full value under section 60. The excluded roll grows at the 2% cap while a reassessed value grows "
+              "with the market, so the gap widens every year, which is why the cumulative column is not simply "
+              "the annual column multiplied by the years left."))
+
+    conflict = callout("flag", "The two reliefs compete for the same two years", f"""
+<p>{esc(exch['conflict']['statement'])}</p>
+<p>So the sequence the statute allows is: <strong>either</strong> move in, claim the exclusion, and keep it by
+staying, <strong>or</strong> let the property at a fair rental for two years with personal use kept to the safe
+harbour's limits, and only then exchange. A household that wants the property-tax relief and the deferral at the
+same time has to choose which one it is giving up, and on these figures the property-tax relief is worth
+{m(exch['property_tax']['annual_shelter_lost'])} a year from the first year, against a deferral of
+{m(exch['at_inheritance']['tax_deferred'])} at the inheritance.</p>
+<p class="callout-src">{slink('rtc63_2')} &middot; {slink('irs_rp2008_16')} &middot; {slink('irs_rp2005_14')}</p>""")
+
+    cond_table = table(
+        "What has to be true for an exchange to be available at all",
+        ["Condition", "Where it comes from", "Source"],
+        [(f"<td>{esc(c['condition'])}</td><td>{esc(c['authority'])}</td>" + src_cell(c["src"]))
+         for c in DISPO["conditions"]],
+        note="These are the statute and the Internal Revenue Service's own procedures, not a checklist written "
+             "for this household. Every one of them is a question for the attorney before the property is "
+             "marketed, because the 45-day clock starts on the transfer, not on the decision.")
+
+    frictions_html = callout("flag", "What the exchange costs that no column above can price", f"""
+<ul>
+{"".join(f"<li>{esc(f)}</li>" for f in DISPO['frictions'])}
+</ul>""")
+
+    limits = callout("flag", "What this page cannot tell you", f"""
+<ul>
+<li><strong>Whether the heir wants to be a landlord of a different building.</strong> The whole exchange question
+presupposes it. Nothing here recommends it.</li>
+<li><strong>Whether this property would be treated as held for investment rather than for sale.</strong> Section
+1031(a)(2) excludes real property held primarily for sale, and the Internal Revenue Service's own safe harbour
+procedures record that a personal residence does not qualify and that the mere hope of selling at a gain is not
+an investment intent. That is a facts question for the attorney, not a number.</li>
+<li><strong>What the replacement property would be, or earn.</strong> No replacement is assumed. The break-even
+columns are published instead of a forecast, which is the honest way round: the site does not know the return, so
+it publishes the return the property would need.</li>
+<li><strong>Whether the transfer itself is excluded from reassessment.</strong> Every property tax figure here
+assumes the intergenerational exclusion exists at all, which depends on the relationship question
+<a href="questions.html">A-1</a>.</li>
+<li><strong>Whether a qualified intermediary's fee, legal costs or the exchange documents change the
+arithmetic.</strong> They are not priced, because no quote exists.</li>
+</ul>""")
+
+    return (head + "".join(timing_tables) + verdict_timing + exchange_head + exch_table
+            + breakeven_table + pt_table + conflict + cond_table + frictions_html + limits)
 
 
 # --------------------------------------------------------------------- laws --
@@ -5450,6 +5668,8 @@ PAGE_BUILDERS = {
     "costs.html": (page_costs, "Water, power, insurance, maintenance and tax, now and projected."),
     "projections.html": (page_projections, "Year by year to 2076 for value, assessed value and tax."),
     "taxes.html": (page_taxes, "Basis step-up, capital gains, the 121 exclusion, recapture."),
+    "disposition.html": (page_disposition,
+                         "What waiting to sell costs, month by month, and what a like-kind exchange would defer."),
     "inheritance.html": (page_inheritance, "The trust transfer, phase by phase, with deadlines."),
     "timeline.html": (page_timeline, "Every legal and tax clock in order, from death and from transfer, with its official source."),
     "what-if.html": (page_what_if, "Change one lever at a time. Each case is a link; no script is used."),

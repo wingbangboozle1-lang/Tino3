@@ -1,5 +1,5 @@
 {
- "as_of": "2026-11-16",
+ "as_of": "2026-11-17",
  "edition": "Anonymised quantitative decision edition; every published figure rounded to the nearest $10.",
  "scope": "Union of two independently maintained ledgers, merged on 13 November 2026. Entries kept verbatim from whichever ledger supplied them; where an entry had no 'supports' field its 'verifies' list was carried across, and 'limits' was filled from 'limit' or 'caveat' when present. Neither ledger was rewritten to match the other.",
  "sources": [
@@ -608,9 +608,9 @@
    "publisher": "Internal Revenue Service",
    "title": "Gifts and inheritances - inherited property basis and sale",
    "url": "https://www.irs.gov/faqs/interest-dividends-other-types-of-income/gifts-inheritances/gifts-inheritances",
-   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
-   "supports": "Property acquired from a decedent generally takes a basis equal to its fair market value at the date of death, so gain on an immediate resale is normally near zero.",
-   "limits": "Special rules apply to community property, to property acquired by gift within one year of death, to income in respect of a decedent and to certain trusts. This is not an exhaustive basis analysis."
+   "checked": "Carried in the repository source ledger and re-checked on 2026-11-13. The FAQ itself was opened and read on the publisher's official domain on 2026-11-17, and the alternate valuation condition above is quoted from it.",
+   "supports": "The basis of property inherited from a decedent is generally its fair market value on the date of the decedent's death, and that is so whether or not the executor files an estate tax return. The fair market value on the alternate valuation date applies only if the executor files Form 706 and elects it on that return. Gain is the excess of the sale price over that basis.",
+   "limits": "The FAQ also warns that a recipient who receives a Schedule A to Form 8971 may be required to report a basis consistent with the estate tax value finally determined, and that an accuracy-related penalty may apply to a basis in excess of that value. Special rules apply to community property, to property acquired by gift within one year of death, to income in respect of a decedent and to certain trusts."
   },
   {
    "id": "irs_estate",
@@ -692,7 +692,7 @@
     "For calendar year 2027 the basic exclusion amount under section 2010(c)(3) is $15,480,000 (section 3.44)",
     "For calendar year 2027 the first $20,000 of gifts to any person is not included in total taxable gifts (section 3.46(1))"
    ],
-   "quote": ".44 Basic Exclusion Amount for Estate Tax. For calendar year 2027, the basic exclusion amount under § 2010(c)(3) is $15,480,000.",
+   "quote": ".44 Basic Exclusion Amount for Estate Tax. For calendar year 2027, the basic exclusion amount under \u00a7 2010(c)(3) is $15,480,000.",
    "checked": "Read on the publisher's official domain on 2026-11-13 (search excerpt) and read in full on 2026-11-16: section 3.44 and section 3.46 were opened directly in the published PDF, and both sentences are quoted from it.",
    "id": "irs_rp2635",
    "supports": "For calendar year 2027 the basic exclusion amount under section 2010(c)(3) is $15,480,000",
@@ -706,7 +706,7 @@
     "Assets of an irrevocable grantor trust that are not included in the gross estate get no basis adjustment at death",
     "Property the decedent placed in a trust that stayed revocable is treated as acquired from the decedent (section 1014(b)(2) and (3))"
    ],
-   "quote": "the basis of Asset is not adjusted to its fair market value on the date of A's death under § 1014 because Asset was not acquired or passed from a decedent as defined in § 1014(b).",
+   "quote": "the basis of Asset is not adjusted to its fair market value on the date of A's death under \u00a7 1014 because Asset was not acquired or passed from a decedent as defined in \u00a7 1014(b).",
    "checked": "opened on the publisher's site in this session",
    "id": "irs_rr2023_2",
    "supports": "Assets of an irrevocable grantor trust that are not included in the gross estate get no basis adjustment at death | Property the decedent placed in a trust that stayed revocable is treated as acquired from the decedent (section 1014(b)(2) and (3))",
@@ -1259,6 +1259,60 @@
    "checked": "opened on the publisher's site on 2026-11-16 (2023 edition of the United States Code)",
    "supports": "The compounding convention used in every deferral figure on the liquidity page: interest on unpaid tax compounds daily, not annually.",
    "limits": "The engine on this site compounds on a 365-day year. The IRS determines rates quarterly and may apply them per quarter; small differences are possible against an assessment."
+  },
+  {
+   "id": "uscode1031",
+   "publisher": "U.S. Government Publishing Office",
+   "title": "26 U.S.C. 1031, Exchange of real property held for productive use or investment (2024 edition of the United States Code)",
+   "url": "https://www.govinfo.gov/content/pkg/USCODE-2024-title26/html/USCODE-2024-title26-subtitleA-chap1-subchapO-partIII-sec1031.htm",
+   "checked": "Opened on the publisher's official domain on 2026-11-17 and read in this session.",
+   "supports": "The statute, quoted from the 2024 edition: (a)(1) no gain or loss is recognised on the exchange of real property held for productive use in a trade or business or for investment, if exchanged solely for real property of like kind which is to be held either for productive use in a trade or business or for investment; (a)(2) the subsection does not apply to any exchange of real property held primarily for sale; (a)(3) property received is treated as not like kind unless it is identified on or before the 45th day after the transfer of the relinquished property and received by the earlier of the 180th day or the due date, including extensions, of the return for the year of the transfer; (b) gain is recognised to the extent of money and the fair market value of other property received; (c) no loss is recognised; (d) the basis of property acquired is the basis of the property exchanged, decreased by money received and increased by gain recognised; (f) a related-party exchange is unwound if either side disposes within two years; (h) real property in the United States and real property outside it are not like kind.",
+   "limits": "The statutory text, not the regulations. Regulations sections 1.1031(a)-1, 1.1031(a)-3 and 1.1031(k)-1 add the definition of real property and the mechanics of deferred exchanges; the site cites the Instructions for Form 8824 for the timing rules as the IRS states them and does not restate the regulations. Whether a particular property is held for investment is a facts question the statute cannot answer."
+  },
+  {
+   "id": "irs_i8824",
+   "publisher": "Internal Revenue Service",
+   "title": "2026 Instructions for Form 8824, Like-Kind Exchanges",
+   "url": "https://www.irs.gov/pub/irs-prior/i8824--2026.pdf",
+   "checked": "Opened on the publisher's official domain on 2026-11-17 and read in this session.",
+   "supports": "The timing rules as the IRS states them: the replacement property must be identified in a signed written document no later than 45 days after the date the property given up was transferred, and must be received by the earlier of the 180th day after that transfer or the due date, including extensions, of the return for the year of the transfer. It also states that section 1031 does not apply to an exchange of real property if the property given up was used solely as the taxpayer's personal residence at the time of the exchange, that section 121 may apply where the property was owned and used as a main home for at least two years in the five-year period ending on the date of the exchange, and that section 1031 does not apply to exchanges of real property held primarily for sale (citing section 1031(a)(2)).",
+   "limits": "The 2026 revision of the instructions. The form itself is the reporting mechanism; the instructions are not a ruling, and the related-party rules, disqualified persons and exchange accommodation titleholder rules are summarised rather than reproduced."
+  },
+  {
+   "id": "irs_rp2008_16",
+   "publisher": "Internal Revenue Service",
+   "title": "Revenue Procedure 2008-16, safe harbour for a dwelling unit qualifying as property held for productive use in a trade or business or for investment",
+   "url": "https://www.irs.gov/pub/irs-drop/rp-08-16.pdf",
+   "checked": "Opened on the publisher's official domain on 2026-11-17 and read in this session.",
+   "supports": "The qualifying use standards, read from the revenue procedure: a dwelling unit qualifies if it is owned by the taxpayer for at least 24 months immediately before the exchange and, within each of the two 12-month periods immediately preceding the exchange, the taxpayer rents it to another person at a fair rental for 14 days or more and the taxpayer's personal use does not exceed the greater of 14 days or 10 percent of the number of days it is rented at a fair rental. The same 24-month standards apply after the exchange to the replacement dwelling unit. The safe harbour applies to exchanges occurring on or after 10 March 2008, and only to whether the unit is held for productive use or investment - every other requirement of section 1031 still applies.",
+   "limits": "A safe harbour, not the only way to qualify, and it does not change any other requirement. The revenue procedure also records that use of a property solely as a personal residence is not enough: it cites Revenue Ruling 59-229, Moore v. Commissioner, and Starker v. United States, and states that the mere hope or expectation that property may be sold at a gain cannot establish an investment intent."
+  },
+  {
+   "id": "irs_rp2005_14",
+   "publisher": "Internal Revenue Service",
+   "title": "Revenue Procedure 2005-14, application of sections 121 and 1031 to a single exchange of property",
+   "url": "https://www.irs.gov/pub/irs-drop/rp-05-14.pdf",
+   "checked": "Opened on the publisher's official domain on 2026-11-17 and read in this session.",
+   "supports": "The order of the two provisions and what each reaches, read from the revenue procedure: section 121 must be applied to gain realised before section 1031 is applied; under section 121(d)(6) the exclusion does not apply to gain attributable to depreciation adjustments for periods after 6 May 1997, but section 1031 may apply to that gain; boot is taken into account only to the extent it exceeds the gain excluded; and the basis of the replacement property is increased by gain excluded under section 121. Section 2.05 states that section 1031 does not apply to property that is used solely as a personal residence, and section 121(a) is quoted for the two-years-in-five ownership and use test.",
+   "limits": "The procedure applies only to a taxpayer who satisfies the held-for-use requirement of section 1031(a)(1) for both the relinquished and the replacement business property. It does not address the nonqualified-use allocation rules for a home that is lived in for part of the ownership period."
+  },
+  {
+   "id": "irs_lke_tips",
+   "publisher": "Internal Revenue Service",
+   "title": "Like-kind exchanges - Real estate tax tips",
+   "url": "https://www.irs.gov/businesses/small-businesses-self-employed/like-kind-exchanges-real-estate-tax-tips",
+   "checked": "Opened on the publisher's official domain on 2026-11-17 and read in this session.",
+   "supports": "The IRS summary of the current scope of the provision: under the Tax Cuts and Jobs Act section 1031 now applies only to exchanges of real property and not to personal or intangible property, and an exchange of real property held primarily for sale still does not qualify as a like-kind exchange. It also states that real properties are generally of like kind whether improved or unimproved, that real property in the United States is not like kind to real property outside it, and that Form 8824 is used to report the exchange.",
+   "limits": "A general-information page. It does not cover the safe harbours, the installment or reverse exchange mechanics, or the interaction with state law."
+  },
+  {
+   "id": "rtc60",
+   "publisher": "California Legislative Information",
+   "title": "Revenue and Taxation Code section 60 - change in ownership defined",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=60",
+   "checked": "Opened on the publisher's official domain on 2026-11-17 and read in this session.",
+   "supports": "The statutory definition, quoted in full: \"A 'change in ownership' means a transfer of a present interest in real property, including the beneficial use thereof, the value of which is substantially equal to the value of the fee interest.\" Used on the disposition page for the point that a transfer of the property in an exchange is a change in ownership for property tax purposes, so the replacement is enrolled at its own value and any intergenerational exclusion carried on the property given up ends.",
+   "limits": "The general definition only. The exclusions and the exceptions are in the sections that follow it, and whether a particular transfer is excluded depends on those sections and on the facts."
   }
  ]
 }
