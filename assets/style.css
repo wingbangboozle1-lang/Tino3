@@ -360,12 +360,14 @@ code {
   body:has(.print-brief) .wrap { max-width: none; padding: 0; }
   body:has(.print-brief) main { width: 100%; }
   body:has(.print-brief) main > h1 { font-size: 19pt; margin: 0 0 4px; }
-  body:has(.print-brief) .lede { font-size: 9pt; margin: 0 0 6px; }
+  /* The printed sheet does not need the screen lede: the title says what the
+     document is, and the space is better spent on the brief itself. */
+  body:has(.print-brief) .lede { display: none; }
   body:has(.print-brief) .brief-confidential { font-size: 8pt; margin: 3px 0; }
-  body:has(.print-brief) .brief-grid { gap: 4px 12px; }
-  body:has(.print-brief) .brief-grid h2 { font-size: 10pt; margin: 5px 0 2px; padding: 0; }
+  body:has(.print-brief) .brief-grid { gap: 3px 12px; }
+  body:has(.print-brief) .brief-grid h2 { font-size: 10pt; margin: 4px 0 1px; padding: 0; }
   body:has(.print-brief) .brief-grid p,
-  body:has(.print-brief) .brief-grid li { font-size: 7.4pt; line-height: 1.2; margin: 2px 0; }
+  body:has(.print-brief) .brief-grid li { font-size: 7.1pt; line-height: 1.2; margin: 1px 0; }
   body:has(.print-brief) .brief-grid ol,
   body:has(.print-brief) .brief-grid ul { padding-left: 12px; }
   body:has(.print-brief) .brief-footer { font-size: 7pt; margin-top: 4px; padding-top: 3px; }
