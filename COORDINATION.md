@@ -4964,6 +4964,17 @@ has rotted. The complete list of twenty is carried in the annotation on the pull
 6. **PR #167 was closed externally** while open and green; recorded so the next reader does not
    mistake it for a withdrawn contribution.
 
+**Board-record pull request.** PR **#179**, opened from this branch after this text was written.
+Its merge commit and the Pages deployment are recorded in the follow-up note appended below.
+
+**The complete list of twenty flagged ledger ids**, read from the annotation on run `44137709464`
+(the same run that reported 98 reachable and 0 missing): `ab1157`, `cbo_outlook`, `civ1946_2`,
+`civ1947_12`, `prob16061_7`, `rtc11911`, `rtc11930`, `rtc13301`, `rtc17043`, `rtc480`, `rtc51`,
+`rtc63_2`, `sb974`, `tsp_returns`, `rtc63_2_eligibility`, `rtc11930_trust`, `gov27388_1`,
+`gov27361`, `civ1102`, `rtc62`. Two of them, `cbo_outlook` and `rtc11911`, were opened
+independently in this session and served their full content, which is why the group is recorded as
+runner-side unreachable rather than as dead links.
+
 **Still open for the owner, unchanged by this session.** The public-history rewrite or making the
 repository private; the two inputs that would close flagged items without moving the ranking
 (three insurance quotes per building, a written date-of-death valuation); the parcel-tax
