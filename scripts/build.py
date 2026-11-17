@@ -2872,6 +2872,11 @@ def page_laws() -> str:
          "Reported but not verified against an official city source on the public site. It is left deliberately "
          "unresolved rather than given a number.",
          []),
+        ("Five initiatives cleared for circulation (none amends Proposition 19)",
+         "The Secretary of State's status page dated 20 October 2026 lists five initiatives cleared for circulation: ballot-procedure changes (one would add a 5% tax on income over $10 million to fund elections), a constitutional-revision route, a constitutional amendment creating a strategic implementation board, a repeal of the top-two primary law, and a food sales-tax exemption. None of them amends the inheritance or reassessment rules.",
+         "Re-checked for a replacement to the failed Proposition 19 repeal. No replacement is pending, eligible or cleared on the page, so the shelter arithmetic is not expected to change from this list.",
+         "Not enacted. Cleared for circulation only; none is circulating with 25% of signatures on the page. Read on 17 November 2026.",
+         ["sos_cleared_circulation"]),
     ]
     dead = [
         ("AB 1157", "Would have amended Civil Code sections 1946.2, 1947.12 and 1947.13 on just cause and rent increases.",

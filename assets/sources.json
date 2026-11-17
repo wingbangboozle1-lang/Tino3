@@ -1272,6 +1272,15 @@
    "checked": "opened on the publisher's site on 2026-11-16 (2023 edition of the United States Code)",
    "supports": "The compounding convention used in every deferral figure on the liquidity page: interest on unpaid tax compounds daily, not annually.",
    "limits": "The engine on this site compounds on a 365-day year. The IRS determines rates quarterly and may apply them per quarter; small differences are possible against an assessment."
+  },
+  {
+    "id": "sos_cleared_circulation",
+    "publisher": "California Secretary of State",
+    "title": "Initiatives and Referenda Cleared for Circulation",
+    "url": "https://www.sos.ca.gov/elections/ballot-measures/initiative-and-referendum-status/initiatives-referenda-cleared-circulation",
+    "checked": "Opened on the publisher's official domain on 2026-11-17. The status page it is linked from is dated 20 October 2026 and lists 5 measures cleared for circulation, 0 circulating with 25% of signatures and 1 pending at the Attorney General.",
+    "supports": "Five proposed initiatives were cleared for circulation (26-0001 to 26-0005, summary dates 7 April to 25 September 2026): ballot-procedure changes, one with a 5% tax on income over $10 million to fund elections; a constitutional-revision route; a constitutional amendment creating a strategic implementation board; a repeal of the top-two primary law; and a food sales-tax exemption. None of the five amends the inheritance or transfer-reassessment rules of Proposition 19.",
+    "limits": "A list of proposals at a point in time, not a forecast. Clearance for circulation is not qualification: a measure needs the signatures listed on the status page, verification, and the ballot date that the Secretary of State sets. Re-read the live dashboard at each review gate."
   }
  ]
 }
