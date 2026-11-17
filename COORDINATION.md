@@ -10,7 +10,7 @@
 | R-1 Claim this scope and push before any other edit | **done** (`80af59f`, pushed) | `arena/fa4bc477-tino3` | `COORDINATION.md` (this section only) |
 | R-2 Read-only verification pass: re-open each official source behind the blanket four-link set that `method_cell` attached to every unattributed row, plus the executive-summary "Key rules" set, on the publisher's own domain; record what each document actually supports so the row map in R-3 cites only what bears on the row | **done** - see the R-2 record below; every one of the six documents was re-read this session and agreed with the ledger | `arena/fa4bc477-tino3` | read-only; results recorded in this section |
 | R-3 **Per-row source relevance map** (the brief's "Every table row must have a source link to an official site" read for relevance, not just presence): give every `method_cell` call site, every executive-summary fact row and the audit-table "Related sources" cells the specific ledger ids that bear on that row instead of the blanket `CORE_SOURCES`, keeping every row at least one official link so the verify gate still passes, and leaving rows that are owner figures or procedures on the register link they already carry | **done** - see the R-3 record below; 72 call sites attributed, 16 fact rows mapped, the audit fallback removed, verify PASS at 1,267 rows / 990 linked / 277 registered | `arena/fa4bc477-tino3` | `scripts/build.py` (source columns only), regenerated pages, `README.md` (counts) |
-| R-4 Rebuild, run every gate, open the pull request from this branch to `main`, merge without waiting for approval, confirm the Pages deploy, record the PR link and merge result | **done except publication - blocked by the owner's history-scrub freeze.** PR #177 opened 17 November 2026 with the full summary; the `verify` check passed on every push (heads `53c7da6` and `7db5942`, runs 44137368572 and the post-merge run, `success`). GitHub's mergeability computation stalled at `unknown` through three force-push waves, then at 17:35:58Z the owner account closed every open pull request as runbook step 1 of the scrub (comment on #177: "Frozen for the pre-rounding Git history scrub (owner decision, session arena/d980e74e-tino3). Closed without merging so the repository could be frozen"). Reopening is refused while the freeze holds. All gates are green on this branch and the work is complete and pushed; runbook step 2 names close-and-re-open as the post-rewrite path, so publication resumes after SQ-3 lifts the freeze. | `arena/fa4bc477-tino3` | this section only |
+| R-4 Rebuild, run every gate, open the pull request from this branch to `main`, merge without waiting for approval, confirm the Pages deploy, record the PR link and merge result | **done** - see the publication record below (PR #182, merged `1653184`, Pages success; superseding #177 which the freeze closed unmerged). Original status text: **done except publication - blocked by the owner's history-scrub freeze.** PR #177 opened 17 November 2026 with the full summary; the `verify` check passed on every push (heads `53c7da6` and `7db5942`, runs 44137368572 and the post-merge run, `success`). GitHub's mergeability computation stalled at `unknown` through three force-push waves, then at 17:35:58Z the owner account closed every open pull request as runbook step 1 of the scrub (comment on #177: "Frozen for the pre-rounding Git history scrub (owner decision, session arena/d980e74e-tino3). Closed without merging so the repository could be frozen"). Reopening is refused while the freeze holds. All gates are green on this branch and the work is complete and pushed; runbook step 2 names close-and-re-open as the post-rewrite path, so publication resumes after SQ-3 lifts the freeze. | `arena/fa4bc477-tino3` | this section only |
 
 **Privacy constraint for this session:** no name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term, estate size or unrounded owner amount is added to any file this session writes, including this board. Every published dollar figure stays a multiple of $10 or a verbatim official amount. New ledger entries, if any, link only to hosts already on the approved list in `scripts/verify.py`.
 
@@ -128,6 +128,29 @@ sheet), `privacy_boundary.py` PASS (26 pages), `tracked_tree_guard.py` PASS (74 
   "close and re-open affected pull requests").
 - **Verification after the reset:** `verify.py` PASS on `ec670fd` (26 pages, ledger 115+ per the
   scrubbed tree, all rows source-linked), my section present once, `FACT_SOURCES` present.
+
+### R-4 publication record, 17 November 2026
+
+- **Freeze cycle.** PR #177 was opened with the full summary and `verify` passed on every push,
+  but GitHub's mergeability computation stalled through three force-push waves and the owner then
+  closed every open pull request as runbook step 1 of the pre-rounding history scrub (comment on
+  #177 naming `arena/d980e74e-tino3`). Reopening #177 is refused by the API even after the scrub
+  completed, so the same branch was re-proposed as **PR #182** ("re-open of #177 after the
+  history scrub"). Before any push this session's local branch was reset to the scrubbed remote
+  tip (`ec670fd`) - no pre-rewrite commit was pushed.
+- **PR #182 merged.** Checks `report` (26s) and `verify` (1m10s) passed; merged without waiting at
+  **18:01:41Z** as merge commit **`1653184`**.
+- **Deploy confirmed.** On `1653184`: `Verify static site` success, `Deploy GitHub Pages` success,
+  `pages build and deployment` success. The live page
+  `https://wingbangboozle1-lang.github.io/Tino3/executive-summary.html` was re-read after the
+  deploy and serves this session's edition: the fact table shows per-row sources (RTC 63.2 +
+  Proposition 19 for the condition; Publication 29 + RTC 63.2 for the tax cliff; RTC 63.2 + LTA
+  2025/009 for the shelter explanation; the IRS basis FAQ + Topic 409 for the tax-free window;
+  CASTHPI + GS10 for the equity comparison; MORTGAGE30US for the borrowing fact) and the owner
+  rows read "no official source / Logged on the register".
+- **Irregularities carried:** #177 stays closed with the owner's freeze comment (this record is
+  its disposition); the register-flagged rows are unverified by design.
+
 
 ## Session `arena/9cb84094-tino3` — the keep-and-borrow case modelled end to end (closes the open "Add a mortgage case" improvement), fresh source re-reads for the borrowing anchors, publication · claimed 2026-11-17
 
