@@ -24,6 +24,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 import build as builder  # noqa: E402
 import package_site as pack  # noqa: E402
+import print_budget as print_budget_mod  # noqa: E402
 
 LEDGER = json.loads((ROOT / "assets" / "sources.json").read_text(encoding="utf-8"))
 LEDGER_URLS = {item["url"] for item in LEDGER["sources"]}
@@ -213,6 +214,35 @@ def check_pages() -> tuple[list[str], dict]:
     return problems, stats
 
 
+def check_print_budget() -> tuple[list[str], dict | None]:
+    """The printable brief must fit on one sheet, and must say so accurately.
+
+    The check is a measured estimate rather than a browser print, because no
+    browser is available here; the estimate reads its geometry out of the
+    stylesheet, so it cannot drift from the sheet that is actually printed.
+    """
+    problems: list[str] = []
+    page = (ROOT / "briefing.html").read_text(encoding="utf-8")
+    css = (ROOT / "assets" / "style.css").read_text(encoding="utf-8")
+    try:
+        report = print_budget_mod.check(page, css)
+    except SystemExit as exc:
+        problems.append(str(exc))
+        return problems, None
+    # The published figure is recomputed here rather than read from a global
+    # that some earlier call happened to set, so this check does not depend on
+    # the order the other checks run in.
+    builder.print_budget_section()
+    published = builder.PRINT_BUDGET
+    if published is None:
+        problems.append("the published print-budget figure is missing")
+    elif abs(published.get("fills", 0) - report["fills"]) > 0.001:
+        problems.append(
+            "the published print-budget figure does not match the measured one: "
+            f"published {published.get('fills')}, measured {report['fills']}")
+    return problems, report
+
+
 def check_nav() -> list[str]:
     problems = []
     for group, pages in builder.NAV_GROUPS:
@@ -232,9 +262,10 @@ def main() -> int:
     no_limits: list[str] = []
     problems += check_reproducible()
     problems += check_nav()
+    print_problems, print_report = check_print_budget()
     page_problems, stats = check_pages()
     ledger_problems, no_limits = check_ledger()
-    problems += page_problems + ledger_problems
+    problems += page_problems + ledger_problems + print_problems
 
     print(f"Pages built by this edition : {len(PAGES)}")
     print(f"Table rows                  : {stats['rows']}")
@@ -243,6 +274,10 @@ def main() -> int:
     print(f"Links                       : {stats['links']} ({stats['official_links']} external)")
     print(f"Official sources in ledger  : {len(LEDGER['sources'])} "
           f"({len(no_limits)} state no limitation)")
+
+    if print_report:
+        print(f"Print budget (briefing sheet) : {print_report['fills']:.0%} of one letter sheet, "
+              f"estimated to fit: {print_report['fits_one_page']}")
 
     if problems:
         raise SystemExit("Verification FAILED:\n  - " + "\n  - ".join(dict.fromkeys(problems)))
