@@ -73,14 +73,21 @@ excess) is raised one of two ways, both priced on the same path engine as the de
 Findings, all computed and published, none assumed: **borrowing never becomes the better route at
 any published band** (`borrow_wins_any_band` is false); the payment stream compounds to about 6.7
 times the principal in future value (the smallest band's loan costs $2,691,700 of terminal value
-against the $33,262,780 selling-versus-living gap); the loan for the two largest bands exceeds
-Property A's projected value at the 2045 model ($6,531,230 alone, $10,319,690 for both buildings),
+against the $33,166,570 selling-versus-living gap); the loan for the two largest bands exceeds
+Property A's projected value at the 2045 model ($6,531,230 alone, $10,323,560 for both buildings),
 so the loan-to-value columns are published rather than left implicit; and **the largest band
 ($8,000,000 of tax on $20,000,000 of excess) is one the sale route cannot self-fund** - projected
 net proceeds are $6,172,010 - so the route table flags the row and says the shortfall must come
 from other assets. Limits are stated on the page: no rate for the 2040s is published or forecast,
 lender willingness and terms are not modelled, points and closing costs are not modelled, and the
 interest is assumed non-deductible, the conservative reading the site uses everywhere.
+
+*Note on the figures.* This section's dollar figures were first recorded against the pre-#170
+model and were re-stated against the current one after the rebase onto PR #170 (the fixed-charge
+double-growth fix): the fix lowers every post-inheritance bill on the keeping paths, so the
+keeping routes and the selling-versus-living gap moved slightly ($33,262,780 to $33,166,570;
+both-buildings value $10,319,690 to $10,323,560). The loan-side figures (payment, total paid,
+interest, future value of the payments) do not depend on the fix and did not move.
 
 Every published figure was re-derived independently outside the build (payment formula, future
 value of the payment stream, both route formulas) and agrees with `model.json` to the dollar.
