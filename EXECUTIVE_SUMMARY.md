@@ -1,6 +1,6 @@
 # Executive summary
 
-Built 16 November 2026 from the same deterministic model as the site. Every dollar figure is rounded to the nearest $10. Anonymised throughout: **Property A** is the single-family home being inherited through a trust; **Property B** is the three-unit building the heir already owns. No name, street address, postal parcel number, postal code, county or city name, trust term or utility account appears here or on the site; the county and city are deliberately withheld because they identify the properties.
+Built 17 November 2026 from the same deterministic model as the site. Every dollar figure is rounded to the nearest $10. Anonymised throughout: **Property A** is the single-family home being inherited through a trust; **Property B** is the three-unit building the heir already owns. No name, street address, postal parcel number, postal code, county or city name, trust term or utility account appears here or on the site; the county and city are deliberately withheld because they identify the properties.
 
 Planning analysis, not legal, tax or investment advice.
 
