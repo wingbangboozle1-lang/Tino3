@@ -8,6 +8,12 @@ code, a property-level place name, a county or city name, a jurisdiction-specifi
 source host or a withdrawn metro series identifier, even in a note, because the
 repository is public.
 
+It also fails on an unresolved Git conflict marker at the start of a line in any
+tracked text file. Rule R-1143-2 in the coordination board already requires a manual
+grep for `<<<<<<<` / `=======` / `>>>>>>>` before every merge to `main`; this check
+makes that rule mechanical, because two merges (one into `README.md`, one into the
+coordination board) have landed on `main` carrying merge residue.
+
 It reuses the publication gate's own patterns (one definition of an identifier), so
 the two checks cannot drift apart. It prints file names, line numbers and pattern
 classes only. It never prints a matched value.
@@ -39,6 +45,14 @@ from privacy_boundary import FORBIDDEN  # noqa: E402  (single source of identifi
 EXEMPT_FILES = {"scripts/privacy_boundary.py"}
 SERVICE_EMAIL = re.compile(r"@(?:[\w-]+\.)*github\.com\b", re.I)
 
+# An unresolved conflict marker at the start of a line: the seven-character open
+# or close marker (with or without a branch label after it) or the seven-character
+# separator on a line of its own. The current tree has no legitimate line-start run
+# of these characters (checked 17 November 2026 over every tracked text file), and a
+# Markdown setext underline long enough to match would be exactly the kind of line
+# the board's manual rule would have flagged anyway.
+CONFLICT_MARKER = re.compile(r"^(?:<{7,}(?: .*)?|={7,}\s*$|>{7,}(?: .*)?)")
+
 
 def tracked_text_files() -> list[str]:
     out = subprocess.check_output(["git", "ls-files"], cwd=ROOT, text=True)
@@ -68,6 +82,8 @@ def scan() -> list[tuple[str, int, str]]:
                         continue
                     findings.append((name, number, label))
                     break
+            if CONFLICT_MARKER.match(line):
+                findings.append((name, number, "git conflict marker"))
     return findings
 
 
