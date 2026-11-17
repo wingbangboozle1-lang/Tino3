@@ -757,7 +757,7 @@ def page_executive_summary() -> str:
         + callout("risk", "Five things that could change the answer", """
 <ol>
 <li><strong>The heir wants to live there.</strong> That is worth the whole gap if it is true. It also has to be true for the whole time: moving out removes the Proposition 19 exclusion.</li>
-<li><strong>Law changes.</strong> On unofficial results as of 14 November 2026 (5:16 p.m.; counting continues), California voters approved Proposition 3, which makes the high-income tax rates permanent (60.7% yes), and rejected Proposition 40, the one-time billionaire tax (52.2% no). Certification is due by 11 December 2026. Both are on the <a href="laws.html">law page</a>. A future measure could cut the other way.</li>
+<li><strong>Law changes.</strong> On unofficial results as of 16 November 2026 (7:12 p.m.; counting continues), California voters approved Proposition 3, which makes the high-income tax rates permanent (60.8% yes), and rejected Proposition 40, the one-time billionaire tax (52.2% no). Certification is due by 11 December 2026. Both are on the <a href="laws.html">law page</a>. A future measure could cut the other way.</li>
 <li><strong>The house outgrows everything.</strong> See the <a href="black-swan.html">stress cases</a>.</li>
 <li><strong>The estate is large enough to matter federally.</strong> See the <a href="estate.html">estate page</a>: the 2026 exclusion is high, but it is indexed and can be cut by Congress.</li>
 <li><strong>An input is wrong.</strong> Every owner-supplied figure is flagged. The <a href="questions.html">questions page</a> is the list of what to confirm and how.</li>
@@ -2426,8 +2426,8 @@ def surcharge_block() -> str:
                  "Tax at the rate with it", "Surcharge effect", "Basis"],
                 rows,
                 note="The two rates are the ones in the inputs file: "
-                     f"{pcf(ss['rate_without'] * 100, 1)} without the surcharge and "
-                     f"{pcf(ss['rate_with'] * 100, 1)} with it. Both are applied to the whole gain, "
+                     f"{pcf(ss['rate_without'], 1)} without the surcharge and "
+                     f"{pcf(ss['rate_with'], 1)} with it. Both are applied to the whole gain, "
                      "which is more conservative than a Form 540 computation, where the surcharge "
                      "reaches only the part of taxable income above the threshold.")
     return (
@@ -2443,9 +2443,9 @@ $2,000,000.</li>
 the brackets around it are indexed every year. Over a forty-year horizon the threshold reaches less and less
 income in today's money.</li>
 </ul>
-<p>The published 2025 Form 540 rate schedules end at <strong>{pcf(12.3, 1)}</strong> on all three
+<p>The published 2025 Form 540 rate schedules end at <strong>{pcf(0.123, 1)}</strong> on all three
 filing-status schedules. Add the statute's 1% and the California layer is
-<strong>{pcf(13.3, 1)}</strong> - which is exactly the state rate this model has been using, so the surcharge
+<strong>{pcf(0.133, 1)}</strong> - which is exactly the state rate this model has been using, so the surcharge
 was never missing from the numbers. What was missing was the statement that it is there, and the check that
 its arithmetic was described the right way round. Both are corrected here.</p>""")
         + tbl
@@ -2464,19 +2464,20 @@ allowable expenses first. A CPA should compute the actual year-of-sale return; t
 robust, the magnitude is an upper bound.</p>""")
         + table("The two rates, and where each comes from",
                 ["Layer", "Rate", "Applies to", "Source"],
-                [f"<td>Federal long-term capital gain, top</td><td>{pcf(20.0, 1)}</td>"
+                [f"<td>Federal long-term capital gain, top</td><td>{pcf(0.20, 1)}</td>"
                  f"<td>Net capital gain above the top threshold</td>" + src_cell(["irs_tc409"], "Official source"),
-                 f"<td>Net investment income tax</td><td>{pcf(3.8, 1)}</td>"
+                 f"<td>Net investment income tax</td><td>{pcf(0.038, 1)}</td>"
                  f"<td>Investment income above the statutory threshold</td>"
                  + src_cell(["irs_tc559"], "Official source"),
-                 f"<td>California top marginal bracket, 2025 and 2026 schedules</td><td>{pcf(12.3, 1)}</td>"
+                 f"<td>California top marginal bracket, 2025 and 2026 schedules</td><td>{pcf(0.123, 1)}</td>"
                  f"<td>Taxable income above the top bracket start, indexed annually; the 2026 schedule shows the same structure</td>"
                  + src_cell(["ftb_rates", "ftb_rates_2026"], "Official source"),
-                 f"<td>California additional tax, section 17043</td><td>{pcf(1.0, 1)}</td>"
-                 f"<td>Taxable income above $1,000,000, not indexed, every filing status</td>"
-                 + src_cell(["rtc17043"], "Official source"),
+                 f"<td>California additional tax, section 17043</td><td>{pcf(0.01, 1)}</td>"
+                 f"<td>Taxable income above $1,000,000, not indexed, every filing status; "
+                 f"the 2025 Form 540 booklet reports it on line 62 as the Behavioral Health Services Tax</td>"
+                 + src_cell(["rtc17043", "ftb_540_instructions_2025"], "Official source"),
                  f"<td><strong>Combined rate in the model</strong></td>"
-                 f"<td><strong>{pcf(ss['rate_with'] * 100, 1)}</strong></td>"
+                 f"<td><strong>{pcf(ss['rate_with'], 1)}</strong></td>"
                  f"<td>The whole gain, with no federal deduction for state tax taken</td>"
                  + method_cell("#method", "Model output")],
                 note="The top California bracket is indexed every year, so its start rises; section 17043's "
@@ -2823,23 +2824,23 @@ def page_laws() -> str:
          "Confirms the exclusion is indexing upward.",
          ["irs_2027"]),
         ("California high-income tax rates: Proposition 3 (unofficial)",
-         "Proposition 3 is approved on unofficial results (60.7% yes as of 14 November 2026, 5:16 p.m.). It makes permanent the voter-approved rates on individuals earning over $371,000, adjusted for inflation, that would otherwise expire in 2031.",
+         "Proposition 3 is approved on unofficial results (60.8% yes as of 16 November 2026, 7:12 p.m.). It makes permanent the voter-approved rates on individuals earning over $371,000, adjusted for inflation, that would otherwise expire in 2031.",
          "Removes a scheduled state tax cut. A large gain on a California property sale will be taxed at the top state rate for the foreseeable future.",
          ["sos_results", "voterguide_p3"]),
         ("One-time tax on certain taxpayers rejected",
-         "Proposition 40 failed on unofficial results (52.2% no as of 14 November 2026, 5:16 p.m.).",
+         "Proposition 40 failed on unofficial results (52.2% no as of 16 November 2026, 7:12 p.m.).",
          "No state wealth tax. Recorded because a later version could return.",
          ["sos_results", "voterguide_p40"]),
         ("Countermeasure to Proposition 40 rejected",
-         "Proposition 41 failed on unofficial results (55.2% no as of 14 November 2026, 5:16 p.m.). It would have prohibited new state taxes that exclude revenues from the state spending limit.",
+         "Proposition 41 failed on unofficial results (55.2% no as of 16 November 2026, 7:12 p.m.). It would have prohibited new state taxes that exclude revenues from the state spending limit.",
          "Its failure removes one of the two measures that could have voided the one-time tax if both had passed.",
          ["sos_results", "voterguide_p40"]),
         ("New state personal property taxes barred",
-         "Proposition 42 is ahead on unofficial results (51.3% yes as of 14 November 2026, 5:16 p.m.). The margin is close and counting continues, so the outcome is not final.",
+         "Proposition 42 is ahead on unofficial results (51.2% yes as of 16 November 2026, 7:12 p.m.). The margin is close and counting continues, so the outcome is not final.",
          "Narrows one route for a future state tax, but does not touch real property tax.",
          ["sos_results"]),
         ("Local revenue vote threshold rejected",
-         "Proposition 43 failed on unofficial results (57.6% no as of 14 November 2026, 5:16 p.m.).",
+         "Proposition 43 failed on unofficial results (57.7% no as of 16 November 2026, 7:12 p.m.).",
          "Local parcel and transfer taxes remain possible without the stricter vote the measure would have required.",
          ["sos_results"]),
         ("Proposition 19 shelter adjusted",
@@ -2890,7 +2891,7 @@ def page_laws() -> str:
     return (
         callout("warn", "Read the election results carefully", """
 <p>The November 2026 California results on this page are <strong>unofficial</strong>, published by the Secretary
-of State with all 23,860 precincts partially reporting as of 14 November 2026, 5:16 p.m. Vote-by-mail,
+of State with all 23,860 precincts partially reporting as of 16 November 2026, 7:12 p.m. Vote-by-mail,
 provisional and other ballots continue to be processed and counted during the canvass, and the results are not
 certified until 11 December 2026. They are
 included because Proposition 3 directly changes the tax on a property sale. Confirm against the certified
@@ -4061,6 +4062,88 @@ an inference.</p>""")
             + table("What was re-read, and what it showed", ["Figure or rule", "What the source says today", "Source"], body))
 
 
+def recheck_section_17() -> str:
+    """The 17 November 2026 official-source recheck, published so the reader can repeat it.
+
+    Same discipline as the 16 November table: only what was read on the publisher's own
+    domain on the date shown, with what could not be checked left visible as a hole.
+    """
+    rows = [
+        ("Federal estate filing threshold and portability",
+         "The IRS estate-tax page was re-read on 17 November 2026. The filing-threshold table still ends at "
+         "2026 with $15,000,000, and the portability paragraph still states that a surviving spouse may elect "
+         "to pass the decedent's unused exemption on a timely filed return. Both match the site's estate "
+         "table and the two-person case on the liquidity page.",
+         ["irs_estate"]),
+        ("The 2027 inflation adjustments",
+         "IRS news release IR-2026-133 of 5 November 2026 was re-read: estates of decedents who die during "
+         "2027 have a basic exclusion amount of $15,480,000, up from $15,000,000 for 2026, and the annual "
+         "gift exclusion rises from $19,000 to $20,000 for calendar year 2027. Both match the site's tables; "
+         "the release names Revenue Procedure 2026-35 as the detail document, which a previous session read "
+         "in full.",
+         ["irs_2027"]),
+        ("Proposition 19 shelter amount and next adjustment",
+         "The Board's Letter to Assessors 2025/009 was re-read in full: the $1,000,000 amount adjusts for "
+         "inflation by the percentage change in the FHFA California house price index, which was 2.15 percent "
+         "for 2024, so the amount is $1,044,586 for transfers from 16 February 2025 through 15 February 2027, "
+         "and the next adjustment falls in February 2027. That is exactly the figure and the date the site "
+         "carries.",
+         ["boe_lta25009", "boe_prop19"]),
+        ("The statewide rent cap",
+         "Civil Code section 1947.12 was re-read from the statute: over any 12-month period the gross rental "
+         "rate may not rise more than 5 percent plus the percentage change in the cost of living, or 10 "
+         "percent, whichever is lower, with no more than two increases in the 12-month period and the "
+         "exemptions in subdivision (d), including housing subject to a stricter local rent ordinance and "
+         "housing issued a certificate of occupancy within the previous 15 years. That is the rule the site "
+         "publishes.",
+         ["civ1947_12", "civ1946_2"]),
+        ("The 1% tax above one million dollars, statute and form together",
+         "Revenue and Taxation Code section 17043 was re-read from the statute - an additional 1 percent on "
+         "the portion of taxable income above $1,000,000, with the credit, filing-status and joint-return "
+         "rules disapplied by subsection (c), and no inflation index anywhere in the section - and for the "
+         "first time the official 2025 Form 540 instructions were also read at source: line 62, named the "
+         "Behavioral Health Services Tax in that booklet, subtracts $1,000,000 from the line 19 amount and "
+         "applies 1 percent to the remainder. The statute is the authority and the booklet shows how the "
+         "return reports it; both now sit beside the sensitivity table on the taxes page.",
+         ["rtc17043", "ftb_540_instructions_2025"]),
+        ("Capital gains treatment in California",
+         "The Franchise Tax Board's capital-gains page was re-read: 'California does not have a lower rate "
+         "for capital gains. All capital gains are taxed as ordinary income.' The page states it was last "
+         "updated 28 January 2026. That is the treatment the model's combined rate assumes when it applies "
+         "ordinary-income rates to the whole gain.",
+         ["ftb_cg"]),
+        ("November 2026 election results: still unofficial",
+         "The Secretary of State's ballot-measures page was re-read on 17 November 2026 at its 16 November "
+         "2026, 7:12 p.m. update: all 23,860 precincts partially reporting, results still labelled "
+         "unofficial, certification still due 11 December 2026. Proposition 3 stands at 60.8 percent yes "
+         "(it was 60.7 percent on the 14 November read), Proposition 40 at 52.2 percent no, Proposition 41 "
+         "at 55.2 percent no, Proposition 42 at 51.2 percent yes and Proposition 43 at 57.7 percent no. "
+         "Every dated figure on the laws page and the dashboard was moved to this read; nothing became law "
+         "in the window, and the enacted-versus-proposed labels are unchanged.",
+         ["sos_results"]),
+        ("Figures this session could not check at all",
+         "Three, the same three as yesterday. The local parcel-tax certification: certification is not due "
+         "until 11 December 2026, so there is nothing final to read on 17 November, and the local publisher "
+         "is withheld anyway. Property A's tax rate area: withheld for the same crosswalk reason as before. "
+         "The law-watch's two pending local measures: not verifiable on the public site because the official "
+         "file names the jurisdiction. Each remains on the register rather than being filled in.",
+         []),
+    ]
+    body = []
+    for item, detail, srcs in rows:
+        cell = (src_cell(srcs, "Official source") if srcs
+                else method_cell("review.html#register", "Withheld for privacy, logged on the register"))
+        body.append(f"<td><strong>{esc(item)}</strong></td><td>{detail}</td>" + cell)
+    return ('<h2 id="recheck-17">Official-source recheck, 17 November 2026</h2>'
+            + callout("note", "The periodic re-check, continued", """<p>The brief asks for the official authorities to be rechecked periodically and for enacted changes to be
+told apart from proposals. This is the next dated pass after the 16 November table above. Nothing read on
+17 November 2026 changed a figure the site already published; the one addition is the Form 540 instructions
+as a source in its own right, and the one refresh is the election-results read. Rechecks are dated so a
+reader can tell how stale the page is.</p>""")
+            + table("What was re-read on 17 November 2026, and what it showed",
+                    ["Figure or rule", "What the source says today", "Source"], body))
+
+
 def history_audit_section() -> str:
     """The Git-history privacy audit, published as counts only.
 
@@ -4501,7 +4584,7 @@ def page_review() -> str:
         ("Fixed charges are projected at the inflation rate",
          "On Property B the fixed part of the bill grew at 8.1% a year between 2016 and 2025. Projecting at 2.5% is deliberately conservative and understates future bills if that pace continues."),
         ("The November 2026 California election results are unofficial",
-         "They are published with all precincts partially reporting and are not certified until 11 December 2026. Proposition 3 is treated as approved (60.7% yes on unofficial results as of 14 November 2026, 5:16 p.m.) because it changes the tax rate on a sale, but the result must be confirmed at certification."),
+         "They are published with all precincts partially reporting and are not certified until 11 December 2026. Proposition 3 is treated as approved (60.8% yes on unofficial results as of 16 November 2026, 7:12 p.m.) because it changes the tax rate on a sale, but the result must be confirmed at certification."),
         ("Combined tax rates are added, not interacted",
          "State and federal rates are added and no federal deduction is taken for state tax paid. That overstates the tax on a sale and therefore understates the case for selling, which is the conservative direction."),
         ("The housing value of living in the home is priced, not added",
@@ -4606,6 +4689,10 @@ def page_review() -> str:
         ("Pre-rounding history scrub is prepared as a runbook, not run",
          "scripts/history_scrub.sh audits the whole history for the identifier classes the privacy scanner guards and for candidate unrounded figures (found outside the repository, never written to the tree), and can run a git-filter-repo rewrite. The audit on 15 November 2026 found the identifier tokens still present in the visible history and one candidate figure. The scanner's own patterns were split into string fragments so the file text no longer carries any identifier.",
          "The rewrite itself rewrites every ref and needs a force-push to main, so it is the owner's to run or authorise. Until then, earlier commits, pull-request diffs and forks keep what they hold. The runbook carries the full post-rewrite checklist."),
+        ("The section 17043 sensitivity table printed percentages ten times too large; corrected 17 November 2026",
+         "The taxes page passed numbers that were already percentages (20.0, 3.8, 12.3, 1.0, 37.1 and 36.1) to a formatter that multiplies by 100, so the rate table and the sentences beside it printed 2000.0%, 380.0%, 1230.0%, 100.0%, 3710.0%, 3610.0% and 1330.0% where 20.0%, 3.8%, 12.3%, 1.0%, 37.1%, 36.1% and 13.3% belong. Nine call sites in the build script were corrected on 17 November 2026 and the page was rebuilt.",
+         "None on the numbers: the model's own rates and every dollar figure computed from them were always right, and no projection or recommendation changed. Only the printed percentages were wrong, so a reader of the earlier edition could have misread the top combined rate as 3710% instead of 37.1%.",
+         ["rtc17043", "ftb_540_instructions_2025", "ftb_rates", "ftb_rates_2026"]),
     ]
     aud_rows = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td>"
                 + src_cell(rest[0] if rest else ["boe_lta25009", "irs_estate"], "Related sources")
@@ -4632,6 +4719,7 @@ each one is a reason to check before acting.</p>""")
         + table("What was found when the repository was reviewed",
                 ["Finding", "Detail", "Residual risk", "Source"], aud_rows)
         + recheck_section()
+        + recheck_section_17()
         + history_audit_section()
     )
 
@@ -4651,7 +4739,7 @@ def page_sources() -> str:
         callout("note", "How the ledger works", f"""
 <p>There are {len(SRC_DOC['sources'])} sources. The date in the last column is when the entry was last read on the
 publisher's own domain. The ledger was opened on 13 November 2026 and has since been re-read in stages, most
-recently on 16 November 2026, when the figures listed in the <a href="review.html#recheck">recheck table</a> were
+recently on 17 November 2026, when the figures listed in the <a href="review.html#recheck">recheck tables</a> were
 taken from the documents themselves rather than from any summary of them. The "supports" column says exactly what
 the source is cited for; the "limits" column says what it does not cover. Sources are cited only for what they
 actually state, and an official publisher whose name or address would identify one of the two properties is
