@@ -1,5 +1,3 @@
-# Coordination board
-
 ## Session `arena/5fb0dcb1-tino3` — law-watch refresh to the 16 November 2026 official results reading, live Proposition 19 initiative recheck, publication · claimed 2026-11-17
 
 *Branch note:* Arena pins this session to `arena/5fb0dcb1-tino3`, branched from `main` at `3b86d5a` (the merge of PR #156). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. At claim time `gh pr list --state open` returned nothing and no section on the board was marked in progress, so no other session holds `scripts/build.py`, `assets/sources.json` or the generated pages. The baseline was checked before any edit: `rebuild.py` reproduces the tree with no diff and all five gates pass.
@@ -27,6 +25,85 @@
 - **Deploy.** On `02a9d55`: `Verify static site` success, `Deploy GitHub Pages` success, `pages build and deployment` success.
 - **Live check.** The published `laws.html` was read at the Pages URL and shows the 16 November 2026, 7:12 p.m. figures (Proposition 3 60.8%, Proposition 42 51.2%, Proposition 43 57.7%).
 - **Left for the owner, unchanged:** the public-history rewrite (suggestion S-22; the owner must decide and run it, see `PRIVACY_REMEDIATION.md`); the Proposition 3 threshold note (official $371,000 used; see the irregularities list); the 11 December 2026 certification, after which the law page's unofficial labels should be replaced with the certified figures; the Property A rate-area and market-rent items that the board records as unobtainable without publishing identifiers.
+
+## Session `arena/9cb84094-tino3` — the keep-and-borrow case modelled end to end (closes the open "Add a mortgage case" improvement), fresh source re-reads for the borrowing anchors, publication · claimed 2026-11-17
+
+*Branch note:* Arena pins this session to `arena/9cb84094-tino3`, branched from `main` at `3b86d5a` (the merge of PR #156). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. At claim time `gh pr list --state open` returned nothing, so no other session held `scripts/model.py`, `assets/data/model.json` or `EXECUTIVE_SUMMARY.md`. While this claim was being pushed, `main` advanced to `02a9d55` (PRs #157, #158 and #159: two law-watch refreshes by `arena/11bff629-tino3` and `arena/5fb0dcb1-tino3`, which edit the law-page and index regions of `scripts/build.py` and append to `assets/sources.json`). This session's `scripts/build.py` edits are confined to the liquidity page, the what-if page, the improvements register and the README counts — different regions — and `assets/sources.json` is append-only, so the scopes do not overlap; the tree was rebased onto `02a9d55` before any shared file was edited and the gates were re-run on the rebased tree.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| Y-1 Claim this scope and push before any other edit | **done** — this section | `arena/9cb84094-tino3` | `COORDINATION.md` (this section only) |
+| Y-2 Re-read the borrowing anchors at source (the published 30-year fixed mortgage average and its 2026 low/high weekly values) and re-read the two decision-critical federal figures the new case touches (the 40 percent top estate-tax rate and the nine-month payment clock) | **done** — result below; no stored value changed, so `assets/data/inputs.json` and `assets/sources.json` are untouched | `arena/9cb84094-tino3` | read-only |
+| Y-3 Build the keep-and-borrow case end to end: for each anonymous excess band the liquidity engine already publishes, price a fully amortising 30-year fixed loan at the published rate band, charge the payment stream to the keeping paths by the model's own conventions, and set it against the sell route that pays the same tax out of the proceeds; publish whether any band flips the ranking | **done** — `scripts/model.py` gained `keep_and_borrow_cases()`, published as `model.json.mortgage_case`; results below | `arena/9cb84094-tino3` | `scripts/model.py` (new function), `assets/data/model.json` (generated) |
+| Y-4 Publish the case on the estate liquidity page and as a what-if lever, with the loan-to-value arithmetic and the stated limits; close the "Add a mortgage case" improvement row with the implementation record | **done** — liquidity page callout and two tables, what-if lever 6 with jump links, decision-page liquidity row updated, glossary entry "Amortisation", improvements row now done, exec summary (page and markdown) and README updated | `arena/9cb84094-tino3` | `scripts/build.py`, `liquidity.html`, `what-if.html`, `decision.html`, `executive-summary.html`, `suggestions.html`, `glossary.html`, `EXECUTIVE_SUMMARY.md`, `README.md` (counts) |
+| Y-5 Rebuild, run every gate, pull request to `main`, merge without waiting, confirm the Pages deploy, record the result | **in progress** | `arena/9cb84094-tino3` | this section only |
+
+### Y-2 result: the anchors re-read at source, 17 November 2026
+
+1. **The 30-year fixed mortgage average: 7.11 in the week of 12 November 2026.** The full FRED
+   series MORTGAGE30US (Freddie Mac Primary Mortgage Market Survey) was downloaded as the
+   publisher's own CSV and the 2026 tail read week by week: the lowest weekly average published
+   in 2026 is **5.98** (26 February) and the highest is **7.40** (8 and 15 October). All three
+   values agree with the anchors `scripts/liquidity.py` already stores, so nothing was corrected.
+2. **The nine-month clock.** The IRS estate-tax FAQ states the due date of the estate tax return
+   is "nine months after the decedent's date of death", with an automatic six-month extension of
+   time to file on Form 4768 - exactly the wording the liquidity page publishes.
+3. **The 40 percent top rate.** Table A—Unified Rate Schedule in the Instructions for Form 706
+   (07/2026), read in full: a taxable amount over $1,000,000 carries $345,800 plus **40 percent**
+   on the excess. The same page's Table of Basic Exclusion Amounts confirms 2026 at $15,000,000
+   and the 2025-through-2026 annual gift exclusion at $19,000.
+4. The 2026 filing threshold of $15,000,000 was confirmed on the IRS estate-tax page itself.
+
+### Y-3 result: the case, its figures and its findings
+
+`scripts/model.py` gained `keep_and_borrow_cases(2045)` (published as `model.json.mortgage_case`).
+For each of the liquidity engine's five anonymous excess bands, the band's tax (40 percent of the
+excess) is raised one of two ways, both priced on the same path engine as the decision page at the
+2045 model:
+
+- **Keep route:** live in the house (or let it out) and borrow the tax against it on a fully
+  amortising 30-year fixed loan at the published 7.11 percent average; the payment stream is
+  charged on the model's own convention (each year's payments at that year's end, compounded at
+  the after-tax equity return, 6.3 percent). The keep-and-let rows credit no rent, so they are a
+  floor, like every letting row on the site.
+- **Sell route:** the proceeds invest through the first year, the band's tax is paid out of them
+  at the end of that year (close to the nine-month due date), and what remains compounds for the
+  years that are left.
+
+Findings, all computed and published, none assumed: **borrowing never becomes the better route at
+any published band** (`borrow_wins_any_band` is false); the payment stream compounds to about 6.7
+times the principal in future value (the smallest band's loan costs $2,691,700 of terminal value
+against the $33,166,570 selling-versus-living gap); the loan for the two largest bands exceeds
+Property A's projected value at the 2045 model ($6,531,230 alone, $10,323,560 for both buildings),
+so the loan-to-value columns are published rather than left implicit; and **the largest band
+($8,000,000 of tax on $20,000,000 of excess) is one the sale route cannot self-fund** - projected
+net proceeds are $6,172,010 - so the route table flags the row and says the shortfall must come
+from other assets. Limits are stated on the page: no rate for the 2040s is published or forecast,
+lender willingness and terms are not modelled, points and closing costs are not modelled, and the
+interest is assumed non-deductible, the conservative reading the site uses everywhere.
+
+*Note on the figures.* This section's dollar figures were first recorded against the pre-#170
+model and were re-stated against the current one after the rebase onto PR #170 (the fixed-charge
+double-growth fix): the fix lowers every post-inheritance bill on the keeping paths, so the
+keeping routes and the selling-versus-living gap moved slightly ($33,262,780 to $33,166,570;
+both-buildings value $10,319,690 to $10,323,560). The loan-side figures (payment, total paid,
+interest, future value of the payments) do not depend on the fix and did not move.
+
+Every published figure was re-derived independently outside the build (payment formula, future
+value of the payment stream, both route formulas) and agrees with `model.json` to the dollar.
+
+### Y-4 result
+
+`liquidity.html` carries the callout and two tables (the loan band by band, with
+loan-to-value columns and the low/high future-value band; the two complete routes, with the
+infeasible-sale flag on the largest band). `what-if.html` carries lever 6 with jump links.
+`decision.html`'s debt section now says liquidity is priced end to end and links the case.
+`glossary.html` gained "Amortisation". `suggestions.html`'s improvements register marks
+"Add a mortgage case" done with the implementation record (the S-13 row itself stays proposed
+for the owner, as every S-row does). `EXECUTIVE_SUMMARY.md` and the executive-summary page carry
+the case; README carries it and the verifier's current counts.
+
+**Privacy constraint:** no name, street address, postal code, parcel identifier, county or city name, trust term or unrounded owner amount is added to any file this session writes. The loan principal is the anonymous excess band already published, never an estate size.
 
 ## Session `arena/4f2a543e-tino3` — repair of the unresolved conflict marker left on `main`, a mechanical marker gate, independent re-verification of the decision-critical figures, publication · claimed 2026-11-17
 

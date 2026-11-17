@@ -70,7 +70,7 @@ professional advice when dates, facts or laws change.
 
 The current generated edition contains **25 HTML pages**, **one runtime stylesheet**, **115 entries
 in the source ledger**, and **139 content-free withdrawal notices** for retired routes. The latest
-local verification reports **1278 table rows**: **1094 linked to official publishers** and **184
+local verification reports **1295 table rows**: **1111 linked to official publishers** and **184
 explicitly registered as unsourceable or unverified**. A row without a confirming official source is
 not filled in by inference. The public site contains no source ledger or internal model data files;
 the Jekyll and Actions publication boundaries are checked separately.
@@ -132,6 +132,13 @@ amount above the exclusion.
 - **The two-person case.** Two exclusions with portability at each inheritance year, and the joint
   section 121 amount repriced against every mixed path. The pure-path model still runs on single-filer
   assumptions, which is the conservative case.
+- **The keep-and-borrow case, end to end.** For each anonymous band of the amount above the exclusion, the
+  page runs both complete routes on the same path engine as the decision pages: keep the house and borrow
+  the band's tax against it on a fully amortising 30-year fixed loan at the published mortgage average, or
+  sell it and pay the tax out of the proceeds. Borrowing is dearer at every published band, the loan for
+  the two largest bands exceeds Property A's projected value alone (the loan-to-value arithmetic is
+  published), and the largest band is one the sale proceeds cannot self-fund - which makes the lender
+  conversation a task to settle before the nine-month date. It is also lever 6 on the what-if page.
 
 ## Mixed paths, distributions and the clawback
 
