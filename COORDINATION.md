@@ -1,5 +1,20 @@
 # Coordination board
 
+## Session `arena/4f2a543e-tino3` — repair of the unresolved conflict marker left on `main`, a mechanical marker gate, independent re-verification of the decision-critical figures, publication · claimed 2026-11-17
+
+*Branch note:* Arena pins this session to `arena/4f2a543e-tino3`, branched from `main` at `bd8ab5b` (the merge of PR #153). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. At claim time `gh pr list --state open` returned nothing, so no other session holds `scripts/build.py`, `scripts/tracked_tree_guard.py`, `assets/data/*` or `assets/sources.json`.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| M-1 Claim this scope and push before any other edit | **done** — this section | `arena/4f2a543e-tino3` | `COORDINATION.md` (this section only) |
+| M-2 Repair the unresolved conflict marker that the #152/#153 merge left on `main` — one line of merge residue on this board, found by the board's own rule R-1143-2 grep — removing only the residue line, no session's text touched | **in progress** | `arena/4f2a543e-tino3` | `COORDINATION.md` (the residue line only) |
+| M-3 Make rule R-1143-2 mechanical: the tracked-tree guard fails on a line-start conflict marker in any tracked text file, so Verify stops a repeat before it reaches a merge | **in progress** | `arena/4f2a543e-tino3` | `scripts/tracked_tree_guard.py` |
+| M-4 Independent line-by-line re-verification of the decision-critical official figures, each read at source this session: the 2026 and 2027 federal transfer-tax amounts and gift exclusions, the Proposition 19 shelter cap, the 1% mental-health surcharge above $1,000,000, the section 121 amounts, the nine-month estate-tax clock and the 2026 fourth-quarter underpayment rate, the statewide rent cap, and the inherited-property basis rule | **in progress** | `arena/4f2a543e-tino3` | read-only; results recorded here, corrections (if any) in `assets/data/inputs.json`, `assets/sources.json` (append only) and regenerated pages |
+| M-5 Record in the improvements table that the brief's same-tax-year sale is the model's own sell path and is priced on the taxes page (register item S-04's analysis therefore exists; the S-row itself stays proposed for the owner) | **in progress** | `arena/4f2a543e-tino3` | `scripts/build.py` (one improvements row), regenerated pages |
+| M-6 Rebuild, run all gates, pull request to `main`, merge without waiting, confirm the Pages deploy, record the result | **in progress** | `arena/4f2a543e-tino3` | this section only |
+
+**Privacy constraint for this session:** no name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term, estate size or unrounded owner amount is added to any file this session writes, including this board.
+
 ## Session `arena/5feeee8b-tino3` — independent re-verification pass, insurance bands replacing the round-number point assumptions, explicit debt and encumbrance treatment, publication · claimed 2026-11-16
 
 *Branch note:* Arena pins this session to `arena/5feeee8b-tino3`, branched from `main` at `5005a72` (the merge of PR #137). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. At claim time `gh pr list --state open` returned nothing, so no other session holds `scripts/build.py`, `scripts/model.py`, `assets/data/*` or `assets/sources.json`. The board's newest section (`arena/2e2742f8-tino3`, 16 November) is merged and live, so this session starts from a clean tree: `python3 scripts/rebuild.py` produced no diff and all five gates exit 0 before any edit.
