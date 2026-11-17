@@ -762,7 +762,7 @@ def page_executive_summary() -> str:
         + callout("risk", "Five things that could change the answer", """
 <ol>
 <li><strong>The heir wants to live there.</strong> That is worth the whole gap if it is true. It also has to be true for the whole time: moving out removes the Proposition 19 exclusion.</li>
-<li><strong>Law changes.</strong> On unofficial results as of 14 November 2026 (5:16 p.m.; counting continues), California voters approved Proposition 3, which makes the high-income tax rates permanent (60.7% yes), and rejected Proposition 40, the one-time billionaire tax (52.2% no). Certification is due by 11 December 2026. Both are on the <a href="laws.html">law page</a>. A future measure could cut the other way.</li>
+<li><strong>Law changes.</strong> On unofficial results as of 16 November 2026 (7:12 p.m.; counting continues), California voters approved Proposition 3, which makes the high-income tax rates permanent (60.8% yes), and rejected Proposition 40, the one-time billionaire tax (52.2% no). Certification is due by 11 December 2026. Both are on the <a href="laws.html">law page</a>. A future measure could cut the other way.</li>
 <li><strong>The house outgrows everything.</strong> See the <a href="black-swan.html">stress cases</a>.</li>
 <li><strong>The estate is large enough to matter federally.</strong> See the <a href="estate.html">estate page</a>: the 2026 exclusion is high, but it is indexed and can be cut by Congress.</li>
 <li><strong>An input is wrong.</strong> Every owner-supplied figure is flagged. The <a href="questions.html">questions page</a> is the list of what to confirm and how.</li>
@@ -2431,8 +2431,8 @@ def surcharge_block() -> str:
                  "Tax at the rate with it", "Surcharge effect", "Basis"],
                 rows,
                 note="The two rates are the ones in the inputs file: "
-                     f"{pcf(ss['rate_without'] * 100, 1)} without the surcharge and "
-                     f"{pcf(ss['rate_with'] * 100, 1)} with it. Both are applied to the whole gain, "
+                     f"{pcf(ss['rate_without'], 1)} without the surcharge and "
+                     f"{pcf(ss['rate_with'], 1)} with it. Both are applied to the whole gain, "
                      "which is more conservative than a Form 540 computation, where the surcharge "
                      "reaches only the part of taxable income above the threshold.")
     return (
@@ -2448,9 +2448,9 @@ $2,000,000.</li>
 the brackets around it are indexed every year. Over a forty-year horizon the threshold reaches less and less
 income in today's money.</li>
 </ul>
-<p>The published 2025 Form 540 rate schedules end at <strong>{pcf(12.3, 1)}</strong> on all three
+<p>The published 2025 Form 540 rate schedules end at <strong>{pcf(0.123, 1)}</strong> on all three
 filing-status schedules. Add the statute's 1% and the California layer is
-<strong>{pcf(13.3, 1)}</strong> - which is exactly the state rate this model has been using, so the surcharge
+<strong>{pcf(0.133, 1)}</strong> - which is exactly the state rate this model has been using, so the surcharge
 was never missing from the numbers. What was missing was the statement that it is there, and the check that
 its arithmetic was described the right way round. Both are corrected here.</p>""")
         + tbl
@@ -2469,24 +2469,125 @@ allowable expenses first. A CPA should compute the actual year-of-sale return; t
 robust, the magnitude is an upper bound.</p>""")
         + table("The two rates, and where each comes from",
                 ["Layer", "Rate", "Applies to", "Source"],
-                [f"<td>Federal long-term capital gain, top</td><td>{pcf(20.0, 1)}</td>"
+                [f"<td>Federal long-term capital gain, top</td><td>{pcf(0.20, 1)}</td>"
                  f"<td>Net capital gain above the top threshold</td>" + src_cell(["irs_tc409"], "Official source"),
-                 f"<td>Net investment income tax</td><td>{pcf(3.8, 1)}</td>"
+                 f"<td>Net investment income tax</td><td>{pcf(0.038, 1)}</td>"
                  f"<td>Investment income above the statutory threshold</td>"
                  + src_cell(["irs_tc559"], "Official source"),
-                 f"<td>California top marginal bracket, 2025 and 2026 schedules</td><td>{pcf(12.3, 1)}</td>"
+                 f"<td>California top marginal bracket, 2025 and 2026 schedules</td><td>{pcf(0.123, 1)}</td>"
                  f"<td>Taxable income above the top bracket start, indexed annually; the 2026 schedule shows the same structure</td>"
-                 + src_cell(["ftb_rates", "ftb_rates_2026"], "Official source"),
-                 f"<td>California additional tax, section 17043</td><td>{pcf(1.0, 1)}</td>"
-                 f"<td>Taxable income above $1,000,000, not indexed, every filing status</td>"
-                 + src_cell(["rtc17043"], "Official source"),
+                 + src_cell(["ftb_rates", "ftb_rates_2026", "ftb_sched_ca_540"], "Official source"),
+                 f"<td>California additional tax, section 17043</td><td>{pcf(0.01, 1)}</td>"
+                 f"<td>Taxable income above $1,000,000, not indexed, every filing status; "
+                 f"the 2025 Form 540 booklet reports it on line 62 as the Behavioral Health Services Tax</td>"
+                 + src_cell(["rtc17043", "ftb_540_instructions_2025"], "Official source"),
                  f"<td><strong>Combined rate in the model</strong></td>"
-                 f"<td><strong>{pcf(ss['rate_with'] * 100, 1)}</strong></td>"
+                 f"<td><strong>{pcf(ss['rate_with'], 1)}</strong></td>"
                  f"<td>The whole gain, with no federal deduction for state tax taken</td>"
                  + method_cell("#method", "Model output")],
                 note="The top California bracket is indexed every year, so its start rises; section 17043's "
                      "threshold does not. The model applies the combined rate to the entire gain, which "
-                     "overstates the tax rather than understating it."))
+                     "overstates the tax rather than understating it.")
+        + surcharge_worksheet_section())
+
+
+
+def surcharge_worksheet_section() -> str:
+    """The 1% computed the way the Form 540 instructions compute it.
+
+    Added after the owner asked for the official Form 540 instructions to be read and
+    the sensitivity value updated. The table above prices the surcharge as a flat
+    one-point difference on the entire gain. That is an upper bound. The form's own
+    line 62 worksheet works on the slice of *taxable income* above $1,000,000, so the
+    figure the household would actually enter depends on what else the return carries
+    in the year of sale. Both are published side by side rather than replacing one
+    with the other, because the ceiling is the honest worst case and the worksheet is
+    the honest number.
+    """
+    ss = MODEL.get("surcharge_sensitivity") or {}
+    ws = ss.get("worksheet") or []
+    if not ws:
+        return ""
+    rows = []
+    for block in ws:
+        for r in block["rungs"]:
+            rows.append(
+                f"<td>{esc(block['label'])}</td><td>{m(block['gain'])}</td>"
+                f"<td>{esc(r['label'])}</td><td>{m(r['taxable_income'])}</td>"
+                f"<td>{m(r['above_threshold'])}</td><td>{m(r['surcharge'])}</td>"
+                + method_cell("#method", "Model output"))
+    marginal = table(
+        "The line 62 worksheet on the same three sales",
+        ["Path", "Taxable gain", "Other taxable income in the year of sale",
+         "Taxable income (line 19)", "Above $1,000,000 (line 2 to 3)",
+         "1% under line 62 (line 5)", "Basis"],
+        rows,
+        note=("Four assumed levels of other income stand in for the rest of the return, because the "
+              "surcharge is computed on total taxable income and not on the gain alone. They are "
+              "scenarios, not figures from the household. The line 62 arithmetic is: taxable income, "
+              "less $(1,000,000), times 1%. A gain under the threshold carries no surcharge at all, "
+              "however large it is - which is the single most useful thing the worksheet shows."))
+
+    caused = table(
+        "How much of the 1% the gain actually causes",
+        ["Path", "Worst case: 1% on the whole gain", "1% caused by the gain, no other income",
+         "1% caused by the gain, $1,000,000 of other income", "Verdict"],
+        [f"<td>{esc(b['label'])}</td><td>{m(b['flat_upper_bound'])}</td>"
+         f"<td>{m(b['rungs'][0]['surcharge_on_gain'])}</td>"
+         f"<td>{m(b['rungs'][2]['surcharge_on_gain'])}</td>"
+         + f"<td>{'Nothing to tax' if b['gain'] == 0 else 'The ceiling holds'}</td>"
+         + method_cell("#method", "Model output") for b in ws],
+        note=("The middle and right columns count only the part of the surcharge that disappears if "
+              "the house is not sold. Other income above the threshold attracts the 1% whether or not "
+              "a sale happens, so charging that part to the sale would overstate what the decision "
+              "costs. On a sale at inheritance the gain is about zero and so is the surcharge: there "
+              "is nothing above the threshold for the gain to push there."))
+
+    other_mid = ss['worksheet_scenarios'][2] if len(ss.get('worksheet_scenarios') or []) > 2 else 1000000
+    return (
+        '<h2>The same tax, computed the way Form 540 computes it</h2>'
+        + callout("key", "What the Form 540 instructions actually say", f"""
+<p>The instruction for <strong>line 62</strong> of Form 540 does not describe a rate applied to a gain.
+It gives a five-step worksheet: taxable income from line 19, less $(1,000,000), multiplied by 1%.
+The form's name for the tax is the <strong>Behavioral Health Services Tax</strong>; the statute behind it is
+Revenue and Taxation Code section 17043, which is what the model has always used. Three things follow,
+and they change the sensitivity rather than the recommendation:</p>
+<ul>
+<li><strong>It is a tax on total taxable income, not on the sale.</strong> A gain of
+{m(ws[1]['gain'])} that lands on a return with no other income is taxed on
+{m(ws[1]['rungs'][0]['above_threshold'])} of income above the line. The same gain on a return already
+carrying {m(other_mid)} of taxable income is taxed on {m(ws[1]['rungs'][2]['above_threshold'])}.</li>
+<li><strong>A gain below the threshold carries none of it.</strong> The first block of the table above
+is the path this site recommends. The basis step-up leaves a gain of
+{m(ws[0]['gain'])}, so there is nothing above the threshold for the 1% to reach, and the
+surcharge is <strong>{m(ws[0]['flat_upper_bound'])}</strong> under the flat ceiling and
+<strong>{m(ws[0]['rungs'][0]['surcharge_on_gain'])}</strong> on the worksheet. The only surcharge that
+appears in that block is the {m(ws[0]['rungs'][-1]['surcharge'])} which the household's other income
+would owe in any case, and which is therefore not a cost of selling.</li>
+<li><strong>The flat figure in the earlier table is a ceiling, and it holds.</strong>
+{m(ws[1]['flat_upper_bound'])} is the most the one point can ever cost on that gain. The worksheet
+reaches it as soon as other taxable income has already filled the space below the threshold, and it
+cannot exceed it, because the gain can only be taxed on that part of itself which lands above the
+threshold. With no other income a slice of the gain itself sits below the line and escapes the point, so
+the true cost is <strong>{m(ws[1]['rungs'][0]['surcharge_on_gain'])}</strong>, not
+{m(ws[1]['flat_upper_bound'])}.</li>
+</ul>""")
+        + marginal
+        + caused
+        + callout("flag", "Two limits on this worksheet, stated rather than buried", f"""
+<ul>
+<li><strong>The bracket tax beside it is a flat approximation.</strong> The worksheet columns price the
+1% exactly, but the state total in the model applies the top printed bracket of {pcf(12.3, 1)} to all
+taxable income instead of walking the published schedule, which overstates the bracket tax. It does not
+affect the 1%, which is correctly a flat rate on the slice above the threshold. A prepared return would
+use the {pcf(12.3, 1)} bracket only on the top slice, as the schedules printed for each filing status
+require.</li>
+<li><strong>California does not conform to every federal change.</strong> The Schedule CA (540)
+instructions state on their face that the Revenue and Taxation Code generally does not conform to the One
+Big Beautiful Bill Act, and the line 7a instruction confirms California taxes long and short term capital
+gains as regular income with no special rate. A year-of-sale return must be prepared on that year's forms;
+the figures here are a planning calculation, not a return.</li>
+</ul>"""))
 
 
 def page_inheritance() -> str:
@@ -2828,23 +2929,23 @@ def page_laws() -> str:
          "Confirms the exclusion is indexing upward.",
          ["irs_2027"]),
         ("California high-income tax rates: Proposition 3 (unofficial)",
-         "Proposition 3 is approved on unofficial results (60.7% yes as of 14 November 2026, 5:16 p.m.). It makes permanent the voter-approved rates on individuals earning over $371,000, adjusted for inflation, that would otherwise expire in 2031.",
+         "Proposition 3 is approved on unofficial results (60.8% yes as of 16 November 2026, 7:12 p.m.). It makes permanent the voter-approved rates on individuals earning over $371,000, adjusted for inflation, that would otherwise expire in 2031.",
          "Removes a scheduled state tax cut. A large gain on a California property sale will be taxed at the top state rate for the foreseeable future.",
          ["sos_results", "voterguide_p3"]),
         ("One-time tax on certain taxpayers rejected",
-         "Proposition 40 failed on unofficial results (52.2% no as of 14 November 2026, 5:16 p.m.).",
+         "Proposition 40 failed on unofficial results (52.2% no as of 16 November 2026, 7:12 p.m.).",
          "No state wealth tax. Recorded because a later version could return.",
          ["sos_results", "voterguide_p40"]),
         ("Countermeasure to Proposition 40 rejected",
-         "Proposition 41 failed on unofficial results (55.2% no as of 14 November 2026, 5:16 p.m.). It would have prohibited new state taxes that exclude revenues from the state spending limit.",
+         "Proposition 41 failed on unofficial results (55.2% no as of 16 November 2026, 7:12 p.m.). It would have prohibited new state taxes that exclude revenues from the state spending limit.",
          "Its failure removes one of the two measures that could have voided the one-time tax if both had passed.",
          ["sos_results", "voterguide_p40"]),
         ("New state personal property taxes barred",
-         "Proposition 42 is ahead on unofficial results (51.3% yes as of 14 November 2026, 5:16 p.m.). The margin is close and counting continues, so the outcome is not final.",
+         "Proposition 42 is ahead on unofficial results (51.2% yes as of 16 November 2026, 7:12 p.m.). The margin is close and counting continues, so the outcome is not final.",
          "Narrows one route for a future state tax, but does not touch real property tax.",
          ["sos_results"]),
         ("Local revenue vote threshold rejected",
-         "Proposition 43 failed on unofficial results (57.6% no as of 14 November 2026, 5:16 p.m.).",
+         "Proposition 43 failed on unofficial results (57.7% no as of 16 November 2026, 7:12 p.m.).",
          "Local parcel and transfer taxes remain possible without the stricter vote the measure would have required.",
          ["sos_results"]),
         ("Proposition 19 shelter adjusted",
@@ -2876,6 +2977,11 @@ def page_laws() -> str:
          "Reported but not verified against an official city source on the public site. It is left deliberately "
          "unresolved rather than given a number.",
          []),
+        ("Five initiatives cleared for circulation (none amends Proposition 19)",
+         "The Secretary of State's status page dated 20 October 2026 lists five initiatives cleared for circulation: ballot-procedure changes (one would add a 5% tax on income over $10 million to fund elections), a constitutional-revision route, a constitutional amendment creating a strategic implementation board, a repeal of the top-two primary law, and a food sales-tax exemption. None of them amends the inheritance or reassessment rules.",
+         "Re-checked for a replacement to the failed Proposition 19 repeal. No replacement is pending, eligible or cleared on the page, so the shelter arithmetic is not expected to change from this list.",
+         "Not enacted. Cleared for circulation only; none is circulating with 25% of signatures on the page. Read on 17 November 2026.",
+         ["sos_cleared_circulation"]),
     ]
     dead = [
         ("AB 1157", "Would have amended Civil Code sections 1946.2, 1947.12 and 1947.13 on just cause and rent increases.",
@@ -2895,7 +3001,7 @@ def page_laws() -> str:
     return (
         callout("warn", "Read the election results carefully", """
 <p>The November 2026 California results on this page are <strong>unofficial</strong>, published by the Secretary
-of State with all 23,860 precincts partially reporting as of 14 November 2026, 5:16 p.m. Vote-by-mail,
+of State with all 23,860 precincts partially reporting as of 16 November 2026, 7:12 p.m. Vote-by-mail,
 provisional and other ballots continue to be processed and counted during the canvass, and the results are not
 certified until 11 December 2026. They are
 included because Proposition 3 directly changes the tax on a property sale. Confirm against the certified
@@ -3825,6 +3931,7 @@ def page_suggestions() -> str:
     # what the 16 November 2026 build actually did, so a reader can see which items
     # are still open rather than assuming the whole list is untouched.
     improve_status = {
+        "Model a sale in the same tax year as the inheritance": ("done", "Implemented: the model's pure sell path is a sale in the same tax year as the inheritance itself, and the taxes page prices it - about zero income tax on the 2045 model, because the basis steps up to the date-of-death value and property acquired from a decedent is treated as held long-term whatever the actual holding period. Register item S-04's analysis therefore exists; the S-row stays proposed for the owner to adopt."),
         "Add a distribution chart to the projections": ("done", "Implemented: decile fan charts on the dashboard and the projections page, a histogram of the sell-minus-keep gap on the dashboard and the decision page, and the same distributions behind every headline share."),
         "Add a real rental opinion for Property A": ("open", "Still open. The site now publishes the rent at which occupying and letting each match selling, which is the closest substitute available without a rent opinion."),
         "Add a real rental opinion for Property A (imputed rent)": ("done", "Implemented as a range of rent scenarios plus a solved break-even, because no rent opinion exists yet."),
@@ -3842,6 +3949,7 @@ def page_suggestions() -> str:
     }
     improve_src = {"Add a real rental opinion for Property A (imputed rent)": ["hud_fmr"],
                    "Model mixed paths, not only the three pure choices": ["rtc63_2_eligibility"],
+                   "Model a sale in the same tax year as the inheritance": ["irs_basis"],
                    "Write the rules down before reading any projection": [],
                    "Put the answer and what would change it on the first screen": [],
                    "Price the transfer tax and recording fees into the sell path": ["rtc11911", "gov27388_1"],
@@ -4737,7 +4845,7 @@ def page_review() -> str:
         ("Fixed charges are projected at the inflation rate",
          "On Property B the fixed part of the bill grew at 8.1% a year between 2016 and 2025. Projecting at 2.5% is deliberately conservative and understates future bills if that pace continues."),
         ("The November 2026 California election results are unofficial",
-         "They are published with all precincts partially reporting and are not certified until 11 December 2026. Proposition 3 is treated as approved (60.7% yes on unofficial results as of 14 November 2026, 5:16 p.m.) because it changes the tax rate on a sale, but the result must be confirmed at certification."),
+         "They are published with all precincts partially reporting and are not certified until 11 December 2026. Proposition 3 is treated as approved (60.8% yes on unofficial results as of 16 November 2026, 7:12 p.m.) because it changes the tax rate on a sale, but the result must be confirmed at certification."),
         ("Combined tax rates are added, not interacted",
          "State and federal rates are added and no federal deduction is taken for state tax paid. That overstates the tax on a sale and therefore understates the case for selling, which is the conservative direction."),
         ("The housing value of living in the home is priced, not added",
@@ -4842,6 +4950,10 @@ def page_review() -> str:
         ("Pre-rounding history scrub is prepared as a runbook, not run",
          "scripts/history_scrub.sh audits the whole history for the identifier classes the privacy scanner guards and for candidate unrounded figures (found outside the repository, never written to the tree), and can run a git-filter-repo rewrite. The audit on 15 November 2026 found the identifier tokens still present in the visible history and one candidate figure. The scanner's own patterns were split into string fragments so the file text no longer carries any identifier.",
          "The rewrite itself rewrites every ref and needs a force-push to main, so it is the owner's to run or authorise. Until then, earlier commits, pull-request diffs and forks keep what they hold. The runbook carries the full post-rewrite checklist."),
+        ("The section 17043 sensitivity table printed percentages ten times too large; corrected 17 November 2026",
+         "The taxes page passed numbers that were already percentages (20.0, 3.8, 12.3, 1.0, 37.1 and 36.1) to a formatter that multiplies by 100, so the rate table and the sentences beside it printed 2000.0%, 380.0%, 1230.0%, 100.0%, 3710.0%, 3610.0% and 1330.0% where 20.0%, 3.8%, 12.3%, 1.0%, 37.1%, 36.1% and 13.3% belong. Nine call sites in the build script were corrected on 17 November 2026 and the page was rebuilt.",
+         "None on the numbers: the model's own rates and every dollar figure computed from them were always right, and no projection or recommendation changed. Only the printed percentages were wrong, so a reader of the earlier edition could have misread the top combined rate as 3710% instead of 37.1%.",
+         ["rtc17043", "ftb_540_instructions_2025", "ftb_rates", "ftb_rates_2026"]),
     ]
     aud_rows = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td>"
                 + src_cell(rest[0] if rest else ["boe_lta25009", "irs_estate"], "Related sources")

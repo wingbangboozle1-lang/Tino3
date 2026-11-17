@@ -520,6 +520,19 @@
    "quote": "California does not have a lower rate for capital gains. All capital gains are taxed as ordinary income."
   },
   {
+   "id": "ftb_540_instructions_2025",
+   "publisher": "California Franchise Tax Board",
+   "title": "2025 Instructions for Form 540, California Resident Income Tax Return",
+   "url": "https://www.ftb.ca.gov/forms/2025/2025-540-instructions.html",
+   "checked": "Opened on the publisher's official domain on 2026-11-17 (arena/11bff629-tino3).",
+   "supports": "Line 62 instructions: if taxable income is more than $1,000,000, subtract $1,000,000 from taxable income from Form 540 line 19 and apply a 1% rate to the remainder; the line is named the Behavioral Health Services Tax in the 2025 booklet.",
+   "limits": "The instructions booklet is for tax year 2025; later years must be re-read. The rate and threshold live in Revenue and Taxation Code section 17043, which is the authority; the booklet shows how the return reports it.",
+   "verifies": [
+    "The additional 1% applies to taxable income above $1,000,000 and is reported on Form 540 line 62 as the Behavioral Health Services Tax"
+   ],
+   "quote": "Line 62 - Behavioral Health Services Tax. If your taxable income is more than $1,000,000, compute the Behavioral Health Services Tax using whole dollars only: 1. Taxable income from Form 540, line 19. 2. Less: $(1,000,000). 3. Subtotal. 4. Tax rate - 1%: .01. 5. Behavioral Health Services Tax - Multiply line 3 by line 4. Enter this amount here and on line 62."
+  },
+  {
    "id": "ftb_inheritance",
    "publisher": "California Franchise Tax Board",
    "title": "Gifts and inheritance - Personal income types",
@@ -924,9 +937,9 @@
    "publisher": "California Secretary of State",
    "title": "State Ballot Measures - Statewide Results, 2026 General Election",
    "url": "https://electionresults.sos.ca.gov/returns/ballot-measures",
-   "checked": "Opened on the publisher's official domain on 2026-11-15; results table read at the 14 November 2026, 5:16 p.m. update.",
-   "supports": "Unofficial results as of 14 November 2026, 5:16 p.m., with 23,860 of 23,860 precincts partially reporting; vote-by-mail, provisional and other ballots continue to be processed and counted during the canvass; results will be certified by 11 December 2026. Proposition 3 (extension of the existing tax on high incomes) yes 60.7%; Proposition 40 (one-time tax on certain taxpayers) no 52.2%; Proposition 41 (spending-limit audits) no 55.2%; Proposition 42 (no new state personal property taxes) yes 51.3%; Proposition 43 (limit on local revenue votes) no 57.6%; Proposition 37 (middle-income buyer loans) yes 62.5%.",
-   "limits": "These are unofficial results. They change during the canvass and are not final until certified on 11 December 2026. Treat every figure as provisional. An earlier edition published the 12 November 2026 counts (Prop 3 60.7% yes; Prop 40 52.4% no; Prop 41 55.1% no; Prop 42 51.4% yes; Prop 43 57.5% no); those moved during the canvass and were corrected on 15 November 2026."
+   "checked": "Opened on the publisher's official domain on 2026-11-15; results table read at the 14 November 2026, 5:16 p.m. update; re-read at the 16 November 2026, 7:12 p.m. update on 2026-11-17 (arena/11bff629-tino3).",
+   "supports": "Unofficial results as of 16 November 2026, 7:12 p.m., with 23,860 of 23,860 precincts partially reporting; vote-by-mail, provisional and other ballots continue to be processed and counted during the canvass; results will be certified by 11 December 2026. Proposition 3 (extension of the existing tax on high incomes) yes 60.8%; Proposition 40 (one-time tax on certain taxpayers) no 52.2%; Proposition 41 (spending-limit audits) no 55.2%; Proposition 42 (no new state personal property taxes) yes 51.2%; Proposition 43 (limit on local revenue votes) no 57.7%; Proposition 37 (middle-income buyer loans) yes 62.5%.",
+   "limits": "These are unofficial results. They change during the canvass and are not final until certified on 11 December 2026. Treat every figure as provisional. An earlier edition published the 12 November 2026 counts (Prop 3 60.7% yes; Prop 40 52.4% no; Prop 41 55.1% no; Prop 42 51.4% yes; Prop 43 57.5% no); those moved during the canvass and were corrected on 15 November 2026. Re-read on 17 November 2026 at the 16 November, 7:12 p.m. update: Proposition 3 (60.8% yes), Proposition 42 (51.2% yes) and Proposition 43 (57.7% no) had moved a tenth of a point from the 14 November read; Propositions 40 and 41 were unchanged; certification is still due 11 December 2026."
   },
   {
    "id": "ssa_trustees",
@@ -1259,6 +1272,24 @@
    "checked": "opened on the publisher's site on 2026-11-16 (2023 edition of the United States Code)",
    "supports": "The compounding convention used in every deferral figure on the liquidity page: interest on unpaid tax compounds daily, not annually.",
    "limits": "The engine on this site compounds on a 365-day year. The IRS determines rates quarterly and may apply them per quarter; small differences are possible against an assessment."
+  },
+  {
+   "id": "sos_cleared_circulation",
+   "publisher": "California Secretary of State",
+   "title": "Initiatives and Referenda Cleared for Circulation",
+   "url": "https://www.sos.ca.gov/elections/ballot-measures/initiative-and-referendum-status/initiatives-referenda-cleared-circulation",
+   "checked": "Opened on the publisher's official domain on 2026-11-17. The status page it is linked from is dated 20 October 2026 and lists 5 measures cleared for circulation, 0 circulating with 25% of signatures and 1 pending at the Attorney General.",
+   "supports": "Five proposed initiatives were cleared for circulation (26-0001 to 26-0005, summary dates 7 April to 25 September 2026): ballot-procedure changes, one with a 5% tax on income over $10 million to fund elections; a constitutional-revision route; a constitutional amendment creating a strategic implementation board; a repeal of the top-two primary law; and a food sales-tax exemption. None of the five amends the inheritance or transfer-reassessment rules of Proposition 19.",
+   "limits": "A list of proposals at a point in time, not a forecast. Clearance for circulation is not qualification: a measure needs the signatures listed on the status page, verification, and the ballot date that the Secretary of State sets. Re-read the live dashboard at each review gate."
+  },
+  {
+   "id": "ftb_sched_ca_540",
+   "publisher": "California Franchise Tax Board",
+   "title": "2025 Instructions for Schedule CA (540), California Adjustments - Residents",
+   "url": "https://www.ftb.ca.gov/forms/2025/2025-540-ca-instructions.html",
+   "checked": "Read at the publisher on 2026-11-17 (this session). Part I, Section A, line 7a and the General Information conformity list were read in full.",
+   "supports": "On line 7a, capital gain or loss: \"Generally, no adjustments are made on this line. California taxes long and short term capital gains as regular income. No special rate for long term capital gains exists.\" The same paragraph lists \"Gain on the sale of personal residence where depreciation was allowable\" among the items for which California basis can differ from federal basis, to be resolved on Schedule D (540). The General Information section lists the One Big Beautiful Bill Act among the federal acts to which the Revenue and Taxation Code generally does not conform.",
+   "limits": "The schedule adjusts federal amounts; it does not state a rate, which comes from the Form 540 schedules and section 17043. The depreciation-allowable point applies to a home that was let before it was sold, which is the live-then-let case on this site."
   }
  ]
 }

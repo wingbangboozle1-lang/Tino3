@@ -670,12 +670,15 @@
    "value": 0.01,
    "threshold": 1000000,
    "threshold_indexed": false,
-   "schedules_checked": "2025",
+   "schedules_checked": "2025 and 2026",
    "ignores_filing_status": true,
-   "basis": "Revenue and Taxation Code section 17043(a) imposes 1% on taxable income above $1,000,000, and subsection (c) excludes the section 17039 credit provisions, the section 17041 filing-status and bracket recomputation, and the section 17045 joint-return provisions. The 2025 Form 540 tax rate schedules were re-read on the publisher's site on 16 November 2026 and every one of the three filing-status schedules ends at 12.30%, so the 1% is additional to, not part of, the top bracket. The Franchise Tax Board also confirms that California has no lower rate for capital gains, so the same graduated rates apply to the gain on sale. The statute sets a flat $1,000,000 and provides no inflation indexing, unlike the brackets, which are indexed.",
+   "basis": "Revenue and Taxation Code section 17043(a) imposes 1% on taxable income above $1,000,000, and subsection (c) excludes the section 17039 credit provisions, the section 17041 filing-status and bracket recomputation, and the section 17045 joint-return provisions. The 2025 and 2026 Form 540 tax rate schedules were each read on the publisher's site and every one of the three filing-status schedules ends at 12.30%, so the 1% is additional to, not part of, the top bracket. The 2025 Form 540 instructions, read on 17 November 2026, name the tax the Behavioral Health Services Tax and give its arithmetic as a line 62 worksheet: taxable income from line 19, less $(1,000,000), times 1%. That is a tax on total taxable income, not on a gain, which is why the sensitivity prices it across a range of assumed other income as well as at the flat-rate ceiling. The Schedule CA (540) instructions confirm California taxes long and short term capital gains as regular income with no special rate, and that California generally does not conform to the One Big Beautiful Bill Act. The statute sets a flat $1,000,000 and provides no inflation indexing, unlike the brackets, which are indexed.",
    "src": [
     "rtc17043",
-    "ftb_rates"
+    "ftb_rates",
+    "ftb_rates_2026",
+    "ftb_540_instructions_2025",
+    "ftb_sched_ca_540"
    ],
    "low": 0.01,
    "high": 0.01,
@@ -690,6 +693,19 @@
     "rtc17043"
    ],
    "checked": "2026-11-16"
+  },
+  "form540_other_income": {
+   "scenarios": [
+    0,
+    250000,
+    1000000,
+    2000000
+   ],
+   "basis": "The 1% under section 17043 is computed on taxable income, not on the gain, so the same gain costs a different amount depending on what else the return carries. These four scenarios stand in for that: no other income; a mid-career salary; income already at the threshold; and income well above it. They are ASSUMPTIONS published as a range, not figures from the household, in the same way as the imputed-rent and insurance bands. Read with ftb_540_instructions_2025, which gives the line 62 worksheet this follows.",
+   "src": [
+    "ftb_540_instructions_2025",
+    "rtc17043"
+   ]
   }
  },
  "precommit": {

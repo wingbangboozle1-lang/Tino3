@@ -29,8 +29,7 @@ and reinvestment choices.
 - `briefing.html` — one-page, printable Attorney & CPA discussion sheet.
 - `questions.html` — what is known, what is missing, who can verify it, and suggested next steps.
 - `suggestions.html` — proposals kept separate from implemented changes; each can be reviewed,
-  adopted, deferred or rejected before implementation, and each row carries a Decision column and a
-  Date column for the household to complete by hand.
+  adopted, deferred or rejected before implementation.
 - `review.html` — flagged, assumed and unverified items.
 
 - **Start here:** Dashboard (the answer, its confidence, the date it was computed and the three checks that would move it, on the first screen), the **pre-commitment register** (`precommit.html`: the rules the household writes down before reading any figure, with empty decision columns), executive summary, decision analysis (including the mixed paths and the Proposition 19 clawback), the what-if cases page (one lever at a time, link-driven, no script), and a printable Attorney & CPA briefing sheet.
@@ -56,7 +55,7 @@ basis, actual sale costs, occupancy, rents, insurance, maintenance, utilities, d
 and laws in force at transfer. Missing or unverified property-specific amounts are not presented as
 confirmed; they are identified on the relevant pages and on `review.html`.
 
-There are **25 generated HTML pages** and one stylesheet in the public allowlist. The pages show rounded owner-provided figures, model outputs and official-source-backed legal/economic information. The source ledger contains **112 entries**. Both property placeholders grow with the California state-level FHFA house-price index: the two metropolitan-area series were withdrawn on 15 November 2026 because the index publisher's own metadata crosswalked the placeholders to their metropolitan areas (an audit finding), and the privacy gate now rejects the withdrawn series identifiers and metro phrasing. The jurisdiction-specific entries (the two properties' county and city official pages) were also withdrawn, because their publishers identify the properties. A factual table row either links to an official source or is explicitly registered as unsourceable/unverified.
+There are **25 generated HTML pages** and one stylesheet in the public allowlist. The pages show rounded owner-provided figures, model outputs and official-source-backed legal/economic information. The source ledger contains **115 entries**. Both property placeholders grow with the California state-level FHFA house-price index: the two metropolitan-area series were withdrawn on 15 November 2026 because the index publisher's own metadata crosswalked the placeholders to their metropolitan areas (an audit finding), and the privacy gate now rejects the withdrawn series identifiers and metro phrasing. The jurisdiction-specific entries (the two properties' county and city official pages) were also withdrawn, because their publishers identify the properties. A factual table row either links to an official source or is explicitly registered as unsourceable/unverified.
 
 The Black Swan analysis uses one canonical monthly park-and-phase engine and one short-Treasury
 parking-yield assumption. It includes synthetic stresses and historical entry replays, including
@@ -69,20 +68,12 @@ professional advice when dates, facts or laws change.
 
 ## Published site and verification snapshot
 
-The current generated edition contains **25 HTML pages**, **one runtime stylesheet**, **112 entries
+The current generated edition contains **25 HTML pages**, **one runtime stylesheet**, **115 entries
 in the source ledger**, and **139 content-free withdrawal notices** for retired routes. The latest
-local verification reports **1258 table rows**: **1074 linked to official publishers** and **184
+local verification reports **1278 table rows**: **1094 linked to official publishers** and **184
 explicitly registered as unsourceable or unverified**. A row without a confirming official source is
 not filled in by inference. The public site contains no source ledger or internal model data files;
 the Jekyll and Actions publication boundaries are checked separately.
-
-The printable Attorney & CPA brief is published as a one-page sheet, and that claim is checked.
-`scripts/print_budget.py` estimates the brief's printed height against one letter-size page, reading
-the page margins, the column grid, the type size and the line height out of `assets/style.css`, so
-the estimate cannot drift from the sheet that is actually printed. The estimate is deliberately
-pessimistic and the build fails if it exceeds one sheet. It is an estimate, not a browser print: no
-browser is available in the build environment, so the printed sheet still has not been seen, and that
-open item is recorded on the register of unverified things.
 
 The model and pages are generated from `assets/data/` and `scripts/build.py`; do not edit generated
 HTML or CSV outputs by hand. `EXECUTIVE_SUMMARY.md` is generated from the same model data and is
