@@ -4474,6 +4474,13 @@ The Secretary of State's page was re-read on 17 November 2026 and shows the **16
 - `scripts/model.py`, `assets/data/inputs.json` — this session's version kept; main had no equivalent.
 - `README.md` counts corrected to the numbers the **merged** build actually reports, not either session's prediction: 114 ledger entries, 1265 table rows, 1088 linked.
 
+### M-6 publication record
+
+- **Pull request:** <https://github.com/wingbangboozle1-lang/Tino3/pull/163>, from `arena/cd11dc07-tino3` to `main`. The `Verify static site` check passed on the PR head (27s) before the merge.
+- **Merge:** `gh pr merge 163 --merge` succeeded, with no approval waited for and no `--auto`. Merge commit `9998b9b1edc307959fa3336f28ad584333a6cc08`, merged 2026-11-17 16:47:25 UTC.
+- **Pages deploy:** for commit `9998b9b` the `Verify static site`, `Deploy GitHub Pages` and `pages-build-deployment` runs all completed **success**.
+- **Live-site confirmation:** <https://wingbangboozle1-lang.github.io/Tino3/taxes.html> serves the new section - the heading "The same tax, computed the way Form 540 computes it", the line 62 worksheet table and the "how much of the 1% the gain actually causes" table are all present, and the Schedule CA (540) citation appears on the bracket row beside the 12.3% entry. A first fetch returned a cached copy of the previous edition; a cache-busted re-fetch confirmed the current one. Readers who saw the older page should reload.
+
 ### M-5 and M-6 result: gates, pull request and deployment
 
 - **Local gates on the merged branch (17 November 2026):** `scripts/rebuild.py` PASS, and a second run leaves the tree byte-identical (verified by `md5sum -c` across `taxes.html`, `review.html`, `sources.html`, `model.json` and `EXECUTIVE_SUMMARY.md`); `scripts/verify.py` PASS (25 pages, **1265 table rows**, **1088 linked to official publishers**, 177 registered as unsourceable, **114 ledger sources**, 4,418 links, every internal link and fragment resolves); `scripts/privacy_boundary.py` PASS; `scripts/tracked_tree_guard.py` PASS (65 tracked text files); `scripts/package_site.py` PASS; `scripts/verify_legacy.py --config-only` PASS; `git diff --check` clean.
