@@ -1,5 +1,5 @@
 {
- "as_of": "2026-11-16",
+ "as_of": "2026-11-17",
  "edition": "Anonymised quantitative decision edition; every published figure rounded to the nearest $10.",
  "scope": "Union of two independently maintained ledgers, merged on 13 November 2026. Entries kept verbatim from whichever ledger supplied them; where an entry had no 'supports' field its 'verifies' list was carried across, and 'limits' was filled from 'limit' or 'caveat' when present. Neither ledger was rewritten to match the other.",
  "sources": [
@@ -520,6 +520,19 @@
    "quote": "California does not have a lower rate for capital gains. All capital gains are taxed as ordinary income."
   },
   {
+   "id": "ftb_540_instructions_2025",
+   "publisher": "California Franchise Tax Board",
+   "title": "2025 Instructions for Form 540, California Resident Income Tax Return",
+   "url": "https://www.ftb.ca.gov/forms/2025/2025-540-instructions.html",
+   "checked": "Opened on the publisher's official domain on 2026-11-17 (arena/11bff629-tino3).",
+   "supports": "Line 62 instructions: if taxable income is more than $1,000,000, subtract $1,000,000 from taxable income from Form 540 line 19 and apply a 1% rate to the remainder; the line is named the Behavioral Health Services Tax in the 2025 booklet.",
+   "limits": "The instructions booklet is for tax year 2025; later years must be re-read. The rate and threshold live in Revenue and Taxation Code section 17043, which is the authority; the booklet shows how the return reports it.",
+   "verifies": [
+    "The additional 1% applies to taxable income above $1,000,000 and is reported on Form 540 line 62 as the Behavioral Health Services Tax"
+   ],
+   "quote": "Line 62 - Behavioral Health Services Tax. If your taxable income is more than $1,000,000, compute the Behavioral Health Services Tax using whole dollars only: 1. Taxable income from Form 540, line 19. 2. Less: $(1,000,000). 3. Subtotal. 4. Tax rate - 1%: .01. 5. Behavioral Health Services Tax - Multiply line 3 by line 4. Enter this amount here and on line 62."
+  },
+  {
    "id": "ftb_inheritance",
    "publisher": "California Franchise Tax Board",
    "title": "Gifts and inheritance - Personal income types",
@@ -924,9 +937,9 @@
    "publisher": "California Secretary of State",
    "title": "State Ballot Measures - Statewide Results, 2026 General Election",
    "url": "https://electionresults.sos.ca.gov/returns/ballot-measures",
-   "checked": "Opened on the publisher's official domain on 2026-11-15; results table read at the 14 November 2026, 5:16 p.m. update.",
-   "supports": "Unofficial results as of 14 November 2026, 5:16 p.m., with 23,860 of 23,860 precincts partially reporting; vote-by-mail, provisional and other ballots continue to be processed and counted during the canvass; results will be certified by 11 December 2026. Proposition 3 (extension of the existing tax on high incomes) yes 60.7%; Proposition 40 (one-time tax on certain taxpayers) no 52.2%; Proposition 41 (spending-limit audits) no 55.2%; Proposition 42 (no new state personal property taxes) yes 51.3%; Proposition 43 (limit on local revenue votes) no 57.6%; Proposition 37 (middle-income buyer loans) yes 62.5%.",
-   "limits": "These are unofficial results. They change during the canvass and are not final until certified on 11 December 2026. Treat every figure as provisional. An earlier edition published the 12 November 2026 counts (Prop 3 60.7% yes; Prop 40 52.4% no; Prop 41 55.1% no; Prop 42 51.4% yes; Prop 43 57.5% no); those moved during the canvass and were corrected on 15 November 2026."
+   "checked": "Opened on the publisher's official domain on 2026-11-15; results table read at the 14 November 2026, 5:16 p.m. update; re-read at the 16 November 2026, 7:12 p.m. update on 2026-11-17 (arena/11bff629-tino3).",
+   "supports": "Unofficial results as of 16 November 2026, 7:12 p.m., with 23,860 of 23,860 precincts partially reporting; vote-by-mail, provisional and other ballots continue to be processed and counted during the canvass; results will be certified by 11 December 2026. Proposition 3 (extension of the existing tax on high incomes) yes 60.8%; Proposition 40 (one-time tax on certain taxpayers) no 52.2%; Proposition 41 (spending-limit audits) no 55.2%; Proposition 42 (no new state personal property taxes) yes 51.2%; Proposition 43 (limit on local revenue votes) no 57.7%; Proposition 37 (middle-income buyer loans) yes 62.5%.",
+   "limits": "These are unofficial results. They change during the canvass and are not final until certified on 11 December 2026. Treat every figure as provisional. An earlier edition published the 12 November 2026 counts (Prop 3 60.7% yes; Prop 40 52.4% no; Prop 41 55.1% no; Prop 42 51.4% yes; Prop 43 57.5% no); those moved during the canvass and were corrected on 15 November 2026. Re-read on 17 November 2026 at the 16 November, 7:12 p.m. update: Proposition 3 (60.8% yes), Proposition 42 (51.2% yes) and Proposition 43 (57.7% no) had moved a tenth of a point from the 14 November read; Propositions 40 and 41 were unchanged; certification is still due 11 December 2026."
   },
   {
    "id": "ssa_trustees",
