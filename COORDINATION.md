@@ -7,13 +7,55 @@
 | Task | Status | Owner | File scope |
 |---|---|---|---|
 | M-1 Claim this scope and push before any other edit | **done** — this section | `arena/4f2a543e-tino3` | `COORDINATION.md` (this section only) |
-| M-2 Repair the unresolved conflict marker that the #152/#153 merge left on `main` — one line of merge residue on this board, found by the board's own rule R-1143-2 grep — removing only the residue line, no session's text touched | **in progress** | `arena/4f2a543e-tino3` | `COORDINATION.md` (the residue line only) |
-| M-3 Make rule R-1143-2 mechanical: the tracked-tree guard fails on a line-start conflict marker in any tracked text file, so Verify stops a repeat before it reaches a merge | **in progress** | `arena/4f2a543e-tino3` | `scripts/tracked_tree_guard.py` |
-| M-4 Independent line-by-line re-verification of the decision-critical official figures, each read at source this session: the 2026 and 2027 federal transfer-tax amounts and gift exclusions, the Proposition 19 shelter cap, the 1% mental-health surcharge above $1,000,000, the section 121 amounts, the nine-month estate-tax clock and the 2026 fourth-quarter underpayment rate, the statewide rent cap, and the inherited-property basis rule | **in progress** | `arena/4f2a543e-tino3` | read-only; results recorded here, corrections (if any) in `assets/data/inputs.json`, `assets/sources.json` (append only) and regenerated pages |
-| M-5 Record in the improvements table that the brief's same-tax-year sale is the model's own sell path and is priced on the taxes page (register item S-04's analysis therefore exists; the S-row itself stays proposed for the owner) | **in progress** | `arena/4f2a543e-tino3` | `scripts/build.py` (one improvements row), regenerated pages |
+| M-2 Repair the unresolved conflict marker that the #152/#153 merge left on `main` — one line of merge residue on this board, found by the board's own rule R-1143-2 grep — removing only the residue line, no session's text touched | **done** — two commits: the first (`1a86e9f`) deleted the wrong line (a blank line; the marker had shifted after the claim was inserted and a stale grep position was used); the second (`c3e573a`) restored that blank line and removed the residue. Net effect against `main`: exactly one line removed | `arena/4f2a543e-tino3` | `COORDINATION.md` (the residue line and one restored blank line) |
+| M-3 Make rule R-1143-2 mechanical: the tracked-tree guard fails on a line-start conflict marker in any tracked text file, so Verify stops a repeat before it reaches a merge | **done** (`68446cb`) — tested by planting three markers and restoring; exit 1 with the class printed, exit 0 clean | `arena/4f2a543e-tino3` | `scripts/tracked_tree_guard.py` |
+| M-4 Independent line-by-line re-verification of the decision-critical official figures, each read at source this session: the 2026 and 2027 federal transfer-tax amounts and gift exclusions, the Proposition 19 shelter cap, the 1% mental-health surcharge above $1,000,000, the section 121 amounts, the nine-month estate-tax clock and the 2026 fourth-quarter underpayment rate, the statewide rent cap, and the inherited-property basis rule | **done** — result below; **no stored value changed**, so `assets/data/inputs.json` and `assets/sources.json` are untouched | `arena/4f2a543e-tino3` | read-only |
+| M-5 Record in the improvements table that the brief's same-tax-year sale is the model's own sell path and is priced on the taxes page (register item S-04's analysis therefore exists; the S-row itself stays proposed for the owner) | **done** — one improvements row with a *done* badge and the `irs_basis` source; verification count 1,239 rows, 1,062 linked | `arena/4f2a543e-tino3` | `scripts/build.py`, `suggestions.html`, `README.md` (row counts), regenerated pages |
 | M-6 Rebuild, run all gates, pull request to `main`, merge without waiting, confirm the Pages deploy, record the result | **in progress** | `arena/4f2a543e-tino3` | this section only |
 
 **Privacy constraint for this session:** no name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term, estate size or unrounded owner amount is added to any file this session writes, including this board.
+
+### M-4 result: the figures re-read at source, 17 November 2026
+
+Each of the following was re-read this session; every stored value agreed, so nothing was
+corrected and no ledger entry was added.
+
+1. **Federal basic exclusion, 2026: $15,000,000.** The IRS "What's new — Estate and gift tax"
+   page, read in full: the Working Families Tax Cuts Bill, signed 4 July 2025 as Public Law
+   119-21, "amends § 2010(c)(3) by increasing the basic exclusion amount to $15,000,000 for
+   calendar year 2026."
+2. **Federal basic exclusion, 2027: $15,480,000; annual gift exclusion $19,000 (2026) and
+   $20,000 (2027).** Confirmed against Rev. Proc. 2026-35 § 3.44 and § 3.46 as reported by the
+   sources citing it, matching the stored `federal_basic_exclusion_2027`,
+   `annual_gift_exclusion_2026` and `annual_gift_exclusion_2027`.
+3. **Proposition 19 shelter cap: $1,044,586** for transfers between 16 February 2025 and
+   15 February 2027, with the prior values $1,000,000 and $1,022,600 — all three match the
+   stored caps (BOE Letter to Assessors 2025/009, as the ledger records).
+4. **The 1% surcharge above $1,000,000.** The official Form 540 booklet text re-read: "If your
+   taxable income is more than $1,000,000, compute the Mental Health Services Tax" as
+   taxable income minus $1,000,000 times 1% — flat for every filing status, exactly the way
+   the taxes page computes it.
+5. **Section 121: $250,000 single, $500,000 joint**, owned and used as the main home two of
+   the last five years — matches the stored `section121_exclusion_single` and `_joint`.
+6. **Estate-tax interest, fourth quarter 2026: 7%** on individual underpayments, on a 4%
+   federal short-term rate plus the statutory three points, compounded daily — matches the
+   rate the liquidity page publishes.
+7. **Form 706: return and tax due nine months after death**, the Form 4768 extension running
+   six months and extending filing, not payment — matches the nine-month clock and its wording.
+8. **Statewide rent cap: the lesser of 5% plus the regional change in the cost of living, or
+   10%**, over any twelve-month period (Civil Code 1947.12) — matches the stored
+   `statewide_rent_cap_base` and `statewide_rent_cap_max`.
+9. **Inherited-property basis: fair market value at the date of death** (Publication 551,
+   revised December 2025), and property acquired from a decedent is **treated as held
+   long-term** whatever the actual holding period (Publication 544) — the two rules the
+   same-tax-year sale figure rests on.
+
+**Gates on this branch, before the merge:** `rebuild.py` (twice — the second run leaves the
+tree unchanged), `verify.py` PASS (25 pages, 1,239 table rows, 1,062 linked to an official
+site, 177 explicitly logged as unsourceable, 112 ledger sources), `privacy_boundary.py` PASS,
+`tracked_tree_guard.py` PASS including the new marker class, `package_site.py` PASS,
+`verify_legacy.py --config-only` PASS.
+
 
 ## Session `arena/5feeee8b-tino3` — independent re-verification pass, insurance bands replacing the round-number point assumptions, explicit debt and encumbrance treatment, publication · claimed 2026-11-16
 

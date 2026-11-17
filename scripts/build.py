@@ -3808,6 +3808,7 @@ def page_suggestions() -> str:
     # what the 16 November 2026 build actually did, so a reader can see which items
     # are still open rather than assuming the whole list is untouched.
     improve_status = {
+        "Model a sale in the same tax year as the inheritance": ("done", "Implemented: the model's pure sell path is a sale in the same tax year as the inheritance itself, and the taxes page prices it - about zero income tax on the 2045 model, because the basis steps up to the date-of-death value and property acquired from a decedent is treated as held long-term whatever the actual holding period. Register item S-04's analysis therefore exists; the S-row stays proposed for the owner to adopt."),
         "Add a distribution chart to the projections": ("done", "Implemented: decile fan charts on the dashboard and the projections page, a histogram of the sell-minus-keep gap on the dashboard and the decision page, and the same distributions behind every headline share."),
         "Add a real rental opinion for Property A": ("open", "Still open. The site now publishes the rent at which occupying and letting each match selling, which is the closest substitute available without a rent opinion."),
         "Add a real rental opinion for Property A (imputed rent)": ("done", "Implemented as a range of rent scenarios plus a solved break-even, because no rent opinion exists yet."),
@@ -3825,6 +3826,7 @@ def page_suggestions() -> str:
     }
     improve_src = {"Add a real rental opinion for Property A (imputed rent)": ["hud_fmr"],
                    "Model mixed paths, not only the three pure choices": ["rtc63_2_eligibility"],
+                   "Model a sale in the same tax year as the inheritance": ["irs_basis"],
                    "Write the rules down before reading any projection": [],
                    "Put the answer and what would change it on the first screen": [],
                    "Price the transfer tax and recording fees into the sell path": ["rtc11911", "gov27388_1"],
@@ -3850,6 +3852,7 @@ def page_suggestions() -> str:
                     + (src_cell(improve_src[a], "Official source") if improve_src[a]
                        else src_cell([], "No official source applies"))
                     for a, b, c in [
+                        ("Model a sale in the same tax year as the inheritance", "Prices the immediate sale before anything else is decided, with the stepped-up basis and the long-term treatment inherited property receives.", "Without it the comparison does not start from the option everything else has to beat."),
                         ("Add per-unit detail for Property B", "Rent, lease dates and anniversary dates per unit, so the income can be projected properly instead of as one total.", "The Property B income is currently a single unverified total with no expiry dates."),
                         ("Add a real rental opinion for Property A", "Replaces the break-even rent with a comparison against an actual market rent.", "The rental path is currently tested only against a break-even, which is honest but indirect."),
                         ("Add a maintenance and capital schedule", "Year-by-year capital items rather than a percentage of value.", "Lumpy costs are invisible, which flatters every hold path."),
