@@ -1,5 +1,16 @@
 # Coordination board
 
+## Session `arena/5fb0dcb1-tino3` — law-watch refresh to the 16 November 2026 official results reading, live Proposition 19 initiative recheck, publication · claimed 2026-11-17
+
+*Branch note:* Arena pins this session to `arena/5fb0dcb1-tino3`, branched from `main` at `3b86d5a` (the merge of PR #156). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. At claim time `gh pr list --state open` returned nothing and no section on the board was marked in progress, so no other session holds `scripts/build.py`, `assets/sources.json` or the generated pages. The baseline was checked before any edit: `rebuild.py` reproduces the tree with no diff and all five gates pass.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| U-1 Claim this scope and push before any other edit | **in progress** — this section | `arena/5fb0dcb1-tino3` | `COORDINATION.md` (this section only) |
+| U-2 Re-read the Secretary of State's statewide results for the 3 November 2026 measures at the official results page; the board's figures were read at 14 November 2026, 5:16 p.m. and are now a later reading. Replace the stale figures on the law page, the index note, the Proposition 3 and 40 rows and the results source entry, and say which reading is used | in progress | `arena/5fb0dcb1-tino3` | `scripts/build.py` (law page, index note, results notes), `assets/sources.json` (the `sos_results` entry only) |
+| U-3 Re-read the Secretary of State's initiative status pages and confirm that no measure restoring the pre-2021 Proposition 19 inheritance rules is pending, eligible or cleared for circulation; record the page dates | in progress | `arena/5fb0dcb1-tino3` | `scripts/build.py` (law page dead-measure row only if a status changes), `assets/sources.json` (append only) |
+| U-4 Rebuild, run all gates, pull request to `main`, merge without waiting, confirm the Pages deploy, record the result | in progress | `arena/5fb0dcb1-tino3` | this section only |
+
 ## Session `arena/4f2a543e-tino3` — repair of the unresolved conflict marker left on `main`, a mechanical marker gate, independent re-verification of the decision-critical figures, publication · claimed 2026-11-17
 
 *Branch note:* Arena pins this session to `arena/4f2a543e-tino3`, branched from `main` at `bd8ab5b` (the merge of PR #153). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. At claim time `gh pr list --state open` returned nothing, so no other session holds `scripts/build.py`, `scripts/tracked_tree_guard.py`, `assets/data/*` or `assets/sources.json`.
