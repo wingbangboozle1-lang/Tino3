@@ -43,9 +43,14 @@ UNDERPAYMENT_RATE = 0.07               # published for the fourth quarter of 202
 FED_SHORT_TERM = 0.04                  # published for the fourth quarter of 2026
 UNDERPAYMENT_LOW = 0.03                # lowest quarterly underpayment rate published 2022-2026
 UNDERPAYMENT_HIGH = 0.08               # highest quarterly underpayment rate published 2022-2026
-MORTGAGE_RATE = 0.0711                 # 30-year fixed average, week of 12 November 2026
-MORTGAGE_LOW = 0.0598                  # lowest weekly average published in 2026
-MORTGAGE_HIGH = 0.0740                 # highest weekly average published in 2026
+# The published 30-year fixed mortgage average, read from the one inputs key so the
+# liquidity page and the keep-and-borrow path cannot drift apart. Re-read at source
+# on 17 November 2026: latest week 7.11 percent (week ending 12 November 2026),
+# 2026 low 5.98 percent (week ending 26 February 2026), 2026 high 7.40 percent
+# (weeks ending 8 and 15 October 2026).
+MORTGAGE_RATE = float(V["mortgage_30yr_weekly"]["value"])
+MORTGAGE_LOW = float(V["mortgage_30yr_weekly"]["low"])
+MORTGAGE_HIGH = float(V["mortgage_30yr_weekly"]["high"])
 DAYS = 365                             # section 6622 compounds daily; a 365-day year is used
 JOINT_121 = V["section121_exclusion_joint"]["value"]
 SINGLE_121 = V["section121_exclusion_single"]["value"]
