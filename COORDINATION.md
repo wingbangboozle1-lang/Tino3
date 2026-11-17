@@ -4137,6 +4137,7 @@ Cross-checked the dashboard's headline figures against `assets/data/model.json` 
 - **Post-merge checks on `main`:** `Verify static site` (run 43927220997) and `Deploy GitHub Pages` (run 43927220421) succeeded; legacy `pages-build-deployment` (run 43927220402) succeeded. Live URL: https://wingbangboozle1-lang.github.io/Tino3/.
 - **Site impact:** none. No model, source, data or generated-site content changed in this session.
 ## Session `arena/0069abd3-tino3` — estate liquidity and borrowing model, joint-filer case, fresh official verification of the new sources · claimed 2026-11-16
+
 *Branch note:* Arena pins this session to `arena/0069abd3-tino3`, branched from `main` at `5005a72`. `git pull --rebase origin main` was run before any edit and fast-forwarded the branch to `aca4b7d` (merge of PR #139, session `arena/3a29bbb0-tino3`). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. `gh pr list --state open` returned nothing when this session started.
 
 **Scope boundary with the sessions already on the board.** `arena/3a29bbb0-tino3` (W-3) re-opened the IRS 2027 inflation release, the IRS estate-tax page, BOE LTA 2025/009 and 2026/026, the FTB gifts page, the State Controller's estate-tax page and the Secretary of State results page on 16 November 2026, and changed nothing. This session does **not** re-check that set and does not edit that section. The sources this session opens are the ones no earlier board entry records: the Form 706 timing and interest rules, the payment-extension provisions, the joint-filer provisions, and the mortgage-rate anchor.
@@ -4151,7 +4152,6 @@ Cross-checked the dashboard's headline figures against `assets/data/model.json` 
 | X-6 Rebuild, run every gate, pull request to `main`, merge without waiting for approval, confirm the Pages deploy, record the PR link and result | **in progress** | `arena/0069abd3-tino3` | this section only |
 
 **Privacy constraint:** no property-specific identifier, name, address, parcel number, postal code, county or city name, trust term, estate size or unrounded owner amount is added to any public page or to this board. The estate's actual size is deliberately not published and not modelled as a figure; the liquidity engine works in anonymous bands and reports ratios. Every dollar figure on the public site is rounded to the nearest $10.
->>>>>>> 5b8d8fa (Board: claim arena/0069abd3-tino3 scope (estate liquidity model, joint-filer case, liquidity page))
 
 ### X-6 result: gates, pull request and deployment
 
