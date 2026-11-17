@@ -1,5 +1,5 @@
 {
- "as_of": "2026-11-16",
+ "as_of": "2026-11-17",
  "edition": "Anonymised quantitative decision edition; every published figure rounded to the nearest $10.",
  "scope": "Union of two independently maintained ledgers, merged on 13 November 2026. Entries kept verbatim from whichever ledger supplied them; where an entry had no 'supports' field its 'verifies' list was carried across, and 'limits' was filled from 'limit' or 'caveat' when present. Neither ledger was rewritten to match the other.",
  "sources": [

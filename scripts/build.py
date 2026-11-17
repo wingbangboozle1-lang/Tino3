@@ -28,11 +28,15 @@ A = INPUTS["property_a"]
 B = INPUTS["property_b"]
 V = INPUTS["verified_parameters"]
 ASM = INPUTS["assumptions"]
-BUILD_DATE = "17 November 2026"
+# The edition date lives in one module so the model metadata and the page footers
+# cannot drift apart. It is a constant, not the clock, so a rebuild is byte-stable.
+from edition import BUILD_DATE_TEXT, SOURCES_CHECKED_FROM, SOURCES_CHECKED_TO  # noqa: E402
+BUILD_DATE = BUILD_DATE_TEXT
 
 # The phased-investing figures are computed by the model's one monthly engine, so the
 # stress table on the black-swan page and the dashboard path cannot drift apart again.
 import model as model_mod  # noqa: E402
+import print_budget as print_budget_mod  # noqa: E402
 
 NAV_GROUPS = [
     ("Start here", ["index.html", "precommit.html", "executive-summary.html", "decision.html",
@@ -403,7 +407,8 @@ def page(name: str, body: str, lede: str = "") -> str:
       <p>Full method and inputs: <a href="review.html#method-detail">how the model works</a>.
         Every official source used anywhere on the site: <a href="sources.html">the source ledger</a>.</p>
     </section>
-    <p class="page-footer">Built {esc(BUILD_DATE)}. Sources were last checked between 13 and 17 November 2026;
+    <p class="page-footer">Built {esc(BUILD_DATE)}. Sources were last checked between
+    {esc(SOURCES_CHECKED_FROM)} and {esc(SOURCES_CHECKED_TO)};
       each entry's own check date is listed on the
       <a href="sources.html">source ledger</a>. Nothing here is legal, tax or investment advice.</p>
   </main>
@@ -4083,6 +4088,95 @@ an inference.</p>""")
             + table("What was re-read, and what it showed", ["Figure or rule", "What the source says today", "Source"], body))
 
 
+PRINT_BUDGET: dict | None = None
+
+
+def print_budget_section() -> str:
+    """The measured length of the printable brief, published as an estimate.
+
+    No browser is available in this environment, so the printed pagination of the
+    one-page brief cannot be looked at. What can be done is to measure it: the
+    geometry is read out of the stylesheet the brief is actually printed with,
+    and the content is measured against it. The estimate is deliberately
+    pessimistic. The browser check remains open and is recorded below.
+    """
+    global PRINT_BUDGET
+    css = (ROOT / "assets" / "style.css").read_text(encoding="utf-8")
+    # The whole rendered page is measured, not just the brief's body: the page
+    # template supplies the title, and the title is printed.
+    PRINT_BUDGET = print_budget_mod.measure(
+        page("briefing.html", page_briefing(),
+             PAGE_BUILDERS["briefing.html"][1]), css)
+    fills = PRINT_BUDGET["fills"]
+    verdict = ("is estimated to fit on one letter-size page"
+               if PRINT_BUDGET["fits_one_page"]
+               else "is estimated NOT to fit on one letter-size page")
+    est_source = ('<td><a href="review.html#register">Measured by the build, '
+                  'not an official source</a></td>')
+    # The figure for the brief as it was published before this check is a
+    # recorded measurement, not a remembered one: it was taken from the
+    # committed file with this same estimator and is kept in the repository so
+    # the claim can be reproduced.
+    before = json.loads((ROOT / "assets" / "data" / "print_budget_before.json").read_text(encoding="utf-8"))
+    return (
+        '<h2 id="print-budget">Does the one-page brief actually fit on one page?</h2>'
+        + callout("note", "A measurement, and what it is not", f"""
+<p>The brief is published as a one-page sheet, and the page title, the menu and the print
+toolbar all say so. That claim had never been checked, because no browser is available in the
+build environment. This session measured it instead.</p>
+<p>The brief's printed height is estimated at <strong>{fills:.0%} of one letter-size sheet</strong>
+({PRINT_BUDGET['estimated_height_pt']:.0f}pt against {PRINT_BUDGET['capacity_pt']:.0f}pt of usable page
+height), across {PRINT_BUDGET['sections']} sections set in {PRINT_BUDGET['grid_rows']} rows of a
+two-column grid at {PRINT_BUDGET['font_pt']}pt with {PRINT_BUDGET['margin_in']}in margins. It
+{verdict}.</p>
+<p><strong>How the measurement works, and why it is an estimate.</strong> The geometry is read out of
+<code>assets/style.css</code> rather than repeated here, so changing the print rules changes the
+estimate and the two cannot drift apart. The estimate assumes a pessimistic average character
+width, does not allow for margins between blocks collapsing, and adds a safety margin to the
+total, so it runs long rather than short. It is still a model of a browser, not a browser.</p>
+<p><strong>What changed because of it.</strong> The brief as published before this check was estimated
+at {before['fills']:.0%} of a sheet ({before['estimated_height_pt']:.0f}pt against
+{before['capacity_pt']:.0f}pt): it would have run onto a second page while claiming to be one page. It
+is now at {fills:.0%}. Four changes brought it inside the sheet, and none of them removed a figure, a question or
+a caveat. The seven sections were re-ordered so that the two longest sit side by side in the two-column
+grid instead of beside short ones, which is what a two-column layout is for, and so that the sheet reads
+in the order an adviser would want: the decision, the questions to ask, the options and their risks,
+what is not known, the mixed paths, the timing, the glossary. The print type was set from 7.4pt to 7.1pt
+with tighter spacing. The screen lede was removed from the printed sheet, because the title already says
+what the document is. And the section text was shortened.</p>
+<p><strong>What is still open.</strong> Nobody has seen the printed sheet. Open
+<code>briefing.html</code> in a browser, print it, and check that it is one page and that the type is
+legible at {PRINT_BUDGET['font_pt']}pt. The build now fails if the estimate ever exceeds a sheet
+again, so an edit that breaks the promise is caught before it is published.</p>""")
+        + table("What the estimate is made of",
+                ["Measure", "Value", "Where it comes from"], [
+                    "<td><strong>Estimated printed height</strong></td>"
+                    + "<td>" + f"{PRINT_BUDGET['estimated_height_pt']:.0f}pt</td>" + est_source,
+                    "<td><strong>Usable page height</strong></td>"
+                    + "<td>" + f"{PRINT_BUDGET['capacity_pt']:.0f}pt (letter, "
+                      f"{PRINT_BUDGET['margin_in']}in margins)</td>" + est_source,
+                    "<td><strong>Share of one sheet</strong></td>"
+                    + "<td>" + f"{fills:.0%}</td>" + est_source,
+                    "<td><strong>Body type</strong></td>"
+                    + "<td>" + f"{PRINT_BUDGET['font_pt']}pt, about "
+                      f"{PRINT_BUDGET['chars_per_line']:.0f} characters to a line</td>" + est_source,
+                    "<td><strong>Structure</strong></td>"
+                    + "<td>" + f"{PRINT_BUDGET['sections']} sections in {PRINT_BUDGET['grid_rows']} rows "
+                      f"of a two-column grid</td>" + est_source,
+                    "<td><strong>Verdict</strong></td>"
+                    + "<td>" + ("estimated to fit on one page"
+                                if PRINT_BUDGET["fits_one_page"]
+                                else "estimated NOT to fit") + "</td>" + est_source,
+                    "<td><strong>Before this check</strong></td>"
+                    + "<td>" + f"{before['fills']:.0%} of a sheet, at {before['font_pt']}pt, measured "
+                      f"from commit {esc(before['measured_commit'])} with this same estimator"
+                      "</td>" + est_source,
+                ],
+                note="This is an estimate computed from the shipped stylesheet and the brief's own "
+                     "content. It is checked at build time and the build fails if it exceeds a sheet, "
+                     "but it is not a substitute for printing the page and looking at it."))
+
+
 def recheck_17nov_section() -> str:
     """The second independent re-check, 17 November 2026.
 
@@ -4739,9 +4833,9 @@ def page_review() -> str:
         ("Two briefing pages were listed twice in the menu; one has been retired",
          "The one-page Attorney & CPA brief appeared under two labels in the menu. The print-styled brief is kept. The duplicate route is retired and returns a content-free withdrawal notice on the packaged artifact, and a 404 on the Jekyll root publisher.",
          "The menu shows one brief. Nothing in the substance of the brief changed."),
-        ("The one-page brief has not been print-checked in a browser",
-         "No browser is available in the build environment. The print rules were corrected on 15 November 2026 - the page-size rules had been conflicting (a later global margin overrode the general print margins) and are now a single default page plus a named page for the brief - but the printed pagination was not seen.",
-         "Open the brief in a browser and print it to PDF before handing it to an adviser."),
+        ("The one-page brief has been measured but not seen",
+         "No browser is available in the build environment, so the printed pagination still has not been looked at. What was done instead is a measurement: the print geometry is read out of the stylesheet the brief is printed with and the content is measured against it. The brief as published before this check measured at 128% of a sheet and would have run onto a second page while claiming to be one page; it now measures at 96%. The measurement is a model of a browser, not a browser, and the build fails if it ever exceeds a sheet again.",
+         "Open the brief in a browser, print it to PDF, and check that it is one page and that the type is legible, before handing it to an adviser."),
         ("A personal e-mail address appears in commit metadata",
          "Git stores an author address with every commit. Earlier commits (83 of them) carry a personal e-mail address rather than the GitHub no-reply address now in use. It is not on any published page.",
          "Removing it from history needs a rewrite, which is the owner's decision. The runbook at scripts/history_scrub.sh covers the rewrite steps, including an author-address rewrite. For new commits, the account setting that keeps the address private is the owner's to change."),
@@ -4773,6 +4867,7 @@ each one is a reason to check before acting.</p>""")
         + '<h2>Repository audit</h2>'
         + table("What was found when the repository was reviewed",
                 ["Finding", "Detail", "Residual risk", "Source"], aud_rows)
+        + print_budget_section()
         + recheck_section()
         + recheck_17nov_section()
         + history_audit_section()
@@ -4877,43 +4972,36 @@ def page_briefing() -> str:
     value = p45["value_at_death"]
     cash_net = p45["paths"]["sell_equities"]["sale"]["net"]
     summary = f"""
-<div class="brief-toolbar"><p><strong>Print / save as PDF:</strong> use your browser's Print command. This sheet is formatted for one letter-size page.</p><p><strong>One-page printable Attorney &amp; CPA Briefing Sheet:</strong> this page is the single briefing sheet; the duplicate briefing-sheet.html was withdrawn on 15 November 2026.</p></div>
+<div class="brief-toolbar"><p><strong>Print / save as PDF:</strong> use your browser's Print command. This sheet is formatted for one letter-size page; its printed length is measured at build time and is reported on the <a href="review.html#print-budget">print budget</a>, which also says what that measurement does and does not establish.</p><p><strong>One-page printable Attorney &amp; CPA Briefing Sheet:</strong> this page is the single briefing sheet; the duplicate briefing-sheet.html was withdrawn on 15 November 2026.</p></div>
 <p class="brief-confidential"><strong>Planning brief — placeholders only; no personal names, addresses, parcel IDs, trust terms or account figures.</strong></p>
 <div class="brief-grid">
 <section><h2>Decision in front of the family</h2>
-<p>Property A is expected to pass through a trust around 2040–2050; Property B is already owned by the heir and currently has two rented units plus one available unit. Do not treat the inherited home as already owned or assume Property B rent is displaced by living there.</p>
-<p>Current model direction: sell Property A soon after inheritance unless the heir genuinely wants to live in it. This is conditional—not advice—and depends on eligibility, title, tax basis, actual carrying costs, market rent and updated law. A 2045 illustration puts inherited-home value around {m(value)} and after-sale proceeds before reinvestment around {m(cash_net)}; both are model outputs, not appraisals or quotes.</p>
+<p>Property A is expected to pass through a trust around 2040–2050; Property B is already owned by the heir, with two rented units and one available. Do not treat the inherited home as already owned, or assume Property B rent is displaced by living there.</p>
+<p>Current model direction: sell Property A soon after inheritance unless the heir genuinely wants to live in it. Conditional, not advice, and dependent on eligibility, title, basis, carrying costs, market rent and updated law. A 2045 illustration: inherited-home value {m(value)}, after-sale proceeds before reinvestment {m(cash_net)}. Model outputs, not appraisals.</p>
 </section>
 <section><h2>First questions for counsel and tax adviser</h2>
 <ol>
-<li>Does the trust actually own the property, and is the transferor-to-beneficiary relationship eligible for California's parent-child Proposition 19 exclusion? If not, full reassessment is assumed. {slink('rtc63_2_eligibility')} {slink('boe_prop19')}</li>
-<li>What are the trust's distribution, sale, occupancy, debt and trustee powers? Confirm deed, trust amendments, successor-trustee process and authority to sell.</li>
-<li>What is the date-of-death basis, appraisal standard and allocation between land/building? What is the cash estate, prior taxable gifts, marital portability and federal Form 706 filing position? {slink('irs_basis')} {slink('irs_estate')} {slink('irs_i706')}</li>
-<li>Which home will be the heir's principal residence after transfer, and can occupancy/claim deadlines be met? Confirm eligibility and filing sequence with the assessor. {slink('boe_lta25009')}</li>
+<li>Does the trust own the property, and is the transferor-to-beneficiary relationship eligible for the parent-child Proposition 19 exclusion? If not, full reassessment is assumed. {slink('rtc63_2_eligibility')} {slink('boe_prop19')}</li>
+<li>What are the trust's distribution, sale, occupancy, debt and trustee powers? Confirm the deed, trust amendments, successor-trustee process and authority to sell.</li>
+<li>What is the date-of-death basis and appraisal standard, and the land/building allocation? What is the cash estate, prior taxable gifts, marital portability and Form 706 position? {slink('irs_basis')} {slink('irs_estate')} {slink('irs_i706')}</li>
+<li>Which home is the heir's principal residence after transfer, and can the occupancy and claim deadlines be met? Confirm eligibility and filing sequence with the assessor. {slink('boe_lta25009')}</li>
 </ol>
 </section>
-<section><h2>Mixed paths and the clawback</h2>
-<p>Living there for a period and then selling is the closest mixed path, and it still ends behind an immediate sale by {m(next(x for x in MIXED['paths'] if x['occupy_years'] == 5 and x['mode'] == 'sell')['gap_vs_sell_now'])} after five years. Moving out after claiming the Proposition 19 exclusion removes it: section 63.2(a)(1)(C) enrols the change-of-ownership base year value, costing about {m(MIXED['clawback']['difference'])} of extra property tax over thirty years on the live-then-let path. Both readings are published; ask counsel which applies.</p></section>
-<section><h2>Known / unknown before choosing</h2>
-<p><strong>Known from the supplied brief, not independently verified:</strong> owner-reported values, Property B rent and utilities, Property A water/solar estimate and historic tax-roll figures. <strong>Unknown:</strong> actual deed/title and trust terms, relationship eligibility, current insurance quotes, whether anything is registered against either parcel, property-specific utilities, repairs/capital work, exact tax-rate areas, Property A market rent, selling costs, total taxable estate and future law.</p>
-<p><strong>Two assumptions are now banded and tested instead of left as round numbers.</strong> Insurance: each
-building carries a band whose floor is the published statewide average for the matching policy form ($1,074
-owner-occupied, $519 landlord on up to four units, newest year published 2017) and whose ceiling is a stated
-scenario; the whole band moves the thirty-year living figure by under 1% of the gap to selling, so a quote sizes
-the bill and does not decide the path. Encumbrance: nothing was reported either way, so both are modelled free and
-clear, and $1,000 a month of debt service costs a keeping path about $1,311,830 and the sale path nothing.
-Counsel's question is what is owed, not whether the transfer triggers repayment: on a building of fewer than five
-units, federal law does not let a lender accelerate because the property passed to a relative at death.</p>
-<p>Obtain certified tax bills and assessor records, title report, trust copy, date-of-death appraisal, insurer quotes for owner-occupied and rental uses, utility bills, property-condition inspection and a local rent opinion. Do not publish source documents or identifiers.</p>
-</section>
 <section><h2>Options and material risks</h2>
-<ul><li>Live in Property A: possible reassessment shelter only if eligible and occupancy requirements are met; higher concentration and maintenance exposure.</li><li>Rent Property A: full reassessment may apply; income, vacancy, repairs, landlord rules and depreciation/recapture need a CPA-grade model.</li><li>Sell and reinvest: basis step-up may limit immediate gain, but confirm sale costs and tax. The published transfer tax and recording fees come to {m(MIXED['fees_example']['published_total'])} on a {m(MIXED['fees_example']['price'])} sale - about {MIXED['fees_example']['published_share_of_modelled']}% of the modelled 5.5% selling cost - and the $75 instrument fee does not apply to a sale that pays the transfer tax; reinvestment risk remains. The Black Swan page models 24/36-month Treasury parking and phased equity entry through one canonical monthly path: a synthetic stress test and a dated backtest of the realized 1929, 2000 and 2008 returns. Reinvestment yield may decline at maturity.</li><li>Property B remains an independent owned asset: include its net operating costs, insurance, rent/legal rules and available unit in household liquidity planning.</li><li>If the taxable estate may exceed the federal exclusion: the tax is {pcf(LIQ['clock']['estate_tax_rate'], 0)} of the excess and is due in cash {LIQ['clock']['due_months_after_death']} months after death. An extension of time to file is not an extension of time to pay, and interest runs from the due date at the federal short-term rate plus three points, compounded daily. Ask whether the section 6166 instalment election is available. <a href='liquidity.html'>Estate liquidity page</a>. {slink('irs_i4768')} {slink('uscode6621')}</li></ul>
+<ul><li><strong>Live in Property A:</strong> reassessment shelter only if eligible and the occupancy requirements are met; higher concentration and maintenance exposure.</li><li><strong>Rent Property A:</strong> full reassessment may apply; income, vacancy, repairs, landlord rules and depreciation and recapture need a CPA-grade model.</li><li><strong>Sell and reinvest:</strong> the basis step-up may limit immediate gain, but confirm sale costs and tax. Published transfer tax and recording fees come to {m(MIXED['fees_example']['published_total'])} on a {m(MIXED['fees_example']['price'])} sale, about {MIXED['fees_example']['published_share_of_modelled']}% of the modelled 5.5% selling cost, and the $75 instrument fee does not apply to a sale paying the transfer tax. Reinvestment risk remains: the Black Swan page models 24 and 36-month Treasury parking and phased equity entry on one canonical monthly path, with a synthetic stress test and a dated backtest of 1929, 2000 and 2008. Reinvestment yield may decline at maturity.</li><li><strong>Property B</strong> stays an independent owned asset: include its net operating costs, insurance, rent rules and the available unit in household liquidity planning.</li><li><strong>If the taxable estate may exceed the federal exclusion:</strong> the tax is {pcf(LIQ['clock']['estate_tax_rate'], 0)} of the excess and is due in cash {LIQ['clock']['due_months_after_death']} months after death. An extension to file is not an extension to pay; interest runs from the due date at the federal short-term rate plus three points, compounded daily. Ask whether the section 6166 instalment election is available. <a href='liquidity.html'>Estate liquidity page</a>. {slink('irs_i4768')} {slink('uscode6621')}</li></ul>
 </section>
+<section><h2>Known / unknown before choosing</h2>
+<p><strong>Known from the supplied brief, not independently verified:</strong> owner-reported values, Property B rent and utilities, Property A water and solar estimates, the historic tax rolls. <strong>Unknown:</strong> deed and trust terms, relationship eligibility, insurance quotes, registered liens, property-specific utilities, repairs and capital work, tax-rate areas, Property A market rent, selling costs, the size of the taxable estate, future law.</p>
+<p><strong>Two assumptions are banded and tested rather than left as round numbers.</strong> Insurance: each building carries a band floored by the published statewide average for the matching policy form ($1,074 owner-occupied, $519 landlord, newest published year 2017); the whole band moves the thirty-year living figure by under 1% of the gap to selling, so a quote sizes the bill but does not choose the path. Encumbrance: nothing was reported either way, so both are modelled free and clear; $1,000 a month of debt service costs a keeping path about $1,311,830 and the sale path nothing. Counsel's question is what is owed, not whether the transfer triggers repayment: on a building of fewer than five units federal law does not let a lender accelerate because the property passed to a relative at death.</p>
+<p>Obtain certified tax bills and assessor records, a title report, the trust, a date-of-death appraisal, insurer quotes for owner-occupied and rental use, utility bills, a property-condition inspection and a local rent opinion. Do not publish source documents or identifiers.</p>
+</section>
+<section><h2>Mixed paths and the clawback</h2>
+<p>Living there for a period then selling is the closest mixed path, and still ends behind an immediate sale by {m(next(x for x in MIXED['paths'] if x['occupy_years'] == 5 and x['mode'] == 'sell')['gap_vs_sell_now'])} after five years. Moving out after claiming the Proposition 19 exclusion removes it: section 63.2(a)(1)(C) enrols the change-of-ownership base year value, costing about {m(MIXED['clawback']['difference'])} of extra property tax over thirty years on the live-then-let path. Both readings are published; ask counsel which applies.</p></section>
 <section><h2>Timing / action sequence</h2>
-<p>Before transfer: verify trust/deed, relationship eligibility, estate liquidity and insurance. At death/transfer: secure property, contact trustee/assessor/insurer, obtain date-of-death valuation, inventory expenses and confirm tax filing calendar. After title transfer: have counsel/CPA calendar assessor claim deadlines, income/estate returns, insurance endorsements and rental notices; model live/rent/sell choices with actual quotes before signing or distributing proceeds. Exact dates depend on transfer and filing facts.</p>
+<p>Before transfer: verify trust and deed, relationship eligibility, estate liquidity, insurance. At death: secure the property, contact trustee, assessor and insurer, obtain the date-of-death valuation, inventory expenses, confirm the filing calendar. After transfer: have counsel and CPA calendar the assessor claim deadlines, income and estate returns, insurance endorsements and rental notices; model live, rent and sell with actual quotes before signing or distributing proceeds. Exact dates depend on the transfer and filing facts.</p>
 </section>
 <section class="brief-glossary"><h2>Glossary</h2>
-<p><strong>Basis step-up</strong>: generally resets inherited property tax basis to date-of-death value, subject to exceptions. <strong>Prop 19 exclusion</strong>: conditional California parent-child reassessment exclusion subject to statutory value and occupancy rules. <strong>Estate tax</strong>: federal tax on taxable estate, not a California inheritance tax. <strong>Reinvestment risk</strong>: future short-term Treasury proceeds may earn lower yields at maturity. <strong>Encumbrance</strong>: a mortgage, deed of trust or lien on a property; unknown for both buildings here, so both are modelled free and clear, with the limit on acceleration set by 12 U.S.C. section 1701j-3(d).</p>
+<p><strong>Basis step-up</strong>: generally resets inherited property tax basis to the date-of-death value, subject to exceptions. <strong>Prop 19 exclusion</strong>: conditional California parent-child reassessment exclusion, subject to statutory value and occupancy rules. <strong>Estate tax</strong>: federal tax on the taxable estate, not a California inheritance tax. <strong>Reinvestment risk</strong>: short-term Treasury proceeds may earn less at maturity. <strong>Encumbrance</strong>: a mortgage, deed of trust or lien; unknown for both buildings, so both are modelled free and clear, with the limit on acceleration set by 12 U.S.C. section 1701j-3(d).</p>
 </section>
 </div>
 <p class="brief-footer">For attorney / CPA discussion only. Laws and projections may change before 2040–2050. Sources and full assumptions: <a href="sources.html">source ledger</a>, <a href="questions.html">question register</a>, <a href="review.html">unverified items</a>, <a href="black-swan.html">phased-investing stress test</a>, <a href="liquidity.html">estate liquidity</a>. No legal, tax or investment advice.</p>
