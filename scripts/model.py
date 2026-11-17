@@ -1176,36 +1176,32 @@ def projections_distribution(span: int = 30) -> dict:
     """The block-bootstrap range for the inherited property's value, one year at a time.
 
     Reads the bootstrap already computed in economy.py (assets/data/economy.json):
-    40 overlapping ten-year blocks of the California state-level all-transactions
-    annual growth record, resampled without randomness by walking the block
-    sequence. Nothing new is estimated here; this only re-expresses the published
-    distribution as a per-year band so the projections page can draw it.
+    ten-year blocks drawn from the California state-level all-transactions record,
+    resampled 2,000 times from a fixed seed so the file is byte-stable. Nothing new
+    is estimated here; it only re-expresses the published distribution as a per-year
+    band so a reader can see the range beside the single line.
+
+    Re-expresses the band the bootstrap module already writes - it publishes a
+    per-year p05/p50/p95 path under bootstrap.chart.years, and nothing is estimated
+    here. An earlier edition looked for per-year growth paths under a key the
+    bootstrap module never writes, which left this function publishing an empty
+    list beside the real distribution; it now reads the key the data actually has,
+    and says so if the band is absent rather than silently returning nothing.
     """
     econ = json.loads((DATA / "economy.json").read_text(encoding="utf-8"))
-    bs = econ.get("bootstrap", {})
+    chart = econ.get("bootstrap", {}).get("chart", {})
     start = A["estimated_market_value_2026"]
-    bands = bs.get("bands") or bs.get("percentiles") or []
-    out = {"start_value": money10(start), "span": span, "source": "economy.json bootstrap",
-           "bands": [], "draws": bs.get("draws") or bs.get("n") or bs.get("count")}
-    # If economy.json exposes per-year growth paths, build a value band directly.
-    paths = bs.get("paths") or bs.get("growth_paths") or []
-    if paths:
-        for year in range(1, span + 1):
-            vals = []
-            for gp in paths:
-                v = start
-                for g in gp[:year]:
-                    v *= (1 + g)
-                vals.append(v)
-            vals.sort()
-            n = len(vals)
-            out["bands"].append({
-                "year": 2026 + year,
-                "p10": money10(vals[int(0.10 * (n - 1))]),
-                "p50": money10(vals[int(0.50 * (n - 1))]),
-                "p90": money10(vals[int(0.90 * (n - 1))]),
-                "n": n,
-            })
+    years = chart.get("years") or []
+    out = {"start_value": money10(start), "span": span,
+           "source": "assets/data/economy.json, bootstrap.chart.years (the seeded 2,000-path resample)",
+           "bands": [], "draws": chart.get("draws"),
+           "basis": (f"The same resample the projections page draws, restated one year at a time: p05, p50 and "
+                     f"p95 of the resampled value, with the model's constant-rate line beside it. "
+                     f"{chart.get('note', '')}").strip()}
+    for row in years[:span]:
+        out["bands"].append({"year": int(row["year"]), "p05": money10(row["p05"]),
+                             "p50": money10(row["p50"]), "p95": money10(row["p95"]),
+                             "constant": money10(row["constant"])})
     return out
 
 
@@ -1444,6 +1440,352 @@ def insurance_and_encumbrance_cases(year: int = 2045) -> dict:
                  "service is charged the same way for the same reason."),
     }
 
+# ------------------------------------------------- keep and borrow (R-3) ----
+# The last path the brief asks for that the model did not run: keep the home, take
+# cash out against the equity instead of selling it, and invest that cash. The estate
+# liquidity page priced the carrying cost of borrowing; this prices the path.
+#
+# Conventions, stated so the arithmetic can be checked line by line:
+#   * the loan is level-payment, monthly, at the nominal annual rate divided by
+#     twelve, which is how a published mortgage average is quoted and applied;
+#   * the cash raised is invested on the same after-tax equity assumption every
+#     other path uses, and the debt service is deducted as a compounded outflow at
+#     that same rate - the fv_stream convention the carrying costs already use;
+#   * no tax deduction is taken for the interest. Publication 936 (2025) states that
+#     interest on a home equity loan or line of credit is deductible only where the
+#     borrowed funds buy, build or substantially improve the home that secures the
+#     loan, so money borrowed to buy securities earns none;
+#   * the loan does not change the property tax: Revenue and Taxation Code section
+#     62(c)(1) excludes the creation of a security interest from change in ownership,
+#     so this path carries exactly the living path's tax bill and no bill of its own.
+
+
+def _amortise(principal: float, annual_rate: float, years: int) -> dict:
+    """Level monthly payment on a fixed-rate loan, with the balance run out year by year."""
+    n = years * 12
+    i = annual_rate / 12.0
+    pay = principal / n if i <= 0 else principal * i / (1.0 - (1.0 + i) ** (-n))
+    bal = principal
+    interest = 0.0
+    yearly = []
+    for y in range(years):
+        start = bal
+        for _ in range(12):
+            intr = bal * i
+            princ = min(max(pay - intr, 0.0), bal)
+            bal -= princ
+            interest += intr
+        yearly.append({"year": y + 1, "start": start, "end": bal})
+    return {"payment_month": pay, "payment_year": pay * 12.0,
+            "total_paid": pay * 12.0 * years, "total_interest": interest,
+            "balance_at_end": max(bal, 0.0), "yearly": yearly}
+
+
+def _live_raw(inherit_year: int, *, g: float, infl: float, eq: float, drag: float,
+              cap_growth: float, sell_pct: float, gain_rate: float, rec_rate: float,
+              exclusion: float, fixed_growth: float, fit_a: dict, cost_a_base: float,
+              maint_live: float, imputed_rent: float = 0.0,
+              maint_growth: float | None = None, maint_on_value_growth: bool = False) -> dict:
+    """The living path, unrounded, with the upkeep assumption exposed as a dial.
+
+    Mirrors the living case in run_paths() and is asserted against it, so the two
+    cannot drift. `maint_growth` overrides the rate at which the maintenance and
+    repair allowance - and only that allowance - is grown; water, power and
+    insurance keep the modelled inflation rate. `maint_on_value_growth` charges the
+    percentage against the house value of each year instead of its value at
+    inheritance, which is what "a percentage of value" means if the value is the
+    current one.
+    """
+    horizon = ASM["horizon_years"]
+    k = inherit_year - 2026
+    value_at_death = A["estimated_market_value_2026"] * (1 + g) ** k
+    byv = A["roll"][0]["assessed"] * (1 + 0.02) ** k
+    cap = V["prop19_value_cap_2025_2027"]["value"] * (1 + cap_growth) ** (inherit_year - 2025)
+    taxable_live = byv + max(0.0, value_at_death - (byv + cap))
+    fit_t = dict(fit_a)
+    fit_t["fixed_base"] = fit_a["fixed_base"] * (1 + fixed_growth) ** (inherit_year - fit_a["base_year"])
+    terminal_price = value_at_death * (1 + g) ** horizon
+    bills = annual_bills(taxable_live, fit_t, inherit_year, infl, horizon)
+    sale = sale_proceeds(terminal_price, value_at_death, sell_pct, gain_rate, rec_rate, 0.0, exclusion)
+    mg = infl if maint_growth is None else maint_growth
+    rate_fv = eq - drag
+    stream = []
+    for j in range(horizon):
+        house_value = value_at_death * ((1 + g) ** j if maint_on_value_growth else 1.0)
+        stream.append(bills[j] + cost_a_base * (1 + infl) ** j + maint_live * house_value * (1 + mg) ** j)
+    carry_fv = fv_stream(stream, rate_fv)
+    imp = 0.0
+    if imputed_rent:
+        imp = sum(float(imputed_rent) * (1 + infl) ** j * (1 + rate_fv) ** (horizon - 1 - j)
+                  for j in range(horizon))
+    return {"inherit_year": inherit_year, "value_at_death": value_at_death,
+            "taxable_live": taxable_live, "terminal_price": terminal_price, "bills": bills,
+            "carry_stream": stream, "sale": sale, "carry_fv": carry_fv, "imputed": imp,
+            "horizon": horizon, "terminal": sale["net"] - carry_fv + imp}
+
+
+def _live_base(year: int) -> dict:
+    """The published baseline arguments for one living-path run, assembled once."""
+    args = _base_args()
+    return dict(g=args["g"], infl=args["infl"], eq=args["eq"], drag=args["drag"],
+                cap_growth=args["cap_growth"], sell_pct=args["sell_pct"],
+                gain_rate=args["gain_rate"], rec_rate=args["rec_rate"],
+                exclusion=args["exclusion"], fixed_growth=args["fixed_growth"],
+                fit_a=args["fit_a"], cost_a_base=COST_A_BASE,
+                maint_live=args["maint_live"], imputed_rent=args["imputed_rent"])
+
+
+def keep_and_borrow_cases(year: int = 2045) -> dict:
+    """Keep the home and take cash out against the equity: does it beat selling?
+
+    One case at each loan-to-value rung, at the published mortgage rate band, plus
+    the same cash staged through the canonical Treasury-parking path, plus the
+    synthetic crash entry, plus the fee band. The living-path baseline is asserted
+    against run_paths() so this function cannot drift from the rest of the site.
+    """
+    args = _base_args()
+    base = _live_base(year)
+    horizon = ASM["horizon_years"]
+    live = _live_raw(year, **base)
+    check = run_paths(inherit_year=year, cost_a_base=COST_A_BASE,
+                      **{k: v for k, v in args.items() if k != "imputed_rent"})["paths"]["live_in"]["terminal"]
+    assert money10(live["terminal"]) == check, (
+        f"living-path replication drifted from run_paths: {money10(live['terminal'])} vs {check}")
+
+    sale = sale_proceeds(live["value_at_death"], live["value_at_death"], args["sell_pct"],
+                         args["gain_rate"], args["rec_rate"], 0.0)
+    sell_terminal = sale["net"] * (1 + args["eq"] - args["drag"]) ** horizon
+
+    rate = ASM["borrow_rate"]
+    fee = ASM["borrow_fee_pct"]
+    term = int(ASM["borrow_term_years"]["value"])
+    rungs = list(ASM["borrow_ltv_rungs"]["value"])
+
+    def case(ltv: float, r: float, f: float, mode: str = "immediate") -> dict:
+        principal = ltv * live["value_at_death"]
+        fees = f * principal
+        net_cash = principal - fees
+        loan = _amortise(principal, r, term)
+        if mode == "shock":
+            seq = [-0.40, 0.25, 0.10]
+            acc = 1.0
+            for y in range(horizon):
+                acc *= (1 + (seq[y] if y < len(seq) else args["eq"] - args["drag"]))
+            grown = net_cash * acc
+        elif mode == "staged":
+            _treasury, _equity = monthly_phase(net_cash, PARK_MONTHS, PHASE_MONTHS, horizon * 12,
+                                               PARK_TSY, args["eq"], args["drag"])
+            grown = _treasury + _equity
+        else:
+            grown = net_cash * (1 + args["eq"] - args["drag"]) ** horizon
+        pay_fv = fv_stream([loan["payment_year"]] * horizon, args["eq"] - args["drag"])
+        balance = loan["balance_at_end"] if term > horizon else 0.0
+        terminal = live["terminal"] - pay_fv + grown - balance
+        return {"mode": mode, "ltv": ltv, "rate": r, "fee_pct": f, "principal": principal,
+                "fees": fees, "net_cash": net_cash, "payment_month": loan["payment_month"],
+                "payment_year": loan["payment_year"], "total_paid": loan["total_paid"],
+                "total_interest": loan["total_interest"], "balance_at_end": balance,
+                "cash_grown": grown, "payments_fv": pay_fv, "terminal": terminal,
+                "vs_sell": terminal - sell_terminal,
+                "vs_live": terminal - live["terminal"]}
+
+    rows = [case(l, rate["baseline"], fee["baseline"]) for l in rungs]
+    staged = [case(l, rate["baseline"], fee["baseline"], "staged") for l in rungs]
+    shocked = [case(l, rate["baseline"], fee["baseline"], "shock") for l in rungs]
+    # The same leveraged position, uninvested: the cash left in a cheque account
+    # earning nothing, which is what a borrower who never invests actually holds.
+    idle = []
+    for l in rungs:
+        c = case(l, rate["baseline"], fee["baseline"])
+        c2 = dict(c)
+        c2["cash_grown"] = c["net_cash"]
+        c2["terminal"] = live["terminal"] - c["payments_fv"] + c["net_cash"] - c["balance_at_end"]
+        c2["vs_sell"] = c2["terminal"] - sell_terminal
+        c2["vs_live"] = c2["terminal"] - live["terminal"]
+        c2["mode"] = "idle"
+        idle.append(c2)
+    rate_runs = {tag: [case(l, rate[tag] if tag != "mid" else rate["baseline"], fee["baseline"])
+                       for l in rungs] for tag in ("low", "high")}
+    fee_runs = [case(rungs[-1], rate["baseline"], f) for f in (fee["low"], fee["baseline"], fee["high"])]
+    balance_path = _amortise(rows[1]["principal"], rate["baseline"], term)["yearly"]
+
+    # Two thresholds, both solved rather than asserted.
+    # 1. Against selling: is there ANY after-tax equity return at which keeping the
+    #    house and borrowing against it matches selling it? Tested across -2% to +30%
+    #    a year. It cannot cross, because a lender advances a share of the value while
+    #    a sale realises the whole of it less costs, and both sums then compound at the
+    #    same rate; the loan adds a bill the sale does not carry.
+    def gap_sell(ret: float, idx: int = 1) -> float:
+        c = case(rungs[idx], rate["baseline"], fee["baseline"])
+        grown = c["net_cash"] * (1 + ret) ** horizon
+        pay_fv = fv_stream([c["payment_year"]] * horizon, ret)
+        return (live["terminal"] + grown - pay_fv - c["balance_at_end"]
+                - sale["net"] * (1 + ret) ** horizon)
+
+    sell_band = {"low": money10(gap_sell(-0.02)), "high": money10(gap_sell(0.30)),
+                 "crosses": gap_sell(-0.02) * gap_sell(0.30) <= 0}
+
+    # 2. Against simply living there without borrowing: the return the borrowed cash
+    #    has to earn for the leveraged keep to beat the unleveraged keep. This one does
+    #    cross, and where it crosses is close to the loan rate, which is the whole
+    #    point of the exercise.
+    def gap_live(ret: float, idx: int = 1) -> float:
+        c = case(rungs[idx], rate["baseline"], fee["baseline"])
+        grown = c["net_cash"] * (1 + ret) ** horizon
+        pay_fv = fv_stream([c["payment_year"]] * horizon, ret)
+        return grown - pay_fv - c["balance_at_end"]
+
+    lo, hi = -0.02, 0.40
+    breakeven = None
+    if gap_live(lo) * gap_live(hi) <= 0:
+        for _ in range(120):
+            mid = (lo + hi) / 2
+            if gap_live(lo) * gap_live(mid) <= 0:
+                hi = mid
+            else:
+                lo = mid
+        breakeven = (lo + hi) / 2
+    return {
+        "inherit_year": year, "horizon_years": horizon, "term_years": term,
+        "value_at_death": money10(live["value_at_death"]),
+        "live_terminal": money10(live["terminal"]),
+        "sell_terminal": money10(sell_terminal),
+        "gap_sell_minus_live": money10(sell_terminal - live["terminal"]),
+        "rate": rate["baseline"], "rate_low": rate["low"], "rate_high": rate["high"],
+        "rate_basis": rate["basis"], "rate_src": rate.get("src", []),
+        "fee_pct": fee["baseline"], "fee_low": fee["low"], "fee_high": fee["high"],
+        "fee_basis": fee["basis"], "ltv_rungs": rungs,
+        "after_tax_equity": pct(args["eq"] - args["drag"], 2),
+        "negative_carry": pct(rate["baseline"] - (args["eq"] - args["drag"]), 2),
+        "deduction_rule": ASM["borrow_interest_deduction"]["rule"],
+        "deduction_src": ASM["borrow_interest_deduction"]["src"],
+        "property_tax_rule": ASM["borrow_property_tax_rule"]["rule"],
+        "property_tax_src": ASM["borrow_property_tax_rule"]["src"],
+        "rows": [_fmt_borrow(c) for c in rows],
+        "staged_rows": [_fmt_borrow(c) for c in staged],
+        "shock_rows": [_fmt_borrow(c) for c in shocked],
+        "idle_rows": [_fmt_borrow(c) for c in idle],
+        "rate_rows": {tag: [_fmt_borrow(c) for c in rs] for tag, rs in rate_runs.items()},
+        "fee_rows": [_fmt_borrow(c) for c in fee_runs],
+        "balance_path": [{"after_years": r["year"], "balance": money10(r["end"])}
+                         for r in balance_path if r["year"] in (5, 10, 15, 20, 25, 30)],
+        "breakeven_vs_live": (pct(breakeven, 2) if breakeven is not None else None),
+        "breakeven_vs_live_note": (
+            "The after-tax equity return at which the middle rung (the second-highest loan-to-value "
+            "scenario) stops being a worse way to hold the same house than simply living in it. It is solved "
+            "by bisection, and it sits a little above the loan rate because the payment schedule amortises "
+            "the balance while the cash is invested as one lump at the start."),
+        "sell_band": sell_band,
+    }
+
+
+def _fmt_borrow(c: dict) -> dict:
+    return {"mode": c["mode"], "ltv": c["ltv"], "rate": c["rate"], "fee_pct": c["fee_pct"],
+            "principal": money10(c["principal"]), "fees": money10(c["fees"]),
+            "net_cash": money10(c["net_cash"]), "payment_month": money10(c["payment_month"]),
+            "payment_year": money10(c["payment_year"]), "total_paid": money10(c["total_paid"]),
+            "total_interest": money10(c["total_interest"]),
+            "balance_at_end": money10(c["balance_at_end"]), "cash_grown": money10(c["cash_grown"]),
+            "payments_fv": money10(c["payments_fv"]), "terminal": money10(c["terminal"]),
+            "vs_sell": money10(c["vs_sell"]), "vs_live": money10(c["vs_live"])}
+
+
+def _upkeep_series() -> list:
+    """The published federal household-upkeep record, read from the registered values."""
+    out = []
+    y = 2015
+    while True:
+        v = V.get(f"bls_ce_upkeep_owner_{y}", {}).get("value")
+        if v is None:
+            break
+        out.append({"year": y, "value": int(v)})
+        y += 1
+    return out
+
+
+def _upkeep_measured_growth() -> float:
+    series = _upkeep_series()
+    if len(series) < 2:
+        return 0.0
+    span = series[-1]["year"] - series[0]["year"]
+    return (series[-1]["value"] / series[0]["value"]) ** (1.0 / span) - 1.0
+
+
+def maintenance_evidence() -> dict:
+    """What owners actually spend on upkeep, from the official record, as a cross-check.
+
+    The model carries maintenance as a percentage of value, grown with inflation,
+    because no quote was supplied for either building. This reads the Business
+    Release Cycle series the Bureau of Labor Statistics Consumer Expenditure
+    Surveys publish for homeowners - maintenance, repairs, insurance and other
+    expenses of an owned dwelling - and asks it two questions: is the level
+    plausible for a house of this value, and is inflation the right growth rate to
+    project it with? The line bundles insurance with upkeep and averages every house
+    size in the country, so it is an upper bound on maintenance alone, and both
+    limits are printed with it rather than after it.
+    """
+    series = _upkeep_series()
+    lo, hi = series[0], series[-1]
+    span = hi["year"] - lo["year"]
+    cagr = (hi["value"] / lo["value"]) ** (1.0 / span) - 1.0
+    cpi = SERIES["cpi"]["values"]
+    cpi_cagr = (float(cpi[str(hi["year"])]) / float(cpi[str(lo["year"])])) ** (1.0 / span) - 1.0
+    infl = ASM["inflation"]["baseline"]
+    a_val = A["estimated_market_value_2026"]
+    b_val = B["estimated_market_value_2026"]
+    own = A["annual_costs"]["maintenance_pct_owner_occupied"]["value"]
+    rent = A["annual_costs"]["maintenance_pct_rental"]["value"]
+    b_rate = B["annual_costs"]["maintenance_pct"]["value"]
+    ins_a = A["annual_costs"]["insurance"]["mid"]
+    ins_b = B["annual_costs"]["insurance"]["mid"]
+    return {"series": series, "span_years": span, "start_year": lo["year"], "end_year": hi["year"],
+            "start_value": lo["value"], "end_value": hi["value"],
+            "measured_growth": pct(cagr, 2), "cpi_growth_same_span": pct(cpi_cagr, 2),
+            "model_growth": pct(infl, 2), "ratio_to_model_growth": round(cagr / infl, 2),
+            "allowance_a_live": money10(a_val * own), "allowance_a_rent": money10(a_val * rent),
+            "allowance_b": money10(b_val * b_rate), "national_mean": int(hi["value"]),
+            "ratio_a_live": round((a_val * own + ins_a) / hi["value"], 2),
+            "ratio_a_rent": round((a_val * rent + ins_a) / hi["value"], 2),
+            "ratio_b": round((b_val * b_rate + ins_b) / hi["value"], 2),
+            "housing_2025": money10(V["bls_ce_housing_all_cu_2025"]["value"]),
+            "operations_2025": money10(V["bls_ce_household_operations_2025"]["value"]),
+            "measured_growth_fraction": cagr,
+            "src": ["bls_cex_ownmaint", "bls_cesan2025", "bls_cpi_annual"]}
+
+
+def maintenance_growth_cases(year: int = 2045) -> dict:
+    """Re-run the living path with upkeep inflating faster than CPI.
+
+    The published record grows about three times as fast as the model's inflation
+    assumption. If that keeps running, a thirty-year hold costs more than the
+    baseline says. Two dials are tested: the rate at which the allowance grows, and
+    whether the percentage is charged on the value at inheritance (the model's
+    convention) or on the value of each year.
+    """
+    base = _live_base(year)
+    measured = _upkeep_measured_growth()
+    rungs = sorted(set(list(ASM["maintenance_growth_cases"]["value"]) + [round(measured, 4)]))
+    baseline = _live_raw(year, **base)
+    rows = []
+    for mg in rungs:
+        c = _live_raw(year, **{**base, "maint_growth": mg})
+        label = ("the modelled inflation rate" if abs(mg - base["infl"]) < 1e-9 else
+                 ("the measured 2015-2024 record" if abs(mg - measured) < 5e-5 else "stated rung"))
+        rows.append({"growth": pct(mg, 2), "label": label, "carry_fv": money10(c["carry_fv"]),
+                     "terminal": money10(c["terminal"]),
+                     "vs_base": money10(c["terminal"] - baseline["terminal"]),
+                     "on_current_value": False})
+    for mg, tag in ((base["infl"], "at the modelled inflation rate"),
+                    (measured, "at the measured rate")):
+        c = _live_raw(year, **{**base, "maint_growth": mg, "maint_on_value_growth": True})
+        rows.append({"growth": pct(mg, 2), "label": f"charged on the house value each year, {tag}",
+                     "carry_fv": money10(c["carry_fv"]), "terminal": money10(c["terminal"]),
+                     "vs_base": money10(c["terminal"] - baseline["terminal"]), "on_current_value": True})
+    return {"inherit_year": year, "baseline_terminal": money10(baseline["terminal"]),
+            "measured_growth": pct(measured, 2), "rows": rows,
+            "src": ASM["maintenance_growth_cases"].get("src", [])}
+
+
 def _append_extras(out: dict) -> dict:
     """Run after main() has built `out`, without editing main()'s body."""
     global MAIN_RESULT
@@ -1453,6 +1795,9 @@ def _append_extras(out: dict) -> dict:
     out["roll_audit"] = roll_audit()
     out["imputed_rent"] = imputed_rent_sensitivity(2045)
     out["cost_cases"] = insurance_and_encumbrance_cases(2045)
+    out["maintenance_evidence"] = maintenance_evidence()
+    out["maintenance_growth_cases"] = maintenance_growth_cases(2045)
+    out["borrow_cases"] = keep_and_borrow_cases(2045)
     return out
 
 

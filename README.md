@@ -68,9 +68,9 @@ professional advice when dates, facts or laws change.
 
 ## Published site and verification snapshot
 
-The current generated edition contains **25 HTML pages**, **one runtime stylesheet**, **110 entries
+The current generated edition contains **25 HTML pages**, **one runtime stylesheet**, **116 entries
 in the source ledger**, and **136 content-free withdrawal notices** for retired routes. The latest
-local verification reports **1238 table rows**: **1061 linked to official publishers** and **177
+local verification reports **1378 table rows**: **1192 linked to official publishers** and **186
 explicitly registered as unsourceable or unverified**. A row without a confirming official source is
 not filled in by inference. The public site contains no source ledger or internal model data files;
 the Jekyll and Actions publication boundaries are checked separately.

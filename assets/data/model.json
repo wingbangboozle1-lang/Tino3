@@ -5007,9 +5007,221 @@
  "projections_distribution": {
   "start_value": 3100000,
   "span": 30,
-  "source": "economy.json bootstrap",
-  "bands": [],
-  "draws": 2000
+  "source": "assets/data/economy.json, bootstrap.chart.years (the seeded 2,000-path resample)",
+  "bands": [
+   {
+    "year": 2027,
+    "p05": 2916020,
+    "p50": 3361550,
+    "p95": 3805000,
+    "constant": 3224000
+   },
+   {
+    "year": 2028,
+    "p05": 2346160,
+    "p50": 3554940,
+    "p95": 4613060,
+    "constant": 3352960
+   },
+   {
+    "year": 2029,
+    "p05": 2081970,
+    "p50": 3862640,
+    "p95": 5286520,
+    "constant": 3487080
+   },
+   {
+    "year": 2030,
+    "p05": 1973230,
+    "p50": 4033430,
+    "p95": 5876700,
+    "constant": 3626560
+   },
+   {
+    "year": 2031,
+    "p05": 1978590,
+    "p50": 4477170,
+    "p95": 6626620,
+    "constant": 3771620
+   },
+   {
+    "year": 2032,
+    "p05": 2057450,
+    "p50": 4451840,
+    "p95": 7305020,
+    "constant": 3922490
+   },
+   {
+    "year": 2033,
+    "p05": 2100190,
+    "p50": 4880790,
+    "p95": 7668310,
+    "constant": 4079390
+   },
+   {
+    "year": 2034,
+    "p05": 2350550,
+    "p50": 5176760,
+    "p95": 8329650,
+    "constant": 4242560
+   },
+   {
+    "year": 2035,
+    "p05": 2591190,
+    "p50": 5003060,
+    "p95": 8593190,
+    "constant": 4412270
+   },
+   {
+    "year": 2036,
+    "p05": 2775190,
+    "p50": 5276430,
+    "p95": 9062740,
+    "constant": 4588760
+   },
+   {
+    "year": 2037,
+    "p05": 3033570,
+    "p50": 5681560,
+    "p95": 10015600,
+    "constant": 4772310
+   },
+   {
+    "year": 2038,
+    "p05": 3109910,
+    "p50": 5945540,
+    "p95": 11066060,
+    "constant": 4963200
+   },
+   {
+    "year": 2039,
+    "p05": 3153050,
+    "p50": 6330970,
+    "p95": 12226650,
+    "constant": 5161730
+   },
+   {
+    "year": 2040,
+    "p05": 3098170,
+    "p50": 6688000,
+    "p95": 13512590,
+    "constant": 5368200
+   },
+   {
+    "year": 2041,
+    "p05": 3149310,
+    "p50": 7030380,
+    "p95": 14864050,
+    "constant": 5582920
+   },
+   {
+    "year": 2042,
+    "p05": 3258790,
+    "p50": 7382720,
+    "p95": 15963610,
+    "constant": 5806240
+   },
+   {
+    "year": 2043,
+    "p05": 3326920,
+    "p50": 7696510,
+    "p95": 16656820,
+    "constant": 6038490
+   },
+   {
+    "year": 2044,
+    "p05": 3518560,
+    "p50": 8094040,
+    "p95": 17518090,
+    "constant": 6280030
+   },
+   {
+    "year": 2045,
+    "p05": 3740410,
+    "p50": 8488910,
+    "p95": 18452740,
+    "constant": 6531230
+   },
+   {
+    "year": 2046,
+    "p05": 4039610,
+    "p50": 8876510,
+    "p95": 19825560,
+    "constant": 6792480
+   },
+   {
+    "year": 2047,
+    "p05": 4140060,
+    "p50": 9397000,
+    "p95": 21095210,
+    "constant": 7064180
+   },
+   {
+    "year": 2048,
+    "p05": 4231380,
+    "p50": 10000370,
+    "p95": 23038970,
+    "constant": 7346750
+   },
+   {
+    "year": 2049,
+    "p05": 4166870,
+    "p50": 10770140,
+    "p95": 25779720,
+    "constant": 7640620
+   },
+   {
+    "year": 2050,
+    "p05": 4202410,
+    "p50": 11498520,
+    "p95": 28231000,
+    "constant": 7946240
+   },
+   {
+    "year": 2051,
+    "p05": 4285550,
+    "p50": 12024390,
+    "p95": 30227490,
+    "constant": 8264090
+   },
+   {
+    "year": 2052,
+    "p05": 4496020,
+    "p50": 12634980,
+    "p95": 32032290,
+    "constant": 8594660
+   },
+   {
+    "year": 2053,
+    "p05": 4755340,
+    "p50": 13337900,
+    "p95": 34423040,
+    "constant": 8938440
+   },
+   {
+    "year": 2054,
+    "p05": 5097560,
+    "p50": 14052800,
+    "p95": 36459940,
+    "constant": 9295980
+   },
+   {
+    "year": 2055,
+    "p05": 5326200,
+    "p50": 14689970,
+    "p95": 38491580,
+    "constant": 9667820
+   },
+   {
+    "year": 2056,
+    "p05": 5545730,
+    "p50": 15258720,
+    "p95": 39891760,
+    "constant": 10054530
+   }
+  ],
+  "draws": 2000,
+  "basis": "The same resample the projections page draws, restated one year at a time: p05, p50 and p95 of the resampled value, with the model's constant-rate line beside it. Block-bootstrap band for the inherited property's value, one year at a time, drawn from the same seeded 2,000-path resample as the horizon rows. p05-p95 is the shaded band, so it is a ninetieth-percent interval, not a ninth; p50 is the middle path and the constant line is the model's single 4% a year. Every value is rounded to the nearest $10."
  },
  "roll_audit": {
   "property_a": {
@@ -5393,5 +5605,721 @@
   ],
   "encumbrance_stated": false,
   "note": "Insurance is charged to the keeping paths only, so a higher premium widens the gap in favour of selling rather than narrowing it. Debt service is charged the same way for the same reason."
+ },
+ "maintenance_evidence": {
+  "series": [
+   {
+    "year": 2015,
+    "value": 2290
+   },
+   {
+    "year": 2016,
+    "value": 2289
+   },
+   {
+    "year": 2017,
+    "value": 2560
+   },
+   {
+    "year": 2018,
+    "value": 2663
+   },
+   {
+    "year": 2019,
+    "value": 2913
+   },
+   {
+    "year": 2020,
+    "value": 3267
+   },
+   {
+    "year": 2021,
+    "value": 3587
+   },
+   {
+    "year": 2022,
+    "value": 3911
+   },
+   {
+    "year": 2023,
+    "value": 3974
+   },
+   {
+    "year": 2024,
+    "value": 4481
+   }
+  ],
+  "span_years": 9,
+  "start_year": 2015,
+  "end_year": 2024,
+  "start_value": 2290,
+  "end_value": 4481,
+  "measured_growth": 7.74,
+  "cpi_growth_same_span": 3.16,
+  "model_growth": 2.5,
+  "ratio_to_model_growth": 3.1,
+  "allowance_a_live": 15500,
+  "allowance_a_rent": 23250,
+  "allowance_b": 27000,
+  "national_mean": 4481,
+  "ratio_a_live": 3.79,
+  "ratio_a_rent": 5.52,
+  "ratio_b": 6.36,
+  "housing_2025": 27790,
+  "operations_2025": 2030,
+  "measured_growth_fraction": 0.07744044358485724,
+  "src": [
+   "bls_cex_ownmaint",
+   "bls_cesan2025",
+   "bls_cpi_annual"
+  ]
+ },
+ "maintenance_growth_cases": {
+  "inherit_year": 2045,
+  "baseline_terminal": 5322760,
+  "measured_growth": 7.74,
+  "rows": [
+   {
+    "growth": 2.5,
+    "label": "the modelled inflation rate",
+    "carry_fv": 9784590,
+    "terminal": 5322760,
+    "vs_base": 0,
+    "on_current_value": false
+   },
+   {
+    "growth": 4.0,
+    "label": "stated rung",
+    "carry_fv": 10485930,
+    "terminal": 4621420,
+    "vs_base": -701340,
+    "on_current_value": false
+   },
+   {
+    "growth": 7.74,
+    "label": "the measured 2015-2024 record",
+    "carry_fv": 13265250,
+    "terminal": 1842100,
+    "vs_base": -3480660,
+    "on_current_value": false
+   },
+   {
+    "growth": 2.5,
+    "label": "charged on the house value each year, at the modelled inflation rate",
+    "carry_fv": 12218460,
+    "terminal": 2888890,
+    "vs_base": -2433870,
+    "on_current_value": true
+   },
+   {
+    "growth": 7.74,
+    "label": "charged on the house value each year, at the measured rate",
+    "carry_fv": 19917210,
+    "terminal": -4809860,
+    "vs_base": -10132620,
+    "on_current_value": true
+   }
+  ],
+  "src": [
+   "bls_cex_ownmaint"
+  ]
+ },
+ "borrow_cases": {
+  "inherit_year": 2045,
+  "horizon_years": 30,
+  "term_years": 30,
+  "value_at_death": 6531230,
+  "live_terminal": 5322760,
+  "sell_terminal": 38585540,
+  "gap_sell_minus_live": 33262780,
+  "rate": 0.0711,
+  "rate_low": 0.0598,
+  "rate_high": 0.074,
+  "rate_basis": "The published 30-year fixed mortgage average for the week of 12 November 2026 (7.11%), read from the series page on 17 November 2026 together with every 2026 weekly value; the low and high are the lowest (5.98%, week of 26 February 2026) and highest (7.40%, weeks of 8 and 15 October 2026) weekly averages published so far in 2026. A 2045 rate is not published and is not forecast: the three rungs are the band, not a prediction. A home equity line prices off a different index and is not published in this series, so a line of credit would sit outside this band.",
+  "rate_src": [
+   "fred_mortgage"
+  ],
+  "fee_pct": 0.01,
+  "fee_low": 0.0,
+  "fee_high": 0.02,
+  "fee_basis": "Origination and closing charges on a cash-out refinance, as a share of the amount borrowed. Stated scenario: no official source publishes a fee schedule for this transaction, and the site declines to copy a commercial one. The zero rung is the honest lower bound - a lender that charged nothing - and the 2% rung is the upper case the ranking is tested against.",
+  "ltv_rungs": [
+   0.3,
+   0.5,
+   0.7,
+   0.8
+  ],
+  "after_tax_equity": 6.3,
+  "negative_carry": 0.81,
+  "deduction_rule": "No deduction is taken for interest on money borrowed to invest or to spend. Publication 936 (2025) states the rule directly: interest on home equity loans and lines of credit is deductible only if the borrowed funds are used to buy, build, or substantially improve the taxpayer's home that secures the loan. Borrowing the house's value and putting it in a brokerage account is not that. Even qualifying interest needs itemising, and the deduction is capped at $750,000 of acquisition debt for a single filer.",
+  "deduction_src": [
+   "irs_p936"
+  ],
+  "property_tax_rule": "Taking money out on a deed of trust does not, by itself, change who owns the property for assessment purposes: Revenue and Taxation Code section 62 excludes from change in ownership 'the creation, assignment, termination, or reconveyance of a security interest', and separately excludes a transfer by a trustor into a revocable trust in which the trustor remains the present beneficiary.",
+  "property_tax_src": [
+   "rtc62"
+  ],
+  "rows": [
+   {
+    "mode": "immediate",
+    "ltv": 0.3,
+    "rate": 0.0711,
+    "fee_pct": 0.01,
+    "principal": 1959370,
+    "fees": 19590,
+    "net_cash": 1939780,
+    "payment_month": 13180,
+    "payment_year": 158170,
+    "total_paid": 4745090,
+    "total_interest": 2785720,
+    "balance_at_end": 0,
+    "cash_grown": 12126890,
+    "payments_fv": 13185070,
+    "terminal": 4264590,
+    "vs_sell": -34320950,
+    "vs_live": -1058170
+   },
+   {
+    "mode": "immediate",
+    "ltv": 0.5,
+    "rate": 0.0711,
+    "fee_pct": 0.01,
+    "principal": 3265620,
+    "fees": 32660,
+    "net_cash": 3232960,
+    "payment_month": 21970,
+    "payment_year": 263620,
+    "total_paid": 7908480,
+    "total_interest": 4642870,
+    "balance_at_end": 0,
+    "cash_grown": 20211490,
+    "payments_fv": 21975110,
+    "terminal": 3559140,
+    "vs_sell": -35026400,
+    "vs_live": -1763620
+   },
+   {
+    "mode": "immediate",
+    "ltv": 0.7,
+    "rate": 0.0711,
+    "fee_pct": 0.01,
+    "principal": 4571860,
+    "fees": 45720,
+    "net_cash": 4526140,
+    "payment_month": 30760,
+    "payment_year": 369060,
+    "total_paid": 11071880,
+    "total_interest": 6500010,
+    "balance_at_end": 0,
+    "cash_grown": 28296080,
+    "payments_fv": 30765150,
+    "terminal": 2853690,
+    "vs_sell": -35731850,
+    "vs_live": -2469070
+   },
+   {
+    "mode": "immediate",
+    "ltv": 0.8,
+    "rate": 0.0711,
+    "fee_pct": 0.01,
+    "principal": 5224990,
+    "fees": 52250,
+    "net_cash": 5172740,
+    "payment_month": 35150,
+    "payment_year": 421790,
+    "total_paid": 12653570,
+    "total_interest": 7428590,
+    "balance_at_end": 0,
+    "cash_grown": 32338380,
+    "payments_fv": 35160180,
+    "terminal": 2500960,
+    "vs_sell": -36084580,
+    "vs_live": -2821800
+   }
+  ],
+  "staged_rows": [
+   {
+    "mode": "staged",
+    "ltv": 0.3,
+    "rate": 0.0711,
+    "fee_pct": 0.01,
+    "principal": 1959370,
+    "fees": 19590,
+    "net_cash": 1939780,
+    "payment_month": 13180,
+    "payment_year": 158170,
+    "total_paid": 4745090,
+    "total_interest": 2785720,
+    "balance_at_end": 0,
+    "cash_grown": 10886650,
+    "payments_fv": 13185070,
+    "terminal": 3024340,
+    "vs_sell": -35561200,
+    "vs_live": -2298420
+   },
+   {
+    "mode": "staged",
+    "ltv": 0.5,
+    "rate": 0.0711,
+    "fee_pct": 0.01,
+    "principal": 3265620,
+    "fees": 32660,
+    "net_cash": 3232960,
+    "payment_month": 21970,
+    "payment_year": 263620,
+    "total_paid": 7908480,
+    "total_interest": 4642870,
+    "balance_at_end": 0,
+    "cash_grown": 18144410,
+    "payments_fv": 21975110,
+    "terminal": 1492060,
+    "vs_sell": -37093480,
+    "vs_live": -3830700
+   },
+   {
+    "mode": "staged",
+    "ltv": 0.7,
+    "rate": 0.0711,
+    "fee_pct": 0.01,
+    "principal": 4571860,
+    "fees": 45720,
+    "net_cash": 4526140,
+    "payment_month": 30760,
+    "payment_year": 369060,
+    "total_paid": 11071880,
+    "total_interest": 6500010,
+    "balance_at_end": 0,
+    "cash_grown": 25402180,
+    "payments_fv": 30765150,
+    "terminal": -40220,
+    "vs_sell": -38625760,
+    "vs_live": -5362980
+   },
+   {
+    "mode": "staged",
+    "ltv": 0.8,
+    "rate": 0.0711,
+    "fee_pct": 0.01,
+    "principal": 5224990,
+    "fees": 52250,
+    "net_cash": 5172740,
+    "payment_month": 35150,
+    "payment_year": 421790,
+    "total_paid": 12653570,
+    "total_interest": 7428590,
+    "balance_at_end": 0,
+    "cash_grown": 29031060,
+    "payments_fv": 35160180,
+    "terminal": -806360,
+    "vs_sell": -39391900,
+    "vs_live": -6129120
+   }
+  ],
+  "shock_rows": [
+   {
+    "mode": "shock",
+    "ltv": 0.3,
+    "rate": 0.0711,
+    "fee_pct": 0.01,
+    "principal": 1959370,
+    "fees": 19590,
+    "net_cash": 1939780,
+    "payment_month": 13180,
+    "payment_year": 158170,
+    "total_paid": 4745090,
+    "total_interest": 2785720,
+    "balance_at_end": 0,
+    "cash_grown": 8329210,
+    "payments_fv": 13185070,
+    "terminal": 466900,
+    "vs_sell": -38118640,
+    "vs_live": -4855860
+   },
+   {
+    "mode": "shock",
+    "ltv": 0.5,
+    "rate": 0.0711,
+    "fee_pct": 0.01,
+    "principal": 3265620,
+    "fees": 32660,
+    "net_cash": 3232960,
+    "payment_month": 21970,
+    "payment_year": 263620,
+    "total_paid": 7908480,
+    "total_interest": 4642870,
+    "balance_at_end": 0,
+    "cash_grown": 13882010,
+    "payments_fv": 21975110,
+    "terminal": -2770340,
+    "vs_sell": -41355880,
+    "vs_live": -8093100
+   },
+   {
+    "mode": "shock",
+    "ltv": 0.7,
+    "rate": 0.0711,
+    "fee_pct": 0.01,
+    "principal": 4571860,
+    "fees": 45720,
+    "net_cash": 4526140,
+    "payment_month": 30760,
+    "payment_year": 369060,
+    "total_paid": 11071880,
+    "total_interest": 6500010,
+    "balance_at_end": 0,
+    "cash_grown": 19434820,
+    "payments_fv": 30765150,
+    "terminal": -6007580,
+    "vs_sell": -44593120,
+    "vs_live": -11330340
+   },
+   {
+    "mode": "shock",
+    "ltv": 0.8,
+    "rate": 0.0711,
+    "fee_pct": 0.01,
+    "principal": 5224990,
+    "fees": 52250,
+    "net_cash": 5172740,
+    "payment_month": 35150,
+    "payment_year": 421790,
+    "total_paid": 12653570,
+    "total_interest": 7428590,
+    "balance_at_end": 0,
+    "cash_grown": 22211220,
+    "payments_fv": 35160180,
+    "terminal": -7626200,
+    "vs_sell": -46211740,
+    "vs_live": -12948960
+   }
+  ],
+  "idle_rows": [
+   {
+    "mode": "idle",
+    "ltv": 0.3,
+    "rate": 0.0711,
+    "fee_pct": 0.01,
+    "principal": 1959370,
+    "fees": 19590,
+    "net_cash": 1939780,
+    "payment_month": 13180,
+    "payment_year": 158170,
+    "total_paid": 4745090,
+    "total_interest": 2785720,
+    "balance_at_end": 0,
+    "cash_grown": 1939780,
+    "payments_fv": 13185070,
+    "terminal": -5922530,
+    "vs_sell": -44508070,
+    "vs_live": -11245290
+   },
+   {
+    "mode": "idle",
+    "ltv": 0.5,
+    "rate": 0.0711,
+    "fee_pct": 0.01,
+    "principal": 3265620,
+    "fees": 32660,
+    "net_cash": 3232960,
+    "payment_month": 21970,
+    "payment_year": 263620,
+    "total_paid": 7908480,
+    "total_interest": 4642870,
+    "balance_at_end": 0,
+    "cash_grown": 3232960,
+    "payments_fv": 21975110,
+    "terminal": -13419390,
+    "vs_sell": -52004930,
+    "vs_live": -18742150
+   },
+   {
+    "mode": "idle",
+    "ltv": 0.7,
+    "rate": 0.0711,
+    "fee_pct": 0.01,
+    "principal": 4571860,
+    "fees": 45720,
+    "net_cash": 4526140,
+    "payment_month": 30760,
+    "payment_year": 369060,
+    "total_paid": 11071880,
+    "total_interest": 6500010,
+    "balance_at_end": 0,
+    "cash_grown": 4526140,
+    "payments_fv": 30765150,
+    "terminal": -20916250,
+    "vs_sell": -59501790,
+    "vs_live": -26239010
+   },
+   {
+    "mode": "idle",
+    "ltv": 0.8,
+    "rate": 0.0711,
+    "fee_pct": 0.01,
+    "principal": 5224990,
+    "fees": 52250,
+    "net_cash": 5172740,
+    "payment_month": 35150,
+    "payment_year": 421790,
+    "total_paid": 12653570,
+    "total_interest": 7428590,
+    "balance_at_end": 0,
+    "cash_grown": 5172740,
+    "payments_fv": 35160180,
+    "terminal": -24664680,
+    "vs_sell": -63250220,
+    "vs_live": -29987440
+   }
+  ],
+  "rate_rows": {
+   "low": [
+    {
+     "mode": "immediate",
+     "ltv": 0.3,
+     "rate": 0.0598,
+     "fee_pct": 0.01,
+     "principal": 1959370,
+     "fees": 19590,
+     "net_cash": 1939780,
+     "payment_month": 11720,
+     "payment_year": 140670,
+     "total_paid": 4220000,
+     "total_interest": 2260630,
+     "balance_at_end": 0,
+     "cash_grown": 12126890,
+     "payments_fv": 11726020,
+     "terminal": 5723630,
+     "vs_sell": -32861900,
+     "vs_live": 400870
+    },
+    {
+     "mode": "immediate",
+     "ltv": 0.5,
+     "rate": 0.0598,
+     "fee_pct": 0.01,
+     "principal": 3265620,
+     "fees": 32660,
+     "net_cash": 3232960,
+     "payment_month": 19540,
+     "payment_year": 234440,
+     "total_paid": 7033340,
+     "total_interest": 3767720,
+     "balance_at_end": 0,
+     "cash_grown": 20211490,
+     "payments_fv": 19543360,
+     "terminal": 5990880,
+     "vs_sell": -32594660,
+     "vs_live": 668120
+    },
+    {
+     "mode": "immediate",
+     "ltv": 0.7,
+     "rate": 0.0598,
+     "fee_pct": 0.01,
+     "principal": 4571860,
+     "fees": 45720,
+     "net_cash": 4526140,
+     "payment_month": 27350,
+     "payment_year": 328220,
+     "total_paid": 9846670,
+     "total_interest": 5274810,
+     "balance_at_end": 0,
+     "cash_grown": 28296080,
+     "payments_fv": 27360710,
+     "terminal": 6258130,
+     "vs_sell": -32327410,
+     "vs_live": 935370
+    },
+    {
+     "mode": "immediate",
+     "ltv": 0.8,
+     "rate": 0.0598,
+     "fee_pct": 0.01,
+     "principal": 5224990,
+     "fees": 52250,
+     "net_cash": 5172740,
+     "payment_month": 31260,
+     "payment_year": 375110,
+     "total_paid": 11253340,
+     "total_interest": 6028350,
+     "balance_at_end": 0,
+     "cash_grown": 32338380,
+     "payments_fv": 31269380,
+     "terminal": 6391760,
+     "vs_sell": -32193780,
+     "vs_live": 1069000
+    }
+   ],
+   "high": [
+    {
+     "mode": "immediate",
+     "ltv": 0.3,
+     "rate": 0.074,
+     "fee_pct": 0.01,
+     "principal": 1959370,
+     "fees": 19590,
+     "net_cash": 1939780,
+     "payment_month": 13570,
+     "payment_year": 162800,
+     "total_paid": 4883860,
+     "total_interest": 2924490,
+     "balance_at_end": 0,
+     "cash_grown": 12126890,
+     "payments_fv": 13570670,
+     "terminal": 3878990,
+     "vs_sell": -34706550,
+     "vs_live": -1443770
+    },
+    {
+     "mode": "immediate",
+     "ltv": 0.5,
+     "rate": 0.074,
+     "fee_pct": 0.01,
+     "principal": 3265620,
+     "fees": 32660,
+     "net_cash": 3232960,
+     "payment_month": 22610,
+     "payment_year": 271330,
+     "total_paid": 8139770,
+     "total_interest": 4874150,
+     "balance_at_end": 0,
+     "cash_grown": 20211490,
+     "payments_fv": 22617780,
+     "terminal": 2916470,
+     "vs_sell": -35669070,
+     "vs_live": -2406290
+    },
+    {
+     "mode": "immediate",
+     "ltv": 0.7,
+     "rate": 0.074,
+     "fee_pct": 0.01,
+     "principal": 4571860,
+     "fees": 45720,
+     "net_cash": 4526140,
+     "payment_month": 31650,
+     "payment_year": 379860,
+     "total_paid": 11395680,
+     "total_interest": 6823810,
+     "balance_at_end": 0,
+     "cash_grown": 28296080,
+     "payments_fv": 31664890,
+     "terminal": 1953950,
+     "vs_sell": -36631580,
+     "vs_live": -3368800
+    },
+    {
+     "mode": "immediate",
+     "ltv": 0.8,
+     "rate": 0.074,
+     "fee_pct": 0.01,
+     "principal": 5224990,
+     "fees": 52250,
+     "net_cash": 5172740,
+     "payment_month": 36180,
+     "payment_year": 434120,
+     "total_paid": 13023630,
+     "total_interest": 7798640,
+     "balance_at_end": 0,
+     "cash_grown": 32338380,
+     "payments_fv": 36188440,
+     "terminal": 1472700,
+     "vs_sell": -37112840,
+     "vs_live": -3850060
+    }
+   ]
+  },
+  "fee_rows": [
+   {
+    "mode": "immediate",
+    "ltv": 0.8,
+    "rate": 0.0711,
+    "fee_pct": 0.0,
+    "principal": 5224990,
+    "fees": 0,
+    "net_cash": 5224990,
+    "payment_month": 35150,
+    "payment_year": 421790,
+    "total_paid": 12653570,
+    "total_interest": 7428590,
+    "balance_at_end": 0,
+    "cash_grown": 32665030,
+    "payments_fv": 35160180,
+    "terminal": 2827610,
+    "vs_sell": -35757930,
+    "vs_live": -2495150
+   },
+   {
+    "mode": "immediate",
+    "ltv": 0.8,
+    "rate": 0.0711,
+    "fee_pct": 0.01,
+    "principal": 5224990,
+    "fees": 52250,
+    "net_cash": 5172740,
+    "payment_month": 35150,
+    "payment_year": 421790,
+    "total_paid": 12653570,
+    "total_interest": 7428590,
+    "balance_at_end": 0,
+    "cash_grown": 32338380,
+    "payments_fv": 35160180,
+    "terminal": 2500960,
+    "vs_sell": -36084580,
+    "vs_live": -2821800
+   },
+   {
+    "mode": "immediate",
+    "ltv": 0.8,
+    "rate": 0.0711,
+    "fee_pct": 0.02,
+    "principal": 5224990,
+    "fees": 104500,
+    "net_cash": 5120490,
+    "payment_month": 35150,
+    "payment_year": 421790,
+    "total_paid": 12653570,
+    "total_interest": 7428590,
+    "balance_at_end": 0,
+    "cash_grown": 32011730,
+    "payments_fv": 35160180,
+    "terminal": 2174310,
+    "vs_sell": -36411230,
+    "vs_live": -3148450
+   }
+  ],
+  "balance_path": [
+   {
+    "after_years": 5,
+    "balance": 3077560
+   },
+   {
+    "after_years": 10,
+    "balance": 2809510
+   },
+   {
+    "after_years": 15,
+    "balance": 2427430
+   },
+   {
+    "after_years": 20,
+    "balance": 1882820
+   },
+   {
+    "after_years": 25,
+    "balance": 1106530
+   },
+   {
+    "after_years": 30,
+    "balance": 0
+   }
+  ],
+  "breakeven_vs_live": 7.12,
+  "breakeven_vs_live_note": "The after-tax equity return at which the middle rung (the second-highest loan-to-value scenario) stops being a worse way to hold the same house than simply living in it. It is solved by bisection, and it sits a little above the loan rate because the payment schedule amortises the balance while the cash is invested as one lump at the start.",
+  "sell_band": {
+   "low": -2271330,
+   "high": -9996340060,
+   "crosses": false
+  }
  }
 }

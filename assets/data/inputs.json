@@ -295,6 +295,22 @@
     "uscode1701j3",
     "irs_basis"
    ]
+  },
+  "unit_structure": {
+   "units": 3,
+   "units_let": 2,
+   "units_vacant": 1,
+   "monthly_total": 7150,
+   "annual_total": 85800,
+   "per_unit_average": 3580,
+   "per_unit_average_note": "Derived by dividing the owner's stated total for the two let units by two and rounding to the nearest $10, the site's publication convention. The equal split is arithmetic on a reported total, not a rent roll: the per-unit rents were not supplied and the two units are unlikely to be identical.",
+   "vacant_unit_annual_scenario": 42900,
+   "vacant_unit_note": "One more unit let at that derived average for twelve months, stated as a scenario. It is not added to any baseline on this site, because it is a decision the heir has not taken, and because letting the last unit changes the occupancy of the building - which is the fact the local rules turn on.",
+   "split_supplied": false,
+   "lease_terms_supplied": false,
+   "basis": "Owner statement of unit counts and a single combined rent figure; no per-unit rent roll was supplied.",
+   "verified": false,
+   "src": []
   }
  },
  "verified_parameters": {
@@ -492,6 +508,111 @@
     "cdi_df_rental"
    ],
    "note": "Statewide average written premium for the dwelling policy form the Department describes as 'rental dwelling or landlord policy form - up to 4 units', experience year 2017, the newest year in that series. Property B is a three-unit building, which is on this form family. Quoted verbatim; not a premium for any one building."
+  },
+  "bls_ce_upkeep_owner_2015": {
+   "value": 2290,
+   "note": "Average annual outlay of home-owner consumer units on maintenance, repairs, insurance and other expenses for an owned dwelling, 2015, quoted verbatim from the Business Release Cycle series the Bureau of Labor Statistics Consumer Expenditure Surveys publish under identifier CXUOWNEXPENLB1702M. The line includes property insurance and other charges, so it is an upper bound on upkeep alone, not a maintenance figure. Read 17 November 2026.",
+   "src": [
+    "bls_cex_ownmaint"
+   ]
+  },
+  "bls_ce_upkeep_owner_2016": {
+   "value": 2289,
+   "note": "Average annual outlay of home-owner consumer units on maintenance, repairs, insurance and other expenses for an owned dwelling, 2016, quoted verbatim from the Business Release Cycle series the Bureau of Labor Statistics Consumer Expenditure Surveys publish under identifier CXUOWNEXPENLB1702M. The line includes property insurance and other charges, so it is an upper bound on upkeep alone, not a maintenance figure. Read 17 November 2026.",
+   "src": [
+    "bls_cex_ownmaint"
+   ]
+  },
+  "bls_ce_upkeep_owner_2017": {
+   "value": 2560,
+   "note": "Average annual outlay of home-owner consumer units on maintenance, repairs, insurance and other expenses for an owned dwelling, 2017, quoted verbatim from the Business Release Cycle series the Bureau of Labor Statistics Consumer Expenditure Surveys publish under identifier CXUOWNEXPENLB1702M. The line includes property insurance and other charges, so it is an upper bound on upkeep alone, not a maintenance figure. Read 17 November 2026.",
+   "src": [
+    "bls_cex_ownmaint"
+   ]
+  },
+  "bls_ce_upkeep_owner_2018": {
+   "value": 2663,
+   "note": "Average annual outlay of home-owner consumer units on maintenance, repairs, insurance and other expenses for an owned dwelling, 2018, quoted verbatim from the Business Release Cycle series the Bureau of Labor Statistics Consumer Expenditure Surveys publish under identifier CXUOWNEXPENLB1702M. The line includes property insurance and other charges, so it is an upper bound on upkeep alone, not a maintenance figure. Read 17 November 2026.",
+   "src": [
+    "bls_cex_ownmaint"
+   ]
+  },
+  "bls_ce_upkeep_owner_2019": {
+   "value": 2913,
+   "note": "Average annual outlay of home-owner consumer units on maintenance, repairs, insurance and other expenses for an owned dwelling, 2019, quoted verbatim from the Business Release Cycle series the Bureau of Labor Statistics Consumer Expenditure Surveys publish under identifier CXUOWNEXPENLB1702M. The line includes property insurance and other charges, so it is an upper bound on upkeep alone, not a maintenance figure. Read 17 November 2026.",
+   "src": [
+    "bls_cex_ownmaint"
+   ]
+  },
+  "bls_ce_upkeep_owner_2020": {
+   "value": 3267,
+   "note": "Average annual outlay of home-owner consumer units on maintenance, repairs, insurance and other expenses for an owned dwelling, 2020, quoted verbatim from the Business Release Cycle series the Bureau of Labor Statistics Consumer Expenditure Surveys publish under identifier CXUOWNEXPENLB1702M. The line includes property insurance and other charges, so it is an upper bound on upkeep alone, not a maintenance figure. Read 17 November 2026.",
+   "src": [
+    "bls_cex_ownmaint"
+   ]
+  },
+  "bls_ce_upkeep_owner_2021": {
+   "value": 3587,
+   "note": "Average annual outlay of home-owner consumer units on maintenance, repairs, insurance and other expenses for an owned dwelling, 2021, quoted verbatim from the Business Release Cycle series the Bureau of Labor Statistics Consumer Expenditure Surveys publish under identifier CXUOWNEXPENLB1702M. The line includes property insurance and other charges, so it is an upper bound on upkeep alone, not a maintenance figure. Read 17 November 2026.",
+   "src": [
+    "bls_cex_ownmaint"
+   ]
+  },
+  "bls_ce_upkeep_owner_2022": {
+   "value": 3911,
+   "note": "Average annual outlay of home-owner consumer units on maintenance, repairs, insurance and other expenses for an owned dwelling, 2022, quoted verbatim from the Business Release Cycle series the Bureau of Labor Statistics Consumer Expenditure Surveys publish under identifier CXUOWNEXPENLB1702M. The line includes property insurance and other charges, so it is an upper bound on upkeep alone, not a maintenance figure. Read 17 November 2026.",
+   "src": [
+    "bls_cex_ownmaint"
+   ]
+  },
+  "bls_ce_upkeep_owner_2023": {
+   "value": 3974,
+   "note": "Average annual outlay of home-owner consumer units on maintenance, repairs, insurance and other expenses for an owned dwelling, 2023, quoted verbatim from the Business Release Cycle series the Bureau of Labor Statistics Consumer Expenditure Surveys publish under identifier CXUOWNEXPENLB1702M. The line includes property insurance and other charges, so it is an upper bound on upkeep alone, not a maintenance figure. Read 17 November 2026.",
+   "src": [
+    "bls_cex_ownmaint"
+   ]
+  },
+  "bls_ce_upkeep_owner_2024": {
+   "value": 4481,
+   "note": "Average annual outlay of home-owner consumer units on maintenance, repairs, insurance and other expenses for an owned dwelling, 2024, quoted verbatim from the Business Release Cycle series the Bureau of Labor Statistics Consumer Expenditure Surveys publish under identifier CXUOWNEXPENLB1702M. The line includes property insurance and other charges, so it is an upper bound on upkeep alone, not a maintenance figure. Read 17 November 2026.",
+   "src": [
+    "bls_cex_ownmaint"
+   ]
+  },
+  "bls_ce_housing_all_cu_2025": {
+   "value": 27790,
+   "note": "Average annual outlay of all consumer units on housing, 2025, from the Bureau's Consumer Expenditures 2025 release (USDL-26-1619, 29 October 2026). Verbatim.",
+   "src": [
+    "bls_cesan2025"
+   ]
+  },
+  "bls_ce_household_operations_2025": {
+   "value": 2034,
+   "note": "Average annual outlay of all consumer units on household operations - the line that contains maintaining and repairing, both tenures together - 2025, same release. Verbatim. It is not an owner-only figure and the site does not present it as one.",
+   "src": [
+    "bls_cesan2025"
+   ]
+  },
+  "mortgage_interest_limit_single": {
+   "value": 750000,
+   "note": "Publication 936 (2025), category 3: debt taken out after 15 December 2017 to buy, build or substantially improve the home is home acquisition debt only if it totals $750,000 or less throughout the year. Verbatim from the publication.",
+   "src": [
+    "irs_p936"
+   ]
+  },
+  "mortgage_interest_limit_mfs": {
+   "value": 375000,
+   "note": "The same limit for married filing separately, Publication 936 (2025). Verbatim.",
+   "src": [
+    "irs_p936"
+   ]
+  },
+  "bls_ce_total_expenditures_2025": {
+   "value": 81905,
+   "note": "Average annual expenditures of all consumer units, 2025, quoted verbatim from the Bureau of Labor Statistics Consumer Expenditures release of 29 October 2026 (USDL-26-1619). Registered here so the privacy gate sees a published official figure rather than an unrounded amount; the release is the source.",
+   "src": [
+    "bls_cesan2025"
+   ]
   }
  },
  "assumptions": {
@@ -683,6 +804,62 @@
     "rtc17043"
    ],
    "checked": "2026-11-16"
+  },
+  "borrow_rate": {
+   "baseline": 0.0711,
+   "low": 0.0598,
+   "high": 0.074,
+   "basis": "The published 30-year fixed mortgage average for the week of 12 November 2026 (7.11%), read from the series page on 17 November 2026 together with every 2026 weekly value; the low and high are the lowest (5.98%, week of 26 February 2026) and highest (7.40%, weeks of 8 and 15 October 2026) weekly averages published so far in 2026. A 2045 rate is not published and is not forecast: the three rungs are the band, not a prediction. A home equity line prices off a different index and is not published in this series, so a line of credit would sit outside this band.",
+   "src": [
+    "fred_mortgage"
+   ]
+  },
+  "borrow_ltv_rungs": {
+   "value": [
+    0.3,
+    0.5,
+    0.7,
+    0.8
+   ],
+   "basis": "Stated scenarios, not lender policy and not an official limit: how much of the home's value at the inheritance is taken as cash. No official publisher sets the ceiling for a property held in trust in 2045, so the rungs are labelled scenarios and the top rung is not described as a maximum.",
+   "src": []
+  },
+  "borrow_fee_pct": {
+   "baseline": 0.01,
+   "low": 0.0,
+   "high": 0.02,
+   "basis": "Origination and closing charges on a cash-out refinance, as a share of the amount borrowed. Stated scenario: no official source publishes a fee schedule for this transaction, and the site declines to copy a commercial one. The zero rung is the honest lower bound - a lender that charged nothing - and the 2% rung is the upper case the ranking is tested against.",
+   "src": []
+  },
+  "borrow_term_years": {
+   "value": 30,
+   "basis": "Set equal to the projection horizon so the amortisation schedule retires inside the window that every other path is measured over. Level payments, monthly, fixed rate; the balance at each checkpoint is published so a reader can see the loan unwinding rather than trusting that it ends.",
+   "src": []
+  },
+  "borrow_interest_deduction": {
+   "value": 0.0,
+   "rule": "No deduction is taken for interest on money borrowed to invest or to spend. Publication 936 (2025) states the rule directly: interest on home equity loans and lines of credit is deductible only if the borrowed funds are used to buy, build, or substantially improve the taxpayer's home that secures the loan. Borrowing the house's value and putting it in a brokerage account is not that. Even qualifying interest needs itemising, and the deduction is capped at $750,000 of acquisition debt for a single filer.",
+   "basis": "The site's conservative reading, applied as an assumption. It is the right reading of the published rule for a cash-out loan used to buy securities; a loan used to re-roof the house would be treated differently, which is the point of the note on the page.",
+   "src": [
+    "irs_p936"
+   ]
+  },
+  "borrow_property_tax_rule": {
+   "rule": "Taking money out on a deed of trust does not, by itself, change who owns the property for assessment purposes: Revenue and Taxation Code section 62 excludes from change in ownership 'the creation, assignment, termination, or reconveyance of a security interest', and separately excludes a transfer by a trustor into a revocable trust in which the trustor remains the present beneficiary.",
+   "basis": "Read from the code section at the state's legislative publisher on 17 November 2026. This is why the keep-and-borrow path carries the same property tax as plain ownership and no reassessment of its own.",
+   "src": [
+    "rtc62"
+   ]
+  },
+  "maintenance_growth_cases": {
+   "value": [
+    0.025,
+    0.04
+   ],
+   "basis": "Upkeep is grown at the modelled inflation rate (2.5%) in every published path. These cases re-run the keeping paths with upkeep instead growing at 4.0% and at 7.66% a year: the second is the compound annual growth of the published federal household-outlay line for maintenance, repairs, insurance and other expenses of an owned dwelling over 2015 to 2024 (7.74% a year, computed from the verbatim series values in verified_parameters). The measured rung is history, not a forecast.",
+   "src": [
+    "bls_cex_ownmaint"
+   ]
   }
  },
  "precommit": {
