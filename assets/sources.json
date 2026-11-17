@@ -377,11 +377,14 @@
    "url": "https://fred.stlouisfed.org/series/MORTGAGE30US",
    "verifies": [
     "18.63 percent in the week of 9 October 1981",
-    "7.79 percent in the week of 26 October 2023"
+    "7.79 percent in the week of 26 October 2023",
+    "7.11 percent in the week of 12 November 2026, the latest published observation",
+    "5.98 percent in the week of 26 February 2026, the lowest weekly average published in 2026",
+    "7.40 percent in the weeks of 8 and 15 October 2026, the highest weekly average published in 2026"
    ],
-   "checked": "CSV opened on the publisher's site on 11 November 2026 (two dated windows read)",
+   "checked": "CSV opened on the publisher's site on 11 November 2026 (two dated windows read); re-read on 2026-11-17 for the whole of calendar 2026 (5 January to 30 November).",
    "id": "fred_mortgage",
-   "supports": "18.63 percent in the week of 9 October 1981 | 7.79 percent in the week of 26 October 2023",
+   "supports": "18.63 percent in the week of 9 October 1981 | 7.79 percent in the week of 26 October 2023 | 7.11 percent for the week of 12 November 2026, with 5.98 and 7.40 percent as the 2026 low and high of the same published series - the three rungs the keep-and-borrow page prices.",
    "limits": ""
   },
   {
@@ -956,10 +959,11 @@
    "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value_month=202611",
    "verifies": [
     "On 9 November 2026 the par yields were 4.38% (1 year), 4.67% (5 years), 4.88% (10 years) and 5.26% (30 years)",
-    "On 13 November 2026 the par yields were 4.32% (3 months), 4.65% (1 year) and 4.88% (2 years) - the tenors the phased-investing path uses"
+    "On 13 November 2026 the par yields were 4.32% (3 months), 4.65% (1 year) and 4.88% (2 years) - the tenors the phased-investing path uses",
+    "On 16 November 2026 the par yields were 4.34% (3 months), 4.62% (1 year) and 4.83% (2 years), the latest row published"
    ],
-   "quote": "11/09/2026 | ... | 4.38 | 4.56 | 4.58 | 4.67 | 4.76 | 4.88 | 5.29 | 5.26 ; 11/13/2026 | ... | 4.32 | 4.34 | 4.42 | 4.65 | 4.88 | 4.92 | 4.98 | 5.05 | 5.15",
-   "checked": "opened on the publisher's site in an earlier session; re-read on the publisher's site on 15 November 2026. The 9 November 2026 row matched the earlier reading exactly; the latest row read is 13 November 2026.",
+   "quote": "11/09/2026 | ... | 4.38 | 4.56 | 4.58 | 4.67 | 4.76 | 4.88 | 5.29 | 5.26 ; 11/13/2026 | ... | 4.32 | 4.34 | 4.42 | 4.65 | 4.88 | 4.92 | 4.98 | 5.05 | 5.15 ; 11/16/2026 | 4.10 | 4.19 | 4.27 | 4.34 | 4.33 | 4.42 | 4.62 | 4.83 | 4.87 | 4.93 | 5.01 | 5.12 | 5.51 | 5.46",
+   "checked": "opened on the publisher's site in an earlier session; re-read on the publisher's site on 17 November 2026. The 13 November row (4.32% 3-month, 4.88% 2-year) still matched; the latest published row is 16 November 2026 at 4.34% (3 months) and 4.83% (2 years).",
    "id": "treasury_cmt",
    "supports": "On 9 November 2026 the par yields were 4.38% (1 year), 4.67% (5 years), 4.88% (10 years) and 5.26% (30 years); on 13 November 2026 they were 4.32% (3 months) and 4.88% (2 years), inside the modelled short-yield band",
    "limits": ""
@@ -1208,10 +1212,11 @@
    "verifies": [
     "Underpayment rate (corporate and non-corporate), 4th quarter 2026: 7 percent",
     "Federal short-term rate (IRC 6603 deposit), 4th quarter 2026: 4 percent",
-    "Underpayment rates published for 2026 by quarter: 7, 7, 6 and 7 percent"
+    "Underpayment rates published for 2026 by quarter: 7, 7, 6 and 7 percent",
+    "No first-quarter 2027 rate had been published on the page as at 17 November 2026: 2026 is the current year on the table"
    ],
    "quote": "Underpayment (corporate and non-corporate) | 7% | 7% | 6% | 7%",
-   "checked": "opened on the publisher's site on 2026-11-16 (2026 quarterly table, and the 2025, 2024, 2023 and 2022 tables for the published range)",
+   "checked": "opened on the publisher's site on 2026-11-16 (2026 quarterly table, and the 2025, 2024, 2023 and 2022 tables for the published range); re-read 2026-11-17 - the fourth-quarter 2026 row is unchanged at 7 percent underpayment on a 4 percent federal short-term rate, and no 2027 quarter is published yet",
    "supports": "The published underpayment rate of 7 percent for the fourth quarter of 2026, the federal short-term rate of 4 percent for the same quarter, and the published range of 3 to 8 percent across 2022-2026.",
    "limits": "Rates are set and published quarterly. The rate that applies to a death in the 2040s is not published and is not forecast here."
   },
@@ -1272,6 +1277,47 @@
    "checked": "opened on the publisher's site on 2026-11-16 (2023 edition of the United States Code)",
    "supports": "The compounding convention used in every deferral figure on the liquidity page: interest on unpaid tax compounds daily, not annually.",
    "limits": "The engine on this site compounds on a 365-day year. The IRS determines rates quarterly and may apply them per quarter; small differences are possible against an assessment."
+  },
+  {
+   "id": "rtc62",
+   "publisher": "California Legislative Information",
+   "title": "Revenue and Taxation Code section 62 - transfers that are not a change in ownership",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=62",
+   "verifies": [
+    "\"Change in ownership shall not include: ... (c) (1) The creation, assignment, termination, or reconveyance of a security interest; or (2) the substitution of a trustee under a security instrument.\""
+   ],
+   "quote": "Change in ownership shall not include: ... (c) (1) The creation, assignment, termination, or reconveyance of a security interest; or (2) the substitution of a trustee under a security instrument.",
+   "checked": "Full section text opened on the publisher's official domain on 2026-11-17.",
+   "supports": "The rule that granting a mortgage or a home equity line on the home is not a change in ownership, so borrowing does not trigger a reassessment and does not disturb the Proposition 19 position, unlike letting the home out.",
+   "limits": "The section lists transfers excluded from change in ownership generally; it is not a Proposition 19 provision and confers no shelter of its own."
+  },
+  {
+   "id": "irs_p936",
+   "publisher": "Internal Revenue Service",
+   "title": "Publication 936 (2025), Home Mortgage Interest Deduction",
+   "url": "https://www.irs.gov/publications/p936",
+   "verifies": [
+    "\"Interest on home equity loans and lines of credit are deductible only if the borrowed funds are used to buy, build, or substantially improve the taxpayer's home that secures the loan.\"",
+    "Home acquisition debt taken out after December 15, 2017 is deductible only up to $750,000 ($375,000 if married filing separately); debt taken out between October 13, 1987 and December 16, 2017 is capped at $1,000,000.",
+    "The deduction requires itemising on Schedule A and a secured debt on a qualified home."
+   ],
+   "quote": "Interest on home equity loans and lines of credit are deductible only if the borrowed funds are used to buy, build, or substantially improve the taxpayer's home that secures the loan.",
+   "checked": "Part I of the publication read on the publisher's site on 2026-11-17.",
+   "supports": "The rule behind this site assuming no deduction for interest on money taken out of a home to invest it, and the statutory caps it quotes for acquisition debt.",
+   "limits": "The publication is the 2025 edition. It does not decide whether interest on a specific loan is deductible as investment interest; that turns on the taxpayer's other return data, and it is a question for the preparer."
+  },
+  {
+   "id": "fred_prime",
+   "publisher": "Federal Reserve Bank of St. Louis (data: Board of Governors of the Federal Reserve System)",
+   "title": "Prime Rate, daily (series DPRIME, H.15 statistical release)",
+   "url": "https://fred.stlouisfed.org/series/DPRIME",
+   "verifies": [
+    "7.00 percent on every business day published from 1 October 2026 through 9 November 2026"
+   ],
+   "quote": "2026-10-01,7.00 ... 2026-11-09,7.00",
+   "checked": "Series CSV opened on the publisher's site on 2026-11-17 for 1 October to 30 November 2026; the last observation published in that window is 9 November 2026.",
+   "supports": "The index a home equity line is priced off, used on the keep-and-borrow page as the interest-only rung with no margin added.",
+   "limits": "Prime is the rate banks quote their most creditworthy customers. A home equity line is quoted at prime plus a margin set by the lender, and no official source publishes a margin for a specific borrower."
   }
  ]
 }
