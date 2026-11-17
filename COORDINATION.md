@@ -1,5 +1,134 @@
 # Coordination board
 
+
+## Session `arena/fa4bc477-tino3` — per-row source relevance map, independent source verification, publication · claimed 2026-11-17
+
+*Branch note:* Arena pins this session to `arena/fa4bc477-tino3`, branched from `main` at `3b86d5a` (the merge of PR #156). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. Before any edit the branch was fast-forwarded to `main` (`9998b9b`, merges of PRs #161, #162 and #163), `python3 scripts/rebuild.py` produced no diff, and all gates passed on the untouched tree. **Rebase log:** while R-2/R-3 were in progress `main` moved again to `20eb134` (PRs #160, #164, #169, #170 and #171 merged, including #160's suggestions/edition/print-budget work and the fixed-charge correction), so the branch was re-set onto `20eb134` and this session's changes were re-applied on top of the merged state: the board section was re-inserted whole, the source-map patch was re-applied to the new `scripts/build.py`, and every generated page was regenerated from source rather than merged. Baseline on `20eb134` before re-application: `rebuild.py` no diff, `verify.py` PASS (links 4,504; registered 184; ledger 115; withdrawal routes 139). At claim time `gh pr list --state open` returned exactly one pull request, #160 (`arena/ac0a4bd3-tino3`), whose board section (AC-1 to AC-5) holds `scripts/build.py`, `scripts/model.py`, `scripts/edition.py`, `scripts/print_budget.py`, `assets/data/*` and `assets/sources.json` for the suggestions-page fix, the shared edition module and the one-page brief print budget. This session's edits to `scripts/build.py` are confined to the source-column helpers (`method_cell`, the executive-summary fact rows and the two "Related sources" cells) and their call sites - a different zone from #160's - and every push is preceded by `git pull --rebase origin main` with conflicts resolved keeping both sides and pages regenerated from source, never hand-merged. **The task claimed here is the per-row source map logged open by `arena/1c788435-tino3` and quoted as still open in the board sections of #158, #160 and #162; no other session has claimed it.**
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| R-1 Claim this scope and push before any other edit | **done** (`80af59f`, pushed) | `arena/fa4bc477-tino3` | `COORDINATION.md` (this section only) |
+| R-2 Read-only verification pass: re-open each official source behind the blanket four-link set that `method_cell` attached to every unattributed row, plus the executive-summary "Key rules" set, on the publisher's own domain; record what each document actually supports so the row map in R-3 cites only what bears on the row | **done** - see the R-2 record below; every one of the six documents was re-read this session and agreed with the ledger | `arena/fa4bc477-tino3` | read-only; results recorded in this section |
+| R-3 **Per-row source relevance map** (the brief's "Every table row must have a source link to an official site" read for relevance, not just presence): give every `method_cell` call site, every executive-summary fact row and the audit-table "Related sources" cells the specific ledger ids that bear on that row instead of the blanket `CORE_SOURCES`, keeping every row at least one official link so the verify gate still passes, and leaving rows that are owner figures or procedures on the register link they already carry | **done** - see the R-3 record below; 72 call sites attributed, 16 fact rows mapped, the audit fallback removed, verify PASS at 1,267 rows / 990 linked / 277 registered | `arena/fa4bc477-tino3` | `scripts/build.py` (source columns only), regenerated pages, `README.md` (counts) |
+| R-4 Rebuild, run every gate, open the pull request from this branch to `main`, merge without waiting for approval, confirm the Pages deploy, record the PR link and merge result | **done except publication - blocked by the owner's history-scrub freeze.** PR #177 opened 17 November 2026 with the full summary; the `verify` check passed on every push (heads `53c7da6` and `7db5942`, runs 44137368572 and the post-merge run, `success`). GitHub's mergeability computation stalled at `unknown` through three force-push waves, then at 17:35:58Z the owner account closed every open pull request as runbook step 1 of the scrub (comment on #177: "Frozen for the pre-rounding Git history scrub (owner decision, session arena/d980e74e-tino3). Closed without merging so the repository could be frozen"). Reopening is refused while the freeze holds. All gates are green on this branch and the work is complete and pushed; runbook step 2 names close-and-re-open as the post-rewrite path, so publication resumes after SQ-3 lifts the freeze. | `arena/fa4bc477-tino3` | this section only |
+
+**Privacy constraint for this session:** no name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term, estate size or unrounded owner amount is added to any file this session writes, including this board. Every published dollar figure stays a multiple of $10 or a verbatim official amount. New ledger entries, if any, link only to hosts already on the approved list in `scripts/verify.py`.
+
+
+### R-2 record: the six documents behind the blanket set, re-read on the publisher's own domain, 17 November 2026
+
+Each of the four `CORE_SOURCES` links that every unattributed row carried, and two more from the
+executive-summary "Key rules" set, was opened this session. What each document actually supports,
+which is what R-3 then used to attribute rows:
+
+1. **`rtc63_2` - Revenue and Taxation Code section 63.2** (leginfo, read in full). Excludes a
+   change in ownership for a transfer of the transferor's principal residence between parents and
+   children (or grandchildren where the middle generation has died) **only if a claim is filed**;
+   (a)(1)(A) the home must become the transferee's principal residence within one year;
+   (a)(1)(B) the homeowners' or disabled veterans' exemption must be filed within a year and the
+   exclusion is removed when the transferee stops being eligible; (a)(1)(C) the base year value
+   established at that change in ownership, adjusted annually under section 51, is then enrolled -
+   the clawback the site prices; (d) the new taxable value is that factored base year value plus
+   the shelter. Supports: eligibility, occupancy, clawback and shelter-formula rows. It does
+   **not** support capital gains, basis or estate rows, which is why those rows no longer carry it.
+2. **`boe_pub29` - BOE Publication 29, "California Property Tax: An Overview" (March 2025)**.
+   Proposition 13 history; the 1 percent rate plus voter-approved bonded indebtedness; the 2 percent
+   annual cap on base year value increases except on change in ownership or new construction; the
+   roll, exemption and collection dates. Supports: bill-structure, assessment-cap and
+   projection rows.
+3. **`irs_basis` - IRS, "Gifts & inheritances" FAQ**. Basis of property inherited from a decedent is
+   generally the fair market value at date of death (or the alternate valuation date if Form 706
+   is filed and elects it); a sale above that basis produces a taxable gain. Supports: step-up,
+   same-tax-year-sale and basis rows.
+4. **`irs_tc409` - IRS Topic no. 409, "Capital gains and losses"**. Long-term versus short-term
+   holding periods, the 0/15/20 percent net-capital-gain rates with their 2025 thresholds, the
+   25 percent ceiling on unrecaptured section 1250 gain, and the 28 percent collectibles rate.
+   Supports: gain-rate and recapture rows.
+5. **`boe_lta25009` - BOE Letter to Assessors 2025/009 (7 March 2025)**. The section 2.1(c)
+   shelter is the factored base year value plus $1,044,586 for transfers from 16 February 2025
+   through 15 February 2027, adjusted from the FHFA California house price index, next adjusted
+   in February 2027; the letter's own table carries $1,000,000 (2021-2023), $1,022,600 (2023-2025)
+   and $1,044,586 (2025-2027). Supports: shelter-cap rows only.
+6. **`sco_estate` - State Controller's Office, "California Estate Tax"**. The state death tax
+   credit was eliminated effective 1 January 2005; no California estate tax return is required for
+   decedents dying on or after that date. Supports: the "no California estate tax since 2005"
+   fact and estate-position rows.
+
+**Result: every stored value agreed; nothing in the ledger changed.** The defect was never in the
+values - it was that rows borrowed these documents wholesale. Recorded so the next reader can see
+which rows were re-attributed against what.
+
+### R-3 record: the per-row source map, 17 November 2026
+
+The gap logged open by `arena/1c788435-tino3` and quoted as still open in the board sections of
+PRs #158, #160 and #162 is closed on this branch:
+
+- **`method_cell` (73 call sites, every unattributed row in the build).** Each call site now passes
+  the ledger ids that bear on its own row: property-tax rows to `boe_pub29`/`rtc51`, shelter rows to
+  `rtc63_2`/`boe_lta25009`, basis and gain rows to `irs_basis`/`irs_tc409`, surcharge rows to
+  `rtc17043`/`ftb_540_instructions_2025`, insurance rows to `cdi_homeowners_avg`/`cdi_df_rental`,
+  market and return rows to `fred_casthpi`/`fred_gs10`/`fred_nasdaq`/`damodaran_histret` and the
+  replay series, transfer-fee rows to `rtc11911`/`rtc11930`, and so on. The 102 year-rows of the
+  projections table now cite Publication 29 and section 51 instead of the four-link set. The one
+  call site PR #169 added while this session was in flight (the keep-and-borrow lever) was
+  attributed in the same pass to `fred_mortgage`, `fred_casthpi` and `fred_gs10`.
+- **`sources=[]` is now an explicit decision.** The helper renders "no official source / Logged on
+  the register" for a row that has no official publisher - an owner figure, a stated scenario, a
+  household rule, a procedure or a private quote - instead of implying official backing with four
+  unrelated statutes. 100 rows moved from blanket-linked to registered for exactly that reason
+  (insurance rungs that are the owner's estimate, maintenance-lifespan assumptions with no quote,
+  the pre-commitment rules and gates, the decision-calendar rows, the rent scenarios, the audit
+  rows about repository history, the worked-example selling-cost line, and the five dashboard facts
+  that are owner figures or preferences).
+- **Executive-summary "Key rules" (16 fact rows).** A new `FACT_SOURCES` map gives each fact its own
+  sources - section 63.2 and the Proposition 19 page for the eligibility fact, Publication 29 and
+  section 63.2 for the tax cliff, section 63.2 and LTA 2025/009 for the shelter explanation,
+  `irs_basis`+`irs_tc409` for the tax-free sale window, `sco_estate`+`irs_estate`+`irs_2027` for the
+  estate position, `rtc11911`+`rtc11930` for the transfer-tax fact, the Secretary of State's
+  initiative-status page for the repeal fact - and the register for Property A, Property B, the
+  rental comparison, the biggest unknown and the pre-commitment rule, which are owner figures,
+  preferences or procedures.
+- **Audit table fallback removed.** The 14 audit rows that borrowed LTA 2025/009 and the IRS estate
+  page now say "no official source" and link the register; the Jekyll publishing row alone carries
+  a real source (`gh_pages_docs`).
+- **Two smaller fixes:** the caveat map's duplicated `fred_casthpi` pair, and a pre-commitment rule
+  loop that now links section 63.2 for the three rules that quote or turn on the exclusion
+  (P-3 quotes section 63.2, P-5 prices the clawback, P-6 turns on the exclusion) while every other
+  rule stays on the register.
+
+**Effect on the published counts (no figure, input, model output or recommendation changed):**
+restated on the final base `091d3a4` (PRs #173 to #176, including the borrow/LTV work, merged and
+conflict-resolved while this PR was in review): 26 pages, 1,385 table rows (unchanged from that
+base), **1,091 linked to official publishers** (was 1,192) and **294 registered as unsourceable**
+(was 193); 4,016 links (2,273 external); ledger 118 (that base's, untouched by this session).
+101 rows moved from blanket-linked to registered - the 100 measured on every earlier base plus the
+borrow-case rows PR #176 added, which were attributed in this PR's merge resolution. README counts
+updated to match. Every row still satisfies the gate: at least one https link or the register link.
+
+**Gates on this branch after the change (base `091d3a4`):** `rebuild.py` run twice (second run
+leaves the tree unchanged), `verify.py` PASS (26 pages, 1,385 rows, 1,091 linked, 294 registered,
+118 ledger, 4,016 links, every internal link and fragment resolves, print budget 94% of one
+sheet), `privacy_boundary.py` PASS (26 pages), `tracked_tree_guard.py` PASS (74 files),
+`package_site.py` PASS (26 pages, 1 runtime asset, 144 withdrawal routes),
+`verify_legacy.py --config-only` PASS, `git diff --check` clean.
+
+### Freeze record, 17 November 2026 (owner decision, scrub session `arena/d980e74e-tino3`)
+
+- **What happened.** The owner decided to run the pre-rounding Git history scrub. Runbook step 1 is
+  a repository freeze: every open pull request is closed without merging. PR #177 (this session's
+  publication) was closed at 17:35:58Z with the owner comment naming the decision and the scrub
+  session. Reopening is refused while the freeze holds. The rewrite force-pushes every ref; this
+  session's local branch was reset to the scrubbed remote tip (`ec670fd`, tree identical to the
+  pre-rewrite content - the per-row source map, the FACT_SOURCES map and this section are all
+  present) and `verify.py` passes on it. **No pre-rewrite commit from this session's local history
+  is pushed anywhere.**
+- **State of the work: complete.** R-1 to R-3 are done and recorded above; R-4 is done except the
+  merge itself, which the freeze forbids. Nothing is left to build - only the reopen, the merge and
+  the deploy confirmation, which resume when the scrub session lifts the freeze (runbook step 2:
+  "close and re-open affected pull requests").
+- **Verification after the reset:** `verify.py` PASS on `ec670fd` (26 pages, ledger 115+ per the
+  scrubbed tree, all rows source-linked), my section present once, `FACT_SOURCES` present.
+
 ## Session `arena/9cb84094-tino3` — the keep-and-borrow case modelled end to end (closes the open "Add a mortgage case" improvement), fresh source re-reads for the borrowing anchors, publication · claimed 2026-11-17
 
 *Branch note:* Arena pins this session to `arena/9cb84094-tino3`, branched from `main` at `3b86d5a` (the merge of PR #156). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. At claim time `gh pr list --state open` returned nothing, so no other session held `scripts/model.py`, `assets/data/model.json` or `EXECUTIVE_SUMMARY.md`. While this claim was being pushed, `main` advanced to `02a9d55` (PRs #157, #158 and #159: two law-watch refreshes by `arena/11bff629-tino3` and `arena/5fb0dcb1-tino3`, which edit the law-page and index regions of `scripts/build.py` and append to `assets/sources.json`). This session's `scripts/build.py` edits are confined to the liquidity page, the what-if page, the improvements register and the README counts — different regions — and `assets/sources.json` is append-only, so the scopes do not overlap; the tree was rebased onto `02a9d55` before any shared file was edited and the gates were re-run on the rebased tree.

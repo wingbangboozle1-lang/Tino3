@@ -223,9 +223,19 @@ def eligibility_callout() -> str:
 
 
 def method_cell(href: str, text: str = "Model output", sources=None):
-    """A computed row. Links the method page and the official rules the model implements."""
-    ids = list(sources) if sources else CORE_SOURCES
-    links = "<br>".join(slink(i) for i in ids)
+    """A computed row. Links the method page and the official sources that bear on the row.
+
+    ``sources=None`` keeps the historical blanket CORE_SOURCES set for any call site that
+    has not been attributed yet. ``sources=[]`` is an explicit decision that the row has no
+    official source of its own (an owner figure, a stated scenario, a household rule or a
+    private quote): the cell then says so and links the register instead of implying
+    official backing. Per-row attribution is the rule; the blanket set is the fallback."""
+    ids = CORE_SOURCES if sources is None else list(sources)
+    if ids:
+        links = "<br>".join(slink(i) for i in ids)
+    else:
+        links = ('<span class="blank">no official source</span><br>'
+                 '<a class="src" href="review.html#register">Logged on the register</a>')
     return (f'<td class="src-cell"><span class="src-label">{esc(text)}</span><br>'
             f'<a class="src" href="{esc(href)}">Inputs and method</a><br>{links}</td>')
 
@@ -738,7 +748,7 @@ def page_executive_summary() -> str:
                 f"<td>{p['inherit_year']}</td><td>{esc(label)}</td>"
                 f"<td>{m(v['terminal'])}</td>"
                 f"<td>{m(v.get('outflow', 0))}</td>"
-                + method_cell("decision.html#method", "Model output"))
+                + method_cell("decision.html#method", "Model output", sources=["fred_casthpi", "fred_gs10", "damodaran_histret"]))
     term = table(
         "Terminal value after 30 years, by inheritance year and path. "
         "Baseline assumptions: house prices 4.0% a year, inflation 2.5%, equities 7.0% gross, "
@@ -768,11 +778,35 @@ def page_executive_summary() -> str:
         ("The repeal that did not happen", "The initiative that would have undone most of Proposition 19 failed to qualify for the November 2026 ballot, so the shelter arithmetic above is current law rather than law about to change. A replacement measure can be filed at any time; the Secretary of State's qualification dashboard is the official page that would show it."),
         ("The pre-commitment rule", "Before reading any projection, the household should write down what would make it choose each path. That register, with its decision columns empty, is on the <a href=\"precommit.html\">pre-commitment page</a>. Without it a single projection can be made to justify any path."),
     ]
-    fact_src = {"The borrowing question": ["fred_mortgage"]}
+    # Per-row source map for the dashboard's fact table: each fact links only to the
+    # official document that bears on it. An owner figure, a preference or a household
+    # procedure has no official source and is sent to the register instead of being
+    # dressed in the four core links (the defect logged open by arena/1c788435-tino3).
+    # "The borrowing question" was added by the keep-and-borrow work and keeps its
+    # mortgage anchor.
+    FACT_SOURCES = {
+        "The condition everything rests on": ["rtc63_2", "boe_prop19"],
+        "Property A": [],
+        "Property B": [],
+        "The tax cliff at transfer": ["boe_pub29", "rtc63_2"],
+        "Why moving in only half-helps": ["rtc63_2", "boe_lta25009"],
+        "The borrowing question": ["fred_mortgage"],
+        "The tax-free sale window": ["irs_basis", "irs_tc409"],
+        "The equity comparison": ["fred_casthpi", "fred_gs10"],
+        "The rental comparison": [],
+        "The estate position": ["sco_estate", "irs_estate", "irs_2027"],
+        "The biggest unknown": [],
+        "Mixed paths": ["fred_casthpi", "fred_gs10"],
+        "The clawback nobody models": ["rtc63_2"],
+        "How often it holds": ["fred_casthpi", "fred_gs10", "damodaran_histret"],
+        "What a sale actually costs the state": ["rtc11911", "rtc11930"],
+        "The repeal that did not happen": ["sos_initiative_status"],
+        "The pre-commitment rule": [],
+    }
+    assert set(FACT_SOURCES) == {k for k, _ in facts}, "every fact row needs a source decision"
     fact_rows = [
         f"<td><strong>{esc(k)}</strong></td><td>{v}</td>"
-        + src_cell(fact_src.get(k, ["boe_lta25009", "rtc63_2", "irs_basis", "sco_estate"]),
-                   "Key rules")
+        + src_cell(FACT_SOURCES[k], "Key rules")
         for k, v in facts]
     ftab = table("The important details", ["Detail", "What this analysis found"], fact_rows)
 
@@ -814,7 +848,7 @@ def page_decision() -> str:
             rows.append(f"<td>{p['inherit_year']}</td><td>{esc(label)}</td>"
                         f"<td>{m(v['terminal'])}</td>"
                         f"<td>{m(v.get('outflow', 0))}</td>"
-                        + method_cell("#method", "Model output"))
+                        + method_cell("#method", "Model output", sources=["fred_casthpi", "fred_gs10", "damodaran_histret"]))
     paths_table = table(
         "Terminal value after thirty years, by inheritance year and path",
         ["Inherited", "Path", "Terminal value", "Carrying tax and running costs (sell paths: cost of sale)", "Basis"], rows,
@@ -835,7 +869,7 @@ def page_decision() -> str:
             f"<td>{ret_cell(p['breakeven_return_vs_rent'])}</td>"
             f"<td>{pc(p['breakeven_house_growth'])}</td>"
             f"<td>{m(p['housing_value_needed'])}</td>"
-            + method_cell("#method", "Model output"))
+            + method_cell("#method", "Model output", sources=["fred_casthpi"]))
     be_table = table(
         "Break-even questions, answered",
         ["Inherited", "Rent needed per year", "Rent needed per month",
@@ -865,7 +899,7 @@ def page_decision() -> str:
             + cell("live_in", s["live_in"])
             + cell("rent_out", s["rent_out"])
             + f"<td><strong>{esc(PATH_LABELS[best_key])}</strong></td>"
-            + method_cell("#method", "Model output"))
+            + method_cell("#method", "Model output", sources=["fred_casthpi", "fred_gs10", "damodaran_histret"]))
     sens_total = len(MODEL["sensitivity"])
     sens_sell = sum(1 for s in MODEL["sensitivity"] if s["best"].startswith("sell"))
     reg_total = len(MODEL["regimes"])
@@ -928,7 +962,7 @@ model rebuilt.</p>
              "the same canonical monthly path the black-swan page stress-tests and back-tests. Cells where a "
              "sell path wins are shaded. All figures come from scripts/model.py; change "
              "assets/data/inputs.json and rebuild to explore other assumptions. "
-             + method_cell("#method", "Model output"))
+             + method_cell("#method", "Model output", sources=["fred_casthpi", "fred_gs10"]))
 
     return (
         eligibility_callout()
@@ -1029,7 +1063,7 @@ def insurance_band_section() -> str:
             f"<td>{m(r['live_gap'])}</td>"
             f"<td><strong>{esc(PATH_LABELS[r['best']])}</strong></td>"
             + (src_cell([r["kind"]], "Published figure") if r["kind"] in SOURCES
-               else method_cell("review.html#register", "Owner figure or stated scenario")))
+               else method_cell("review.html#register", "Owner figure or stated scenario", sources=[])))
     band_tbl = table(
         "Every path re-run at each rung of the Property A insurance band (2045 inheritance, thirty years)",
         ["Insurance carried", "A year", "Sell and invest", "Live in it", "Let it out",
@@ -1062,19 +1096,19 @@ def insurance_band_section() -> str:
             f"<td>{m(a_ins['low'])} to {m(a_ins['high'])} a year, {m(a_ins['mid'])} used</td>"
             f"<td>Owner's estimate in the middle, published averages at the floor, a stated upper "
             f"scenario at the ceiling.</td>"
-            + method_cell("review.html#register", "Band, owner estimate flagged"),
+            + method_cell("review.html#register", "Band, owner estimate flagged", sources=["cdi_homeowners_avg"]),
             f"<td>Property B band carried by the model</td>"
             f"<td>{m(b_ins['low'])} to {m(b_ins['high'])} a year, {m(b_ins['mid'])} used</td>"
             f"<td>Same construction. Property B's insurance is not charged to any Property A path, "
             f"because this building is already owned and already let; it enters the comparison only "
             f"through the value of the housing the household would consume by living there.</td>"
-            + method_cell("review.html#register", "Band, owner estimate flagged"),
+            + method_cell("review.html#register", "Band, owner estimate flagged", sources=["cdi_df_rental"]),
             f"<td>What the whole band is worth on the living path</td>"
             f"<td>{m(band.get('effect_on_live', 0))} of terminal value</td>"
             f"<td>The difference between the bottom and the top of the band, run through thirty years "
             f"of the model. Against the {m(cc.get('gap_live_at_baseline', 0))} gap between selling and "
             f"living, that is {cc.get('band_share_of_gap', 0)}%.</td>"
-            + method_cell("#method", "Model output"),
+            + method_cell("#method", "Model output", sources=["cdi_homeowners_avg", "cdi_df_rental"]),
             "<td>Share of California dwelling fire and owner-occupied exposures carrying $1,000,000 or "
             "more of insurance, 2023</td><td>8.4%</td>"
             f"<td>The reason the published average is treated as a floor rather than an estimate: "
@@ -1172,7 +1206,7 @@ def debt_section() -> str:
     body = []
     for item, status, needed, srcs in rows:
         cell = (src_cell(srcs, "Official source") if srcs
-                else method_cell("review.html#register", "No official source applies"))
+                else method_cell("review.html#register", "No official source applies", sources=[]))
         body.append(f"<td><strong>{esc(item)}</strong></td><td>{status}</td><td>{esc(needed)}</td>" + cell)
     tbl = table("What the comparison carries, and what it does not",
                 ["Element", "Status in this edition", "What is still needed", "Basis"], body,
@@ -1188,7 +1222,7 @@ def debt_section() -> str:
             f"<td>{m(term['sell_equities'])}</td><td>{m(term['live_in'])}</td>"
             f"<td>{m(term['rent_out'])}</td><td>{m(r['live_delta'])}</td>"
             f"<td><strong>{esc(PATH_LABELS[r['best']])}</strong></td>"
-            + method_cell("#method", "Model output"))
+            + method_cell("#method", "Model output", sources=["fred_casthpi", "fred_gs10"]))
     per_1000 = next((-r["live_delta"] for r in cc.get("debt_rows", [])
                      if r.get("monthly") == 1000), 0)
     cases = ""
@@ -1225,7 +1259,8 @@ def debt_section() -> str:
             f"<td>{esc(r['money_label'])}<br><span class='sub'>{pc(r['money_return_pct'])} a year</span></td>"
             f"<td>{m(r['terminal'])}</td><td>{m(live_term)}</td><td>{m(sell_term)}</td>"
             f"<td><strong>{esc(PATH_LABELS[r['best']])}</strong></td>"
-            + method_cell("#method", "Model output"))
+            + method_cell("#method", "Model output",
+                          sources=["fred_mortgage", "fred_casthpi", "fred_gs10"]))
     _base_row = next((r for r in bc.get("rows", [])
                       if r["ltv_pct"] == 50 and r["rate_pct"] == 7.11), {})
     _low_row = next((r for r in bc.get("rows", [])
@@ -1267,7 +1302,8 @@ def debt_section() -> str:
             f"<td>{m(r['terminal'])}</td><td>{m(r['delta_vs_live'])}</td>"
             f"<td>{m(r['gap_vs_sell'])}</td>"
             f"<td><strong>{esc(PATH_LABELS[r['best']])}</strong></td>"
-            + method_cell("#method", "Model output"))
+            + method_cell("#method", "Model output",
+                          sources=["fred_mortgage", "fred_tb3ms", "fred_nasdaq"]))
     extra_table = table(
         "Two more ways the same loan can end: parked, or meeting a crash at entry",
         ["Borrowed", "Rate charged", "What the money does", "Terminal",
@@ -1332,7 +1368,7 @@ def reinvestment_section() -> str:
     for r in stress["rows"]:
         rows.append(f"<td>{esc(r['label'])}</td><td>{m(r['terminal'])}</td>"
                     f"<td>{m(r['difference'])}</td><td>{esc(r['reading'])}</td>"
-                    + method_cell("black-swan.html", "Model output"))
+                    + method_cell("black-swan.html", "Model output", sources=["fred_cpiaucns", "fred_tb3ms", "fred_nasdaq"]))
     stress_tbl = table(
         "The staging choice, priced on the same engine as the headline",
         ["Case", "What the money becomes", "Difference from the same case without staging",
@@ -1404,7 +1440,7 @@ def mixed_section() -> str:
             f"<td>{m(r['terminal_price'])}</td>"
             f"{opened}{m(terminal)}</td>"
             f"<td>{m(gap)}</td>"
-            + method_cell("precommit.html#method", "Model output"))
+            + method_cell("precommit.html#method", "Model output", sources=["fred_casthpi", "fred_gs10"]))
     mixed_tbl = table(
         "Mixed paths: what happens if the household does one thing and then another",
         ["Path", "Years occupied", "Property tax paid over the period", "Sale price at the end",
@@ -1445,7 +1481,7 @@ def mixed_section() -> str:
         ("Extra property tax the clawback costs, over the thirty years", m(cb["difference"])),
     ]
     claw_rows = [f"<td>{esc(a)}</td><td><strong>{esc(b)}</strong></td>"
-                 + method_cell("review.html#register", "Model output, condition unverified")
+                 + method_cell("review.html#register", "Model output, condition unverified", sources=["rtc63_2"])
                  for a, b in clawback_rows]
     claw_tbl = table(
         "The Proposition 19 clawback: what moving out costs on the live-then-let path",
@@ -1521,7 +1557,12 @@ def page_precommit() -> str:
             f"<td>{esc(r['decides_if'])}</td>"
             f"<td>{esc(r['would_override_if'])}</td>"
             f"<td>{on}</td><td>{by}</td>"
-            + method_cell("review.html#register", "Household rule, not a figure"))
+            # A household rule that quotes or turns on the exclusion statute links that
+            # statute; every other rule is a preference with no official publisher.
+            + method_cell("review.html#register", "Household rule, not a figure",
+                          sources=["rtc63_2"] if any(
+                              k in (r["decides_if"] + " " + r["would_override_if"])
+                              for k in ("63.2", "exclusion", "clawback")) else []))
     rule_table = table(
         "The pre-commitment register: what decides each path, written before the figures",
         ["Rule", "Path", "The household chooses this path if...", "...but this would override it",
@@ -1539,7 +1580,7 @@ def page_precommit() -> str:
             f"<td>{esc(g['definition'])}</td>"
             f"<td>{g['priority']}</td>"
             f'<td><span class="blank">not yet agreed</span></td>'
-            + method_cell("review.html#register", "Household objective, not a figure"))
+            + method_cell("review.html#register", "Household objective, not a figure", sources=[]))
     goal_table = table(
         "The household's own objectives, in priority order",
         ["Goal", "Objective", "What it means in this decision", "Priority", "Agreed on"],
@@ -1555,7 +1596,7 @@ def page_precommit() -> str:
             f"<td><strong>{esc(g['id'])}</strong></td><td>{esc(g['when'])}</td>"
             f"<td>{esc(g['what'])}</td>"
             f'<td><span class="badge assumption">not yet held</span></td>'
-            + method_cell("review.html#register", "Procedure, not a figure"))
+            + method_cell("review.html#register", "Procedure, not a figure", sources=[]))
     gate_table = table(
         "The gates: what must be true before any step is taken",
         ["Gate", "When", "What has to be true", "Status", "Source"], gate_rows,
@@ -1571,7 +1612,7 @@ def page_precommit() -> str:
             shown = m(adj) if adj is not None else m(p["asset_terminal"])
             cells.append(f"<td>{shown}</td>")
         rent_rows.append(f"<td>{m(point['rent'])} a year</td>" + "".join(cells)
-                         + method_cell("#method", "Scenario, not a quote"))
+                         + method_cell("#method", "Scenario, not a quote", sources=[]))
     rent_table = table(
         "The imputed-rent test: what living in the house has to be worth",
         ["Assumed market rent", "Live in it 30 years, then sell: value including the rent saved",
@@ -1590,7 +1631,7 @@ def page_precommit() -> str:
             f"<td>{esc(b['label'])}</td><td>{m(b['annual_rent'])}</td>"
             f"<td>{m(b['monthly_rent'])}</td>"
             f"<td>{pcf(b['share_of_value_at_death'], 1)} of the value at death</td>"
-            + method_cell("review.html#register", "Model output, rent unverified"))
+            + method_cell("review.html#register", "Model output, rent unverified", sources=[]))
     be_table = '<h2 id="imputed">What living there has to be worth</h2>' + table(
         "The imputed-rent break-even: the market rent at which occupying the house matches selling",
         ["Path", "Rent needed per year", "Rent needed per month", "As a share of the value at death",
@@ -1665,7 +1706,7 @@ def page_property_a() -> str:
         ["Line", "Amount", "Basis"],
         [
             f"<td>Market value at transfer, modelled</td><td>{m(p45['value_at_death'])}</td>"
-            + method_cell("projections.html#method", "Model output"),
+            + method_cell("projections.html#method", "Model output", sources=["fred_casthpi"]),
             f"<td>Assessed value if nothing changes, grown at the 2% cap</td>"
             f"<td>{m(p45['factored_base_year_value'])}</td>"
             + src_cell(["boe_pub29", "rtc51"], "Proposition 13"),
@@ -1683,11 +1724,11 @@ def page_property_a() -> str:
             f"<td><strong>{m(p45['taxable_if_rent'])}</strong></td>"
             + src_cell(["boe_pub29", "rtc63_2"], "Full reassessment"),
             f"<td>Tax bill today, projected to 2045</td><td>{m(p45['bill_today_projected'])}</td>"
-            + method_cell("projections.html#method", "Model output"),
+            + method_cell("projections.html#method", "Model output", sources=["boe_pub29", "rtc51"]),
             f"<td>Tax bill from 2045, heir moves in</td><td>{m(p45['bill_if_live_year1'])}</td>"
-            + method_cell("projections.html#method", "Model output"),
+            + method_cell("projections.html#method", "Model output", sources=["rtc63_2", "boe_lta25009"]),
             f"<td>Tax bill from 2045, heir does not move in</td><td>{m(p45['bill_if_rent_year1'])}</td>"
-            + method_cell("projections.html#method", "Model output"),
+            + method_cell("projections.html#method", "Model output", sources=["rtc63_2", "boe_pub29"]),
         ],
         note="The statute enrols the inherited home at the transferor's factored base year value plus the "
              "indexed amount, and adds to that the excess of the market value over the two; the rows above are "
@@ -1931,7 +1972,7 @@ def page_property_b() -> str:
         f"<td>{m(ph['totals_to_expiry']['low'])}</td>"
         f"<td>{m(ph['totals_to_expiry']['baseline'])}</td>"
         f"<td>{m(ph['totals_to_expiry']['high'])}</td>"
-        + method_cell("#method", "Model output"))
+        + method_cell("#method", "Model output", sources=[]))
     ph_schedule = table(
         "Property B parcel tax by fiscal year, at the modelled inflation band",
         ["Fiscal year", "At 1.8% inflation", "At 2.5% inflation", "At 3.0% inflation", "Source"],
@@ -2059,7 +2100,7 @@ def capital_plan_section() -> str:
             total += amt
             rows.append(f"<td>{2026 + i}</td><td>{m(money10(value * ((1 + growth) ** i)))}</td>"
                         f"<td>{pcf(rate, 2)}</td><td>{m(amt)}</td><td>{m(total)}</td>"
-                        + method_cell("#method", "Assumption, no quote"))
+                        + method_cell("#method", "Assumption, no quote", sources=[]))
         return rows
 
     a_rows = five_year_budget(a, own, "Property A, owner-occupied")
@@ -2080,27 +2121,27 @@ def capital_plan_section() -> str:
             "<td>Roof covering and flashings</td><td>20 to 30 years</td><td>No quote</td>"
             "<td>The largest single item in most five-year windows. A replacement landing inside the window "
             "can consume several years of the allowance at once.</td>"
-            + method_cell("#method", "Assumption, no quote"),
+            + method_cell("#method", "Assumption, no quote", sources=[]),
             "<td>Exterior paint and siding</td><td>7 to 10 years</td><td>No quote</td>"
             "<td>Predictable and deferrable, which is what makes it the usual casualty of a tight year.</td>"
-            + method_cell("#method", "Assumption, no quote"),
+            + method_cell("#method", "Assumption, no quote", sources=[]),
             "<td>Water heater</td><td>10 to 15 years</td><td>No quote</td>"
             "<td>Emergency replacement; cannot be deferred and does not improve value.</td>"
-            + method_cell("#method", "Assumption, no quote"),
+            + method_cell("#method", "Assumption, no quote", sources=[]),
             "<td>Furnace and ductwork</td><td>15 to 25 years</td><td>No quote</td>"
             "<td>An efficiency-driven replacement is larger than a like-for-like repair.</td>"
-            + method_cell("#method", "Assumption, no quote"),
+            + method_cell("#method", "Assumption, no quote", sources=[]),
             "<td>Solar inverter and monitoring</td><td>10 to 15 years</td><td>No quote</td>"
             "<td>Property A has solar. The panels outlast the inverter, so an inverter replacement is likely "
             "inside a long hold and the net electricity benefit in the projection does not include it.</td>"
-            + method_cell("#method", "Assumption, no quote"),
+            + method_cell("#method", "Assumption, no quote", sources=[]),
             "<td>Windows and doors</td><td>20 to 30 years</td><td>No quote</td>"
             "<td>Usually deferred to sale, which means a buyer discounts for it instead of the owner paying for it.</td>"
-            + method_cell("#method", "Assumption, no quote"),
+            + method_cell("#method", "Assumption, no quote", sources=[]),
             "<td>Unit turnover: paint, flooring, appliances (Property B only)</td><td>On vacancy</td><td>No quote</td>"
             "<td>This is why a rental carries a higher rate than an owner-occupied home. It is also the item "
             "the letting path is most sensitive to, because it arrives when the tenant leaves, not on a schedule.</td>"
-            + method_cell("#method", "Assumption, no quote"),
+            + method_cell("#method", "Assumption, no quote", sources=[]),
         ],
         note="A list of what the allowance is for, not a quote for any of it. No component cost is published "
              "because none has been quoted, and a fabricated roof price would be worse than a blank.")
@@ -2115,7 +2156,7 @@ def capital_plan_section() -> str:
             f"<td>{label}</td><td>{pcf(own, 2)}</td><td>{pcf(rental, 2)}</td>"
             f"<td>{m(money10(a * (rental - own)))} a year, rising with inflation</td>"
             f"<td>{m(money10(a * (rental - own) * 5))} over five years</td><td>{m(terminal)}</td>"
-            + method_cell("#method", "Model output"))
+            + method_cell("#method", "Model output", sources=[]))
     switch = table(
         "What the same house costs to keep when a tenant lives in it",
         ["Path", "Owner-occupied rate", "Rental rate used by this site",
@@ -2160,7 +2201,7 @@ def page_costs() -> str:
                        f"<td>{m(money10(base['maintenance'] * f))}</td>"
                        f"<td>{m(money10(tax))}</td>"
                        f"<td><strong>{m(money10(total))}</strong></td>"
-                       + method_cell("#method", "Model output"))
+                       + method_cell("#method", "Model output", sources=["boe_pub29", "rtc51"]))
         return out
 
     tbl_a = table("Property A running costs, projected at the modelled inflation rate",
@@ -2246,7 +2287,7 @@ for either building appears on this site; both remain owner estimates flagged un
                     f"<td>Less insurance</td><td>{m(-net['insurance'])}</td>" + src_cell([], "Owner estimate, unverified"),
                     f"<td>Less maintenance at the assumed rate</td><td>{m(-net['maintenance'])}</td>" + src_cell([], "Assumption"),
                     f"<td>Less property tax</td><td>{m(-net['property_tax'])}</td>" + src_cell([], "Local rate withheld for privacy"),
-                    f"<td><strong>Net, before income tax and vacancy</strong></td><td><strong>{m(net_now)}</strong></td>" + method_cell("#method", "Model output"),
+                    f"<td><strong>Net, before income tax and vacancy</strong></td><td><strong>{m(net_now)}</strong></td>" + method_cell("#method", "Model output", sources=[]),
                 ],
                 note=f"That is about {net_now / B['estimated_market_value_2026'] * 100:.1f}% of the estimated value. "
                      f"A vacancy allowance and income tax would reduce it further.")
@@ -2290,7 +2331,7 @@ def page_projections() -> str:
         for r in proj:
             out.append(f"<td>{r['year']}</td><td>{m(r['value'])}</td><td>{m(r['assessed'])}</td>"
                        f"<td>{m(r['bill'])}</td><td>{r['effective_rate']}%</td>"
-                       + method_cell("#method", "Model output"))
+                       + method_cell("#method", "Model output", sources=["boe_pub29", "rtc51"]))
         return out
 
     excl_rows = [f"<td>{e['year']}</td><td>{m(e['amount'])}</td><td>{esc(e['basis'])}</td>"
@@ -2414,7 +2455,7 @@ def sale_charges_section() -> str:
     out = []
     for a, b, srcs in rows:
         cell = (src_cell(srcs, "Official source") if srcs
-                else method_cell("review.html#register", "Private cost or deliberate omission"))
+                else method_cell("review.html#register", "Private cost or deliberate omission", sources=[]))
         out.append(f"<td>{a}</td><td>{b}</td>" + cell)
     tbl = table(
         "What a sale actually owes the state and the county, itemised on a $5,000,000 price",
@@ -2481,14 +2522,14 @@ def page_taxes() -> str:
                    ["Line", "Sell at inheritance", "Live in it, sell after 30 years",
                     "Let it out, sell after 30 years", "Basis"],
                    [
-                       f"<td>Sale price</td><td>{m(now_sale['price'])}</td><td>{m(late_sale['price'])}</td><td>{m(rent_sale['price'])}</td>" + method_cell("#method", "Model output"),
-                       f"<td>Selling costs</td><td>{m(now_sale['costs'])}</td><td>{m(late_sale['costs'])}</td><td>{m(rent_sale['costs'])}</td>" + method_cell("#method", "Model output"),
-                       f"<td>Basis</td><td>{m(now_sale['basis'])}</td><td>{m(late_sale['basis'])}</td><td>{m(rent_sale['basis'])}</td>" + method_cell("#method", "Model output"),
-                       f"<td>Gain</td><td>{m(now_sale['gain'])}</td><td>{m(late_sale['gain'])}</td><td>{m(rent_sale['gain'])}</td>" + method_cell("#method", "Model output"),
-                       f"<td>Of which depreciation recapture</td><td>{m(now_sale['recapture'])}</td><td>{m(late_sale['recapture'])}</td><td>{m(rent_sale['recapture'])}</td>" + method_cell("#method", "Model output"),
+                       f"<td>Sale price</td><td>{m(now_sale['price'])}</td><td>{m(late_sale['price'])}</td><td>{m(rent_sale['price'])}</td>" + method_cell("#method", "Model output", sources=["fred_casthpi"]),
+                       f"<td>Selling costs</td><td>{m(now_sale['costs'])}</td><td>{m(late_sale['costs'])}</td><td>{m(rent_sale['costs'])}</td>" + method_cell("#method", "Model output", sources=[]),
+                       f"<td>Basis</td><td>{m(now_sale['basis'])}</td><td>{m(late_sale['basis'])}</td><td>{m(rent_sale['basis'])}</td>" + method_cell("#method", "Model output", sources=["irs_basis"]),
+                       f"<td>Gain</td><td>{m(now_sale['gain'])}</td><td>{m(late_sale['gain'])}</td><td>{m(rent_sale['gain'])}</td>" + method_cell("#method", "Model output", sources=["irs_basis", "irs_tc409"]),
+                       f"<td>Of which depreciation recapture</td><td>{m(now_sale['recapture'])}</td><td>{m(late_sale['recapture'])}</td><td>{m(rent_sale['recapture'])}</td>" + method_cell("#method", "Model output", sources=["irs_tc409"]),
                        f"<td>Section 121 exclusion</td><td>{m(now_sale['exclusion'])}</td><td>{m(late_sale['exclusion'])}</td><td>{m(rent_sale['exclusion'])}</td>" + src_cell(["irs_p523"], "Exclusion rule"),
-                       f"<td><strong>Tax</strong></td><td><strong>{m(now_sale['tax'])}</strong></td><td><strong>{m(late_sale['tax'])}</strong></td><td><strong>{m(rent_sale['tax'])}</strong></td>" + method_cell("#method", "Model output"),
-                       f"<td><strong>Net proceeds</strong></td><td><strong>{m(now_sale['net'])}</strong></td><td><strong>{m(late_sale['net'])}</strong></td><td><strong>{m(rent_sale['net'])}</strong></td>" + method_cell("#method", "Model output"),
+                       f"<td><strong>Tax</strong></td><td><strong>{m(now_sale['tax'])}</strong></td><td><strong>{m(late_sale['tax'])}</strong></td><td><strong>{m(rent_sale['tax'])}</strong></td>" + method_cell("#method", "Model output", sources=["irs_tc409", "ftb_cg", "rtc17043"]),
+                       f"<td><strong>Net proceeds</strong></td><td><strong>{m(now_sale['net'])}</strong></td><td><strong>{m(late_sale['net'])}</strong></td><td><strong>{m(rent_sale['net'])}</strong></td>" + method_cell("#method", "Model output", sources=["irs_basis", "irs_tc409"]),
                    ],
                    note="Same house, same thirty years, three very different tax outcomes. The difference is "
                         "entirely the basis reset at death plus the depreciation taken in the rental case.")
@@ -2555,7 +2596,7 @@ def surcharge_block() -> str:
             f"<td>{esc(r['label'])}</td><td>{m(r['gain'])}</td>"
             f"<td>{m(r['tax_without_surcharge'])}</td><td>{m(r['tax_with_surcharge'])}</td>"
             f"<td>{m(r['difference'])}</td>"
-            + method_cell("#method", "Model output"))
+            + method_cell("#method", "Model output", sources=["rtc17043", "ftb_540_instructions_2025"]))
     tbl = table("What the surcharge does to the tax on each path, 2045 inheritance",
                 ["Path", "Taxable gain", "Tax at the rate without it",
                  "Tax at the rate with it", "Surcharge effect", "Basis"],
@@ -2614,7 +2655,7 @@ robust, the magnitude is an upper bound.</p>""")
                  f"<td><strong>Combined rate in the model</strong></td>"
                  f"<td><strong>{pcf(ss['rate_with'], 1)}</strong></td>"
                  f"<td>The whole gain, with no federal deduction for state tax taken</td>"
-                 + method_cell("#method", "Model output")],
+                 + method_cell("#method", "Model output", sources=["irs_tc409", "ftb_rates_2026", "rtc17043"])],
                 note="The top California bracket is indexed every year, so its start rises; section 17043's "
                      "threshold does not. The model applies the combined rate to the entire gain, which "
                      "overstates the tax rather than understating it.")
@@ -2645,7 +2686,7 @@ def surcharge_worksheet_section() -> str:
                 f"<td>{esc(block['label'])}</td><td>{m(block['gain'])}</td>"
                 f"<td>{esc(r['label'])}</td><td>{m(r['taxable_income'])}</td>"
                 f"<td>{m(r['above_threshold'])}</td><td>{m(r['surcharge'])}</td>"
-                + method_cell("#method", "Model output"))
+                + method_cell("#method", "Model output", sources=["ftb_540_instructions_2025", "rtc17043"]))
     marginal = table(
         "The line 62 worksheet on the same three sales",
         ["Path", "Taxable gain", "Other taxable income in the year of sale",
@@ -2666,7 +2707,7 @@ def surcharge_worksheet_section() -> str:
          f"<td>{m(b['rungs'][0]['surcharge_on_gain'])}</td>"
          f"<td>{m(b['rungs'][2]['surcharge_on_gain'])}</td>"
          + f"<td>{'Nothing to tax' if b['gain'] == 0 else 'The ceiling holds'}</td>"
-         + method_cell("#method", "Model output") for b in ws],
+         + method_cell("#method", "Model output", sources=["rtc17043", "ftb_540_instructions_2025"]) for b in ws],
         note=("The middle and right columns count only the part of the surcharge that disappears if "
               "the house is not sold. Other income above the threshold attracts the 1% whether or not "
               "a sale happens, so charging that part to the sale would overstate what the decision "
@@ -4685,7 +4726,7 @@ def recheck_section() -> str:
     body = []
     for item, detail, srcs in rows:
         cell = (src_cell(srcs, "Official source") if srcs
-                else method_cell("review.html#register", "Withheld for privacy, logged on the register"))
+                else method_cell("review.html#register", "Withheld for privacy, logged on the register", sources=[]))
         body.append(f"<td><strong>{esc(item)}</strong></td><td>{detail}</td>" + cell)
     return ('<h2 id="recheck">Official-source recheck, 16 November 2026</h2>'
             + callout("note", "Why this is published", """
@@ -4938,7 +4979,7 @@ def recheck_17nov_section() -> str:
     body = []
     for item, detail, srcs in rows:
         cell = (src_cell(srcs, "Official source") if srcs
-                else method_cell("review.html#register", "Withheld for privacy, logged on the register"))
+                else method_cell("review.html#register", "Withheld for privacy, logged on the register", sources=[]))
         body.append(f"<td><strong>{esc(item)}</strong></td><td>{detail}</td>" + cell)
     return ('<h2 id="recheck-2">Official-source recheck, 17 November 2026</h2>'
             + callout("note", "Why there are two re-check tables", """
@@ -5076,7 +5117,7 @@ def roll_audit_section() -> str:
                 f"<td>{label}</td><td>{f['year']}</td><td>{m(f['bill'])}</td>"
                 f"<td>{m(f['assessed'])}</td><td>{m(f['ad_valorem'])}</td>"
                 f"<td>{m(f['fixed'])}</td><td>{f['fixed_pct']}%</td>"
-                + method_cell("#method", "Model output"))
+                + method_cell("#method", "Model output", sources=["boe_pub29", "rtc51"]))
         return out
 
     def finding(n, title, body, status):
@@ -5219,15 +5260,15 @@ def assumption_register() -> str:
                                           "published for one fiscal year")):
                 measured += 1
                 how = "Measured from the record"
-                source = src_cell(srcs, "Where the band comes from") if srcs else method_cell("#method")
+                source = src_cell(srcs, "Where the band comes from") if srcs else method_cell("#method", sources=[])
             else:
                 how = "Stated scenario"
-                source = method_cell("#method", "Stated, not sourced")
+                source = method_cell("#method", "Stated, not sourced", sources=[])
             basis = band_basis
         else:
             how = "Point input"
             basis = a.get("basis", "")
-            source = method_cell("#method")
+            source = method_cell("#method", sources=[])
         rows.append(
             f"<td><strong>{esc(label)}</strong></td><td>{fmt(base)}</td>"
             f"<td>{fmt(low)}</td><td>{fmt(high)}</td>"
@@ -5272,7 +5313,7 @@ def imputed_rent_section() -> str:
             f"<td>{m(r['credit_fv'])}</td><td>{m(r['terminal'])}</td>"
             f"<td>{m(r['gap_to_sell'])}</td>"
             f'<td><span class="badge {"verified" if r["living_wins"] else "unverified"}">{verdict}</span></td>'
-            + method_cell("#method", "Model output"))
+            + method_cell("#method", "Model output", sources=["fred_casthpi", "fred_gs10", "damodaran_histret"]))
     pct_needed = next((r["share"] for r in ir["rows"] if r["living_wins"]), None)
     return (
         '<h2 id="imputed-rent">The living path, and the rent it does not pay itself</h2>'
@@ -5493,7 +5534,7 @@ def page_review() -> str:
         "A sheltered base is assumed to survive a later move-out": ["rtc63_2_eligibility", "boe_prop19"],
         "Every reassessment figure is conditional on the parent-and-child relationship": ["rtc63_2_eligibility"],
         "The dated equity-entry backtest uses an academic return series": ["damodaran_histret", "fedhist_1929", "fedhist_greatrecession"],
-        "Both properties are projected with the same state-level house price index": ["fred_casthpi", "fred_casthpi"],
+        "Both properties are projected with the same state-level house price index": ["fred_casthpi"],
         "Insurance above the insurer-of-last-resort cap": ["cdi_fairplan"],
         "Jurisdiction names and their official pages are withheld from the public site": [],
     }
@@ -5526,7 +5567,8 @@ def page_review() -> str:
          "The coordination board records the full disposition. Nothing on this site depends on them."),
         ("The site is published from the repository root by Jekyll",
          "The GitHub Pages source is set to the main branch at the repository root, with a configuration file excluding everything outside the published allowlist. A separate workflow also builds an allowlisted artifact.",
-         "The publishing route should be confirmed live after every change. The exclusion list is the control that keeps the rest of the repository out of the site."),
+         "The publishing route should be confirmed live after every change. The exclusion list is the control that keeps the rest of the repository out of the site.",
+         ["gh_pages_docs"]),
         ("Verification is a build-time check, not a legal review",
          "The verifier checks that every published table row carries a source link, that no forbidden identifier appears, and that the build is reproducible.",
          "It cannot check whether a legal reading is correct. That needs a professional."),
@@ -5551,8 +5593,12 @@ def page_review() -> str:
          "None on the numbers: the model's own rates and every dollar figure computed from them were always right, and no projection or recommendation changed. Only the printed percentages were wrong, so a reader of the earlier edition could have misread the top combined rate as 3710% instead of 37.1%.",
          ["rtc17043", "ftb_540_instructions_2025", "ftb_rates", "ftb_rates_2026"]),
     ]
+    # No blanket fallback: an audit row with no stated sources is a repository finding
+    # with no official publisher, and it says so on the register instead of borrowing the
+    # Proposition 19 letter and the IRS estate page (the second half of the gap logged
+    # open by arena/1c788435-tino3).
     aud_rows = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td>"
-                + src_cell(rest[0] if rest else ["boe_lta25009", "irs_estate"], "Related sources")
+                + src_cell(rest[0] if rest else [], "Related sources")
                 for a, b, c, *rest in audit]
 
     return (
@@ -5796,7 +5842,7 @@ def policy_section() -> str:
     ]:
         rows.append(f"<td>{esc(when)}</td><td><strong>{esc(item)}</strong></td><td>{esc(why)}</td>"
                     f'<td><a href="precommit.html">{esc(gate)}</a></td>'
-                    + method_cell("precommit.html", "Household rule, not a figure"))
+                    + method_cell("precommit.html", "Household rule, not a figure", sources=[]))
     tbl = table(
         "The written investing policy: what has to be decided before the money arrives",
         ["When it is due", "What the policy must answer", "Why it cannot wait", "Gate", "Status"], rows,
@@ -6003,7 +6049,7 @@ def page_what_if() -> str:
             for k in ["sell_equities", "sell_treasury", "live_in", "rent_out"])
         return (f"<td><a id='{anchor}'></a>{pc(s['house_growth'], 1)}</td><td>{pc(s['equity_return'], 1)}</td>"
                 + cells + f"<td><strong>{esc(PATH_LABELS[best])}</strong></td>"
-                + method_cell("#method", "Model output"))
+                + method_cell("#method", "Model output", sources=["fred_casthpi", "fred_gs10", "damodaran_histret"]))
 
     lever_hdr = ["House growth", "Equity return", "Sell, equities", "Sell, Treasuries",
                  "Live in it", "Let it out", "Best path", "Basis"]
@@ -6032,7 +6078,7 @@ def page_what_if() -> str:
             f"<td><a id='regime-{i}'></a>{esc(r['name'])}</td><td>{pc(r['cpi'], 1)}</td>"
             f"<td>{pc(r['house'], 1)}</td><td>{pc(r['treasury'], 1)}</td>"
             + cells + f"<td><strong>{esc(PATH_LABELS[best])}</strong></td>"
-            + method_cell("black-swan.html", "Stress regime"))
+            + method_cell("black-swan.html", "Stress regime", sources=["fred_casthpi", "fred_tb3ms", "fred_nasdaq"]))
     reg_table = table(
         "Stress regimes: each one is a case",
         ["Regime", "Inflation a year", "House prices a year", "Treasury yield",
@@ -6050,7 +6096,7 @@ def page_what_if() -> str:
             for k in ["sell_equities", "sell_treasury", "live_in", "live_then_rent", "rent_out"])
         yr_rows.append(f"<td><a id='year-{y}'></a>{y}</td>" + cells
                        + f"<td><strong>{esc(PATH_LABELS[best])}</strong></td>"
-                       + method_cell("#method", "Model output"))
+                       + method_cell("#method", "Model output", sources=["fred_nasdaq", "fred_tb3ms", "fred_cpiaucns"]))
     yr_table = table(
         "Inheritance year: each one is a case",
         ["Inherited", "Sell, equities", "Sell, Treasuries", "Live in it", "Live in it, then let it",
@@ -6069,7 +6115,7 @@ def page_what_if() -> str:
     be_table = table(
         "Break-even thresholds, 2045 inheritance",
         ["Threshold", "Value"],
-        [f"<td>{a}</td><td>{b}</td>" + method_cell("#method", "Model output") for a, b in be_rows],
+        [f"<td>{a}</td><td>{b}</td>" + method_cell("#method", "Model output", sources=["fred_casthpi", "fred_gs10"]) for a, b in be_rows],
         note="A negative return means selling still matches living even if the sale proceeds lose that much a year.")
 
     # ---------------------------------------------------------------- imputed rent --
@@ -6088,7 +6134,7 @@ def page_what_if() -> str:
             f"<td>{m(r['sell_terminal'])}</td>"
             + ret_cell(r["return_required"])
             + f"<td><strong>{esc(PATH_LABELS[r['best']])}</strong></td>"
-            + method_cell("#method", "Model output"))
+            + method_cell("#method", "Model output", sources=["fred_casthpi", "fred_gs10"]))
     im_table = table(
         "Lever 3: imputed rent credited to the living path (2045 inheritance)",
         ["Imputed rent a month (stated)", "A year", "Added to the living path",
@@ -6123,7 +6169,7 @@ def page_what_if() -> str:
             f"<td>{m(r['live_gap'])}</td>"
             f"<td><strong>{esc(PATH_LABELS[r['best']])}</strong></td>"
             + (src_cell([r["kind"]], "Published figure") if r.get("kind") in SOURCES
-               else method_cell("review.html#register", "Owner figure or stated scenario")))
+               else method_cell("review.html#register", "Owner figure or stated scenario", sources=[])))
     ins_table = table(
         "Lever 4: the insurance premium on Property A, across the whole band (2045 inheritance)",
         ["Rung", "A year", "Sell, equities", "Sell, Treasuries", "Live in it", "Let it out",
@@ -6148,7 +6194,7 @@ def page_what_if() -> str:
             f"<td>{m(t['live_in'])}</td><td>{m(t['rent_out'])}</td>"
             f"<td>{m(r['live_delta'])}</td>"
             f"<td><strong>{esc(PATH_LABELS[r['best']])}</strong></td>"
-            + method_cell("#method", "Model output"))
+            + method_cell("#method", "Model output", sources=["fred_casthpi", "fred_gs10"]))
     debt_table = table(
         "Lever 5: a debt service added to the keeping paths, if either building is encumbered (2045 inheritance)",
         ["Stated payment", "A year", "Sell, equities", "Live in it", "Let it out",
@@ -6175,7 +6221,8 @@ def page_what_if() -> str:
             f"<td>{m(r['route_keep_live'])}</td><td>{m(r['route_keep_rent'])}</td>"
             f"<td>{m(r['route_sell_pay'])}</td>"
             f"<td><strong>{esc(r['best_route'])}</strong></td>"
-            + method_cell("liquidity.html", "Keep-and-borrow case"))
+            + method_cell("liquidity.html", "Keep-and-borrow case",
+                          sources=["fred_mortgage", "fred_casthpi", "fred_gs10"]))
     kb_table = table(
         "Lever 6: borrow the estate's tax against the kept house instead of selling (2045 inheritance, band by band)",
         ["Tax to raise", "Monthly payment on a 30-year fixed loan", "Keep it, live in it, borrow",
@@ -6207,7 +6254,8 @@ def page_what_if() -> str:
             f"<td>{m(r['terminal'])}</td><td>{m(live7)}</td><td>{m(sell7)}</td>"
             f"<td>{m(r['delta_vs_live'])}</td>"
             f"<td><strong>{esc(PATH_LABELS[r['best']])}</strong></td>"
-            + method_cell("#method", "Model output"))
+            + method_cell("#method", "Model output",
+                          sources=["fred_mortgage", "fred_casthpi", "fred_gs10"]))
     for r, anchor in ((bc7.get("park_row"), "borrow-park"),
                       (bc7.get("crash_row"), "borrow-crash")):
         if not r:
@@ -6220,7 +6268,8 @@ def page_what_if() -> str:
             f"<td>{m(r['terminal'])}</td><td>{m(live7)}</td><td>{m(sell7)}</td>"
             f"<td>{m(r['delta_vs_live'])}</td>"
             f"<td><strong>{esc(PATH_LABELS[r['best']])}</strong></td>"
-            + method_cell("#method", "Model output"))
+            + method_cell("#method", "Model output",
+                          sources=["fred_mortgage", "fred_tb3ms", "fred_nasdaq"]))
     borrow_table7 = table(
         "Lever 7: borrow against the inherited house and invest the proceeds instead of selling it (2045 inheritance)",
         ["Borrowed", "Rate charged", "What the money does", "Borrow-and-keep terminal",
@@ -6316,25 +6365,25 @@ def page_decision_rules() -> str:
                  "No change to the model.",
                  "Re-run the model before deciding. The 10% band is a proposal for the owner to adopt or change.",
                  "The model starts from the owner's estimate, unverified.",
-                 ], method_cell("decision.html", "Model input, unverified")),
+                 ], method_cell("decision.html", "Model input, unverified", sources=[])),
             row(["G4", "Does a documented rent opinion for comparable housing, where the heir would otherwise live, exceed the imputed-rent break-even for the year of inheritance?",
                  "A written rent opinion for comparable housing in the place the heir would live, and the inheritance year.",
                  "The living path beats selling and investing on the model's assumptions.",
                  "Selling and investing (section 2, rule R2).",
                  f"2045: about {m(p45['imputed_rent_breakeven_monthly'])} a month, in 2045 dollars, rising with inflation.",
-                 ], method_cell("decision.html", "Model output")),
+                 ], method_cell("decision.html", "Model output", sources=[])),
             row(["G5", "Does a documented market rent for Property A exceed the letting break-even?",
                  "An independent rent opinion for Property A.",
                  "Letting becomes a candidate to compare with selling.",
                  "Letting stays a floor, not a comparison. The site credits no rent today.",
                  f"2045: about {m(p45['breakeven_rent_monthly'])} a month, in 2045 dollars.",
-                 ], method_cell("decision.html", "Model output")),
+                 ], method_cell("decision.html", "Model output", sources=[])),
             row(["G6", "Does the best independent forecast of house growth over thirty years exceed the growth needed for keeping the home to match selling?",
                  "A forecast with a stated source and a stated range.",
                  "Keeping the home is a candidate.",
                  "Sell.",
                  f"2045: {pc(p45['breakeven_house_growth'])} a year. The model baseline is {pcf(ASM['house_growth']['baseline'], 1)}.",
-                 ], method_cell("decision.html", "Model output")),
+                 ], method_cell("decision.html", "Model output", sources=["fred_casthpi"])),
             row(["G7", "Does the gross estate, with adjusted taxable gifts, exceed the federal basic exclusion?",
                  "An estate inventory, a record of prior taxable gifts and the portability decision.",
                  "An estate liquidity plan and a review of the federal return are needed before the sale.",
@@ -6367,7 +6416,7 @@ def page_decision_rules() -> str:
             row(["R2", "G1 met, and G2 or G4 not met",
                  "Sell soon after inheritance. Invest the proceeds under the policy in section 3.",
                  "Selling leads in the baseline run of the path table, and it does not depend on occupancy or on finding a tenant. The sensitivity and regime runs are on the what-if and black-swan pages.",
-                 blank], method_cell("decision.html", "Model output")),
+                 blank], method_cell("decision.html", "Model output", sources=["fred_casthpi", "fred_gs10"])),
             row(["R3", "G1 not met",
                  "Sell (no exclusion). Re-run the sale and tax figures with the attorney and the CPA.",
                  "Without the exclusion the reassessment is to full value, which favours a sale.",
@@ -6375,7 +6424,7 @@ def page_decision_rules() -> str:
             row(["R4", "G5 met",
                  "Letting becomes a candidate. Compare it with selling on the rent opinion, not on the model's zero rent.",
                  "The letting paths are a floor until a documented rent exists.",
-                 blank], method_cell("decision.html", "Model output")),
+                 blank], method_cell("decision.html", "Model output", sources=[])),
             row(["R5", "G3 not met",
                  "Re-run the model on the independent value. Re-test G4 and G6 before deciding.",
                  "Every reassessment and sale figure scales with the value at death.",
@@ -6383,7 +6432,7 @@ def page_decision_rules() -> str:
             row(["R6", "A mixed path is wanted (for example, part of the proceeds invested at once and the rest phased)",
                  "Write the split as a percentage before the proceeds arrive. The black-swan page models the phased half and the immediate half separately.",
                  "A mixed path is not a fourth answer. It is a way of spreading the entry risk, and it has to be written down to be tested.",
-                 blank], method_cell("black-swan.html", "Model output")),
+                 blank], method_cell("black-swan.html", "Model output", sources=["fred_tb3ms"])),
         ],
         note="Rules R1 to R6 are proposals. They take effect only when the owner and the household sign section 5.")
 
@@ -6396,7 +6445,7 @@ def page_decision_rules() -> str:
                  "No model input. The owner states the goals.", blank], src_cell([], "Owner statement")),
             row(["P2", f"Entry method, chosen before the proceeds arrive: (a) invest in one step, or (b) park the net proceeds in short-term Treasuries for 24 to 36 months, then buy equities in equal monthly steps over {ASM['phased_equity_phase_months']['value']} months. The base case in the model parks for {ASM['phased_park_months']['value']} months.",
                  "The black-swan page: four real crashes (1929, 2000, 2008, 2020) and the 24-, 30- and 36-month windows, with the synthetic stress table alongside.", blank],
-                 method_cell("black-swan.html", "Model output")),
+                 method_cell("black-swan.html", "Model output", sources=["fred_tb3ms", "treasury_cmt"])),
             row([f"P3", f"Parking yield. Short-term Treasuries from three months to two years. The model uses {pc(pi*100, 1)} nominal, within a band of {pc(ASM['treasury_short_yield_nominal']['low']*100, 1)} to {pc(ASM['treasury_short_yield_nominal']['high']*100, 1)}.",
                  "A stated scenario, not an official forecast. No agency publishes a forward short-term yield for 2040 to 2050.", blank],
                  src_cell(["fred_gs10"], "FRED, Treasury yields")),
@@ -6414,7 +6463,7 @@ def page_decision_rules() -> str:
                  blank], src_cell(["ftb_cg"], "FTB, Capital gains")),
             row(["P9", "Review. Once a year, and after any change on the law watch. Re-run the model from the inputs each time.",
                  "The model rebuilds from its inputs and reports whether the recommendation moved.", blank],
-                 method_cell("#method", "Model output")),
+                 method_cell("#method", "Model output", sources=[])),
             row(["P10", "Records. Keep dated copies of this page, the gate decisions and the model version used.",
                  "This page and the build version are the record.", blank], src_cell([], "Owner decision")),
         ],
