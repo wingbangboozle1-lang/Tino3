@@ -125,24 +125,28 @@ a host already on the approved list in `scripts/verify.py`. New verbatim officia
 registered in `inputs.json` `verified_parameters` so the privacy gate recognises them: the 2027 top
 bracket start of REDACTED-FIGURE the 37% top rate, and California's 13.3% top rate.
 
-## Session `arena/8b9e2db0-tino3` — letting-path tax realism (ordinary-rate rental taxation, passive-loss limitation, NIIT, section 199A) and the basis-at-death completeness assumption · claimed 2026-11-17
+### Rebase collisions logged
 
-*Branch note:* Arena pins this session to `arena/8b9e2db0-tino3`, branched from `main` at `bd8ab5b` (the merge of PR #153). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. At claim time `gh pr list --state open` returned nothing, so no other session holds any of the files below, and `python3 scripts/rebuild.py` left the working tree clean.
+Three sessions landed on `main` while this one was working (`#160`, `#163`, `#164`), so `git pull
+--rebase origin main` conflicted twice. Nothing of theirs was discarded:
 
-**Scope boundary with the sessions already on the board.** `arena/5feeee8b-tino3` re-verified the insurance bands, the encumbrance rows and the law-watch entries on 16 November 2026; `arena/0069abd3-tino3` built the estate-liquidity engine and the joint-filer case. This session does **not** touch either file set and does not re-check that ledger. The sources this session opens are the ones no earlier board entry records: the passive activity loss rules, the rental depreciation and ordinary-income rules, the net investment income tax thresholds and their non-indexation, the section 199A rental safe harbour, and the basis-at-death rules (section 1014(b)(6), section 2032).
+1. `COORDINATION.md` (the claim commit) — resolved by keeping the main-side board and re-splicing
+   this session's section. The record commit then spliced a second copy because the base already
+   carried the first; the duplicate was removed by hand and the file was checked to hold exactly one
+   section for this session, with the completion record attached to it.
+2. `scripts/build.py` — two hunks, both in `page_briefing`. Another session had rewritten the
+   briefing sheet into a shorter, bolded form at the same time this session was adding to it. The
+   main-side rewrite was kept and this session's two additions were re-applied inside it, in the
+   shorter style.
+3. `assets/sources.json`, `README.md`, `EXECUTIVE_SUMMARY.md` and the generated pages — sources.json
+   was resolved by keeping main's entries and appending this session's eight new ones (115 to 123);
+   README counts were re-applied against the merged build; every generated file was regenerated from
+   source after the merge rather than merged by hand.
 
-| Task | Status | Owner | File scope |
-|---|---|---|---|
-| R-1 Claim this scope and push before any other edit | **done** — this section | `arena/8b9e2db0-tino3` | `COORDINATION.md` (this section only) |
-| R-2 Read and verify at source the rules the letting path currently ignores: Pub 925 / section 469 (rental per se passive, the $25,000 allowance and its MAGI phase-out, active participation, the real-estate-professional exception, suspended losses freed on disposition), Pub 527 (27.5-year MACRS, land not depreciable, mid-month convention), section 1411 and the NIIT thresholds, section 199A and the Rev. Proc. 2019-38 rental safe harbour, Pub 551 / sections 1014 and 2032 for the basis step-up | **in progress** | `arena/8b9e2db0-tino3` | `assets/sources.json` (append only), `assets/data/inputs.json` (`verified_parameters` only) |
-| R-3 Build `scripts/rental_tax.py`: a deterministic year-by-year letting-path tax engine that prices rent at ordinary rates net of depreciation, applies the passive-loss limitation and carries suspended losses to the disposition, tests section 199A on and off, applies the NIIT above its statutory threshold, and reports the result against the untaxed convention the model uses today | **in progress** | `arena/8b9e2db0-tino3` | `scripts/rental_tax.py` (new), `assets/data/rental_tax.json` (new), `scripts/model.py` (consume only) |
-| R-4 Publish the finding and the corrected letting path: a new section on the taxes page, a restated rent row on the decision page, what-if levers, new owner questions and suggestions, glossary entries, and a review-register row for anything unverifiable | **in progress** | `arena/8b9e2db0-tino3` | `scripts/build.py`, regenerated pages |
-| R-5 Publish the basis-at-death assumption explicitly: the model's sell path assumes the whole property steps up. State the section 1014(b)(6) community-property rule, the joint-tenancy and life-estate patterns that break a full step-up, and the section 2032 alternate valuation date, as labelled assumptions with what each would change | **in progress** | `arena/8b9e2db0-tino3` | `scripts/build.py` (taxes / inheritance / questions / precommit / review), regenerated pages |
-| R-6 Rebuild, run every gate, pull request to `main`, merge without waiting for approval, confirm the Pages deploy, record the PR link and result | **in progress** | `arena/8b9e2db0-tino3` | this section only |
-
-**Why these tasks.** A gap check against the owner's brief, run on the current tree, found two things that are genuinely missing rather than deliberately withheld. First, the letting path is the only path whose income the model never taxes: `rent_carry_fv` in `scripts/model.py` credits gross rent and deducts property tax and running costs, with no ordinary-rate tax on the rent, no depreciation deduction against that rent, no passive-loss limitation, no NIIT and no section 199A test. The rent input is empty today, so the published baseline is unaffected — but the moment a written rent opinion is entered (suggestion S-25) the path will be overstated by the whole of the income tax on it, and the break-even rent is computed on that same untaxed basis. Second, every sell path assumes the entire property receives a date-of-death basis, with no page stating the facts on which that rests or the three common patterns that give only a partial step-up. Both are model-visible and both are answered from official sources.
-
-**Privacy constraint.** No name, street address, postal code, parcel identifier, county or city name, trust term, estate size or unrounded owner amount is added to any public page or to this board. Owner-supplied money is published only as a multiple of ten; official amounts are published verbatim where the official document prints them. Every new ledger entry links to a host already on the approved list in `scripts/verify.py`. No rent, income, filing status or other household figure is invented: the letting-path engine is driven by the same empty rent input the model already uses and by anonymous scenario bands, and where the answer depends on a household fact the page says so instead of filling it in.
+**A warning for the next session.** The printable Attorney & CPA brief was already at 94% of a letter
+sheet before this session touched it, and adding the letting-path line took it to 98%. `verify.py`
+fails the build above 100%, and there is now about 13 points of headroom - roughly one line of text.
+Anything added to `page_briefing` should be cut somewhere else on the same page.
 
 ## Session `arena/5fb0dcb1-tino3` — law-watch refresh to the 16 November 2026 official results reading, live Proposition 19 initiative recheck, publication · claimed 2026-11-17
 
