@@ -11,7 +11,7 @@
 | M-3 Make rule R-1143-2 mechanical: the tracked-tree guard fails on a line-start conflict marker in any tracked text file, so Verify stops a repeat before it reaches a merge | **done** (`68446cb`) — tested by planting three markers and restoring; exit 1 with the class printed, exit 0 clean | `arena/4f2a543e-tino3` | `scripts/tracked_tree_guard.py` |
 | M-4 Independent line-by-line re-verification of the decision-critical official figures, each read at source this session: the 2026 and 2027 federal transfer-tax amounts and gift exclusions, the Proposition 19 shelter cap, the 1% mental-health surcharge above $1,000,000, the section 121 amounts, the nine-month estate-tax clock and the 2026 fourth-quarter underpayment rate, the statewide rent cap, and the inherited-property basis rule | **done** — result below; **no stored value changed**, so `assets/data/inputs.json` and `assets/sources.json` are untouched | `arena/4f2a543e-tino3` | read-only |
 | M-5 Record in the improvements table that the brief's same-tax-year sale is the model's own sell path and is priced on the taxes page (register item S-04's analysis therefore exists; the S-row itself stays proposed for the owner) | **done** — one improvements row with a *done* badge and the `irs_basis` source; verification count 1,239 rows, 1,062 linked | `arena/4f2a543e-tino3` | `scripts/build.py`, `suggestions.html`, `README.md` (row counts), regenerated pages |
-| M-6 Rebuild, run all gates, pull request to `main`, merge without waiting, confirm the Pages deploy, record the result | **in progress** | `arena/4f2a543e-tino3` | this section only |
+| M-6 Rebuild, run all gates, pull request to `main`, merge without waiting, confirm the Pages deploy, record the result | **done** — see the publication record below | `arena/4f2a543e-tino3` | this section only |
 
 **Privacy constraint for this session:** no name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term, estate size or unrounded owner amount is added to any file this session writes, including this board.
 
@@ -55,6 +55,23 @@ tree unchanged), `verify.py` PASS (25 pages, 1,239 table rows, 1,062 linked to a
 site, 177 explicitly logged as unsourceable, 112 ledger sources), `privacy_boundary.py` PASS,
 `tracked_tree_guard.py` PASS including the new marker class, `package_site.py` PASS,
 `verify_legacy.py --config-only` PASS.
+
+### M-6 publication record
+
+- **PR #154** (repair, guard gate, re-verification record, S-04 row, README counts): Verify
+  passed on the branch (27s), merged into `main` as `8c6d90c` on 17 November 2026 without
+  waiting for approval and without `--auto`. Post-merge `Verify static site`,
+  `Deploy GitHub Pages` and `pages build and deployment` all completed success on that commit.
+- **PR #155** (edition date to 17 November 2026; no input, figure, recommendation or source
+  changed): Verify passed on the branch (25s), merged into `main` as `83efc41`. The live page
+  was then re-read at the Pages URL and carries both the new improvements row and the current
+  edition, confirming the deploy.
+- The pre-merge R-1143-2 grep (`git grep -nE '^(<<<<<<<|=======\s*$|>>>>>>>)'`) was run on the
+  merge result of #154 and returned nothing; it is now enforced mechanically by M-3's guard.
+- The board-only result section is contained in the pull request that carries it.
+- Left for the owner, unchanged: the public-history rewrite (suggestion S-22), Property A's
+  tax-rate-area rate and market rent (flagged as unobtainable without publishing identifiers),
+  and the unverified owner-supplied figures on the Flagged for Review page.
 
 
 ## Session `arena/5feeee8b-tino3` — independent re-verification pass, insurance bands replacing the round-number point assumptions, explicit debt and encumbrance treatment, publication · claimed 2026-11-16
