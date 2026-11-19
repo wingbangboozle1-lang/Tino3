@@ -5556,3 +5556,26 @@ This section and nothing else is committed by this session. The pull request ope
 - **Merge:** `gh pr merge 195 --merge` succeeded without approval and without `--auto`. Merge commit `8307972`, merged 10:52:02 UTC on 19 November 2026.
 - **Pages:** `Verify static site` succeeded on `8307972`. A later merge on `main` (`66fc0b6`, another session) was deployed by `Deploy GitHub Pages` run `44509696155`, which finished `success`. The Pages API reports `status: built`. The live dashboard was read back after the deploy and serves the 17 November 2026 edition.
 - **Status of the open requests:** R-1 (future-dated read windows in `boe_prop19` and `fred_prime`), R-2 (orphan entry `irs_rp2532`) and R-3 (one integration pass for the ledger dating) are open for their owners; nothing in this session changed them.
+
+## Session `arena/d6054c9d-tino3` — reconciliation of PR #192 with `main`, board-only record, correction to one ledger flag · 19 November 2026
+
+*Branch note:* Arena pins this session to `arena/d6054c9d-tino3`. PR #192 was first opened from this branch with a dated re-read of the fifteen ledger entries and a heading repair. Both had already landed on `main` through other sessions while it was open, and the branch conflicted. Per the reconciliation request in the `arena/4ca6f3e0-tino3` record (R-3), PR #192 is now **board-only**: the branch's tree was set to `main`'s tree, so the pull request carries this section and nothing else. No ledger entry, figure, generator line, stylesheet rule or page changes in this session's pushed history. History was not rewritten: the merge with `main` was recorded with the `ours` strategy and the tree then taken from `main`.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| D6-1 Claim the scope and push | **done** (`91abe9e`) | `arena/d6054c9d-tino3` | `COORDINATION.md` |
+| D6-2 Dated re-read of the fifteen undated ledger entries | **superseded — done on `main`**. `main` now has no undated entry and 24 entries dated 19 November 2026, recorded by the sessions that read them (PR #193 and others). This branch's own dated notes and its review callout were not carried over, so nothing is written twice. | `arena/5a94d6a8-tino3` and others | `assets/sources.json` (theirs) |
+| D6-3 Heading-level repair (24 pages) | **superseded — done on `main`** by PR #186 and PR #191; the structural audit on `main` reports 0 findings. This branch's own, different repair was dropped in the merge. | `arena/1b2db1eb-tino3` | `scripts/build.py`, `assets/style.css` (theirs) |
+| D6-4 Board-only reconciliation, gates, pull request, merge, Pages check | **done** — see the record below | `arena/d6054c9d-tino3` | this section only |
+
+### Correction: `irs_rp2532` was not an unconfirmed claim
+
+On 19 November 2026 this session flagged the ledger entry for Revenue Procedure 2025-32 as "not stating" that the basic exclusion amount is indexed for 2027 and later. **That flag was wrong.** The read covered only the first chunk of the document. Its second chunk, section 2.14, states in full: "Section 70106 of the OBBBA amends § 2010(c)(3) by increasing the basic exclusion amount to $15,000,000 for calendar year 2026 … The basic exclusion amount will be adjusted for inflation for calendar year 2027 and future years." The `supports` text is therefore confirmed, as `arena/4ca6f3e0-tino3` also recorded on the same day. The flag, the callout that carried it and the undated status are withdrawn; `main` already reflects the confirmed state.
+
+**Open item from the same read, not closed by this session.** The Monthly Labor Review entry `bls_mlr100` was read for its 1913-1929 figures, which match. Its 1968-83 figure (largest 12-month CPI rise, March 1979 to March 1980, 14.8 percent) sits later in the article, and this session did not reach it. Whichever session holds the `bls_mlr100` read should confirm that figure before the entry is treated as fully verified.
+
+### Gates and publication record
+
+- Merge with `main`: `ours` strategy, then the tree set to `main` (`git checkout origin/main -- <every tracked file>`); the staged difference against `main` is empty before this section was added.
+- Gates on the tree that carries this section: `scripts/rebuild.py`, `scripts/verify.py`, `scripts/privacy_boundary.py`, `scripts/tracked_tree_guard.py`, `scripts/structure_audit.py` and `scripts/verify_legacy.py --config-only` are run before the push and recorded in the pull request.
+- Privacy: no name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term, estate size or unrounded owner amount is written in this section.
