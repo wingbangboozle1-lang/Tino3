@@ -1,5 +1,5 @@
 {
- "as_of": "2026-11-17",
+ "as_of": "2026-11-19",
  "edition": "Anonymised quantitative decision edition; every published figure rounded to the nearest $10.",
  "scope": "Union of two independently maintained ledgers, merged on 13 November 2026. Entries kept verbatim from whichever ledger supplied them; where an entry had no 'supports' field its 'verifies' list was carried across, and 'limits' was filled from 'limit' or 'caveat' when present. Neither ledger was rewritten to match the other.",
  "sources": [
@@ -87,7 +87,7 @@
    "publisher": "California State Board of Equalization",
    "title": "Letter to Assessors No. 2025/009 - Intergenerational Transfer Exclusion, adjustment of the $1 million amount",
    "url": "https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf",
-   "checked": "Opened on the publisher's official domain on 2026-11-13. Re-verified on the publisher's official domain on 15 November 2026. Re-read in full on 2026-11-17 by the integrated audit session and confirmed unchanged.",
+   "checked": "Opened on the publisher's official domain on 2026-11-13. Re-verified on the publisher's official domain on 15 November 2026. Re-read in full on 2026-11-17 by the integrated audit session and confirmed unchanged. Re-read on 2026-11-19 by arena/eed1a2e1-tino3; confirmed unchanged.",
    "supports": "For transfers occurring 16 February 2025 through 15 February 2027 the value cap is the property's factored base year value plus $1,044,586. Earlier amounts: $1,000,000 (16 Feb 2021 - 15 Feb 2023) and $1,022,600 (16 Feb 2023 - 15 Feb 2025). The next adjustment occurs in February 2027.",
    "limits": "The amount is adjusted every second February by the change in the FHFA California House Price Index, so a 2040-2050 transfer will use a different, currently unpublished amount."
   },
@@ -527,7 +527,7 @@
    "publisher": "California Franchise Tax Board",
    "title": "2025 Instructions for Form 540, California Resident Income Tax Return",
    "url": "https://www.ftb.ca.gov/forms/2025/2025-540-instructions.html",
-   "checked": "Opened on the publisher's official domain on 2026-11-17 (arena/11bff629-tino3).",
+   "checked": "Opened on the publisher's official domain on 2026-11-17 (arena/11bff629-tino3). Re-read on 2026-11-19 by arena/eed1a2e1-tino3; confirmed unchanged.",
    "supports": "Line 62 instructions: if taxable income is more than $1,000,000, subtract $1,000,000 from taxable income from Form 540 line 19 and apply a 1% rate to the remainder; the line is named the Behavioral Health Services Tax in the 2025 booklet.",
    "limits": "The instructions booklet is for tax year 2025; later years must be re-read. The rate and threshold live in Revenue and Taxation Code section 17043, which is the authority; the booklet shows how the return reports it.",
    "verifies": [
@@ -615,7 +615,7 @@
    "publisher": "Internal Revenue Service",
    "title": "IRS releases tax inflation adjustments for tax year 2027 (IR-2026-133, 5 November 2026)",
    "url": "https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts",
-   "checked": "Opened on the publisher's official domain on 2026-11-13. Re-verified on the publisher's official domain on 15 November 2026. Re-read in full on 2026-11-17 by the integrated audit session and confirmed unchanged.",
+   "checked": "Opened on the publisher's official domain on 2026-11-13. Re-verified on the publisher's official domain on 15 November 2026. Re-read in full on 2026-11-17 by the integrated audit session and confirmed unchanged. Re-read on 2026-11-19 by arena/eed1a2e1-tino3; confirmed unchanged.",
    "supports": "For decedents dying during 2027 the basic exclusion amount is $15,480,000; the annual gift exclusion for 2027 is $20,000 per recipient (up from $19,000 for 2026); the 2027 standard deduction is $33,200 for married filing jointly; the top marginal income rate remains 37%.",
    "limits": "These are indexed statutory amounts for one year, not a forecast for later years."
   },
@@ -624,7 +624,7 @@
    "publisher": "Internal Revenue Service",
    "title": "Gifts and inheritances - inherited property basis and sale",
    "url": "https://www.irs.gov/faqs/interest-dividends-other-types-of-income/gifts-inheritances/gifts-inheritances",
-   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13.",
+   "checked": "Carried in the repository source ledger and re-checked by this session on 2026-11-13. Re-read on 2026-11-19 by arena/eed1a2e1-tino3; confirmed unchanged.",
    "supports": "Property acquired from a decedent generally takes a basis equal to its fair market value at the date of death, so gain on an immediate resale is normally near zero.",
    "limits": "Special rules apply to community property, to property acquired by gift within one year of death, to income in respect of a decedent and to certain trusts. This is not an exhaustive basis analysis."
   },
@@ -733,7 +733,7 @@
    "publisher": "Internal Revenue Service",
    "title": "Topic no. 409, Capital gains and losses",
    "url": "https://www.irs.gov/taxtopics/tc409",
-   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "checked": "Opened on the publisher's official domain on 2026-11-13. Re-read on 2026-11-19 by arena/eed1a2e1-tino3; confirmed unchanged.",
    "supports": "Net capital gain rates of 0%, 15% and 20% by taxable income; 25% maximum rate on unrecaptured section 1250 gain from section 1250 real property; 28% maximum for collectibles and certain small-business stock; the $3,000 annual limit on deducting excess capital losses.",
    "limits": "The page shows 2025 taxable-income thresholds. Thresholds are indexed and change each year."
   },
@@ -755,7 +755,7 @@
     "The owner must have owned and lived in the home for 2 of the 5 years before the sale"
    ],
    "quote": "you may qualify to exclude up to $250,000 of that gain from your income, or up to $500,000 of that gain if you file a joint return with your spouse.",
-   "checked": "opened on the publisher's site in this session",
+   "checked": "opened on the publisher's site in this session. Re-read on 2026-11-19 by arena/eed1a2e1-tino3; confirmed unchanged.",
    "id": "irs_tc701",
    "supports": "Up to $250,000 of gain ($500,000 on a joint return) on a main home can be excluded | The owner must have owned and lived in the home for 2 of the 5 years before the sale",
    "limits": ""
@@ -765,7 +765,7 @@
    "publisher": "Internal Revenue Service",
    "title": "What's new - Estate and gift tax",
    "url": "https://www.irs.gov/businesses/small-businesses-self-employed/whats-new-estate-and-gift-tax",
-   "checked": "Opened on the publisher's official domain on 2026-11-13.",
+   "checked": "Opened on the publisher's official domain on 2026-11-13. Re-read on 2026-11-19 by arena/eed1a2e1-tino3; confirmed unchanged.",
    "supports": "Public Law 119-21 (the Working Families Tax Cuts, signed 4 July 2025) amended section 2010(c)(3) by increasing the basic exclusion amount to $15,000,000 for calendar year 2026.",
    "limits": "The 2026 amount is year-specific. The page is not a forecast of later law."
   },
@@ -863,7 +863,7 @@
     "The additional tax is imposed in addition to any other taxes imposed by Part 10"
    ],
    "quote": "in addition to any other taxes imposed by this part, an additional tax shall be imposed at the rate of 1 percent on that portion of a taxpayer's taxable income in excess of one million dollars ($1,000,000).",
-   "checked": "Opened on the publisher's official domain on 2026-11-13 and re-read on 2026-11-16. The section text is unchanged from what this site cites: added by Proposition 63 on 2 November 2004, operative 1 January 2005. Re-read in full on 2026-11-17 by the integrated audit session and confirmed unchanged.",
+   "checked": "Opened on the publisher's official domain on 2026-11-13 and re-read on 2026-11-16. The section text is unchanged from what this site cites: added by Proposition 63 on 2 November 2004, operative 1 January 2005. Re-read in full on 2026-11-17 by the integrated audit session and confirmed unchanged. Re-read on 2026-11-19 by arena/eed1a2e1-tino3; confirmed unchanged.",
    "id": "rtc17043",
    "supports": "For taxable years beginning on or after 1 January 2005 an additional tax of 1% applies to the portion of taxable income above $1,000,000 | The additional tax is imposed in addition to any other taxes imposed by Part 10",
    "limits": ""
@@ -891,7 +891,7 @@
    "publisher": "California Legislative Information",
    "title": "Revenue and Taxation Code section 63.2",
    "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=63.2",
-   "checked": "Opened on the publisher's official domain on 2026-11-13. Re-verified on the publisher's official domain on 15 November 2026. Re-read in full on 2026-11-17 by the integrated audit session and confirmed unchanged.",
+   "checked": "Opened on the publisher's official domain on 2026-11-13. Re-verified on the publisher's official domain on 15 November 2026. Re-read in full on 2026-11-17 by the integrated audit session and confirmed unchanged. Re-read on 2026-11-19 by arena/eed1a2e1-tino3; confirmed unchanged.",
    "supports": "The statutory text of the intergenerational transfer exclusion: the one-year principal-residence requirement, the homeowners'/disabled veterans' exemption filing requirement, removal of the exclusion when the exemption is lost, the claim-filing requirement, the confidentiality of the claim, and the new taxable value formula (existing taxable value plus the fair market value above the existing taxable value plus $1,000,000).",
    "limits": "Section 63.2 was amended by SB 974 (Chapter 665, Statutes of 2026); read the current text."
   },
@@ -1336,6 +1336,15 @@
    "checked": "Read at the publisher on 2026-11-17 (this session). Part I, Section A, line 7a and the General Information conformity list were read in full.",
    "supports": "On line 7a, capital gain or loss: \"Generally, no adjustments are made on this line. California taxes long and short term capital gains as regular income. No special rate for long term capital gains exists.\" The same paragraph lists \"Gain on the sale of personal residence where depreciation was allowable\" among the items for which California basis can differ from federal basis, to be resolved on Schedule D (540). The General Information section lists the One Big Beautiful Bill Act among the federal acts to which the Revenue and Taxation Code generally does not conform.",
    "limits": "The schedule adjusts federal amounts; it does not state a rate, which comes from the Form 540 schedules and section 17043. The depreciation-allowable point applies to a home that was let before it was sold, which is the live-then-let case on this site."
+  },
+  {
+   "id": "irs_1031",
+   "publisher": "Internal Revenue Service",
+   "title": "Like-kind exchanges - Real estate tax tips",
+   "url": "https://www.irs.gov/businesses/small-businesses-self-employed/like-kind-exchanges-real-estate-tax-tips",
+   "checked": "Opened on the publisher's official domain on 2026-11-19 (arena/eed1a2e1-tino3).",
+   "supports": "A like-kind exchange is an exchange of real property used for business or held as an investment solely for other business or investment property of the same type or like-kind; generally no gain or loss is recognized under section 1031, gain is recognized to the extent of other property or money received (boot), and a loss is not recognized. Under the Tax Cuts and Jobs Act section 1031 applies only to real property, not personal or intangible property, and real property held primarily for sale does not qualify. Reported on Form 8824.",
+   "limits": "The exchange must be of business or investment real property for business or investment real property; a home held for personal use does not meet that description on the face of this page, so whether an inherited home can be exchanged at all is a question for advice on the actual use. Non-recognition defers gain; it does not forgive it, and this page does not address California property tax reassessment."
   }
  ]
 }

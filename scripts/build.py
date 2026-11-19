@@ -2565,9 +2565,9 @@ rules work, and it only exists at the moment of transfer.</p>""")
         + '<h2>The 1% surcharge above $1,000,000, computed</h2>'
         + surcharge_block()
         + '<h2>What the model does and does not do</h2>'
-        + callout("flag", "Not modelled, and flagged for a professional", """
+        + callout("flag", "Not modelled, and flagged for a professional", f"""
 <ul>
-<li><strong>A like-kind exchange under section 1031.</strong> Exchanges of real property are still available, but they defer rather than forgive tax, and they do not fix the property tax reassessment. Whether one makes sense depends on whether the heir wants to stay in real estate at all.</li>
+<li><strong>A like-kind exchange under section 1031.</strong> Section 1031 covers only real property held for productive use in a trade or business or held for investment, exchanged solely for other business or investment real property; a home held for personal use does not meet that description, so whether an inherited home can be exchanged at all depends on its actual use and needs advice before any sale. A qualifying exchange generally defers gain rather than forgiving it (money or other property received is taxable, a loss is not recognized), and it does not fix the property tax reassessment. Whether one makes sense depends on whether the heir wants to stay in real estate as an investment at all. {slink('irs_1031')}</li>
 <li><strong>An instalment sale.</strong> Spreads the gain, but not the tax.</li>
 <li><strong>Gifting during life rather than at death.</strong> Removes the basis step-up. Almost always worse for an appreciated asset.</li>
 <li><strong>Whether the trust itself should hold the property after the transfer.</strong> This affects both the basis and the Proposition 19 claim and depends on the trust terms, which this site does not have.</li>
@@ -3874,7 +3874,7 @@ def page_phased_stress() -> str:
     win = bt["phased_wins_at_10_years"]
     return callout("key", "What this test does and does not say", f"""
 <p>It tests the requested choice: after a hypothetical 2045 inheritance and sale, keep proceeds in short-dated Treasuries for 24 or 36 months, then move equal monthly portions into equities over the following 12 months. It compares that path with investing immediately.</p>
-<p>Two tests run side by side. The <strong>synthetic stress</strong> assumes a stylized crash at entry (a -40% equity year, then +25%, then +10%, then the baseline {esc(ps['equity_baseline'])}% net nominal equity return); it is a scenario, not history. The <strong>dated backtest</strong> applies the returns that actually followed the 1929, 2000 and 2008 entries. In {win} of 3 dated crash entries the phased path ended its first decade ahead of immediate entry; in the synthetic no-shock case, phasing costs between {m(ps['rows'][2]['difference'])} and {m(ps['rows'][4]['difference'])} of terminal value. Phasing is insurance whose premium is the no-crash opportunity cost, not a free lunch.</p>
+<p>Two tests run side by side. The <strong>synthetic stress</strong> assumes a stylized crash at entry (a -40% equity year, then +25%, then +10%, then the baseline {esc(ps['equity_baseline'])}% net nominal equity return); it is a scenario, not history. The <strong>dated backtest</strong> applies the returns that actually followed the 1929, 2000 and 2008 entries. In {win} of 3 dated crash entries the phased path ended its first decade ahead of immediate entry; in the synthetic no-shock case, phasing costs between {m(ps['rows'][2]['difference'])} and {m(ps['rows'][4]['difference'])} of terminal value. Phasing is insurance whose premium is the no-crash opportunity cost, not a free lunch. The 36-month crash row equals its no-crash row because the synthetic crash occupies the first three years and a 36-month park buys no equity until after that window, so the shock never touches the equity balance; that identity is the longer park working as intended, not a copying error.</p>
 <p>The parking yield is the model's one canonical 3-month-to-2-year Treasury parking scenario ({esc(ps['parking_yield'])}%, band {esc(ps['parking_yield_low'])}%-{esc(ps['parking_yield_high'])}%), stated, not a forecast. This backtest uses annual total returns so it can reach the 1929 entry and count dividends; the monthly replay further down this page re-runs the 2000, 2008 and 2020 entry months with official FRED monthly data (a price index without dividends), so the two tables test the same idea at two granularities and two data sources. The actual bill/note yield, reinvestment rates, taxes on interest, transaction costs and the chosen equity allocation must be refreshed with a fiduciary before implementation.</p>""") + page_phased_rows() + page_backtest() + f"""
 <section id="phased-method">
 <h2>Interpretation and reinvestment risk</h2>
@@ -5644,10 +5644,12 @@ def page_sources() -> str:
         callout("note", "How the ledger works", f"""
 <p>There are {len(SRC_DOC['sources'])} sources. The date in the last column is when the entry was last read on the
 publisher's own domain. The ledger was opened on 13 November 2026 and has since been re-read in stages, most
-recently on 17 November 2026, when the figures listed in the
-<a href="review.html#recheck-2">17 November recheck table</a> were read from the documents themselves rather than
-from any summary of them; the <a href="review.html#recheck">16 November recheck table</a> records the previous
-pass. The "supports" column says exactly what
+recently on 19 November 2026, when the decision-critical figures (the federal exclusions, the Proposition 19 cap,
+section 17043 and the Form 540 line-62 worksheet, section 63.2, the date-of-death basis rule and the Topic 409/701
+rates) were re-read at the publishers and confirmed unchanged, and the like-kind exchange page was read for the
+first time; the <a href="review.html#recheck-2">17 November recheck table</a> records the previous pass, read from
+the documents themselves rather than from any summary of them; the <a href="review.html#recheck">16 November recheck
+table</a> records the pass before that. The "supports" column says exactly what
 the source is cited for; the "limits" column says what it does not cover. Sources are cited only for what they
 actually state, and an official publisher whose name or address would identify one of the two properties is
 deliberately not linked here: it is recorded on the register instead.</p>""")
