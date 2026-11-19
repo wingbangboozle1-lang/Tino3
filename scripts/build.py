@@ -5620,7 +5620,6 @@ each one is a reason to check before acting.</p>""")
         + '<h2>Modelling caveats</h2>'
         + table("Shortcuts that matter", ["Caveat", "What it means", "Source"], cav_rows)
         + '<h2>Repository audit</h2>'
-        + ledger_reread_callout()
         + table("What was found when the repository was reviewed",
                 ["Finding", "Detail", "Residual risk", "Source"], aud_rows)
         + print_budget_section()
@@ -5628,38 +5627,6 @@ each one is a reason to check before acting.</p>""")
         + recheck_17nov_section()
         + history_audit_section()
     )
-
-
-# Ledger entries whose supports text could not be confirmed in the 19 November 2026
-# re-read. They are flagged on the review page and are not edited.
-LEDGER_OPEN_FLAGS = [
-    ("bls_mlr100",
-     "the 1913-1929 figures match the article. The 1968-83 figure (the largest 12-month CPI rise, "
-     "March 1979 to March 1980, 14.8 percent) sits later in the article and was not reached in this "
-     "read, so the entry stays undated until that section is read."),
-    ("irs_rp2532",
-     "the cited document (Revenue Procedure 2025-32, 2026 adjusted items) was read, and its contents "
-     "do not state that the basic exclusion amount is indexed for 2027 and later. The IRS 'What's new' "
-     "page and the US Code section 2010 both returned a not-found page in this read. The claim stays "
-     "unverified until a page that states it is opened."),
-]
-
-
-def ledger_reread_callout() -> str:
-    by_id = {s["id"]: s for s in SRC_DOC["sources"]}
-    total = len(SRC_DOC["sources"])
-    dated = sum(1 for s in SRC_DOC["sources"] if "2026-11-19" in str(s.get("checked", "")))
-    items = "".join(
-        f'<li><a href="{esc(by_id[sid]["url"])}">{esc(by_id[sid]["title"])}</a> '
-        f'({esc(by_id[sid]["publisher"])}; ledger ID <code>{esc(sid)}</code>): {why}</li>'
-        for sid, why in LEDGER_OPEN_FLAGS)
-    return callout(
-        "limit", "Ledger re-read on 19 November 2026: two entries flagged",
-        f"<p>This session re-read thirteen entries on 19 November 2026 and confirmed each one's supports text "
-        "against the page read that day; one of them had been dated the same day by another session. Two "
-        "entries could not be confirmed. They are flagged here and left as they were. In all, "
-        f"{dated} of {total} entries now carry a read date of 19 November 2026.</p>"
-        f"<ul>{items}</ul>")
 
 
 # ------------------------------------------------------------------ sources --
@@ -5686,7 +5653,6 @@ table</a> records the pass before that. The "supports" column says exactly what
 the source is cited for; the "limits" column says what it does not cover. Sources are cited only for what they
 actually state, and an official publisher whose name or address would identify one of the two properties is
 deliberately not linked here: it is recorded on the register instead.</p>""")
-        + ledger_reread_callout()
         + table("Source ledger", ["ID", "Publisher", "Document", "What it supports",
                                   "Limits", "How it was checked"], rows)
         + callout("limit", "What this ledger does not do", """

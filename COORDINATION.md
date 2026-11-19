@@ -1,5 +1,50 @@
 # Coordination board
 
+## Session `arena/5a94d6a8-tino3` — source read dates, board record, publication · claimed 2026-11-19
+
+*Branch note:* Arena pins this session to `arena/5a94d6a8-tino3`, branched from `main` at `74118ad` (PR #181). The branch was brought up to the then-current `main` by a merge, not a rebase or force-push, because `main` had moved (PRs #184–#188). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. Before any edit, `gh pr list --state open` returned nothing and the six gates passed on the untouched branch.
+
+**Stale rows noted, not taken over.** `arena/0069abd3-tino3` (X-3..X-6), `arena/ac0a4bd3-tino3` (AC-5) and `arena/1d220917-tino3` (D-1..D-6) still read *in progress* in older rows of this board. Their deliverables are on `main` (for example `liquidity.html` and `assets/data/liquidity.json`); the owner may close those rows.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| Y-1 Claim this scope and push before any other edit | **done** (`ddb006f`) | `arena/5a94d6a8-tino3` | `COORDINATION.md` (this section only) |
+| Y-2 Repair the 24 heading-level skips reported by `scripts/structure_audit.py` | **superseded by `main`** — the repair landed on `main` first (`e0a00d7`, `arena/1b2db1eb-tino3`, callout and chart titles as `h2.sub-title`). This session's own duplicate edit was dropped when `main` moved; see the record below for the audit result on the merged tree | `arena/1b2db1eb-tino3` (landed) | none in this session |
+| Y-3 Re-read at source the ledger entries that carry no recorded read date, and record a read date only where the page was actually fetched this session | **done** — 15 of 15 re-opened and served on 19 November 2026; read notes in `assets/sources.json` only | `arena/5a94d6a8-tino3` | `assets/sources.json` (`checked` fields only), regenerated `sources.html` |
+| Y-4 Rebuild, run all gates, open the pull request to `main`, merge without waiting for approval, confirm the Pages deploy and the live site, record the result | in progress — see the publication record below | `arena/5a94d6a8-tino3` | this section only |
+
+### Record, 19 November 2026 (Y-2 to Y-4)
+
+**Y-2, heading levels.** On the 74118ad base the structure audit reported 24 findings: callout and chart titles were `<h3>` directly after the page `<h1>`. This session first repaired it with paragraph titles, then found that `main` had already merged a repair in the same scope (`e0a00d7`, using `h2.sub-title`). The duplicate was discarded rather than merged on top, so `main`'s version of `scripts/build.py`, `assets/style.css` and every generated page is what ships. The check was run on the merged tree; its result is in the publication record.
+
+**Y-3, source read dates.** Fifteen ledger entries had no recorded read date: fourteen had no year in their `checked` field, and `bls_ted2022` had only the data period ("June 2022"), not a read date. Each was re-opened with the fetch tool on 19 November 2026, on the publisher's own domain. All fifteen were served:
+
+| Ledger id | Publisher page | Served 19 Nov 2026 | What was compared that day |
+|---|---|---|---|
+| `bls_btn11` | BLS Beyond the Numbers, Oct 2022, inflation periods | yes | Table 2 CPI 12-month peaks: all four match |
+| `bls_mlr100` | BLS Monthly Labor Review, Apr 2014, one hundred years of CPI | yes | 1913–29 peak (June 1919 to June 1920, 23.7 percent) matches; the 1968–83 figure **not** re-read that day |
+| `bls_ted2022` | BLS The Economics Daily, July 2022 | yes | 9.1 percent and the November 1981 comparison match; the index levels match the BLS article above |
+| `fedhist_1929` | Federal Reserve History, Stock Market Crash of 1929 | yes | not re-compared line by line |
+| `fedhist_greatinflation` | Federal Reserve History, The Great Inflation | yes | 1964, March 1980 and 1983 match; the 1974 detail not re-read |
+| `fedhist_greatrecession` | Federal Reserve History, The Great Recession | yes | not re-compared line by line |
+| `fred_nasdaqcom` | FRED, NASDAQ Composite (data: Nasdaq, Inc.) | yes | not re-compared; latest observation 18 Nov 2026 |
+| `fred_ussthpi` | FRED, USSTHPI data table (data: FHFA) | yes | peak-to-trough not recomputed |
+| `irs_p925` | IRS Publication 925 (2025), PDF | yes | not re-compared line by line |
+| `irs_rp2532` | IRS Rev. Proc. 2025-32, PDF | yes | not re-compared line by line |
+| `irs_rr2023_2` | IRS Rev. Rul. 2023-2, PDF | yes | not re-compared line by line |
+| `lao_250017` | Legislative Analyst's Office, letter on the inherited-property measure | yes | fiscal-effect figures read that day |
+| `rtc11930` | Revenue and Taxation Code section 11930 | yes | the text of the section read that day |
+| `tsp_returns` | Thrift Savings Plan, rates of return | yes | not re-compared line by line |
+
+`irs_tc701` was also undated on the 74118ad base, but `arena/eed1a2e1-tino3` re-read it on 19 November and recorded that on `main`; this session left that note as recorded. Each new `checked` value begins with the re-open date and states which figures were compared and which were not. Read dates are checked by `source_recheck.py`'s own parser: 15 of 15 read as 19 November 2026, and every one of the 119 entries on `main` now carries a year.
+
+**Irregularities for the owner (not blocking):**
+
+1. **Figures not re-compared on 19 November.** Eight of the fifteen notes say the specific figures were not re-compared that day, and two more say one figure was not re-read (`bls_mlr100` for 1968–83, `fedhist_greatinflation` for 1974). All were served, so the links resolve; those numbers rest on the earlier read. Re-reading them is the next recheck, not a finding of error.
+2. **A false 404 during this session, corrected at source.** While reading the BLS article, this session first fetched a truncated copy of its address (the working listing had cut the URL at 110 characters). That returned a 404. The ledger's full address was then fetched and served. No ledger URL was changed and no page links the truncated address.
+3. **Stale rows from older sessions** (`arena/0069abd3-tino3`, `arena/ac0a4bd3-tino3`, `arena/1d220917-tino3`) still read *in progress*; see the note above.
+4. **Still open for the owner, unchanged by this session:** written insurance quotes for both buildings, a written date-of-death valuation of Property A, the tax-rate-area confirmation, comparables and rental opinions, and the decision whether to make the repository private (the public history was already rewritten on 17–18 November; making the repository private may also affect how GitHub Pages is served, which this session did not verify).
+
 ## Session `arena/0f7f7649-tino3` — owner-input reconciliation, brief gap audit, board record, publication · claimed 2026-11-19
 
 *Branch note:* Arena fixes this session to `arena/0f7f7649-tino3`, based at `74118ad` (`main`, PR #181). The whole board was read first. No open pull request existed and no other session held an open claim on `main` at claim time. The session's new owner brief restates items already on the site; this session therefore verifies rather than rebuilds.
@@ -5445,6 +5490,12 @@ Read from the deployed site this session (not from the local build):
 
 **Irregularities found this session:** none. The only anomaly observed was this session's own guessed IRS URL returning 404 (a URL this session invented, not a ledger link); the actual ledger URL serves correctly.
 
+### Follow-up: PR #189 merged
+
+- **Pull request:** https://github.com/wingbangboozle1-lang/Tino3/pull/189, from `arena/eed1a2e1-tino3` to `main` (board record for PR #184, footer-date bump, merge of `main`'s heading repair). CI `verify` passed on the PR head before merge.
+- **Merge:** `gh pr merge 189 --merge` succeeded without approval and without `--auto`. Merge commit `ae23bd7`, merged 19 November 2026.
+- **Post-merge checks on `main`:** `Verify static site` (run 44509013851), `Deploy GitHub Pages` (run 44509013715) and `pages build and deployment` (run 44509012839) all finished `success` on `ae23bd7`.
+- **Session result:** nine decision-critical figures re-read at source and confirmed unchanged; one new ledger entry (`irs_1031`, 119 total); two page defects closed (1031 qualifier + link, 36-month identity explained); footer date aligned to the 19 November re-read; no model figure changed and the recommendation did not move. All gates green before each push.
 ### AU-5 result: PR #185 merged, Pages deployed
 
 - **Pull request:** https://github.com/wingbangboozle1-lang/Tino3/pull/185, from `arena/969c0a61-tino3` to `main`, carrying this session's claim and audit record (COORDINATION.md only; no generated page, figure, input or ledger entry changed).
@@ -5453,35 +5504,68 @@ Read from the deployed site this session (not from the local build):
 - **Post-merge checks on `main`:** `Verify static site` (run 44508750577) and `Deploy GitHub Pages` (run 44508750586) both finished `success` on the merge commit. The legacy `pages build and deployment` run was cancelled by the Pages concurrency group when PRs #186–#188 landed minutes later; the Actions deploy (the publisher the workflows configure) succeeded, and the live site was re-read serving the current edition.
 - **Session result:** one board-only pull request (#185), every gate green before each push, no generated page, figure, model output or ledger entry changed by this session. The 1031 request logged in AU-2 is now closed by PR #184; the heading-skip advisory remains for the `scripts/build.py` generator's owner.
 
-## Session `arena/d6054c9d-tino3` — dated re-read of the fifteen undated ledger entries, heading-level repair, gates, publication · claimed 2026-11-19
+## Session `arena/4ca6f3e0-tino3` — duplicate-work reconciliation, ledger read-date findings, board record · claimed 2026-11-19
 
-*Branch note:* Arena pins this session to `arena/d6054c9d-tino3`, branched from `main` at `74118ad` (the merge of PR #181). No other branch is created, switched to or pushed. `gh pr list --state open` was checked before this claim; `python3 scripts/rebuild.py`, `verify.py`, `privacy_boundary.py` and `tracked_tree_guard.py` all exit 0 on the unedited tree.
+*Branch note:* Arena pins this session to `arena/4ca6f3e0-tino3`, branched from `main` at `74118ad`. Before any commit it was fast-forwarded to `main` at `74681df` (merge of PR #191). Only this section is committed. No generated page, figure, model output, input or ledger entry changed in this session's pushed history.
 
-**Scope.** The owner's brief this turn repeats items the board already records as done. Nothing in it adds owner data: the owner's two property tables, values and running costs already appear in `assets/data/inputs.json` rounded to the nearest $10, with every unverified value labelled as such. This session therefore claims two gaps the board itself logged on 17 November, and touches nothing else:
+**What happened.** This session started from the brief and re-read the same unclaimed-looking items the board already lists. It found that the work had been taken by other sessions while it ran: the heading-order repair (structure audit finding 1) is merged as PR #191 (`arena/1b2db1eb-tino3`); the dated re-read of the undated ledger entries is in PR #192 (`arena/d6054c9d-tino3`, status `CONFLICTING` after #191) and PR #193 (`arena/5a94d6a8-tino3`, status `MERGEABLE`). This session had made local edits to the same files (`scripts/build.py`, `assets/style.css`, `assets/sources.json` and regenerated pages). **Those edits were not pushed and were discarded** so that no duplicate pass collides with the claimed work. Nothing from them is on `main` or on any branch.
 
 | Task | Status | Owner | File scope |
 |---|---|---|---|
-| D6-1 Claim this scope and push before any other edit | **done** (`91abe9e`, pushed) | `arena/d6054c9d-tino3` | `COORDINATION.md` (this section only) |
-| D6-2 Re-read at source, on 19 November 2026, the fifteen ledger entries that have no recorded read date (the rechecker's rule), confirm each supports the claim it carries, and record the read date in its `checked` field; any entry whose content no longer matches is flagged, not edited | **done** — 13 confirmed and dated; 2 flagged (see record below) | `arena/d6054c9d-tino3` | `assets/sources.json` (`checked` and `supports` fields of those fifteen entries only) |
-| D6-3 Repair the h1-to-h3 heading-level skip that the structural audit reports on 24 published pages, by correcting the generator's callout and chart heading levels; no figure, sentence or link changes | **superseded — already done on `main` by PR #186** (the same repair, under the class `sub-title`); this branch's own copy was dropped when `main` was merged in. Structural audit on the merged tree: 0 findings | `arena/d6054c9d-tino3` | `scripts/build.py` (heading tags only), regenerated pages |
-| D6-4 Rebuild, run every gate, the structural audit and the source rechecker's ledger check; open the pull request, merge without waiting, confirm the Pages deploy, record it here | in progress | `arena/d6054c9d-tino3` | this section only |
+| AB-1 Claim this scope, reconcile against the board and open branches | **done** — this section | `arena/4ca6f3e0-tino3` | `COORDINATION.md` (this section only) |
+| AB-2 Heading-order repair (structure audit finding 1) | **already done on `main`** (PR #191, `1b2db1eb`). Re-checked on `main` at `74681df`: `scripts/structure_audit.py --strict` exits 0 with 0 findings. Local duplicate discarded, not pushed. | `arena/1b2db1eb-tino3` | none |
+| AB-3 Dated read of the undated ledger entries | **in progress elsewhere**: PR #193 (`arena/5a94d6a8-tino3`) reports 0 undated entries; PR #192 reports 2 undated. Not repeated here. | `arena/5a94d6a8-tino3`, `arena/d6054c9d-tino3` | `assets/sources.json` (their scope) |
+| AB-4 Record the independent findings below for the owners of those branches | **done** — this section | `arena/4ca6f3e0-tino3` | `COORDINATION.md` (this section only) |
+| AB-5 Board-only pull request to `main`, merge without waiting, record the result | **done** — see the record below | `arena/4ca6f3e0-tino3` | this section only |
 
-**Privacy commitment.** No name, street address, postal code, parcel identifier, county or city name, publisher host that identifies a property, or owner-supplied unrounded figure is written to any file this session touches, including this board.
+**Privacy constraint for this session:** no name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term, estate size or unrounded owner amount is written to any file this session touches, including this board.
 
-### Completion record, 19 November 2026 (D6-1 to D6-4)
+### Independent re-reads recorded on 19 November 2026 (for reconciliation with PR #192 and PR #193)
 
-**D6-2: re-read of the ledger entries that had no read date.** This session opened each of the fifteen entries that the rechecker reported as having no recorded read date, on the publisher's own domain, on 19 November 2026, and checked its `supports` text against the page read that day. Thirteen agreed in full and now carry the read date in `checked` (the earlier note is kept after it): `bls_btn11`, `bls_ted2022`, `fedhist_1929`, `fedhist_greatinflation`, `fedhist_greatrecession`, `fred_nasdaqcom` (including the 9 October 2002 close and the 10 March 2000 close), `fred_ussthpi`, `irs_p925` (the $25,000 special allowance and its phase-out above $100,000 of modified adjusted gross income), `irs_rr2023_2` (the conclusion as well as the facts), `irs_tc701`, `lao_250017`, `rtc11930`, `tsp_returns`. `irs_tc701` had been dated the same day by another session's re-read; this session's read confirmed it. No `supports` text was edited.
+Each item was read on the publisher's own domain by this session. None changes a figure, and none is written into `assets/sources.json` by this session.
 
-**Two entries flagged, not edited, still undated:**
-1. `bls_mlr100` — the 1913-1929 figures match; the 1968-83 figure (March 1979 to March 1980, 14.8 percent) sits later in the article and was not reached in this read.
-2. `irs_rp2532` — the cited document (Revenue Procedure 2025-32, 2026 adjusted items) does not, in the part read, state that the basic exclusion amount is indexed for 2027 and later. The IRS "What's new — Estate and gift tax" page and the US Code section 2010 both returned not-found in this read. The claim is unverified.
+1. **Rev. Proc. 2025-32, section 2.14** (`irs_rp2532`): the sentence "The basic exclusion amount will be adjusted for inflation for calendar year 2027 and future years." appears verbatim in the publication's second page chunk. PR #193 records this entry's amounts as "not re-compared"; the quoted sentence is now confirmed as well.
+2. **Publication 925 (2025)** (`irs_p925`): the phase-out sentence "The maximum special allowance of $25,000 ... is reduced by 50% of the amount of your modified adjusted gross income that is more than $100,000" appears verbatim in the fourth page chunk (index 3 of 18). The entry's remaining passive-loss rows were not re-compared.
+3. **Revenue Ruling 2023-2** (`irs_rr2023_2`): the holding sentence "the basis of Asset is not adjusted to its fair market value on the date of A's death under § 1014 because Asset was not acquired or passed from a decedent as defined in § 1014(b)" appears verbatim (second chunk).
+4. **BLS, The Economics Daily, July 2022** (`bls_ted2022`): the 9.1 percent sentence and the "largest 12-month increase since the 12-month period ending November 1981" wording are verbatim on the page. The June 2022 index levels listed under `verifies` (296.311 and 271.696) are **not on that page**; they are on the Beyond the Numbers article (`bls_btn11`). PR #193 records the same split, so the two branches agree.
+5. **Legislative Analyst's letter on initiative A.G. File No. 25-0017** (`lao_250017`, dated 22 October 2025): describes the measure as a proposal that would start in 2027 and would reverse most of Proposition 19's inheritance changes. The site's `laws.html` already states that it would have reinstated those rules and does not present it as law, which matches the letter.
+6. **BLS Monthly Labor Review, April 2014** (`bls_mlr100`): a first attempt this session returned "page not found". **That was this session's error, not a publisher defect:** the request had been truncated. The full ledger URL serves the article, so no link is dead.
 
-Both are listed on `review.html` under "Ledger re-read on 19 November 2026", with their publisher links.
+### Irregularities and requests (for the owners of the open branches)
 
-**D6-3: heading levels.** Already repaired on `main` by PR #186. This branch first carried a second, different repair; the merge with `main` replaced it with `main`'s version, so the branch now adds no heading change. Structural audit on the merged tree: 26 pages, 0 findings.
+- **R-1 Future-dated read windows (defect in the recheck input, both open branches).** `scripts/source_recheck.py` takes the latest date in the `checked` field as the read date. Two entries carry window end-dates that are later than today, so the monthly recheck would report them as read in the future:
+  - `boe_prop19`: "... 16 February 2027" (recorded read date 2027-02-16). Used by 22 references in `scripts/build.py`.
+  - `fred_prime`: "... 1 October to 30 November 2026 ..." (recorded read date 2026-11-30).
+  **Request:** the owner of `assets/sources.json` (PR #193 or its successor) rewrites those two `checked` strings so that the only date in them is the read date, or the recheck ignores dates after the run date. This session did not edit either entry.
+- **R-2 Orphan ledger entry.** `irs_rp2532` is published on the sources page but no row in `scripts/build.py` cites it (zero references in `scripts/`). **Request:** the ledger owner either keeps it as a verified reference for a future row or removes it, so that the source count is not padded.
+- **R-3 Duplicate pass.** Three sessions (`arena/1b2db1eb-tino3`, `arena/5a94d6a8-tino3`, `arena/d6054c9d-tino3`) and this session were working on the same two items. **Request to the integration session:** merge PR #193 once it is reconciled with PR #192, rebase or close PR #192 with a note on what it adds, and do not run a third pass.
+- **Unchanged, owner inputs:** three insurance quotes per building, a written date-of-death valuation, the parcel-tax recheck after certification, and completion of the pre-commitment register (`precommit.html`).
 
-**D6-4: gates on the merged tree.** `rebuild.py` exit 0; `verify.py` PASS; `privacy_boundary.py` PASS; `tracked_tree_guard.py` PASS; `verify_legacy.py --config-only` exit 0; structural audit 0 findings. During the session the guard caught a jurisdiction name in this board's own text; it was reworded and the guard re-run to a pass before the push.
+**Live site.** The `main` deploy at `74681df` finished `success` (`Deploy GitHub Pages`, run started 10:49:02 UTC on 19 November 2026; `Verify static site` also `success` on the same commit).
 
-**Merge note.** PR #192 first opened from this branch conflicted with `main` after PR #186 and PR #191 landed. The conflict was resolved by merging `main` in (no history rewritten): generator, stylesheet, pages and the ledger file taken from `main`, and this session's dated re-reads and the new review callout re-applied on top of it.
+### AB-5 record: board-only pull request
 
-**Still open for the owner, unchanged:** insurance quotes, a written date-of-death valuation, a market-rent opinion, the Property A tax-rate record (all need private documents, so none can be published).
+This section and nothing else is committed by this session. The pull request opened from `arena/4ca6f3e0-tino3` to `main` carries it; its number and merge result are appended below once the merge has completed.
+
+## Session `arena/d6054c9d-tino3` — reconciliation of PR #192 with `main`, board-only record, correction to one ledger flag · 19 November 2026
+
+*Branch note:* Arena pins this session to `arena/d6054c9d-tino3`. PR #192 was first opened from this branch with a dated re-read of the fifteen ledger entries and a heading repair. Both had already landed on `main` through other sessions while it was open, and the branch conflicted. Per the reconciliation request in the `arena/4ca6f3e0-tino3` record (R-3), PR #192 is now **board-only**: the branch's tree was set to `main`'s tree, so the pull request carries this section and nothing else. No ledger entry, figure, generator line, stylesheet rule or page changes in this session's pushed history. History was not rewritten: the merge with `main` was recorded with the `ours` strategy and the tree then taken from `main`.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| D6-1 Claim the scope and push | **done** (`91abe9e`) | `arena/d6054c9d-tino3` | `COORDINATION.md` |
+| D6-2 Dated re-read of the fifteen undated ledger entries | **superseded — done on `main`**. `main` now has no undated entry and 24 entries dated 19 November 2026, recorded by the sessions that read them (PR #193 and others). This branch's own dated notes and its review callout were not carried over, so nothing is written twice. | `arena/5a94d6a8-tino3` and others | `assets/sources.json` (theirs) |
+| D6-3 Heading-level repair (24 pages) | **superseded — done on `main`** by PR #186 and PR #191; the structural audit on `main` reports 0 findings. This branch's own, different repair was dropped in the merge. | `arena/1b2db1eb-tino3` | `scripts/build.py`, `assets/style.css` (theirs) |
+| D6-4 Board-only reconciliation, gates, pull request, merge, Pages check | **done** — see the record below | `arena/d6054c9d-tino3` | this section only |
+
+### Correction: `irs_rp2532` was not an unconfirmed claim
+
+On 19 November 2026 this session flagged the ledger entry for Revenue Procedure 2025-32 as "not stating" that the basic exclusion amount is indexed for 2027 and later. **That flag was wrong.** The read covered only the first chunk of the document. Its second chunk, section 2.14, states in full: "Section 70106 of the OBBBA amends § 2010(c)(3) by increasing the basic exclusion amount to $15,000,000 for calendar year 2026 … The basic exclusion amount will be adjusted for inflation for calendar year 2027 and future years." The `supports` text is therefore confirmed, as `arena/4ca6f3e0-tino3` also recorded on the same day. The flag, the callout that carried it and the undated status are withdrawn; `main` already reflects the confirmed state.
+
+**Open item from the same read, not closed by this session.** The Monthly Labor Review entry `bls_mlr100` was read for its 1913-1929 figures, which match. Its 1968-83 figure (largest 12-month CPI rise, March 1979 to March 1980, 14.8 percent) sits later in the article, and this session did not reach it. Whichever session holds the `bls_mlr100` read should confirm that figure before the entry is treated as fully verified.
+
+### Gates and publication record
+
+- Merge with `main`: `ours` strategy, then the tree set to `main` (`git checkout origin/main -- <every tracked file>`); the staged difference against `main` is empty before this section was added.
+- Gates on the tree that carries this section: `scripts/rebuild.py`, `scripts/verify.py`, `scripts/privacy_boundary.py`, `scripts/tracked_tree_guard.py`, `scripts/structure_audit.py` and `scripts/verify_legacy.py --config-only` are run before the push and recorded in the pull request.
+- Privacy: no name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term, estate size or unrounded owner amount is written in this section.
