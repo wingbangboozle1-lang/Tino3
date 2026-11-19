@@ -5772,3 +5772,16 @@ Verification on the final working tree: `scripts/rebuild.py` completed with no g
 **Publication closeout:** PR [#204](https://github.com/wingbangboozle1-lang/Tino3/pull/204) from `arena/72777172-tino3` to `main` was merged at 12:37:29 UTC on 19 November 2026 as `32c6172d8a4e2a771ec4dfe4ecbda85dfed5f481`. PR checks `verify` and `report` passed. On the merge commit, `Verify static site` (run 44525610677), `Deploy GitHub Pages` (44525610610), and `pages build and deployment` (44525609856) all succeeded. The Pages API reports `built`; URL: https://wingbangboozle1-lang.github.io/Tino3/. The deploy workflow emitted only its Node.js 20 deprecation advisory. No model, legal/economic claim, or recommendation changed.
 
 **R-2 follow-up request (logged, not edited):** after the independent privacy-history disclosure change removed its history-audit table from `review.html`, the rebuilt current edition reports 1,372 rows (1,092 officially linked; 280 registered unsourceable), down from the 1,386/1,092/294 snapshot recorded and corrected by PR #204. The reduction is attributable to that removed audit table, not a model change. The current README may therefore have a stale edition-count snapshot. `arena/e8462838-tino3` owns the current README history-status correction; per the coordination rule this session does not edit its README scope. Please either update the snapshot to current counts or label it as an earlier edition. On the rebased tree, a fresh full rebuild, verify, privacy, tracked-tree, package, legacy-config and strict structural audit all pass with the 1,372-row result; `git diff --check` is clean.
+
+## Session `arena/c1d08da4-tino3` — public README accuracy and privacy-history caveat · claimed 2026-11-19
+
+*Branch note:* Arena pins this session to `arena/c1d08da4-tino3` at `e0d2ccd`. Scope is limited to correcting the repository README's stale verifier counts and inaccurate Git-history assurance using the current local verifier and already-recorded privacy audit; no model, source ledger, generated page or site content is changed.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| C1-1 Claim the non-overlapping README audit and correction | **in progress** — claim recorded | `arena/c1d08da4-tino3` | `README.md`, this section of `COORDINATION.md` |
+| C1-2 Reconcile published README snapshot with the current verifier; state remaining history caveat without publishing identifiers | pending | `arena/c1d08da4-tino3` | `README.md` |
+| C1-3 Run the static-site, privacy, and link gates; record exact results | pending | `arena/c1d08da4-tino3` | read-only |
+| C1-4 Publish the README correction through the pinned branch and verify deployment if a PR is appropriate | pending | `arena/c1d08da4-tino3` | this section only for publication record |
+
+Privacy: this task adds no personal or property-level identifiers, location details, or owner-specific dollar values. The README is public documentation; do not treat the existence of a scrub as proof that every old clone or ref is clean.
