@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import html
 import json
-import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -254,7 +253,7 @@ def table(caption, headers, rows, cls="", note=None):
 
 
 def callout(kind, title, body):
-    return (f'<div class="callout {esc(kind)}"><h3>{esc(title)}</h3>'
+    return (f'<div class="callout {esc(kind)}"><h2 class="sub-title">{esc(title)}</h2>'
             f'<div class="callout-body">{body}</div></div>')
 
 
@@ -292,7 +291,7 @@ def fan_chart(title: str, sub: str, unit: str, rows: list[dict], note: str) -> s
     cols = 1 + len(rows[0]["values"]) + 1
     legend = "".join(f'<span><i class="swatch {esc(cls)}"></i>{esc(name)}</span>'
                      for cls, _, name in rows[0]["values"])
-    return (f'<div class="chart"><h3>{esc(title)}</h3><p class="chart-sub">{sub}</p>'
+    return (f'<div class="chart"><h2 class="sub-title">{esc(title)}</h2><p class="chart-sub">{sub}</p>'
             f'<div class="fan" style="grid-template-columns:92px repeat({len(rows[0]["values"])}, 1fr) 150px">'
             + "".join(body) + "</div>"
             f'<div class="chart-legend">{legend}</div>'
@@ -314,7 +313,7 @@ def histogram(title: str, sub: str, counts: list[int], lo: int, hi: int,
     zero = max(0.0, min(100.0, zero_pos * 100.0))
     axis = (f'<div class="hist-axis"><span>{_num(lo)}</span>'
             f'<span>zero at {_num(0)}</span><span>{_num(hi)}</span></div>')
-    return (f'<div class="chart"><h3>{esc(title)}</h3><p class="chart-sub">{sub}</p>'
+    return (f'<div class="chart"><h2 class="sub-title">{esc(title)}</h2><p class="chart-sub">{sub}</p>'
             f'<div class="hist">{"".join(bars)}'
             f'<div class="hist-zero" style="left:{zero:.1f}%"></div></div>{axis}'
             f'<div class="chart-legend">'
@@ -334,7 +333,7 @@ def meter_chart(title: str, sub: str, rows: list[tuple[str, int, str]], note: st
         body.append(f'<div>{esc(name)}</div><div class="track">'
                     f'<div class="fill {cls}" style="width:{width:.1f}%"></div></div>'
                     f'<div class="val">{_num(v)}</div>')
-    return (f'<div class="chart"><h3>{esc(title)}</h3><p class="chart-sub">{sub}</p>'
+    return (f'<div class="chart"><h2 class="sub-title">{esc(title)}</h2><p class="chart-sub">{sub}</p>'
             f'<div class="meter">{"".join(body)}</div>'
             f'<p class="chart-sub" style="margin:8px 0 0">{note}</p></div>')
 
@@ -373,48 +372,7 @@ def method_links() -> str:
     return "".join(out)
 
 
-_HEADING_TAG = re.compile(r"<(/?)h([1-6])\b([^>]*)>")
-
-
-def _leading_h3_to_h2(body: str) -> str:
-    """Keep the heading outline in sequence on every page.
-
-    Each page opens with its <h1>. Callout and chart titles are <h3> elements, so a
-    page whose first body title is an <h3> jumps from h1 to h3. Any <h3> that comes
-    before the page's first <h2> is therefore written as an <h2> with class "ttl";
-    its look is set by the stylesheet, so the screen and print layout do not change.
-    """
-    out: list[str] = []
-    pos = 0
-    seen_h2 = False
-    stack: list[bool] = []  # one entry per open h3: True when it was promoted
-    for match in _HEADING_TAG.finditer(body):
-        closing, level, attrs = match.group(1), match.group(2), match.group(3)
-        out.append(body[pos:match.start()])
-        pos = match.end()
-        if level == "2" and not closing:
-            seen_h2 = True
-        if level != "3":
-            out.append(match.group(0))
-            continue
-        if closing:
-            promoted = stack.pop() if stack else False
-            out.append("</h2>" if promoted else match.group(0))
-            continue
-        promote = not seen_h2
-        stack.append(promote)
-        if promote:
-            if 'class="' in attrs:
-                raise ValueError("a leading h3 with its own class needs a rule before it is promoted")
-            out.append(f'<h2 class="ttl"{attrs}>')
-        else:
-            out.append(match.group(0))
-    out.append(body[pos:])
-    return "".join(out)
-
-
 def page(name: str, body: str, lede: str = "") -> str:
-    body = _leading_h3_to_h2(body)
     nav = []
     for group, pages in NAV_GROUPS:
         items = "".join(
@@ -569,7 +527,7 @@ def dist_chart(chart: dict, title: str) -> str:
         f'<span>{years[i]["year"]}</span>'
         for j, i in enumerate(ticks))
     return (
-        f'<div class="chart"><h3>{esc(title)}</h3>'
+        f'<div class="chart"><h2 class="sub-title">{esc(title)}</h2>'
         f'<p class="chart-note">{esc(chart["note"])}</p>'
         f'<div class="chart-rows">{"".join(rows)}</div>'
         f'<div class="chart-axis"><span></span><span>'
@@ -2607,9 +2565,9 @@ rules work, and it only exists at the moment of transfer.</p>""")
         + '<h2>The 1% surcharge above $1,000,000, computed</h2>'
         + surcharge_block()
         + '<h2>What the model does and does not do</h2>'
-        + callout("flag", "Not modelled, and flagged for a professional", """
+        + callout("flag", "Not modelled, and flagged for a professional", f"""
 <ul>
-<li><strong>A like-kind exchange under section 1031.</strong> Exchanges of real property are still available, but they defer rather than forgive tax, and they do not fix the property tax reassessment. Whether one makes sense depends on whether the heir wants to stay in real estate at all.</li>
+<li><strong>A like-kind exchange under section 1031.</strong> Section 1031 covers only real property held for productive use in a trade or business or held for investment, exchanged solely for other business or investment real property; a home held for personal use does not meet that description, so whether an inherited home can be exchanged at all depends on its actual use and needs advice before any sale. A qualifying exchange generally defers gain rather than forgiving it (money or other property received is taxable, a loss is not recognized), and it does not fix the property tax reassessment. Whether one makes sense depends on whether the heir wants to stay in real estate as an investment at all. {slink('irs_1031')}</li>
 <li><strong>An instalment sale.</strong> Spreads the gain, but not the tax.</li>
 <li><strong>Gifting during life rather than at death.</strong> Removes the basis step-up. Almost always worse for an appreciated asset.</li>
 <li><strong>Whether the trust itself should hold the property after the transfer.</strong> This affects both the basis and the Proposition 19 claim and depends on the trust terms, which this site does not have.</li>
@@ -3916,7 +3874,7 @@ def page_phased_stress() -> str:
     win = bt["phased_wins_at_10_years"]
     return callout("key", "What this test does and does not say", f"""
 <p>It tests the requested choice: after a hypothetical 2045 inheritance and sale, keep proceeds in short-dated Treasuries for 24 or 36 months, then move equal monthly portions into equities over the following 12 months. It compares that path with investing immediately.</p>
-<p>Two tests run side by side. The <strong>synthetic stress</strong> assumes a stylized crash at entry (a -40% equity year, then +25%, then +10%, then the baseline {esc(ps['equity_baseline'])}% net nominal equity return); it is a scenario, not history. The <strong>dated backtest</strong> applies the returns that actually followed the 1929, 2000 and 2008 entries. In {win} of 3 dated crash entries the phased path ended its first decade ahead of immediate entry; in the synthetic no-shock case, phasing costs between {m(ps['rows'][2]['difference'])} and {m(ps['rows'][4]['difference'])} of terminal value. Phasing is insurance whose premium is the no-crash opportunity cost, not a free lunch.</p>
+<p>Two tests run side by side. The <strong>synthetic stress</strong> assumes a stylized crash at entry (a -40% equity year, then +25%, then +10%, then the baseline {esc(ps['equity_baseline'])}% net nominal equity return); it is a scenario, not history. The <strong>dated backtest</strong> applies the returns that actually followed the 1929, 2000 and 2008 entries. In {win} of 3 dated crash entries the phased path ended its first decade ahead of immediate entry; in the synthetic no-shock case, phasing costs between {m(ps['rows'][2]['difference'])} and {m(ps['rows'][4]['difference'])} of terminal value. Phasing is insurance whose premium is the no-crash opportunity cost, not a free lunch. The 36-month crash row equals its no-crash row because the synthetic crash occupies the first three years and a 36-month park buys no equity until after that window, so the shock never touches the equity balance; that identity is the longer park working as intended, not a copying error.</p>
 <p>The parking yield is the model's one canonical 3-month-to-2-year Treasury parking scenario ({esc(ps['parking_yield'])}%, band {esc(ps['parking_yield_low'])}%-{esc(ps['parking_yield_high'])}%), stated, not a forecast. This backtest uses annual total returns so it can reach the 1929 entry and count dividends; the monthly replay further down this page re-runs the 2000, 2008 and 2020 entry months with official FRED monthly data (a price index without dividends), so the two tables test the same idea at two granularities and two data sources. The actual bill/note yield, reinvestment rates, taxes on interest, transaction costs and the chosen equity allocation must be refreshed with a fiduciary before implementation.</p>""") + page_phased_rows() + page_backtest() + f"""
 <section id="phased-method">
 <h2>Interpretation and reinvestment risk</h2>
@@ -5672,7 +5630,6 @@ each one is a reason to check before acting.</p>""")
     )
 
 
-# ------------------------------------------------------------------ sources --
 # Ledger entries whose supports text could not be confirmed in the 19 November 2026
 # re-read. They are flagged on the review page and are not edited.
 LEDGER_OPEN_FLAGS = [
@@ -5691,20 +5648,21 @@ LEDGER_OPEN_FLAGS = [
 def ledger_reread_callout() -> str:
     by_id = {s["id"]: s for s in SRC_DOC["sources"]}
     total = len(SRC_DOC["sources"])
-    reread = sum(1 for s in SRC_DOC["sources"]
-                 if str(s.get("checked", "")).startswith("Re-read at the publisher on 2026-11-19"))
+    dated = sum(1 for s in SRC_DOC["sources"] if "2026-11-19" in str(s.get("checked", "")))
     items = "".join(
         f'<li><a href="{esc(by_id[sid]["url"])}">{esc(by_id[sid]["title"])}</a> '
         f'({esc(by_id[sid]["publisher"])}; ledger ID <code>{esc(sid)}</code>): {why}</li>'
         for sid, why in LEDGER_OPEN_FLAGS)
     return callout(
         "limit", "Ledger re-read on 19 November 2026: two entries flagged",
-        f"<p>{reread} of {total} entries were re-read at their publishers on 19 November 2026, and each "
-        "entry's supports text was checked against the page text read that day; those entries now carry "
-        "that date. Two entries could not be confirmed. They are flagged here and left as they were.</p>"
+        f"<p>This session re-read thirteen entries on 19 November 2026 and confirmed each one's supports text "
+        "against the page read that day; one of them had been dated the same day by another session. Two "
+        "entries could not be confirmed. They are flagged here and left as they were. In all, "
+        f"{dated} of {total} entries now carry a read date of 19 November 2026.</p>"
         f"<ul>{items}</ul>")
 
 
+# ------------------------------------------------------------------ sources --
 def page_sources() -> str:
     rows = []
     for s in SRC_DOC["sources"]:
@@ -5719,10 +5677,12 @@ def page_sources() -> str:
         callout("note", "How the ledger works", f"""
 <p>There are {len(SRC_DOC['sources'])} sources. The date in the last column is when the entry was last read on the
 publisher's own domain. The ledger was opened on 13 November 2026 and has since been re-read in stages, most
-recently on 17 November 2026, when the figures listed in the
-<a href="review.html#recheck-2">17 November recheck table</a> were read from the documents themselves rather than
-from any summary of them; the <a href="review.html#recheck">16 November recheck table</a> records the previous
-pass. The "supports" column says exactly what
+recently on 19 November 2026, when the decision-critical figures (the federal exclusions, the Proposition 19 cap,
+section 17043 and the Form 540 line-62 worksheet, section 63.2, the date-of-death basis rule and the Topic 409/701
+rates) were re-read at the publishers and confirmed unchanged, and the like-kind exchange page was read for the
+first time; the <a href="review.html#recheck-2">17 November recheck table</a> records the previous pass, read from
+the documents themselves rather than from any summary of them; the <a href="review.html#recheck">16 November recheck
+table</a> records the pass before that. The "supports" column says exactly what
 the source is cited for; the "limits" column says what it does not cover. Sources are cited only for what they
 actually state, and an official publisher whose name or address would identify one of the two properties is
 deliberately not linked here: it is recorded on the register instead.</p>""")
