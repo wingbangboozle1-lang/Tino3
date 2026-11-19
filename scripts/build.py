@@ -253,7 +253,7 @@ def table(caption, headers, rows, cls="", note=None):
 
 
 def callout(kind, title, body):
-    return (f'<div class="callout {esc(kind)}"><h3>{esc(title)}</h3>'
+    return (f'<div class="callout {esc(kind)}"><p class="callout-head">{esc(title)}</p>'
             f'<div class="callout-body">{body}</div></div>')
 
 
@@ -291,7 +291,7 @@ def fan_chart(title: str, sub: str, unit: str, rows: list[dict], note: str) -> s
     cols = 1 + len(rows[0]["values"]) + 1
     legend = "".join(f'<span><i class="swatch {esc(cls)}"></i>{esc(name)}</span>'
                      for cls, _, name in rows[0]["values"])
-    return (f'<div class="chart"><h3>{esc(title)}</h3><p class="chart-sub">{sub}</p>'
+    return (f'<div class="chart"><p class="chart-head">{esc(title)}</p><p class="chart-sub">{sub}</p>'
             f'<div class="fan" style="grid-template-columns:92px repeat({len(rows[0]["values"])}, 1fr) 150px">'
             + "".join(body) + "</div>"
             f'<div class="chart-legend">{legend}</div>'
@@ -313,7 +313,7 @@ def histogram(title: str, sub: str, counts: list[int], lo: int, hi: int,
     zero = max(0.0, min(100.0, zero_pos * 100.0))
     axis = (f'<div class="hist-axis"><span>{_num(lo)}</span>'
             f'<span>zero at {_num(0)}</span><span>{_num(hi)}</span></div>')
-    return (f'<div class="chart"><h3>{esc(title)}</h3><p class="chart-sub">{sub}</p>'
+    return (f'<div class="chart"><p class="chart-head">{esc(title)}</p><p class="chart-sub">{sub}</p>'
             f'<div class="hist">{"".join(bars)}'
             f'<div class="hist-zero" style="left:{zero:.1f}%"></div></div>{axis}'
             f'<div class="chart-legend">'
@@ -333,7 +333,7 @@ def meter_chart(title: str, sub: str, rows: list[tuple[str, int, str]], note: st
         body.append(f'<div>{esc(name)}</div><div class="track">'
                     f'<div class="fill {cls}" style="width:{width:.1f}%"></div></div>'
                     f'<div class="val">{_num(v)}</div>')
-    return (f'<div class="chart"><h3>{esc(title)}</h3><p class="chart-sub">{sub}</p>'
+    return (f'<div class="chart"><p class="chart-head">{esc(title)}</p><p class="chart-sub">{sub}</p>'
             f'<div class="meter">{"".join(body)}</div>'
             f'<p class="chart-sub" style="margin:8px 0 0">{note}</p></div>')
 
@@ -527,7 +527,7 @@ def dist_chart(chart: dict, title: str) -> str:
         f'<span>{years[i]["year"]}</span>'
         for j, i in enumerate(ticks))
     return (
-        f'<div class="chart"><h3>{esc(title)}</h3>'
+        f'<div class="chart"><p class="chart-head">{esc(title)}</p>'
         f'<p class="chart-note">{esc(chart["note"])}</p>'
         f'<div class="chart-rows">{"".join(rows)}</div>'
         f'<div class="chart-axis"><span></span><span>'
@@ -1780,7 +1780,7 @@ def page_property_a() -> str:
     # Water and sewer tariffs are withheld from the public edition for privacy:
     # provider and district names, and their web addresses, would identify the area.
     tariffs = (
-        '<section class="withheld"><h3>Water and sewer: withheld for privacy</h3>'
+        '<section class="withheld"><h2>Water and sewer: withheld for privacy</h2>'
         '<p>The official water and sewer tariffs for this property are not published here, because the '
         "provider and district names and their web addresses would identify the area. The owner's water "
         'estimate in the costs table above stays marked unverified. Confirm the provider and the charges '

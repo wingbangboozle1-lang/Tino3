@@ -1,5 +1,5 @@
 {
- "as_of": "2026-11-17",
+ "as_of": "2026-11-19",
  "edition": "Anonymised quantitative decision edition; every published figure rounded to the nearest $10.",
  "scope": "Union of two independently maintained ledgers, merged on 13 November 2026. Entries kept verbatim from whichever ledger supplied them; where an entry had no 'supports' field its 'verifies' list was carried across, and 'limits' was filled from 'limit' or 'caveat' when present. Neither ledger was rewritten to match the other.",
  "sources": [
@@ -20,7 +20,7 @@
     "High-inflation periods table (CPI 12-month peaks): 1973-76 at 12.3% (Dec 1974); 1977-82 at 14.8% (Mar 1980); 2005-08 at 5.6% (Jul 2008); 2021 at 7.0% (Dec 2021)"
    ],
    "quote": "1973-76 | 12.3 (Dec. 1974) ... 1977-82 | 14.8 (Mar. 1980) ... 2005-08 | 5.6 (Jul. 2008) ... 2021 | 7.0 (Dec. 2021)",
-   "checked": "opened on the publisher's site in this session (Table 2 read in full)",
+   "checked": "Re-opened on the publisher's official domain on 2026-11-19 and served. Table 2 (the CPI 12-month peaks) was compared that day with the figures in supports: all four match.",
    "id": "bls_btn11",
    "supports": "High-inflation periods table (CPI 12-month peaks): 1973-76 at 12.3% (Dec 1974); 1977-82 at 14.8% (Mar 1980); 2005-08 at 5.6% (Jul 2008); 2021 at 7.0% (Dec 2021)",
    "limits": ""
@@ -63,7 +63,7 @@
     "1913-1929 largest 12-month increase: June 1919-June 1920, 23.7 percent"
    ],
    "quote": "Largest 12-month increase: March 1979-March 1980, 14.8 percent",
-   "checked": "opened on the publisher's site in this session (full article; the 1968-83 summary appears in the article body)",
+   "checked": "Re-opened on the publisher's official domain on 2026-11-19 and served. The 1913-1929 figure in verifies (June 1919 to June 1920, 23.7 percent) was compared that day and matches. The 1968-83 figure was not re-read on 2026-11-19; it stays as recorded in the earlier read.",
    "id": "bls_mlr100",
    "supports": "Largest 12-month CPI increase in the 1968-1983 period: March 1979-March 1980, 14.8 percent | 1913-1929 largest 12-month increase: June 1919-June 1920, 23.7 percent",
    "limits": ""
@@ -77,7 +77,7 @@
     "June 2022 all-items index was 296.311 versus 271.696 in June 2021"
    ],
    "quote": "Over the 12 months ended June 2022, the Consumer Price Index for All Urban Consumers increased 9.1 percent. ... the largest 12-month increase since the 12-month period ending November 1981.",
-   "checked": "opened on the publisher's site in this session; 9.1 percent also read in the June 2022 CPI news release archive",
+   "checked": "Re-opened on the publisher's official domain on 2026-11-19 and served. The 9.1 percent figure and the 'largest since November 1981' wording were compared that day. The index levels in verifies were compared that day against the BLS Beyond the Numbers article, which gives the same June 2022 and June 2021 values.",
    "id": "bls_ted2022",
    "supports": "CPI-U rose 9.1 percent over the 12 months ended June 2022, the largest 12-month increase since November 1981 | June 2022 all-items index was 296.311 versus 271.696 in June 2021",
    "limits": ""
@@ -275,7 +275,7 @@
     "Black Monday 28 Oct 1929 fell nearly 13 percent; Black Tuesday 29 Oct 1929 fell nearly 12 percent"
    ],
    "quote": "the index peaked on September 3, 1929, closing at 381.17. The index declined until July 8, 1932, when it closed at 41.22 ... The index did not reach the 1929 high again until November 23, 1954.",
-   "checked": "opened on the publisher's site in this session",
+   "checked": "Re-opened on the publisher's official domain on 2026-11-19 and served. The specific figures in supports were not re-compared that day.",
    "id": "fedhist_1929",
    "supports": "DJIA peaked 381.17 on 3 September 1929; closed at 41.22 on 8 July 1932, 89 percent below its peak | The index did not regain its September 1929 high until 23 November 1954 | Black Monday 28 Oct 1929 fell nearly 13 percent; Black Tuesday 29 Oct 1929 fell nearly 12 percent",
    "limits": ""
@@ -291,7 +291,7 @@
     "1983: 12-month inflation settled back to 0 to 5 percent"
    ],
    "quote": "In 1964, inflation measured a little more than 1 percent per year. ... Inflation began ratcheting upward in the mid-1960s and reached more than 14 percent in 1980.",
-   "checked": "opened on the publisher's site in this session (the 1974 stagflation detail is from the same essay, read as an official-domain search excerpt)",
+   "checked": "Re-opened on the publisher's official domain on 2026-11-19 and served. The 1964, March 1980 and 1983 figures in verifies were compared that day and match; the 1974 detail was not re-read that day.",
    "id": "fedhist_greatinflation",
    "supports": "Inflation measured a little more than 1 percent per year in 1964; reached more than 14 percent in 1980 | Inflation peaked in March 1980 at close to 15 percent (CPI, 12-month change) | 1974: inflation over 12 percent with unemployment above 7 percent | 1983: 12-month inflation settled back to 0 to 5 percent",
    "limits": ""
@@ -308,7 +308,7 @@
     "Household and nonprofit net worth fell from approximately $69 trillion in 2007 to $55 trillion in 2009"
    ],
    "quote": "Real gross domestic product (GDP) fell 4.3 percent from its peak in 2007Q4 to its trough in 2009Q2 ... the S&P 500 index fell 57 percent from its October 2007 peak to its trough in March 2009.",
-   "checked": "opened on the publisher's site in this session",
+   "checked": "Re-opened on the publisher's official domain on 2026-11-19 and served. The specific figures in supports were not re-compared that day.",
    "id": "fedhist_greatrecession",
    "supports": "Real GDP fell 4.3 percent from its 2007Q4 peak to its 2009Q2 trough | Unemployment peaked at 10 percent in October 2009 (5 percent in December 2007) | Home prices fell approximately 30 percent on average from their mid-2006 peak to mid-2009 | The S&P 500 fell 57 percent from its October 2007 peak to its March 2009 trough | Household and nonprofit net worth fell from approximately $69 trillion in 2007 to $55 trillion in 2009",
    "limits": ""
@@ -395,7 +395,7 @@
     "NASDAQ Composite closed at 5,048.62 on 10 March 2000 (the dot-com peak) and 1,114.11 on 9 October 2002, about -78 percent (read from the series CSV)"
    ],
    "quote": "2000-03-10,5048.620 ... 2002-10-09,1114.110",
-   "checked": "opened in this session; values read from the series CSV served by FRED (2000-03-10 and 2002-09-25 to 2002-10-15 windows)",
+   "checked": "Re-opened on the FRED series page on 2026-11-19 and served; latest observation 2026-11-18. The 2000 and 2002 windows in supports were not re-compared that day.",
    "id": "fred_nasdaqcom",
    "supports": "NASDAQ Composite closed at 5,048.62 on 10 March 2000 (the dot-com peak) and 1,114.11 on 9 October 2002, about -78 percent (read from the series CSV)",
    "limits": ""
@@ -423,7 +423,7 @@
     "Q2 2026 value 719.87; Q1 2026 712.20; Q4 2025 707.22"
    ],
    "quote": "Q2 2026: 719.87 | All-Transactions House Price Index for the United States ... Source: U.S. Federal Housing Finance Agency via FRED",
-   "checked": "opened on the publisher's site in this session; the peak-to-trough change is computed from the full series table read there",
+   "checked": "Re-opened on the FRED data table on 2026-11-19 and served; last updated 2026-08-25, latest quarter 2026-04-01. The peak-to-trough change in supports was not recomputed that day.",
    "id": "fred_ussthpi",
    "supports": "National house price index (1980Q1=100): 380.31 in Jan 2007 fell to 308.14 in Apr 2012, about -19 percent (computed from the series table) | Q2 2026 value 719.87; Q1 2026 712.20; Q4 2025 707.22",
    "limits": ""
@@ -673,7 +673,7 @@
     "A special allowance of up to $25,000 phases out above $100,000 of modified adjusted gross income"
    ],
    "quote": "The maximum special allowance of $25,000 ... is reduced by 50% of the amount of your modified adjusted gross income that is more than $100,000.",
-   "checked": "official-domain search excerpt read in this session (full document not opened)",
+   "checked": "Re-opened on the publisher's official domain (the 2025 edition, PDF) on 2026-11-19 and served. The passive-loss figures in supports were not re-compared that day.",
    "id": "irs_p925",
    "supports": "Rental losses are passive and generally deductible only against passive income | A special allowance of up to $25,000 phases out above $100,000 of modified adjusted gross income",
    "limits": ""
@@ -695,7 +695,7 @@
     "The basic exclusion amount is indexed for inflation for 2027 and later years"
    ],
    "quote": "The basic exclusion amount will be adjusted for inflation for calendar year 2027 and future years.",
-   "checked": "official-domain search excerpt read in this session (full document not opened)",
+   "checked": "Re-opened on the publisher's official domain on 2026-11-19 and served (Rev. Proc. 2025-32, the 2026 adjusted items). The specific amounts in supports were not re-compared that day.",
    "id": "irs_rp2532",
    "supports": "The basic exclusion amount is indexed for inflation for 2027 and later years",
    "limits": ""
@@ -723,7 +723,7 @@
     "Property the decedent placed in a trust that stayed revocable is treated as acquired from the decedent (section 1014(b)(2) and (3))"
    ],
    "quote": "the basis of Asset is not adjusted to its fair market value on the date of A's death under § 1014 because Asset was not acquired or passed from a decedent as defined in § 1014(b).",
-   "checked": "opened on the publisher's site in this session",
+   "checked": "Re-opened on the publisher's official domain on 2026-11-19 and served. Not re-compared line by line that day.",
    "id": "irs_rr2023_2",
    "supports": "Assets of an irrevocable grantor trust that are not included in the gross estate get no basis adjustment at death | Property the decedent placed in a trust that stayed revocable is treated as acquired from the decedent (section 1014(b)(2) and (3))",
    "limits": ""
@@ -755,7 +755,7 @@
     "The owner must have owned and lived in the home for 2 of the 5 years before the sale"
    ],
    "quote": "you may qualify to exclude up to $250,000 of that gain from your income, or up to $500,000 of that gain if you file a joint return with your spouse.",
-   "checked": "opened on the publisher's site in this session",
+   "checked": "Re-opened on the publisher's official domain on 2026-11-19 and served. The exclusion amounts shown on the page were read that day.",
    "id": "irs_tc701",
    "supports": "Up to $250,000 of gain ($500,000 on a joint return) on a main home can be excluded | The owner must have owned and lived in the home for 2 of the 5 years before the sale",
    "limits": ""
@@ -779,7 +779,7 @@
     "Other inherited property would be excluded on the first $1 million of combined value"
    ],
    "quote": "Beginning January 1, 2027, the measure reverses most of the major changes made by Proposition 19. The expanded special rules would apply to future property transfers. The rules would also apply to properties that have transferred since Proposition 19 took effect on February 16, 2021.",
-   "checked": "opened on the publisher's site in this session",
+   "checked": "Re-opened on the publisher's official domain on 2026-11-19 and served; the letter is the Legislative Analyst's fiscal analysis of the measure. The fiscal-effect figures on the page were read that day.",
    "id": "lao_250017",
    "supports": "The proposal would reverse most of Proposition 19's inheritance changes from 1 January 2027, including for transfers since 16 February 2021 | Inherited primary homes would be fully excluded regardless of value | Other inherited property would be excluded on the first $1 million of combined value",
    "limits": ""
@@ -835,7 +835,7 @@
     "A transfer by gift or by reason of death, outright or in trust, is exempt from documentary transfer tax"
    ],
    "quote": "Any tax imposed pursuant to this part shall not apply to any deed ... if by reason of such inter vivos gift or by reason of the death of any person, such lands ... are transferred outright to, or in trust for the benefit of, any person or entity.",
-   "checked": "opened on the publisher's site in this session",
+   "checked": "Re-opened on the publisher's official domain on 2026-11-19 and served; the text of the section was read that day.",
    "id": "rtc11930",
    "supports": "A transfer by gift or by reason of death, outright or in trust, is exempt from documentary transfer tax",
    "limits": ""
@@ -977,7 +977,7 @@
     "Its long-run average was not readable on the official page in this session"
    ],
    "quote": "C Fund ... Inception date: January 29, 1988 ... 12.09% ... S&P 500 C Fund Benchmark Index 12.11%",
-   "checked": "opened on the publisher's site in this session",
+   "checked": "Re-opened on the publisher's official domain on 2026-11-19 and served (returns table to October 2026). The specific return figures in supports were not re-compared that day.",
    "id": "tsp_returns",
    "supports": "The C Fund, which tracks the S&P 500 index, returned 12.09% from November 2025 to October 2026 | Its long-run average was not readable on the official page in this session",
    "limits": ""

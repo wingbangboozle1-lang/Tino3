@@ -9,9 +9,48 @@
 | Task | Status | Owner | File scope |
 |---|---|---|---|
 | Y-1 Claim this scope and push before any other edit | **done** — this section | `arena/5a94d6a8-tino3` | `COORDINATION.md` (this section only) |
-| Y-2 Repair the 24 heading-level skips reported by `scripts/structure_audit.py`: callout and chart titles are rendered as `<h3>` before any `<h2>` exists; restyle them as titled paragraphs so the visual design and the print brief do not change | pending | `arena/5a94d6a8-tino3` | `scripts/build.py` (callout and chart title helpers only), `assets/style.css` (title selectors only), regenerated HTML |
-| Y-3 Re-read at source the ledger entries that carry no recorded read date (the 15 flagged in the 17 November recheck); record a read date only where the official page was actually fetched this session; leave the rest flagged | pending | `arena/5a94d6a8-tino3` | `assets/sources.json` (`checked` field only), regenerated `sources.html` |
-| Y-4 Rebuild, run all six gates, open the pull request to `main`, merge without waiting for approval, confirm the Pages deploy and the live site, record the result | pending | `arena/5a94d6a8-tino3` | this section only |
+| Y-2 Repair the 24 heading-level skips reported by `scripts/structure_audit.py`: callout and chart titles are rendered as `<h3>` before any `<h2>` exists; restyle them as titled paragraphs so the visual design and the print brief do not change | **done** — see the record below; the audit now reports 0 findings | `arena/5a94d6a8-tino3` | `scripts/build.py` (callout and chart title helpers only), `assets/style.css` (title selectors only), regenerated HTML |
+| Y-3 Re-read at source the ledger entries that carry no recorded read date (the 15 flagged in the 17 November recheck); record a read date only where the official page was actually fetched this session; leave the rest flagged | **done** — 15 of 15 re-opened and served on 19 November 2026; the dated read notes are in the record below | `arena/5a94d6a8-tino3` | `assets/sources.json` (`checked` field only), regenerated `sources.html` |
+| Y-4 Rebuild, run all six gates, open the pull request to `main`, merge without waiting for approval, confirm the Pages deploy and the live site, record the result | in progress — see the publication record below | `arena/5a94d6a8-tino3` | this section only |
+
+### Record, 19 November 2026 (Y-2 to Y-4)
+
+**Y-2 heading repair.** The structure audit reported 24 findings on 19 November before the edit: on 24 of the 26 published pages a callout or chart title was rendered as `<h3>` directly after the page `<h1>` (no `<h2>` yet), and on one page (the Property A water-and-sewer notice) an `<h3>` sat directly under the `<h1>`. The repair changes the markup, not the design:
+
+- `scripts/build.py`: callout titles are `<p class="callout-head">` and chart titles are `<p class="chart-head">`; the withheld-utility notice on Property A uses an `<h2>`, which is the correct level for a section.
+- `assets/style.css`: the four title selectors (screen and print) now target `.callout-head` and `.chart-head` with the same size, weight and margins as before. The new selectors set `color: inherit` so that the paragraph rules (`.method p`, `.callout p`) cannot change the title colour. The class names are new, so the existing review-page `callout-title` element is untouched.
+- Proof of no content change: every one of the 25 changed HTML pages was compared with its previous version after all tags were stripped, and the visible text is identical. No figure, table row or model output changed.
+- Result: `scripts/structure_audit.py --strict` exits 0 with **0 findings**.
+
+**Y-3 source read dates.** Fourteen ledger entries had no year in their `checked` field, and one more (`bls_ted2022`) had a year missing from its read note. Each was re-opened with the fetch tool on 19 November 2026, on the publisher's own domain. Fifteen of fifteen were served:
+
+| Ledger id | Publisher page (official domain) | Served on 19 Nov 2026 | Figures compared that day |
+|---|---|---|---|
+| `bls_btn11` | BLS Beyond the Numbers, Oct 2022, inflation periods | yes | Table 2 CPI 12-month peaks: all four match |
+| `bls_mlr100` | BLS Monthly Labor Review, Apr 2014, one hundred years of CPI | yes | 1913–29 peak (June 1919 to June 1920, 23.7 percent) matches; the 1968–83 figure **not** re-read that day |
+| `bls_ted2022` | BLS The Economics Daily, July 2022 | yes | 9.1 percent and the November 1981 comparison match; index levels matched via the BLS article above |
+| `fedhist_1929` | Federal Reserve History, Stock Market Crash of 1929 | yes | not re-compared line by line |
+| `fedhist_greatinflation` | Federal Reserve History, The Great Inflation | yes | 1964, March 1980 and 1983 match; the 1974 detail not re-read |
+| `fedhist_greatrecession` | Federal Reserve History, The Great Recession | yes | not re-compared line by line |
+| `fred_nasdaqcom` | FRED, NASDAQ Composite (source: Nasdaq, Inc.) | yes | not re-compared line by line; latest observation 18 Nov 2026 |
+| `fred_ussthpi` | FRED, USSTHPI data table (source: FHFA) | yes | peak-to-trough not recomputed |
+| `irs_p925` | IRS Publication 925 (2025), PDF | yes | not re-compared line by line |
+| `irs_rp2532` | IRS Rev. Proc. 2025-32, PDF | yes | not re-compared line by line |
+| `irs_rr2023_2` | IRS Rev. Rul. 2023-2, PDF | yes | not re-compared line by line |
+| `irs_tc701` | IRS Topic 701, sale of your home | yes | exclusion amounts on the page read that day |
+| `lao_250017` | California Legislative Analyst's Office, letter on the inherited-property measure | yes | fiscal-effect figures read that day |
+| `rtc11930` | California Revenue and Taxation Code section 11930 | yes | the text of the section read that day |
+| `tsp_returns` | Thrift Savings Plan, rates of return | yes | not re-compared line by line |
+
+Each `checked` value now begins with the re-open date and says plainly which figures were compared and which were not; nothing is stated as checked that was not. The recheck parser (`recorded_read_date`) reads 15 of 15 as 19 November 2026. All 118 entries now carry a year. The ledger's `as_of` moved to 19 November 2026.
+
+**Irregularities for the owner (not blocking, logged here and not hidden):**
+
+1. **Figures not re-compared on 19 November.** Eight of the fifteen notes say the specific figures in `supports` were not re-compared that day, and two more (`bls_mlr100`, item 2, and `fedhist_greatinflation`, the 1974 detail) say one figure was not re-read. All were served, so the links resolve; those numbers rest on the earlier read. Re-reading them is the next recheck, not a finding of error.
+2. **The 1968–83 CPI figure** on `bls_mlr100` (14.8 percent, March 1979 to March 1980) is recorded as read in an earlier session and was not re-read on 19 November.
+3. **A false 404 during this session, corrected at source.** While reading the BLS article, this session fetched a truncated copy of its address that existed only in its own working listing (the listing had cut the URL at 110 characters). That returned a 404. The ledger's full address was then fetched and served. No ledger URL was changed, and no published page links the truncated address.
+4. **Stale rows from older sessions** (`arena/0069abd3-tino3`, `arena/ac0a4bd3-tino3`, `arena/1d220917-tino3`) still read *in progress*. Their deliverables are on `main`; the owner may close those rows.
+5. **Still open for the owner, unchanged:** written insurance quotes for both buildings, a written date-of-death valuation of Property A, the tax-rate-area confirmation, comparables and rental opinions, and the decision whether to make the repository private. The public history has already been rewritten (17–18 November); making it private may also affect how GitHub Pages is served, which this session did not verify; the choice is the owner's.
 
 ## Session `arena/d980e74e-tino3` — pre-rounding Git history scrub, line-by-line source re-verification, publication · claimed 2026-11-17
 
