@@ -5785,3 +5785,5 @@ Verification on the final working tree: `scripts/rebuild.py` completed with no g
 | C1-4 Publish the README snapshot correction through this pinned branch | **in progress** — documentation-only; no public page or model output changes | `arena/c1d08da4-tino3` | this section only for publication record |
 
 **Privacy:** no identifying values or owner-specific amounts were added. The README history paragraph now distinguishes the current artifact's privacy-gate result from the residual historical-ref finding and points to the owner-level coordinated rewrite decision; no identifier value is reproduced.
+
+**R-3 publication closeout:** PR [#206](https://github.com/wingbangboozle1-lang/Tino3/pull/206) was merged at 12:42:45 UTC on 19 November 2026 as `01b9a791c29b51a83a4a810138c2a88b5d47d089`. PR `verify` and `report` passed. On the merge commit, `Verify static site` run 44526434493, `Deploy GitHub Pages` run 44526434612, and `pages build and deployment` run 44526432741 succeeded. The Pages API reports `built`; URL: https://wingbangboozle1-lang.github.io/Tino3/.
