@@ -5695,8 +5695,6 @@ The reproducible local verification reported 26 pages, 1,386 table rows (1,092 w
 
 Verification on the final working tree: `scripts/rebuild.py` completed with no generated-file diff; `scripts/verify.py`, `scripts/privacy_boundary.py`, `scripts/tracked_tree_guard.py`, `scripts/package_site.py`, `scripts/verify_legacy.py --config-only`, `scripts/structure_audit.py --strict`, and `git diff --check` passed. The tracked-tree privacy guard scanned 74 files; the publication boundary scanned the 26 allowlisted pages and stylesheet. This was not a full-history audit, and it does not resolve any historical exposure already disclosed in `PRIVACY_REMEDIATION.md` or earlier board records.
 
-The existing live Pages deployment was confirmed built at the `main` head before this documentation correction. A PR and post-merge deployment check will be recorded below if the branch checks pass.
-
 ## Session `arena/e8462838-tino3` — correct privacy-history disclosure · 2026-11-19
 
 | Task | Status | Owner | File scope |
@@ -5717,3 +5715,7 @@ The existing live Pages deployment was confirmed built at the `main` head before
 - **Merge:** `gh pr merge 207 --merge` succeeded at 12:39:23 UTC on 19 November 2026.
 - **Pages:** API status `built`; live address remains `https://wingbangboozle1-lang.github.io/Tino3/`.
 - **Result:** public privacy disclosure now distinguishes the current artifact gate from historical Git exposure. No figures, model outputs, or recommendations changed. The second history rewrite remains an owner-level decision; this session did not rewrite or force-push any refs.
+
+**Publication closeout:** PR [#204](https://github.com/wingbangboozle1-lang/Tino3/pull/204) from `arena/72777172-tino3` to `main` was merged at 12:37:29 UTC on 19 November 2026 as `32c6172d8a4e2a771ec4dfe4ecbda85dfed5f481`. PR checks `verify` and `report` passed. On the merge commit, `Verify static site` (run 44525610677), `Deploy GitHub Pages` (44525610610), and `pages build and deployment` (44525609856) all succeeded. The Pages API reports `built`; URL: https://wingbangboozle1-lang.github.io/Tino3/. The deploy workflow emitted only its Node.js 20 deprecation advisory. No model, legal/economic claim, or recommendation changed.
+
+**R-2 follow-up request (logged, not edited):** after the independent privacy-history disclosure change removed its history-audit table from `review.html`, the rebuilt current edition reports 1,372 rows (1,092 officially linked; 280 registered unsourceable), down from the 1,386/1,092/294 snapshot recorded and corrected by PR #204. The reduction is attributable to that removed audit table, not a model change. The current README may therefore have a stale edition-count snapshot. `arena/e8462838-tino3` owns the current README history-status correction; per the coordination rule this session does not edit its README scope. Please either update the snapshot to current counts or label it as an earlier edition. On the rebased tree, a fresh full rebuild, verify, privacy, tracked-tree, package, legacy-config and strict structural audit all pass with the 1,372-row result; `git diff --check` is clean.
