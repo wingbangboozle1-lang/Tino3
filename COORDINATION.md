@@ -5275,13 +5275,29 @@ recheck after certification; and completing the pre-commitment register.
 
 *Branch note:* Arena pins this session to `arena/d6054c9d-tino3`, branched from `main` at `74118ad` (the merge of PR #181). No other branch is created, switched to or pushed. `gh pr list --state open` was checked before this claim; `python3 scripts/rebuild.py`, `verify.py`, `privacy_boundary.py` and `tracked_tree_guard.py` all exit 0 on the unedited tree.
 
-**Scope.** The owner's brief this turn repeats items the board already records as done. Nothing in it adds owner data: the owner's Cupertino and San Francisco tables, values and running costs already appear in `assets/data/inputs.json` rounded to the nearest $10, with every unverified value labelled as such. This session therefore claims two gaps the board itself logged on 17 November, and touches nothing else:
+**Scope.** The owner's brief this turn repeats items the board already records as done. Nothing in it adds owner data: the owner's two property tables, values and running costs already appear in `assets/data/inputs.json` rounded to the nearest $10, with every unverified value labelled as such. This session therefore claims two gaps the board itself logged on 17 November, and touches nothing else:
 
 | Task | Status | Owner | File scope |
 |---|---|---|---|
-| D6-1 Claim this scope and push before any other edit | **in progress** (this section) | `arena/d6054c9d-tino3` | `COORDINATION.md` (this section only) |
-| D6-2 Re-read at source, on 19 November 2026, the fifteen ledger entries that have no recorded read date (the rechecker's rule), confirm each supports the claim it carries, and record the read date in its `checked` field; any entry whose content no longer matches is flagged, not edited | not started | `arena/d6054c9d-tino3` | `assets/sources.json` (`checked` and `supports` fields of those fifteen entries only) |
-| D6-3 Repair the h1-to-h3 heading-level skip that the structural audit reports on eleven-plus published pages, by correcting the generator's callout and chart heading levels; no figure, sentence or link changes | not started | `arena/d6054c9d-tino3` | `scripts/build.py` (heading tags only), regenerated pages |
-| D6-4 Rebuild, run every gate, the structural audit and the source rechecker's ledger check; open the pull request, merge without waiting, confirm the Pages deploy, record it here | not started | `arena/d6054c9d-tino3` | this section only |
+| D6-1 Claim this scope and push before any other edit | **done** (`91abe9e`, pushed) | `arena/d6054c9d-tino3` | `COORDINATION.md` (this section only) |
+| D6-2 Re-read at source, on 19 November 2026, the fifteen ledger entries that have no recorded read date (the rechecker's rule), confirm each supports the claim it carries, and record the read date in its `checked` field; any entry whose content no longer matches is flagged, not edited | **done** — 13 confirmed and dated; 2 flagged (see record below) | `arena/d6054c9d-tino3` | `assets/sources.json` (`checked` and `supports` fields of those fifteen entries only) |
+| D6-3 Repair the h1-to-h3 heading-level skip that the structural audit reports on 24 published pages, by correcting the generator's callout and chart heading levels; no figure, sentence or link changes | **done** — structural audit now 0 findings; see record below | `arena/d6054c9d-tino3` | `scripts/build.py` (heading tags only), regenerated pages |
+| D6-4 Rebuild, run every gate, the structural audit and the source rechecker's ledger check; open the pull request, merge without waiting, confirm the Pages deploy, record it here | in progress | `arena/d6054c9d-tino3` | this section only |
 
 **Privacy commitment.** No name, street address, postal code, parcel identifier, county or city name, publisher host that identifies a property, or owner-supplied unrounded figure is written to any file this session touches, including this board.
+
+### Completion record, 19 November 2026 (D6-1 to D6-3)
+
+**D6-2: dated re-read of the fifteen undated entries.** Each was opened at its publisher on 19 November 2026 and its `supports` text was checked against the page read that day. Thirteen agreed in full and now carry the read date in `checked` (an "earlier note" is kept after it): `bls_btn11`, `bls_ted2022`, `fedhist_1929`, `fedhist_greatinflation`, `fedhist_greatrecession`, `fred_nasdaqcom` (including the 9 October 2002 close), `fred_ussthpi`, `irs_p925` (the $25,000 special allowance and its phase-out above $100,000 of modified adjusted gross income), `irs_rr2023_2` (the conclusion as well as the facts), `irs_tc701`, `lao_250017`, `rtc11930`, `tsp_returns`. Nothing in any `supports` field was edited.
+
+**Two entries flagged, not edited, still undated:**
+1. `bls_mlr100` — the 1913-1929 figures match; the 1968-83 figure (March 1979 to March 1980, 14.8 percent) sits later in the article and was not reached in this read.
+2. `irs_rp2532` — the cited document (Revenue Procedure 2025-32, 2026 adjusted items) does not, in the part read, state that the basic exclusion amount is indexed for 2027 and later. The IRS "What's new — Estate and gift tax" page and the US Code section 2010 both returned not-found in this read. The claim is unverified.
+
+Both are now listed on `review.html` under "Ledger re-read on 19 November 2026", with their publisher links.
+
+**D6-3: heading levels.** Callout and chart titles are `<h3>` elements. A page whose first title sits in the body jumped from h1 to h3. `scripts/build.py` now promotes any `<h3>` that comes before the page's first `<h2>` to an `<h2 class="ttl">` in the page writer (`_leading_h3_to_h2`); the stylesheet gives `ttl` headings the same size, margin and no border, so screen and print layout are unchanged. Later titles stay `<h3>`. `structure_audit.py`: 26 pages, **0 findings** (was 24). Visible text is unchanged.
+
+**Gates on the changed tree:** `rebuild.py` exit 0; `verify.py` PASS (1,385 rows; every row source-linked or logged as unsourceable); `privacy_boundary.py` PASS; `tracked_tree_guard.py` PASS (74 files); `verify_legacy.py --config-only` exit 0; print budget 94%, estimated to fit. One guard failure during this session came from this board's own text naming a jurisdiction; it was reworded before the push, and the guard was re-run to a pass.
+
+**Still open for the owner, unchanged:** insurance quotes, a written date-of-death valuation, a market-rent opinion, the Property A tax-rate record (all need private documents, so none can be published), and a decision on the public-history rewrite already recorded as done on 17 November.

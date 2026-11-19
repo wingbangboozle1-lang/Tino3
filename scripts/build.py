@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import html
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -372,7 +373,48 @@ def method_links() -> str:
     return "".join(out)
 
 
+_HEADING_TAG = re.compile(r"<(/?)h([1-6])\b([^>]*)>")
+
+
+def _leading_h3_to_h2(body: str) -> str:
+    """Keep the heading outline in sequence on every page.
+
+    Each page opens with its <h1>. Callout and chart titles are <h3> elements, so a
+    page whose first body title is an <h3> jumps from h1 to h3. Any <h3> that comes
+    before the page's first <h2> is therefore written as an <h2> with class "ttl";
+    its look is set by the stylesheet, so the screen and print layout do not change.
+    """
+    out: list[str] = []
+    pos = 0
+    seen_h2 = False
+    stack: list[bool] = []  # one entry per open h3: True when it was promoted
+    for match in _HEADING_TAG.finditer(body):
+        closing, level, attrs = match.group(1), match.group(2), match.group(3)
+        out.append(body[pos:match.start()])
+        pos = match.end()
+        if level == "2" and not closing:
+            seen_h2 = True
+        if level != "3":
+            out.append(match.group(0))
+            continue
+        if closing:
+            promoted = stack.pop() if stack else False
+            out.append("</h2>" if promoted else match.group(0))
+            continue
+        promote = not seen_h2
+        stack.append(promote)
+        if promote:
+            if 'class="' in attrs:
+                raise ValueError("a leading h3 with its own class needs a rule before it is promoted")
+            out.append(f'<h2 class="ttl"{attrs}>')
+        else:
+            out.append(match.group(0))
+    out.append(body[pos:])
+    return "".join(out)
+
+
 def page(name: str, body: str, lede: str = "") -> str:
+    body = _leading_h3_to_h2(body)
     nav = []
     for group, pages in NAV_GROUPS:
         items = "".join(
@@ -5620,6 +5662,7 @@ each one is a reason to check before acting.</p>""")
         + '<h2>Modelling caveats</h2>'
         + table("Shortcuts that matter", ["Caveat", "What it means", "Source"], cav_rows)
         + '<h2>Repository audit</h2>'
+        + ledger_reread_callout()
         + table("What was found when the repository was reviewed",
                 ["Finding", "Detail", "Residual risk", "Source"], aud_rows)
         + print_budget_section()
@@ -5630,6 +5673,38 @@ each one is a reason to check before acting.</p>""")
 
 
 # ------------------------------------------------------------------ sources --
+# Ledger entries whose supports text could not be confirmed in the 19 November 2026
+# re-read. They are flagged on the review page and are not edited.
+LEDGER_OPEN_FLAGS = [
+    ("bls_mlr100",
+     "the 1913-1929 figures match the article. The 1968-83 figure (the largest 12-month CPI rise, "
+     "March 1979 to March 1980, 14.8 percent) sits later in the article and was not reached in this "
+     "read, so the entry stays undated until that section is read."),
+    ("irs_rp2532",
+     "the cited document (Revenue Procedure 2025-32, 2026 adjusted items) was read, and its contents "
+     "do not state that the basic exclusion amount is indexed for 2027 and later. The IRS 'What's new' "
+     "page and the US Code section 2010 both returned a not-found page in this read. The claim stays "
+     "unverified until a page that states it is opened."),
+]
+
+
+def ledger_reread_callout() -> str:
+    by_id = {s["id"]: s for s in SRC_DOC["sources"]}
+    total = len(SRC_DOC["sources"])
+    reread = sum(1 for s in SRC_DOC["sources"]
+                 if str(s.get("checked", "")).startswith("Re-read at the publisher on 2026-11-19"))
+    items = "".join(
+        f'<li><a href="{esc(by_id[sid]["url"])}">{esc(by_id[sid]["title"])}</a> '
+        f'({esc(by_id[sid]["publisher"])}; ledger ID <code>{esc(sid)}</code>): {why}</li>'
+        for sid, why in LEDGER_OPEN_FLAGS)
+    return callout(
+        "limit", "Ledger re-read on 19 November 2026: two entries flagged",
+        f"<p>{reread} of {total} entries were re-read at their publishers on 19 November 2026, and each "
+        "entry's supports text was checked against the page text read that day; those entries now carry "
+        "that date. Two entries could not be confirmed. They are flagged here and left as they were.</p>"
+        f"<ul>{items}</ul>")
+
+
 def page_sources() -> str:
     rows = []
     for s in SRC_DOC["sources"]:
@@ -5651,6 +5726,7 @@ pass. The "supports" column says exactly what
 the source is cited for; the "limits" column says what it does not cover. Sources are cited only for what they
 actually state, and an official publisher whose name or address would identify one of the two properties is
 deliberately not linked here: it is recorded on the register instead.</p>""")
+        + ledger_reread_callout()
         + table("Source ledger", ["ID", "Publisher", "Document", "What it supports",
                                   "Limits", "How it was checked"], rows)
         + callout("limit", "What this ledger does not do", """
