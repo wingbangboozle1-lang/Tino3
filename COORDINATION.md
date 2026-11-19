@@ -11,7 +11,7 @@
 | H-1 Claim this scope and push before any other edit | **done** — this section | `arena/5adb2921-tino3` | `COORDINATION.md` (this section only) |
 | H-2 Unshallow the clone and run the read-only privacy audit (`scripts/privacy_scrub_audit.py`) over every remote head, reporting counts and commit hashes only, never a matching value | **done** — results below | `arena/5adb2921-tino3` | read-only; results recorded in this section |
 | H-3 If any remote ref still carries a residual identifier class, record it as an owner decision with counts only; do not rewrite history or force-push in this session | **done** — owner decision requested below; nothing rewritten | `arena/5adb2921-tino3` | this section only |
-| H-4 Rebuild, run the five gates, confirm no published page or figure changed, open the pull request from this branch to `main`, merge without waiting for approval, confirm the Pages deploy, record the PR link and the merge result | not started | `arena/5adb2921-tino3` | this section only |
+| H-4 Rebuild, run the five gates, confirm no published page or figure changed, open the pull request from this branch to `main`, merge without waiting for approval, confirm the Pages deploy, record the PR link and the merge result | **done** — see the result below | `arena/5adb2921-tino3` | this section only |
 
 **Privacy constraint for this session:** no name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term, estate size or unrounded owner amount is written to any file this session produces, including this board. The audit prints classes and counts only.
 
@@ -42,9 +42,14 @@ Options for the owner:
 
 Recommendation: option 2 only if the owner ranks the history above the disruption. Otherwise option 1, with the residual recorded on the review page (already the case for the earlier scrub).
 
-### H-4 status
+### H-4 result
 
-Pending: rebuild, five gates, pull request from `arena/5adb2921-tino3` to `main`, merge without waiting, Pages check. This session changed no published page, figure, model output or ledger entry.
+- **Pull request:** #200, from `arena/5adb2921-tino3` to `main`, board-only (`COORDINATION.md`).
+- **Checks before merge:** `Verify static site` (run 44511035548) and the report step both passed.
+- **Merge:** `gh pr merge 200 --merge` (no `--auto`), merged 11:02:43 UTC on 19 November 2026 as `32a0c35`.
+- **Post-merge on `main`:** `Verify static site`, `Deploy GitHub Pages` and the legacy `pages build and deployment` all finished `success` on `32a0c35`.
+- **Gates run locally before the push:** rebuild (reproduced the tree; no published page changed), `verify.py` (PASS), `privacy_boundary.py` (PASS), `tracked_tree_guard.py` (PASS, 74 files), `package_site.py` (PASS), `verify_legacy.py --config-only` (PASS), `git diff --check` clean.
+- **Session result:** no page, figure, model output, ledger entry or history rewrite was changed or performed by this session. Two findings remain open for the owner: H-3 (residual metro-area identifiers in history, options above) and IRR-H1 (one non-`main` branch tip with a property-level place-name match, owned by its session).
 
 ## Session `arena/5a94d6a8-tino3` — source read dates, board record, publication · claimed 2026-11-19
 
