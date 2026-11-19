@@ -5312,7 +5312,7 @@ recheck after certification; and completing the pre-commitment register.
 | HO-1 Claim this scope and push before any other edit | **done** (this section) | `arena/1b2db1eb-tino3` | `COORDINATION.md` (this section only) |
 | HO-2 Emit callout and chart titles as `<h2 class="sub-title">` in the generator and mirror their CSS so the rendered look is unchanged | **done** | `arena/1b2db1eb-tino3` | `scripts/build.py`, `assets/style.css` |
 | HO-3 Rebuild, confirm the numbers are unchanged (diff of every generated figure), re-run the structure audit and all gates | **done** — 27 generated files changed, 0 with any content change once heading tags are masked; structure audit 24 → 0 findings; all gates exit 0 | `arena/1b2db1eb-tino3` | regenerated outputs |
-| HO-4 Pull request to `main`, merge without waiting for approval, confirm the Pages deploy, record PR link and result here | pending | `arena/1b2db1eb-tino3` | this section only |
+| HO-4 Pull request to `main`, merge without waiting for approval, confirm the Pages deploy, record PR link and result here | **done** — PR **#186** merged as `edb70c7` (merge of `main` into the branch resolved `COORDINATION.md` by keeping both sections and `sources.html` by rebuilding from `main`); Pages deploy for the current `main` head `eeb5d13` completed `success`; live glossary page confirmed to serve the repaired heading order | `arena/1b2db1eb-tino3` | this section only |
 
 **Privacy commitments for this session.** No name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term, estate size or unrounded owner amount is added to any file this session writes, including this board.
 
@@ -5362,6 +5362,15 @@ Each of the following was opened on the publisher's own domain this session and 
 **Gates, run on this branch.** `scripts/rebuild.py` PASS and reproducible (a second full rebuild produced no further diff). `scripts/verify.py` **PASS: 26 pages, 1,386 table rows, 1,092 linked to official publishers, 294 registered unsourceable, 4,018 links (2,275 external), 119 ledger sources**, briefing print budget 94% of one letter sheet and still estimated to fit. `scripts/privacy_boundary.py` PASS. `scripts/tracked_tree_guard.py` PASS (74 files). `scripts/package_site.py` PASS. `scripts/verify_legacy.py --config-only` PASS (27 public files). `scripts/structure_audit.py` advisory: 24 findings, all the previously logged h1-to-h3 skip; none introduced by this session. Model JSON/CSV outputs are byte-unchanged, so the recommendation did not move: selling soon after inheritance still leads in the baseline, and the phased path still costs $3,337,360 (24 months) to $4,532,990 (36 months) of terminal value in the no-crash case while gaining $9,374,880 (24 months) to $7,550,550 (36 months) in the synthetic crash case.
 
 **Still open for the owner, unchanged by this session.** The trust relationship (A-1), the tax-rate area, a written date-of-death valuation, three insurance quotes per building, a documented market rent for Property A, Property B's leases and local rules, the five-year capital plan's actual spend history, and completing the pre-commitment register. The February 2027 Proposition 19 adjustment and the 2027 exclusion remain standing recheck gates.
+
+### Publication record, 19 November 2026 (HO-4)
+
+- **Pull request:** https://github.com/wingbangboozle1-lang/Tino3/pull/186, from `arena/1b2db1eb-tino3` to `main`.
+- **Checks before merge:** `verify` and `report` both `pass` on the merged tree.
+- **Merge:** `gh pr merge 186 --merge` (no approval waited for, no `--auto`). `main` now carries it as `edb70c7`. `main` had advanced by PR #185 when the first merge attempt hit a conflict; that conflict was resolved on the branch, the rebuilt tree was re-checked, and the second run passed before merge.
+- **Post-merge.** Later merges from other sessions sit on top of PR #186 (head `eeb5d13`). The `Verify static site` and `Deploy GitHub Pages` runs for `eeb5d13` both completed `success`.
+- **Live check.** The published glossary page serves the repaired heading order (`h1` then `h2` for the first section). The structure audit reports 0 findings on the merged tree.
+- **Irregularities.** None new. The earlier flagged items from `d1968629` remain as recorded.
 
 ### Follow-up: PR #184 merged
 
