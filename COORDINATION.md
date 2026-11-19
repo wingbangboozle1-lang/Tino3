@@ -5685,6 +5685,14 @@ On 19 November 2026 this session flagged the ledger entry for Revenue Procedure 
 
 | Task | Status | Owner | File scope |
 |---|---|---|---|
-| R-1 Claim this documentation-only scope and push before other edits | **in progress** — this section | `arena/72777172-tino3` | `COORDINATION.md` (this section only) |
+| R-1 Claim this documentation-only scope and push before other edits | **done** (`3bf6549`; pushed to `arena/72777172-tino3`) | `arena/72777172-tino3` | `COORDINATION.md` (this section only) |
 
 **Privacy constraint:** this section contains no owner-supplied amount, name, street, parcel, postal code, location-specific source, trust, account, or estate detail.
+
+### R-1 verification and completion · 19 November 2026
+
+The reproducible local verification reported 26 pages, 1,386 table rows (1,092 with official publisher links; 294 explicitly registered as unsourceable), 4,018 links, 119 source-ledger entries, and 144 content-free withdrawal routes. The README snapshot was corrected to match those generated results and its duplicated wording was removed. This is a documentation-only correction; no model input, source claim, public page, or recommendation changed.
+
+Verification on the final working tree: `scripts/rebuild.py` completed with no generated-file diff; `scripts/verify.py`, `scripts/privacy_boundary.py`, `scripts/tracked_tree_guard.py`, `scripts/package_site.py`, `scripts/verify_legacy.py --config-only`, `scripts/structure_audit.py --strict`, and `git diff --check` passed. The tracked-tree privacy guard scanned 74 files; the publication boundary scanned the 26 allowlisted pages and stylesheet. This was not a full-history audit, and it does not resolve any historical exposure already disclosed in `PRIVACY_REMEDIATION.md` or earlier board records.
+
+The existing live Pages deployment was confirmed built at the `main` head before this documentation correction. A PR and post-merge deployment check will be recorded below if the branch checks pass.
