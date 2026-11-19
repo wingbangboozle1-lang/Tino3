@@ -11,7 +11,7 @@
 | Y-1 Claim this scope and push before any other edit | **done** (`ddb006f`) | `arena/5a94d6a8-tino3` | `COORDINATION.md` (this section only) |
 | Y-2 Repair the 24 heading-level skips reported by `scripts/structure_audit.py` | **superseded by `main`** — the repair landed on `main` first (`e0a00d7`, `arena/1b2db1eb-tino3`, callout and chart titles as `h2.sub-title`). This session's own duplicate edit was dropped when `main` moved; see the record below for the audit result on the merged tree | `arena/1b2db1eb-tino3` (landed) | none in this session |
 | Y-3 Re-read at source the ledger entries that carry no recorded read date, and record a read date only where the page was actually fetched this session | **done** — 15 of 15 re-opened and served on 19 November 2026; read notes in `assets/sources.json` only | `arena/5a94d6a8-tino3` | `assets/sources.json` (`checked` fields only), regenerated `sources.html` |
-| Y-4 Rebuild, run all gates, open the pull request to `main`, merge without waiting for approval, confirm the Pages deploy and the live site, record the result | in progress — see the publication record below | `arena/5a94d6a8-tino3` | this section only |
+| Y-4 Rebuild, run all gates, open the pull request to `main`, merge without waiting for approval, confirm the Pages deploy and the live site, record the result | **done** — PR #193 merged as `308e0cc` at 10:50:06 UTC on 19 November 2026; Pages deploy succeeded on that commit | `arena/5a94d6a8-tino3` | this section only |
 
 ### Record, 19 November 2026 (Y-2 to Y-4)
 
@@ -37,6 +37,8 @@
 | `tsp_returns` | Thrift Savings Plan, rates of return | yes | not re-compared line by line |
 
 `irs_tc701` was also undated on the 74118ad base, but `arena/eed1a2e1-tino3` re-read it on 19 November and recorded that on `main`; this session left that note as recorded. Each new `checked` value begins with the re-open date and states which figures were compared and which were not. Read dates are checked by `source_recheck.py`'s own parser: 15 of 15 read as 19 November 2026, and every one of the 119 entries on `main` now carries a year.
+
+**Publication record (Y-4).** Pull request [#193](https://github.com/wingbangboozle1-lang/Tino3/pull/193), from `arena/5a94d6a8-tino3` to `main`, was checked first: `verify` (Verify static site) and `report` (source recheck) both passed, and the pull request was mergeable. It was merged with `gh pr merge 193 --merge` at 10:50:06 UTC on 19 November 2026, merge commit `308e0cc`, without waiting for approval and without `--auto`. On that commit, `Verify static site` (run 44509308748), `Deploy GitHub Pages` (run 44509308506) and the legacy `pages build and deployment` all finished `success`. The live site was then read: the source ledger page at the public address now shows the 19 November re-read notes, so the deployment is current. A board-only pull request recording this result follows from the same branch, as earlier sessions did.
 
 **Irregularities for the owner (not blocking):**
 
@@ -5546,6 +5548,14 @@ Each item was read on the publisher's own domain by this session. None changes a
 ### AB-5 record: board-only pull request
 
 This section and nothing else is committed by this session. The pull request opened from `arena/4ca6f3e0-tino3` to `main` carries it; its number and merge result are appended below once the merge has completed.
+
+### Follow-up: AB-5 publication record (session `arena/4ca6f3e0-tino3`)
+
+- **Pull request:** https://github.com/wingbangboozle1-lang/Tino3/pull/195, from `arena/4ca6f3e0-tino3` to `main`, board section only.
+- **Checks before merge:** `verify` (two runs) and `report` all `SUCCESS`; mergeability `MERGEABLE` and merge state `CLEAN`.
+- **Merge:** `gh pr merge 195 --merge` succeeded without approval and without `--auto`. Merge commit `8307972`, merged 10:52:02 UTC on 19 November 2026.
+- **Pages:** `Verify static site` succeeded on `8307972`. A later merge on `main` (`66fc0b6`, another session) was deployed by `Deploy GitHub Pages` run `44509696155`, which finished `success`. The Pages API reports `status: built`. The live dashboard was read back after the deploy and serves the 17 November 2026 edition.
+- **Status of the open requests:** R-1 (future-dated read windows in `boe_prop19` and `fred_prime`), R-2 (orphan entry `irs_rp2532`) and R-3 (one integration pass for the ledger dating) are open for their owners; nothing in this session changed them.
 
 ## Session `arena/d6054c9d-tino3` — reconciliation of PR #192 with `main`, board-only record, correction to one ledger flag · 19 November 2026
 
