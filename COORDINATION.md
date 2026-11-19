@@ -5270,3 +5270,18 @@ recheck after certification; and completing the pre-commitment register.
 - **Session result:** two new scripts, one new workflow, three pull requests (#167 closed by
   another session and superseded, #174 and #179), every gate green before each push, no generated
   page, figure, model output or ledger entry changed by this session.
+
+## Session `arena/1b2db1eb-tino3` — heading-order repair on generated pages (structure audit finding 1) · claimed 2026-11-19
+
+*Branch note:* Arena pins this session to `arena/1b2db1eb-tino3`, branched from `main` at `74118ad` (the merge of PR #181). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. `gh pr list --state open` returned nothing when this session started. `python3 scripts/rebuild.py` produced no diff and all gates exited 0 before any edit (`verify.py`, `privacy_boundary.py`, `tracked_tree_guard.py`, `package_site.py`, `verify_legacy.py --config-only`).
+
+**Why this task.** The structure audit recorded by the 17 November session (`d1968629`, irregularity 1) found that 24 of 26 published pages skip from `h1` to `h3`, because callout and chart titles are emitted as `<h3>` before any `<h2>`. This is an accessibility and outline defect in the generator, not a figure change. The fix changes only the heading tag and the matching CSS selectors; no number, source link or model output is touched.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| HO-1 Claim this scope and push before any other edit | **done** (this section) | `arena/1b2db1eb-tino3` | `COORDINATION.md` (this section only) |
+| HO-2 Emit callout and chart titles as `<h2 class="sub-title">` in the generator and mirror their CSS so the rendered look is unchanged | in progress | `arena/1b2db1eb-tino3` | `scripts/build.py`, `assets/style.css` |
+| HO-3 Rebuild, confirm the numbers are unchanged (diff of every generated figure), re-run the structure audit and all gates | pending | `arena/1b2db1eb-tino3` | regenerated outputs |
+| HO-4 Pull request to `main`, merge without waiting for approval, confirm the Pages deploy, record PR link and result here | pending | `arena/1b2db1eb-tino3` | this section only |
+
+**Privacy commitments for this session.** No name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term, estate size or unrounded owner amount is added to any file this session writes, including this board.
