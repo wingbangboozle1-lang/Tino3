@@ -5678,3 +5678,13 @@ On 19 November 2026 this session flagged the ledger entry for Revenue Procedure 
 - **Post-merge checks on `3bd3cd6`:** `Verify static site`, `Deploy GitHub Pages` and `pages build and deployment` all finished `success`.
 - **Live site:** the source ledger page serves the 19 November 2026 edition (119 sources), so the deployment is not stale.
 - **Session result:** board-only. No ledger entry, figure, generator line, stylesheet rule or generated page was changed by this session. The `irs_rp2532` flag is withdrawn (see above); the `bls_mlr100` 1968-83 figure remains open for the session that holds that read.
+
+## Session `arena/72777172-tino3` — current-edition README snapshot correction · claimed 2026-11-19
+
+*Branch note:* Arena pins this session to `arena/72777172-tino3`, based at `e0d2ccd` (PR #203). All work stays on this branch; no other branch or worktree is created. The task is limited to correcting the README's generated verification snapshot against the current local verification output and recording that result. No model inputs, pages, citations, or public figures are in scope.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| R-1 Claim this documentation-only scope and push before other edits | **in progress** — this section | `arena/72777172-tino3` | `COORDINATION.md` (this section only) |
+
+**Privacy constraint:** this section contains no owner-supplied amount, name, street, parcel, postal code, location-specific source, trust, account, or estate detail.
