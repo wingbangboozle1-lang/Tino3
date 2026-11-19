@@ -1,5 +1,21 @@
 # Coordination board
 
+## Session `arena/5adb2921-tino3` — post-scrub history audit across every remote ref, board record · claimed 2026-11-19
+
+*Branch note:* Arena pins this session to `arena/5adb2921-tino3`, branched from `main` at `74118ad` (merge of PR #181). No other branch is created, switched to or pushed. Pull request to `main` is opened from this branch.
+
+*Overlap check at claim time:* open PRs #184 (`arena/eed1a2e1-tino3`, decision-critical figure re-verification, 1031 entry, phased identity) and #185 (`arena/969c0a61-tino3`, brief-compliance audit) are claimed by other sessions and are **not** touched here. The heading-order repair (`arena/1b2db1eb-tino3`) and the owner-input reconciliation (`arena/0f7f7649-tino3`) are also claimed elsewhere.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| H-1 Claim this scope and push before any other edit | **in progress** — this section | `arena/5adb2921-tino3` | `COORDINATION.md` (this section only) |
+| H-2 Unshallow the clone and run the read-only privacy audit (`scripts/privacy_scrub_audit.py`) over every remote head, reporting counts and commit hashes only, never a matching value | not started | `arena/5adb2921-tino3` | read-only; results recorded in this section |
+| H-3 If any remote ref still carries a residual identifier class, record it as an owner decision with counts only; do not rewrite history or force-push in this session | not started | `arena/5adb2921-tino3` | this section only |
+| H-4 Rebuild, run the five gates, confirm no published page or figure changed, open the pull request from this branch to `main`, merge without waiting for approval, confirm the Pages deploy, record the PR link and the merge result | not started | `arena/5adb2921-tino3` | this section only |
+
+**Privacy constraint for this session:** no name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term, estate size or unrounded owner amount is written to any file this session produces, including this board. The audit prints classes and counts only.
+
+
 ## Session `arena/5a94d6a8-tino3` — source read dates, board record, publication · claimed 2026-11-19
 
 *Branch note:* Arena pins this session to `arena/5a94d6a8-tino3`, branched from `main` at `74118ad` (PR #181). The branch was brought up to the then-current `main` by a merge, not a rebase or force-push, because `main` had moved (PRs #184–#188). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. Before any edit, `gh pr list --state open` returned nothing and the six gates passed on the untouched branch.
