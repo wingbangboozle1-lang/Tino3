@@ -9,7 +9,7 @@
 | OW-1 Reconcile the owner's property-tax, assessed-value and bill tables for both properties against the stored roll, rounded to the nearest $10; counts only | **done** | `arena/0f7f7649-tino3` | `COORDINATION.md` (this section only) |
 | OW-2 Reconcile the owner's utility, rent, insurance-midpoint and value inputs against the stored inputs | **done** | `arena/0f7f7649-tino3` | this section only |
 | OW-3 Gap audit of the owner brief against the built pages; list what is still owner input | **done** | `arena/0f7f7649-tino3` | this section only |
-| OW-4 Board record, pull request to `main`, merge without waiting, confirm the Pages deploy, record the result | **in progress** | `arena/0f7f7649-tino3` | this section only |
+| OW-4 Board record, pull request to `main`, merge without waiting, confirm the Pages deploy, record the result | **done** | `arena/0f7f7649-tino3` | this section only |
 
 Privacy for this session: no name, street address, postal code, parcel identifier, county or city name, trust term or unrounded owner amount is written to any file. Reconciliation was run on a scratch copy outside the repository; only counts are recorded here.
 
@@ -20,6 +20,8 @@ Privacy for this session: no name, street address, postal code, parcel identifie
 **OW-2, utilities, rent, insurance and value (done).** Converted to annual figures and compared with the stored inputs: Property A water (monthly range to annual) matches; Property A electricity as a solar credit matches; Property B water for all three units matches; Property B electricity matches; Property B rent of two let units matches; both market-value estimates match; both owner insurance midpoints match. All of these remain labelled owner-supplied and `verified: false`. No insurance premium was re-read at source in this session; the statewide-average floors already on the site were not re-checked and are not confirmed here.
 
 **OW-3, gap audit (done).** Every item in the owner's brief already has a page or a register entry on the built site, so nothing was added. Items that still need an owner or professional input, and which the site's question register already lists (`questions.html`, 36 questions), are: the trust's terms and revocability; a written valuation at the date of death; the estate's own size against the federal exclusion (not published); three insurance quotes per building; a market rent and comparables for Property A; whether either property carries debt or liens; Property B's building area (needed for the parcel tax, which is not yet priced); Property A's tax rate area; the heir's intended occupancy (which governs the Proposition 19 choice); and portability and prior taxable gifts. None of these can be filled from public sources without a fabricated value, so each stays blank or flagged.
+
+**Publication record.** Pull request [#187](https://github.com/wingbangboozle1-lang/Tino3/pull/187) (board record only) merged with `gh pr merge 187 --merge` at 10:45:22 UTC on 19 November 2026, merge commit `8980baf`. Checks before merge: `Verify static site` and `report` both passed. On `main` after the merge, `Verify static site`, `Deploy GitHub Pages` and `pages build and deployment` all completed with `success` on `8980baf`.
 
 **Irregularities for review (not blocking).**
 1. This session's brief repeated a postal code and unrounded owner values in the chat. They were not written to any repository file, because the board's privacy rule forbids them; only rounded values already stored were checked.
@@ -5310,7 +5312,7 @@ recheck after certification; and completing the pre-commitment register.
 | HO-1 Claim this scope and push before any other edit | **done** (this section) | `arena/1b2db1eb-tino3` | `COORDINATION.md` (this section only) |
 | HO-2 Emit callout and chart titles as `<h2 class="sub-title">` in the generator and mirror their CSS so the rendered look is unchanged | **done** | `arena/1b2db1eb-tino3` | `scripts/build.py`, `assets/style.css` |
 | HO-3 Rebuild, confirm the numbers are unchanged (diff of every generated figure), re-run the structure audit and all gates | **done** — 27 generated files changed, 0 with any content change once heading tags are masked; structure audit 24 → 0 findings; all gates exit 0 | `arena/1b2db1eb-tino3` | regenerated outputs |
-| HO-4 Pull request to `main`, merge without waiting for approval, confirm the Pages deploy, record PR link and result here | pending | `arena/1b2db1eb-tino3` | this section only |
+| HO-4 Pull request to `main`, merge without waiting for approval, confirm the Pages deploy, record PR link and result here | **done** — PR **#186** merged as `edb70c7` (merge of `main` into the branch resolved `COORDINATION.md` by keeping both sections and `sources.html` by rebuilding from `main`); Pages deploy for the current `main` head `eeb5d13` completed `success`; live glossary page confirmed to serve the repaired heading order | `arena/1b2db1eb-tino3` | this section only |
 
 **Privacy commitments for this session.** No name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term, estate size or unrounded owner amount is added to any file this session writes, including this board.
 
@@ -5360,6 +5362,15 @@ Each of the following was opened on the publisher's own domain this session and 
 **Gates, run on this branch.** `scripts/rebuild.py` PASS and reproducible (a second full rebuild produced no further diff). `scripts/verify.py` **PASS: 26 pages, 1,386 table rows, 1,092 linked to official publishers, 294 registered unsourceable, 4,018 links (2,275 external), 119 ledger sources**, briefing print budget 94% of one letter sheet and still estimated to fit. `scripts/privacy_boundary.py` PASS. `scripts/tracked_tree_guard.py` PASS (74 files). `scripts/package_site.py` PASS. `scripts/verify_legacy.py --config-only` PASS (27 public files). `scripts/structure_audit.py` advisory: 24 findings, all the previously logged h1-to-h3 skip; none introduced by this session. Model JSON/CSV outputs are byte-unchanged, so the recommendation did not move: selling soon after inheritance still leads in the baseline, and the phased path still costs $3,337,360 (24 months) to $4,532,990 (36 months) of terminal value in the no-crash case while gaining $9,374,880 (24 months) to $7,550,550 (36 months) in the synthetic crash case.
 
 **Still open for the owner, unchanged by this session.** The trust relationship (A-1), the tax-rate area, a written date-of-death valuation, three insurance quotes per building, a documented market rent for Property A, Property B's leases and local rules, the five-year capital plan's actual spend history, and completing the pre-commitment register. The February 2027 Proposition 19 adjustment and the 2027 exclusion remain standing recheck gates.
+
+### Publication record, 19 November 2026 (HO-4)
+
+- **Pull request:** https://github.com/wingbangboozle1-lang/Tino3/pull/186, from `arena/1b2db1eb-tino3` to `main`.
+- **Checks before merge:** `verify` and `report` both `pass` on the merged tree.
+- **Merge:** `gh pr merge 186 --merge` (no approval waited for, no `--auto`). `main` now carries it as `edb70c7`. `main` had advanced by PR #185 when the first merge attempt hit a conflict; that conflict was resolved on the branch, the rebuilt tree was re-checked, and the second run passed before merge.
+- **Post-merge.** Later merges from other sessions sit on top of PR #186 (head `eeb5d13`). The `Verify static site` and `Deploy GitHub Pages` runs for `eeb5d13` both completed `success`.
+- **Live check.** The published glossary page serves the repaired heading order (`h1` then `h2` for the first section). The structure audit reports 0 findings on the merged tree.
+- **Irregularities.** None new. The earlier flagged items from `d1968629` remain as recorded.
 
 ### Follow-up: PR #184 merged
 
@@ -5440,3 +5451,10 @@ Read from the deployed site this session (not from the local build):
 - **Merge:** `gh pr merge 189 --merge` succeeded without approval and without `--auto`. Merge commit `ae23bd7`, merged 19 November 2026.
 - **Post-merge checks on `main`:** `Verify static site` (run 44509013851), `Deploy GitHub Pages` (run 44509013715) and `pages build and deployment` (run 44509012839) all finished `success` on `ae23bd7`.
 - **Session result:** nine decision-critical figures re-read at source and confirmed unchanged; one new ledger entry (`irs_1031`, 119 total); two page defects closed (1031 qualifier + link, 36-month identity explained); footer date aligned to the 19 November re-read; no model figure changed and the recommendation did not move. All gates green before each push.
+### AU-5 result: PR #185 merged, Pages deployed
+
+- **Pull request:** https://github.com/wingbangboozle1-lang/Tino3/pull/185, from `arena/969c0a61-tino3` to `main`, carrying this session's claim and audit record (COORDINATION.md only; no generated page, figure, input or ledger entry changed).
+- **Merge conflict, resolved without discarding either side.** Session `arena/eed1a2e1-tino3` merged PR #184 to `main` while this PR was open; both sessions had appended sections at the tail of `COORDINATION.md`. The rebase conflict was resolved by keeping both sections in order (theirs first, then this session's) and removing only the three conflict-marker lines; `git grep -nE '^(<<<<<<<|>>>>>>>)'` is clean. That session's 1031 source entry (`irs_1031`, 119 ledger entries) and phased-stress explanation are on `main` and untouched by this session. Rebuild, `verify.py`, `privacy_boundary.py` and `tracked_tree_guard.py` were re-run on the rebased tree: all PASS, rebuild deterministic, recommendation unmoved.
+- **Merge:** `gh pr merge 185 --merge` succeeded without approval and without `--auto`. Merge commit `9d8bb11`.
+- **Post-merge checks on `main`:** `Verify static site` (run 44508750577) and `Deploy GitHub Pages` (run 44508750586) both finished `success` on the merge commit. The legacy `pages build and deployment` run was cancelled by the Pages concurrency group when PRs #186–#188 landed minutes later; the Actions deploy (the publisher the workflows configure) succeeded, and the live site was re-read serving the current edition.
+- **Session result:** one board-only pull request (#185), every gate green before each push, no generated page, figure, model output or ledger entry changed by this session. The 1031 request logged in AU-2 is now closed by PR #184; the heading-skip advisory remains for the `scripts/build.py` generator's owner.
