@@ -1,5 +1,18 @@
 # Coordination board
 
+## Session `arena/0f7f7649-tino3` — owner-input reconciliation, brief gap audit, board record, publication · claimed 2026-11-19
+
+*Branch note:* Arena fixes this session to `arena/0f7f7649-tino3`, based at `74118ad` (`main`, PR #181). The whole board was read first. No open pull request existed and no other session held an open claim on `main` at claim time. The session's new owner brief restates items already on the site; this session therefore verifies rather than rebuilds.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| OW-1 Reconcile the owner's property-tax, assessed-value and bill tables for both properties against the stored roll, rounded to the nearest $10; counts only | **in progress** | `arena/0f7f7649-tino3` | `COORDINATION.md` (this section only) |
+| OW-2 Reconcile the owner's utility, rent, insurance-midpoint and value inputs against the stored inputs | **in progress** | `arena/0f7f7649-tino3` | this section only |
+| OW-3 Gap audit of the owner brief against the built pages; list what is still owner input | **in progress** | `arena/0f7f7649-tino3` | this section only |
+| OW-4 Board record, pull request to `main`, merge without waiting, confirm the Pages deploy, record the result | **in progress** | `arena/0f7f7649-tino3` | this section only |
+
+Privacy for this session: no name, street address, postal code, parcel identifier, county or city name, trust term or unrounded owner amount is written to any file. Reconciliation was run on a scratch copy outside the repository; only counts are recorded here.
+
 ## Session `arena/d980e74e-tino3` — pre-rounding Git history scrub, line-by-line source re-verification, publication · claimed 2026-11-17
 
 *Branch note:* Arena pins this session to `arena/d980e74e-tino3`, branched from `main` at `3b86d5a` and fast-forwarded to `main` at `02a9d55` (the merge of PR #158) before any edit. The session's ordinary work stays on this branch; the history scrub is executed on a separate mirror clone and force-pushed to the remote per the owner's recorded decision (`PRIVACY_REMEDIATION.md` section 6, second checkpoint) and the runbook in `scripts/history_scrub.sh`. At claim time `gh pr list --state open` returned nothing — PR #158 merged at 16:43:55Z and PR #159 was already merged — so runbook step 1 (freeze: merge or close every open pull request) is satisfied before the rewrite.
