@@ -1,5 +1,51 @@
 # Coordination board
 
+## Session `arena/5adb2921-tino3` — post-scrub history audit across every remote ref, board record · claimed 2026-11-19
+
+*Branch note:* Arena pins this session to `arena/5adb2921-tino3`, branched from `main` at `74118ad` (merge of PR #181). No other branch is created, switched to or pushed. Pull request to `main` is opened from this branch.
+
+*Overlap check at claim time:* open PRs #184 (`arena/eed1a2e1-tino3`, decision-critical figure re-verification, 1031 entry, phased identity) and #185 (`arena/969c0a61-tino3`, brief-compliance audit) are claimed by other sessions and are **not** touched here. The heading-order repair (`arena/1b2db1eb-tino3`) and the owner-input reconciliation (`arena/0f7f7649-tino3`) are also claimed elsewhere.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| H-1 Claim this scope and push before any other edit | **done** — this section | `arena/5adb2921-tino3` | `COORDINATION.md` (this section only) |
+| H-2 Unshallow the clone and run the read-only privacy audit (`scripts/privacy_scrub_audit.py`) over every remote head, reporting counts and commit hashes only, never a matching value | **done** — results below | `arena/5adb2921-tino3` | read-only; results recorded in this section |
+| H-3 If any remote ref still carries a residual identifier class, record it as an owner decision with counts only; do not rewrite history or force-push in this session | **done** — owner decision requested below; nothing rewritten | `arena/5adb2921-tino3` | this section only |
+| H-4 Rebuild, run the five gates, confirm no published page or figure changed, open the pull request from this branch to `main`, merge without waiting for approval, confirm the Pages deploy, record the PR link and the merge result | not started | `arena/5adb2921-tino3` | this section only |
+
+**Privacy constraint for this session:** no name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term, estate size or unrounded owner amount is written to any file this session produces, including this board. The audit prints classes and counts only.
+
+### H-2 result: post-scrub audit of the full history, 19 November 2026
+
+Method: the clone was unshallowed (711 commits; 140 remote refs), then `scripts/privacy_scrub_audit.py --no-fetch` ran read-only. A second read-only pass used the same publication-gate patterns over every remote head tree and over the history of `main`. Only counts, class names, ref names and file paths were recorded; no matching value was printed or written.
+
+| Identifier class | File versions in history (audit) | Current tree (audit, `57da0c8`) | Remote head trees (rescan) | `main` history (567 commits) |
+|---|---|---|---|---|
+| Street address, parcel/APN, phone, postal code | 0 | 0 | 0 | 0 |
+| Personal e-mail address (GitHub service addresses excluded, as the audit does) | 0 | 0 | 0 | 0 |
+| Property-level place name / jurisdiction name | 1 + 1 (both in `COORDINATION.md` history only) | 0 | **1 file on one non-`main` branch tip** (see below) | 0 |
+| Metro-area series identifier (the class withdrawn on 15 November 2026) | **247 versions, 18 paths** | **0** | **0 tips** | **500 of 567 commits** have a snapshot containing it; 17 paths; first snapshot 10 November, last 19 November 2026 |
+| Amount not a multiple of ten | 360 versions, 34 paths | 1 (the verbatim official quote already accepted in `PRIVACY_REMEDIATION.md` section 1) | — | — |
+
+Further detail (no values): the metro-area class is present in the history of **122 of the 140 remote refs**. Current published tree is clean on every class.
+
+**Irregularity IRR-H1: a live property-level place-name match on another session's branch.** `origin/arena/d6054c9d-tino3` (whose pull request #199 is merged) has one file, `COORDINATION.md`, whose tip matches the property-level place-name class. `main` does not. This session did not edit that branch; the owning session should remove the matching text from its branch before any further push.
+
+### H-3 owner decision requested: history still carries the metro-area class
+
+The 17–18 November 2026 rewrite removed the postal-code, e-mail, place-name and street classes from `main`'s history, as recorded. It did **not** remove the metro-area series identifiers, which the repository itself treats as location identifiers (withdrawn on 15 November 2026 and rejected by the publication gate). The rewrite tool has a rule for this class (`scripts/history_scrub.py`, the metro-series crosswalk replacement), so the gap is between that rule and what was actually executed, and it is not yet explained.
+
+Options for the owner:
+
+1. **Accept the residual.** The published site and current tree are clean. The residual is historical file versions in 122 refs, including the 500 `main` commits. A reader who clones the history can see the metro-area series identifiers and, from them, the metropolitan area of the two properties. This is the lower-disruption option.
+2. **Authorise a second rewrite.** Re-run `scripts/history_scrub.py` (its `--check` mode first, to confirm the metro-series rule matches) on a mirror, verify with the audit, then force-push every ref. This rewrites `main` and 122 session branches, and invalidates any open pull request and any session's local clone. It needs a freeze of all sessions first, and it is an owner action: the tool's own documentation says no session may force-push `main`, and this session may push only its own branch. **This session did not perform it.**
+
+Recommendation: option 2 only if the owner ranks the history above the disruption. Otherwise option 1, with the residual recorded on the review page (already the case for the earlier scrub).
+
+### H-4 status
+
+Pending: rebuild, five gates, pull request from `arena/5adb2921-tino3` to `main`, merge without waiting, Pages check. This session changed no published page, figure, model output or ledger entry.
+
 ## Session `arena/5a94d6a8-tino3` — source read dates, board record, publication · claimed 2026-11-19
 
 *Branch note:* Arena pins this session to `arena/5a94d6a8-tino3`, branched from `main` at `74118ad` (PR #181). The branch was brought up to the then-current `main` by a merge, not a rebase or force-push, because `main` had moved (PRs #184–#188). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. Before any edit, `gh pr list --state open` returned nothing and the six gates passed on the untouched branch.
