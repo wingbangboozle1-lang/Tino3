@@ -1,5 +1,50 @@
 # Coordination board
 
+## Session `arena/5a94d6a8-tino3` — source read dates, board record, publication · claimed 2026-11-19
+
+*Branch note:* Arena pins this session to `arena/5a94d6a8-tino3`, branched from `main` at `74118ad` (PR #181). The branch was brought up to the then-current `main` by a merge, not a rebase or force-push, because `main` had moved (PRs #184–#188). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. Before any edit, `gh pr list --state open` returned nothing and the six gates passed on the untouched branch.
+
+**Stale rows noted, not taken over.** `arena/0069abd3-tino3` (X-3..X-6), `arena/ac0a4bd3-tino3` (AC-5) and `arena/1d220917-tino3` (D-1..D-6) still read *in progress* in older rows of this board. Their deliverables are on `main` (for example `liquidity.html` and `assets/data/liquidity.json`); the owner may close those rows.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| Y-1 Claim this scope and push before any other edit | **done** (`ddb006f`) | `arena/5a94d6a8-tino3` | `COORDINATION.md` (this section only) |
+| Y-2 Repair the 24 heading-level skips reported by `scripts/structure_audit.py` | **superseded by `main`** — the repair landed on `main` first (`e0a00d7`, `arena/1b2db1eb-tino3`, callout and chart titles as `h2.sub-title`). This session's own duplicate edit was dropped when `main` moved; see the record below for the audit result on the merged tree | `arena/1b2db1eb-tino3` (landed) | none in this session |
+| Y-3 Re-read at source the ledger entries that carry no recorded read date, and record a read date only where the page was actually fetched this session | **done** — 15 of 15 re-opened and served on 19 November 2026; read notes in `assets/sources.json` only | `arena/5a94d6a8-tino3` | `assets/sources.json` (`checked` fields only), regenerated `sources.html` |
+| Y-4 Rebuild, run all gates, open the pull request to `main`, merge without waiting for approval, confirm the Pages deploy and the live site, record the result | in progress — see the publication record below | `arena/5a94d6a8-tino3` | this section only |
+
+### Record, 19 November 2026 (Y-2 to Y-4)
+
+**Y-2, heading levels.** On the 74118ad base the structure audit reported 24 findings: callout and chart titles were `<h3>` directly after the page `<h1>`. This session first repaired it with paragraph titles, then found that `main` had already merged a repair in the same scope (`e0a00d7`, using `h2.sub-title`). The duplicate was discarded rather than merged on top, so `main`'s version of `scripts/build.py`, `assets/style.css` and every generated page is what ships. The check was run on the merged tree; its result is in the publication record.
+
+**Y-3, source read dates.** Fifteen ledger entries had no recorded read date: fourteen had no year in their `checked` field, and `bls_ted2022` had only the data period ("June 2022"), not a read date. Each was re-opened with the fetch tool on 19 November 2026, on the publisher's own domain. All fifteen were served:
+
+| Ledger id | Publisher page | Served 19 Nov 2026 | What was compared that day |
+|---|---|---|---|
+| `bls_btn11` | BLS Beyond the Numbers, Oct 2022, inflation periods | yes | Table 2 CPI 12-month peaks: all four match |
+| `bls_mlr100` | BLS Monthly Labor Review, Apr 2014, one hundred years of CPI | yes | 1913–29 peak (June 1919 to June 1920, 23.7 percent) matches; the 1968–83 figure **not** re-read that day |
+| `bls_ted2022` | BLS The Economics Daily, July 2022 | yes | 9.1 percent and the November 1981 comparison match; the index levels match the BLS article above |
+| `fedhist_1929` | Federal Reserve History, Stock Market Crash of 1929 | yes | not re-compared line by line |
+| `fedhist_greatinflation` | Federal Reserve History, The Great Inflation | yes | 1964, March 1980 and 1983 match; the 1974 detail not re-read |
+| `fedhist_greatrecession` | Federal Reserve History, The Great Recession | yes | not re-compared line by line |
+| `fred_nasdaqcom` | FRED, NASDAQ Composite (data: Nasdaq, Inc.) | yes | not re-compared; latest observation 18 Nov 2026 |
+| `fred_ussthpi` | FRED, USSTHPI data table (data: FHFA) | yes | peak-to-trough not recomputed |
+| `irs_p925` | IRS Publication 925 (2025), PDF | yes | not re-compared line by line |
+| `irs_rp2532` | IRS Rev. Proc. 2025-32, PDF | yes | not re-compared line by line |
+| `irs_rr2023_2` | IRS Rev. Rul. 2023-2, PDF | yes | not re-compared line by line |
+| `lao_250017` | Legislative Analyst's Office, letter on the inherited-property measure | yes | fiscal-effect figures read that day |
+| `rtc11930` | Revenue and Taxation Code section 11930 | yes | the text of the section read that day |
+| `tsp_returns` | Thrift Savings Plan, rates of return | yes | not re-compared line by line |
+
+`irs_tc701` was also undated on the 74118ad base, but `arena/eed1a2e1-tino3` re-read it on 19 November and recorded that on `main`; this session left that note as recorded. Each new `checked` value begins with the re-open date and states which figures were compared and which were not. Read dates are checked by `source_recheck.py`'s own parser: 15 of 15 read as 19 November 2026, and every one of the 119 entries on `main` now carries a year.
+
+**Irregularities for the owner (not blocking):**
+
+1. **Figures not re-compared on 19 November.** Eight of the fifteen notes say the specific figures were not re-compared that day, and two more say one figure was not re-read (`bls_mlr100` for 1968–83, `fedhist_greatinflation` for 1974). All were served, so the links resolve; those numbers rest on the earlier read. Re-reading them is the next recheck, not a finding of error.
+2. **A false 404 during this session, corrected at source.** While reading the BLS article, this session first fetched a truncated copy of its address (the working listing had cut the URL at 110 characters). That returned a 404. The ledger's full address was then fetched and served. No ledger URL was changed and no page links the truncated address.
+3. **Stale rows from older sessions** (`arena/0069abd3-tino3`, `arena/ac0a4bd3-tino3`, `arena/1d220917-tino3`) still read *in progress*; see the note above.
+4. **Still open for the owner, unchanged by this session:** written insurance quotes for both buildings, a written date-of-death valuation of Property A, the tax-rate-area confirmation, comparables and rental opinions, and the decision whether to make the repository private (the public history was already rewritten on 17–18 November; making the repository private may also affect how GitHub Pages is served, which this session did not verify).
+
 ## Session `arena/0f7f7649-tino3` — owner-input reconciliation, brief gap audit, board record, publication · claimed 2026-11-19
 
 *Branch note:* Arena fixes this session to `arena/0f7f7649-tino3`, based at `74118ad` (`main`, PR #181). The whole board was read first. No open pull request existed and no other session held an open claim on `main` at claim time. The session's new owner brief restates items already on the site; this session therefore verifies rather than rebuilds.
