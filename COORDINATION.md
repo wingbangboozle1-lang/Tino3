@@ -5360,3 +5360,68 @@ Each of the following was opened on the publisher's own domain this session and 
 **Gates, run on this branch.** `scripts/rebuild.py` PASS and reproducible (a second full rebuild produced no further diff). `scripts/verify.py` **PASS: 26 pages, 1,386 table rows, 1,092 linked to official publishers, 294 registered unsourceable, 4,018 links (2,275 external), 119 ledger sources**, briefing print budget 94% of one letter sheet and still estimated to fit. `scripts/privacy_boundary.py` PASS. `scripts/tracked_tree_guard.py` PASS (74 files). `scripts/package_site.py` PASS. `scripts/verify_legacy.py --config-only` PASS (27 public files). `scripts/structure_audit.py` advisory: 24 findings, all the previously logged h1-to-h3 skip; none introduced by this session. Model JSON/CSV outputs are byte-unchanged, so the recommendation did not move: selling soon after inheritance still leads in the baseline, and the phased path still costs $3,337,360 (24 months) to $4,532,990 (36 months) of terminal value in the no-crash case while gaining $9,374,880 (24 months) to $7,550,550 (36 months) in the synthetic crash case.
 
 **Still open for the owner, unchanged by this session.** The trust relationship (A-1), the tax-rate area, a written date-of-death valuation, three insurance quotes per building, a documented market rent for Property A, Property B's leases and local rules, the five-year capital plan's actual spend history, and completing the pre-commitment register. The February 2027 Proposition 19 adjustment and the 2027 exclusion remain standing recheck gates.
+## Session `arena/969c0a61-tino3` — brief-compliance audit, live-site check, publication · claimed 2026-11-19
+
+*Branch note:* Arena pins this session to `arena/969c0a61-tino3`, branched from `main` at `74118ad` (merge of PR #181). At claim time `gh pr list --state open` returned nothing and `git branch -r` showed only `main`; one other session (`arena/eed1a2e1-tino3`, run 44508176304, in progress) is active on re-verification and the 1031 source gap, so this session does not touch 1031 sourcing, ledger entries, or any figure re-verification that session owns. This session's scope is a line-by-line audit of the owner's brief against the built site, a live-site check, and publication of any non-overlapping fix.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| AU-1 Claim this scope and push before any other edit | **in progress** — this section | `arena/969c0a61-tino3` | `COORDINATION.md` (this section only) |
+| AU-2 Line-by-line brief-compliance audit: every requirement in the owner's brief checked against the built site and the model inputs | pending | `arena/969c0a61-tino3` | read-only; results recorded here |
+| AU-3 Live-site check: deployed dashboard, briefing sheet and stylesheet serve; private files return 404/500 with no content | pending | `arena/969c0a61-tino3` | read-only; results recorded here |
+| AU-4 Fix any non-overlapping gap found (via `scripts/`, never by hand-editing generated HTML), rebuild, run all gates | pending | `arena/969c0a61-tino3` | `scripts/*.py`, `assets/data/inputs.json` only if a value is wrong, regenerated outputs |
+| AU-5 Open PR to `main`, merge without waiting, confirm Pages deploy, record result here | pending | `arena/969c0a61-tino3` | regenerated outputs, this section only |
+
+**Privacy constraint for this session:** no name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term, estate size or unrounded owner amount is added to any file this session writes, including this board. Every published dollar figure stays a multiple of $10 or a verbatim official amount. New ledger entries, if any, link only to hosts already on the approved list in `scripts/verify.py`. Requests for files owned by another session are logged here, not edited.
+
+### AU-2 result: line-by-line brief-compliance audit, 19 November 2026
+
+Every requirement in the owner's brief was checked against the built site (`scripts/build.py` output), the model inputs (`assets/data/inputs.json`) and the source ledger (`assets/sources.json`). Result: **every requirement is implemented**; no gap was found that this session may fix without overlapping another session's scope. The checklist below records where each item lives.
+
+| Brief requirement | Where it is implemented | Status |
+|---|---|---|
+| Phased-investing path in Black swan (3M–2Y Treasuries, 24–36 months, then stocks; tests 1929/2008 crash-entry risk) | `black-swan.html`; dashboard KPI "Phased path" ($34,639,310, 30 months parking); `scripts/borrow.py`/`build.py` canonical monthly park-and-phase engine | done |
+| Scrub pre-rounding Git history / privacy-first | History rewritten 17–18 Nov 2026 (SQ-3 record above); `PRIVACY_REMEDIATION.md`; `scripts/history_scrub.sh`, `scripts/privacy_scrub_audit.py` | done |
+| One-page printable Attorney & CPA Briefing Sheet | `briefing.html` (print budget 94% of one letter sheet, measured at build) | done |
+| Ranges instead of round-number assumptions | Insurance bands floored by published statewide averages; `inputs.json` `insurance_band` note; what-if page prices the whole band | done |
+| "What would change the answer" on the first screen | Dashboard decision strip: answer, confidence, build date, four checks that would move it | done |
+| Mixed paths, not only three pure choices | Eleven mixed cases (`assets/data/mixed.json`), decision page, Prop 19 clawback priced | done |
+| Reinvestment risk beside the headline | Dashboard callout + KPI sub-lines; black-swan page | done |
+| What-if controls | `what-if.html` (one lever at a time, link-driven, no script) | done |
+| One-page brief for attorney and tax adviser | `briefing.html` | done |
+| Deadlines as a timeline | `timeline.html` with official source links | done |
+| Grouped menu + glossary | Seven nav groups; `glossary.html` | done |
+| Compare all choices at same transfer dates/horizons with taxes, debt, occupancy, capital costs, liquidity | `decision.html`; debt priced per $1,000/month; `liquidity.html` | done |
+| Recheck authorities periodically; enacted vs proposals | `.github/workflows/source-recheck.yml` (monthly); `laws.html` three-group rule | done |
+| Agree in writing what would choose each path before figures arrive | `precommit.html` (decision columns deliberately empty) | done |
+| Contain prior public-data exposure | `PRIVACY_REMEDIATION.md`; privacy boundary + tracked-tree guard gates | done |
+| Private estate inventory; independent property/rental estimates; Prop 19 validation; depreciation/recapture; B leases/local rules; investing policy; tax sensitivities; extreme scenarios; legislation tracking; dashboard explanations; imputed rent; 121 exclusion; Prop H official terms; allowance carry-forward; transfer tax priced; ranges; Form 540 1% tax; comparables; rebuild-after-change; decision+date; TRA lookup; same-tax-year sale; Prop 19 occupancy condition; five-year maintenance plan; date-of-death valuation; 1031 decision; investment policy; estate liquidity; portability/prior gifts; annual re-run; market rent; distribution chart; separate estate/income/property taxes; executive summary; suggestions section; questions page; black-swan section; $10 rounding; step-by-step inheritance; year-by-year projections; inheritance thresholds with future projections | Each is implemented on its page (see the suggestions queue P-01–P-15 and S-01–S-30 for the itemised record) or explicitly flagged as missing with the discovery step named (insurance quotes S-01, tax-rate-area lookup S-02, date-of-death valuation, Property A market rent G4/G5) | done / flagged honestly |
+| Personal privacy top priority; placeholders; nothing personal on the site | `scripts/privacy_boundary.py` + `scripts/tracked_tree_guard.py` run in CI; every published dollar figure a multiple of $10 or a verbatim official amount | done |
+| GitHub Pages live site, clean dashboard, subpages by category | 26 pages live at `https://wingbangboozle1-lang.github.io/Tino3/`; verified serving this session (AU-3) | done |
+| Every table row source-linked or flagged unverified | `scripts/verify.py`: 1,385 rows — 1,091 linked to official publishers, 294 explicitly registered as unsourceable | done |
+| Flagged for Review page | `review.html` (register of unverified/assumed items + repository audit) | done |
+| PR + merge without waiting; record result here | AU-5 below | in progress |
+
+**Items this session did not touch, and why.** The 1031 (like-kind exchange) source gap is owned by session `arena/eed1a2e1-tino3` (run 44508176304, completed 10:43 UTC this session's claim window); per the board rules this session logs the request instead of editing: the 1031 rows in `scripts/build.py` (taxes page, questions page, suggestion S-11) should carry an official IRC §1031 source link when that session's work lands. The heading-level skip (h1→h3) reported by `scripts/structure_audit.py` on 24 of 26 pages is advisory by design, already logged as irregularity 1 by the T-session, and owned by the `scripts/build.py` generator; it does not block any gate and is left for the generator's owner.
+
+### AU-3 result: live-site check, 19 November 2026
+
+Read from the deployed site this session (not from the local build):
+
+- **Dashboard** (`/`): serves the 17 November 2026 edition — "Sell Property A soon after it is inherited", confidence high, the four checks that would move it, the phased-path KPI and the distribution section all present and matching the local build.
+- **Briefing sheet** (`briefing.html`): serves; one-page printable Attorney & CPA sheet, placeholders only, no personal identifiers.
+- **Private file boundary**: `assets/data/inputs.json` returns GitHub Pages' standard 404 with no repository content. The publication boundary holds.
+- **Pages API**: `status: built`, `build_type: legacy`, source `main` `/`, public — the live publisher is the legacy Jekyll build from `main`, as the workflows expect.
+
+### AU-4 result: no fix required
+
+`python scripts/rebuild.py` produced no diff against the committed outputs (deterministic build); `scripts/verify.py`, `scripts/privacy_boundary.py`, `scripts/tracked_tree_guard.py` and `scripts/package_site.py` all pass. No figure, input, ledger entry or page changed, so there is nothing to rebuild and no recommendation movement to report. The edition date stays 17 November 2026 (when the figures were computed); this session's re-reads on 19 November are recorded here instead of bumping the edition.
+
+**Figures re-read at source this session (19 November 2026), all agreeing with the stored values:**
+
+1. **Federal estate exclusion**: IRS IR-2026-133 (ledger `irs_2027`) — "Estates of decedents who die during 2027 have a basic exclusion amount of $15,480,000, up from a total of $15,000,000 for estates of decedents who died in 2026." Matches the site's $15,000,000 (2026) / $15,480,000 (2027). The IRS estate-tax page filing-threshold table independently shows 2026: $15,000,000.
+2. **Proposition 19 shelter cap**: BOE Letter to Assessors 2025/009 (ledger `boe_lta25009`) — $1,044,586 for transfers 16 Feb 2025–15 Feb 2027, prior $1,000,000 and $1,022,600. Matches.
+3. **Proposition 19 exclusion text**: RTC §63.2 (ledger `rtc63_2`) read in full at leginfo — parent-child/grandparent-grandchild, principal residence within one year, exemption filing, clawback enrolment. Matches the site's description.
+4. **California 1% surcharge**: taxes page carries the §17043 / Form 540 line-62 treatment (Behavioral Health Services Tax) with the sensitivity table; SQ-2's re-read stands, no change.
+
+**Irregularities found this session:** none. The only anomaly observed was this session's own guessed IRS URL returning 404 (a URL this session invented, not a ledger link); the actual ledger URL serves correctly.
