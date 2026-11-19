@@ -5709,3 +5709,11 @@ The existing live Pages deployment was confirmed built at the `main` head before
 **Verification.** `scripts/rebuild.py` completed; `scripts/verify.py` PASS (26 pages, 1,372 rows; 1,092 official-linked, 280 registered unsourceable; 4,004 links; 119 ledger sources); `privacy_boundary.py` PASS; `tracked_tree_guard.py` PASS (74 tracked text files); `package_site.py` PASS (26 public pages, 1 runtime asset, 144 content-free withdrawal notices); `verify_legacy.py --config-only` PASS; `git diff --check` clean. Rebuilding changed only the review page's generated privacy disclosure; no model data or recommendation changed. The per-row totals differ from the prior edition because the old history-audit table was removed, not because decision data changed.
 
 **Open owner decision.** Freeze concurrent writes, audit a full mirror of every remote ref, and decide whether to authorize a second coordinated rewrite. Do not treat a passing artifact scan as history certification. No external official source is applicable to the repository-history audit; the source is the read-only audit record already documented above.
+
+### P-3 publication closeout · 19 November 2026
+
+- **Pull request:** [#207](https://github.com/wingbangboozle1-lang/Tino3/pull/207), from `arena/e8462838-tino3` to `main`.
+- **Checks:** PR report and verify passed; post-merge `Verify static site` run `44525906699`, `Deploy GitHub Pages` run `44525906815`, and legacy `pages build and deployment` run `44525905368` all succeeded on merge commit `0b2bc65690bf6c257b47137b7c92607ed9bd3ef8`.
+- **Merge:** `gh pr merge 207 --merge` succeeded at 12:39:23 UTC on 19 November 2026.
+- **Pages:** API status `built`; live address remains `https://wingbangboozle1-lang.github.io/Tino3/`.
+- **Result:** public privacy disclosure now distinguishes the current artifact gate from historical Git exposure. No figures, model outputs, or recommendations changed. The second history rewrite remains an owner-level decision; this session did not rewrite or force-push any refs.
