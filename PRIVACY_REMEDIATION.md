@@ -18,6 +18,13 @@ That instruction has two parts, and only one of them can be delivered by a commi
 This document records the facts, what was and was not done, and the exact procedure with
 its costs, so the decision can be taken knowingly.
 
+> **Status correction, 19 November 2026:** the rewrite recorded below did not remove every
+> historical match. A later full-history audit found residual matches in a withdrawn
+> location-data identifier class. The current checkout is shallow and cannot independently
+> certify all refs. The published artifact passes its privacy gate, but Git history must not
+> be described as clean. No second rewrite has been authorized or performed here; see the
+> latest coordination-board audit record for scope, with no matching values reproduced.
+
 ---
 
 ## 1. What the audit found
@@ -179,9 +186,10 @@ Do these in order. Do not skip step 2.
       is `refs/pull/*`, which GitHub manages internally and which retains pre-rewrite
       commit objects visible only to maintainers.
 
-The rewrite is done. The published site is unaffected: it was already clean, the controls
-in section 2 keep it clean on every build, and the history behind it is now clean on every
-property-identifying class.
+The recorded rewrite was performed, but a subsequent full-history audit on 19 November 2026
+found residual matches in a withdrawn location-data identifier class. The history is therefore
+not certified clean. The published artifact remains separately subject to the privacy controls
+in section 2; those controls do not verify all Git refs or copies outside the repository.
 
 ---
 
