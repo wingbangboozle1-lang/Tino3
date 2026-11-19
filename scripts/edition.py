@@ -20,4 +20,4 @@ BUILD_DATE_TEXT = "17 November 2026"
 # The window the source ledger was read over. Every entry in the ledger carries its
 # own check date; this is the range those dates fall in.
 SOURCES_CHECKED_FROM = "13 November 2026"
-SOURCES_CHECKED_TO = "17 November 2026"
+SOURCES_CHECKED_TO = "19 November 2026"

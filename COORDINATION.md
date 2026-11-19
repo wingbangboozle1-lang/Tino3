@@ -1,5 +1,33 @@
 # Coordination board
 
+## Session `arena/0f7f7649-tino3` — owner-input reconciliation, brief gap audit, board record, publication · claimed 2026-11-19
+
+*Branch note:* Arena fixes this session to `arena/0f7f7649-tino3`, based at `74118ad` (`main`, PR #181). The whole board was read first. No open pull request existed and no other session held an open claim on `main` at claim time. The session's new owner brief restates items already on the site; this session therefore verifies rather than rebuilds.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| OW-1 Reconcile the owner's property-tax, assessed-value and bill tables for both properties against the stored roll, rounded to the nearest $10; counts only | **done** | `arena/0f7f7649-tino3` | `COORDINATION.md` (this section only) |
+| OW-2 Reconcile the owner's utility, rent, insurance-midpoint and value inputs against the stored inputs | **done** | `arena/0f7f7649-tino3` | this section only |
+| OW-3 Gap audit of the owner brief against the built pages; list what is still owner input | **done** | `arena/0f7f7649-tino3` | this section only |
+| OW-4 Board record, pull request to `main`, merge without waiting, confirm the Pages deploy, record the result | **in progress** | `arena/0f7f7649-tino3` | this section only |
+
+Privacy for this session: no name, street address, postal code, parcel identifier, county or city name, trust term or unrounded owner amount is written to any file. Reconciliation was run on a scratch copy outside the repository; only counts are recorded here.
+
+### Result · `arena/0f7f7649-tino3` · 2026-11-19
+
+**OW-1, property-tax and assessment reconciliation (done).** The owner's tables were rounded to the nearest $10 on a scratch copy outside the repository and compared value by value with `assets/data/inputs.json`. Property A: 25 values checked (assessed value and bill for 2014 to 2025, plus the 2026 assessed value), 0 mismatches. Property B: 20 values checked (assessed value and bill for 2016 to 2025), 0 mismatches. Rounding rule: half up. The owner's 2026-27 bill for Property A was not supplied and remains blank, as the stored file already records.
+
+**OW-2, utilities, rent, insurance and value (done).** Converted to annual figures and compared with the stored inputs: Property A water (monthly range to annual) matches; Property A electricity as a solar credit matches; Property B water for all three units matches; Property B electricity matches; Property B rent of two let units matches; both market-value estimates match; both owner insurance midpoints match. All of these remain labelled owner-supplied and `verified: false`. No insurance premium was re-read at source in this session; the statewide-average floors already on the site were not re-checked and are not confirmed here.
+
+**OW-3, gap audit (done).** Every item in the owner's brief already has a page or a register entry on the built site, so nothing was added. Items that still need an owner or professional input, and which the site's question register already lists (`questions.html`, 36 questions), are: the trust's terms and revocability; a written valuation at the date of death; the estate's own size against the federal exclusion (not published); three insurance quotes per building; a market rent and comparables for Property A; whether either property carries debt or liens; Property B's building area (needed for the parcel tax, which is not yet priced); Property A's tax rate area; the heir's intended occupancy (which governs the Proposition 19 choice); and portability and prior taxable gifts. None of these can be filled from public sources without a fabricated value, so each stays blank or flagged.
+
+**Irregularities for review (not blocking).**
+1. This session's brief repeated a postal code and unrounded owner values in the chat. They were not written to any repository file, because the board's privacy rule forbids them; only rounded values already stored were checked.
+2. Insurance floors and the Property A tax rate area remain unverified against a fresh source read in this session; they are carried as already flagged on `review.html`.
+3. The structure audit's heading-level skip on most pages (recorded above by another session) is unchanged; it sits in the `scripts/build.py` scope and is not edited here.
+
+**Verification performed.** `scripts/rebuild.py` rerun with no change to any generated file; `scripts/verify.py`, `scripts/privacy_boundary.py` and `scripts/tracked_tree_guard.py` all PASS on the branch before this board record was written.
+
 ## Session `arena/d980e74e-tino3` — pre-rounding Git history scrub, line-by-line source re-verification, publication · claimed 2026-11-17
 
 *Branch note:* Arena pins this session to `arena/d980e74e-tino3`, branched from `main` at `3b86d5a` and fast-forwarded to `main` at `02a9d55` (the merge of PR #158) before any edit. The session's ordinary work stays on this branch; the history scrub is executed on a separate mirror clone and force-pushed to the remote per the owner's recorded decision (`PRIVACY_REMEDIATION.md` section 6, second checkpoint) and the runbook in `scripts/history_scrub.sh`. At claim time `gh pr list --state open` returned nothing — PR #158 merged at 16:43:55Z and PR #159 was already merged — so runbook step 1 (freeze: merge or close every open pull request) is satisfied before the rewrite.
@@ -5271,6 +5299,30 @@ recheck after certification; and completing the pre-commitment register.
   another session and superseded, #174 and #179), every gate green before each push, no generated
   page, figure, model output or ledger entry changed by this session.
 
+## Session `arena/1b2db1eb-tino3` — heading-order repair on generated pages (structure audit finding 1) · claimed 2026-11-19
+
+*Branch note:* Arena pins this session to `arena/1b2db1eb-tino3`, branched from `main` at `74118ad` (the merge of PR #181). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. `gh pr list --state open` returned nothing when this session started. `python3 scripts/rebuild.py` produced no diff and all gates exited 0 before any edit (`verify.py`, `privacy_boundary.py`, `tracked_tree_guard.py`, `package_site.py`, `verify_legacy.py --config-only`).
+
+**Why this task.** The structure audit recorded by the 17 November session (`d1968629`, irregularity 1) found that 24 of 26 published pages skip from `h1` to `h3`, because callout and chart titles are emitted as `<h3>` before any `<h2>`. This is an accessibility and outline defect in the generator, not a figure change. The fix changes only the heading tag and the matching CSS selectors; no number, source link or model output is touched.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| HO-1 Claim this scope and push before any other edit | **done** (this section) | `arena/1b2db1eb-tino3` | `COORDINATION.md` (this section only) |
+| HO-2 Emit callout and chart titles as `<h2 class="sub-title">` in the generator and mirror their CSS so the rendered look is unchanged | **done** | `arena/1b2db1eb-tino3` | `scripts/build.py`, `assets/style.css` |
+| HO-3 Rebuild, confirm the numbers are unchanged (diff of every generated figure), re-run the structure audit and all gates | **done** — 27 generated files changed, 0 with any content change once heading tags are masked; structure audit 24 → 0 findings; all gates exit 0 | `arena/1b2db1eb-tino3` | regenerated outputs |
+| HO-4 Pull request to `main`, merge without waiting for approval, confirm the Pages deploy, record PR link and result here | pending | `arena/1b2db1eb-tino3` | this section only |
+
+**Privacy commitments for this session.** No name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term, estate size or unrounded owner amount is added to any file this session writes, including this board.
+
+### Completion record, 19 November 2026 (HO-1 to HO-3)
+
+- **Change.** `scripts/build.py`: the five title helpers for callouts and charts (`callout`, the three chart helpers and the chart-rows helper) emit `<h2 class="sub-title">` instead of `<h3>`. `assets/style.css`: the four `.callout h3` / `.chart h3` selectors became `.callout h2.sub-title` / `.chart h2.sub-title`, with `border: 0; padding: 0` so the `main h2` rule no longer adds an underline. Visual values are unchanged; print rules were renamed in place.
+- **Numbers.** Rebuilt with `scripts/rebuild.py`. Every generated HTML file was compared with the `h2.sub-title` tags masked back to `h3`: no content differs. No input, model output, source ledger entry or figure was edited.
+- **Structure audit (`scripts/structure_audit.py`).** Before: 26 pages, 24 findings (all h1→h3 skips). After: 26 pages, **0 findings**.
+- **Gates.** `verify.py` PASS (build reproducible, every table row source-linked, links resolve, privacy boundary), `privacy_boundary.py` PASS, `tracked_tree_guard.py` PASS (74 files), `package_site.py` PASS, `verify_legacy.py --config-only` PASS.
+- **Not verified in a browser.** The visual match rests on the CSS mirror and the gate checks, not on a screenshot comparison.
+- **Irregularities recorded for review.** None new. The earlier items from `d1968629` still stand (fifteen ledger entries without a read date; the unexplained 404-versus-500 difference on withdrawn routes).
+
 ## Session `arena/eed1a2e1-tino3` — independent re-verification of decision-critical figures, 1031 source gap, phased-stress explanation · claimed 2026-11-19
 
 *Branch note:* Arena pins this session to `arena/eed1a2e1-tino3`, branched from `main` at `74118ad` (the merge of PR #181). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. At claim time `gh pr list --state open` returned nothing, and `scripts/verify.py`, `scripts/privacy_boundary.py` and `scripts/tracked_tree_guard.py` all passed on the untouched tree (26 pages, 1,385 table rows, 1,091 linked, 294 registered, 118 ledger entries, briefing print budget 94%).
@@ -5316,3 +5368,68 @@ Each of the following was opened on the publisher's own domain this session and 
 - **Post-merge checks on `main`:** `Verify static site` (run 44508501351) and `Deploy GitHub Pages` (run 44508501491) both finished `success` on `30825a1`. The legacy `pages build and deployment` run for that commit was cancelled by concurrency when later merges queued their own deploys; the Actions deploy itself succeeded.
 - **Live site:** re-read after the deploy. `taxes.html` serves the corrected section 1031 bullet with the IRS link, confirming the deployment is not stale.
 - **One inconsistency left by this session, fixed in the follow-up:** the page footers still read "Sources were last checked between 13 November 2026 and 17 November 2026" (from `scripts/edition.py`), while the ledger and the sources page now record the 19 November re-read. The follow-up bumps `SOURCES_CHECKED_TO` to 19 November 2026 and rebuilds.
+## Session `arena/969c0a61-tino3` — brief-compliance audit, live-site check, publication · claimed 2026-11-19
+
+*Branch note:* Arena pins this session to `arena/969c0a61-tino3`, branched from `main` at `74118ad` (merge of PR #181). At claim time `gh pr list --state open` returned nothing and `git branch -r` showed only `main`; one other session (`arena/eed1a2e1-tino3`, run 44508176304, in progress) is active on re-verification and the 1031 source gap, so this session does not touch 1031 sourcing, ledger entries, or any figure re-verification that session owns. This session's scope is a line-by-line audit of the owner's brief against the built site, a live-site check, and publication of any non-overlapping fix.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| AU-1 Claim this scope and push before any other edit | **in progress** — this section | `arena/969c0a61-tino3` | `COORDINATION.md` (this section only) |
+| AU-2 Line-by-line brief-compliance audit: every requirement in the owner's brief checked against the built site and the model inputs | pending | `arena/969c0a61-tino3` | read-only; results recorded here |
+| AU-3 Live-site check: deployed dashboard, briefing sheet and stylesheet serve; private files return 404/500 with no content | pending | `arena/969c0a61-tino3` | read-only; results recorded here |
+| AU-4 Fix any non-overlapping gap found (via `scripts/`, never by hand-editing generated HTML), rebuild, run all gates | pending | `arena/969c0a61-tino3` | `scripts/*.py`, `assets/data/inputs.json` only if a value is wrong, regenerated outputs |
+| AU-5 Open PR to `main`, merge without waiting, confirm Pages deploy, record result here | pending | `arena/969c0a61-tino3` | regenerated outputs, this section only |
+
+**Privacy constraint for this session:** no name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term, estate size or unrounded owner amount is added to any file this session writes, including this board. Every published dollar figure stays a multiple of $10 or a verbatim official amount. New ledger entries, if any, link only to hosts already on the approved list in `scripts/verify.py`. Requests for files owned by another session are logged here, not edited.
+
+### AU-2 result: line-by-line brief-compliance audit, 19 November 2026
+
+Every requirement in the owner's brief was checked against the built site (`scripts/build.py` output), the model inputs (`assets/data/inputs.json`) and the source ledger (`assets/sources.json`). Result: **every requirement is implemented**; no gap was found that this session may fix without overlapping another session's scope. The checklist below records where each item lives.
+
+| Brief requirement | Where it is implemented | Status |
+|---|---|---|
+| Phased-investing path in Black swan (3M–2Y Treasuries, 24–36 months, then stocks; tests 1929/2008 crash-entry risk) | `black-swan.html`; dashboard KPI "Phased path" ($34,639,310, 30 months parking); `scripts/borrow.py`/`build.py` canonical monthly park-and-phase engine | done |
+| Scrub pre-rounding Git history / privacy-first | History rewritten 17–18 Nov 2026 (SQ-3 record above); `PRIVACY_REMEDIATION.md`; `scripts/history_scrub.sh`, `scripts/privacy_scrub_audit.py` | done |
+| One-page printable Attorney & CPA Briefing Sheet | `briefing.html` (print budget 94% of one letter sheet, measured at build) | done |
+| Ranges instead of round-number assumptions | Insurance bands floored by published statewide averages; `inputs.json` `insurance_band` note; what-if page prices the whole band | done |
+| "What would change the answer" on the first screen | Dashboard decision strip: answer, confidence, build date, four checks that would move it | done |
+| Mixed paths, not only three pure choices | Eleven mixed cases (`assets/data/mixed.json`), decision page, Prop 19 clawback priced | done |
+| Reinvestment risk beside the headline | Dashboard callout + KPI sub-lines; black-swan page | done |
+| What-if controls | `what-if.html` (one lever at a time, link-driven, no script) | done |
+| One-page brief for attorney and tax adviser | `briefing.html` | done |
+| Deadlines as a timeline | `timeline.html` with official source links | done |
+| Grouped menu + glossary | Seven nav groups; `glossary.html` | done |
+| Compare all choices at same transfer dates/horizons with taxes, debt, occupancy, capital costs, liquidity | `decision.html`; debt priced per $1,000/month; `liquidity.html` | done |
+| Recheck authorities periodically; enacted vs proposals | `.github/workflows/source-recheck.yml` (monthly); `laws.html` three-group rule | done |
+| Agree in writing what would choose each path before figures arrive | `precommit.html` (decision columns deliberately empty) | done |
+| Contain prior public-data exposure | `PRIVACY_REMEDIATION.md`; privacy boundary + tracked-tree guard gates | done |
+| Private estate inventory; independent property/rental estimates; Prop 19 validation; depreciation/recapture; B leases/local rules; investing policy; tax sensitivities; extreme scenarios; legislation tracking; dashboard explanations; imputed rent; 121 exclusion; Prop H official terms; allowance carry-forward; transfer tax priced; ranges; Form 540 1% tax; comparables; rebuild-after-change; decision+date; TRA lookup; same-tax-year sale; Prop 19 occupancy condition; five-year maintenance plan; date-of-death valuation; 1031 decision; investment policy; estate liquidity; portability/prior gifts; annual re-run; market rent; distribution chart; separate estate/income/property taxes; executive summary; suggestions section; questions page; black-swan section; $10 rounding; step-by-step inheritance; year-by-year projections; inheritance thresholds with future projections | Each is implemented on its page (see the suggestions queue P-01–P-15 and S-01–S-30 for the itemised record) or explicitly flagged as missing with the discovery step named (insurance quotes S-01, tax-rate-area lookup S-02, date-of-death valuation, Property A market rent G4/G5) | done / flagged honestly |
+| Personal privacy top priority; placeholders; nothing personal on the site | `scripts/privacy_boundary.py` + `scripts/tracked_tree_guard.py` run in CI; every published dollar figure a multiple of $10 or a verbatim official amount | done |
+| GitHub Pages live site, clean dashboard, subpages by category | 26 pages live at `https://wingbangboozle1-lang.github.io/Tino3/`; verified serving this session (AU-3) | done |
+| Every table row source-linked or flagged unverified | `scripts/verify.py`: 1,385 rows — 1,091 linked to official publishers, 294 explicitly registered as unsourceable | done |
+| Flagged for Review page | `review.html` (register of unverified/assumed items + repository audit) | done |
+| PR + merge without waiting; record result here | AU-5 below | in progress |
+
+**Items this session did not touch, and why.** The 1031 (like-kind exchange) source gap is owned by session `arena/eed1a2e1-tino3` (run 44508176304, completed 10:43 UTC this session's claim window); per the board rules this session logs the request instead of editing: the 1031 rows in `scripts/build.py` (taxes page, questions page, suggestion S-11) should carry an official IRC §1031 source link when that session's work lands. The heading-level skip (h1→h3) reported by `scripts/structure_audit.py` on 24 of 26 pages is advisory by design, already logged as irregularity 1 by the T-session, and owned by the `scripts/build.py` generator; it does not block any gate and is left for the generator's owner.
+
+### AU-3 result: live-site check, 19 November 2026
+
+Read from the deployed site this session (not from the local build):
+
+- **Dashboard** (`/`): serves the 17 November 2026 edition — "Sell Property A soon after it is inherited", confidence high, the four checks that would move it, the phased-path KPI and the distribution section all present and matching the local build.
+- **Briefing sheet** (`briefing.html`): serves; one-page printable Attorney & CPA sheet, placeholders only, no personal identifiers.
+- **Private file boundary**: `assets/data/inputs.json` returns GitHub Pages' standard 404 with no repository content. The publication boundary holds.
+- **Pages API**: `status: built`, `build_type: legacy`, source `main` `/`, public — the live publisher is the legacy Jekyll build from `main`, as the workflows expect.
+
+### AU-4 result: no fix required
+
+`python scripts/rebuild.py` produced no diff against the committed outputs (deterministic build); `scripts/verify.py`, `scripts/privacy_boundary.py`, `scripts/tracked_tree_guard.py` and `scripts/package_site.py` all pass. No figure, input, ledger entry or page changed, so there is nothing to rebuild and no recommendation movement to report. The edition date stays 17 November 2026 (when the figures were computed); this session's re-reads on 19 November are recorded here instead of bumping the edition.
+
+**Figures re-read at source this session (19 November 2026), all agreeing with the stored values:**
+
+1. **Federal estate exclusion**: IRS IR-2026-133 (ledger `irs_2027`) — "Estates of decedents who die during 2027 have a basic exclusion amount of $15,480,000, up from a total of $15,000,000 for estates of decedents who died in 2026." Matches the site's $15,000,000 (2026) / $15,480,000 (2027). The IRS estate-tax page filing-threshold table independently shows 2026: $15,000,000.
+2. **Proposition 19 shelter cap**: BOE Letter to Assessors 2025/009 (ledger `boe_lta25009`) — $1,044,586 for transfers 16 Feb 2025–15 Feb 2027, prior $1,000,000 and $1,022,600. Matches.
+3. **Proposition 19 exclusion text**: RTC §63.2 (ledger `rtc63_2`) read in full at leginfo — parent-child/grandparent-grandchild, principal residence within one year, exemption filing, clawback enrolment. Matches the site's description.
+4. **California 1% surcharge**: taxes page carries the §17043 / Form 540 line-62 treatment (Behavioral Health Services Tax) with the sensitivity table; SQ-2's re-read stands, no change.
+
+**Irregularities found this session:** none. The only anomaly observed was this session's own guessed IRS URL returning 404 (a URL this session invented, not a ledger link); the actual ledger URL serves correctly.
