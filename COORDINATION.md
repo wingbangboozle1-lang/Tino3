@@ -1,5 +1,33 @@
 # Coordination board
 
+## Session `arena/0f7f7649-tino3` — owner-input reconciliation, brief gap audit, board record, publication · claimed 2026-11-19
+
+*Branch note:* Arena fixes this session to `arena/0f7f7649-tino3`, based at `74118ad` (`main`, PR #181). The whole board was read first. No open pull request existed and no other session held an open claim on `main` at claim time. The session's new owner brief restates items already on the site; this session therefore verifies rather than rebuilds.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| OW-1 Reconcile the owner's property-tax, assessed-value and bill tables for both properties against the stored roll, rounded to the nearest $10; counts only | **done** | `arena/0f7f7649-tino3` | `COORDINATION.md` (this section only) |
+| OW-2 Reconcile the owner's utility, rent, insurance-midpoint and value inputs against the stored inputs | **done** | `arena/0f7f7649-tino3` | this section only |
+| OW-3 Gap audit of the owner brief against the built pages; list what is still owner input | **done** | `arena/0f7f7649-tino3` | this section only |
+| OW-4 Board record, pull request to `main`, merge without waiting, confirm the Pages deploy, record the result | **in progress** | `arena/0f7f7649-tino3` | this section only |
+
+Privacy for this session: no name, street address, postal code, parcel identifier, county or city name, trust term or unrounded owner amount is written to any file. Reconciliation was run on a scratch copy outside the repository; only counts are recorded here.
+
+### Result · `arena/0f7f7649-tino3` · 2026-11-19
+
+**OW-1, property-tax and assessment reconciliation (done).** The owner's tables were rounded to the nearest $10 on a scratch copy outside the repository and compared value by value with `assets/data/inputs.json`. Property A: 25 values checked (assessed value and bill for 2014 to 2025, plus the 2026 assessed value), 0 mismatches. Property B: 20 values checked (assessed value and bill for 2016 to 2025), 0 mismatches. Rounding rule: half up. The owner's 2026-27 bill for Property A was not supplied and remains blank, as the stored file already records.
+
+**OW-2, utilities, rent, insurance and value (done).** Converted to annual figures and compared with the stored inputs: Property A water (monthly range to annual) matches; Property A electricity as a solar credit matches; Property B water for all three units matches; Property B electricity matches; Property B rent of two let units matches; both market-value estimates match; both owner insurance midpoints match. All of these remain labelled owner-supplied and `verified: false`. No insurance premium was re-read at source in this session; the statewide-average floors already on the site were not re-checked and are not confirmed here.
+
+**OW-3, gap audit (done).** Every item in the owner's brief already has a page or a register entry on the built site, so nothing was added. Items that still need an owner or professional input, and which the site's question register already lists (`questions.html`, 36 questions), are: the trust's terms and revocability; a written valuation at the date of death; the estate's own size against the federal exclusion (not published); three insurance quotes per building; a market rent and comparables for Property A; whether either property carries debt or liens; Property B's building area (needed for the parcel tax, which is not yet priced); Property A's tax rate area; the heir's intended occupancy (which governs the Proposition 19 choice); and portability and prior taxable gifts. None of these can be filled from public sources without a fabricated value, so each stays blank or flagged.
+
+**Irregularities for review (not blocking).**
+1. This session's brief repeated a postal code and unrounded owner values in the chat. They were not written to any repository file, because the board's privacy rule forbids them; only rounded values already stored were checked.
+2. Insurance floors and the Property A tax rate area remain unverified against a fresh source read in this session; they are carried as already flagged on `review.html`.
+3. The structure audit's heading-level skip on most pages (recorded above by another session) is unchanged; it sits in the `scripts/build.py` scope and is not edited here.
+
+**Verification performed.** `scripts/rebuild.py` rerun with no change to any generated file; `scripts/verify.py`, `scripts/privacy_boundary.py` and `scripts/tracked_tree_guard.py` all PASS on the branch before this board record was written.
+
 ## Session `arena/d980e74e-tino3` — pre-rounding Git history scrub, line-by-line source re-verification, publication · claimed 2026-11-17
 
 *Branch note:* Arena pins this session to `arena/d980e74e-tino3`, branched from `main` at `3b86d5a` and fast-forwarded to `main` at `02a9d55` (the merge of PR #158) before any edit. The session's ordinary work stays on this branch; the history scrub is executed on a separate mirror clone and force-pushed to the remote per the owner's recorded decision (`PRIVACY_REMEDIATION.md` section 6, second checkpoint) and the runbook in `scripts/history_scrub.sh`. At claim time `gh pr list --state open` returned nothing — PR #158 merged at 16:43:55Z and PR #159 was already merged — so runbook step 1 (freeze: merge or close every open pull request) is satisfied before the rewrite.
