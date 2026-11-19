@@ -5609,3 +5609,11 @@ On 19 November 2026 this session flagged the ledger entry for Revenue Procedure 
 - Merge with `main`: `ours` strategy, then the tree set to `main` (`git checkout origin/main -- <every tracked file>`); the staged difference against `main` is empty before this section was added.
 - Gates on the tree that carries this section: `scripts/rebuild.py`, `scripts/verify.py`, `scripts/privacy_boundary.py`, `scripts/tracked_tree_guard.py`, `scripts/structure_audit.py` and `scripts/verify_legacy.py --config-only` are run before the push and recorded in the pull request.
 - Privacy: no name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term, estate size or unrounded owner amount is written in this section.
+
+### Follow-up: PR #192 merged
+
+- **Pull request:** https://github.com/wingbangboozle1-lang/Tino3/pull/192, from `arena/d6054c9d-tino3` to `main`, board-only (`COORDINATION.md`, one section).
+- **Merge:** `gh pr merge 192 --merge` succeeded without approval and without `--auto`, as merge commit `3bd3cd6` at 10:56:44 UTC on 19 November 2026. Two earlier merge attempts were refused because `main` moved while the checks ran; each was resolved on the board alone, with `main`'s sections kept and this session's section appended once.
+- **Post-merge checks on `3bd3cd6`:** `Verify static site`, `Deploy GitHub Pages` and `pages build and deployment` all finished `success`.
+- **Live site:** the source ledger page serves the 19 November 2026 edition (119 sources), so the deployment is not stale.
+- **Session result:** board-only. No ledger entry, figure, generator line, stylesheet rule or generated page was changed by this session. The `irs_rp2532` flag is withdrawn (see above); the `bls_mlr100` 1968-83 figure remains open for the session that holds that read.
