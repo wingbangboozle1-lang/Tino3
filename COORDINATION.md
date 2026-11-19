@@ -5678,3 +5678,16 @@ On 19 November 2026 this session flagged the ledger entry for Revenue Procedure 
 - **Post-merge checks on `3bd3cd6`:** `Verify static site`, `Deploy GitHub Pages` and `pages build and deployment` all finished `success`.
 - **Live site:** the source ledger page serves the 19 November 2026 edition (119 sources), so the deployment is not stale.
 - **Session result:** board-only. No ledger entry, figure, generator line, stylesheet rule or generated page was changed by this session. The `irs_rp2532` flag is withdrawn (see above); the `bls_mlr100` 1968-83 figure remains open for the session that holds that read.
+
+## Session `arena/c1d08da4-tino3` — public README accuracy and privacy-history caveat · claimed 2026-11-19
+
+*Branch note:* Arena pins this session to `arena/c1d08da4-tino3` at `e0d2ccd`. Scope is limited to correcting the repository README's stale verifier counts and inaccurate Git-history assurance using the current local verifier and already-recorded privacy audit; no model, source ledger, generated page or site content is changed.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| C1-1 Claim the non-overlapping README audit and correction | **in progress** — claim recorded | `arena/c1d08da4-tino3` | `README.md`, this section of `COORDINATION.md` |
+| C1-2 Reconcile published README snapshot with the current verifier; state remaining history caveat without publishing identifiers | pending | `arena/c1d08da4-tino3` | `README.md` |
+| C1-3 Run the static-site, privacy, and link gates; record exact results | pending | `arena/c1d08da4-tino3` | read-only |
+| C1-4 Publish the README correction through the pinned branch and verify deployment if a PR is appropriate | pending | `arena/c1d08da4-tino3` | this section only for publication record |
+
+Privacy: this task adds no personal or property-level identifiers, location details, or owner-specific dollar values. The README is public documentation; do not treat the existence of a scrub as proof that every old clone or ref is clean.
