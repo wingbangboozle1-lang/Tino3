@@ -5299,6 +5299,30 @@ recheck after certification; and completing the pre-commitment register.
   another session and superseded, #174 and #179), every gate green before each push, no generated
   page, figure, model output or ledger entry changed by this session.
 
+## Session `arena/1b2db1eb-tino3` — heading-order repair on generated pages (structure audit finding 1) · claimed 2026-11-19
+
+*Branch note:* Arena pins this session to `arena/1b2db1eb-tino3`, branched from `main` at `74118ad` (the merge of PR #181). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. `gh pr list --state open` returned nothing when this session started. `python3 scripts/rebuild.py` produced no diff and all gates exited 0 before any edit (`verify.py`, `privacy_boundary.py`, `tracked_tree_guard.py`, `package_site.py`, `verify_legacy.py --config-only`).
+
+**Why this task.** The structure audit recorded by the 17 November session (`d1968629`, irregularity 1) found that 24 of 26 published pages skip from `h1` to `h3`, because callout and chart titles are emitted as `<h3>` before any `<h2>`. This is an accessibility and outline defect in the generator, not a figure change. The fix changes only the heading tag and the matching CSS selectors; no number, source link or model output is touched.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| HO-1 Claim this scope and push before any other edit | **done** (this section) | `arena/1b2db1eb-tino3` | `COORDINATION.md` (this section only) |
+| HO-2 Emit callout and chart titles as `<h2 class="sub-title">` in the generator and mirror their CSS so the rendered look is unchanged | **done** | `arena/1b2db1eb-tino3` | `scripts/build.py`, `assets/style.css` |
+| HO-3 Rebuild, confirm the numbers are unchanged (diff of every generated figure), re-run the structure audit and all gates | **done** — 27 generated files changed, 0 with any content change once heading tags are masked; structure audit 24 → 0 findings; all gates exit 0 | `arena/1b2db1eb-tino3` | regenerated outputs |
+| HO-4 Pull request to `main`, merge without waiting for approval, confirm the Pages deploy, record PR link and result here | pending | `arena/1b2db1eb-tino3` | this section only |
+
+**Privacy commitments for this session.** No name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term, estate size or unrounded owner amount is added to any file this session writes, including this board.
+
+### Completion record, 19 November 2026 (HO-1 to HO-3)
+
+- **Change.** `scripts/build.py`: the five title helpers for callouts and charts (`callout`, the three chart helpers and the chart-rows helper) emit `<h2 class="sub-title">` instead of `<h3>`. `assets/style.css`: the four `.callout h3` / `.chart h3` selectors became `.callout h2.sub-title` / `.chart h2.sub-title`, with `border: 0; padding: 0` so the `main h2` rule no longer adds an underline. Visual values are unchanged; print rules were renamed in place.
+- **Numbers.** Rebuilt with `scripts/rebuild.py`. Every generated HTML file was compared with the `h2.sub-title` tags masked back to `h3`: no content differs. No input, model output, source ledger entry or figure was edited.
+- **Structure audit (`scripts/structure_audit.py`).** Before: 26 pages, 24 findings (all h1→h3 skips). After: 26 pages, **0 findings**.
+- **Gates.** `verify.py` PASS (build reproducible, every table row source-linked, links resolve, privacy boundary), `privacy_boundary.py` PASS, `tracked_tree_guard.py` PASS (74 files), `package_site.py` PASS, `verify_legacy.py --config-only` PASS.
+- **Not verified in a browser.** The visual match rests on the CSS mirror and the gate checks, not on a screenshot comparison.
+- **Irregularities recorded for review.** None new. The earlier items from `d1968629` still stand (fifteen ledger entries without a read date; the unexplained 404-versus-500 difference on withdrawn routes).
+
 ## Session `arena/eed1a2e1-tino3` — independent re-verification of decision-critical figures, 1031 source gap, phased-stress explanation · claimed 2026-11-19
 
 *Branch note:* Arena pins this session to `arena/eed1a2e1-tino3`, branched from `main` at `74118ad` (the merge of PR #181). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. At claim time `gh pr list --state open` returned nothing, and `scripts/verify.py`, `scripts/privacy_boundary.py` and `scripts/tracked_tree_guard.py` all passed on the untouched tree (26 pages, 1,385 table rows, 1,091 linked, 294 registered, 118 ledger entries, briefing print budget 94%).
