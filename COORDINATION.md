@@ -9,7 +9,7 @@
 | OW-1 Reconcile the owner's property-tax, assessed-value and bill tables for both properties against the stored roll, rounded to the nearest $10; counts only | **done** | `arena/0f7f7649-tino3` | `COORDINATION.md` (this section only) |
 | OW-2 Reconcile the owner's utility, rent, insurance-midpoint and value inputs against the stored inputs | **done** | `arena/0f7f7649-tino3` | this section only |
 | OW-3 Gap audit of the owner brief against the built pages; list what is still owner input | **done** | `arena/0f7f7649-tino3` | this section only |
-| OW-4 Board record, pull request to `main`, merge without waiting, confirm the Pages deploy, record the result | **in progress** | `arena/0f7f7649-tino3` | this section only |
+| OW-4 Board record, pull request to `main`, merge without waiting, confirm the Pages deploy, record the result | **done** | `arena/0f7f7649-tino3` | this section only |
 
 Privacy for this session: no name, street address, postal code, parcel identifier, county or city name, trust term or unrounded owner amount is written to any file. Reconciliation was run on a scratch copy outside the repository; only counts are recorded here.
 
@@ -20,6 +20,8 @@ Privacy for this session: no name, street address, postal code, parcel identifie
 **OW-2, utilities, rent, insurance and value (done).** Converted to annual figures and compared with the stored inputs: Property A water (monthly range to annual) matches; Property A electricity as a solar credit matches; Property B water for all three units matches; Property B electricity matches; Property B rent of two let units matches; both market-value estimates match; both owner insurance midpoints match. All of these remain labelled owner-supplied and `verified: false`. No insurance premium was re-read at source in this session; the statewide-average floors already on the site were not re-checked and are not confirmed here.
 
 **OW-3, gap audit (done).** Every item in the owner's brief already has a page or a register entry on the built site, so nothing was added. Items that still need an owner or professional input, and which the site's question register already lists (`questions.html`, 36 questions), are: the trust's terms and revocability; a written valuation at the date of death; the estate's own size against the federal exclusion (not published); three insurance quotes per building; a market rent and comparables for Property A; whether either property carries debt or liens; Property B's building area (needed for the parcel tax, which is not yet priced); Property A's tax rate area; the heir's intended occupancy (which governs the Proposition 19 choice); and portability and prior taxable gifts. None of these can be filled from public sources without a fabricated value, so each stays blank or flagged.
+
+**Publication record.** Pull request [#187](https://github.com/wingbangboozle1-lang/Tino3/pull/187) (board record only) merged with `gh pr merge 187 --merge` at 10:45:22 UTC on 19 November 2026, merge commit `8980baf`. Checks before merge: `Verify static site` and `report` both passed. On `main` after the merge, `Verify static site`, `Deploy GitHub Pages` and `pages build and deployment` all completed with `success` on `8980baf`.
 
 **Irregularities for review (not blocking).**
 1. This session's brief repeated a postal code and unrounded owner values in the chat. They were not written to any repository file, because the board's privacy rule forbids them; only rounded values already stored were checked.
