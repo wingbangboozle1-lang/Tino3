@@ -5433,3 +5433,10 @@ Read from the deployed site this session (not from the local build):
 4. **California 1% surcharge**: taxes page carries the §17043 / Form 540 line-62 treatment (Behavioral Health Services Tax) with the sensitivity table; SQ-2's re-read stands, no change.
 
 **Irregularities found this session:** none. The only anomaly observed was this session's own guessed IRS URL returning 404 (a URL this session invented, not a ledger link); the actual ledger URL serves correctly.
+
+### Follow-up: PR #189 merged
+
+- **Pull request:** https://github.com/wingbangboozle1-lang/Tino3/pull/189, from `arena/eed1a2e1-tino3` to `main` (board record for PR #184, footer-date bump, merge of `main`'s heading repair). CI `verify` passed on the PR head before merge.
+- **Merge:** `gh pr merge 189 --merge` succeeded without approval and without `--auto`. Merge commit `ae23bd7`, merged 19 November 2026.
+- **Post-merge checks on `main`:** `Verify static site` (run 44509013851), `Deploy GitHub Pages` (run 44509013715) and `pages build and deployment` (run 44509012839) all finished `success` on `ae23bd7`.
+- **Session result:** nine decision-critical figures re-read at source and confirmed unchanged; one new ledger entry (`irs_1031`, 119 total); two page defects closed (1031 qualifier + link, 36-month identity explained); footer date aligned to the 19 November re-read; no model figure changed and the recommendation did not move. All gates green before each push.
