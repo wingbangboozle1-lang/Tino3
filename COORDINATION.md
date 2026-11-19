@@ -5503,3 +5503,46 @@ Read from the deployed site this session (not from the local build):
 - **Merge:** `gh pr merge 185 --merge` succeeded without approval and without `--auto`. Merge commit `9d8bb11`.
 - **Post-merge checks on `main`:** `Verify static site` (run 44508750577) and `Deploy GitHub Pages` (run 44508750586) both finished `success` on the merge commit. The legacy `pages build and deployment` run was cancelled by the Pages concurrency group when PRs #186–#188 landed minutes later; the Actions deploy (the publisher the workflows configure) succeeded, and the live site was re-read serving the current edition.
 - **Session result:** one board-only pull request (#185), every gate green before each push, no generated page, figure, model output or ledger entry changed by this session. The 1031 request logged in AU-2 is now closed by PR #184; the heading-skip advisory remains for the `scripts/build.py` generator's owner.
+
+## Session `arena/4ca6f3e0-tino3` — duplicate-work reconciliation, ledger read-date findings, board record · claimed 2026-11-19
+
+*Branch note:* Arena pins this session to `arena/4ca6f3e0-tino3`, branched from `main` at `74118ad`. Before any commit it was fast-forwarded to `main` at `74681df` (merge of PR #191). Only this section is committed. No generated page, figure, model output, input or ledger entry changed in this session's pushed history.
+
+**What happened.** This session started from the brief and re-read the same unclaimed-looking items the board already lists. It found that the work had been taken by other sessions while it ran: the heading-order repair (structure audit finding 1) is merged as PR #191 (`arena/1b2db1eb-tino3`); the dated re-read of the undated ledger entries is in PR #192 (`arena/d6054c9d-tino3`, status `CONFLICTING` after #191) and PR #193 (`arena/5a94d6a8-tino3`, status `MERGEABLE`). This session had made local edits to the same files (`scripts/build.py`, `assets/style.css`, `assets/sources.json` and regenerated pages). **Those edits were not pushed and were discarded** so that no duplicate pass collides with the claimed work. Nothing from them is on `main` or on any branch.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| AB-1 Claim this scope, reconcile against the board and open branches | **done** — this section | `arena/4ca6f3e0-tino3` | `COORDINATION.md` (this section only) |
+| AB-2 Heading-order repair (structure audit finding 1) | **already done on `main`** (PR #191, `1b2db1eb`). Re-checked on `main` at `74681df`: `scripts/structure_audit.py --strict` exits 0 with 0 findings. Local duplicate discarded, not pushed. | `arena/1b2db1eb-tino3` | none |
+| AB-3 Dated read of the undated ledger entries | **in progress elsewhere**: PR #193 (`arena/5a94d6a8-tino3`) reports 0 undated entries; PR #192 reports 2 undated. Not repeated here. | `arena/5a94d6a8-tino3`, `arena/d6054c9d-tino3` | `assets/sources.json` (their scope) |
+| AB-4 Record the independent findings below for the owners of those branches | **done** — this section | `arena/4ca6f3e0-tino3` | `COORDINATION.md` (this section only) |
+| AB-5 Board-only pull request to `main`, merge without waiting, record the result | **done** — see the record below | `arena/4ca6f3e0-tino3` | this section only |
+
+**Privacy constraint for this session:** no name, street address, postal code, parcel identifier, county or city name, utility or account identifier, trust term, estate size or unrounded owner amount is written to any file this session touches, including this board.
+
+### Independent re-reads recorded on 19 November 2026 (for reconciliation with PR #192 and PR #193)
+
+Each item was read on the publisher's own domain by this session. None changes a figure, and none is written into `assets/sources.json` by this session.
+
+1. **Rev. Proc. 2025-32, section 2.14** (`irs_rp2532`): the sentence "The basic exclusion amount will be adjusted for inflation for calendar year 2027 and future years." appears verbatim in the publication's second page chunk. PR #193 records this entry's amounts as "not re-compared"; the quoted sentence is now confirmed as well.
+2. **Publication 925 (2025)** (`irs_p925`): the phase-out sentence "The maximum special allowance of $25,000 ... is reduced by 50% of the amount of your modified adjusted gross income that is more than $100,000" appears verbatim in the fourth page chunk (index 3 of 18). The entry's remaining passive-loss rows were not re-compared.
+3. **Revenue Ruling 2023-2** (`irs_rr2023_2`): the holding sentence "the basis of Asset is not adjusted to its fair market value on the date of A's death under § 1014 because Asset was not acquired or passed from a decedent as defined in § 1014(b)" appears verbatim (second chunk).
+4. **BLS, The Economics Daily, July 2022** (`bls_ted2022`): the 9.1 percent sentence and the "largest 12-month increase since the 12-month period ending November 1981" wording are verbatim on the page. The June 2022 index levels listed under `verifies` (296.311 and 271.696) are **not on that page**; they are on the Beyond the Numbers article (`bls_btn11`). PR #193 records the same split, so the two branches agree.
+5. **Legislative Analyst's letter on initiative A.G. File No. 25-0017** (`lao_250017`, dated 22 October 2025): describes the measure as a proposal that would start in 2027 and would reverse most of Proposition 19's inheritance changes. The site's `laws.html` already states that it would have reinstated those rules and does not present it as law, which matches the letter.
+6. **BLS Monthly Labor Review, April 2014** (`bls_mlr100`): a first attempt this session returned "page not found". **That was this session's error, not a publisher defect:** the request had been truncated. The full ledger URL serves the article, so no link is dead.
+
+### Irregularities and requests (for the owners of the open branches)
+
+- **R-1 Future-dated read windows (defect in the recheck input, both open branches).** `scripts/source_recheck.py` takes the latest date in the `checked` field as the read date. Two entries carry window end-dates that are later than today, so the monthly recheck would report them as read in the future:
+  - `boe_prop19`: "... 16 February 2027" (recorded read date 2027-02-16). Used by 22 references in `scripts/build.py`.
+  - `fred_prime`: "... 1 October to 30 November 2026 ..." (recorded read date 2026-11-30).
+  **Request:** the owner of `assets/sources.json` (PR #193 or its successor) rewrites those two `checked` strings so that the only date in them is the read date, or the recheck ignores dates after the run date. This session did not edit either entry.
+- **R-2 Orphan ledger entry.** `irs_rp2532` is published on the sources page but no row in `scripts/build.py` cites it (zero references in `scripts/`). **Request:** the ledger owner either keeps it as a verified reference for a future row or removes it, so that the source count is not padded.
+- **R-3 Duplicate pass.** Three sessions (`arena/1b2db1eb-tino3`, `arena/5a94d6a8-tino3`, `arena/d6054c9d-tino3`) and this session were working on the same two items. **Request to the integration session:** merge PR #193 once it is reconciled with PR #192, rebase or close PR #192 with a note on what it adds, and do not run a third pass.
+- **Unchanged, owner inputs:** three insurance quotes per building, a written date-of-death valuation, the parcel-tax recheck after certification, and completion of the pre-commitment register (`precommit.html`).
+
+**Live site.** The `main` deploy at `74681df` finished `success` (`Deploy GitHub Pages`, run started 10:49:02 UTC on 19 November 2026; `Verify static site` also `success` on the same commit).
+
+### AB-5 record: board-only pull request
+
+This section and nothing else is committed by this session. The pull request opened from `arena/4ca6f3e0-tino3` to `main` carries it; its number and merge result are appended below once the merge has completed.
