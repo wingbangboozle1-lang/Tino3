@@ -11,7 +11,7 @@
 | V-1 Claim this scope and push before any other edit | **done** — this section | `arena/07f65751-tino3` | `COORDINATION.md` (this section only) |
 | V-2 Re-read the primary federal, California and BOE sources behind the headline figures (IRS Rev. Proc. 2026-35 §3.44 and §3.46; IR-2026-133; BOE Letter to Assessors 2025/009; FTB 2025 Form 540 instructions, line 62) and compare with the stored figures | **done** — results below (V-2 record) | `arena/07f65751-tino3` | read-only |
 | V-3 Refresh the unofficial 2026 statewide measure figures on the Secretary of State results page and correct any figure that no longer matches the published reading | **done** — result below (V-3 record) | `arena/07f65751-tino3` | `scripts/build.py` (election-result sentences only), `assets/sources.json` (one `supports` string), generated outputs |
-| V-4 Rebuild, run every gate, open the pull request from this branch to `main`, merge without waiting for approval, confirm the Pages deploy, record the PR link and the merge result | **in progress** — this section | `arena/07f65751-tino3` | this section only |
+| V-4 Rebuild, run every gate, open the pull request from this branch to `main`, merge without waiting for approval, confirm the Pages deploy, record the PR link and the merge result | **done** — publication record below | `arena/07f65751-tino3` | this section only |
 
 ### V-2 record: primary-source re-reads, 19 November 2026
 
@@ -52,6 +52,16 @@ Gates (run on this branch): `rebuild.py` (reproduces the tree; only the intended
 4. **Owner decision H-3 (residual metro-area identifiers in Git history) is still open** and was not performed here; this session did not rewrite history or force-push.
 6. **Rebase and squash (branch hygiene, this session).** `main` moved by eight commits (PRs #204 to #208) during this session; the branch was rebased onto `origin/main`. The one conflict was the generated `review.html`, resolved by taking `main`'s file and regenerating it with `scripts/rebuild.py`. An intermediate commit briefly carried a place reference that the identifier guard caught; the three session commits were squashed into one before the pull request was merged, so no intermediate state reaches `main`'s history.
 5. **Items that still need owner or professional input** (unchanged from the owner-brief gap audit, OW-3): trust terms and revocability; a written valuation at the date of death; the estate's size against the exclusion; three insurance quotes per building; a market rent and comparables for Property A; debt or liens; Property B's building area for the parcel tax; Property A's tax rate area (needs the parcel); the heir's intended occupancy; portability and prior taxable gifts.
+
+### V-4 publication record, 19 November 2026
+
+- **Pull request:** [#209](https://github.com/wingbangboozle1-lang/Tino3/pull/209), from `arena/07f65751-tino3` to `main`, squashed to one commit on the current `main` (`c3afa5a`) before merge; board record commit `b15282b`.
+- **Checks before merge:** `verify` (Verify static site) and `report` (structure and source-recheck report) both `pass`; `mergeStateStatus` CLEAN.
+- **Merge:** `gh pr merge 209 --merge` (no `--auto`), merged 12:44:12 UTC on 19 November 2026 as merge commit `51b61df`.
+- **Deploy:** the Pages run for `51b61df` was **cancelled** by the concurrency rule, because another session pushed `4ced92e` (PR #210) to `main` a few seconds later. The run for `4ced92e`, which contains `51b61df`, completed `success` on all three jobs (`Verify static site`, `Deploy GitHub Pages`, `pages build and deployment`).
+- **Live check:** the published laws page at the project's GitHub Pages address was fetched after the deploy and shows "as of 18 November 2026, 5:21 p.m." and Proposition 40 at 52.1% no.
+- **Gates run locally before the push:** `rebuild.py` (reproduces the tree), `verify.py`, `privacy_boundary.py`, `tracked_tree_guard.py` (74 files), `package_site.py`, `verify_legacy.py --config-only`.
+- **Open after this session (not blocking):** irregularities 1 to 5 above, carried to the Flagged for Review page; owner decision H-3 (history) is unchanged.
 
 ## Session `arena/5adb2921-tino3` — post-scrub history audit across every remote ref, board record · claimed 2026-11-19
 
