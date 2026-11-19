@@ -4998,106 +4998,38 @@ all, the row says so instead of being filled in.</p>""")
 
 
 def history_audit_section() -> str:
-    """The Git-history privacy audit, published as counts only.
-
-    Deliberately value-free: the page states how many file versions carry the shape of
-    an identifier, never what any of them are. Reprinting a postal code or a place name
-    here to 'disclose' it would create the exposure it is supposed to describe.
-    """
-    rows = [
-        ("Street address", "0", "0", "Never committed in any reachable commit."),
-        ("Parcel or assessor number", "0", "0", "Never committed in any reachable commit."),
-        ("Telephone number", "0", "0", "Never committed in any reachable commit."),
-        ("Person-name pattern", "0", "0", "Never committed in any reachable commit."),
-        ("Personal mail-service address, in file content", "0", "0",
-         "Zero in file content. The personal address this repository held was in Git's commit identities, "
-         "not in any file; the 17–18 November 2026 rewrite replaced it throughout history with the account's "
-         "own noreply address, so no reachable commit carries it."),
-        ("Postal code, in a prefixed form", "0", "0",
-         "Was present in superseded file versions only; the rewrite removed it from every reachable commit."),
-        ("Postal code, bare", "0", "0",
-         "Was present in superseded file versions and the archive directories, which are never published; the "
-         "rewrite removed it from every reachable commit."),
-        ("Place name at property level", "0", "0",
-         "Was present in superseded file versions and archive material, plus early versions written before the "
-         "county and city names were withdrawn; the rewrite removed it from every reachable commit."),
-        ("Place name anywhere, including inside a web address", "0", "0",
-         "The same versions, counted with the wider pattern that also catches a host name; removed by the rewrite."),
-        ("County or city name", "0", "0",
-         "The widest class. Every version written before the jurisdiction names were withdrawn, including "
-         "superseded sections of the coordination board; removed by the rewrite."),
-        ("Location-specific source host", "0", "0",
-         "Links to county and city publishers, whose web addresses name the jurisdiction. Withdrawn from the "
-         "published site earlier; the rewrite removed the residual host tokens from history."),
-        ("Withdrawn metropolitan series identifier", "0", "0",
-         "The FHFA and FRED metropolitan series and their codes, withdrawn from the published edition on "
-         "15 November 2026 because they crosswalked the placeholders to their metropolitan areas; the rewrite "
-         "removed the residual series identifiers from history."),
-        ("Metro phrasing attached to a placeholder", "0", "0",
-         "The prose form of the same crosswalk; removed by the rewrite."),
-        ("Dollar amount that is not a multiple of ten", "0", "0",
-         "Superseded versions held the pre-rounding figures. The rewrite removed every unrounded candidate, so "
-         "no reachable file version carries one. Every amount in the current tree is a multiple of ten or a "
-         "verbatim published official amount."),
-    ]
-    body = [f"<td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td><td>{esc(d)}</td>"
-            + f'<td><a href="review.html#register">Logged in the register</a></td>' for a, b, c, d in rows]
+    """Disclose the artifact/history distinction without repeating identifiers."""
     return (
         '<h2 id="history-audit">Privacy audit of this repository\'s own history</h2>'
-        + callout("privacy", "What the history audit found, and what it did not do", """
-<p>The published site is scanned on every build for names, street addresses, postal codes, parcel numbers,
-telephone numbers, email addresses, property-level place names and the county and city names, and for any dollar
-figure that is not a
-multiple of ten. That scan covers the deployable artifact, not the Git history behind it.</p>
-<p>A separate read-only audit therefore walks every commit reachable in this repository and counts how many file
-versions carry the <em>shape</em> of each identifier. It reports counts only. It does not print a matching value,
-because publishing the value in order to disclose it would recreate exactly the exposure being disclosed.</p>
-<p><strong>The pre-rewrite measurement below was taken on 17 November 2026 over the complete history in a full
-clone; the rewrite was then executed and force-pushed, and the counts were re-measured after it.</strong> The
-current tracked tree is clean on every identifier class. No street address, parcel number, telephone number or
-personal mail-service address has ever been committed in any file. Postal codes, place names, the two
-jurisdiction names, the jurisdiction publishers' web addresses and the withdrawn metropolitan series identifiers
-did appear in superseded file versions and in archive material, none of which is part of the published artifact;
-the 17–18 November 2026 rewrite removed them from every reachable commit, so the counts now report zero in every
-property-identifying class.</p>
-<p>Two things about the pre-rewrite numbers are worth stating because they changed since the last measurement on
-16 November. The audit treated a GitHub service address the way the tracked-tree guard already does, so two
-documentation matches were no longer counted as personal; and it took its list of exempt official amounts from
-the publication gate instead of keeping a copy of its own, which had drifted and was counting three statutory
-recording fees as exposure. The rewrite then removed every residual candidate, so the post-rewrite counts are
-zero across the board.</p>
-<p><strong>The rewrite has been executed.</strong> On 17–18 November 2026 the repository's full Git history was
-rewritten with <code>git-filter-repo</code> and force-pushed to the remote, at the owner's recorded decision (see
-<code>PRIVACY_REMEDIATION.md</code> and the coordination board). Postal codes, property-level place names,
-jurisdiction names, location-specific source hosts, metro crosswalk identifiers and the personal
-author/committer address were removed from every reachable commit. The published tree is byte-identical before
-and after the rewrite, so no page, table or model figure changed. No street address, parcel number or telephone
-number was ever committed, so none needed removal. The one class that cannot be removed by a push is the
-pull-request refs, which GitHub manages internally; no branch or tag retains any identifier. This page records
-that the rewrite happened and why, without printing any value that was removed.</p>""")
-        + table("File versions whose content matches each identifier class, measured after the 17–18 November 2026 rewrite",
-                ["Identifier class", "File versions in history", "Files in the current tracked tree",
-                 "What that means", "Basis"], body,
-                note="Counts are an upper bound. A file version can match because the rule itself is being "
-                     "described, or because an official documentary quote contains a non-round amount, as well as "
-                     "because a real identifier is present. Address, parcel and telephone classes are the ones "
-                     "with zero in both columns.")
+        + callout("privacy", "The published site and Git history are different privacy surfaces", """
+<p>The deployable site is scanned on every build for personal identifiers and for owner-supplied
+money that is not rounded to the nearest $10. The latest local build passes that publication gate.
+This establishes what is in the published artifact; it does <strong>not</strong> establish that all
+older Git commits, pull-request records, forks, caches or downloaded clones are clean.</p>
+<p>A history rewrite was carried out on 17–18 November 2026. A subsequent full-history audit recorded
+on 19 November found that the earlier rewrite did not remove every match in the withdrawn location-series
+class from all historical refs. The current session checkout is shallow, so it cannot independently
+recount the full history. The repository's recorded audit should therefore be treated as an open privacy
+finding, not as proof that history is clean. No identifier value is reproduced here.</p>
+<p><strong>What remains to do:</strong> an owner must decide whether to freeze contributors, audit a full
+mirror of every remote ref, and authorize a second coordinated rewrite. The rewrite procedure is
+ destructive and can invalidate clones and open work; this build does not rewrite Git history or force-push.
+Ask GitHub to address any residual pull-request objects where possible, and treat previously downloaded
+copies as outside the repository's control.</p>
+<p><strong>Current assurance:</strong> the published artifact passes the privacy boundary; the Git history
+is not certified clean. The read-only audit prints only counts, paths and commit hashes, never matching
+values. See the internal remediation record and coordination log for audit scope and the owner decision
+required. These repository records are not included in the published website.</p>""")
         + f"""<section id="history-audit-method">
-<h3>How the history audit works</h3>
+<h3>How to read the audit status</h3>
 <ul>
-<li><code>scripts/privacy_scrub_audit.py</code> runs <code>git log --all</code> and <code>git log --name-only</code>,
-reads every distinct file version, and tests it against the same identifier patterns the live publication gate
-uses. It writes nothing and changes nothing.</li>
-<li>The amount class is evaluated by calling the live gate's own money test, so a rounded figure is never
-counted and a pre-rounding figure always is, and the exemption for verbatim official amounts cannot drift from
-the exemption the site actually applies.</li>
-<li>The count needs a complete clone. A shallow checkout silently under-reports: this repository's Arena clones
-arrive shallow, so <code>git fetch --unshallow origin</code> is run before the audit, and the audit says in its
-own header when the history it read was incomplete.</li>
-<li>The audit knows its own limits. It reads file content, not commit metadata: the author and committer
-addresses Git stores on each commit are outside its patterns, and those carry an address in 172 of the 482
-commits that no file has ever held. It cannot see pull-request diffs, forks, or copies outside this repository,
-and it cannot certify that a deleted object is unreachable on the hosting service.</li>
+<li><code>scripts/privacy_boundary.py</code> checks the allowlisted publication artifact. It does not inspect
+older Git versions.</li>
+<li><code>scripts/privacy_scrub_audit.py</code> is read-only and must run against a full clone. It reports
+whether the history it saw was complete; a shallow clone silently under-reports.</li>
+<li>The history rewrite is an owner-level operation. Do not infer that a clean site, a passing build, or a
+past rewrite makes all refs, pull requests, forks or copies clean.</li>
+<li>Do not add private source values or identifying terms to this public site or its public records.</li>
 </ul>
 </section>"""
     )
