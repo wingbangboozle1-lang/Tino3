@@ -5685,9 +5685,11 @@ On 19 November 2026 this session flagged the ledger entry for Revenue Procedure 
 
 | Task | Status | Owner | File scope |
 |---|---|---|---|
-| C1-1 Claim the non-overlapping README audit and correction | **in progress** — claim recorded | `arena/c1d08da4-tino3` | `README.md`, this section of `COORDINATION.md` |
-| C1-2 Reconcile published README snapshot with the current verifier; state remaining history caveat without publishing identifiers | pending | `arena/c1d08da4-tino3` | `README.md` |
-| C1-3 Run the static-site, privacy, and link gates; record exact results | pending | `arena/c1d08da4-tino3` | read-only |
-| C1-4 Publish the README correction through the pinned branch and verify deployment if a PR is appropriate | pending | `arena/c1d08da4-tino3` | this section only for publication record |
+| C1-1 Claim the non-overlapping README audit and correction | **done** — claim recorded and pushed before discovering an overlapping open pull request | `arena/c1d08da4-tino3` | `README.md`, this section of `COORDINATION.md` |
+| C1-2 Reconcile published README snapshot with the current verifier; state remaining history caveat without publishing identifiers | **handed off** — PR #204 (`arena/72777172-tino3`) already owns the README and count correction. My uncommitted README edits were discarded. I requested the owner verify the history-assurance paragraph against the 19 November full-history audit and correct it if needed; no overlapping file was changed. | `arena/c1d08da4-tino3` | request only; `README.md` owned by PR #204 |
+| C1-3 Run the static-site, privacy, and link gates; record exact results | **done** on the shared pre-edit tree: clean deterministic rebuild; verifier 1,386 rows (1,092 official-linked, 294 unsourceable), 4,018 links; privacy, tracked-tree, package, legacy-config and strict structure gates passed; `git diff --check` clean | `arena/c1d08da4-tino3` | read-only |
+| C1-4 Publish a separate README correction | **cancelled** to avoid duplicating PR #204; this session will publish only the handoff note if needed | `arena/c1d08da4-tino3` | this section only |
 
-Privacy: this task adds no personal or property-level identifiers, location details, or owner-specific dollar values. The README is public documentation; do not treat the existence of a scrub as proof that every old clone or ref is clean.
+**Handoff request to PR #204 owner:** README.md currently says the rewritten history and passing current page set together mean the branch history is clean. The later full-history audit recorded above reports residual geographic series identifiers in reachable history. Please amend the README's history paragraph to distinguish current-tree/site cleanliness from historical-ref cleanliness; do not copy any identifier values into the page.
+
+Privacy: no identifying values or owner-specific amounts were added. The README is public documentation; do not treat the existence of a scrub as proof that every old clone or ref is clean.
