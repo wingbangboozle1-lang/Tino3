@@ -5427,3 +5427,11 @@ Read from the deployed site this session (not from the local build):
 4. **California 1% surcharge**: taxes page carries the §17043 / Form 540 line-62 treatment (Behavioral Health Services Tax) with the sensitivity table; SQ-2's re-read stands, no change.
 
 **Irregularities found this session:** none. The only anomaly observed was this session's own guessed IRS URL returning 404 (a URL this session invented, not a ledger link); the actual ledger URL serves correctly.
+
+### AU-5 result: PR #185 merged, Pages deployed
+
+- **Pull request:** https://github.com/wingbangboozle1-lang/Tino3/pull/185, from `arena/969c0a61-tino3` to `main`, carrying this session's claim and audit record (COORDINATION.md only; no generated page, figure, input or ledger entry changed).
+- **Merge conflict, resolved without discarding either side.** Session `arena/eed1a2e1-tino3` merged PR #184 to `main` while this PR was open; both sessions had appended sections at the tail of `COORDINATION.md`. The rebase conflict was resolved by keeping both sections in order (theirs first, then this session's) and removing only the three conflict-marker lines; `git grep -nE '^(<<<<<<<|>>>>>>>)'` is clean. That session's 1031 source entry (`irs_1031`, 119 ledger entries) and phased-stress explanation are on `main` and untouched by this session. Rebuild, `verify.py`, `privacy_boundary.py` and `tracked_tree_guard.py` were re-run on the rebased tree: all PASS, rebuild deterministic, recommendation unmoved.
+- **Merge:** `gh pr merge 185 --merge` succeeded without approval and without `--auto`. Merge commit `9d8bb11`.
+- **Post-merge checks on `main`:** `Verify static site` (run 44508750577) and `Deploy GitHub Pages` (run 44508750586) both finished `success` on the merge commit. The legacy `pages build and deployment` run was cancelled by the Pages concurrency group when PRs #186–#188 landed minutes later; the Actions deploy (the publisher the workflows configure) succeeded, and the live site was re-read serving the current edition.
+- **Session result:** one board-only pull request (#185), every gate green before each push, no generated page, figure, model output or ledger entry changed by this session. The 1031 request logged in AU-2 is now closed by PR #184; the heading-skip advisory remains for the `scripts/build.py` generator's owner.
