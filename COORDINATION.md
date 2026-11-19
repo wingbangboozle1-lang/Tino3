@@ -5270,3 +5270,18 @@ recheck after certification; and completing the pre-commitment register.
 - **Session result:** two new scripts, one new workflow, three pull requests (#167 closed by
   another session and superseded, #174 and #179), every gate green before each push, no generated
   page, figure, model output or ledger entry changed by this session.
+
+## Session `arena/d6054c9d-tino3` — dated re-read of the fifteen undated ledger entries, heading-level repair, gates, publication · claimed 2026-11-19
+
+*Branch note:* Arena pins this session to `arena/d6054c9d-tino3`, branched from `main` at `74118ad` (the merge of PR #181). No other branch is created, switched to or pushed. `gh pr list --state open` was checked before this claim; `python3 scripts/rebuild.py`, `verify.py`, `privacy_boundary.py` and `tracked_tree_guard.py` all exit 0 on the unedited tree.
+
+**Scope.** The owner's brief this turn repeats items the board already records as done. Nothing in it adds owner data: the owner's Cupertino and San Francisco tables, values and running costs already appear in `assets/data/inputs.json` rounded to the nearest $10, with every unverified value labelled as such. This session therefore claims two gaps the board itself logged on 17 November, and touches nothing else:
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| D6-1 Claim this scope and push before any other edit | **in progress** (this section) | `arena/d6054c9d-tino3` | `COORDINATION.md` (this section only) |
+| D6-2 Re-read at source, on 19 November 2026, the fifteen ledger entries that have no recorded read date (the rechecker's rule), confirm each supports the claim it carries, and record the read date in its `checked` field; any entry whose content no longer matches is flagged, not edited | not started | `arena/d6054c9d-tino3` | `assets/sources.json` (`checked` and `supports` fields of those fifteen entries only) |
+| D6-3 Repair the h1-to-h3 heading-level skip that the structural audit reports on eleven-plus published pages, by correcting the generator's callout and chart heading levels; no figure, sentence or link changes | not started | `arena/d6054c9d-tino3` | `scripts/build.py` (heading tags only), regenerated pages |
+| D6-4 Rebuild, run every gate, the structural audit and the source rechecker's ledger check; open the pull request, merge without waiting, confirm the Pages deploy, record it here | not started | `arena/d6054c9d-tino3` | this section only |
+
+**Privacy commitment.** No name, street address, postal code, parcel identifier, county or city name, publisher host that identifies a property, or owner-supplied unrounded figure is written to any file this session touches, including this board.
