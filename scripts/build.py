@@ -823,7 +823,7 @@ def page_executive_summary() -> str:
         + callout("risk", "Five things that could change the answer", """
 <ol>
 <li><strong>The heir wants to live there.</strong> That is worth the whole gap if it is true. It also has to be true for the whole time: moving out removes the Proposition 19 exclusion.</li>
-<li><strong>Law changes.</strong> On unofficial results as of 16 November 2026 (7:12 p.m.; counting continues), California voters approved Proposition 3, which makes the high-income tax rates permanent (60.8% yes), and rejected Proposition 40, the one-time billionaire tax (52.2% no). Certification is due by 11 December 2026. Both are on the <a href="laws.html">law page</a>. A future measure could cut the other way.</li>
+<li><strong>Law changes.</strong> On unofficial results as of 18 November 2026 (5:21 p.m.; counting continues), California voters approved Proposition 3, which makes the high-income tax rates permanent (60.8% yes), and rejected Proposition 40, the one-time tax on certain taxpayers (52.1% no). Certification is due by 11 December 2026. Both are on the <a href="laws.html">law page</a>. A future measure could cut the other way.</li>
 <li><strong>The house outgrows everything.</strong> See the <a href="black-swan.html">stress cases</a>.</li>
 <li><strong>The estate is large enough to matter federally.</strong> See the <a href="estate.html">estate page</a>: the 2026 exclusion is high, but it is indexed and can be cut by Congress.</li>
 <li><strong>An input is wrong.</strong> Every owner-supplied figure is flagged. The <a href="questions.html">questions page</a> is the list of what to confirm and how.</li>
@@ -3439,23 +3439,23 @@ def page_laws() -> str:
          "Confirms the exclusion is indexing upward.",
          ["irs_2027"]),
         ("California high-income tax rates: Proposition 3 (unofficial)",
-         "Proposition 3 is approved on unofficial results (60.8% yes as of 16 November 2026, 7:12 p.m.). It makes permanent the voter-approved rates on individuals earning over $371,000, adjusted for inflation, that would otherwise expire in 2031.",
+         "Proposition 3 is approved on unofficial results (60.8% yes as of 18 November 2026, 5:21 p.m.). It makes permanent the voter-approved rates on individuals earning over $371,000, adjusted for inflation, that would otherwise expire in 2031.",
          "Removes a scheduled state tax cut. A large gain on a California property sale will be taxed at the top state rate for the foreseeable future.",
          ["sos_results", "voterguide_p3"]),
         ("One-time tax on certain taxpayers rejected",
-         "Proposition 40 failed on unofficial results (52.2% no as of 16 November 2026, 7:12 p.m.).",
+         "Proposition 40 failed on unofficial results (52.1% no as of 18 November 2026, 5:21 p.m.).",
          "No state wealth tax. Recorded because a later version could return.",
          ["sos_results", "voterguide_p40"]),
         ("Countermeasure to Proposition 40 rejected",
-         "Proposition 41 failed on unofficial results (55.2% no as of 16 November 2026, 7:12 p.m.). It would have prohibited new state taxes that exclude revenues from the state spending limit.",
+         "Proposition 41 failed on unofficial results (55.2% no as of 18 November 2026, 5:21 p.m.). It would have prohibited new state taxes that exclude revenues from the state spending limit.",
          "Its failure removes one of the two measures that could have voided the one-time tax if both had passed.",
          ["sos_results", "voterguide_p40"]),
         ("New state personal property taxes barred",
-         "Proposition 42 is ahead on unofficial results (51.2% yes as of 16 November 2026, 7:12 p.m.). The margin is close and counting continues, so the outcome is not final.",
+         "Proposition 42 is ahead on unofficial results (51.2% yes as of 18 November 2026, 5:21 p.m.). The margin is close and counting continues, so the outcome is not final.",
          "Narrows one route for a future state tax, but does not touch real property tax.",
          ["sos_results"]),
         ("Local revenue vote threshold rejected",
-         "Proposition 43 failed on unofficial results (57.7% no as of 16 November 2026, 7:12 p.m.).",
+         "Proposition 43 failed on unofficial results (57.7% no as of 18 November 2026, 5:21 p.m.).",
          "Local parcel and transfer taxes remain possible without the stricter vote the measure would have required.",
          ["sos_results"]),
         ("Proposition 19 shelter adjusted",
@@ -3511,7 +3511,7 @@ def page_laws() -> str:
     return (
         callout("warn", "Read the election results carefully", """
 <p>The November 2026 California results on this page are <strong>unofficial</strong>, published by the Secretary
-of State with all 23,860 precincts partially reporting as of 16 November 2026, 7:12 p.m. Vote-by-mail,
+of State with all 23,860 precincts partially reporting as of 18 November 2026, 5:21 p.m. Vote-by-mail,
 provisional and other ballots continue to be processed and counted during the canvass, and the results are not
 certified until 11 December 2026. They are
 included because Proposition 3 directly changes the tax on a property sale. Confirm against the certified
@@ -4948,10 +4948,10 @@ def recheck_17nov_section() -> str:
          "shelter constant while it changes everything else about the position.",
          ["rtc62"]),
         ("The November 2026 ballot measures, still unofficial",
-         "The Secretary of State's ballot-measures page was re-read on 17 November 2026 at its 16 November 2026, "
-         "7:12 p.m. update: all 23,860 precincts partially reporting, results still labelled unofficial, "
+         "The Secretary of State's ballot-measures page was re-read on 19 November 2026 at its 18 November 2026, "
+         "5:21 p.m. update: all 23,860 precincts partially reporting, results still labelled unofficial, "
          "certification still due 11 December 2026. Proposition 3 stands at 60.8 percent yes (60.7 percent on the "
-         "14 November read), Proposition 40 at 52.2 percent no, Proposition 41 at 55.2 percent no, Proposition 42 "
+         "14 November read), Proposition 40 at 52.1 percent no (52.2 percent on the 16 November read), Proposition 41 at 55.2 percent no, Proposition 42 "
          "at 51.2 percent yes and Proposition 43 at 57.7 percent no. Every dated figure on the laws page and the "
          "dashboard was moved to this read; nothing became law in the window, so the enacted-versus-proposed "
          "labels are unchanged.",
@@ -5408,7 +5408,7 @@ def page_review() -> str:
         ("Fixed charges are projected at the inflation rate",
          "On Property B the fixed part of the bill grew at 8.1% a year between 2016 and 2025. Projecting at 2.5% is deliberately conservative and understates future bills if that pace continues."),
         ("The November 2026 California election results are unofficial",
-         "They are published with all precincts partially reporting and are not certified until 11 December 2026. Proposition 3 is treated as approved (60.8% yes on unofficial results as of 16 November 2026, 7:12 p.m.) because it changes the tax rate on a sale, but the result must be confirmed at certification."),
+         "They are published with all precincts partially reporting and are not certified until 11 December 2026. Proposition 3 is treated as approved (60.8% yes on unofficial results as of 18 November 2026, 5:21 p.m.) because it changes the tax rate on a sale, but the result must be confirmed at certification."),
         ("Combined tax rates are added, not interacted",
          "State and federal rates are added and no federal deduction is taken for state tax paid. That overstates the tax on a sale and therefore understates the case for selling, which is the conservative direction."),
         ("The housing value of living in the home is priced, not added",

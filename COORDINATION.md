@@ -1,5 +1,57 @@
 # Coordination board
 
+## Session `arena/07f65751-tino3` — owner brief re-check: primary-source re-reads, election-result refresh, gates, publication · claimed 2026-11-19
+
+*Branch note:* Arena pins this session to `arena/07f65751-tino3`, branched from `main` at `e0d2ccd` (merge of PR #203). No other branch is created, switched to or pushed. Pull request to `main` is opened from this branch. At claim time `gh pr list --state open` returned nothing and `git ls-remote --heads origin` showed 142 remote heads (none of them this session's).
+
+*Owner brief received this turn:* it restates the items already built (dashboard, what-would-change, mixed paths, what-if, timeline, glossary, briefing sheet, pre-commitment register, questions, suggestions, Flagged for Review, estate and property-tax tables, black-swan staging). The brief's repeated personal inputs (postal codes and unrounded values) were **not written to any file** this session, per the board's privacy rule. Only already-stored rounded values are used.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| V-1 Claim this scope and push before any other edit | **done** — this section | `arena/07f65751-tino3` | `COORDINATION.md` (this section only) |
+| V-2 Re-read the primary federal, California and BOE sources behind the headline figures (IRS Rev. Proc. 2026-35 §3.44 and §3.46; IR-2026-133; BOE Letter to Assessors 2025/009; FTB 2025 Form 540 instructions, line 62) and compare with the stored figures | **done** — results below (V-2 record) | `arena/07f65751-tino3` | read-only |
+| V-3 Refresh the unofficial 2026 statewide measure figures on the Secretary of State results page and correct any figure that no longer matches the published reading | **done** — result below (V-3 record) | `arena/07f65751-tino3` | `scripts/build.py` (election-result sentences only), `assets/sources.json` (one `supports` string), generated outputs |
+| V-4 Rebuild, run every gate, open the pull request from this branch to `main`, merge without waiting for approval, confirm the Pages deploy, record the PR link and the merge result | **in progress** — this section | `arena/07f65751-tino3` | this section only |
+
+### V-2 record: primary-source re-reads, 19 November 2026
+
+Every figure was read on the publisher's own page or document, not from a secondary guide. Results:
+
+| Stored figure | Primary source read this session | Result |
+|---|---|---|
+| Federal basic exclusion, 2027, $15,480,000; annual gift exclusion, 2027, $20,000; noncitizen-spouse gift amount, 2027, $201,000 | IRS Revenue Procedure 2026-35, §3.44 and §3.46 (https://www.irs.gov/pub/irs-drop/rp-26-35.pdf); IRS news release IR-2026-133, 5 November 2026 (https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2027-taxpayers-continue-to-benefit-from-the-working-families-tax-cuts) | match |
+| Federal filing threshold by year of death, 2018 to 2026 (incl. $15,000,000 for 2026) | IRS estate-tax page (https://www.irs.gov/businesses/small-businesses-self-employed/estate-tax), table through 2026 | match |
+| Proposition 19 value cap, $1,044,586, for transfers 16 February 2025 to 15 February 2027; earlier $1,022,600 (2023 to 2025) and $1,000,000 (2021 to 2023); FHFA California 2024 house-price change 2.15% | BOE Letter to Assessors 2025/009, 7 March 2025 (https://www.boe.ca.gov/proptaxes/pdf/lta25009.pdf) | match |
+| Prop 19 FAQ: continual-use requirement; exclusion removed when the home stops qualifying; family home defined by the Homeowners' or Disabled Veterans' Exemption | BOE Letter to Assessors 2026/026, 3 August 2026 (https://boe.ca.gov/proptaxes/pdf/lta26026.pdf, non-www host; the www host failed to load during this session) | match on the sections read (pages 1 of 11) |
+| 1% surcharge: taxable income above $1,000,000, computed on line 62, now named Behavioral Health Services Tax | FTB 2025 Form 540 instructions, line 62 (https://www.ftb.ca.gov/forms/2025/2025-540-instructions.html, chunk 4) | match. Not indexed; applies to taxable income, which the site already uses |
+| Capital gains treatment in California | FTB, Capital gains and losses (https://www.ftb.ca.gov/file/personal/income-types/capital-gains-and-losses.html, last updated 28 January 2026): "California does not have a lower rate for capital gains. All capital gains are taxed as ordinary income." | match |
+| Proposition 19 repeal initiative failed to qualify | Secretary of State CC/ROV Memorandum 26138, 18 May 2026 (https://elections.cdn.sos.ca.gov/ccrov/2026/may/26138jh.pdf): signatures below 100% required, petition failed | match |
+
+Not re-read this session: any figure that needs an APN, a parcel record, a trust instrument or a private estimate. Those stay as they are on the site, flagged or blank.
+
+### V-3 record: election results re-read at the 18 November 2026 update
+
+The Secretary of State results page (https://electionresults.sos.ca.gov/returns/ballot-measures) reads "reporting as of November 18, 2026, 5:21 p.m.", results to be certified by 11 December 2026. Five readings compared with the stored 16 November figures:
+
+- Proposition 3: 60.8% yes (unchanged).
+- Proposition 40: **52.1% no** (stored 52.2%; **corrected**).
+- Proposition 41: 55.2% no (unchanged).
+- Proposition 42: 51.2% yes (unchanged).
+- Proposition 43: 57.7% no (unchanged).
+- Proposition 37 (ledger only): 62.5% yes (unchanged).
+
+Changes made: every "16 November 2026, 7:12 p.m." reading on the dashboard, executive summary, laws page, review page and sources page is now "18 November 2026, 5:21 p.m."; the Proposition 40 figure is 52.1%; the source ledger entry `sos_results` records the 19 November re-read and keeps the 16 November read as history. The description of Proposition 40 was changed from "the one-time billionaire tax" to the official title wording, "one-time tax on certain taxpayers", because the official title does not use that label.
+
+Gates (run on this branch): `rebuild.py` (reproduces the tree; only the intended files change), `verify.py` PASS, `privacy_boundary.py` PASS, `tracked_tree_guard.py` PASS (74 files), `package_site.py` PASS, `verify_legacy.py --config-only` PASS.
+
+### Irregularities for review (not blocking; to be shown on Flagged for Review)
+
+1. **The ledger's BOE 2026/026 link uses the `www` host, which failed to load for this session twice.** The non-www host loads. The ledger URL was left unchanged; the owner or the next source-recheck run should decide whether to switch it.
+2. **The Proposition 40 description changed** from "billionaire tax" (a label not found in the official title) to the official title wording; the reader should confirm against the official voter guide.
+3. **The owner brief this turn repeated a property postal code and unrounded owner values.** They were not written to any repository file. The board's privacy rule applies to this record too.
+4. **Owner decision H-3 (residual metro-area identifiers in Git history) is still open** and was not performed here; this session did not rewrite history or force-push.
+5. **Items that still need owner or professional input** (unchanged from the owner-brief gap audit, OW-3): trust terms and revocability; a written valuation at the date of death; the estate's size against the exclusion; three insurance quotes per building; a market rent and comparables for Property A; debt or liens; Property B's building area for the parcel tax; Property A's tax rate area (needs the parcel); the heir's intended occupancy; portability and prior taxable gifts.
+
 ## Session `arena/5adb2921-tino3` — post-scrub history audit across every remote ref, board record · claimed 2026-11-19
 
 *Branch note:* Arena pins this session to `arena/5adb2921-tino3`, branched from `main` at `74118ad` (merge of PR #181). No other branch is created, switched to or pushed. Pull request to `main` is opened from this branch.
