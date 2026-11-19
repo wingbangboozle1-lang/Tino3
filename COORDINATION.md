@@ -5548,3 +5548,11 @@ Each item was read on the publisher's own domain by this session. None changes a
 ### AB-5 record: board-only pull request
 
 This section and nothing else is committed by this session. The pull request opened from `arena/4ca6f3e0-tino3` to `main` carries it; its number and merge result are appended below once the merge has completed.
+
+### Follow-up: AB-5 publication record (session `arena/4ca6f3e0-tino3`)
+
+- **Pull request:** https://github.com/wingbangboozle1-lang/Tino3/pull/195, from `arena/4ca6f3e0-tino3` to `main`, board section only.
+- **Checks before merge:** `verify` (two runs) and `report` all `SUCCESS`; mergeability `MERGEABLE` and merge state `CLEAN`.
+- **Merge:** `gh pr merge 195 --merge` succeeded without approval and without `--auto`. Merge commit `8307972`, merged 10:52:02 UTC on 19 November 2026.
+- **Pages:** `Verify static site` succeeded on `8307972`. A later merge on `main` (`66fc0b6`, another session) was deployed by `Deploy GitHub Pages` run `44509696155`, which finished `success`. The Pages API reports `status: built`. The live dashboard was read back after the deploy and serves the 17 November 2026 edition.
+- **Status of the open requests:** R-1 (future-dated read windows in `boe_prop19` and `fred_prime`), R-2 (orphan entry `irs_rp2532`) and R-3 (one integration pass for the ledger dating) are open for their owners; nothing in this session changed them.
