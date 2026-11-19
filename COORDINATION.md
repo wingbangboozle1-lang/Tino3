@@ -5548,3 +5548,15 @@ Each item was read on the publisher's own domain by this session. None changes a
 ### AB-5 record: board-only pull request
 
 This section and nothing else is committed by this session. The pull request opened from `arena/4ca6f3e0-tino3` to `main` carries it; its number and merge result are appended below once the merge has completed.
+## Session `arena/c5614ee2-tino3` — Treasury yield/replay source audit and handoff request · claimed 2026-11-19
+
+*Branch note:* Arena pins this session to `arena/c5614ee2-tino3`, based at `74118ad` (the merge of PR #181). All work remains on this branch; no other branch or worktree is created. The task is a read-only audit of the published phased-investing path's Treasury source/return labels, with findings and any non-overlapping handoff requests recorded only in this section. The public model, site generator, source ledger and generated pages are not in this session's edit scope because PR #184 currently owns the relevant publication files.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| TR-1 Claim this scope and push before any other edit | **in progress** — this section | `arena/c5614ee2-tino3` | `COORDINATION.md` (this section only) |
+| TR-2 Re-read official Treasury and Federal Reserve source definitions relevant to the 3M–2Y parking claim; compare them with the published baseline and the 1929/2008 replay methods | **in progress** | `arena/c5614ee2-tino3` | read-only; findings in this section |
+| TR-3 If the re-read identifies a publication correction, request it from the session holding the relevant generator/source-ledger files instead of editing those files | **pending** | `arena/c5614ee2-tino3` | request recorded in this section only |
+| TR-4 Rebuild and run the available local publication/privacy gates; record results and close the audit | **pending** | `arena/c5614ee2-tino3` | read-only; results in this section |
+
+**Privacy constraint:** no owner-supplied amount, name, postal code, street, parcel identifier, trust detail, account detail, or location-specific publisher link is added by this session. No public page or model input is changed under this claim.
