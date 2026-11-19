@@ -5270,3 +5270,18 @@ recheck after certification; and completing the pre-commitment register.
 - **Session result:** two new scripts, one new workflow, three pull requests (#167 closed by
   another session and superseded, #174 and #179), every gate green before each push, no generated
   page, figure, model output or ledger entry changed by this session.
+
+## Session `arena/eed1a2e1-tino3` — independent re-verification of decision-critical figures, 1031 source gap, phased-stress explanation · claimed 2026-11-19
+
+*Branch note:* Arena pins this session to `arena/eed1a2e1-tino3`, branched from `main` at `74118ad` (the merge of PR #181). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. At claim time `gh pr list --state open` returned nothing, and `scripts/verify.py`, `scripts/privacy_boundary.py` and `scripts/tracked_tree_guard.py` all passed on the untouched tree (26 pages, 1,385 table rows, 1,091 linked, 294 registered, 118 ledger entries, briefing print budget 94%).
+
+**Scope boundary.** Earlier sessions' sections record the model, the phased-investing engine, the history scrub and the source-recheck machinery as done. This session claims only: this section, `assets/sources.json`, `scripts/build.py` (two small text edits, below), and the regenerated outputs. It does not touch `scripts/model.py`, `scripts/mixed.py`, `scripts/economy.py`, `scripts/episodes.py`, `assets/data/inputs.json` or any other generator, so no model figure can move except through the two text edits.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| E-1 Claim this scope and push before any other edit | **in progress** — this section | `arena/eed1a2e1-tino3` | `COORDINATION.md` (this section only) |
+| E-2 Independent re-verification at the publishers of the decision-critical figures: the 2026/2027 federal basic exclusion and gift exclusion, the Proposition 19 cap, RTC 17043 and the Form 540 line-62 worksheet, RTC 63.2 eligibility, the date-of-death basis rule, and the Topic 409/701 rates; plus a first read of the like-kind exchange topic (Topic 702) | **pending** | `arena/eed1a2e1-tino3` | read-only; results recorded here |
+| E-3 Close two defects found in exploration: (a) the taxes page's like-kind exchange bullet carries no official source link and the ledger has no 1031 entry — add the Topic 702 entry read at source and link it; (b) the phased-stress table's 36-month crash terminal equals its no-crash terminal with no explanation — add one sentence stating the equity phase starts after the synthetic crash window | **pending** | `arena/eed1a2e1-tino3` | `assets/sources.json`, `scripts/build.py` |
+| E-4 Rebuild, run all gates, open the pull request from this branch to `main`, merge without waiting, confirm the Pages deploy, record the result | **pending** | `arena/eed1a2e1-tino3` | regenerated outputs, this section only |
+
+**Privacy constraint for this session:** no name, street address, postal code, parcel identifier, county or city name, trust term, estate size or unrounded owner amount is added to any file this session writes, including this board.
