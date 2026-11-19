@@ -1,5 +1,18 @@
 # Coordination board
 
+## Session `arena/5a94d6a8-tino3` — heading-structure repair, source-date recheck, live-site confirmation, publication · claimed 2026-11-19
+
+*Branch note:* Arena pins this session to `arena/5a94d6a8-tino3`, branched from `main` at `74118ad` (the merge of PR #181). No other branch is created, switched to or pushed; the pull request is opened from this branch to `main`. `gh pr list --state open` returned nothing at claim time. `python3 scripts/rebuild.py` produced no diff and all six gates (`verify.py`, `privacy_boundary.py`, `tracked_tree_guard.py`, `package_site.py`, `verify_legacy.py --config-only`, `structure_audit.py`) were checked before any edit: five exit 0, and the structure audit reported 24 findings (heading skips).
+
+**Stale claims noted, not taken over.** `arena/0069abd3-tino3` (X-3..X-6), `arena/ac0a4bd3-tino3` (AC-5) and `arena/1d220917-tino3` (D-1..D-6) still read *in progress* in older rows of this board. Their deliverables are on `main` (for example `liquidity.html`, `assets/data/liquidity.json`) and no branch of those names is open, so their rows are left for the owner to close.
+
+| Task | Status | Owner | File scope |
+|---|---|---|---|
+| Y-1 Claim this scope and push before any other edit | **done** — this section | `arena/5a94d6a8-tino3` | `COORDINATION.md` (this section only) |
+| Y-2 Repair the 24 heading-level skips reported by `scripts/structure_audit.py`: callout and chart titles are rendered as `<h3>` before any `<h2>` exists; restyle them as titled paragraphs so the visual design and the print brief do not change | pending | `arena/5a94d6a8-tino3` | `scripts/build.py` (callout and chart title helpers only), `assets/style.css` (title selectors only), regenerated HTML |
+| Y-3 Re-read at source the ledger entries that carry no recorded read date (the 15 flagged in the 17 November recheck); record a read date only where the official page was actually fetched this session; leave the rest flagged | pending | `arena/5a94d6a8-tino3` | `assets/sources.json` (`checked` field only), regenerated `sources.html` |
+| Y-4 Rebuild, run all six gates, open the pull request to `main`, merge without waiting for approval, confirm the Pages deploy and the live site, record the result | pending | `arena/5a94d6a8-tino3` | this section only |
+
 ## Session `arena/d980e74e-tino3` — pre-rounding Git history scrub, line-by-line source re-verification, publication · claimed 2026-11-17
 
 *Branch note:* Arena pins this session to `arena/d980e74e-tino3`, branched from `main` at `3b86d5a` and fast-forwarded to `main` at `02a9d55` (the merge of PR #158) before any edit. The session's ordinary work stays on this branch; the history scrub is executed on a separate mirror clone and force-pushed to the remote per the owner's recorded decision (`PRIVACY_REMEDIATION.md` section 6, second checkpoint) and the runbook in `scripts/history_scrub.sh`. At claim time `gh pr list --state open` returned nothing — PR #158 merged at 16:43:55Z and PR #159 was already merged — so runbook step 1 (freeze: merge or close every open pull request) is satisfied before the rewrite.
